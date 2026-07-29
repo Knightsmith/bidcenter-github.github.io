@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1200">
+<title>客户详情页 - 大土豆有限责任公司</title>
+<!-- 本地资源 -->
+<link rel="stylesheet" href="原文件/大土豆有限责任公司 - 客户详情页_files/common.css">
+<link rel="stylesheet" href="原文件/大土豆有限责任公司 - 客户详情页_files/newsStyle.css">
+<link rel="stylesheet" href="原文件/大土豆有限责任公司 - 客户详情页_files/gongsibianji.css">
+<link rel="stylesheet" href="原文件/大土豆有限责任公司 - 客户详情页_files/bootstrap.min.css">
+<link rel="stylesheet" href="原文件/大土豆有限责任公司 - 客户详情页_files/bootstrap-select.min.css">
+<link rel="stylesheet" href="原文件/大土豆有限责任公司 - 客户详情页_files/easyui.css">
+<link rel="stylesheet" href="原文件/大土豆有限责任公司 - 客户详情页_files/icon.css">
+<link rel="stylesheet" href="原文件/大土豆有限责任公司 - 客户详情页_files/layer.css">
+<link rel="stylesheet" href="原文件/大土豆有限责任公司 - 客户详情页_files/laydate.css">
+<style>
+/* ========== 页面自定义样式 ========== */
+body { background-color: #eaedf1; font-family: "Microsoft YaHei", Arial, sans-serif; font-size: 14px; color: #333; }
+.w12 { width: 1200px; margin: 0 auto; }
+a { text-decoration: none; color: #888; }
+a:hover { color: #0066ff; }
+.red { color: #FF0000; }
+.blue { color: #0000FF; }
+.green { color: #29CCA5; }
+.fontcolor1 { color: #6F9BC4; }
+.fontcolor4 { color: #FF6600; }
+.fontweight { font-weight: 700; }
+
+/* ========== 头部 ========== */
+.header-wrap { background: #0066ff; }
+.header { height: 45px; }
+.header-left ul li { float: left; line-height: 45px; margin-right: 10px; }
+.header-left ul li a { color: #fff; font-size: 12px; }
+.header-right ul li { float: left; border-right: 1px solid #fff; padding: 0 10px; height: 13px; line-height: 13px; margin-top: 16px; }
+.header-right ul li:last-child { border-right: 0; }
+.header-right ul li a { color: #fff; font-size: 12px; }
+
+/* ========== 公司信息头部 ========== */
+.company-header { background: #fff; padding: 25px 0; }
+.company-name { font-size: 22px; font-weight: 700; }
+.company-tag { display: inline-block; padding: 0 8px; height: 20px; line-height: 20px; border-radius: 3px; font-size: 12px; color: #fff; margin-left: 5px; vertical-align: middle; }
+.tag-paid { background: #EC808D; }
+.tag-primary { background: #0066ff; }
+.source-label { font-size: 12px; color: #999; margin-left: 15px; }
+.rating-box { margin-top: 8px; }
+.rating-star { color: #FF9900; font-size: 16px; }
+.rating-score { color: #FF9900; font-weight: 700; }
+.credit-badge { border: 1px solid #ddd; padding: 0 8px; border-radius: 3px; font-size: 12px; color: #999; }
+
+/* ========== 公司信息表格 ========== */
+.info-grid { margin-top: 15px; background: #fff; border: 1px solid #e2ebf6; border-radius: 5px; padding: 20px 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.info-item { padding: 10px 20px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; }
+.info-item:nth-last-child(-n+2) { border-bottom: none; }
+.info-label { width: 85px; color: #7F7F7F; font-size: 13px; flex-shrink: 0; }
+.info-value { flex: 1; color: #333; font-size: 14px; }
+.info-value .tel-icon { cursor: pointer; color: #0066ff; }
+.info-value .tag-level { color: #0066ff; font-weight: 700; }
+.info-value .tag-expire { color: #FF0000; font-weight: 700; }
+.info-timeline { grid-column: 1 / -1; padding: 10px 20px 0; font-size: 12px; color: #7F7F7F; }
+.info-timeline span { margin: 0 10px; color: #333; }
+.info-timeline .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin: 0 5px; }
+.dot-green { background: #29CCA5; }
+.dot-blue { background: #0066ff; }
+.dot-red { background: #EC808D; }
+
+/* ========== 常用操作 ========== */
+.action-section { background: #fff; border: 1px solid #e2ebf6; border-radius: 5px; padding: 15px 28px; margin-top: 2px; }
+.action-group { margin-bottom: 8px; display: flex; align-items: flex-start; }
+.action-group:last-child { margin-bottom: 0; }
+.action-group-label { width: 85px; font-size: 12px; color: #999; line-height: 28px; flex-shrink: 0; }
+.action-group-buttons { flex: 1; display: flex; flex-wrap: wrap; gap: 6px; }
+.action-btn { display: inline-block; padding: 0 12px; height: 26px; line-height: 24px; border: 1px solid #a0d2ff; background: #e2ebf6; border-radius: 3px; font-size: 12px; color: #0000FF; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+.action-btn:hover { background: #0000FF; border-color: #0000FF; color: #fff; }
+.action-btn.edit-company { background: #3399FF; border-color: #3399FF; color: #fff; }
+.action-btn.edit-company:hover { background: #0066ff; }
+.action-btn .badge { display: inline-block; background: #FF0000; color: #fff; font-size: 10px; padding: 0 5px; border-radius: 5px; margin-left: 3px; }
+
+/* ========== 主账号信息面板 ========== */
+.section-wrap { background: #fff; border: 1px solid #e2ebf6; border-radius: 5px; margin-top: 2px; padding: 20px 0 20px; }
+.section-title { padding: 0 28px 15px; font-size: 16px; font-weight: 700; position: relative; }
+.section-title::before { content: ''; position: absolute; left: 28px; top: 4px; width: 6px; height: 15px; background: #0066ff; border-radius: 5px; }
+.section-title-text { padding-left: 15px; }
+
+/* 功能 Tab */
+.func-tabs { border-bottom: 2px solid #e2ebf6; padding: 0 28px; }
+.func-tab { display: inline-block; padding: 8px 20px; font-size: 14px; color: #666; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+.func-tab:hover { color: #0066ff; }
+.func-tab.active { color: #0066ff; font-weight: 700; border-bottom-color: #0066ff; }
+
+/* 子 Tab */
+.sub-tabs { padding: 10px 28px 0; border-bottom: 1px solid #e2ebf6; }
+.sub-tab { display: inline-block; padding: 6px 14px; font-size: 13px; color: #666; cursor: pointer; border: 1px solid transparent; border-bottom: none; margin-bottom: -1px; border-radius: 3px 3px 0 0; }
+.sub-tab.active { color: #0066ff; font-weight: 700; background: #fff; border-color: #e2ebf6; }
+.sub-tab:hover { color: #0066ff; }
+
+/* Tab 内容 */
+.tab-content { display: none; padding: 15px 28px; }
+.tab-content.active { display: block; }
+
+/* ========== 表格 ========== */
+.data-table { width: 100%; border-collapse: collapse; border: 1px solid #d7d7d7; }
+.data-table thead th { background: #0066ff; color: #fff; height: 40px; border-right: 1px solid #fff; padding: 0 8px; font-size: 13px; text-align: center; }
+.data-table thead th:last-child { border-right: 1px solid #d7d7d7; }
+.data-table tbody td { border: 1px solid #d7d7d7; padding: 8px 8px; text-align: center; font-size: 13px; color: #555; }
+.data-table tbody tr:hover td { background: #f5f8ff; }
+.data-table .text-left { text-align: left; }
+.caozuo-btn { display: inline-block; padding: 2px 10px; height: 23px; line-height: 19px; border-radius: 3px; color: #fff; font-size: 12px; margin: 1px; cursor: pointer; white-space: nowrap; border: none; }
+.caozuo-btn.chakan { background: #0066ff; }
+.caozuo-btn.tuikuan { background: #ff5454; }
+.caozuo-btn.shoukuan { background: #70b603; }
+.caozuo-btn.zuofei { background: #999; }
+.caozuo-btn.yeji { background: #FF9A39; }
+.caozuo-btn.blue-btn { background: #3399ff; }
+.caozuo-btn.green-btn { background: #29CCA5; }
+.caozuo-btn i { font-style: normal; }
+.toggle-status { font-size: 12px; cursor: pointer; }
+.toggle-status.open { color: #70b603; }
+.toggle-status.close { color: #999; }
+
+/* ========== 客服权限 ========== */
+.kefu-panel { padding: 15px 28px; }
+.kefu-table { width: 100%; border-collapse: collapse; border: 1px solid #d7d7d7; }
+.kefu-table td { padding: 8px 12px; border: 1px solid #d7d7d7; font-size: 13px; }
+.kefu-table .kefu-label { width: 100px; background: #e2ebf6; font-weight: 700; color: #555; }
+
+/* ========== 日志记录 ========== */
+.log-section { margin-top: 2px; background: #fff; border: 1px solid #e2ebf6; border-radius: 5px; padding-bottom: 20px; }
+.log-header { padding: 15px 28px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2ebf6; }
+.log-tabs { display: flex; border: 1px solid #0066ff; border-right: none; }
+.log-tab { padding: 0 20px; height: 38px; line-height: 38px; font-size: 14px; cursor: pointer; border-right: 1px solid #0066ff; color: #333; }
+.log-tab.active { background: #0066ff; color: #fff; font-weight: 700; }
+.log-tab.active b { color: #fff; }
+.btn-add-log { background: #ff5454; color: #fff; padding: 0 20px; height: 38px; line-height: 38px; border-radius: 5px; cursor: pointer; font-size: 14px; border: none; }
+
+/* 通话记录添加 */
+.call-log-form { background: #f7f7f7; padding: 15px 28px; }
+.call-contact { padding: 5px 0; display: flex; justify-content: space-between; align-items: flex-start; }
+.quick-tags { display: flex; flex-wrap: wrap; gap: 0; }
+.quick-tag-group { position: relative; padding: 5px 18px; border-right: 1px solid #DEDEDE; cursor: pointer; font-size: 12px; }
+.quick-tag-group:last-child { border-right: none; }
+.quick-tag-group .tag-label { color: #333; }
+.quick-tag-group .dropdown-menu-tag { display: none; position: absolute; top: 100%; left: 0; background: #fff; border: 1px solid #ddd; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); z-index: 100; min-width: 120px; }
+.quick-tag-group:hover .dropdown-menu-tag { display: block; }
+.quick-tag-group .dropdown-menu-tag li { padding: 6px 12px; cursor: pointer; font-size: 12px; color: #333; }
+.quick-tag-group .dropdown-menu-tag li:hover { background: #e2ebf6; }
+.call-textarea { border: 1px solid #e2e2e2; border-radius: 3px; width: 100%; height: 85px; padding: 10px 15px; resize: none; box-sizing: border-box; margin-top: 10px; }
+.call-filters { margin-top: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+.filter-select { border: 1px solid #dedede; height: 30px; padding: 0 8px; border-radius: 3px; font-size: 12px; }
+.filter-date { border: 1px solid #dedede; height: 30px; border-radius: 3px; display: inline-flex; align-items: center; padding: 0 8px; background: #fff; }
+.filter-date input { border: none; width: 85px; outline: none; font-size: 12px; }
+.checkbox-group label { margin-right: 20px; font-size: 12px; cursor: pointer; }
+.btn-submit { background: #EC808D; color: #fff; padding: 6px 20px; border-radius: 3px; border: none; cursor: pointer; }
+.btn-cancel { background: #d7d7d7; color: #333; padding: 6px 20px; border-radius: 3px; border: none; cursor: pointer; }
+
+/* 回访日程 */
+.return-schedule { margin-top: 10px; display: flex; align-items: center; border: 1px solid #ccc; border-radius: 3px; overflow: hidden; }
+.schedule-label { width: 100px; padding: 0 10px; border-right: 1px solid #ccc; line-height: 32px; font-size: 12px; flex-shrink: 0; }
+.schedule-items { display: flex; flex: 1; background: #fff; }
+.schedule-item { padding: 0 10px; line-height: 32px; font-size: 12px; border-right: 1px solid #f0f0f0; }
+.schedule-item .count { color: #FF6600; font-weight: 700; }
+.schedule-item.warning { color: #FF0000; }
+
+/* 记录搜索 */
+.log-search { padding: 13px 28px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.search-input { border: 1px solid #0066ff; border-radius: 3px; height: 34px; display: inline-flex; align-items: center; background: #fff; padding: 0 8px; }
+.search-input input { border: none; outline: none; width: 180px; font-size: 12px; color: #333; }
+.search-input img { cursor: pointer; }
+.search-select { border: 1px solid #dedede; height: 34px; border-radius: 3px; padding: 0 8px; font-size: 12px; }
+.search-btn { background: #0066ff; color: #fff; padding: 0 18px; height: 34px; line-height: 34px; border-radius: 3px; cursor: pointer; border: none; font-size: 13px; }
+
+/* 记录表格 */
+.log-table-container { margin: 0 28px; }
+.log-table { width: 100%; border-collapse: collapse; border: 1px solid #d7d7d7; }
+.log-table thead th { background: #0066ff; color: #fff; height: 40px; border-right: 1px solid #fff; padding: 0 8px; font-size: 13px; text-align: center; }
+.log-table thead th:last-child { border-right: 1px solid #d7d7d7; }
+.log-table tbody td { border: 1px solid #d7d7d7; padding: 8px 8px; text-align: center; font-size: 13px; color: #555; }
+.log-table .td-content { text-align: left; max-width: 350px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.log-load-more { text-align: center; margin-top: 15px; }
+.log-load-more a { display: inline-block; padding: 8px 30px; border: 1px solid #0066FF; color: #0066FF; border-radius: 5px; font-size: 13px; }
+.log-load-more a.back-top { border-color: #FF0000; color: #FF0000; margin-left: 10px; }
+
+/* ========== 滚动返回顶部 ========== */
+.rollTop { position: fixed; bottom: 100px; right: 0; z-index: 1000; }
+.rollTop a { display: block; width: 48px; background: #555; color: #fff; padding: 10px 10px; border-radius: 5px 0 0 5px; text-align: center; font-size: 12px; }
+
+/* ========== 弹出层 ========== */
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 999; justify-content: center; align-items: center; }
+.modal-overlay.active { display: flex; }
+.modal-box { background: #fff; border-radius: 5px; min-width: 300px; max-width: 600px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+.modal-header { background: #958de1; padding: 0 20px; height: 45px; line-height: 45px; color: #fff; border-radius: 5px 5px 0 0; display: flex; justify-content: space-between; }
+.modal-header .close-btn { font-size: 24px; cursor: pointer; color: #fff; }
+.modal-body { padding: 20px; }
+
+/* ========== 支付码弹窗 ========== */
+.pay-modal { width: 282px; background: none; }
+.pay-close { text-align: right; }
+.pay-close a { width: 41px; height: 26px; line-height: 26px; text-align: center; background: #d7d7d7; display: inline-block; color: #333; cursor: pointer; }
+.pay-body { background: #1995d3; padding: 25px 0 1px; text-align: center; }
+.pay-body .pay-title { width: 198px; height: 34px; line-height: 34px; background: #fff; border-radius: 30px; margin: 0 auto; font-size: 18px; color: #1995d3; font-weight: 700; }
+.pay-body .qr-box { width: 180px; height: 180px; padding: 9px; background: #fff; border-radius: 5px; margin: 20px auto; }
+.pay-body .qr-box img { width: 180px; height: 180px; }
+.pay-info { width: 205px; margin: 0 auto; color: #fff; text-align: left; }
+.pay-info .info-row { margin-bottom: 8px; font-size: 13px; }
+.pay-footer { background: #fff; margin: 1px 1px 0; padding: 12px 0; text-align: center; }
+.pay-modal.wechat .pay-body { background: #2aa139; }
+.pay-modal.wechat .pay-title { color: #2aa139; }
+</style>
+</head>
+<body>
+
+<!-- ========== 头部导航 ========== -->
+<div class="header-wrap">
+  <div class="w12 header">
+    <div class="fl header-left">
+      <ul>
+        <li><a href="javascript:history.back()">← 返回</a></li>
+      </ul>
+    </div>
+    <div class="fr header-right">
+      <ul>
+        <li><a href="javascript:;">高级搜索</a></li>
+        <li><a href="/">首页</a></li>
+        <li><a href="javascript:;">帮助</a></li>
+      </ul>
+    </div>
+    <div class="clear"></div>
+  </div>
+</div>
+
+<!-- ========== 公司信息头部 ========== -->
+<div class="company-header">
+  <div class="w12">
+    <div class="gongsixinxi">
+      <span class="company-name">大土豆有限责任公司</span>
+      <span class="company-tag tag-paid">付费</span>
+      <span class="company-tag tag-primary">主账号</span>
+      <span class="source-label">来源：手动录入 2022-11-25 18:29:14</span>
+    </div>
+    <div class="rating-box">
+      <span class="rating-star">★★★★★</span>
+      <span class="rating-score">4.6</span>
+      <span style="color:#999;font-size:12px;">（333人评分）</span>
+      <span class="credit-badge" style="margin-left:15px;">信用认证：未认证</span>
+      <span style="margin-left:15px;font-size:13px;">
+        客户评级：<b class="red">C级</b>
+        <span style="color:#999;font-size:12px;">（有考虑需挖掘）</span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 公司信息表格 ========== -->
+<div class="w12 info-grid">
+  <!-- 左列 -->
+  <div class="info-item"><span class="info-label">公司电话</span><span class="info-value"><span class="tel-icon">📞</span> 0312-2050308</span></div>
+  <div class="info-item"><span class="info-label">公司地址</span><span class="info-value">河北省保定市涿州市...</span></div>
+  <div class="info-item"><span class="info-label">手机号</span><span class="info-value"><span class="tel-icon">📞</span> 15650132296</span></div>
+  <div class="info-item"><span class="info-label">所属行业</span><span class="info-value">水利、环境和公共设施管理业</span></div>
+  <div class="info-item"><span class="info-label">联系人</span><span class="info-value">[待核实]&lt;同事，禁止联系&gt;</span></div>
+  <div class="info-item"><span class="info-label">会员级别</span><span class="info-value"><span class="tag-level">移动端标准会员</span></span></div>
+  <div class="info-item"><span class="info-label">注册时间</span><span class="info-value">2022/11/25 18:29:14</span></div>
+  <div class="info-item"><span class="info-label">到期时间</span><span class="info-value"><span class="tag-expire">2026/7/10 18:29:14</span></span></div>
+  <div class="info-item"><span class="info-label">销售归属</span><span class="info-value">营销部经理(周海贵)</span></div>
+  <!-- 右列 -->
+  <div class="info-item"><span class="info-label">账号数量</span><span class="info-value"><a href="javascript:;" style="color:#0066ff;">1 个</a></span></div>
+  <div class="info-item"><span class="info-label">上次登录IP</span><span class="info-value">...</span></div>
+  <div class="info-item"><span class="info-label">官网</span><span class="info-value">无</span></div>
+  <div class="info-item"><span class="info-label">邮箱</span><span class="info-value">无</span></div>
+  <div class="info-item"><span class="info-label">信息来源</span><span class="info-value">手机注册</span></div>
+  <div class="info-item"><span class="info-label">会员服务</span><span class="info-value">移动端标准会员</span></div>
+  <div class="info-item"><span class="info-label">开通费用</span><span class="info-value"><span class="tag-expire">￥998.00</span></span></div>
+  <div class="info-item"><span class="info-label">历史消费</span><span class="info-value">￥998.00</span></div>
+  <div class="info-item"><span class="info-label">客服归属</span><span class="info-value">客服二部(张亚娟)</span></div>
+  <div class="info-timeline">
+    <span class="dot dot-green"></span>注册：2022-11-25 18:29:14
+    <span class="dot dot-blue"></span>分配：2025-07-07 08:54:57
+    <span class="dot dot-red"></span>登录：2026-07-14 15:59:43
+  </div>
+</div>
+
+<!-- ========== 编辑 + 常用操作 ========== -->
+<div class="w12 action-section">
+  <div class="action-group">
+    <div class="action-group-label">信息管理</div>
+    <div class="action-group-buttons">
+      <span class="action-btn edit-company">编辑公司信息</span>
+    </div>
+  </div>
+  <div class="action-group">
+    <div class="action-group-label">业务操作</div>
+    <div class="action-group-buttons">
+      <span class="action-btn">发送短信</span>
+      <span class="action-btn">发送邮件</span>
+      <span class="action-btn">生成订单</span>
+      <span class="action-btn">补发邮件</span>
+      <span class="action-btn">手动入款</span>
+      <span class="action-btn">关联账号</span>
+    </div>
+  </div>
+  <div class="action-group">
+    <div class="action-group-label">账号信息</div>
+    <div class="action-group-buttons">
+      <span class="action-btn">修改密码</span>
+      <span class="action-btn">解锁账号</span>
+      <span class="action-btn">修改实名</span>
+      <span class="action-btn">负责人变更</span>
+    </div>
+  </div>
+  <div class="action-group">
+    <div class="action-group-label">优惠折扣</div>
+    <div class="action-group-buttons">
+      <span class="action-btn">改价</span>
+      <span class="action-btn">改续费价格</span>
+      <span class="action-btn">延期</span>
+      <span class="action-btn">优惠券</span>
+    </div>
+  </div>
+  <div class="action-group">
+    <div class="action-group-label">会员服务</div>
+    <div class="action-group-buttons">
+      <span class="action-btn">开通正式会员</span>
+      <span class="action-btn">开通试用会员</span>
+      <span class="action-btn">生成试用账号</span>
+      <span class="action-btn">体验账号</span>
+      <span class="action-btn">账号升级</span>
+    </div>
+  </div>
+  <div class="action-group">
+    <div class="action-group-label">资源增值</div>
+    <div class="action-group-buttons">
+      <span class="action-btn">标书代写</span>
+      <span class="action-btn">数据导出</span>
+      <span class="action-btn">广告服务</span>
+      <span class="action-btn">企宣宝</span>
+      <span class="action-btn">中标通</span>
+    </div>
+  </div>
+  <div class="action-group">
+    <div class="action-group-label">管理工具</div>
+    <div class="action-group-buttons">
+      <span class="action-btn">投诉</span>
+      <span class="action-btn">操作记录</span>
+      <span class="action-btn">发票</span>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 主账号信息面板 ========== -->
+<div class="w12 section-wrap">
+  <div class="section-title"><span class="section-title-text">主账号信息</span></div>
+
+  <!-- 功能 Tab -->
+  <div class="func-tabs" id="funcTabs">
+    <span class="func-tab active" data-tab="tab-zaixian">在线开通</span>
+    <span class="func-tab" data-tab="tab-dingyue">订阅管理</span>
+    <span class="func-tab" data-tab="tab-jiegou">结构化数据包</span>
+    <span class="func-tab" data-tab="tab-shuju">数据服务</span>
+    <span class="func-tab" data-tab="tab-dashuju">采招大数据</span>
+    <span class="func-tab" data-tab="tab-zuizong">追踪信息</span>
+  </div>
+
+  <!-- ========== Tab: 在线开通 ========== -->
+  <div class="tab-content active" id="tab-zaixian">
+    <div class="sub-tabs">
+      <span class="sub-tab active">全部</span>
+      <span class="sub-tab">待审核</span>
+      <span class="sub-tab">已通过</span>
+      <span class="sub-tab">未通过</span>
+    </div>
+    <div style="padding-top:15px;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width:13%;">级别（地区）</th>
+            <th style="width:13%;">用户名</th>
+            <th style="width:12%;">订单编号</th>
+            <th style="width:10%;">服务器</th>
+            <th style="width:10%;">支付方式</th>
+            <th style="width:8%;">金额</th>
+            <th style="width:12%;">归属人</th>
+            <th style="width:12%;">时间</th>
+            <th style="width:10%;">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>移动端标准会员<br><span style="font-size:11px;color:#999;">（北京）</span></td>
+            <td>15650132296</td>
+            <td>DD20260701001</td>
+            <td>北京节点</td>
+            <td>支付宝<span style="color:#999;">（在线支付）</span></td>
+            <td><b class="red">￥998.00</b></td>
+            <td>周海贵（营销部）</td>
+            <td>2026-07-01 10:30:00</td>
+            <td style="text-align:left;">
+              <span class="caozuo-btn chakan" style="margin:1px 0;display:inline-block;">查看</span>
+              <span class="caozuo-btn chakan" style="margin:1px 0;display:inline-block;">生成合同</span>
+              <span class="caozuo-btn shoukuan" style="margin:1px 0;display:inline-block;">收款</span>
+              <span class="caozuo-btn chakan" style="margin:1px 0;display:inline-block;">技术对接</span>
+            </td>
+          </tr>
+          <tr>
+            <td>投标通会员<br><span style="font-size:11px;color:#999;">（全国）</span></td>
+            <td>test_user</td>
+            <td>DD20260615003</td>
+            <td>默认</td>
+            <td>微信<span style="color:#999;">（在线支付）</span></td>
+            <td><b class="red">￥2,680.00</b></td>
+            <td>系统</td>
+            <td>2026-06-15 14:22:10</td>
+            <td style="text-align:left;">
+              <span class="caozuo-btn chakan" style="margin:1px 0;display:inline-block;">查看</span>
+              <span class="caozuo-btn tuikuan" style="margin:1px 0;display:inline-block;">退款申请</span>
+              <span class="caozuo-btn zuofei" style="margin:1px 0;display:inline-block;">作废</span>
+              <span class="caozuo-btn yeji" style="margin:1px 0;display:inline-block;">业绩变更</span>
+            </td>
+          </tr>
+          <tr>
+            <td>金牌会员<br><span style="font-size:11px;color:#999;">（河北）</span></td>
+            <td>hebei_company</td>
+            <td>DD20260520008</td>
+            <td>河北节点</td>
+            <td>对公转账</td>
+            <td><b class="red">￥5,800.00</b></td>
+            <td>牟敬茹（售后部）</td>
+            <td>2026-05-20 09:15:30</td>
+            <td style="text-align:left;">
+              <span class="caozuo-btn chakan" style="margin:1px 0;display:inline-block;">查看</span>
+              <span class="caozuo-btn chakan" style="margin:1px 0;display:inline-block;">提交标书</span>
+              <span class="caozuo-btn shoukuan" style="margin:1px 0;display:inline-block;">收款</span>
+              <span class="caozuo-btn yeji" style="margin:1px 0;display:inline-block;">业绩变更</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ========== Tab: 订阅管理 ========== -->
+  <div class="tab-content" id="tab-dingyue">
+    <div class="sub-tabs">
+      <span class="sub-tab active">全部</span>
+      <span class="sub-tab">邮件定制</span>
+      <span class="sub-tab">微信招标</span>
+      <span class="sub-tab">微信工程</span>
+      <span class="sub-tab">App招标</span>
+      <span class="sub-tab">App工程</span>
+    </div>
+
+    <!-- 全部面板（显示所有子项） -->
+    <div class="sub-tab-panel" data-sub="全部" style="padding-top:15px;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width:15%;">定制邮箱</th>
+            <th style="width:18%;">定制关键词</th>
+            <th style="width:10%;">地区</th>
+            <th style="width:10%;">信息类型</th>
+            <th style="width:8%;">发送内容</th>
+            <th style="width:8%;">附件</th>
+            <th style="width:13%;">状态</th>
+            <th style="width:18%;">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>contact@company.com<br><span style="color:red;font-size:11px;">（张三/标准会员）</span></td>
+            <td class="text-left">
+              <span style="color:#6F9BC4;">水利工程、河道治理</span><br>
+              <span style="font-size:11px;color:#999;">DD2026-GC-001</span>
+              <a href="javascript:;" style="color:#6F9BC4;font-size:11px;margin-left:5px;">结构化数据</a>
+            </td>
+            <td>河北</td>
+            <td>招标公告</td>
+            <td>标题+内容</td>
+            <td>无</td>
+            <td>
+              <span class="toggle-status open">邮件：开启中</span><br>
+              <span class="toggle-status open">微信：开启中</span><br>
+              <span class="toggle-status close">编辑锁：未锁</span>
+            </td>
+            <td>
+              <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">推送日志</a>
+              <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">补发</a><br>
+              <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">修改</a>
+              <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">删除</a>
+            </td>
+          </tr>
+          <tr>
+            <td>admin@potato.com<br><span style="color:red;font-size:11px;">（李四/高级会员）</span></td>
+            <td class="text-left">
+              <span style="color:#6F9BC4;">市政工程、污水处理</span><br>
+              <span style="font-size:11px;color:#999;">DD2026-GC-002</span>
+              <a href="javascript:;" style="color:#6F9BC4;font-size:11px;margin-left:5px;">结构化数据</a>
+            </td>
+            <td>全国</td>
+            <td>中标结果</td>
+            <td>标题+内容</td>
+            <td>有</td>
+            <td>
+              <span class="toggle-status open">邮件：开启中</span><br>
+              <span class="toggle-status close">微信：关闭中</span><br>
+              <span class="toggle-status open">编辑锁：已锁</span>
+            </td>
+            <td>
+              <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">推送日志</a>
+              <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">修改</a><br>
+              <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">修改记录</a>
+              <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">更多</a>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="8" style="background:#6F9BC4;color:#fff;font-weight:700;text-align:left;padding-left:15px;">微信招标定制</td>
+          </tr>
+          <tr>
+            <td colspan="8">
+              <table class="data-table" style="margin:0;border:0;">
+                <thead>
+                  <tr>
+                    <th style="width:14%;">联系人</th>
+                    <th style="width:22%;">关键词</th>
+                    <th style="width:10%;">地区</th>
+                    <th style="width:12%;">信息类型</th>
+                    <th style="width:11%;">创建时间</th>
+                    <th style="width:11%;">更新时间</th>
+                    <th style="width:8%;">状态</th>
+                    <th style="width:12%;">操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>张三（13800138000）</td><td class="text-left"><span style="color:#6F9BC4;">招标代理、工程监理</span> <a href="javascript:;" style="color:#6F9BC4;font-size:11px;">结构化数据</a></td><td>河北</td><td>招标公告</td><td>2026-06-01</td><td>2026-07-10</td><td><span class="toggle-status open">开启中</span></td><td><a href="javascript:;" style="font-size:11px;color:#6F9BC4;">发送日志</a> <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">修改</a></td></tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 邮件定制面板 -->
+    <div class="sub-tab-panel" data-sub="邮件定制" style="padding-top:15px;display:none;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width:15%;">定制邮箱</th>
+            <th style="width:18%;">定制关键词</th>
+            <th style="width:10%;">地区</th>
+            <th style="width:10%;">信息类型</th>
+            <th style="width:8%;">发送内容</th>
+            <th style="width:8%;">附件</th>
+            <th style="width:13%;">状态</th>
+            <th style="width:18%;">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>contact@company.com<br><span style="color:red;font-size:11px;">（张三/标准会员）</span></td>
+            <td class="text-left">
+              <span style="color:#6F9BC4;">水利工程、河道治理</span><br>
+              <span style="font-size:11px;color:#999;">DD2026-GC-001</span>
+              <a href="javascript:;" style="color:#6F9BC4;font-size:11px;margin-left:5px;">结构化数据</a>
+            </td>
+            <td>河北</td>
+            <td>招标公告</td>
+            <td>标题+内容</td>
+            <td>无</td>
+            <td>
+              <span class="toggle-status open">邮件：开启中</span><br>
+              <span class="toggle-status open">微信：开启中</span><br>
+              <span class="toggle-status close">编辑锁：未锁</span>
+            </td>
+            <td>
+              <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">推送日志</a>
+              <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">微信推送日志</a>
+              <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">补发</a><br>
+              <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">修改</a>
+              <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">修改记录</a>
+              <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">删除</a>
+              <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">更多</a>
+            </td>
+          </tr>
+          <tr>
+            <td>admin@potato.com<br><span style="color:red;font-size:11px;">（李四/高级会员）</span></td>
+            <td class="text-left">
+              <span style="color:#6F9BC4;">市政工程、污水处理</span><br>
+              <span style="font-size:11px;color:#999;">DD2026-GC-002</span>
+              <a href="javascript:;" style="color:#6F9BC4;font-size:11px;margin-left:5px;">结构化数据</a>
+            </td>
+            <td>全国</td>
+            <td>中标结果</td>
+            <td>标题+内容</td>
+            <td>有</td>
+            <td>
+              <span class="toggle-status open">邮件：开启中</span><br>
+              <span class="toggle-status close">微信：关闭中</span><br>
+              <span class="toggle-status open">编辑锁：已锁</span>
+            </td>
+            <td>
+              <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">推送日志</a>
+              <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">修改</a><br>
+              <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">修改记录</a>
+              <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">更多</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 微信招标面板 -->
+    <div class="sub-tab-panel" data-sub="微信招标" style="padding-top:15px;display:none;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width:14%;">联系人</th>
+            <th style="width:22%;">关键词</th>
+            <th style="width:10%;">地区</th>
+            <th style="width:12%;">信息类型</th>
+            <th style="width:11%;">创建时间</th>
+            <th style="width:11%;">更新时间</th>
+            <th style="width:8%;">状态</th>
+            <th style="width:12%;">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>张三（13800138000）</td>
+            <td class="text-left"><span style="color:#6F9BC4;">招标代理、工程监理</span> <a href="javascript:;" style="color:#6F9BC4;font-size:11px;">结构化数据</a></td>
+            <td>河北</td>
+            <td>招标公告</td>
+            <td>2026-06-01</td>
+            <td>2026-07-10</td>
+            <td><span class="toggle-status open">开启中</span></td>
+            <td><a href="javascript:;" style="font-size:11px;color:#6F9BC4;">发送日志</a> <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">修改</a></td>
+          </tr>
+          <tr>
+            <td>李四（13900139000）</td>
+            <td class="text-left"><span style="color:#6F9BC4;">工程监理、造价咨询</span> <a href="javascript:;" style="color:#6F9BC4;font-size:11px;">结构化数据</a></td>
+            <td>全国</td>
+            <td>招标公告</td>
+            <td>2026-05-20</td>
+            <td>2026-07-08</td>
+            <td><span class="toggle-status open">开启中</span></td>
+            <td><a href="javascript:;" style="font-size:11px;color:#6F9BC4;">发送日志</a> <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">修改</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 微信工程面板 -->
+    <div class="sub-tab-panel" data-sub="微信工程" style="padding-top:15px;display:none;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width:25%;">标题</th>
+            <th style="width:12%;">地区</th>
+            <th style="width:12%;">行业</th>
+            <th style="width:10%;">阶段</th>
+            <th style="width:20%;">推送状态</th>
+            <th style="width:21%;">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>河北省水利工程项目跟踪</td>
+            <td>河北</td>
+            <td>水利</td>
+            <td>招标阶段</td>
+            <td><span class="toggle-status open">邮件：开启中</span><br><span class="toggle-status open">微信：开启中</span></td>
+            <td><a href="javascript:;" style="font-size:11px;color:#6F9BC4;">邮件推送日志</a> <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">微信推送日志</a></td>
+          </tr>
+          <tr>
+            <td>保定市污水处理改扩建工程</td>
+            <td>河北</td>
+            <td>环保</td>
+            <td>施工阶段</td>
+            <td><span class="toggle-status open">邮件：开启中</span><br><span class="toggle-status close">微信：关闭中</span></td>
+            <td><a href="javascript:;" style="font-size:11px;color:#6F9BC4;">邮件推送日志</a> <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">微信推送日志</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- App招标面板 -->
+    <div class="sub-tab-panel" data-sub="App招标" style="padding-top:15px;display:none;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width:16%;">联系人/AppID</th>
+            <th style="width:18%;">关键词</th>
+            <th style="width:8%;">地区</th>
+            <th style="width:8%;">类型</th>
+            <th style="width:10%;">推送方式</th>
+            <th style="width:8%;">范围</th>
+            <th style="width:8%;">状态</th>
+            <th style="width:10%;">创建时间</th>
+            <th style="width:14%;">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>张三<br>appID: wx123456</td>
+            <td class="text-left"><span style="color:#6F9BC4;">工程招标</span> <a href="javascript:;" style="color:#6F9BC4;font-size:11px;">结构化数据</a></td>
+            <td>全国</td>
+            <td>招标公告</td>
+            <td>即时推送</td>
+            <td>全国</td>
+            <td><span class="toggle-status open">开启中</span></td>
+            <td>2026-06-15</td>
+            <td><a href="javascript:;" style="font-size:11px;color:#6F9BC4;">推送记录</a> <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">修改</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- App工程面板 -->
+    <div class="sub-tab-panel" data-sub="App工程" style="padding-top:15px;display:none;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width:16%;">联系人/AppID</th>
+            <th style="width:18%;">阶段</th>
+            <th style="width:12%;">地区</th>
+            <th style="width:10%;">类型</th>
+            <th style="width:12%;">创建时间</th>
+            <th style="width:8%;">状态</th>
+            <th style="width:24%;">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>李四<br>appID: wx789012</td>
+            <td>施工阶段</td>
+            <td>河北</td>
+            <td>工程信息</td>
+            <td>2026-06-20</td>
+            <td><span class="toggle-status open">开启中</span></td>
+            <td><a href="javascript:;" style="font-size:11px;color:#6F9BC4;">推送记录</a> <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">修改</a></td>
+          </tr>
+          <tr>
+            <td>王五<br>appID: wx345678</td>
+            <td>招标阶段</td>
+            <td>全国</td>
+            <td>工程信息</td>
+            <td>2026-05-10</td>
+            <td><span class="toggle-status close">关闭中</span></td>
+            <td><a href="javascript:;" style="font-size:11px;color:#6F9BC4;">推送记录</a> <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">修改</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ========== Tab: 结构化数据包 ========== -->
+  <div class="tab-content" id="tab-jiegou">
+    <div style="padding-top:15px;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>手机号</th>
+            <th>联系人</th>
+            <th>订单编号</th>
+            <th>金额</th>
+            <th>状态</th>
+            <th>时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>15650132296</td><td>[待核实]</td><td>JGH20260701001</td><td><b class="red">￥500.00</b></td><td>已完成</td><td>2026-07-01</td><td><span class="caozuo-btn chakan">查看</span></td></tr>
+          <tr><td>15011513872</td><td>测试</td><td>JGH20260620003</td><td><b class="red">￥300.00</b></td><td>处理中</td><td>2026-06-20</td><td><span class="caozuo-btn chakan">查看</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ========== Tab: 数据服务 ========== -->
+  <div class="tab-content" id="tab-shuju">
+    <div class="sub-tabs">
+      <span class="sub-tab active">全部</span>
+      <span class="sub-tab">企业套餐</span>
+      <span class="sub-tab">招标数据导出</span>
+      <span class="sub-tab">中标数据</span>
+      <span class="sub-tab">项目数据</span>
+      <span class="sub-tab">标讯数据</span>
+      <span class="sub-tab">商机数据</span>
+      <span class="sub-tab">采购数据</span>
+    </div>
+    <div style="padding-top:15px;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>手机号</th>
+            <th>联系人</th>
+            <th>订单编号</th>
+            <th>订单名称</th>
+            <th>金额</th>
+            <th>到款状态</th>
+            <th>时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>15650132296</td><td>[待核实]</td><td>SJFW20260705</td><td>企业数据套餐A</td><td><b class="red">￥1,280.00</b></td><td>已到款</td><td>2026-07-05</td><td><span class="caozuo-btn chakan">查看</span></td></tr>
+          <tr><td>15011513872</td><td>测试</td><td>SJFW20260628</td><td>招标数据导出</td><td><b class="red">￥680.00</b></td><td>未到款</td><td>2026-06-28</td><td><span class="caozuo-btn chakan">查看</span> <span class="caozuo-btn shoukuan">收款</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ========== Tab: 采招大数据 ========== -->
+  <div class="tab-content" id="tab-dashuju">
+    <div class="sub-tabs">
+      <span class="sub-tab active">全部</span>
+      <span class="sub-tab">企业数据</span>
+      <span class="sub-tab">招标数据</span>
+    </div>
+    <div style="padding-top:15px;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>手机号</th>
+            <th>联系人</th>
+            <th>订单编号</th>
+            <th>订单名称</th>
+            <th>金额</th>
+            <th>到款状态</th>
+            <th>时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>15650132296</td><td>[待核实]</td><td>DSJ20260710</td><td>企业数据报告</td><td><b class="red">￥3,200.00</b></td><td>已到款</td><td>2026-07-10</td><td><span class="caozuo-btn chakan">查看</span></td></tr>
+          <tr><td>15011513872</td><td>测试</td><td>DSJ20260615</td><td>招标数据分析</td><td><b class="red">￥1,800.00</b></td><td>未到款</td><td>2026-06-15</td><td><span class="caozuo-btn chakan">查看</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ========== Tab: 追踪信息 ========== -->
+  <div class="tab-content" id="tab-zuizong">
+    <div style="padding-top:15px;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>用户</th>
+            <th>关键词/标题</th>
+            <th>更新时间</th>
+            <th>到期时间</th>
+            <th>联系方式</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>张三（张三）</td>
+            <td>河北省水利工程招标项目</td>
+            <td>2026-07-14</td>
+            <td>2026-08-14</td>
+            <td>13800138000（张三）</td>
+            <td><span class="green">追踪中</span></td>
+            <td><a href="javascript:;" style="font-size:11px;color:#6F9BC4;">微信日志</a> <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">操作记录</a> <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">编辑</a></td>
+          </tr>
+          <tr>
+            <td>李四（李四）</td>
+            <td>保定市污水处理项目</td>
+            <td>2026-07-10</td>
+            <td>2026-08-10</td>
+            <td>13900139000（李四）</td>
+            <td><span class="green">追踪中</span></td>
+            <td><a href="javascript:;" style="font-size:11px;color:#6F9BC4;">微信日志</a> <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">操作记录</a> <a href="javascript:;" style="font-size:11px;color:#6F9BC4;">编辑</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 客服权限板块 ========== -->
+<div class="w12 section-wrap" style="padding-bottom:0;">
+  <div class="section-title"><span class="section-title-text">客服权限</span></div>
+  <div class="kefu-panel">
+    <table class="kefu-table">
+      <tr><td class="kefu-label">客服权限</td><td>客服二部</td><td class="kefu-label">客服</td><td>张亚娟</td></tr>
+      <tr><td class="kefu-label">跟进状态</td><td>正常跟进</td><td class="kefu-label">最后跟进</td><td>2026-7-14 17:00:42</td></tr>
+      <tr><td class="kefu-label">回访计划</td><td colspan="3">
+        <span style="margin-right:20px;">AA级：<b>2026-07-16</b></span>
+        <span style="margin-right:20px;">A级：<b>2026-07-17</b></span>
+        <span style="margin-right:20px;">B级：<b>2026-07-20</b></span>
+        <span style="margin-right:20px;">C级：<b>2026-07-22</b></span>
+      </td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ========== 日志记录 ========== -->
+<div class="w12 log-section">
+  <div class="log-header">
+    <div class="log-tabs" id="logTabs">
+      <span class="log-tab active" data-log="log-sale"><b>销售记录</b></span>
+      <span class="log-tab" data-log="log-system"><b>系统记录</b></span>
+      <span class="log-tab" data-log="log-behavior"><b>用户行为记录</b></span>
+      <span class="log-tab" data-log="log-sms"><b>短信记录</b></span>
+      <span class="log-tab" data-log="log-all"><b>全部记录</b></span>
+    </div>
+    <button class="btn-add-log" onclick="alert('添加记录')">+ 添加记录</button>
+  </div>
+
+  <!-- 通话记录添加表单 -->
+  <div class="call-log-form" id="callLogForm">
+    <div class="call-contact">
+      <div>
+        <img src="原文件/大土豆有限责任公司 - 客户详情页_files/toux.png" style="vertical-align:middle;">
+        <b style="margin:0 8px;font-size:14px;">[待核实]&lt;同事，禁止联系&gt;</b>
+        <span style="color:#7F7F7F;font-size:12px;">询问决策人贵姓或联系方式请询问客户对我们哪些服务感兴趣</span>
+      </div>
+      <div class="quick-tags">
+        <div class="quick-tag-group">
+          <a href="javascript:;" class="tag-label" style="color:red;font-weight:700;">投诉标记</a>
+          <ul class="dropdown-menu-tag">
+            <li style="color:red;">电话骚扰</li>
+            <li style="color:red;">拨打频繁</li>
+            <li style="color:red;">广告推销</li>
+            <li style="color:red;">侵犯隐私</li>
+            <li style="color:red;">注销账号</li>
+          </ul>
+        </div>
+        <div class="quick-tag-group">
+          <a href="javascript:;" class="tag-label">信息错误</a>
+          <ul class="dropdown-menu-tag">
+            <li>号码空号</li>
+            <li>号码错误</li>
+            <li>人已离职</li>
+            <li>不是本人</li>
+          </ul>
+        </div>
+        <div class="quick-tag-group">
+          <a href="javascript:;" class="tag-label">发布信息</a>
+          <ul class="dropdown-menu-tag">
+            <li>发布供应信息</li>
+            <li>发布展会信息</li>
+            <li>软件注册的</li>
+          </ul>
+        </div>
+        <div class="quick-tag-group">
+          <a href="javascript:;" class="tag-label">没沟通上</a>
+          <ul class="dropdown-menu-tag">
+            <li>无法接通</li>
+            <li>无人接听</li>
+            <li>在开车</li>
+            <li>在忙或开会</li>
+            <li>停机</li>
+          </ul>
+        </div>
+        <div class="quick-tag-group">
+          <a href="javascript:;" class="tag-label">对方挂机</a>
+          <ul class="dropdown-menu-tag">
+            <li>接通后挂机</li>
+            <li>对方拒接</li>
+          </ul>
+        </div>
+        <div class="quick-tag-group">
+          <a href="javascript:;" class="tag-label" style="border-right:0;">不需要</a>
+          <ul class="dropdown-menu-tag">
+            <li>收费不考虑</li>
+            <li>个人随便看看</li>
+            <li>不投标</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <textarea class="call-textarea" placeholder="填写通话记录"></textarea>
+    <div class="call-filters">
+      <div>
+        <select class="filter-select" style="width:110px;">
+          <option>选择客户评级</option>
+          <option>AA级（待打款）</option>
+          <option>A级（已明确办理）</option>
+          <option>B级（计划合作）</option>
+          <option>C级（有考虑需挖掘）</option>
+          <option>D级（意向不明确）</option>
+          <option>E级（明确不合作）</option>
+        </select>
+        <select class="filter-select" style="width:130px;">
+          <option>选择服务类型</option>
+          <option>正常回访</option>
+          <option>招标信息查询</option>
+          <option>招标信息关注</option>
+          <option>特约项目查询</option>
+          <option>招标数据导出</option>
+          <option>指定联系人查询</option>
+          <option>项目数据导出</option>
+          <option>项目唯一推荐</option>
+          <option>短信推送服务</option>
+          <option>招标业务咨询</option>
+          <option>招标数据报告</option>
+        </select>
+        <span class="filter-date">
+          <input type="text" placeholder="填写回访时间" readonly value="2026-07-15">
+          <img src="原文件/大土豆有限责任公司 - 客户详情页_files/riqi.png" style="cursor:pointer;">
+        </span>
+      </div>
+      <div>
+        <span class="checkbox-group">
+          <label><input type="checkbox">&nbsp;管理批复</label>
+        </span>
+        <button class="btn-submit">提交</button>
+        <button class="btn-cancel">取消</button>
+      </div>
+    </div>
+    <!-- 回访日程 -->
+    <div class="return-schedule" style="margin-top:15px;">
+      <span class="schedule-label">客户回访日程</span>
+      <div class="schedule-items">
+        <span class="schedule-item">今天：<span class="count">3</span></span>
+        <span class="schedule-item">1天后：<span class="count">1</span></span>
+        <span class="schedule-item">2天后：<span class="count">2</span></span>
+        <span class="schedule-item">3天后：<span class="count">0</span></span>
+        <span class="schedule-item">4天后：<span class="count">1</span></span>
+        <span class="schedule-item">5天后：<span class="count">0</span></span>
+        <span class="schedule-item">6天后：<span class="count">0</span></span>
+        <span class="schedule-item">7天后：<span class="count">1</span></span>
+        <span class="schedule-item">非工作日：<span class="count">0</span></span>
+        <span class="schedule-item warning">*红色为当天回访数量过多</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 销售记录 ========== -->
+  <div class="log-tab-content active" id="log-sale">
+    <div class="log-search">
+      <div class="search-input">
+        <input type="text" placeholder="搜索相关记录关键词">
+        <img src="原文件/大土豆有限责任公司 - 客户详情页_files/sou.png" style="cursor:pointer;">
+      </div>
+      <select class="search-select">
+        <option>选择客户</option>
+        <option>[待核实]测试(15011513872)</option>
+        <option>[待核实](15650132296)</option>
+      </select>
+      <select class="search-select" style="width:130px;">
+        <option>选择客户评级</option>
+        <option>AA级（待打款）</option>
+        <option>A级（已明确办理）</option>
+        <option>B级（计划合作）</option>
+        <option>C级（有考虑需挖掘）</option>
+        <option>D级（意向不明确）</option>
+        <option>E级（明确不合作）</option>
+      </select>
+      <div class="search-input">
+        <input type="text" placeholder="请选择日期" style="width:130px;">
+        <img src="原文件/大土豆有限责任公司 - 客户详情页_files/riqi.png" style="cursor:pointer;">
+      </div>
+      <button class="search-btn">搜索</button>
+    </div>
+    <div class="log-table-container">
+      <table class="log-table">
+        <thead>
+          <tr>
+            <th style="width:13%;">相关账户</th>
+            <th style="width:10%;">客户姓名</th>
+            <th style="width:12%;">记录创建时间</th>
+            <th style="width:12%;">下次联系时间</th>
+            <th style="width:8%;">客户评级</th>
+            <th style="width:10%;">销售人员</th>
+            <th style="width:25%;">联系/系统记录</th>
+            <th style="width:10%;">操作记录</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>--</td>
+            <td>--</td>
+            <td>2026-07-07 11:45:33<br><a href="javascript:;" style="font-size:11px;color:#0066ff;">录音</a></td>
+            <td>--</td>
+            <td>--</td>
+            <td>售后部(牟敬茹)</td>
+            <td class="td-content">【邮件补发】客户：大土豆有限责任公司（6296201）| 信息时间：2026-07-07 | 补发关键词邮箱组： 2 组</td>
+            <td>补发邮件</td>
+          </tr>
+          <tr>
+            <td>15650132296<br><span style="font-size:11px;color:#999;">（测试测试）</span></td>
+            <td>[待核实]&lt;同事，禁止联系&gt;</td>
+            <td>2026-07-03 09:50:10<br><a href="javascript:;" style="font-size:11px;color:#0066ff;">录音</a></td>
+            <td>2026-07-06 00:00:00</td>
+            <td><b class="red">E</b></td>
+            <td>营销部经理(周海贵)</td>
+            <td class="td-content">测试</td>
+            <td>正常回访</td>
+          </tr>
+          <tr>
+            <td>--</td>
+            <td>--</td>
+            <td>2026-06-29 14:18:03<br><a href="javascript:;" style="font-size:11px;color:#0066ff;">录音</a></td>
+            <td>--</td>
+            <td>--</td>
+            <td>营销部经理(周海贵)</td>
+            <td class="td-content">【邮件补发】客户：大土豆有限责任公司（6296201）| 信息时间：2026-06-29 | 补发关键词邮箱组： 3 组</td>
+            <td>补发邮件</td>
+          </tr>
+          <tr>
+            <td>--</td>
+            <td>--</td>
+            <td>2026-06-25 16:30:22<br><a href="javascript:;" style="font-size:11px;color:#0066ff;">录音</a></td>
+            <td>2026-07-02 10:00:00</td>
+            <td>C</td>
+            <td>营销部经理(周海贵)</td>
+            <td class="td-content">客户咨询了移动端会员服务，对价格比较敏感，建议后续跟进时强调性价比</td>
+            <td>正常回访</td>
+          </tr>
+          <tr>
+            <td>15011513872<br><span style="font-size:11px;color:#999;">（测试）</span></td>
+            <td>[待核实]测试</td>
+            <td>2026-06-20 14:15:00<br><a href="javascript:;" style="font-size:11px;color:#0066ff;">录音</a></td>
+            <td>2026-06-28 09:30:00</td>
+            <td>D</td>
+            <td>营销部经理(周海贵)</td>
+            <td class="td-content">客户表示目前没有明确需求，后续再联系</td>
+            <td>正常回访</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="log-load-more">
+        <a href="javascript:;">点击加载更多》</a>
+        <a href="javascript:;" class="back-top">返回记录顶部</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 系统记录 ========== -->
+  <div class="log-tab-content" id="log-system" style="display:none;">
+    <div class="log-search">
+      <div class="search-input">
+        <input type="text" placeholder="搜索相关记录关键词">
+        <img src="原文件/大土豆有限责任公司 - 客户详情页_files/sou.png" style="cursor:pointer;">
+      </div>
+      <select class="search-select">
+        <option>选择客户</option>
+        <option>[待核实]测试(15011513872)</option>
+        <option>[待核实](15650132296)</option>
+      </select>
+      <select class="search-select" style="width:130px;">
+        <option>选择客户评级</option>
+        <option>AA级</option><option>A级</option><option>B级</option>
+        <option>C级</option><option>D级</option><option>E级</option><option>K级</option>
+      </select>
+      <div class="search-input">
+        <input type="text" placeholder="请选择日期" style="width:130px;">
+        <img src="原文件/大土豆有限责任公司 - 客户详情页_files/riqi.png" style="cursor:pointer;">
+      </div>
+      <button class="search-btn">搜索</button>
+    </div>
+    <div class="log-table-container">
+      <table class="log-table">
+        <thead>
+          <tr>
+            <th style="width:13%;">相关账户</th>
+            <th style="width:10%;">客户姓名</th>
+            <th style="width:13%;">记录创建时间</th>
+            <th style="width:8%;">客户评级</th>
+            <th style="width:12%;">销售人员</th>
+            <th style="width:34%;">联系/系统记录</th>
+            <th style="width:10%;">操作记录</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>系统</td><td>--</td><td>2026-07-14 08:00:00</td><td>--</td><td>系统</td><td class="td-content">【系统】客户到期提醒：距离到期还有 7 天</td><td>系统提醒</td></tr>
+          <tr><td>系统</td><td>--</td><td>2026-07-10 10:30:00</td><td>--</td><td>系统</td><td class="td-content">【系统】客服分配：从客服一部转移至客服二部（张亚娟）</td><td>分配转移</td></tr>
+        </tbody>
+      </table>
+      <div class="log-load-more">
+        <a href="javascript:;">点击加载更多》</a>
+        <a href="javascript:;" class="back-top">返回记录顶部</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 用户行为记录 ========== -->
+  <div class="log-tab-content" id="log-behavior" style="display:none;">
+    <div class="log-search">
+      <div class="search-input">
+        <input type="text" placeholder="搜索相关记录关键词">
+        <img src="原文件/大土豆有限责任公司 - 客户详情页_files/sou.png" style="cursor:pointer;">
+      </div>
+      <select class="search-select">
+        <option>查看记录</option>
+        <option>搜索记录</option>
+        <option>登录记录(近半年)</option>
+        <option>服务记录</option>
+        <option>申请记录</option>
+        <option>导出记录</option>
+        <option>清理缓存记录</option>
+      </select>
+      <select class="search-select" style="width:180px;">
+        <option>选择账号</option>
+        <option>15650132296(测试测试)【付费】</option>
+      </select>
+      <div class="search-input">
+        <input type="text" placeholder="搜索用户名" style="width:120px;">
+      </div>
+      <button class="search-btn">搜索</button>
+    </div>
+    <div class="log-table-container">
+      <table class="log-table">
+        <thead>
+          <tr>
+            <th style="width:15%;">账号</th>
+            <th style="width:12%;">信息类型</th>
+            <th style="width:8%;">地区</th>
+            <th style="width:13%;">记录创建时间</th>
+            <th style="width:52%;">信息内容</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>15650132296</td><td>招标公告</td><td>河北</td><td>2026-07-14 09:30:00</td><td class="td-content">查看招标公告：河北省水利工程招标项目【XX市河道治理工程】</td></tr>
+          <tr><td>15650132296</td><td>中标结果</td><td>全国</td><td>2026-07-13 15:20:00</td><td class="td-content">查看中标结果：XX市污水处理厂改扩建工程</td></tr>
+        </tbody>
+      </table>
+      <div class="log-load-more">
+        <a href="javascript:;">点击加载更多》</a>
+        <a href="javascript:;" class="back-top">返回记录顶部</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 短信记录 ========== -->
+  <div class="log-tab-content" id="log-sms" style="display:none;">
+    <div class="log-search">
+      <div class="search-input">
+        <input type="text" placeholder="搜索相关记录关键词">
+        <img src="原文件/大土豆有限责任公司 - 客户详情页_files/sou.png" style="cursor:pointer;">
+      </div>
+      <select class="search-select" style="width:130px;">
+        <option>全部短信记录</option>
+        <option>销售短信记录</option>
+        <option>系统短信记录</option>
+      </select>
+      <select class="search-select" style="width:150px;">
+        <option>选择联系人</option>
+        <option>[待核实]测试(15011513872)</option>
+        <option>[待核实](15650132296)</option>
+      </select>
+      <div class="search-input">
+        <input type="text" placeholder="请选择日期" style="width:130px;">
+        <img src="原文件/大土豆有限责任公司 - 客户详情页_files/riqi.png" style="cursor:pointer;">
+      </div>
+      <button class="search-btn">搜索</button>
+    </div>
+    <div class="log-table-container">
+      <table class="log-table">
+        <thead>
+          <tr>
+            <th style="width:13%;">联系方式</th>
+            <th style="width:15%;">联系人</th>
+            <th style="width:12%;">短信类型</th>
+            <th style="width:10%;">操作人</th>
+            <th style="width:13%;">记录创建时间</th>
+            <th style="width:37%;">记录内容</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>15650132296</td><td>[待核实]</td><td>销售短信</td><td>周海贵</td><td>2026-07-14 11:00:00</td><td class="td-content">【招标提醒】您关注的河北省水利工程招标项目已发布公告</td></tr>
+          <tr><td>15011513872</td><td>测试</td><td>系统短信</td><td>系统</td><td>2026-07-13 09:00:00</td><td class="td-content">【验证码】您的验证码是123456，请在10分钟内使用</td></tr>
+        </tbody>
+      </table>
+      <div class="log-load-more">
+        <a href="javascript:;">点击加载更多》</a>
+        <a href="javascript:;" class="back-top">返回记录顶部</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 全部记录 ========== -->
+  <div class="log-tab-content" id="log-all" style="display:none;">
+    <div class="log-search">
+      <div class="search-input">
+        <input type="text" placeholder="搜索相关记录关键词">
+        <img src="原文件/大土豆有限责任公司 - 客户详情页_files/sou.png" style="cursor:pointer;">
+      </div>
+      <select class="search-select">
+        <option>选择客户</option>
+        <option>[待核实]测试(15011513872)</option>
+        <option>[待核实](15650132296)</option>
+      </select>
+      <select class="search-select" style="width:130px;">
+        <option>选择客户评级</option>
+        <option>AA级</option><option>A级</option><option>B级</option>
+        <option>C级</option><option>D级</option><option>E级</option><option>K级</option>
+      </select>
+      <div class="search-input">
+        <input type="text" placeholder="请选择日期" style="width:130px;">
+        <img src="原文件/大土豆有限责任公司 - 客户详情页_files/riqi.png" style="cursor:pointer;">
+      </div>
+      <button class="search-btn">搜索</button>
+    </div>
+    <div class="log-table-container">
+      <table class="log-table">
+        <thead>
+          <tr>
+            <th style="width:13%;">相关账户</th>
+            <th style="width:10%;">客户姓名</th>
+            <th style="width:13%;">记录创建时间</th>
+            <th style="width:8%;">客户评级</th>
+            <th style="width:12%;">销售人员</th>
+            <th style="width:34%;">联系/系统记录</th>
+            <th style="width:10%;">操作记录</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>15650132296</td><td>[待核实]</td><td>2026-07-14 15:59:43</td><td>--</td><td>--</td><td class="td-content">【登录】用户通过手机号登录系统</td><td>登录</td></tr>
+          <tr><td>系统</td><td>--</td><td>2026-07-14 08:00:00</td><td>--</td><td>系统</td><td class="td-content">【系统】到期提醒：距离到期还有7天</td><td>系统提醒</td></tr>
+          <tr><td>15650132296</td><td>[待核实]</td><td>2026-07-07 11:45:33</td><td>--</td><td>售后部(牟敬茹)</td><td class="td-content">【邮件补发】补发关键词邮箱组：2组</td><td>补发邮件</td></tr>
+        </tbody>
+      </table>
+      <div class="log-load-more">
+        <a href="javascript:;">点击加载更多》</a>
+        <a href="javascript:;" class="back-top">返回记录顶部</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 返回顶部 ========== -->
+<div class="rollTop">
+  <a href="javascript:scrollTo(0,0);">返回顶部</a>
+</div>
+
+<!-- ========== 支付码弹窗：支付宝 ========== -->
+<div class="modal-overlay" id="alipayModal">
+  <div class="pay-modal">
+    <div class="pay-close"><a href="javascript:;" onclick="closeModal('alipayModal')">关闭</a></div>
+    <div class="pay-body">
+      <div class="pay-title">打开支付宝扫一扫</div>
+      <div class="qr-box"><img src="原文件/大土豆有限责任公司 - 客户详情页_files/zhifubao-ewm.png" alt="支付宝二维码"></div>
+      <div class="pay-info">
+        <div class="info-row">会员级别：移动端标准会员</div>
+        <div class="info-row">会员账号：15010051587</div>
+        <div class="info-row">开通时间：3个月（北京）</div>
+        <div class="info-row">支付金额：￥998.0</div>
+        <div class="info-row">订单编号：2021457617315413</div>
+      </div>
+    </div>
+    <div class="pay-footer"><img src="原文件/大土豆有限责任公司 - 客户详情页_files/zhifubao.png" alt="支付宝"></div>
+  </div>
+</div>
+
+<!-- ========== 支付码弹窗：微信 ========== -->
+<div class="modal-overlay" id="wechatModal">
+  <div class="pay-modal wechat">
+    <div class="pay-close"><a href="javascript:;" onclick="closeModal('wechatModal')">关闭</a></div>
+    <div class="pay-body">
+      <div class="pay-title" style="color:#2AA139;">打开微信扫一扫</div>
+      <div class="qr-box"><img src="原文件/大土豆有限责任公司 - 客户详情页_files/weixin-ewm.png" alt="微信二维码"></div>
+      <div class="pay-info">
+        <div class="info-row">会员级别：移动端标准会员</div>
+        <div class="info-row">会员账号：15010051587</div>
+        <div class="info-row">开通时间：3个月（北京、...）</div>
+        <div class="info-row">支付金额：￥998.0</div>
+        <div class="info-row">订单编号：2021457617315413</div>
+      </div>
+    </div>
+    <div class="pay-footer"><img src="原文件/大土豆有限责任公司 - 客户详情页_files/weixin.png" alt="微信"></div>
+  </div>
+</div>
+
+<!-- ========== JavaScript ========== -->
+<script src="原文件/大土豆有限责任公司 - 客户详情页_files/jquery-1.8.3.min.js.下载"></script>
+<script>
+// ========== 功能 Tab 切换 ==========
+$(function() {
+  // 主账号功能 Tab
+  $('#funcTabs .func-tab').on('click', function() {
+    var tabId = $(this).data('tab');
+    $('#funcTabs .func-tab').removeClass('active');
+    $(this).addClass('active');
+    $('.section-wrap .tab-content').removeClass('active');
+    $('#' + tabId).addClass('active');
+  });
+
+  // 子 Tab 切换（通用：切换关联的 sub-tab-panel）
+  $('.sub-tabs .sub-tab').on('click', function() {
+    var $tabs = $(this).closest('.sub-tabs');
+    $tabs.find('.sub-tab').removeClass('active');
+    $(this).addClass('active');
+    // 查找同级的 sub-tab-panel 容器并切换
+    var tabName = $(this).text().trim();
+    var $container = $tabs.nextAll('.sub-tab-panel').first().parent();
+    // 如果子 Tab 的父级是 tab-content，查找内部 panel
+    var $parent = $(this).closest('.tab-content');
+    if ($parent.length) {
+      $parent.find('.sub-tab-panel').hide();
+      $parent.find('.sub-tab-panel[data-sub="' + tabName + '"]').show();
+    }
+  });
+
+  // 日志记录 Tab 切换
+  $('#logTabs .log-tab').on('click', function() {
+    var logId = $(this).data('log');
+    $('#logTabs .log-tab').removeClass('active');
+    $(this).addClass('active');
+    $('.log-tab-content').hide();
+    $('#' + logId).show();
+  });
+});
+
+// ========== 弹窗控制 ==========
+function openModal(id) {
+  document.getElementById(id).classList.add('active');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('active');
+}
+// 点击遮罩关闭
+document.querySelectorAll('.modal-overlay').forEach(function(el) {
+  el.addEventListener('click', function(e) {
+    if (e.target === this) {
+      this.classList.remove('active');
+    }
+  });
+});
+
+// ========== 快速标记点击 ==========
+$('.dropdown-menu-tag li').on('click', function() {
+  var text = $(this).text();
+  alert('已标记：' + text);
+});
+
+// ========== 页面滚动 ==========
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

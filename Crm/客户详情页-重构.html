@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大土豆有限责任公司 - 客户详情页（shadcn 重构版）</title>
+<style>
+/* ================================================================
+   shadcn 风格 CSS 系统
+   ================================================================ */
+
+/* ===== 全局重置 ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 14px; color: var(--foreground); background: var(--background); line-height: 1.5; }
+a { text-decoration: none; color: inherit; }
+a:hover { text-decoration: none; }
+ul li { list-style: none; }
+
+/* ===== shadcn 语义化色彩系统 ===== */
+:root {
+  /* 主色 */
+  --primary: #6F9BC4;
+  --primary-dark: #5a87b0;
+  --primary-light: #E2EBF6;
+  --primary-foreground: #fff;
+
+  /* 语义色 */
+  --background: #f5f6f8;
+  --foreground: #555;
+  --card: #fff;
+  --card-foreground: #2A2A2A;
+  --muted: #F4F4F4;
+  --muted-foreground: #999;
+  --secondary: #E2EBF6;
+  --secondary-foreground: #6F9BC4;
+  --accent: #E2EBF6;
+  --accent-foreground: #2A2A2A;
+  --destructive: #FF5454;
+  --destructive-foreground: #fff;
+  --success: #00BFBF;
+  --orange: #FF8F22;
+
+  /* 边框与输入 */
+  --border: #E8E8E8;
+  --border-dark: #D7D7D7;
+  --input: #D7D7D7;
+  --ring: #6F9BC4;
+
+  /* 尺寸 */
+  --radius: 6px;
+  --radius-sm: 4px;
+  --shadow: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+/* ===== 布局容器 ===== */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+/* ===== shadcn 风格工具类 ===== */
+
+/* 弹性布局 */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.items-center { align-items: center; }
+.items-start { align-items: flex-start; }
+.justify-between { justify-content: space-between; }
+.justify-end { justify-content: flex-end; }
+.justify-center { justify-content: center; }
+.gap-0 { gap: 0; }
+.gap-1 { gap: 4px; }
+.gap-2 { gap: 8px; }
+.gap-3 { gap: 12px; }
+.gap-4 { gap: 16px; }
+.gap-6 { gap: 24px; }
+.gap-8 { gap: 32px; }
+.flex-1 { flex: 1; }
+.flex-shrink-0 { flex-shrink: 0; }
+.ml-auto { margin-left: auto; }
+.mr-auto { margin-right: auto; }
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: 4px; }
+.mt-2 { margin-top: 8px; }
+.mt-3 { margin-top: 12px; }
+.mt-4 { margin-top: 16px; }
+.mb-2 { margin-bottom: 8px; }
+.mb-3 { margin-bottom: 12px; }
+.mb-4 { margin-bottom: 16px; }
+.ml-2 { margin-left: 8px; }
+.ml-3 { margin-left: 12px; }
+.mr-2 { margin-right: 8px; }
+.p-3 { padding: 12px; }
+.p-4 { padding: 16px; }
+
+/* 截断 */
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* 相等尺寸 */
+.size-4 { width: 16px; height: 16px; }
+.size-5 { width: 20px; height: 20px; }
+.size-6 { width: 24px; height: 24px; }
+.size-8 { width: 32px; height: 32px; }
+.size-10 { width: 40px; height: 40px; }
+
+/* 文字 */
+.text-xs { font-size: 12px; }
+.text-sm { font-size: 13px; }
+.text-base { font-size: 14px; }
+.text-lg { font-size: 16px; }
+.text-xl { font-size: 18px; }
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+.text-muted { color: var(--muted-foreground); }
+.text-primary { color: var(--primary); }
+.text-destructive { color: var(--destructive); }
+.text-success { color: var(--success); }
+.text-card-foreground { color: var(--card-foreground); }
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+
+/* 隐藏 */
+.hidden { display: none !important; }
+
+/* ================================================================
+   shadcn 组件系统
+   ================================================================ */
+
+/* ===== Header / 顶栏 ===== */
+.header { background: var(--primary); height: 50px; line-height: 50px; color: var(--primary-foreground); }
+.header a { color: var(--primary-foreground); }
+.header .nav-item { position: relative; float: left; padding: 0 16px; cursor: pointer; font-size: 13px; }
+.header .nav-item:hover { background: rgba(255,255,255,0.1); }
+.header .nav-item .dropdown { display: none; position: absolute; top: 50px; left: 0; background: var(--card); border: 1px solid var(--border); min-width: 140px; z-index: 1000; box-shadow: var(--shadow-lg); border-radius: var(--radius-sm); }
+.header .nav-item .dropdown a { display: block; padding: 8px 16px; color: var(--foreground); font-size: 13px; }
+.header .nav-item .dropdown a:hover { background: var(--accent); }
+.header .nav-item:hover .dropdown { display: block; }
+.header-right { float: right; font-size: 12px; }
+.header-right a, .header-right span { display: inline-block; padding: 0 10px; color: var(--primary-foreground); font-size: 12px; }
+
+/* ===== Badge 组件 ===== */
+.badge { display: inline-block; padding: 1px 8px; border-radius: 3px; font-size: 12px; font-weight: 500; line-height: 1.6; }
+.badge-default { background: var(--primary); color: var(--primary-foreground); }
+.badge-secondary { background: var(--secondary); color: var(--secondary-foreground); border: 1px solid var(--primary); }
+.badge-destructive { background: var(--destructive); color: var(--destructive-foreground); }
+.badge-success { background: var(--success); color: #fff; }
+.badge-outline { background: transparent; color: var(--foreground); border: 1px solid var(--border); }
+.badge-danger-outline { color: var(--destructive); border: 1px solid var(--destructive); background: #fff5f5; }
+.badge-danger { background: var(--destructive); color: #fff; }
+.badge-warning { background: #F59E0B; color: #fff; }
+.badge-primary-outline { color: var(--primary); border: 1px solid var(--primary); background: var(--primary-light); }
+.badge-sm { padding: 0 6px; font-size: 11px; }
+
+/* 兼容旧 tag-item */
+.tag-item { display: inline-block; padding: 1px 8px; border: 1px solid var(--primary); color: var(--primary); background: var(--primary-light); border-radius: 3px; font-size: 12px; margin: 1px 3px; cursor: pointer; }
+.tag-item.danger { border-color: var(--destructive); color: var(--destructive); background: #fff5f5; }
+.tag-item.success { border-color: var(--success); color: var(--success); background: #f0fafa; }
+
+/* ===== Button 组件 ===== */
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; border-radius: var(--radius-sm); font-size: 13px; cursor: pointer; border: 1px solid transparent; transition: all 0.2s; line-height: 1.4; white-space: nowrap; background: transparent; color: inherit; }
+.btn:hover { opacity: 0.9; }
+.btn-default { background: var(--primary); color: var(--primary-foreground); border-color: var(--primary); }
+.btn-default:hover { background: var(--primary-dark); }
+.btn-outline { border-color: var(--border); color: var(--foreground); background: var(--card); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+.btn-secondary { background: var(--secondary); color: var(--secondary-foreground); border-color: transparent; }
+.btn-ghost { color: var(--foreground); border-color: transparent; }
+.btn-ghost:hover { background: var(--accent); }
+.btn-destructive { background: var(--destructive); color: var(--destructive-foreground); border-color: var(--destructive); }
+.btn-destructive-outline { color: var(--destructive); border-color: var(--destructive); background: #fff5f5; }
+.btn-destructive-outline:hover { background: var(--destructive); color: #fff; }
+.btn-sm { padding: 3px 10px; font-size: 12px; }
+.btn-lg { padding: 8px 24px; font-size: 14px; }
+.btn-icon { width: 32px; height: 32px; padding: 0; justify-content: center; }
+
+/* ===== Badge 组件的 Button 兼容 ===== */
+.btn-pink { background: #EC808D; color: #fff; border-color: #EC808D; }
+
+/* ===== Card 组件 ===== */
+.card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+.card-header { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; }
+.card-title { font-size: 16px; font-weight: 700; color: var(--card-foreground); }
+.card-title::before { content: ''; display: inline-block; width: 4px; height: 18px; background: var(--primary); margin-right: 10px; vertical-align: middle; }
+.card-description { font-size: 12px; color: var(--muted-foreground); margin-top: 2px; }
+.card-content { padding: 16px; }
+.card-footer { padding: 12px 16px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+
+/* ===== Section 区块组件 ===== */
+/* 层级规则：每个区块独立占一行，通过 margin-bottom 在灰色背景上形成视觉分割 */
+.section { background: var(--card); padding: 16px 0; margin-bottom: 2px; }
+.section-header { display: flex; align-items: center; padding-bottom: 12px; border-bottom: 2px solid var(--primary); margin-bottom: 16px; }
+.section-title { font-size: 16px; font-weight: 700; color: var(--card-foreground); }
+.section-title::before { content: ''; display: inline-block; width: 4px; height: 18px; background: var(--primary); margin-right: 10px; vertical-align: middle; }
+.section-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+/* 标签栏+内容区作为同一视觉单元：标签组无 margin，紧随其内容区 */
+.section-tab-group { margin-bottom: 2px; }
+
+/* ===== Input 组件 ===== */
+.input { height: 32px; border: 1px solid var(--input); border-radius: var(--radius-sm); padding: 0 10px; font-size: 13px; color: var(--foreground); background: var(--card); outline: none; transition: border-color 0.2s; }
+.input:focus { border-color: var(--ring); box-shadow: 0 0 0 2px rgba(111,155,196,0.2); }
+.input-sm { height: 28px; font-size: 12px; }
+.select { height: 32px; border: 1px solid var(--input); border-radius: var(--radius-sm); padding: 0 10px; font-size: 13px; color: var(--foreground); background: var(--card); outline: none; cursor: pointer; }
+.select:focus { border-color: var(--ring); }
+textarea.input { height: auto; padding: 8px 12px; resize: none; line-height: 1.5; }
+
+/* ===== Separator 组件 ===== */
+.separator { border: none; height: 1px; background: var(--border); margin: 0; }
+.separator-vertical { width: 1px; height: 28px; background: var(--border); display: inline-block; vertical-align: middle; }
+
+/* ===== Table 组件 ===== */
+.table-wrap { overflow-x: auto; }
+.table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.table thead th { background: var(--primary); color: var(--primary-foreground); padding: 8px 12px; text-align: left; font-weight: 500; }
+.table tbody td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--card-foreground); }
+.table tbody tr:last-child td { border-bottom: none; }
+.sub-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.sub-table thead th { background: var(--muted); color: var(--card-foreground); padding: 8px 12px; text-align: left; font-weight: 600; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.sub-table tbody td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--card-foreground); }
+.sub-table tbody tr:last-child td { border-bottom: none; }
+.sub-table tbody tr:hover { background: var(--accent); }
+.sub-table td[colspan] { text-align: center; color: var(--muted-foreground); padding: 0; }
+.sub-table td[colspan] .empty-state { padding: 40px 12px; }
+
+/* ===== Empty State ===== */
+.empty-state { text-align: center; padding: 40px; color: var(--muted-foreground); font-size: 13px; }
+
+/* ================================================================
+   业务组件样式
+   ================================================================ */
+
+/* ===== 公司信息区（一级区块） ===== */
+.company-section { background: var(--card); border-bottom: 3px solid var(--primary); padding: 12px 0; margin-bottom: 2px; }
+.company-name { font-size: 18px; font-weight: 700; color: var(--card-foreground); }
+.company-name img { width: 24px; margin-right: 8px; vertical-align: middle; }
+.company-tag { font-size: 12px; padding: 2px 8px; border-radius: 3px; margin-left: 8px; }
+.company-tag.verify-fail { color: var(--destructive); border: 1px solid var(--destructive); }
+.company-tag.verify-pass { color: var(--success); border: 1px solid var(--success); }
+.futag-ysq { display: inline-block; width: 17px; height: 18px; background: linear-gradient(135deg, #cec7c7, #bfb5b5); border-radius: 0 5px 0 5px; font-weight: 700; font-size: 12px; color: #fff; text-align: center; line-height: 18px; margin-left: 8px; }
+
+/* ===== 查询链接 ===== */
+.query-bar { background: var(--card); padding: 8px 0; border-bottom: 1px solid var(--border); }
+.query-bar a { margin: 0 10px; font-size: 13px; }
+.query-link { color: var(--foreground); }
+.query-link:hover { color: var(--primary); }
+.query-link.baidu { color: var(--success); font-weight: 700; }
+
+/* ===== 编辑面板 ===== */
+.edit-section { background: var(--card); padding: 10px 0; border-bottom: 1px solid var(--border); display: none; }
+.edit-section .tab-btns { border-bottom: 2px solid var(--primary); }
+.edit-section .tab-btns span { display: inline-block; padding: 6px 24px; cursor: pointer; font-size: 14px; color: var(--foreground); }
+.edit-section .tab-btns span.active { background: var(--primary); color: var(--primary-foreground); border-radius: var(--radius-sm) var(--radius-sm) 0 0; }
+.edit-form { padding: 16px 0; }
+.edit-form .form-row { display: flex; align-items: flex-start; gap: 0; margin-bottom: 12px; }
+.edit-form .form-label { width: 140px; text-align: right; padding-right: 12px; color: var(--foreground); line-height: 34px; flex-shrink: 0; }
+.edit-form .form-input { flex: 1; max-width: 400px; }
+.edit-form .form-input .input { width: 100%; }
+.edit-form .tips { font-size: 12px; color: var(--muted-foreground); margin-top: 4px; line-height: 1.6; }
+
+/* ===== 常用操作栏（shadcn 风格） ===== */
+.ops-bar { background: var(--card); padding: 12px 0; margin-bottom: 2px; }
+.ops-bar > .container { display: flex; flex-direction: column; gap: 10px; }
+.ops-bar .ops-group { display: flex; align-items: flex-start; gap: 6px; flex-wrap: wrap; }
+.ops-bar .ops-group-label { font-size: 11px; font-weight: 600; color: var(--muted-foreground); letter-spacing: 0.5px; padding: 4px 0; min-width: 56px; flex-shrink: 0; }
+.ops-bar .ops-item { display: inline-flex; align-items: center; padding: 3px 12px; background: var(--muted); color: var(--card-foreground); border-radius: 999px; font-size: 12px; cursor: pointer; transition: all 0.15s; text-decoration: none; line-height: 1.6; }
+.ops-bar .ops-item:hover { background: var(--primary); color: var(--primary-foreground); }
+.ops-bar .ops-item .new-tag { color: var(--destructive); font-size: 10px; font-weight: 700; margin-left: 3px; }
+.ops-bar .ops-item:hover .new-tag { color: #fff; }
+.ops-bar .ops-item.highlight { background: #e05858; color: #fff; }
+.ops-bar .ops-item.highlight:hover { background: #d04040; }
+
+/* ===== 主账号信息面板（一级区块） ===== */
+.account-summary { background: var(--card); padding: 16px 0; margin-bottom: 2px; }
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.info-grid .info-row { display: flex; border-bottom: 1px dashed #eee; }
+.info-grid > div:first-child .info-row:last-child,
+.info-grid > div:last-child .info-row:last-child { border-bottom: none; }
+.info-grid .info-label { width: 140px; background: var(--muted); padding: 8px 12px; font-weight: 700; color: var(--card-foreground); flex-shrink: 0; font-size: 13px; }
+.info-grid .info-value { flex: 1; padding: 8px 12px; color: var(--card-foreground); font-size: 13px; }
+.bind-icon { display: inline-flex; width: 22px; height: 20px; align-items: center; justify-content: center; background: var(--primary); border-radius: 3px; color: #fff; font-size: 11px; margin-right: 2px; }
+
+/* ===== 任务区域（一级区块） ===== */
+.task-section { background: var(--card); padding: 12px 0; margin-bottom: 2px; }
+.task-tabs { display: flex; gap: 0; }
+.task-tabs li { padding: 6px 20px; cursor: pointer; font-size: 14px; border: 1px solid var(--border); border-bottom: none; border-radius: var(--radius-sm) var(--radius-sm) 0 0; background: var(--muted); color: var(--foreground); }
+.task-tabs li.active { background: var(--card); font-weight: 700; border-color: var(--primary); color: var(--primary); }
+.task-tabs li .count { color: var(--primary); margin-left: 4px; }
+
+/* ===== 功能 Tab 栏（二级区块：与内容区一体） ===== */
+.func-tab-group { margin-bottom: 2px; background: var(--card); }
+.func-tabs { padding: 0; }
+.func-tabs ul { display: flex; margin: 0; border-bottom: 1px solid var(--border); }
+.func-tabs ul li { padding: 10px 22px; cursor: pointer; font-size: 14px; color: var(--muted-foreground); border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; background: transparent; transition: all 0.2s; }
+.func-tabs ul li.active { color: var(--primary); font-weight: 600; border-bottom-color: var(--primary); background: transparent; }
+.func-tabs ul li:hover:not(.active) { color: var(--foreground); background: var(--accent); }
+.func-tab-content { padding: 16px 0; min-height: 100px; }
+
+/* ===== 订阅子 Tab（shadcn 风格） ===== */
+.sub-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 16px; flex-wrap: wrap; }
+.sub-tab { padding: 6px 16px; cursor: pointer; font-size: 12px; color: var(--muted-foreground); border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; background: transparent; transition: all 0.2s; }
+.sub-tab.active { color: var(--primary); font-weight: 600; border-bottom-color: var(--primary); }
+.sub-tab:hover:not(.active) { color: var(--foreground); background: var(--accent); border-radius: var(--radius-sm) var(--radius-sm) 0 0; }
+
+/* ===== 记录管理区（一级区块） ===== */
+.records-section { background: var(--card); padding: 16px 0; margin-bottom: 2px; }
+.records-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); }
+.records-tabs li { padding: 8px 18px; cursor: pointer; font-size: 13px; color: var(--muted-foreground); border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; background: transparent; transition: all 0.2s; }
+.records-tabs li.active { color: var(--primary); font-weight: 600; border-bottom-color: var(--primary); background: transparent; }
+.records-tabs li:hover:not(.active) { color: var(--foreground); background: var(--accent); }
+.records-content { padding: 12px 0; overflow-x: auto; }
+.records-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.records-table th { background: var(--muted); color: var(--card-foreground); padding: 8px 10px; text-align: left; font-weight: 700; border: 1px solid var(--border-dark); }
+.records-table td { padding: 6px 10px; border: 1px solid var(--border); color: var(--card-foreground); }
+.records-table .log-content { max-width: 400px; }
+.records-table .log-name { color: var(--destructive); }
+.records-table .log-zname { color: var(--orange); }
+.records-table .load-more { display: block; text-align: center; padding: 8px; color: var(--primary); cursor: pointer; font-size: 12px; }
+
+/* ===== 快捷记录添加 ===== */
+.quick-record { background: #fafbfc; border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 16px; }
+.quick-record .qr-header { display: flex; align-items: center; margin-bottom: 10px; gap: 8px; flex-wrap: wrap; }
+.quick-record .qr-header .contact-select { display: flex; align-items: center; gap: 8px; }
+.quick-record .qr-header .quick-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+.quick-record .qr-header .quick-tags .tag-dropdown { position: relative; }
+.quick-record .qr-header .quick-tags .tag-btn { padding: 3px 12px; border: 1px solid var(--border); border-radius: 3px; font-size: 12px; cursor: pointer; background: var(--card); }
+.quick-record .qr-header .quick-tags .tag-btn:hover { border-color: var(--primary); color: var(--primary); }
+.quick-record .qr-header .quick-tags .tag-dropdown-menu { display: none; position: absolute; top: 28px; left: 0; background: var(--card); border: 1px solid var(--border); box-shadow: var(--shadow-lg); z-index: 100; min-width: 120px; border-radius: var(--radius-sm); }
+.quick-record .qr-header .quick-tags .tag-dropdown:hover .tag-dropdown-menu { display: block; }
+.quick-record .qr-header .quick-tags .tag-dropdown-menu a { display: block; padding: 4px 12px; font-size: 12px; color: var(--foreground); }
+.quick-record .qr-header .quick-tags .tag-dropdown-menu a:hover { background: var(--accent); }
+
+/* ===== 返回顶部 ===== */
+.rollTop { position: fixed; right: 20px; bottom: 60px; z-index: 999; }
+.rollTop a { display: flex; width: 40px; height: 40px; background: var(--primary); color: #fff; align-items: center; justify-content: center; border-radius: 50%; font-size: 12px; box-shadow: var(--shadow-lg); }
+
+/* ===== 页脚间距 ===== */
+.page-footer { height: 40px; }
+
+/* ========== Tab 切换（shadcn 风格：仅通过 .active 类控制显隐） ========== */
+.func-tab-content .tab-inner { display: none; }
+.func-tab-content .tab-inner.active { display: block; }
+.records-content .tab-inner { display: none; }
+.records-content .tab-inner.active { display: block; }
+
+/* ===== 联系人紧凑表格（shadcn 风格） ===== */
+.contacts-table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius-sm); }
+.contacts-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.contacts-table thead th { background: var(--muted); color: var(--card-foreground); padding: 7px 10px; text-align: left; font-weight: 600; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.contacts-table tbody td { padding: 7px 10px; border-bottom: 1px solid var(--border); color: var(--card-foreground); vertical-align: middle; }
+.contacts-table tbody tr:last-child > td { border-bottom: none; }
+.contacts-table .contact-row { cursor: pointer; transition: background 0.15s; }
+.contacts-table .contact-row:hover { background: var(--accent); }
+.contacts-table .contact-row.active { background: var(--accent); }
+.contacts-table .main-dot { display: inline-flex; width: 18px; height: 18px; align-items: center; justify-content: center; background: var(--destructive); color: #fff; border-radius: 50%; font-size: 10px; font-weight: 700; flex-shrink: 0; }
+.contacts-table .contact-name-cell { font-weight: 600; color: var(--card-foreground); }
+.contacts-table .kw-cell { max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted-foreground); }
+.contacts-table .bind-cell { white-space: nowrap; }
+.contacts-table .action-cell { white-space: nowrap; }
+.contacts-table .btn-ghost { background: none; border: none; color: var(--primary); padding: 2px 8px; font-size: 12px; cursor: pointer; border-radius: 3px; transition: background 0.15s; }
+.contacts-table .btn-ghost:hover { background: var(--accent); }
+.contacts-table .btn-ghost.danger { color: var(--destructive); }
+
+/* 展开详情行 */
+.contact-expand td { padding: 0; background: #fafbfc; border-bottom: 1px solid var(--border); }
+.contact-detail-wrap { padding: 10px 16px 10px 46px; display: grid; grid-template-columns: 1fr 1fr; gap: 2px 24px; font-size: 12px; }
+.contact-detail-wrap .cd-row { display: flex; padding: 2px 0; line-height: 1.6; }
+.contact-detail-wrap .cd-label { color: var(--muted-foreground); width: 72px; flex-shrink: 0; }
+.contact-detail-wrap .cd-value { color: var(--card-foreground); }
+.contact-detail-wrap .cd-full { grid-column: 1 / -1; }
+.contact-detail-wrap .cd-actions { grid-column: 1 / -1; padding-top: 6px; border-top: 1px solid var(--border); margin-top: 4px; display: flex; gap: 6px; flex-wrap: wrap; }
+.contact-detail-wrap .cd-actions .btn { font-size: 11px; padding: 2px 10px; }
+
+/* ========== 响应式适配 ========== */
+@media (max-width: 768px) {
+  .container { padding: 0 12px; }
+  .company-name { font-size: 16px; }
+  .header .nav-item { padding: 0 10px; font-size: 12px; }
+  .header-right a, .header-right span { padding: 0 6px; font-size: 11px; }
+  .info-grid { grid-template-columns: 1fr; }
+  .info-grid .info-label { width: 100px; font-size: 12px; padding: 6px 8px; }
+  .info-grid .info-value { font-size: 12px; padding: 6px 8px; }
+  .edit-form .form-label { width: 100px; font-size: 12px; }
+  .edit-form .form-input { max-width: 100%; }
+  .records-tabs li { padding: 6px 10px; font-size: 12px; }
+  .func-tabs ul li { padding: 8px 12px; font-size: 12px; }
+  .sub-tab { padding: 3px 10px; font-size: 11px; }
+  .sub-table thead th,
+  .sub-table tbody td { padding: 6px 10px; font-size: 11px; }
+}
+
+@media (max-width: 480px) {
+  .container { padding: 0 8px; }
+  .header .nav-item { padding: 0 6px; font-size: 11px; }
+  .header-right a, .header-right span { padding: 0 4px; font-size: 10px; }
+  .company-name { font-size: 14px; flex-wrap: wrap; }
+  .info-grid .info-label { width: 80px; font-size: 11px; }
+  .info-grid .info-value { font-size: 11px; padding: 4px 8px; }
+  .section-header { flex-wrap: wrap; gap: 8px; }
+  .section-actions { flex-wrap: wrap; gap: 4px; }
+  .section-actions .btn { font-size: 11px; padding: 2px 8px; }
+  .section-actions .input { width: 120px; }
+  .card-detail-grid { grid-template-columns: 1fr; }
+  .card-header .bind-icons { flex-wrap: wrap; }
+  .account-card .card-header { flex-wrap: wrap; gap: 4px; }
+  .card-contact-row .contact-item { margin-right: 12px; font-size: 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ========== 1. 顶栏 Header ========== -->
+<div class="header">
+  <div class="container">
+    <div class="flex">
+      <ul class="flex" style="margin:0; padding:0;">
+        <li class="nav-item">
+          <a href="javascript:;">上报客户</a>
+          <div class="dropdown">
+            <a href="javascript:;" onclick="alert('上报撞单客户')">上报撞单客户</a>
+            <a href="javascript:;" onclick="alert('上报下周重点')">上报下周重点</a>
+            <a href="javascript:;" onclick="alert('上报今日意向客户')">上报今日意向客户</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a href="javascript:;">交流学习</a>
+          <div class="dropdown">
+            <a href="javascript:;" onclick="alert('常见问题学习')">常见问题学习</a>
+            <a href="javascript:;" onclick="alert('服务介绍话术')">服务介绍话术</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a href="javascript:;">客户录音</a>
+          <div class="dropdown">
+            <a href="javascript:;" onclick="alert('听此客户录音')">听此客户录音</a>
+            <a href="javascript:;" onclick="alert('听本部门的录音')">听本部门的录音</a>
+          </div>
+        </li>
+      </ul>
+      <div class="header-right ml-auto">
+        <span style="color:#E2EBF6; padding:0 8px;">快捷工具:</span>
+        <a href="javascript:;" onclick="alert('项目搜索')">项目搜索</a>
+        <a href="javascript:;" onclick="alert('招标搜索')">招标搜索</a>
+        <a href="javascript:;" onclick="alert('邀请招标')">邀请招标</a>
+        <a href="javascript:;" onclick="alert('服务话术')">服务话术</a>
+        <a href="javascript:;" onclick="alert('工商企业查询')">工商企业查询</a>
+        <a href="javascript:;" onclick="alert('库中中标企业')">库中中标企业</a>
+        <a href="javascript:;" class="btn btn-sm btn-destructive" onclick="alert('删除此客户')" style="padding:0 12px; border-radius:0; line-height:50px;">删除此客户</a>
+        <a href="javascript:;" onclick="alert('问题反馈')">问题反馈</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 2. 公司信息区 ========== -->
+<div class="company-section">
+  <div class="container">
+    <div class="company-name flex items-center flex-wrap">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%236F9BC4'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/%3E%3C/svg%3E" alt="">
+      大土豆有限责任公司
+      <span class="company-tag verify-fail">【未通过】</span>
+      <a href="javascript:;" style="color:#3399FF; font-size:12px; margin-left:4px;" onclick="alert('重新验证')">重新验证</a>
+      <span class="futag-ysq">扶</span>
+      <span class="text-muted text-sm ml-2">（ID：6296201 E）</span>
+      <a href="javascript:;" class="ml-2 text-sm text-primary" onclick="alert('编辑')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle;"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+        编辑
+      </a>
+      <span class="btn btn-sm btn-destructive-outline ml-2" onclick="alert('验重')"><b>验重</b></span>
+      <a href="javascript:;" class="ml-2 text-sm text-destructive" onclick="alert('查看发票邮寄')">查看发票邮寄</a>
+      <a href="javascript:;" class="ml-2 text-sm" style="color:#3399FF;" onclick="alert('更新验重信息')">更新验重信息</a>
+    </div>
+
+    <!-- 外部查询 -->
+    <div class="flex items-center flex-wrap mt-2">
+      <span class="text-sm" style="color:var(--foreground);">其他查询：</span>
+      <a href="javascript:;" class="query-link baidu ml-2" onclick="alert('百度一下')">百度一下</a>
+      <a href="javascript:;" class="query-link ml-2" onclick="alert('天眼查')">天眼查</a>
+      <a href="javascript:;" class="query-link ml-2" onclick="alert('爱企查')">爱企查</a>
+      <a href="javascript:;" class="query-link ml-2" onclick="alert('企业信用查询')">企业信用查询</a>
+      <a href="javascript:;" class="query-link ml-2" onclick="alert('信用中国')">信用中国</a>
+      <span class="ml-3 text-sm">近3日中标：<font color="var(--destructive)">0</font>个</span>
+      <span class="btn btn-sm btn-destructive-outline ml-2" onclick="alert('生成中标喜报')">生成中标喜报</span>
+    </div>
+
+    <!-- 编辑操作面板（默认隐藏） -->
+    <div class="edit-section" id="editPanel">
+      <div class="tab-btns">
+        <span class="active" onclick="switchEditTab(this,'edit_hebing')">合并</span>
+        <span onclick="switchEditTab(this,'edit_xiugai')">修改</span>
+        <span onclick="switchEditTab(this,'edit_chaifen')">拆分</span>
+      </div>
+      <div class="edit-form" id="edit_hebing">
+        <div class="form-row"><div class="form-label"><span class="text-destructive">*</span> 合并的客户ID：</div><div class="form-input"><input type="text" class="input" placeholder="请输入需要与之合并的客户ID"></div></div>
+        <div class="form-row"><div class="form-label">备注：</div><div class="form-input"><textarea class="input" placeholder="请输入备注" style="height:80px;"></textarea><div class="tips">1.合并需要首先验重…<br>2.合并后将以ID数值较小的客户作为主客户</div></div></div>
+        <div class="form-row"><div class="form-label"></div><span class="btn btn-default" onclick="alert('提交申请')">提交申请</span></div>
+      </div>
+      <div class="edit-form" id="edit_xiugai" style="display:none;">
+        <div class="form-row"><div class="form-label"><span class="text-destructive">*</span> 修改主公司名称：</div><div class="form-input"><input type="text" class="input" placeholder="请输入修改的公司名称"></div></div>
+        <div class="form-row"><div class="form-label"><span class="text-destructive">*</span> 提交录音证明：</div><div class="form-input"><span class="btn btn-outline btn-sm" onclick="alert('上传录音')">上传</span><div class="tips">最多上传4个录音文件</div></div></div>
+        <div class="form-row"><div class="form-label">备注：</div><div class="form-input"><textarea class="input" placeholder="请输入修改原因"></textarea></div></div>
+        <div class="form-row"><div class="form-label"></div><span class="btn btn-default" onclick="alert('提交申请')">提交申请</span></div>
+      </div>
+      <div class="edit-form" id="edit_chaifen" style="display:none;">
+        <div class="form-row"><div class="form-label"><span class="text-destructive">*</span> 选择拆分对象：</div><div class="form-input"><select class="select" style="width:100%;"><option value="">请选择联系人</option></select></div></div>
+        <div class="form-row"><div class="form-label">备注：</div><div class="form-input"><textarea class="input"></textarea><div class="tips">拆分只有当前公司名下有2个以上联系人时才可拆分</div></div></div>
+        <div class="form-row"><div class="form-label"></div><span class="btn btn-default" onclick="alert('提交申请')">提交申请</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 4. 常用操作栏（shadcn 风格标签组） ========== -->
+<div class="ops-bar">
+  <div class="container">
+    <!-- 销售推进 -->
+    <div class="ops-group">
+      <span class="ops-group-label">销售推进</span>
+      <a class="ops-item" href="javascript:;" onclick="alert('商机工具')">商机工具 <span class="new-tag">新</span></a>
+      <a class="ops-item" href="javascript:;" onclick="alert('项目协助')">项目协助</a>
+      <a class="ops-item" href="javascript:;" onclick="alert('信息协助')">信息协助</a>
+      <a class="ops-item" href="javascript:;" onclick="alert('销售协助')">销售协助</a>
+      <a class="ops-item" href="javascript:;" onclick="alert('服务咨询')">服务咨询</a>
+      <a class="ops-item" href="javascript:;" onclick="alert('同行业信息搜索')">同行业信息搜索</a>
+    </div>
+    <!-- 合同订单 -->
+    <div class="ops-group">
+      <span class="ops-group-label">合同订单</span>
+      <a class="ops-item" href="javascript:;" onclick="alert('生成合同')">生成合同</a>
+      <a class="ops-item" href="javascript:;" onclick="alert('查看订单')">查看订单</a>
+      <a class="ops-item" href="javascript:;" onclick="alert('在线开通会员')">在线开通会员</a>
+      <a class="ops-item" href="javascript:;" onclick="alert('创建增值服务订单')">创建增值服务订单</a>
+      <a class="ops-item" href="javascript:;" onclick="alert('增值业务')">增值业务</a>
+    </div>
+    <!-- 客户服务 -->
+    <div class="ops-group">
+      <span class="ops-group-label">客户服务</span>
+      <a class="ops-item" href="javascript:;" onclick="alert('相关账户')">相关账户</a>
+      <a class="ops-item" href="javascript:;" onclick="alert('服务延期')">服务延期</a>
+      <a class="ops-item" href="javascript:;" onclick="alert('未到款预开通')">未到款预开通</a>
+      <a class="ops-item" href="javascript:;" onclick="alert('会员服务资料')">会员服务资料</a>
+      <a class="ops-item" href="javascript:;" onclick="alert('密码重置')">密码重置</a>
+      <a class="ops-item" href="javascript:;" onclick="alert('补加联系人')">补加联系人</a>
+      <a class="ops-item" href="javascript:;" onclick="alert('模拟客户')">模拟客户</a>
+    </div>
+    <!-- 财务票据 -->
+    <div class="ops-group">
+      <span class="ops-group-label">财务票据</span>
+      <a class="ops-item" href="javascript:;" onclick="alert('查看优惠')">查看优惠</a>
+      <a class="ops-item" href="javascript:;" onclick="alert('查看发票邮寄')">查看发票邮寄</a>
+      <a class="ops-item" href="javascript:;" onclick="alert('历史回执')">历史回执</a>
+    </div>
+    <!-- 客户运营 -->
+    <div class="ops-group">
+      <span class="ops-group-label">客户运营</span>
+      <a class="ops-item" href="javascript:;" onclick="alert('转介绍客户')">转介绍客户</a>
+      <a class="ops-item" href="javascript:;" onclick="alert('添加广告')">添加广告</a>
+      <a class="ops-item highlight" href="javascript:;" onclick="alert('推荐信息')">推荐信息</a>
+      <a class="ops-item" href="javascript:;" onclick="alert('优惠券工具')">优惠券工具</a>
+    </div>
+    <!-- 资料管理 -->
+    <div class="ops-group">
+      <span class="ops-group-label">资料管理</span>
+      <a class="ops-item" href="javascript:;" onclick="alert('上传文件')">上传文件</a>
+      <a class="ops-item" href="javascript:;" onclick="alert('客户中标记录')">客户中标记录</a>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 5. 主账号信息面板（shadcn 网格） ========== -->
+<div class="account-summary">
+  <div class="container">
+    <div class="section-header" style="border-bottom:2px solid var(--primary); padding-bottom:12px; margin-bottom:16px; display:flex; align-items:center;">
+      <span class="section-title">主账号信息总览</span>
+    </div>
+    <div class="info-grid">
+      <!-- 左列（9项） -->
+      <div>
+        <div class="info-row">
+          <div class="info-label">主用户级别</div>
+          <div class="info-value"><span class="tag-item danger">VIP会员（总站）</span> 维护人：<span class="text-destructive">牟敬茹(售后部) -意向客户(库)</span></div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">用户名</div>
+          <div class="info-value">
+            15650132296 <span class="text-muted">招投标负责人（招投标办）</span>
+            <span class="tag-item ml-2" onclick="alert('注册信息')">注册信息</span>
+            <span class="bind-icon" title="邮件定制">邮</span>
+            <span class="bind-icon" title="标讯助手已绑定">信</span>
+            <span class="bind-icon" title="采招网会员服务已绑定">服</span>
+            <span class="bind-icon" title="微信小程序已绑定">程</span>
+            <span class="bind-icon" title="发票开具">票</span>
+            <span class="bind-icon" title="手机APP下载">端</span>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">重复注册账号级别</div>
+          <div class="info-value"><span class="tag-item danger">VIP会员(总站)</span> <span class="tag-item" onclick="alert('查看')">查看</span></div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">企业电子邮箱</div>
+          <div class="info-value">zhangjiaming@bidcenter.cn</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">企业地址</div>
+          <div class="info-value">地球</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">资源类型</div>
+          <div class="info-value">快速注册-服务号绑定注册</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">注册关键词</div>
+          <div class="info-value text-muted">--</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">注册 / 入库 / 登录</div>
+          <div class="info-value">2022-11-25 18:29:14 <span class="text-muted">|</span> 2025-07-07 08:54:57 <span class="text-muted">|</span> <span class="text-destructive">2026-07-14 15:59:43</span></div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">增值业务</div>
+          <div class="info-value">中标通</div>
+        </div>
+      </div>
+      <!-- 右列（9项） -->
+      <div>
+        <div class="info-row">
+          <div class="info-label">到期时间 / 登录时间</div>
+          <div class="info-value">2030-09-30到期 <span class="text-primary ml-2">2026-07-14 15:59:43</span> <a href="javascript:;" style="color:#7b71da;text-decoration:underline;margin-left:8px;font-size:12px;" onclick="alert('激活订阅邮箱')">激活订阅邮箱</a></div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">绑定手机</div>
+          <div class="info-value"><a href="javascript:;" style="color:#7b71da;text-decoration:underline;" onclick="alert('15650132296')">15650132296</a></div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">上次缴费</div>
+          <div class="info-value text-muted">无付费信息</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">中标次数</div>
+          <div class="info-value"><span class="text-destructive">0</span> <a href="javascript:;" class="ml-2 text-xs" onclick="alert('查看')">查看</a></div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">相关账户</div>
+          <div class="info-value"><span>0</span> <a href="javascript:;" class="ml-2 text-xs" onclick="alert('查看')">查看</a></div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">邮件定制</div>
+          <div class="info-value"><span>120</span> <a href="javascript:;" class="ml-2 text-xs" onclick="alert('定制')">定制</a></div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">发票邮寄</div>
+          <div class="info-value"><span>0</span> <a href="javascript:;" class="ml-2 text-xs" onclick="alert('查看')">查看</a></div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">主营业务区域</div>
+          <div class="info-value">海城市 <span class="tag-item" onclick="alert('编辑')">编辑</span></div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">同行网站</div>
+          <div class="info-value">
+            <span class="tag-item" onclick="alert('比地招标网')">比地招标网</span>
+            <span class="tag-item" onclick="alert('千里马')">千里马</span>
+            <span class="tag-item" onclick="alert('导航网')">导航网</span>
+            <span class="tag-item" onclick="alert('乙方宝')">乙方宝</span>
+            <span class="tag-item" onclick="alert('剑鱼')">剑鱼</span>
+            <span class="tag-item" onclick="alert('招标网')">招标网</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 6. 任务区域 ========== -->
+<div class="task-section">
+  <div class="container">
+    <div class="flex items-center">
+      <ul class="task-tabs">
+        <li class="active" onclick="switchTaskTab(this,'dayrenwu')">今日任务<span class="count">(0)</span></li>
+        <li onclick="switchTaskTab(this,'yuqirenwu')">预期任务<span class="count">(0)</span></li>
+      </ul>
+      <div class="section-actions">
+        <span class="btn btn-sm btn-default" onclick="alert('新增任务')">+ 新增</span>
+        <span class="btn btn-sm btn-outline" onclick="alert('全部任务')">全部任务</span>
+        <span class="btn btn-sm btn-ghost" onclick="alert('展开更多')">更多<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="margin-left:4px;"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></span>
+      </div>
+    </div>
+    <div class="table-wrap mt-2" id="dayrenwu">
+      <table class="table">
+        <thead><tr><th style="width:118px;">联系人</th><th>任务内容</th><th style="width:153px;">任务类型</th><th style="width:130px;">提醒时间</th><th style="width:108px;">操作</th></tr></thead>
+        <tbody><tr><td colspan="5"><div class="empty-state">暂无相关任务信息</div></td></tr></tbody>
+      </table>
+    </div>
+    <div class="table-wrap mt-2 hidden" id="yuqirenwu">
+      <table class="table">
+        <thead><tr><th style="width:118px;">联系人</th><th>任务内容</th><th style="width:153px;">任务类型</th><th style="width:130px;">提醒时间</th><th style="width:108px;">操作</th></tr></thead>
+        <tbody><tr><td colspan="5"><div class="empty-state">暂无相关任务信息</div></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 7. 功能 Tab 组（Tab 栏 + 内容区 = 同一视觉单元） ========== -->
+<div class="func-tab-group">
+  <div class="func-tabs">
+    <div class="container">
+      <ul>
+        <li class="active" onclick="switchFuncTab(this,'tab_online')">在线开通</li>
+        <li onclick="switchFuncTab(this,'tab_subscribe')">订阅管理</li>
+        <li onclick="switchFuncTab(this,'tab_struct')">结构化数据包管理</li>
+        <li onclick="switchFuncTab(this,'tab_dataservice')">数据服务管理</li>
+        <li onclick="switchFuncTab(this,'tab_bigdata')">采招大数据管理</li>
+        <li onclick="switchFuncTab(this,'tab_track')">追踪信息</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="func-tab-content">
+    <div class="container">
+
+    <!-- 在线开通 -->
+    <div class="tab-inner active" id="tab_online">
+      <div class="flex items-center gap-4 mb-3">
+        <span class="text-lg font-bold">在线开通订单<span class="text-primary ml-1">（173）</span></span>
+        <span class="text-xs text-destructive">订单收款码有效期48小时，超时未支付请重新下单。</span>
+        <div class="ml-auto flex gap-2">
+          <span class="btn btn-sm btn-default" onclick="alert('创建订单')">创建订单</span>
+          <span class="btn btn-sm btn-outline" onclick="alert('更多')">更多</span>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="sub-table">
+          <thead><tr><th>订单类型</th><th>会员账号</th><th>订单编号</th><th>服务时间</th><th>支付状态</th><th>开通金额</th><th>业绩归属</th><th>下单时间</th><th>操作</th></tr></thead>
+          <tbody>
+            <tr><td>数据导出（全国）</td><td>15650132296（测试测试）</td><td>SJDC202607091100155360</td><td>--</td><td><span class="text-destructive">待支付</span>（微信）</td><td>￥0</td><td>系统（未知部门）</td><td>2026/07/09 11:00</td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+            <tr><td>标书审核（全国）</td><td>15650132296（测试测试）</td><td>BIDHY2606261546353179</td><td>--</td><td><span class="text-destructive">已下单</span>（线下支付）</td><td>￥0.01</td><td>牟敬茹（售后部）</td><td>2026/06/26 15:46</td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 订阅管理 -->
+    <div class="tab-inner" id="tab_subscribe">
+      <div class="flex items-center gap-2 mb-3 flex-wrap">
+        <input type="text" class="input" placeholder="搜索关键词" style="width:160px;">
+        <input type="text" class="input" placeholder="搜索地区" style="width:120px;">
+        <select class="select" style="width:160px;"><option value="">选择账号</option><option>15650132296(测试测试)【付费】</option></select>
+        <select class="select" style="width:140px;"><option value="">选择定制状态</option><option>开启中</option><option>关闭</option></select>
+        <label class="text-xs flex items-center gap-1"><input type="checkbox" checked> 排除重复客户</label>
+        <span class="btn btn-sm btn-default">搜索</span>
+        <span class="btn btn-sm btn-pink ml-auto" onclick="alert('新增')">+ 新增</span>
+      </div>
+      <div class="sub-tabs">
+        <span class="sub-tab active" onclick="switchSubTab(this,'sub_email')">PC招标订阅（邮件）<span class="ml-1">(3)</span></span>
+        <span class="sub-tab" onclick="switchSubTab(this,'sub_wegc')">PC工程订阅<span class="ml-1">(2)</span></span>
+        <span class="sub-tab" onclick="switchSubTab(this,'sub_appzb')">APP招标订阅<span class="ml-1">(4)</span></span>
+        <span class="sub-tab" onclick="switchSubTab(this,'sub_appxm')">APP工程订阅<span class="ml-1">(5)</span></span>
+        <span class="sub-tab" onclick="switchSubTab(this,'sub_wezb')">标讯助手招标订阅<span class="ml-1">(2)</span></span>
+        <span class="sub-tab" onclick="switchSubTab(this,'sub_wexm')">标讯助手工程订阅<span class="ml-1">(3)</span></span>
+      </div>
+      <div id="sub_email" class="tab-inner active">
+        <div class="table-wrap">
+          <table class="sub-table"><thead><tr><th>邮箱(账户名/级别)</th><th>定制关键词</th><th>地区</th><th>类别</th><th>发送方式</th><th>检索方式</th><th>推送状态</th><th>操作</th></tr></thead>
+            <tbody>
+              <tr><td>zhangjiaming@bidcenter.cn (15650132296/VIP)</td><td>医院建设, 医疗器械</td><td>全国</td><td>招标公告</td><td>每天08:00发送</td><td>智能匹配</td><td><span class="badge badge-success badge-sm">正常</span></td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+              <tr><td>zhangjiaming@bidcenter.cn (15650132296/VIP)</td><td>食品加工, 冷链物流</td><td>江苏省</td><td>中标结果</td><td>每天12:00发送</td><td>关键词模糊</td><td><span class="badge badge-success badge-sm">正常</span></td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+              <tr><td>zhangjiaming@bidcenter.cn (15650132296/VIP)</td><td>市政道路, 桥梁工程</td><td>广东省</td><td>变更公告</td><td>每天18:00发送</td><td>地区+关键词</td><td><span class="badge badge-secondary badge-sm">暂停</span></td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+            </tbody></table>
+        </div>
+      </div>
+      <div id="sub_wegc" class="tab-inner">
+        <div class="table-wrap"><table class="sub-table"><thead><tr><th>订阅名称</th><th>地区</th><th>行业类型</th><th>项目阶段</th><th>状态</th><th>操作</th></tr></thead>
+          <tbody>
+            <tr><td>建筑工程招标信息订阅</td><td>全国</td><td>建筑工程</td><td>施工</td><td><span class="badge badge-success badge-sm">正常</span></td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+            <tr><td>市政工程招标信息订阅</td><td>北京市</td><td>市政工程</td><td>设计</td><td><span class="badge badge-success badge-sm">正常</span></td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div id="sub_appzb" class="tab-inner">
+        <div class="table-wrap"><table class="sub-table"><thead><tr><th>用户名</th><th>关键词</th><th>地区</th><th>定制类型</th><th>发送方式</th><th>范围</th><th>状态</th><th>定制时间</th><th>操作</th></tr></thead>
+          <tbody>
+            <tr><td>15650132296</td><td>医院建设</td><td>全国</td><td>关键词</td><td>APP推送</td><td>全国</td><td><span class="badge badge-success badge-sm">开启</span></td><td>2026/06/15</td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+            <tr><td>15650132296</td><td>学校工程</td><td>北京市</td><td>地区+关键词</td><td>APP推送</td><td>北京市</td><td><span class="badge badge-success badge-sm">开启</span></td><td>2026/05/20</td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+            <tr><td>15650132296</td><td>道路桥梁</td><td>全国</td><td>关键词</td><td>短信+APP</td><td>全国</td><td><span class="badge badge-secondary badge-sm">暂停</span></td><td>2026/04/10</td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+            <tr><td>15650132296</td><td>政府采购</td><td>深圳市</td><td>地区</td><td>APP推送</td><td>深圳市</td><td><span class="badge badge-success badge-sm">开启</span></td><td>2026/07/01</td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div id="sub_appxm" class="tab-inner">
+        <div class="table-wrap"><table class="sub-table"><thead><tr><th>用户名</th><th>行业类型</th><th>地区</th><th>提醒类型</th><th>定制时间</th><th>状态</th><th>操作</th></tr></thead>
+          <tbody>
+            <tr><td>15650132296</td><td>建筑工程</td><td>全国</td><td>招标公告</td><td>2026/06/01</td><td><span class="badge badge-success badge-sm">开启</span></td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+            <tr><td>15650132296</td><td>市政工程</td><td>北京市</td><td>中标结果</td><td>2026/05/15</td><td><span class="badge badge-success badge-sm">开启</span></td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+            <tr><td>15650132296</td><td>园林绿化</td><td>全国</td><td>招标公告</td><td>2026/04/20</td><td><span class="badge badge-success badge-sm">开启</span></td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+            <tr><td>15650132296</td><td>电力工程</td><td>广东省</td><td>变更公告</td><td>2026/07/05</td><td><span class="badge badge-secondary badge-sm">暂停</span></td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+            <tr><td>15650132296</td><td>水利工程</td><td>全国</td><td>招标公告</td><td>2026/03/10</td><td><span class="badge badge-success badge-sm">开启</span></td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div id="sub_wezb" class="tab-inner">
+        <div class="table-wrap"><table class="sub-table"><thead><tr><th>用户名</th><th>关键词</th><th>地区</th><th>定制类型</th><th>定制时间</th><th>更新时间</th><th>状态</th><th>操作</th></tr></thead>
+          <tbody>
+            <tr><td>15650132296</td><td>医院信息化, HIS系统</td><td>全国</td><td>关键词定制</td><td>2026/06/10</td><td>2026/07/14</td><td><span class="badge badge-success badge-sm">开启</span></td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+            <tr><td>15650132296</td><td>校园安防, 智慧教室</td><td>北京市</td><td>地区+关键词</td><td>2026/05/28</td><td>2026/07/10</td><td><span class="badge badge-success badge-sm">开启</span></td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div id="sub_wexm" class="tab-inner">
+        <div class="table-wrap"><table class="sub-table"><thead><tr><th>用户名</th><th>行业类型</th><th>地区</th><th>定制时间</th><th>更新时间</th><th>状态</th><th>操作</th></tr></thead>
+          <tbody>
+            <tr><td>15650132296</td><td>建筑工程</td><td>上海市</td><td>2026/06/01</td><td>2026/07/14</td><td><span class="badge badge-success badge-sm">开启</span></td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+            <tr><td>15650132296</td><td>市政工程</td><td>深圳市</td><td>2026/05/15</td><td>2026/07/12</td><td><span class="badge badge-success badge-sm">开启</span></td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+            <tr><td>15650132296</td><td>绿化景观</td><td>杭州市</td><td>2026/04/20</td><td>2026/07/08</td><td><span class="badge badge-secondary badge-sm">暂停</span></td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- 结构化数据包管理 -->
+    <div class="tab-inner" id="tab_struct">
+      <div class="flex items-center gap-4 mb-3">
+        <span class="text-lg font-bold">订单列表</span>
+        <span class="btn btn-sm btn-default ml-auto" onclick="alert('全部订单')">全部订单</span>
+      </div>
+      <div class="table-wrap">
+        <table class="sub-table"><thead><tr><th>下单账号</th><th>联系人</th><th>订单编号</th><th>签约金额</th><th>订单状态</th><th>下单时间</th><th>操作</th></tr></thead>
+          <tbody>
+            <tr><td>15650132296（测试测试）</td><td>测试测试</td><td>SJGZ202607081200155361</td><td>￥3,800</td><td><span class="badge badge-success badge-sm">已完成</span></td><td>2026/07/08 12:00</td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+            <tr><td>15650132296（测试测试）</td><td>测试测试</td><td>SJGZ202606221345155362</td><td>￥6,500</td><td><span class="badge badge-secondary badge-sm">处理中</span></td><td>2026/06/22 13:45</td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+            <tr><td>15650132296（测试测试）</td><td>测试测试</td><td>SJGZ202606010912155363</td><td>￥2,200</td><td><span class="badge badge-danger badge-sm">已取消</span></td><td>2026/06/01 09:12</td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+          </tbody></table>
+      </div>
+    </div>
+
+    <!-- 数据服务管理 -->
+    <div class="tab-inner" id="tab_dataservice">
+      <div class="flex items-center gap-4 mb-3">
+        <span class="text-lg font-bold">订单列表</span>
+        <span class="btn btn-sm btn-default ml-auto" onclick="alert('全部订单')">全部订单</span>
+      </div>
+      <div class="table-wrap">
+        <table class="sub-table"><thead><tr><th>下单账号</th><th>联系人</th><th>订单编号</th><th>订单名称</th><th>签约金额</th><th>到款状态</th><th>下单时间</th><th>操作</th></tr></thead>
+          <tbody>
+            <tr><td>15650132296（测试测试）</td><td>测试测试</td><td>DSFW202607100930100101</td><td>全国招标信息数据服务（季度）</td><td>￥12,000</td><td><span class="badge badge-success badge-sm">已到款</span></td><td>2026/07/10 09:30</td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+            <tr><td>15650132296（测试测试）</td><td>测试测试</td><td>DSFW202606281415100102</td><td>江苏省工程项目数据包（月度）</td><td>￥3,500</td><td><span class="badge badge-warning badge-sm">部分到款</span></td><td>2026/06/28 14:15</td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+            <tr><td>15650132296（测试测试）</td><td>测试测试</td><td>DSFW202605111036100103</td><td>医疗行业招标数据推送（半年）</td><td>￥8,800</td><td><span class="badge badge-secondary badge-sm">待收款</span></td><td>2026/05/11 10:36</td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+            <tr><td>15650132296（测试测试）</td><td>测试测试</td><td>DSFW202604052200100104</td><td>政府采购数据分析报告（年度）</td><td>￥25,000</td><td><span class="badge badge-success badge-sm">已到款</span></td><td>2026/04/05 22:00</td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+          </tbody></table>
+      </div>
+    </div>
+
+    <!-- 采招大数据管理 -->
+    <div class="tab-inner" id="tab_bigdata">
+      <div class="flex items-center gap-4 mb-3">
+        <span class="text-lg font-bold">订单列表</span>
+        <span class="btn btn-sm btn-default ml-auto" onclick="alert('全部订单')">全部订单</span>
+      </div>
+      <div class="table-wrap">
+        <table class="sub-table"><thead><tr><th>下单账号</th><th>联系人</th><th>订单编号</th><th>订单名称</th><th>签约金额</th><th>到款状态</th><th>下单时间</th><th>操作</th></tr></thead>
+          <tbody>
+            <tr><td>15650132296（测试测试）</td><td>测试测试</td><td>BGDZ202607010830200101</td><td>企业采购态势感知报告（季度）</td><td>￥18,000</td><td><span class="badge badge-success badge-sm">已到款</span></td><td>2026/07/01 08:30</td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+            <tr><td>15650132296（测试测试）</td><td>测试测试</td><td>BGDZ202606150920200102</td><td>全国招标趋势分析（月度）</td><td>￥5,600</td><td><span class="badge badge-secondary badge-sm">待收款</span></td><td>2026/06/15 09:20</td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+            <tr><td>15650132296（测试测试）</td><td>测试测试</td><td>BGDZ202605030745200103</td><td>竞争对手投标行为分析报告</td><td>￥9,900</td><td><span class="badge badge-success badge-sm">已到款</span></td><td>2026/05/03 07:45</td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+          </tbody></table>
+      </div>
+    </div>
+
+    <!-- 追踪信息 -->
+    <div class="tab-inner" id="tab_track">
+      <div class="flex items-center gap-2 mb-3 flex-wrap">
+        <select class="select" style="width:160px;"><option value="">选择账号</option><option>15650132296(测试测试)【付费】</option></select>
+        <select class="select" style="width:140px;"><option value="">追踪状态</option><option>追踪中</option><option>已过期</option></select>
+        <span class="btn btn-sm btn-default">搜索</span>
+        <span class="btn btn-sm btn-outline ml-auto" onclick="alert('编辑锁')">编辑锁</span>
+        <span class="btn btn-sm btn-outline" onclick="alert('更多')">更多</span>
+      </div>
+      <div class="table-wrap">
+        <table class="sub-table"><thead><tr><th>账户名称</th><th>标题</th><th>更新时间</th><th>截止时间</th><th>通知人</th><th>状态</th><th>操作</th></tr></thead>
+          <tbody>
+            <tr><td>15650132296（测试测试）</td><td>2026年第三季度医院建设招标项目汇总</td><td>2026/07/14 10:30</td><td>2026/09/30</td><td>周海贵</td><td><span class="badge badge-success badge-sm">追踪中</span></td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+            <tr><td>15650132296（测试测试）</td><td>江苏省市政道路改造工程追踪</td><td>2026/07/12 16:45</td><td>2026/08/15</td><td>牟敬茹</td><td><span class="badge badge-success badge-sm">追踪中</span></td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+            <tr><td>15650132296（测试测试）</td><td>深圳市垃圾分类处理设施招标</td><td>2026/07/08 09:00</td><td>2026/07/30</td><td>周海贵</td><td><span class="badge badge-success badge-sm">追踪中</span></td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+            <tr><td>15650132296（测试测试）</td><td>2026年度政府IT采购项目集</td><td>2026/06/30 14:20</td><td>2026/07/15</td><td>系统</td><td><span class="badge badge-secondary badge-sm">已过期</span></td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+            <tr><td>15650132296（测试测试）</td><td>新疆等地援建工程招标追踪</td><td>2026/06/25 11:10</td><td>2026/07/10</td><td>牟敬茹</td><td><span class="badge badge-secondary badge-sm">已过期</span></td><td><span class="btn btn-sm btn-outline" onclick="alert('查看')">查看</span></td></tr>
+          </tbody></table>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div><!-- /func-tab-group -->
+
+<!-- ========== 8. 相关联系人账户（紧凑表格 + 展开详情） ========== -->
+<div class="section" style="margin-bottom:2px;">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-title">相关联系人账户</span>
+      <span class="text-primary ml-2 text-sm">（5）</span>
+      <span class="text-xs text-muted ml-2">* 点击行可展开查看详细信息</span>
+      <div class="section-actions">
+        <input type="text" class="input" placeholder="搜索手机号码" style="width:150px;">
+        <span class="btn btn-sm btn-outline" onclick="alert('重置')">重置</span>
+        <span class="btn btn-sm btn-outline" onclick="alert('补添')">+ 补添</span>
+        <span class="btn btn-sm btn-pink" onclick="alert('名片管理')">名片管理</span>
+        <span class="btn btn-sm btn-default" onclick="alert('新增联系人')">+ 新增联系人</span>
+      </div>
+    </div>
+
+    <div class="contacts-table-wrap">
+      <table class="contacts-table">
+        <thead>
+          <tr>
+            <th style="width:24px;"></th>
+            <th>联系人</th>
+            <th>电话</th>
+            <th>级别/状态</th>
+            <th>绑定服务</th>
+            <th>搜索关键词</th>
+            <th style="width:150px;">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- ====== 主账号（默认展开） ====== -->
+          <tr class="contact-row active" onclick="toggleContactDetail(this)">
+            <td><span class="main-dot">主</span></td>
+            <td><span class="contact-name-cell">[待核实]&lt;同事，禁止联系&gt;</span> <span class="text-xs text-muted">ID:6296201</span></td>
+            <td><span class="text-primary font-semibold">15650132296</span></td>
+            <td><span class="tag-item danger">VIP会员(总站)</span></td>
+            <td class="bind-cell"><span class="bind-icon" title="邮件定制">邮</span><span class="bind-icon" title="采招网会员服务已绑定">服</span><span class="bind-icon" title="微信小程序已绑定">程</span><span class="bind-icon" title="发票开具">票</span><span class="bind-icon" title="手机APP下载">端</span></td>
+            <td class="kw-cell">医院 食品 绩效 猪肉 水果 …</td>
+            <td class="action-cell">
+              <span class="btn-ghost" onclick="event.stopPropagation(); toggleContactDetail(this.closest('tr'))">展开详情</span>
+              <span class="btn-ghost" onclick="event.stopPropagation(); alert('创建维护任务')">任务</span>
+              <span class="btn-ghost danger" onclick="event.stopPropagation(); alert('删除')">删除</span>
+            </td>
+          </tr>
+          <tr class="contact-expand" id="ce_0" style="">
+            <td colspan="7">
+              <div class="contact-detail-wrap">
+                <div class="cd-row"><span class="cd-label">邮箱</span><span class="cd-value">zhangjiaming@bidcenter.cn</span></div>
+                <div class="cd-row"><span class="cd-label">用户名/角色</span><span class="cd-value">15650132296 <span class="text-muted">招投标负责人</span></span></div>
+                <div class="cd-row"><span class="cd-label">绑定手机</span><span class="cd-value">15650132296</span></div>
+                <div class="cd-row"><span class="cd-label">微信绑定</span><span class="cd-value"><span class="bind-icon">服</span> 已绑定</span></div>
+                <div class="cd-row"><span class="cd-label">到期时间</span><span class="cd-value">2030/9/30</span></div>
+                <div class="cd-row"><span class="cd-label">邮件定制</span><span class="cd-value">18 个 <a href="javascript:;" class="text-primary" onclick="alert('邮件定制')">管理</a></span></div>
+                <div class="cd-row"><span class="cd-label">销售跟进</span><span class="cd-value"><span class="text-destructive">0</span>/2 次</span></div>
+                <div class="cd-row"><span class="cd-label">上次缴费</span><span class="cd-value text-muted">无付费信息</span></div>
+                <div class="cd-row cd-full"><span class="cd-label">注册/入库/登录</span><span class="cd-value">2022-11-25 | 2025-07-07 | <span class="text-destructive">2026-07-14 15:59</span></span></div>
+                <div class="cd-row cd-full"><span class="cd-label">搜索关键词</span><span class="cd-value">
+                  <span class="kw-item" onclick="alert('医院')">医院</span>
+                  <span class="kw-item" onclick="alert('食品')">食品</span>
+                  <span class="kw-item" onclick="alert('绩效')">绩效</span>
+                  <span class="kw-item" onclick="alert('猪肉')">猪肉</span>
+                  <span class="kw-item" onclick="alert('水果')">水果</span>
+                  <span class="kw-more" onclick="alert('更多')">更多</span>
+                  <span class="kw-more" style="border-color:var(--destructive);color:var(--destructive);" onclick="alert('结构化数据')">结构化数据</span>
+                </span></div>
+                <div class="cd-actions">
+                  <span class="btn btn-sm btn-outline" onclick="alert('编辑')">编辑</span>
+                  <span class="btn btn-sm btn-outline" onclick="alert('创建维护任务')">创建维护任务</span>
+                  <span class="btn btn-sm btn-outline" onclick="alert('客户ID变更')">客户ID变更</span>
+                  <span class="btn btn-sm btn-outline" onclick="alert('发短信')">发短信</span>
+                  <span class="btn btn-sm btn-outline" onclick="alert('录音记录')">录音记录</span>
+                  <span class="btn btn-sm btn-destructive-outline" onclick="alert('删除联系人')">删除</span>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- ====== 张明（采购经理） ====== -->
+          <tr class="contact-row" onclick="toggleContactDetail(this)">
+            <td></td>
+            <td><span class="contact-name-cell">张明</span> <span class="text-xs text-muted">采购经理</span></td>
+            <td><span class="text-primary">13912345678</span></td>
+            <td><span class="badge badge-outline badge-sm">免费用户</span></td>
+            <td class="bind-cell"><span class="bind-icon">邮</span></td>
+            <td class="kw-cell">钢材 混凝土 塔吊 …</td>
+            <td class="action-cell">
+              <span class="btn-ghost" onclick="event.stopPropagation(); toggleContactDetail(this.closest('tr'))">展开详情</span>
+              <span class="btn-ghost" onclick="event.stopPropagation(); alert('创建维护任务')">任务</span>
+              <span class="btn-ghost danger" onclick="event.stopPropagation(); alert('删除')">删除</span>
+            </td>
+          </tr>
+          <tr class="contact-expand" id="ce_1" style="display:none;">
+            <td colspan="7">
+              <div class="contact-detail-wrap">
+                <div class="cd-row"><span class="cd-label">电话</span><span class="cd-value">13912345678</span></div>
+                <div class="cd-row"><span class="cd-label">邮箱</span><span class="cd-value">zhangming@example.com</span></div>
+                <div class="cd-row"><span class="cd-label">用户级别</span><span class="cd-value">免费用户（未开通）</span></div>
+                <div class="cd-row"><span class="cd-label">注册时间</span><span class="cd-value">2026-01-15</span></div>
+                <div class="cd-row"><span class="cd-label">上次登录</span><span class="cd-value">2026-07-10 08:30</span></div>
+                <div class="cd-row cd-full"><span class="cd-label">搜索关键词</span><span class="cd-value">
+                  <span class="kw-item" onclick="alert('钢材')">钢材</span>
+                  <span class="kw-item" onclick="alert('混凝土')">混凝土</span>
+                  <span class="kw-item" onclick="alert('塔吊')">塔吊</span>
+                  <span class="kw-more" onclick="alert('更多')">更多</span>
+                </span></div>
+                <div class="cd-actions">
+                  <span class="btn btn-sm btn-outline" onclick="alert('编辑')">编辑</span>
+                  <span class="btn btn-sm btn-outline" onclick="alert('创建维护任务')">创建维护任务</span>
+                  <span class="btn btn-sm btn-destructive-outline" onclick="alert('删除')">删除</span>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- ====== 李芳（财务总监） ====== -->
+          <tr class="contact-row" onclick="toggleContactDetail(this)">
+            <td></td>
+            <td><span class="contact-name-cell">李芳</span> <span class="text-xs text-muted">财务总监</span></td>
+            <td><span class="text-primary">13698765432</span></td>
+            <td><span class="tag-item" style="background:#e8f4f8;color:#1a7a9a;">高级会员</span></td>
+            <td class="bind-cell"><span class="bind-icon">邮</span><span class="bind-icon">票</span></td>
+            <td class="kw-cell">财务系统 ERP 发票 …</td>
+            <td class="action-cell">
+              <span class="btn-ghost" onclick="event.stopPropagation(); toggleContactDetail(this.closest('tr'))">展开详情</span>
+              <span class="btn-ghost" onclick="event.stopPropagation(); alert('创建维护任务')">任务</span>
+              <span class="btn-ghost danger" onclick="event.stopPropagation(); alert('删除')">删除</span>
+            </td>
+          </tr>
+          <tr class="contact-expand" id="ce_2" style="display:none;">
+            <td colspan="7">
+              <div class="contact-detail-wrap">
+                <div class="cd-row"><span class="cd-label">电话</span><span class="cd-value">13698765432</span></div>
+                <div class="cd-row"><span class="cd-label">邮箱</span><span class="cd-value">lifang@example.com</span></div>
+                <div class="cd-row"><span class="cd-label">用户级别</span><span class="cd-value">高级会员</span></div>
+                <div class="cd-row"><span class="cd-label">绑定手机</span><span class="cd-value">13698765432</span></div>
+                <div class="cd-row"><span class="cd-label">到期时间</span><span class="cd-value">2027-06-30</span></div>
+                <div class="cd-row cd-full"><span class="cd-label">搜索关键词</span><span class="cd-value">
+                  <span class="kw-item" onclick="alert('财务系统')">财务系统</span>
+                  <span class="kw-item" onclick="alert('ERP')">ERP</span>
+                  <span class="kw-item" onclick="alert('发票')">发票</span>
+                </span></div>
+                <div class="cd-actions">
+                  <span class="btn btn-sm btn-outline" onclick="alert('编辑')">编辑</span>
+                  <span class="btn btn-sm btn-outline" onclick="alert('创建维护任务')">创建维护任务</span>
+                  <span class="btn btn-sm btn-destructive-outline" onclick="alert('删除')">删除</span>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- ====== 王磊（项目经理） ====== -->
+          <tr class="contact-row" onclick="toggleContactDetail(this)">
+            <td></td>
+            <td><span class="contact-name-cell">王磊</span> <span class="text-xs text-muted">项目经理</span></td>
+            <td><span class="text-primary">15011513872</span></td>
+            <td><span class="badge badge-outline badge-sm">未注册</span></td>
+            <td class="bind-cell"><span class="text-muted text-xs">--</span></td>
+            <td class="kw-cell text-muted">暂无关键词</td>
+            <td class="action-cell">
+              <span class="btn-ghost" onclick="event.stopPropagation(); toggleContactDetail(this.closest('tr'))">展开详情</span>
+              <span class="btn-ghost" onclick="event.stopPropagation(); alert('创建维护任务')">任务</span>
+              <span class="btn-ghost danger" onclick="event.stopPropagation(); alert('删除')">删除</span>
+            </td>
+          </tr>
+          <tr class="contact-expand" id="ce_3" style="display:none;">
+            <td colspan="7">
+              <div class="contact-detail-wrap">
+                <div class="cd-row"><span class="cd-label">电话</span><span class="cd-value">15011513872</span></div>
+                <div class="cd-row"><span class="cd-label">邮箱</span><span class="cd-value text-muted">--</span></div>
+                <div class="cd-row"><span class="cd-label">用户级别</span><span class="cd-value text-muted">未注册</span></div>
+                <div class="cd-row"><span class="cd-label">绑定手机</span><span class="cd-value">15011513872</span></div>
+                <div class="cd-actions">
+                  <span class="btn btn-sm btn-outline" onclick="alert('编辑')">编辑</span>
+                  <span class="btn btn-sm btn-outline" onclick="alert('创建维护任务')">创建维护任务</span>
+                  <span class="btn btn-sm btn-destructive-outline" onclick="alert('删除')">删除</span>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- ====== 陈婷（招标专员） ====== -->
+          <tr class="contact-row" onclick="toggleContactDetail(this)">
+            <td></td>
+            <td><span class="contact-name-cell">陈婷</span> <span class="text-xs text-muted">招标专员</span></td>
+            <td><span class="text-primary">18945671234</span></td>
+            <td><span class="badge badge-success badge-sm">VIP会员</span></td>
+            <td class="bind-cell"><span class="bind-icon">邮</span><span class="bind-icon">程</span></td>
+            <td class="kw-cell">招标代理 投标 标书 …</td>
+            <td class="action-cell">
+              <span class="btn-ghost" onclick="event.stopPropagation(); toggleContactDetail(this.closest('tr'))">展开详情</span>
+              <span class="btn-ghost" onclick="event.stopPropagation(); alert('创建维护任务')">任务</span>
+              <span class="btn-ghost danger" onclick="event.stopPropagation(); alert('删除')">删除</span>
+            </td>
+          </tr>
+          <tr class="contact-expand" id="ce_4" style="display:none;">
+            <td colspan="7">
+              <div class="contact-detail-wrap">
+                <div class="cd-row"><span class="cd-label">电话</span><span class="cd-value">18945671234</span></div>
+                <div class="cd-row"><span class="cd-label">邮箱</span><span class="cd-value">chenting@example.com</span></div>
+                <div class="cd-row"><span class="cd-label">用户级别</span><span class="cd-value">VIP会员（总站）</span></div>
+                <div class="cd-row"><span class="cd-label">绑定手机</span><span class="cd-value">18945671234</span></div>
+                <div class="cd-row"><span class="cd-label">到期时间</span><span class="cd-value">2027-12-31</span></div>
+                <div class="cd-row"><span class="cd-label">邮件定制</span><span class="cd-value">6 个 <a href="javascript:;" class="text-primary" onclick="alert('邮件定制')">管理</a></span></div>
+                <div class="cd-row cd-full"><span class="cd-label">搜索关键词</span><span class="cd-value">
+                  <span class="kw-item" onclick="alert('招标代理')">招标代理</span>
+                  <span class="kw-item" onclick="alert('投标')">投标</span>
+                  <span class="kw-item" onclick="alert('标书')">标书</span>
+                  <span class="kw-item" onclick="alert('投标保证金')">投标保证金</span>
+                  <span class="kw-more" onclick="alert('更多')">更多</span>
+                </span></div>
+                <div class="cd-actions">
+                  <span class="btn btn-sm btn-outline" onclick="alert('编辑')">编辑</span>
+                  <span class="btn btn-sm btn-outline" onclick="alert('创建维护任务')">创建维护任务</span>
+                  <span class="btn btn-sm btn-outline" onclick="alert('客户ID变更')">客户ID变更</span>
+                  <span class="btn btn-sm btn-destructive-outline" onclick="alert('删除')">删除</span>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- ========== 9. 统一的记录管理区 ========== -->
+<div class="records-section section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-title">记录管理</span>
+      <span class="btn btn-sm btn-pink ml-auto" onclick="alert('添加记录')">+ 添加记录</span>
+    </div>
+
+    <!-- 快捷添加记录 -->
+    <div class="quick-record">
+      <div class="qr-header">
+        <div class="contact-select">
+          <span class="text-base font-bold text-card-foreground">[待核实]&lt;同事，禁止联系&gt;</span>
+          <span class="text-xs text-muted">询问决策人贵姓或联系方式请询问客户对我们哪些服务感兴趣</span>
+        </div>
+        <div class="quick-tags">
+          <div class="tag-dropdown">
+            <span class="tag-btn">投诉标记</span>
+            <div class="tag-dropdown-menu">
+              <a href="javascript:;" onclick="alert('电话骚扰')">电话骚扰</a>
+              <a href="javascript:;" onclick="alert('拨打频繁')">拨打频繁</a>
+              <a href="javascript:;" onclick="alert('广告推销')">广告推销</a>
+              <a href="javascript:;" onclick="alert('侵犯隐私')">侵犯隐私</a>
+              <a href="javascript:;" onclick="alert('注销账号')">注销账号</a>
+            </div>
+          </div>
+          <div class="tag-dropdown">
+            <span class="tag-btn">信息错误</span>
+            <div class="tag-dropdown-menu">
+              <a href="javascript:;" onclick="alert('号码空号')">号码空号</a>
+              <a href="javascript:;" onclick="alert('号码错误')">号码错误</a>
+              <a href="javascript:;" onclick="alert('人已离职')">人已离职</a>
+              <a href="javascript:;" onclick="alert('不是本人')">不是本人</a>
+            </div>
+          </div>
+          <div class="tag-dropdown">
+            <span class="tag-btn">没沟通上</span>
+            <div class="tag-dropdown-menu">
+              <a href="javascript:;" onclick="alert('无法接通')">无法接通</a>
+              <a href="javascript:;" onclick="alert('无人接听')">无人接听</a>
+              <a href="javascript:;" onclick="alert('在开车')">在开车</a>
+              <a href="javascript:;" onclick="alert('在忙或开会')">在忙或开会</a>
+              <a href="javascript:;" onclick="alert('停机')">停机</a>
+            </div>
+          </div>
+          <div class="tag-dropdown">
+            <span class="tag-btn">不需要</span>
+            <div class="tag-dropdown-menu">
+              <a href="javascript:;" onclick="alert('收费不考虑')">收费不考虑</a>
+              <a href="javascript:;" onclick="alert('个人随便看看')">个人随便看看</a>
+              <a href="javascript:;" onclick="alert('不投标')">不投标</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="qr-textarea">
+        <textarea class="input" placeholder="填写通话记录" style="height:60px; width:100%;"></textarea>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap mt-2">
+        <select class="select" style="width:160px;"><option value="">选择客户评级</option><option>AA级（待打款）</option><option>A级（已明确办理）</option><option>B级（计划合作）</option><option>C级（有考虑需挖掘）</option><option>D级（意向不明确）</option><option>E级（明确不合作）</option></select>
+        <select class="select" style="width:160px;"><option value="">选择服务类型</option><option>正常回访</option><option>招标信息查询</option><option>招标信息关注</option><option>特约项目查询</option><option>招标数据导出</option></select>
+        <input type="text" class="input" placeholder="回访时间" onclick="alert('选择日期')" readonly style="width:140px;">
+        <span class="btn btn-sm btn-pink" onclick="alert('提交成功')">提交</span>
+        <span class="btn btn-sm btn-outline" onclick="alert('取消')">取消</span>
+      </div>
+    </div>
+
+    <!-- 记录 Tab -->
+    <ul class="records-tabs">
+      <li class="active" onclick="switchRecordTab(this,'rec_sale')">销售记录</li>
+      <li onclick="switchRecordTab(this,'rec_system')">系统记录</li>
+      <li onclick="switchRecordTab(this,'rec_behavior')">用户行为记录</li>
+      <li onclick="switchRecordTab(this,'rec_sms')">短信记录</li>
+      <li onclick="switchRecordTab(this,'rec_all')">全部记录</li>
+    </ul>
+
+    <!-- 记录内容 -->
+    <div class="records-content">
+      <!-- 销售记录 -->
+      <div class="tab-inner active" id="rec_sale">
+        <div class="flex items-center gap-2 mb-3 flex-wrap">
+          <input type="text" class="input" placeholder="搜索关键词" style="width:140px;">
+          <select class="select" style="width:160px;"><option value="">选择客户</option><option>[待核实]测试(15011513872)</option><option>[待核实](15650132296)</option></select>
+          <select class="select" style="width:140px;"><option value="">选择客户评级</option><option>AA级</option><option>A级</option></select>
+          <input type="text" class="input" placeholder="请选择日期" style="width:130px;" onclick="alert('选择日期')" readonly>
+          <span class="btn btn-sm btn-default" onclick="alert('搜索')">搜索</span>
+        </div>
+        <table class="records-table">
+          <thead><tr><th>相关账户</th><th>客户姓名</th><th>记录创建时间</th><th>下次联系时间</th><th>客户评级</th><th>销售人员</th><th>联系/系统记录</th><th>操作记录</th></tr></thead>
+          <tbody>
+            <tr><td>15650132296（测试测试）</td><td><span class="log-zname">[待核实]&lt;同事，禁止联系&gt;</span></td><td>2026-07-15 10:30:00</td><td>2026-07-22</td><td><span class="text-destructive">AA</span></td><td>牟敬茹(售后部)</td><td class="log-content truncate">客户表示近期有招标计划，已发送产品资料，跟进中</td><td>正常回访</td></tr>
+            <tr><td>15650132296（测试测试）</td><td><span class="log-zname">[待核实]&lt;同事，禁止联系&gt;</span></td><td>2026-07-07 11:45:33</td><td>--</td><td>--</td><td>售后部(牟敬茹)</td><td class="log-content truncate">【邮件补发】客户：大土豆有限责任公司（6296201）| 信息时间：2026-07-07 | 补发关键词邮箱组：2组</td><td>补发邮件</td></tr>
+            <tr><td>15650132296（测试测试）</td><td><span class="log-zname">[待核实]&lt;同事，禁止联系&gt;</span></td><td>2026-07-03 09:50:10</td><td>2026-07-06</td><td>E</td><td>营销部经理(周海贵)</td><td class="log-content truncate">客户表示暂时不需要，已记录意向，后续跟进</td><td>正常回访</td></tr>
+            <tr><td>--</td><td><span class="log-name">--</span></td><td>2026-06-29 14:18:03</td><td>--</td><td>--</td><td>营销部经理(周海贵)</td><td class="log-content truncate">【邮件补发】客户：大土豆有限责任公司（6296201）| 信息时间：2026-06-29 | 补发关键词邮箱组：3组</td><td>补发邮件</td></tr>
+            <tr><td>15650132296（测试测试）</td><td><span class="log-zname">[待核实]&lt;同事，禁止联系&gt;</span></td><td>2026-06-20 14:00:00</td><td>2026-06-27</td><td>C</td><td>牟敬茹(售后部)</td><td class="log-content truncate">电话沟通，客户对VIP会员服务感兴趣，需进一步介绍套餐详情</td><td>正常回访</td></tr>
+          </tbody>
+        </table>
+        <a href="javascript:;" class="load-more" onclick="alert('加载更多')">点击加载更多》</a>
+      </div>
+
+      <!-- 系统记录 -->
+      <div class="tab-inner" id="rec_system">
+        <div class="flex items-center gap-2 mb-3 flex-wrap">
+          <input type="text" class="input" placeholder="搜索关键词" style="width:140px;">
+          <select class="select" style="width:160px;"><option value="">选择客户</option><option>[待核实]测试(15011513872)</option><option>[待核实](15650132296)</option></select>
+          <select class="select" style="width:140px;"><option value="">选择客户评级</option></select>
+          <input type="text" class="input" placeholder="选择日期" style="width:130px;" onclick="alert('选择日期')" readonly>
+          <span class="btn btn-sm btn-default" onclick="alert('搜索')">搜索</span>
+        </div>
+        <table class="records-table">
+          <thead><tr><th>相关账户</th><th>客户姓名</th><th>记录创建时间</th><th>客户评级</th><th>销售人员</th><th>联系/系统记录</th><th>操作记录</th></tr></thead>
+          <tbody>
+            <tr><td>15650132296（测试测试）</td><td><span class="log-name">测试测试</span></td><td>2026-07-14 15:59:43</td><td>--</td><td>系统</td><td class="log-content truncate">用户登录成功（IP: 192.168.1.100）</td><td>登录</td></tr>
+            <tr><td>15650132296（测试测试）</td><td><span class="log-name">测试测试</span></td><td>2026-07-13 09:30:00</td><td>--</td><td>系统</td><td class="log-content truncate">密码修改成功</td><td>修改</td></tr>
+            <tr><td>15650132296（测试测试）</td><td><span class="log-name">测试测试</span></td><td>2026-07-10 14:22:18</td><td>--</td><td>系统</td><td class="log-content truncate">会员级别变更为 VIP会员（总站）</td><td>变更</td></tr>
+            <tr><td>15650132296（测试测试）</td><td><span class="log-name">测试测试</span></td><td>2026-07-08 10:15:00</td><td>--</td><td>系统</td><td class="log-content truncate">邮箱绑定成功：zhangjiaming@bidcenter.cn</td><td>绑定</td></tr>
+          </tbody>
+        </table>
+        <a href="javascript:;" class="load-more" onclick="alert('加载更多')">点击加载更多》</a>
+      </div>
+
+      <!-- 用户行为记录 -->
+      <div class="tab-inner" id="rec_behavior">
+        <div class="flex items-center gap-2 mb-3 flex-wrap">
+          <input type="text" class="input" placeholder="搜索关键词" style="width:140px;">
+          <select class="select" style="width:140px;"><option>查看记录</option><option>搜索记录</option><option>登录记录</option><option>服务记录</option><option>导出记录</option></select>
+          <select class="select" style="width:180px;"><option value="">选择账号</option><option>15650132296(测试测试)【付费】</option></select>
+          <input type="text" class="input" placeholder="搜索用户名" style="width:120px;">
+          <span class="btn btn-sm btn-default" onclick="alert('搜索')">搜索</span>
+        </div>
+        <table class="records-table">
+          <thead><tr><th>账号</th><th>信息类型</th><th>地区</th><th>记录创建时间</th><th>信息内容</th></tr></thead>
+          <tbody>
+            <tr><td>15650132296</td><td>搜索记录</td><td>全国</td><td>2026-07-14 10:30:00</td><td class="log-content truncate">搜索关键词"医院采购"相关招标信息，命中 126 条结果</td></tr>
+            <tr><td>15650132296</td><td>查看记录</td><td>北京市</td><td>2026-07-13 15:20:00</td><td class="log-content truncate">查看招标公告《北京市第三人民医院改造工程项目》</td></tr>
+            <tr><td>15650132296</td><td>登录记录</td><td>--</td><td>2026-07-14 15:59:43</td><td class="log-content truncate">IP 192.168.1.100 通过 PC 端登录成功</td></tr>
+            <tr><td>15650132296</td><td>导出记录</td><td>全国</td><td>2026-07-12 11:00:00</td><td class="log-content truncate">导出招标数据（全国）共 236 条，格式 Excel</td></tr>
+          </tbody>
+        </table>
+        <a href="javascript:;" class="load-more" onclick="alert('加载更多')">点击加载更多》</a>
+      </div>
+
+      <!-- 短信记录 -->
+      <div class="tab-inner" id="rec_sms">
+        <div class="flex items-center gap-2 mb-3 flex-wrap">
+          <input type="text" class="input" placeholder="搜索关键词" style="width:140px;">
+          <select class="select" style="width:140px;"><option>全部短信记录</option><option>销售短信记录</option><option>系统短信记录</option></select>
+          <select class="select" style="width:160px;"><option value="">选择联系人</option><option>[待核实]测试(15011513872)</option><option>[待核实](15650132296)</option></select>
+          <input type="text" class="input" placeholder="选择日期" style="width:130px;" onclick="alert('选择日期')" readonly>
+          <span class="btn btn-sm btn-default" onclick="alert('搜索')">搜索</span>
+        </div>
+        <table class="records-table">
+          <thead><tr><th>联系方式</th><th>联系人</th><th>短信类型</th><th>操作人</th><th>记录创建时间</th><th>记录内容</th></tr></thead>
+          <tbody>
+            <tr><td>15650132296</td><td>测试测试</td><td>验证码</td><td>系统</td><td>2026-07-14 15:59:00</td><td class="log-content truncate">【采招网】您的验证码是123456，15分钟内有效</td></tr>
+            <tr><td>15650132296</td><td>测试测试</td><td>通知</td><td>系统</td><td>2026-07-10 09:00:00</td><td class="log-content truncate">【采招网】您订阅的"医院"关键词新增 5 条招标信息</td></tr>
+            <tr><td>15650132296</td><td>测试测试</td><td>营销</td><td>牟敬茹</td><td>2026-07-05 14:30:00</td><td class="log-content truncate">【采招网】尊敬的VIP会员，您的会员服务将于2026-08-30到期</td></tr>
+          </tbody>
+        </table>
+        <a href="javascript:;" class="load-more" onclick="alert('加载更多')">点击加载更多》</a>
+      </div>
+
+      <!-- 全部记录 -->
+      <div class="tab-inner" id="rec_all">
+        <div class="flex items-center gap-2 mb-3 flex-wrap">
+          <input type="text" class="input" placeholder="搜索关键词" style="width:140px;">
+          <select class="select" style="width:160px;"><option value="">选择客户</option><option>[待核实]测试(15011513872)</option><option>[待核实](15650132296)</option></select>
+          <select class="select" style="width:140px;"><option value="">选择客户评级</option></select>
+          <input type="text" class="input" placeholder="选择日期" style="width:130px;" onclick="alert('选择日期')" readonly>
+          <span class="btn btn-sm btn-default" onclick="alert('搜索')">搜索</span>
+        </div>
+        <table class="records-table">
+          <thead><tr><th>相关账户</th><th>客户姓名</th><th>记录创建时间</th><th>客户评级</th><th>销售人员</th><th>联系/系统记录</th><th>操作记录</th></tr></thead>
+          <tbody>
+            <tr><td>--</td><td><span class="log-name">--</span></td><td>2026-07-14 15:59:43</td><td>--</td><td>系统</td><td class="log-content truncate">用户登录成功（IP: 192.168.1.100）</td><td>登录</td></tr>
+            <tr><td>--</td><td><span class="log-name">--</span></td><td>2026-07-07 11:45:33</td><td>--</td><td>售后部(牟敬茹)</td><td class="log-content truncate">【邮件补发】客户：大土豆有限责任公司（6296201）| 信息时间：2026-07-07</td><td>补发邮件</td></tr>
+            <tr><td>15650132296（测试测试）</td><td><span class="log-zname">[待核实]&lt;同事，禁止联系&gt;</span></td><td>2026-07-03 09:50:10</td><td>E</td><td>营销部经理(周海贵)</td><td class="log-content truncate">测试</td><td>正常回访</td></tr>
+            <tr><td>15650132296（测试测试）</td><td><span class="log-name">测试测试</span></td><td>2026-07-13 09:30:00</td><td>--</td><td>系统</td><td class="log-content truncate">密码修改成功</td><td>修改</td></tr>
+            <tr><td>15650132296</td><td>--</td><td>2026-07-14 10:30:00</td><td>--</td><td>--</td><td class="log-content truncate">【用户行为】搜索关键词"医院采购"，命中 126 条结果</td><td>搜索</td></tr>
+          </tbody>
+        </table>
+        <a href="javascript:;" class="load-more" onclick="alert('加载更多')">点击加载更多》</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 底部 ========== -->
+<div class="page-footer"></div>
+
+<!-- 返回顶部 -->
+<div class="rollTop">
+  <a href="javascript:;" onclick="window.scrollTo({top:0,behavior:'smooth'})">顶部</a>
+</div>
+
+<script>
+// ===== 编辑 Tab 切换 =====
+function switchEditTab(el, id) {
+  document.querySelectorAll('.edit-section .tab-btns span').forEach(function(s){ s.classList.remove('active'); });
+  el.classList.add('active');
+  document.querySelectorAll('.edit-section .edit-form').forEach(function(f){ f.style.display = 'none'; });
+  document.getElementById(id).style.display = 'block';
+}
+
+// ===== 任务 Tab 切换 =====
+function switchTaskTab(el, id) {
+  document.querySelectorAll('.task-tabs li').forEach(function(s){ s.classList.remove('active'); });
+  el.classList.add('active');
+  document.querySelectorAll('.task-section .table-wrap').forEach(function(t){ t.style.display = 'none'; });
+  document.getElementById(id).style.display = 'block';
+}
+
+// ===== 功能 Tab 切换 =====
+function switchFuncTab(el, id) {
+  document.querySelectorAll('.func-tabs ul li').forEach(function(s){ s.classList.remove('active'); });
+  el.classList.add('active');
+  document.querySelectorAll('.func-tab-content .tab-inner').forEach(function(t){ t.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+}
+
+// ===== 订阅子 Tab 切换（shadcn 风格：仅使用 .active 类控制显隐） =====
+function switchSubTab(el, id) {
+  var parent = el.parentNode;
+  parent.querySelectorAll('.sub-tab').forEach(function(s){ s.classList.remove('active'); });
+  el.classList.add('active');
+  var container = parent.parentNode;
+  container.querySelectorAll('.tab-inner').forEach(function(t){ t.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+}
+
+// ===== 记录 Tab 切换（shadcn 风格：仅使用 .active 类控制显隐） =====
+function switchRecordTab(el, id) {
+  document.querySelectorAll('.records-tabs li').forEach(function(s){ s.classList.remove('active'); });
+  el.classList.add('active');
+  document.querySelectorAll('.records-content .tab-inner').forEach(function(t){ t.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+}
+
+// ===== 联系人表格行展开/收起 =====
+function toggleContactDetail(row) {
+  row.classList.toggle('active');
+  var expandRow = row.nextElementSibling;
+  if (expandRow && expandRow.classList.contains('contact-expand')) {
+    if (expandRow.style.display === 'none') {
+      expandRow.style.display = '';
+    } else {
+      expandRow.style.display = 'none';
+    }
+  }
+}
+</script>
+
+</body>
+</html>

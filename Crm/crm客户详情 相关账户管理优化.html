@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>crm客户详情 - 相关账户管理优化</title>
+    <style>
+        /* ========== 基础重置 ========== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #6b46c1;
+            --primary-light: #9f7aea;
+            --primary-dark: #553c9a;
+
+            --bg: #f0f2f5;
+            --bg-card: #ffffff;
+            --border: #e8eaed;
+            --border-light: #f0f1f3;
+
+            --text-primary: #1a1a2e;
+            --text-secondary: #5f6368;
+            --text-muted: #9aa0a6;
+
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+
+            --shadow: 0 2px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
+
+            --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text-primary);
+            padding: 24px;
+            line-height: 1.5;
+        }
+
+        /* ========== 弹窗容器 ========== */
+        .modal {
+            max-width: 1380px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            min-width: 0; /* 防止 flex 溢出 */
+        }
+
+        /* ========== 弹窗头部 ========== */
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 28px;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+        }
+        .modal-header h2 {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .modal-header h2::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 18px;
+            background: var(--primary);
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+        .modal-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+        .btn-close {
+            width: 32px; height: 32px;
+            border: none;
+            background: transparent;
+            border-radius: var(--radius-sm);
+            font-size: 20px;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+        }
+        .btn-close:hover { background: #f5f5f5; color: var(--text-primary); }
+
+        /* ========== 搜索区域 ========== */
+        .search-bar {
+            display: flex; align-items: center; gap: 12px;
+            padding: 16px 28px;
+            background: #fafbfc;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+        .search-bar .input-group { display: flex; gap: 8px; flex: 1 1 auto; min-width: 200px; }
+        .search-bar input {
+            padding: 7px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-family: var(--font);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            width: 150px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .search-bar input::placeholder { color: var(--text-muted); }
+        .search-bar input:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(107,70,193,0.1);
+        }
+        .search-bar .actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+
+        .btn {
+            padding: 7px 18px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 500;
+            font-family: var(--font);
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-outline {
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+        .btn-outline:hover { background: #f5f5f5; }
+
+        .sort-group { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-secondary); white-space: nowrap; flex-shrink: 0; }
+        .sort-group select {
+            padding: 7px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-family: var(--font);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            cursor: pointer;
+            outline: none;
+        }
+
+        /* ========== 表格 ========== */
+        .table-wrap {
+            padding: 0 28px 20px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch; /* iOS 平滑滚动 */
+        }
+        table {
+            width: 100%;
+            table-layout: fixed; /* 固定布局，列宽由 colgroup 决定 */
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        /* 列宽分配 */
+        .col-uid      { width: 7%; }
+        .col-name     { width: 9%; }
+        .col-realname { width: 6%; }
+        .col-level    { width: 7%; }
+        .col-mlevel   { width: 6%; }
+        .col-bind     { width: 6%; }
+        .col-phone    { width: 9%; }
+        .col-email    { width: 14%; }
+        .col-source   { width: 8%; }
+        .col-regtime  { width: 10%; }
+        .col-logintime{ width: 10%; }
+        .col-actions  { width: 8%; }
+
+        thead th {
+            padding: 12px 8px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: #fafbfc;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+            font-size: 12px;
+            letter-spacing: 0.3px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        tbody td {
+            padding: 12px 8px;
+            border-bottom: 1px solid var(--border-light);
+            white-space: nowrap;
+            color: var(--text-primary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        tbody tr { transition: background 0.15s; }
+        tbody tr:last-child td { border-bottom: none; }
+        tbody tr:hover { background: #f8f7fc; }
+        tbody tr.active { background: #f3f0ff; }
+
+        .badge {
+            display: inline-flex; align-items: center;
+            padding: 2px 10px;
+            border-radius: 100px;
+            font-size: 12px; font-weight: 500;
+        }
+        .badge-success { background: #e6f7ed; color: #0d7c3f; }
+        .text-ellipsis {
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: inline-block;
+            vertical-align: middle;
+            width: 100%;
+        }
+
+        /* ========== 操作列 ========== */
+        .actions-cell { text-align: center; }
+        .actions-inner { display: flex; align-items: center; justify-content: center; gap: 2px; }
+
+        .action-link {
+            padding: 4px 8px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 500;
+            font-family: var(--font);
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .action-link:hover { background: #f0edf8; color: var(--primary); }
+        .action-link.primary-link { color: var(--primary); }
+
+        /* ⋮ 按钮 */
+        .btn-more {
+            width: 30px; height: 30px;
+            border: none;
+            background: transparent;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: inline-flex; align-items: center; justify-content: center;
+            color: var(--text-muted);
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.2s;
+            user-select: none;
+            flex-shrink: 0;
+        }
+        .btn-more:hover { background: #f0edf8; color: var(--primary); }
+
+        /* ========== 全局下拉浮层（fixed 定位，不被父容器裁剪） ========== */
+        .dropdown-layer {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            min-width: 200px;
+            max-width: calc(100vw - 8px);
+            border: 1px solid var(--border);
+            padding: 6px 0;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .dropdown-layer.show { display: block; }
+        .dropdown-layer .menu-group { padding: 4px 0; }
+        .dropdown-layer .menu-group:not(:last-child) { border-bottom: 1px solid var(--border-light); }
+        .dropdown-layer .menu-label {
+            padding: 6px 16px 4px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+        .dropdown-layer .menu-item {
+            display: block; width: 100%;
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            font-family: var(--font);
+            color: var(--text-primary);
+            cursor: pointer;
+            text-align: left;
+            transition: background 0.15s;
+            white-space: nowrap;
+        }
+        .dropdown-layer .menu-item:hover { background: #f8f7fc; color: var(--primary); }
+        .dropdown-layer .menu-item .menu-item-desc {
+            display: block;
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 400;
+            margin-top: 1px;
+        }
+
+        /* ========== 遮罩层 ========== */
+        .menu-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9998;
+        }
+        .menu-overlay.show { display: block; }
+
+        /* ========== 响应式：列隐藏（按屏幕宽度逐步隐藏低优先级列） ========== */
+        @media (max-width: 1100px) {
+            /* 隐藏：移动端级别、邮箱、注册入口 */
+            .col-mlevel,
+            .col-email,
+            .col-source { display: none; }
+        }
+        @media (max-width: 768px) {
+            body { padding: 12px; }
+            .modal-header { padding: 14px 18px; }
+            .modal-header h2 { font-size: 15px; }
+
+            .search-bar { padding: 12px 18px; flex-direction: column; align-items: stretch; }
+            .search-bar .input-group { flex-wrap: wrap; min-width: 0; }
+            .search-bar .input-group input { flex: 1; min-width: 80px; width: auto; }
+            .search-bar .actions { justify-content: flex-start; flex-wrap: wrap; }
+
+            .table-wrap { padding: 0 16px 16px; }
+            thead th, tbody td { padding: 10px 6px; font-size: 12px; }
+
+            /* 隐藏：真名、服务绑定、注册时间、最后登录 */
+            .col-realname,
+            .col-bind,
+            .col-regtime,
+            .col-logintime { display: none; }
+        }
+        @media (max-width: 480px) {
+            thead th, tbody td { padding: 8px 4px; font-size: 11px; }
+            .action-link { padding: 3px 5px; font-size: 11px; }
+            .btn-more { width: 26px; height: 26px; font-size: 16px; }
+
+            /* 隐藏：用户级别 */
+            .col-level { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="modal" id="modalRoot">
+        <!-- 弹窗头部 -->
+        <div class="modal-header">
+            <h2>crm客户详情 - 相关账户管理优化</h2>
+            <div class="modal-actions">
+                <button class="btn-close" id="btnClose" title="关闭">✕</button>
+            </div>
+        </div>
+
+        <!-- 搜索区域 -->
+        <div class="search-bar">
+            <div class="input-group">
+                <input type="text" id="searchUid" placeholder="用户ID">
+                <input type="text" id="searchName" placeholder="用户名">
+                <input type="text" id="searchPhone" placeholder="手机号">
+            </div>
+            <div class="actions">
+                <button class="btn btn-primary" id="btnSearch">搜索</button>
+                <button class="btn btn-outline" id="btnReset">重置</button>
+            </div>
+            <div class="sort-group">
+                <span>排序：</span>
+                <select id="sortSelect">
+                    <option>会员级别</option>
+                    <option>注册时间</option>
+                    <option>最后登录</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- 表格 -->
+        <div class="table-wrap">
+            <table>
+                <colgroup>
+                    <col class="col-uid">
+                    <col class="col-name">
+                    <col class="col-realname">
+                    <col class="col-level">
+                    <col class="col-mlevel">
+                    <col class="col-bind">
+                    <col class="col-phone">
+                    <col class="col-email">
+                    <col class="col-source">
+                    <col class="col-regtime">
+                    <col class="col-logintime">
+                    <col class="col-actions">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>用户ID</th>
+                        <th>用户名</th>
+                        <th>真名</th>
+                        <th>用户级别</th>
+                        <th>移动端级别</th>
+                        <th>服务绑定</th>
+                        <th>手机号</th>
+                        <th>邮箱</th>
+                        <th>注册入口</th>
+                        <th>注册时间</th>
+                        <th>最后登录</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr data-row="1">
+                        <td>6296201</td>
+                        <td>15650132296</td>
+                        <td>测试测试</td>
+                        <td>VIP会员</td>
+                        <td>免费会员</td>
+                        <td><span class="badge badge-success">已绑定</span></td>
+                        <td>15650132296</td>
+                        <td><span class="text-ellipsis" title="zhangjiaming@bidcenter.cn">zhangjiaming@bidcenter.cn</span></td>
+                        <td>服务号绑定注册</td>
+                        <td>2022/11/25 18:29:14</td>
+                        <td>2026/7/14 15:59:43</td>
+                        <td class="actions-cell">
+                            <div class="actions-inner">
+                                <button class="action-link primary-link" data-act="view">查看</button>
+                                <button class="action-link" data-act="edit">修改</button>
+                                <button class="btn-more" data-act="more">⋮</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr data-row="2">
+                        <td>7152034</td>
+                        <td>zhangsan_bid</td>
+                        <td>张三</td>
+                        <td>金牌会员</td>
+                        <td>VIP会员</td>
+                        <td><span class="badge badge-success">已绑定</span></td>
+                        <td>13800138002</td>
+                        <td><span class="text-ellipsis" title="zhangsan@bidcenter.cn">zhangsan@bidcenter.cn</span></td>
+                        <td>手机端注册</td>
+                        <td>2023/3/15 09:12:33</td>
+                        <td>2026/7/15 08:30:12</td>
+                        <td class="actions-cell">
+                            <div class="actions-inner">
+                                <button class="action-link primary-link" data-act="view">查看</button>
+                                <button class="action-link" data-act="edit">修改</button>
+                                <button class="btn-more" data-act="more">⋮</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr data-row="3">
+                        <td>4521890</td>
+                        <td>lisi_2024</td>
+                        <td>李四</td>
+                        <td>免费会员</td>
+                        <td>免费会员</td>
+                        <td><span class="badge badge-success">已绑定</span></td>
+                        <td>13912345678</td>
+                        <td><span class="text-ellipsis" title="lisi@example.com">lisi@example.com</span></td>
+                        <td>PC端注册</td>
+                        <td>2024/1/8 14:20:55</td>
+                        <td>2026/7/10 16:45:21</td>
+                        <td class="actions-cell">
+                            <div class="actions-inner">
+                                <button class="action-link primary-link" data-act="view">查看</button>
+                                <button class="action-link" data-act="edit">修改</button>
+                                <button class="btn-more" data-act="more">⋮</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr data-row="4">
+                        <td>8934567</td>
+                        <td>wangwu_cn</td>
+                        <td>王五</td>
+                        <td>钻石会员</td>
+                        <td>VIP会员</td>
+                        <td><span class="badge badge-success">已绑定</span></td>
+                        <td>18698765432</td>
+                        <td><span class="text-ellipsis" title="wangwu@bidcenter.cn">wangwu@bidcenter.cn</span></td>
+                        <td>服务号绑定注册</td>
+                        <td>2023/8/20 10:05:00</td>
+                        <td>2026/7/13 20:18:36</td>
+                        <td class="actions-cell">
+                            <div class="actions-inner">
+                                <button class="action-link primary-link" data-act="view">查看</button>
+                                <button class="action-link" data-act="edit">修改</button>
+                                <button class="btn-more" data-act="more">⋮</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr data-row="5">
+                        <td>3312568</td>
+                        <td>zhaoliu</td>
+                        <td>赵六</td>
+                        <td>银牌会员</td>
+                        <td>免费会员</td>
+                        <td><span class="badge badge-success">已绑定</span></td>
+                        <td>13579246801</td>
+                        <td><span class="text-ellipsis" title="zhaoliu@partner.com">zhaoliu@partner.com</span></td>
+                        <td>邀请注册</td>
+                        <td>2024/6/30 16:48:22</td>
+                        <td>2026/7/14 09:05:17</td>
+                        <td class="actions-cell">
+                            <div class="actions-inner">
+                                <button class="action-link primary-link" data-act="view">查看</button>
+                                <button class="action-link" data-act="edit">修改</button>
+                                <button class="btn-more" data-act="more">⋮</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 全局浮层面板（由 JS 控制位置） -->
+    <div class="dropdown-layer" id="dropdownLayer"></div>
+    <!-- 遮罩层 -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <script>
+    (function() {
+        'use strict';
+
+        /* ===== 操作名称映射 ===== */
+        var menuItems = [
+            { group: '查看', items: [
+                { act: 'view-detail',    label: '查看手机站客户详情' },
+                { act: 'search-config',  label: '客户搜索默认配置' }
+            ]},
+            { group: '编辑', items: [
+                { act: 'rename-company',   label: '修改公司名称' },
+                { act: 'rename-username',  label: '修改用户名' },
+                { act: 'business-change',  label: '工商注册公司名称变更' }
+            ]},
+            { group: '设置', items: [
+                { act: 'ban-qr-scan',      label: '禁止扫码', desc: '禁止该客户通过扫码方式登录' },
+                { act: 'simulate',         label: '模拟客户' },
+                { act: 'single-device',    label: '单设备登录设置' },
+                { act: 'grant-permission', label: '赠送特殊功能权限' },
+                { act: 'merge',            label: '快速合并至客户' }
+            ]}
+        ];
+
+        var actionLabels = {};
+        menuItems.forEach(function(g) {
+            g.items.forEach(function(item) { actionLabels[item.act] = item.label; });
+        });
+        actionLabels['view'] = '查看手机站客户详情';
+        actionLabels['edit'] = '修改用户信息';
+
+        /* ===== DOM 引用 ===== */
+        var overlay = document.getElementById('menuOverlay');
+        var layer  = document.getElementById('dropdownLayer');
+        var modal  = document.getElementById('modalRoot');
+        var tbody  = document.getElementById('tableBody');
+        var tableWrap = document.querySelector('.table-wrap');
+
+        if (!overlay || !layer || !modal) {
+            console.error('初始化失败：找不到关键 DOM');
+            return;
+        }
+
+        var activeMoreBtn = null; // 当前打开菜单的按钮
+
+        /* ===== 构建下拉菜单 HTML ===== */
+        function buildMenuHTML() {
+            var html = '';
+            menuItems.forEach(function(g, idx) {
+                html += '<div class="menu-group">';
+                html += '<div class="menu-label">' + g.group + '</div>';
+                g.items.forEach(function(item) {
+                    html += '<button class="menu-item" data-act="' + item.act + '">' + item.label;
+                    if (item.desc) {
+                        html += '<span class="menu-item-desc">' + item.desc + '</span>';
+                    }
+                    html += '</button>';
+                });
+                html += '</div>';
+            });
+            return html;
+        }
+        layer.innerHTML = buildMenuHTML();
+
+        /* ===== 关闭菜单 ===== */
+        function closeMenu() {
+            layer.classList.remove('show');
+            overlay.classList.remove('show');
+            activeMoreBtn = null;
+        }
+
+        /* ===== 打开菜单（支持横向滚动容器） ===== */
+        function openMenu(btn) {
+            // 如果按钮在横向滚动容器内，先将其滚动到可视区域
+            if (tableWrap) {
+                var btnRect = btn.getBoundingClientRect();
+                var wrapRect = tableWrap.getBoundingClientRect();
+                // 判断按钮是否被表格横向滚动遮挡
+                if (btnRect.right > wrapRect.right || btnRect.left < wrapRect.left) {
+                    // 滚动父容器使按钮可见
+                    var cell = btn.closest('td') || btn.closest('th');
+                    if (cell) {
+                        cell.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+                    }
+                }
+            }
+
+            // 等待滚动完成后再定位菜单
+            requestAnimationFrame(function() {
+                var rect = btn.getBoundingClientRect();
+                var spaceBelow = window.innerHeight - rect.bottom;
+                var menuHeight = Math.min(280, layer.scrollHeight || 280);
+                var viewW = window.innerWidth;
+
+                // 计算左侧位置：按钮右对齐，但不要超出左/右边界
+                var leftPos = Math.max(8, rect.right - 200);
+                if (leftPos + 200 > viewW - 8) {
+                    leftPos = Math.max(8, viewW - 208);
+                }
+
+                if (spaceBelow >= menuHeight || spaceBelow >= 200) {
+                    // 向下展开
+                    layer.style.top = (rect.bottom + 4) + 'px';
+                    layer.style.left = leftPos + 'px';
+                    layer.style.maxHeight = '';
+                } else {
+                    // 向上展开
+                    var topPos = Math.max(4, rect.top - menuHeight);
+                    layer.style.top = topPos + 'px';
+                    layer.style.left = leftPos + 'px';
+                    layer.style.maxHeight = Math.min(menuHeight, rect.top - 8) + 'px';
+                }
+
+                layer.classList.add('show');
+                overlay.classList.add('show');
+                activeMoreBtn = btn;
+            });
+        }
+
+        /* ===== 执行操作 ===== */
+        function doAction(act) {
+            var label = actionLabels[act] || act;
+            console.log('[操作]', label);
+            alert('操作：' + label);
+        }
+
+        /* ===== 获取 data-act 值 ===== */
+        function getAct(el) {
+            return el ? (el.getAttribute('data-act') || '') : '';
+        }
+
+        /* ===== 事件委托：统一处理所有点击 ===== */
+        modal.addEventListener('click', function(e) {
+            var target = e.target;
+
+            // 1) ⋮ 更多按钮
+            if (target.classList.contains('btn-more')) {
+                e.stopPropagation();
+                if (activeMoreBtn === target && layer.classList.contains('show')) {
+                    closeMenu();
+                } else {
+                    openMenu(target);
+                }
+                return;
+            }
+
+            // 2) 菜单项
+            if (target.classList.contains('menu-item')) {
+                e.stopPropagation();
+                var act = getAct(target);
+                if (act) doAction(act);
+                closeMenu();
+                return;
+            }
+
+            // 3) 顶部操作按钮（查看 / 修改）
+            if (target.classList.contains('action-link')) {
+                e.stopPropagation();
+                var act = getAct(target);
+                if (act) doAction(act);
+                return;
+            }
+
+            // 4) 关闭
+            if (target.id === 'btnClose') {
+                e.stopPropagation();
+                alert('关闭弹窗（实际应用中会关闭）');
+                return;
+            }
+
+            // 5) 搜索
+            if (target.id === 'btnSearch') {
+                e.stopPropagation();
+                var uid   = document.getElementById('searchUid').value.trim();
+                var name  = document.getElementById('searchName').value.trim();
+                var phone = document.getElementById('searchPhone').value.trim();
+                var params = {};
+                if (uid)   params['用户ID'] = uid;
+                if (name)  params['用户名'] = name;
+                if (phone) params['手机号'] = phone;
+                if (Object.keys(params).length > 0) {
+                    alert('搜索参数：' + JSON.stringify(params, null, 2));
+                } else {
+                    alert('请输入搜索条件');
+                }
+                return;
+            }
+
+            // 6) 重置
+            if (target.id === 'btnReset') {
+                e.stopPropagation();
+                document.getElementById('searchUid').value = '';
+                document.getElementById('searchName').value = '';
+                document.getElementById('searchPhone').value = '';
+                alert('已重置搜索条件');
+                return;
+            }
+
+            // 7) 行点击高亮
+            if (target.tagName === 'TD') {
+                var row = target.closest ? target.closest('tr') : null;
+                if (row && row.parentElement === tbody) {
+                    var rows = tbody.querySelectorAll('tr.active');
+                    for (var i = 0; i < rows.length; i++) rows[i].classList.remove('active');
+                    row.classList.add('active');
+                }
+                return;
+            }
+        });
+
+        /* ===== 点击遮罩关闭 ===== */
+        overlay.addEventListener('click', closeMenu);
+
+        /* ===== ESC 关闭 ===== */
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeMenu();
+        });
+
+        /* ===== 窗口滚动/缩放时关闭菜单 ===== */
+        window.addEventListener('scroll', closeMenu, true);
+        window.addEventListener('resize', closeMenu);
+
+        console.log('弹窗初始化完成');
+    })();
+    </script>
+</body>
+</html>
