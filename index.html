@@ -1,24 +1,1298 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>推广入口</title>
-  <style>
-    body{font-family:system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#f7fafc}
-    .container{text-align:center}
-    h1{margin-bottom:24px}
-    .btn{display:inline-block;margin:8px;padding:14px 24px;border-radius:8px;background:#0366d6;color:#fff;text-decoration:none;font-weight:600}
-    .btn.secondary{background:#2ea44f}
-    .note{margin-top:16px;color:#666;font-size:0.9rem}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>原型导航 · 采招网</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ========== shadcn CSS 变量主题 ========== */
+        :root {
+            --background: 0 0% 100%;
+            --foreground: 222.2 84% 4.9%;
+            --card: 0 0% 100%;
+            --card-foreground: 222.2 84% 4.9%;
+            --primary: 221.2 83.2% 53.3%;
+            --primary-foreground: 210 40% 98%;
+            --secondary: 210 40% 96.1%;
+            --secondary-foreground: 222.2 47.4% 11.2%;
+            --muted: 210 40% 96.1%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+            --accent: 210 40% 96.1%;
+            --accent-foreground: 222.2 47.4% 11.2%;
+            --border: 214.3 31.8% 91.4%;
+            --radius: 0.5rem;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
+            background: #f1f5f9;
+            color: hsl(var(--foreground));
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ========== 顶部导航 ========== */
+        .site-header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: 0 4px 24px rgba(30, 64, 175, 0.3);
+            flex-shrink: 0;
+        }
+
+        .header-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            user-select: none;
+            transition: opacity 0.2s;
+        }
+        .logo-area:hover { opacity: 0.85; }
+
+        .logo-icon {
+            width: 36px; height: 36px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            backdrop-filter: blur(4px);
+        }
+
+        .logo-text { font-size: 1.15rem; font-weight: 700; letter-spacing: 0.02em; }
+        .logo-badge {
+            font-size: 0.65rem;
+            background: rgba(255,255,255,0.18);
+            padding: 0.125rem 0.6rem;
+            border-radius: 999px;
+            font-weight: 500;
+            max-width: 180px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+
+        .header-stats {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            font-size: 0.8rem;
+            opacity: 0.92;
+        }
+        .header-stats i { opacity: 0.7; margin-right: 0.3rem; }
+        .header-stats strong { font-weight: 700; }
+
+        /* ========== 面包屑 ========== */
+        .breadcrumb-bar {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0.75rem 1.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.82rem;
+            flex-shrink: 0;
+        }
+
+        .breadcrumb-item {
+            color: hsl(var(--muted-foreground));
+            cursor: pointer;
+            transition: color 0.15s;
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+        }
+        .breadcrumb-item:hover { color: hsl(var(--primary)); background: rgba(59,130,246,0.06); }
+        .breadcrumb-item.active { color: hsl(var(--foreground)); font-weight: 600; cursor: default; background: none; }
+        .breadcrumb-sep { color: hsl(var(--muted-foreground)); opacity: 0.3; font-size: 0.75rem; }
+
+        /* ========== 主内容 ========== */
+        .main-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1.25rem 1.5rem;
+            flex: 1;
+            width: 100%;
+        }
+
+        /* ========== 搜索栏 ========== */
+        .search-area { margin-bottom: 1.25rem; }
+        .search-wrapper {
+            position: relative;
+            max-width: 420px;
+        }
+        .search-wrapper i {
+            position: absolute; left: 1rem; top: 50%;
+            transform: translateY(-50%);
+            color: hsl(var(--muted-foreground));
+            font-size: 0.85rem;
+            pointer-events: none;
+        }
+        .search-input {
+            width: 100%;
+            padding: 0.65rem 1rem 0.65rem 2.6rem;
+            border: 1px solid hsl(var(--border));
+            border-radius: 999px;
+            font-size: 0.85rem;
+            background: white;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .search-input:focus {
+            border-color: hsl(var(--primary));
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+        }
+        .search-clear {
+            position: absolute; right: 0.625rem; top: 50%;
+            transform: translateY(-50%);
+            background: none; border: none;
+            color: hsl(var(--muted-foreground));
+            cursor: pointer; font-size: 0.8rem;
+            padding: 0.25rem;
+            display: none;
+        }
+        .search-clear.visible { display: block; }
+
+        /* ======================================================
+           Level 1: 站点卡片（重新设计 - 带圆形头像） 
+           ====================================================== */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+        }
+
+        .category-card {
+            background: white;
+            border: 1px solid hsl(var(--border));
+            border-radius: 1rem;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-color), var(--accent-color-light));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .category-card:hover::before { opacity: 1; }
+        .category-card:hover {
+            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+            transform: translateY(-3px);
+            border-color: transparent;
+        }
+        .category-card:active { transform: translateY(-1px) scale(0.99); }
+
+        /* 圆形头像 - 用户说的"头像" */
+        .cat-avatar {
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .category-card:hover .cat-avatar {
+            transform: scale(1.08);
+        }
+
+        .cat-avatar.blue {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+        }
+        .cat-avatar.green {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+        }
+        .cat-avatar.orange {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            color: white;
+        }
+        .cat-avatar.purple {
+            background: linear-gradient(135deg, #a855f7, #7c3aed);
+            color: white;
+        }
+        .cat-avatar.cyan {
+            background: linear-gradient(135deg, #06b6d4, #0891b2);
+            color: white;
+        }
+        .cat-avatar.rose {
+            background: linear-gradient(135deg, #f43f5e, #e11d48);
+            color: white;
+        }
+
+        .card-top {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .cat-info { flex: 1; min-width: 0; }
+        .cat-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: hsl(var(--foreground));
+            letter-spacing: -0.01em;
+        }
+        .cat-desc {
+            font-size: 0.8rem;
+            color: hsl(var(--muted-foreground));
+            margin-top: 0.15rem;
+            line-height: 1.4;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 0.75rem;
+            border-top: 1px solid hsl(var(--border));
+            margin-top: 0.25rem;
+        }
+
+        .cat-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.75rem;
+            color: hsl(var(--muted-foreground));
+        }
+        .cat-meta i { margin-right: 0.25rem; }
+
+        .cat-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.2rem 0.7rem;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            font-size: 0.72rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(59,130,246,0.25);
+        }
+
+        /* ======================================================
+           Level 2: 站点详情页面 
+           ====================================================== */
+        .detail-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.45rem 1rem;
+            border-radius: 999px;
+            border: 1px solid hsl(var(--border));
+            background: white;
+            color: hsl(var(--muted-foreground));
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        .back-btn:hover {
+            background: hsl(var(--accent));
+            color: hsl(var(--foreground));
+            border-color: hsl(var(--primary));
+        }
+
+        .detail-title-area {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .detail-avatar {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .detail-avatar.blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; }
+        .detail-avatar.green { background: linear-gradient(135deg, #22c55e, #16a34a); color: white; }
+        .detail-avatar.orange { background: linear-gradient(135deg, #f97316, #ea580c); color: white; }
+        .detail-avatar.purple { background: linear-gradient(135deg, #a855f7, #7c3aed); color: white; }
+        .detail-avatar.cyan { background: linear-gradient(135deg, #06b6d4, #0891b2); color: white; }
+        .detail-avatar.rose { background: linear-gradient(135deg, #f43f5e, #e11d48); color: white; }
+
+        .detail-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: hsl(var(--foreground));
+            line-height: 1.3;
+        }
+        .detail-subtitle {
+            font-size: 0.82rem;
+            color: hsl(var(--muted-foreground));
+            margin-top: 0.05rem;
+        }
+
+        /* 子文件夹卡片（Level 2）- 加大 + 圆形头像 */
+        .subfolder-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .subfolder-card {
+            background: white;
+            border: 1px solid hsl(var(--border));
+            border-radius: 1rem;
+            padding: 1.5rem 1.25rem;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .subfolder-card:hover {
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+            transform: translateY(-2px);
+            border-color: hsl(var(--primary));
+        }
+
+        /* 子文件夹圆形头像 */
+        .subfolder-avatar {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, #818cf8, #6366f1);
+            color: white;
+            box-shadow: 0 3px 10px rgba(99,102,241,0.25);
+            transition: transform 0.25s;
+        }
+        .subfolder-card:hover .subfolder-avatar { transform: scale(1.08); }
+
+        .subfolder-info { flex: 1; min-width: 0; }
+        .subfolder-name { font-weight: 600; font-size: 1rem; color: hsl(var(--foreground)); }
+        .subfolder-meta { font-size: 0.78rem; color: hsl(var(--muted-foreground)); margin-top: 0.15rem; }
+
+        /* 需求文件区块标题 */
+        .files-section-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: hsl(var(--muted-foreground));
+            margin: 0 0 0.625rem;
+            padding: 0.5rem 0.75rem;
+            background: white;
+            border-radius: 0.5rem;
+            border: 1px solid hsl(var(--border));
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .files-section-title i { opacity: 0.5; }
+
+        /* ======================================================
+           Level 3: 文件列表  
+           ====================================================== */
+        .file-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.7rem 1rem;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            color: hsl(var(--foreground));
+            font-size: 0.88rem;
+            transition: all 0.2s;
+            background: white;
+            border: 1px solid hsl(var(--border));
+        }
+        .file-item:hover {
+            border-color: #93c5fd;
+            box-shadow: 0 4px 16px rgba(59,130,246,0.1);
+            transform: translateY(-1px);
+        }
+
+        .file-item .file-icon {
+            width: 34px; height: 34px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #e0e7ff, #dbeafe);
+            color: #4f46e5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .file-item .file-name {
+            flex: 1;
+            font-weight: 500;
+        }
+        .file-item .file-ext {
+            font-size: 0.65rem;
+            color: hsl(var(--muted-foreground));
+            background: hsl(var(--muted));
+            padding: 0.15rem 0.45rem;
+            border-radius: 0.25rem;
+            flex-shrink: 0;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        /* ========== 空状态 ========== */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: hsl(var(--muted-foreground));
+        }
+        .empty-state i { font-size: 2.5rem; margin-bottom: 1rem; opacity: 0.3; }
+        .empty-state p { font-size: 0.9rem; }
+        .empty-state button {
+            margin-top: 0.75rem;
+            padding: 0.45rem 1.1rem;
+            background: hsl(var(--primary));
+            color: white;
+            border: none;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 0.82rem;
+            transition: all 0.2s;
+        }
+        .empty-state button:hover { background: #2563eb; box-shadow: 0 4px 12px rgba(59,130,246,0.3); }
+
+        /* ========== 视图控制 ========== */
+        .view { display: none; }
+        .view.active { display: block; }
+
+        /* ======================================================
+           页脚 - 重新设计
+           ====================================================== */
+        .site-footer {
+            background: white;
+            border-top: 1px solid hsl(var(--border));
+            margin-top: 2.5rem;
+            padding: 1.25rem 0;
+            flex-shrink: 0;
+        }
+
+        .footer-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-copy {
+            font-size: 0.78rem;
+            color: hsl(var(--muted-foreground));
+        }
+        .footer-copy strong { color: hsl(var(--foreground)); font-weight: 600; }
+
+        .footer-stats {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.72rem;
+            color: hsl(var(--muted-foreground));
+        }
+        .footer-stat {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            background: hsl(var(--secondary));
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+        }
+        .footer-stat i { opacity: 0.6; }
+        .footer-stat strong { color: hsl(var(--foreground)); font-weight: 700; }
+
+        .footer-right {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .footer-links {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .footer-links a {
+            font-size: 0.78rem;
+            color: hsl(var(--muted-foreground));
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .footer-links a:hover { color: hsl(var(--primary)); }
+        .footer-link-divider {
+            color: hsl(var(--border));
+            font-size: 0.75rem;
+        }
+
+        /* 自动刷新指示器 */
+        .refresh-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.72rem;
+            color: hsl(var(--muted-foreground));
+            padding: 0.2rem 0.7rem;
+            border-radius: 999px;
+            background: hsl(var(--secondary));
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+        .refresh-indicator:hover { background: hsl(var(--accent)); }
+        .refresh-indicator .dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: #22c55e;
+            animation: pulse 2s infinite;
+        }
+        .refresh-indicator.paused .dot { background: #94a3b8; animation: none; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .refresh-indicator .countdown { font-variant-numeric: tabular-nums; min-width: 1.8rem; text-align: center; }
+
+        /* ========== 响应式 ========== */
+        @media (max-width: 1024px) {
+            .category-grid { grid-template-columns: repeat(2, 1fr); }
+            .subfolder-grid { grid-template-columns: repeat(2, 1fr); }
+            .file-list { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .footer-left { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+            .footer-right { flex-wrap: wrap; }
+        }
+        @media (max-width: 640px) {
+            .category-grid { grid-template-columns: 1fr; }
+            .subfolder-grid { grid-template-columns: 1fr; }
+            .file-list { grid-template-columns: 1fr; }
+            .header-inner { height: 52px; padding: 0 1rem; }
+            .logo-text { font-size: 1rem; }
+            .header-stats span { display: none; }
+            .main-content { padding: 1rem; }
+            .breadcrumb-bar { padding: 0.5rem 1rem 0; }
+            .footer-inner { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+            .footer-right { width: 100%; justify-content: space-between; }
+        }
+
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>欢迎 — 选择推广页面</h1>
-    <a class="btn" href="promotion1.html">推广文件 1</a>
-    <a class="btn secondary" href="promotion2.html">推广文件 2</a>
-    <div class="note">如果你的推广文件文件名不是 promotion1.html / promotion2.html，请把正确文件名发给我，我会帮你更新链接。</div>
-  </div>
+    <!-- ==================== 顶部导航栏 ==================== -->
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="logo-area" onclick="goHome()">
+                <div class="logo-icon"><i class="fas fa-compass"></i></div>
+                <span class="logo-text">原型导航</span>
+                <span class="logo-badge" id="levelBadge">首页</span>
+            </div>
+            <div class="header-stats">
+                <span><i class="fas fa-globe"></i><strong id="totalCats">0</strong> 个站点</span>
+                <span><i class="fas fa-file-code"></i><strong id="totalFiles">0</strong> 个页面</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== 面包屑 ==================== -->
+    <div class="breadcrumb-bar" id="breadcrumbBar">
+        <span class="breadcrumb-item active" id="bcHome" onclick="goHome()">🏠 首页</span>
+        <span class="breadcrumb-sep" id="bcSep1" style="display:none;">›</span>
+        <span class="breadcrumb-item" id="bcCategory" style="display:none;"></span>
+        <span class="breadcrumb-sep" id="bcSep2" style="display:none;">›</span>
+        <span class="breadcrumb-item" id="bcSubfolder" style="display:none;"></span>
+    </div>
+
+    <!-- ==================== 主内容区 ==================== -->
+    <div class="main-content">
+        <!-- 搜索栏 -->
+        <div class="search-area" id="searchArea">
+            <div class="search-wrapper">
+                <i class="fas fa-search"></i>
+                <input class="search-input" id="searchInput" placeholder="搜索站点名称或页面名称…" oninput="handleSearch(this.value)">
+                <button class="search-clear" id="searchClear" onclick="clearSearch()"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+
+        <!-- ===== 视图 1：首页（站点列表） ===== -->
+        <div class="view active" id="viewLevel1">
+            <div class="category-grid" id="categoryGrid"></div>
+            <div class="empty-state" id="emptyState1" style="display:none;">
+                <i class="fas fa-inbox"></i>
+                <p>没有匹配的站点</p>
+                <button onclick="clearSearch()">清除筛选</button>
+            </div>
+        </div>
+
+        <!-- ===== 视图 2：站点详情（显示需求文件夹 + 文件） ===== -->
+        <div class="view" id="viewLevel2">
+            <div class="detail-header">
+                <button class="back-btn" onclick="goHome()"><i class="fas fa-arrow-left"></i> 返回</button>
+                <div class="detail-title-area">
+                    <div class="detail-avatar blue" id="l2Avatar">站</div>
+                    <div>
+                        <div class="detail-title" id="l2Title"></div>
+                        <div class="detail-subtitle" id="l2Subtitle"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="l2Content"></div>
+            <div class="empty-state" id="emptyState2" style="display:none;">
+                <i class="fas fa-folder-open"></i>
+                <p>该站点暂无需求文件夹</p>
+            </div>
+        </div>
+
+        <!-- ===== 视图 3：需求文件夹详情（文件列表） ===== -->
+        <div class="view" id="viewLevel3">
+            <div class="detail-header">
+                <button class="back-btn" id="l3BackBtn"><i class="fas fa-arrow-left"></i> 返回</button>
+                <div>
+                    <div class="detail-title" id="l3Title" style="font-size:1.1rem;"></div>
+                    <div class="detail-subtitle" id="l3Subtitle"></div>
+                </div>
+            </div>
+            <div id="l3Content"></div>
+            <div class="empty-state" id="emptyState3" style="display:none;">
+                <i class="fas fa-file"></i>
+                <p>该文件夹暂无原型页面</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 页脚（重新设计） ==================== -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-left">
+                <div class="footer-copy">
+                    © 2026 <strong>采招网</strong> · 原型设计 · 仅限内部使用
+                </div>
+                <div class="footer-stats">
+                    <span class="footer-stat"><i class="fas fa-globe"></i> <strong id="ftCats">0</strong> 站点</span>
+                    <span class="footer-stat"><i class="fas fa-file"></i> <strong id="ftFiles">0</strong> 页面</span>
+                    <span class="footer-stat"><i class="fas fa-folder"></i> <strong id="ftFolders">0</strong> 需求文件夹</span>
+                </div>
+            </div>
+            <div class="footer-right">
+                <div class="footer-links">
+                    <a onclick="goHome()"><i class="fas fa-home"></i> 首页</a>
+                    <span class="footer-link-divider">|</span>
+                    <a onclick="manualRefresh()"><i class="fas fa-sync-alt"></i> 刷新</a>
+                    <span class="footer-link-divider">|</span>
+                    <a onclick="scrollToTop()"><i class="fas fa-arrow-up"></i> 顶部</a>
+                </div>
+                <div class="refresh-indicator" id="refreshIndicator" onclick="toggleAutoRefresh()" title="点击暂停/继续自动刷新">
+                    <span class="dot"></span>
+                    <span>自动刷新</span>
+                    <span class="countdown" id="refreshCountdown">30s</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== JavaScript ==================== -->
+    <script>
+        // ================================================================
+        // 三级导航数据结构：站点名称 → 需求文件夹 → HTML文件
+        // ================================================================
+        var navData = [
+            {
+                id: 'zhuzhan-tuiguang',
+                name: '主站 · 推广站',
+                description: '关键词广告、推广页面、公司卡片等',
+                iconColor: 'blue',
+                avatarLetter: '推',
+                files: [
+                    { name: '相关账户弹窗优化',              url: '主站 推广站/相关账户弹窗优化.html' },
+                    { name: '服务器招投标市场分析报告',      url: '主站 推广站/服务器招投标市场分析报告.html' },
+                    { name: '推广页面',                      url: '主站 推广站/推广页面.html' },
+                    { name: '推广页面-m',                    url: '主站 推广站/推广页面-m.html' },
+                    { name: '招标代理列表',                  url: '主站 推广站/招标代理列表.html' },
+                    { name: '关键词广告优化',                url: '主站 推广站/关键词广告优化.html' },
+                    { name: '关键词广告优化-技术一览表',      url: '主站 推广站/关键词广告优化-技术一览表.html' },
+                    { name: '关键词广告优化-产品说明（表格版）', url: '主站 推广站/关键词广告优化-产品说明（表格版）.html' },
+                    { name: '公司卡片',                      url: '主站 推广站/公司卡片.html' },
+                    { name: '公司卡片-推拉版',               url: '主站 推广站/公司卡片-推拉版.html' }
+                ],
+                subfolders: []
+            },
+            {
+                id: 'crm',
+                name: 'CRM',
+                description: '客户详情页、相关账户管理优化',
+                iconColor: 'green',
+                avatarLetter: 'C',
+                files: [
+                    { name: '客户详情页',                    url: 'crm/客户详情页.html' },
+                    { name: '客户详情页-重构',               url: 'crm/客户详情页-重构.html' },
+                    { name: 'crm客户详情 相关账户管理优化',    url: 'crm/crm客户详情 相关账户管理优化.html' }
+                ],
+                subfolders: [
+                    {
+                        name: '原文件',
+                        description: '历史版本存档',
+                        icon: 'fas fa-archive',
+                        files: [
+                            { name: '大土豆有限责任公司 - 客户详情页', url: 'crm/原文件/大土豆有限责任公司 - 客户详情页.html' }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'zhuzhan',
+                name: '主站',
+                description: '采乐会推广页面',
+                iconColor: 'orange',
+                avatarLetter: '主',
+                files: [],
+                subfolders: [
+                    {
+                        name: '采乐会推广页面-2026-07-27',
+                        description: '采乐会活动推广相关',
+                        icon: 'fas fa-megaphone',
+                        files: [
+                            { name: '推广页面',                url: '主站/采乐会推广页面-2026-07-27/推广页面.html' },
+                            { name: '推广页面-m',              url: '主站/采乐会推广页面-2026-07-27/推广页面-m.html' }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'user-center',
+                name: '用户中心',
+                description: '招标日历、用户管理相关',
+                iconColor: 'purple',
+                avatarLetter: '用',
+                files: [
+                    { name: '招标日历（bid-calendar）',       url: '用户中心/bid-calendar.html' }
+                ],
+                subfolders: []
+            },
+            {
+                id: 'mini-program',
+                name: '小程序',
+                description: '扫码登录、App/小程序相关',
+                iconColor: 'cyan',
+                avatarLetter: '小',
+                files: [
+                    { name: '扫码登录二次校验',               url: '小程序/扫码登录二次校验.html' }
+                ],
+                subfolders: []
+            },
+            {
+                id: 'xiaobang',
+                name: '销邦',
+                description: '用户裂变、用户增长',
+                iconColor: 'rose',
+                avatarLetter: '销',
+                files: [],
+                subfolders: [
+                    {
+                        name: '用户裂变',
+                        description: '低成本用户增长裂变方法',
+                        icon: 'fas fa-share-alt',
+                        files: [
+                            { name: '9种低成本"老带新"用户增长裂变方法', url: '销邦/用户裂变/9种低成本&amp;quot;老带新&amp;quot;用户增长裂变方法.html' }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        // ================================================================
+        // 导航状态
+        // ================================================================
+        var state = {
+            level: 1,
+            categoryId: null,
+            subfolderIdx: -1
+        };
+
+        // ================================================================
+        // 自动刷新（问题 1）
+        // ================================================================
+        var REFRESH_INTERVAL = 60; // 秒
+        var refreshTimer = null;
+        var refreshCountdown = REFRESH_INTERVAL;
+        var refreshPaused = false;
+
+        function startAutoRefresh() {
+            if (refreshTimer) clearInterval(refreshTimer);
+            refreshCountdown = REFRESH_INTERVAL;
+            updateRefreshDisplay();
+            refreshTimer = setInterval(function() {
+                if (!refreshPaused && state.level === 1) {
+                    refreshCountdown--;
+                    updateRefreshDisplay();
+                    if (refreshCountdown <= 0) {
+                        refreshCountdown = REFRESH_INTERVAL;
+                        location.reload();
+                    }
+                }
+            }, 1000);
+        }
+
+        function toggleAutoRefresh() {
+            refreshPaused = !refreshPaused;
+            var el = document.getElementById('refreshIndicator');
+            el.classList.toggle('paused', refreshPaused);
+            if (!refreshPaused) refreshCountdown = REFRESH_INTERVAL;
+            updateRefreshDisplay();
+        }
+
+        function updateRefreshDisplay() {
+            var el = document.getElementById('refreshCountdown');
+            if (el) el.textContent = (refreshPaused ? '暂停' : refreshCountdown + 's');
+        }
+
+        function manualRefresh() {
+            location.reload();
+        }
+
+        // ================================================================
+        // 工具函数
+        // ================================================================
+        function getCategory(id) {
+            for (var i = 0; i < navData.length; i++) {
+                if (navData[i].id === id) return navData[i];
+            }
+            return null;
+        }
+
+        function escapeHtml(str) {
+            var d = document.createElement('div');
+            d.appendChild(document.createTextNode(str));
+            return d.innerHTML;
+        }
+
+        function escapeAttr(str) {
+            return str.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ================================================================
+        // 计算统计
+        // ================================================================
+        function calcStats() {
+            var cats = 0, files = 0, folders = 0;
+            for (var i = 0; i < navData.length; i++) {
+                var cat = navData[i];
+                if (cat.files.length > 0 || cat.subfolders.length > 0) cats++;
+                files += cat.files.length;
+                folders += cat.subfolders.length;
+                for (var j = 0; j < cat.subfolders.length; j++) {
+                    files += cat.subfolders[j].files.length;
+                }
+            }
+            return { categories: cats, files: files, folders: folders };
+        }
+
+        // ================================================================
+        // 视图切换
+        // ================================================================
+        function showView(level) {
+            var views = ['viewLevel1', 'viewLevel2', 'viewLevel3'];
+            for (var i = 0; i < views.length; i++) {
+                var el = document.getElementById(views[i]);
+                if (el) el.classList.toggle('active', (i + 1) === level);
+            }
+            var searchArea = document.getElementById('searchArea');
+            if (searchArea) searchArea.style.display = (level === 1) ? 'block' : 'none';
+            state.level = level;
+            updateBreadcrumb();
+            updateLevelBadge();
+        }
+
+        // ================================================================
+        // 面包屑
+        // ================================================================
+        function updateBreadcrumb() {
+            var bcHome = document.getElementById('bcHome');
+            var bcSep1 = document.getElementById('bcSep1');
+            var bcCategory = document.getElementById('bcCategory');
+            var bcSep2 = document.getElementById('bcSep2');
+            var bcSubfolder = document.getElementById('bcSubfolder');
+
+            bcSep1.style.display = 'none';
+            bcSep2.style.display = 'none';
+            bcCategory.style.display = 'none';
+            bcCategory.classList.remove('active');
+            bcSubfolder.style.display = 'none';
+            bcSubfolder.classList.remove('active');
+
+            if (state.level === 1) {
+                bcHome.classList.add('active');
+                return;
+            }
+
+            bcHome.classList.remove('active');
+
+            var cat = getCategory(state.categoryId);
+            if (!cat) return;
+
+            bcCategory.textContent = cat.name;
+            bcCategory.style.display = 'inline';
+            bcSep1.style.display = 'inline';
+
+            if (state.level === 2) {
+                bcCategory.classList.add('active');
+                return;
+            }
+
+            bcCategory.classList.remove('active');
+            var sub = cat.subfolders[state.subfolderIdx];
+            if (sub) {
+                bcSubfolder.textContent = sub.name;
+                bcSubfolder.style.display = 'inline';
+                bcSubfolder.classList.add('active');
+                bcSep2.style.display = 'inline';
+            }
+        }
+
+        // ================================================================
+        // 更新左上角层级指示器
+        // ================================================================
+        function updateLevelBadge() {
+            var badge = document.getElementById('levelBadge');
+            if (!badge) return;
+            var labels = ['首页', '站点详情', '需求文件夹'];
+            var icons = ['🏠', '📁', '📂'];
+            var idx = state.level - 1;
+            var text = '';
+            if (state.level === 1) {
+                text = '🏠 首页';
+            } else {
+                var cat = getCategory(state.categoryId);
+                if (cat) {
+                    if (state.level === 2) {
+                        text = '📁 ' + cat.name;
+                    } else if (state.level === 3) {
+                        var sub = cat.subfolders[state.subfolderIdx];
+                        if (sub) {
+                            text = '📂 ' + sub.name;
+                        } else {
+                            text = '📂 需求文件夹';
+                        }
+                    }
+                } else {
+                    text = icons[idx] + ' ' + labels[idx];
+                }
+            }
+            badge.textContent = text;
+        }
+
+        // ================================================================
+        // 渲染 Level 1：站点卡片（带漂亮圆形头像）
+        // ================================================================
+        function renderLevel1(data) {
+            var grid = document.getElementById('categoryGrid');
+            var html = '';
+
+            for (var i = 0; i < data.length; i++) {
+                var cat = data[i];
+                var fileCount = cat.files.length;
+                var folderCount = cat.subfolders.length;
+                for (var j = 0; j < cat.subfolders.length; j++) {
+                    fileCount += cat.subfolders[j].files.length;
+                }
+                var colorClass = getIconColorClass(cat.iconColor);
+
+                html += '<div class="category-card" onclick="openCategory(\'' + cat.id + '\')" style="--accent-color: var(--' + cat.iconColor + '-500);">';
+                html += '  <div class="card-top">';
+                html += '    <div class="cat-avatar ' + colorClass + '">' + escapeHtml(cat.avatarLetter || cat.name.charAt(0)) + '</div>';
+                html += '    <div class="cat-info">';
+                html += '      <div class="cat-name">' + escapeHtml(cat.name) + '</div>';
+                html += '      <div class="cat-desc">' + escapeHtml(cat.description) + '</div>';
+                html += '    </div>';
+                html += '  </div>';
+                html += '  <div class="card-footer">';
+                html += '    <div class="cat-meta">';
+                html += '      <span><i class="fas fa-file"></i>' + fileCount + ' 个页面</span>';
+                if (folderCount > 0) {
+                    html += '      <span><i class="fas fa-folder"></i>' + folderCount + ' 个需求文件夹</span>';
+                }
+                html += '    </div>';
+                html += '    <div class="cat-badge"><i class="fas fa-chevron-right" style="font-size:0.6rem;"></i> 浏览</div>';
+                html += '  </div>';
+                html += '</div>';
+            }
+
+            grid.innerHTML = html;
+        }
+
+        function getIconColorClass(color) {
+            return color || 'blue';
+        }
+
+        // ================================================================
+        // 渲染 Level 2：站点详情
+        // ================================================================
+        function renderLevel2(catId) {
+            var cat = getCategory(catId);
+            if (!cat) { goHome(); return; }
+
+            state.categoryId = catId;
+            state.subfolderIdx = -1;
+
+            var colorClass = getIconColorClass(cat.iconColor);
+            document.getElementById('l2Avatar').className = 'detail-avatar ' + colorClass;
+            document.getElementById('l2Avatar').textContent = cat.avatarLetter || cat.name.charAt(0);
+            document.getElementById('l2Title').textContent = cat.name;
+            document.getElementById('l2Subtitle').textContent = cat.description;
+
+            var container = document.getElementById('l2Content');
+            var html = '';
+            var hasContent = false;
+
+            // 需求文件夹
+            if (cat.subfolders.length > 0) {
+                html += '<div class="subfolder-grid">';
+                for (var i = 0; i < cat.subfolders.length; i++) {
+                    var sub = cat.subfolders[i];
+                    var count = sub.files.length;
+                    html += '<div class="subfolder-card" onclick="openSubfolder(\'' + cat.id + '\',' + i + ')">';
+                    html += '  <div class="subfolder-avatar">' + escapeHtml(sub.name.charAt(0)) + '</div>';
+                    html += '  <div class="subfolder-info">';
+                    html += '    <div class="subfolder-name">' + escapeHtml(sub.name) + '</div>';
+                    html += '    <div class="subfolder-meta">' + escapeHtml(sub.description) + ' · ' + count + ' 个页面</div>';
+                    html += '  </div>';
+                    html += '</div>';
+                    hasContent = true;
+                }
+                html += '</div>';
+            }
+
+            // 直接文件
+            if (cat.files.length > 0) {
+                if (cat.subfolders.length > 0) {
+                    html += '<div class="files-section-title"><i class="fas fa-list"></i> 需求文件</div>';
+                }
+                html += '<div class="file-list">';
+                for (var j = 0; j < cat.files.length; j++) {
+                    html += renderFileLink(cat.files[j]);
+                    hasContent = true;
+                }
+                html += '</div>';
+            }
+
+            container.innerHTML = html;
+            document.getElementById('emptyState2').style.display = hasContent ? 'none' : 'block';
+            showView(2);
+        }
+
+        // ================================================================
+        // 渲染 Level 3：需求文件夹详情
+        // ================================================================
+        function renderLevel3(catId, subIdx) {
+            var cat = getCategory(catId);
+            if (!cat || !cat.subfolders[subIdx]) { goHome(); return; }
+
+            state.categoryId = catId;
+            state.subfolderIdx = subIdx;
+            var sub = cat.subfolders[subIdx];
+
+            document.getElementById('l3Title').textContent = sub.name;
+            document.getElementById('l3Subtitle').textContent = sub.description + ' · ' + sub.files.length + ' 个页面';
+            document.getElementById('l3BackBtn').onclick = function() { openCategory(catId); };
+
+            var container = document.getElementById('l3Content');
+            var html = '';
+            var hasContent = false;
+
+            if (sub.files.length > 0) {
+                html += '<div class="file-list">';
+                for (var i = 0; i < sub.files.length; i++) {
+                    html += renderFileLink(sub.files[i]);
+                    hasContent = true;
+                }
+                html += '</div>';
+            }
+
+            container.innerHTML = html;
+            document.getElementById('emptyState3').style.display = hasContent ? 'none' : 'block';
+            showView(3);
+        }
+
+        // ================================================================
+        // 渲染文件链接
+        // ================================================================
+        function renderFileLink(file) {
+            var ext = 'html';
+            var idx = file.url.lastIndexOf('.');
+            if (idx !== -1) ext = file.url.substring(idx + 1);
+            return '<a href="' + escapeAttr(file.url) + '" class="file-item" target="_blank">' +
+                       '<span class="file-icon"><i class="fas fa-file-lines"></i></span>' +
+                       '<span class="file-name">' + escapeHtml(file.name) + '</span>' +
+                       '<span class="file-ext">' + ext + '</span>' +
+                   '</a>';
+        }
+
+        // ================================================================
+        // 导航操作
+        // ================================================================
+        function openCategory(catId) { renderLevel2(catId); }
+        function openSubfolder(catId, subIdx) { renderLevel3(catId, subIdx); }
+
+        function goHome() {
+            state.level = 1;
+            state.categoryId = null;
+            state.subfolderIdx = -1;
+            showView(1);
+            var query = document.getElementById('searchInput').value.trim();
+            if (query) {
+                handleSearch(query);
+            } else {
+                renderLevel1(navData);
+                updateEmptyState(navData);
+            }
+            updateStats();
+        }
+
+        // ================================================================
+        // 搜索
+        // ================================================================
+        function handleSearch(value) {
+            if (state.level !== 1) return;
+
+            var query = value.trim().toLowerCase();
+            document.getElementById('searchClear').classList.toggle('visible', query.length > 0);
+
+            var filtered = [];
+            for (var i = 0; i < navData.length; i++) {
+                var cat = navData[i];
+                var nameMatch = cat.name.toLowerCase().indexOf(query) !== -1;
+                var descMatch = cat.description.toLowerCase().indexOf(query) !== -1;
+                var fileMatch = false;
+                for (var j = 0; j < cat.files.length; j++) {
+                    if (cat.files[j].name.toLowerCase().indexOf(query) !== -1) { fileMatch = true; break; }
+                }
+                if (!fileMatch) {
+                    for (var k = 0; k < cat.subfolders.length; k++) {
+                        var sub = cat.subfolders[k];
+                        if (sub.name.toLowerCase().indexOf(query) !== -1) { fileMatch = true; break; }
+                        for (var m = 0; m < sub.files.length; m++) {
+                            if (sub.files[m].name.toLowerCase().indexOf(query) !== -1) { fileMatch = true; break; }
+                        }
+                        if (fileMatch) break;
+                    }
+                }
+                if (query === '' || nameMatch || descMatch || fileMatch) {
+                    filtered.push(cat);
+                }
+            }
+
+            renderLevel1(filtered);
+            updateEmptyState(filtered);
+        }
+
+        function updateEmptyState(data) {
+            document.getElementById('emptyState1').style.display = (data.length === 0) ? 'block' : 'none';
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            handleSearch('');
+            document.getElementById('searchInput').focus();
+        }
+
+        // ================================================================
+        // 更新统计
+        // ================================================================
+        function updateStats() {
+            var stats = calcStats();
+            var ids = ['totalCats', 'totalFiles', 'ftCats', 'ftFiles', 'ftFolders'];
+            var vals = [stats.categories, stats.files, stats.categories, stats.files, stats.folders];
+            for (var i = 0; i < ids.length; i++) {
+                var el = document.getElementById(ids[i]);
+                if (el) el.textContent = vals[i];
+            }
+        }
+
+        // ================================================================
+        // 初始化
+        // ================================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            renderLevel1(navData);
+            updateStats();
+            showView(1);
+            startAutoRefresh();
+        });
+    </script>
 </body>
 </html>
