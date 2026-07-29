@@ -228,10 +228,6 @@
         }
         .item-card:hover .item-avatar { transform: scale(1.08); }
 
-        .avatar-folder { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; }
-        .avatar-file  { background: linear-gradient(135deg, #f97316, #ea580c); color: white; }
-        .avatar-html  { background: linear-gradient(135deg, #22c55e, #16a34a); color: white; }
-
         .card-top { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 0.75rem; }
         .item-info { flex: 1; min-width: 0; }
         .item-name {
@@ -660,16 +656,16 @@
     // 颜色工具
     // ================================================================
     var avatarColors = [
-        'linear-gradient(135deg, #3b82f6, #1d4ed8)',
-        'linear-gradient(135deg, #22c55e, #16a34a)',
-        'linear-gradient(135deg, #f97316, #ea580c)',
-        'linear-gradient(135deg, #a855f7, #7c3aed)',
-        'linear-gradient(135deg, #06b6d4, #0891b2)',
-        'linear-gradient(135deg, #f43f5e, #e11d48)',
-        'linear-gradient(135deg, #14b8a6, #0d9488)',
-        'linear-gradient(135deg, #eab308, #ca8a04)',
-        'linear-gradient(135deg, #6366f1, #4f46e5)',
-        'linear-gradient(135deg, #ec4899, #db2777)'
+        { bg: '#3b82f6', text: '#ffffff' },  // blue
+        { bg: '#22c55e', text: '#ffffff' },  // green
+        { bg: '#f97316', text: '#ffffff' },  // orange
+        { bg: '#a855f7', text: '#ffffff' },  // purple
+        { bg: '#06b6d4', text: '#ffffff' },  // cyan
+        { bg: '#ef4444', text: '#ffffff' },  // red
+        { bg: '#14b8a6', text: '#ffffff' },  // teal
+        { bg: '#eab308', text: '#ffffff' },  // yellow
+        { bg: '#6366f1', text: '#ffffff' },  // indigo
+        { bg: '#ec4899', text: '#ffffff' },  // pink
     ];
 
     function getColor(name) {
@@ -677,7 +673,8 @@
         for (var i = 0; i < name.length; i++) {
             hash = name.charCodeAt(i) + ((hash << 5) - hash);
         }
-        return avatarColors[Math.abs(hash) % avatarColors.length];
+        var c = avatarColors[Math.abs(hash) % avatarColors.length];
+        return 'background:' + c.bg + ';color:' + c.text;
     }
 
     function getAvatarLetter(name) {
@@ -702,7 +699,7 @@
             var count = child.children.length + child.files.length;
             html += '<div class="item-card" onclick="enterFolder(\'' + child.path + '\')">';
             html += '  <div class="card-top">';
-            html += '    <div class="item-avatar avatar-folder" style="background:' + getColor(child.name) + '">' + letter + '</div>';
+            html += '    <div class="item-avatar avatar-folder" style="' + getColor(child.name) + '">' + letter + '</div>';
             html += '    <div class="item-info">';
             html += '      <div class="item-name">' + safeHtml(child.name) + '</div>';
             html += '      <div class="item-path">' + safeHtml(child.path) + '</div>';
@@ -725,7 +722,7 @@
             var letter = getAvatarLetter(file.name);
             html += '<div class="item-card" onclick="openFile(\'' + file.path + '\')">';
             html += '  <div class="card-top">';
-            html += '    <div class="item-avatar avatar-file" style="background:' + getColor(file.name) + '">' + letter + '</div>';
+            html += '    <div class="item-avatar avatar-file" style="' + getColor(file.name) + '">' + letter + '</div>';
             html += '    <div class="item-info">';
             html += '      <div class="item-name">' + safeHtml(file.name) + '</div>';
             html += '      <div class="item-path">' + safeHtml(file.path) + '</div>';
@@ -807,7 +804,7 @@
             subText += node.files.length + ' 个文件';
         }
         document.getElementById('detailSubtitle').textContent = subText || '空目录';
-        document.getElementById('detailAvatar').style.background = getColor(node.name);
+        document.getElementById('detailAvatar').setAttribute('style', getColor(node.name));
         document.getElementById('detailAvatar').textContent = getAvatarLetter(node.name);
         document.getElementById('detailAvatar').className = 'detail-avatar';
 
