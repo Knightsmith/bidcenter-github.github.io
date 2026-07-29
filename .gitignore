@@ -12,5 +12,7 @@ Thumbs.db
 temp/
 *.log
 
-# 局部测试脚本（不上传到 GitHub）
+# 局部脚本（不上传到 GitHub）
 generate-index-local.ps1
+push.ps1
+一键推送.bat
