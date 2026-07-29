@@ -78,23 +78,30 @@ jobs:
             <div class="grid" id="pageList">
           HTMLEOF
 
-          # 查找所有 HTML 文件（排除 index.html 自身和模板）
-          find . -name "*.html" -not -name "index.html" -not -path "*/node_modules/*" | sort | while read -r file; do
+          # 查找所有 HTML 文件（只排除根目录的 index.html 自身）
+          # 支持任意层级的嵌套目录，如: 登录页面/子功能A/index.html
+          find . -name "*.html" -not -path "./index.html" -not -path "*/node_modules/*" | sort | while read -r file; do
             # 去掉开头的 ./
             path="${file#./}"
-
-            # 提取目录名或文件名作为显示标题
             dirpart=$(dirname "$path")
             filepart=$(basename "$path" .html)
 
-            if [ "$dirpart" = "." ]; then
-              # 文件在根目录，用文件名
-              title=$(echo "$filepart" | sed 's/[-_]/ /g' | sed 's/\b\(.\)/\U\1/g')
+            # 智能提取标题
+            if [ "$filepart" = "index" ] && [ "$dirpart" != "." ]; then
+              # 子目录下的 index.html → 用最里层的目录名
+              # 例如: 登录页面/子功能A/index.html → 标题 = "子功能A"
+              lastdir=$(basename "$dirpart")
+              title=$(echo "$lastdir" | sed 's/[-_]/ /g')
+              tag="文件夹"
+            elif [ "$dirpart" = "." ]; then
+              # 根目录下的独立 .html 文件 → 用文件名
+              title=$(echo "$filepart" | sed 's/[-_]/ /g')
               tag="页面"
             else
-              # 文件在子目录，用目录名
-              title=$(echo "$dirpart" | sed 's/[-_]/ /g' | sed 's/\b\(.\)/\U\1/g')
-              tag=$(echo "$dirpart" | sed 's/[-_]/ /g' | sed 's/\b\(.\)/\U\1/g')
+              # 子目录下的非 index.html 文件 → 用文件名
+              title=$(echo "$filepart" | sed 's/[-_]/ /g')
+              lastdir=$(basename "$dirpart")
+              tag="$lastdir"
             fi
 
             # 生成卡片 HTML
