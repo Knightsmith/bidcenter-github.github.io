@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>帮助中心</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f6fa; padding: 32px; max-width: 800px; margin: 0 auto; }
+    h1 { font-size: 28px; color: #2d3436; margin-bottom: 32px; }
+    .faq-item { background: white; border-radius: 12px; margin-bottom: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .faq-question { padding: 18px 24px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 500; color: #2d3436; }
+    .faq-answer { padding: 0 24px 18px; color: #636e72; font-size: 14px; line-height: 1.8; display: none; }
+    .faq-item.open .faq-answer { display: block; }
+    .arrow { transition: transform 0.2s; }
+    .faq-item.open .arrow { transform: rotate(180deg); }
+  </style>
+</head>
+<body>
+  <h1>❓ 帮助中心</h1>
+  <div class="faq-item open">
+    <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+      <span>如何重置密码？</span>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="faq-answer">在登录页面点击「忘记密码」，输入注册邮箱，系统会发送重置链接到您的邮箱。</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+      <span>如何导出数据？</span>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="faq-answer">在数据看板页面右上角有「导出」按钮，支持 CSV 和 Excel 格式。</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+      <span>如何邀请团队成员？</span>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="faq-answer">在用户管理页面点击「添加用户」，输入对方邮箱和角色即可发送邀请。</div>
+  </div>
+</body>
+</html>
