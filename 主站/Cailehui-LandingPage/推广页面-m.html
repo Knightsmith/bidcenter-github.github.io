@@ -169,6 +169,23 @@
         .section-title { font-size: 18px; font-weight: 800; color: #111827; text-align: center; }
         .section-sub { font-size: 12px; color: #9ca3af; text-align: center; margin-top: 2px; }
 
+        /* 底部通知横向无缝轮播 */
+        #mNotifyText {
+            display: inline-block;
+            white-space: nowrap;
+            line-height: 1.4em;
+            font-size: 11px;
+            color: #fff;
+        }
+        .notify-wrapper {
+            overflow: hidden;
+            position: relative;
+            height: 1.4em;
+            flex: 1;
+            min-width: 0;
+            line-height: 1.4em;
+        }
+
         /* 品牌横向循环滚动 */
         .brand-track { display: flex; gap: 16px; width: max-content; }
         .brand-scroll-left { animation: brandScrollLeft 20s linear infinite; }
@@ -703,10 +720,12 @@
 
         <!-- 底部报名横幅 -->
         <div class="flex-shrink-0 bg-gradient-to-r from-[#E86A6A] to-[#F4976C] text-white px-3 py-2.5 flex items-center gap-2">
-            <div class="flex-1 min-w-0 overflow-hidden">
+            <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-1.5 text-[11px] font-medium">
-                    <span>🔥</span>
-                    <span id="mNotifyText" class="truncate"></span>
+                    <span class="flex-shrink-0">🔥</span>
+                    <div class="notify-wrapper">
+                        <span id="mNotifyText"></span>
+                    </div>
                 </div>
                 <div class="text-[9px] text-white/70 mt-0.5">现在咨询，免费获取培训方案</div>
             </div>
@@ -817,24 +836,60 @@
 switchTeacher(0);
         })();
 
-        // 底部通知轮播
-        var notifyData = [
-            {name:'赵总',company:'XXXX建筑企业',people:'7',phone:'177 XXXX 1542',time:'6'},
-            {name:'王经理',company:'某央企建设集团',people:'3',phone:'138 XXXX 6789',time:'3'},
-            {name:'张总监',company:'某大型国企',people:'5',phone:'159 XXXX 2345',time:'5'},
-            {name:'李主任',company:'某市政工程公司',people:'2',phone:'186 XXXX 8901',time:'2'},
-            {name:'刘主管',company:'某上市公司采购部',people:'4',phone:'135 XXXX 4567',time:'7'},
-            {name:'陈专员',company:'某事业单位',people:'3',phone:'188 XXXX 3456',time:'4'},
-            {name:'周经理',company:'某能源集团',people:'6',phone:'176 XXXX 7890',time:'8'}
-        ];
-        var idx = 0, mEl = document.getElementById("mNotifyText");
-        function showNotify() {
-            var d = notifyData[idx];
-            mEl.textContent = d.name + "（" + d.company + "）" + d.people + "人 " + d.phone + " " + d.time + "分钟前报名了";
-            idx = (idx + 1) % notifyData.length;
-        }
-        showNotify();
-        setInterval(showNotify, 3500);
+        // 底部通知无缝横向轮播
+        (function() {
+            try {
+                var notifyData = [
+                    {name:'赵总',company:'XXXX建筑企业',people:'7',phone:'177 XXXX 1542',time:'6'},
+                    {name:'王经理',company:'某央企建设集团',people:'3',phone:'138 XXXX 6789',time:'3'},
+                    {name:'张总监',company:'某大型国企',people:'5',phone:'159 XXXX 2345',time:'5'},
+                    {name:'李主任',company:'某市政工程公司',people:'2',phone:'186 XXXX 8901',time:'2'},
+                    {name:'刘主管',company:'某上市公司采购部',people:'4',phone:'135 XXXX 4567',time:'7'},
+                    {name:'陈专员',company:'某事业单位',people:'3',phone:'188 XXXX 3456',time:'4'},
+                    {name:'周经理',company:'某能源集团',people:'6',phone:'176 XXXX 7890',time:'8'}
+                ];
+                var mEl = document.getElementById("mNotifyText");
+                var wrap = mEl ? mEl.parentNode : null;
+                var scrollTimer = null;
+                var pos = 0;
+
+                // 所有信息拼成一条长文本，复制一份实现无缝循环
+                function buildAllText() {
+                    var parts = [];
+                    for (var i = 0; i < notifyData.length; i++) {
+                        var d = notifyData[i];
+                        parts.push(d.name + "（" + d.company + "）" + d.people + "人 " + d.phone + " " + d.time + "分钟前报名了");
+                    }
+                    var single = parts.join("　　　　　");
+                    return single + "　　　　　" + single;
+                }
+
+                function startScroll() {
+                    if (scrollTimer) clearInterval(scrollTimer);
+                    var wrapWidth = wrap.offsetWidth;
+                    var textWidth = mEl.offsetWidth;
+                    var halfWidth = textWidth / 2;
+                    pos = wrapWidth;
+                    mEl.style.transform = 'translateX(' + pos + 'px)';
+                    scrollTimer = setInterval(function() {
+                        pos -= 1;
+                        mEl.style.transform = 'translateX(' + pos + 'px)';
+                        if (pos < -halfWidth) {
+                            pos = wrapWidth;
+                        }
+                    }, 16);
+                }
+
+                if (mEl && wrap) {
+                    mEl.textContent = buildAllText();
+                    if (document.readyState === 'complete') {
+                        startScroll();
+                    } else {
+                        window.addEventListener('load', startScroll);
+                    }
+                }
+            } catch(e) {}
+        })();
     });
     </script>
 </body>
