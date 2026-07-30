@@ -207,23 +207,6 @@
         @keyframes scrollSlow { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         @keyframes scrollFast { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* 底部通知横向滚动 */
-        #mNotifyText {
-            display: inline-block;
-            white-space: nowrap;
-            line-height: 1.4em;
-            font-size: 11px;
-            color: #fff;
-        }
-        .notify-wrapper {
-            overflow: hidden;
-            position: relative;
-            height: 1.4em;
-            flex: 1;
-            min-width: 0;
-            line-height: 1.4em;
-        }
-
         .teacher-thumb { text-align: center; flex-shrink: 0; width: 58px; padding: 4px 0; border-radius: 10px; cursor: pointer; border: 2px solid transparent; }
         .teacher-thumb.active { background: #FDF2F2; border-color: #E86A6A; }
         .teacher-thumb.active .t-avatar { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #E86A6A; }
@@ -313,7 +296,15 @@
                                     <input type="text" class="form-input" placeholder="您的姓名 *" required id="regName">
                                     <input type="tel" class="form-input" placeholder="手机号码 *" required id="regPhone">
                                     <input type="text" class="form-input" placeholder="公司/单位名称">
-                                    <input type="text" class="form-input" placeholder="参会人数" id="regPeople">
+                                    <div>
+                                        <label class="text-[11px] text-gray-500 mb-0.5 block">参会人数</label>
+                                        <select class="form-input text-gray-500" id="regPeople">
+                                            <option value="1">1 人</option>
+                                            <option value="2-3" selected>2-3 人</option>
+                                            <option value="4-5">4-5 人</option>
+                                            <option value="6+">6 人以上</option>
+                                        </select>
+                                    </div>
                                     <select class="form-input text-gray-500">
                                         <option value="">感兴趣的课程方向</option>
                                         <option>满分投标文件编制</option>
@@ -638,12 +629,10 @@
 
         <!-- 底部报名横幅 -->
         <div class="flex-shrink-0 bg-gradient-to-r from-[#E86A6A] to-[#F4976C] text-white px-3 py-2.5 flex items-center gap-2">
-            <div class="flex-1 min-w-0">
+            <div class="flex-1 min-w-0 overflow-hidden">
                 <div class="flex items-center gap-1.5 text-[11px] font-medium">
-                    <span class="flex-shrink-0">🔥</span>
-                    <div class="notify-wrapper" style="overflow:hidden;flex:1;min-width:0;height:1.4em;line-height:1.4em;">
-                        <span id="mNotifyText">加载中...</span>
-                    </div>
+                    <span>🔥</span>
+                    <span id="mNotifyText" class="truncate"></span>
                 </div>
                 <div class="text-[9px] text-white/70 mt-0.5">实时报名动态 · 名额有限</div>
             </div>
@@ -709,127 +698,82 @@
             }, 1200);
         });
 
-        // 老师切换（包 try-catch，报错不影响后续代码）
-        try {
-            (function() {
-                var teachers = [
-                    { name:'杜静', tag:'招标培训专家', title1:'著名招投标培训专家', title2:'国资委研究中心特聘讲师', desc:'著名招投标培训专家，国资委研究中心特聘讲师，北京大学、清华大学特邀教授，美国国际训练协会AITA职业资格认证讲师。', stats:[{n:'20年',l:'培训经验'},{n:'10000+',l:'培训学员'},{n:'95%',l:'满意率'}], grad:'from-blue-400 to-blue-600' },
-                    { name:'李峣', tag:'首席专家', title1:'发改委培训中心特聘讲师', title2:'中国采招网特聘首席专家', desc:'发改委培训中心特聘讲师，中国采招网特聘首席专家，大成律师事务所律师。精通招标投标法律法规。', stats:[{n:'15年',l:'法律经验'},{n:'500+',l:'培训场次'},{n:'98%',l:'满意率'}], grad:'from-purple-400 to-purple-600' },
-                    { name:'南斌', tag:'采购管理专家', title1:'采购招投标管理专家', title2:'供应链系统实战专家', desc:'采购招投标与供应链管理专家，中国采招网特聘首席讲师。自2003年开始从事采购与招标投标培训工作。', stats:[{n:'20年',l:'培训经验'},{n:'数万',l:'培训学员'},{n:'96%',l:'满意率'}], grad:'from-green-400 to-green-600' },
-                    { name:'刁春凤', tag:'事业部负责人', title1:'中国采招网 · 招投标事业部负责人', title2:'采乐会营销总监 / 特聘首席专家', desc:'中国采招网招投标事业部负责人，中国采招网采乐会营销总监，中国采招网特聘首席专家，专注招投标研究十余年。', stats:[{n:'10年',l:'行业经验'},{n:'200+',l:'培训场次'},{n:'500+',l:'辅导企业'}], grad:'from-[#E86A6A] to-[#F4976C]' },
-                    { name:'许海波', tag:'首席讲师', title1:'采招网首席讲师', title2:'历任采招网客服部经理', desc:'采招网首席讲师，采招网微课创始人。在招投标领域工作多年，具有丰富的专业知识与工作经验。', stats:[{n:'10年',l:'行业经验'},{n:'300+',l:'培训场次'},{n:'97%',l:'满意率'}], grad:'from-cyan-400 to-cyan-600' },
-                    { name:'陈伟', tag:'十佳讲师', title1:'中国招投标行业十佳讲师', title2:'发改委培训中心特聘讲师', desc:'发改委培训中心特聘讲师，中国招投标行业十佳讲师，中国企业联合会培训委员执委。招投标实战学院院长。', stats:[{n:'18年',l:'培训经验'},{n:'2000+',l:'培训场次'},{n:'98%',l:'满意率'}], grad:'from-amber-400 to-amber-600' }
-                ];
-                var thumbs = document.querySelectorAll('.teacher-thumb');
-                var wrap = document.getElementById('teacherPortraitWrap');
-                var avatarLetter = document.getElementById('teacherAvatarLetter');
-                var tName = document.getElementById('tName');
-                var tTag = document.getElementById('tTag');
-                var tTitle1 = document.getElementById('tTitle1');
-                var tTitle2 = document.getElementById('tTitle2');
-                var tDesc = document.getElementById('tDesc');
-                var tStats = document.getElementById('tStats');
-                var gradBgMap = {
-                    'from-blue-400 to-blue-600':'linear-gradient(135deg, #dbeafe, #eff6ff)',
-                    'from-purple-400 to-purple-600':'linear-gradient(135deg, #f3e8ff, #faf5ff)',
-                    'from-green-400 to-green-600':'linear-gradient(135deg, #dcfce7, #f0fdf4)',
-                    'from-[#E86A6A] to-[#F4976C]':'linear-gradient(135deg, #fce4e4, #fff0eb)',
-                    'from-cyan-400 to-cyan-600':'linear-gradient(135deg, #cffafe, #ecfeff)',
-                    'from-amber-400 to-amber-600':'linear-gradient(135deg, #fef3c7, #fffbeb)'
-                };
-                var gradAvatarMap = {
-                    'from-blue-400 to-blue-600':'bg-gradient-to-br from-blue-400 to-blue-600',
-                    'from-purple-400 to-purple-600':'bg-gradient-to-br from-purple-400 to-purple-600',
-                    'from-green-400 to-green-600':'bg-gradient-to-br from-green-400 to-green-600',
-                    'from-[#E86A6A] to-[#F4976C]':'bg-gradient-to-br from-[#E86A6A] to-[#F4976C]',
-                    'from-cyan-400 to-cyan-600':'bg-gradient-to-br from-cyan-400 to-cyan-600',
-                    'from-amber-400 to-amber-600':'bg-gradient-to-br from-amber-400 to-amber-600'
-                };
-                function switchTeacher(idx) {
-                    var t = teachers[idx];
-                    for (var i = 0; i < thumbs.length; i++) thumbs[i].classList.toggle('active', i === idx);
-                    wrap.style.background = gradBgMap[t.grad] || '#dbeafe';
-                    avatarLetter.className = 'w-12 h-16 rounded-xl flex items-center justify-center text-xl font-bold text-white flex-shrink-0 ' + (gradAvatarMap[t.grad] || 'bg-gradient-to-br from-blue-400 to-blue-600');
-                    tName.textContent = t.name;
-                    tTag.textContent = t.tag;
-                    tTitle1.textContent = t.title1;
-                    tTitle2.textContent = t.title2;
-                    tDesc.textContent = t.desc;
-                    var html = '';
-                    for (var s = 0; s < t.stats.length; s++) html += '<div class="text-center flex-1"><div class="text-sm font-bold text-[#E86A6A]">' + t.stats[s].n + '</div><div class="text-[9px] text-gray-400">' + t.stats[s].l + '</div></div>';
-                    tStats.innerHTML = html;
-                }
-                for (var i = 0; i < thumbs.length; i++) {
-                    thumbs[i].addEventListener('click', function() {
-                        var idx = parseInt(this.getAttribute('data-index'));
-                        switchTeacher(idx);
-                    });
-                }
-                switchTeacher(0);
-            })();
-        } catch(e) {}
-
-    </script>
-
-    <!-- 通知轮播（独立 script，不受上面代码报错影响） -->
-    <script>
-    (function() {
-        try {
-            var notifyData = [
-                {name:'赵总',company:'XXXX建筑企业',people:'7',phone:'177 XXXX 1542',time:'6'},
-                {name:'王经理',company:'某央企建设集团',people:'3',phone:'138 XXXX 6789',time:'3'},
-                {name:'张总监',company:'某大型国企',people:'5',phone:'159 XXXX 2345',time:'5'},
-                {name:'李主任',company:'某市政工程公司',people:'2',phone:'186 XXXX 8901',time:'2'},
-                {name:'刘主管',company:'某上市公司采购部',people:'4',phone:'135 XXXX 4567',time:'7'},
-                {name:'陈专员',company:'某事业单位',people:'3',phone:'188 XXXX 3456',time:'4'},
-                {name:'周经理',company:'某能源集团',people:'6',phone:'176 XXXX 7890',time:'8'}
+        // 老师切换
+        (function() {
+            var teachers = [
+                { name:'杜静', tag:'招标培训专家', title1:'著名招投标培训专家', title2:'国资委研究中心特聘讲师', desc:'著名招投标培训专家，国资委研究中心特聘讲师，北京大学、清华大学特邀教授，美国国际训练协会AITA职业资格认证讲师。', stats:[{n:'20年',l:'培训经验'},{n:'10000+',l:'培训学员'},{n:'95%',l:'满意率'}], grad:'from-blue-400 to-blue-600' },
+                { name:'李峣', tag:'首席专家', title1:'发改委培训中心特聘讲师', title2:'中国采招网特聘首席专家', desc:'发改委培训中心特聘讲师，中国采招网特聘首席专家，大成律师事务所律师。精通招标投标法律法规。', stats:[{n:'15年',l:'法律经验'},{n:'500+',l:'培训场次'},{n:'98%',l:'满意率'}], grad:'from-purple-400 to-purple-600' },
+                { name:'南斌', tag:'采购管理专家', title1:'采购招投标管理专家', title2:'供应链系统实战专家', desc:'采购招投标与供应链管理专家，中国采招网特聘首席讲师。自2003年开始从事采购与招标投标培训工作。', stats:[{n:'20年',l:'培训经验'},{n:'数万',l:'培训学员'},{n:'96%',l:'满意率'}], grad:'from-green-400 to-green-600' },
+                { name:'刁春凤', tag:'事业部负责人', title1:'中国采招网 · 招投标事业部负责人', title2:'采乐会营销总监 / 特聘首席专家', desc:'中国采招网招投标事业部负责人，中国采招网采乐会营销总监，中国采招网特聘首席专家，专注招投标研究十余年。', stats:[{n:'10年',l:'行业经验'},{n:'200+',l:'培训场次'},{n:'500+',l:'辅导企业'}], grad:'from-[#E86A6A] to-[#F4976C]' },
+                { name:'许海波', tag:'首席讲师', title1:'采招网首席讲师', title2:'历任采招网客服部经理', desc:'采招网首席讲师，采招网微课创始人。在招投标领域工作多年，具有丰富的专业知识与工作经验。', stats:[{n:'10年',l:'行业经验'},{n:'300+',l:'培训场次'},{n:'97%',l:'满意率'}], grad:'from-cyan-400 to-cyan-600' },
+                { name:'陈伟', tag:'十佳讲师', title1:'中国招投标行业十佳讲师', title2:'发改委培训中心特聘讲师', desc:'发改委培训中心特聘讲师，中国招投标行业十佳讲师，中国企业联合会培训委员执委。招投标实战学院院长。', stats:[{n:'18年',l:'培训经验'},{n:'2000+',l:'培训场次'},{n:'98%',l:'满意率'}], grad:'from-amber-400 to-amber-600' }
             ];
-            var mEl = document.getElementById("mNotifyText");
-            var wrap = mEl ? mEl.parentNode : null;
-            var scrollTimer = null;
-            var pos = 0;
-
-            // 把所有信息拼成一条长文本，复制一份实现无缝循环
-            function buildAllText() {
-                var parts = [];
-                for (var i = 0; i < notifyData.length; i++) {
-                    var d = notifyData[i];
-                    parts.push(d.name + "（" + d.company + "）" + d.people + "人 " + d.phone + " " + d.time + "分钟前报名了");
-                }
-                var single = parts.join("　　　　　"); // 加大间距
-                return single + "　　　　　" + single; // 复制一份无缝衔接
+            var thumbs = document.querySelectorAll('.teacher-thumb');
+            var wrap = document.getElementById('teacherPortraitWrap');
+            var avatarLetter = document.getElementById('teacherAvatarLetter');
+            var tName = document.getElementById('tName');
+            var tTag = document.getElementById('tTag');
+            var tTitle1 = document.getElementById('tTitle1');
+            var tTitle2 = document.getElementById('tTitle2');
+            var tDesc = document.getElementById('tDesc');
+            var tStats = document.getElementById('tStats');
+            var gradBgMap = {
+                'from-blue-400 to-blue-600':'linear-gradient(135deg, #dbeafe, #eff6ff)',
+                'from-purple-400 to-purple-600':'linear-gradient(135deg, #f3e8ff, #faf5ff)',
+                'from-green-400 to-green-600':'linear-gradient(135deg, #dcfce7, #f0fdf4)',
+                'from-[#E86A6A] to-[#F4976C]':'linear-gradient(135deg, #fce4e4, #fff0eb)',
+                'from-cyan-400 to-cyan-600':'linear-gradient(135deg, #cffafe, #ecfeff)',
+                'from-amber-400 to-amber-600':'linear-gradient(135deg, #fef3c7, #fffbeb)'
+            };
+            var gradAvatarMap = {
+                'from-blue-400 to-blue-600':'bg-gradient-to-br from-blue-400 to-blue-600',
+                'from-purple-400 to-purple-600':'bg-gradient-to-br from-purple-400 to-purple-600',
+                'from-green-400 to-green-600':'bg-gradient-to-br from-green-400 to-green-600',
+                'from-[#E86A6A] to-[#F4976C]':'bg-gradient-to-br from-[#E86A6A] to-[#F4976C]',
+                'from-cyan-400 to-cyan-600':'bg-gradient-to-br from-cyan-400 to-cyan-600',
+                'from-amber-400 to-amber-600':'bg-gradient-to-br from-amber-400 to-amber-600'
+            };
+            function switchTeacher(idx) {
+                var t = teachers[idx];
+                for (var i = 0; i < thumbs.length; i++) thumbs[i].classList.toggle('active', i === idx);
+                wrap.style.background = gradBgMap[t.grad] || '#dbeafe';
+                avatarLetter.className = 'w-12 h-16 rounded-xl flex items-center justify-center text-xl font-bold text-white flex-shrink-0 ' + (gradAvatarMap[t.grad] || 'bg-gradient-to-br from-blue-400 to-blue-600');
+                tName.textContent = t.name;
+                tTag.textContent = t.tag;
+                tTitle1.textContent = t.title1;
+                tTitle2.textContent = t.title2;
+                tDesc.textContent = t.desc;
+                var html = '';
+                for (var s = 0; s < t.stats.length; s++) html += '<div class="text-center flex-1"><div class="text-sm font-bold text-[#E86A6A]">' + t.stats[s].n + '</div><div class="text-[9px] text-gray-400">' + t.stats[s].l + '</div></div>';
+                tStats.innerHTML = html;
             }
-
-            function startScroll() {
-                if (scrollTimer) clearInterval(scrollTimer);
-                var wrapWidth = wrap.offsetWidth;
-                var textWidth = mEl.offsetWidth;
-                var halfWidth = textWidth / 2; // 单份长度
-                pos = wrapWidth;
-                mEl.style.transform = 'translateX(' + pos + 'px)';
-                scrollTimer = setInterval(function() {
-                    pos -= 1;
-                    mEl.style.transform = 'translateX(' + pos + 'px)';
-                    // 第一份滚完，瞬间跳回起点，视觉无缝
-                    if (pos < -halfWidth) {
-                        pos = wrapWidth;
-                    }
-                }, 16);
+            for (var i = 0; i < thumbs.length; i++) {
+                thumbs[i].addEventListener('click', function() {
+                    var idx = parseInt(this.getAttribute('data-index'));
+                    switchTeacher(idx);
+                });
             }
+switchTeacher(0);
+        })();
 
-            if (mEl && wrap) {
-                mEl.textContent = buildAllText();
-                if (document.readyState === 'complete') {
-                    startScroll();
-                } else {
-                    window.addEventListener('load', startScroll);
-                }
-            }
-        } catch(e) {
-            var el = document.getElementById("mNotifyText");
-            if (el) el.textContent = "实时报名动态 · 名额有限";
+        // 底部通知轮播
+        var notifyData = [
+            {name:'赵总',company:'XXXX建筑企业',people:'7',phone:'177 XXXX 1542',time:'6'},
+            {name:'王经理',company:'某央企建设集团',people:'3',phone:'138 XXXX 6789',time:'3'},
+            {name:'张总监',company:'某大型国企',people:'5',phone:'159 XXXX 2345',time:'5'},
+            {name:'李主任',company:'某市政工程公司',people:'2',phone:'186 XXXX 8901',time:'2'},
+            {name:'刘主管',company:'某上市公司采购部',people:'4',phone:'135 XXXX 4567',time:'7'},
+            {name:'陈专员',company:'某事业单位',people:'3',phone:'188 XXXX 3456',time:'4'},
+            {name:'周经理',company:'某能源集团',people:'6',phone:'176 XXXX 7890',time:'8'}
+        ];
+        var idx = 0, mEl = document.getElementById("mNotifyText");
+        function showNotify() {
+            var d = notifyData[idx];
+            mEl.textContent = d.name + "（" + d.company + "）" + d.people + "人 " + d.phone + " " + d.time + "分钟前报名了";
+            idx = (idx + 1) % notifyData.length;
         }
-    })();
+        showNotify();
+        setInterval(showNotify, 3500);
     </script>
 </body>
 </html>
