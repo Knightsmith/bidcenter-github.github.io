@@ -161,10 +161,10 @@
         @keyframes scrollSlow { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         @keyframes scrollFast { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        .teacher-thumb { text-align: center; flex-shrink: 0; width: 58px; padding: 4px 0; border-radius: 10px; cursor: pointer; border: 2px solid transparent; }
+        .teacher-thumb { text-align: center; padding: 6px 2px; border-radius: 10px; cursor: pointer; border: 2px solid transparent; }
         .teacher-thumb.active { background: #FDF2F2; border-color: #E86A6A; }
         .teacher-thumb.active .t-avatar { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #E86A6A; }
-        .t-avatar { width: 38px; height: 54px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #fff; margin: 0 auto 3px; }
+        .t-avatar { width: 42px; height: 58px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #fff; margin: 0 auto 3px; }
 
         .section-title { font-size: 18px; font-weight: 800; color: #111827; text-align: center; }
         .section-sub { font-size: 12px; color: #9ca3af; text-align: center; margin-top: 2px; }
@@ -455,9 +455,8 @@
                     <h2 class="section-title">👨‍🏫 实战派名师团队</h2>
                     <p class="section-sub">来自一线的专家，教你能落地的真本事</p>
                 </div>
-                <!-- 头像横向滑动 -->
-                <div class="overflow-x-auto -mx-4 px-4" style="scrollbar-width:none;-ms-overflow-style:none;">
-                    <div class="flex gap-1.5" id="teacherThumbs">
+                <!-- 头像 2行3列网格 -->
+                <div class="grid grid-cols-3 gap-x-2 gap-y-1.5" id="teacherThumbs">
                         <div class="teacher-thumb active" data-index="0"><div class="t-avatar bg-gradient-to-br from-amber-400 to-amber-600">陈</div><div class="text-xs font-bold text-gray-800">陈伟</div><div class="text-[10px] text-gray-400">十佳讲师</div></div>
                         <div class="teacher-thumb" data-index="1"><div class="t-avatar bg-gradient-to-br from-blue-400 to-blue-600">杜</div><div class="text-xs font-bold text-gray-800">杜静</div><div class="text-[10px] text-gray-400">招标培训专家</div></div>
                         <div class="teacher-thumb" data-index="2"><div class="t-avatar bg-gradient-to-br from-teal-400 to-teal-600">阁</div><div class="text-xs font-bold text-gray-800">阁策</div><div class="text-[10px] text-gray-400">评标专家</div></div>
@@ -465,7 +464,6 @@
                         <div class="teacher-thumb" data-index="4"><div class="t-avatar bg-gradient-to-br from-purple-400 to-purple-600">李</div><div class="text-xs font-bold text-gray-800">李峣</div><div class="text-[10px] text-gray-400">首席专家</div></div>
                         <div class="teacher-thumb" data-index="5"><div class="t-avatar bg-gradient-to-br from-[#E86A6A] to-[#F4976C]">何</div><div class="text-xs font-bold text-gray-800">何朔</div><div class="text-[10px] text-gray-400">招投标实战专家</div></div>
                     </div>
-                </div>
                 <!-- 详情卡片 - 横向布局 -->
                 <div class="bg-white rounded-xl border border-gray-100 overflow-hidden mt-2" id="teacherDetail">
                     <div class="p-3" id="teacherPortraitWrap" style="background:linear-gradient(135deg, #fef3c7, #fffbeb)">
