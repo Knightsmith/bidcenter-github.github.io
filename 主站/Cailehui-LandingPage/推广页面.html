@@ -1005,7 +1005,19 @@
                 var tDesc = document.getElementById('tDesc');
                 var tStats = document.getElementById('tStats');
 
+                // 老师详情自动轮播：每4秒切换下一位老师
+                var currentIdx = 0;
+                var autoTimer = null;
+                function restartAutoPlay() {
+                    if (autoTimer) clearInterval(autoTimer);
+                    autoTimer = setInterval(function() {
+                        currentIdx = (currentIdx + 1) % teachers.length;
+                        switchTeacher(currentIdx);
+                    }, 4000);
+                }
+
                 function switchTeacher(idx) {
+                    currentIdx = idx;
                     var t = teachers[idx];
                     // 更新 active 状态
                     for (var i = 0; i < thumbs.length; i++) {
@@ -1040,11 +1052,19 @@
                     thumbs[i].addEventListener('mouseenter', function() {
                         var idx = parseInt(this.getAttribute('data-index'));
                         switchTeacher(idx);
+                        // 鼠标悬停时暂停自动轮播
+                        if (autoTimer) clearInterval(autoTimer);
                     });
                 }
+                // 鼠标离开缩略图区域后恢复自动轮播
+                var thumbWrap = document.getElementById('teacherThumbs');
+                if (thumbWrap) {
+                    thumbWrap.addEventListener('mouseleave', restartAutoPlay);
+                }
 
-                // 默认展示第一位老师
+                // 默认展示第一位老师并启动自动轮播
                 switchTeacher(0);
+                restartAutoPlay();
             })();
         });
     </script>
