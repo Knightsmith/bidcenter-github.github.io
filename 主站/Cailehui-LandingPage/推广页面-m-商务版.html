@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>招标采购培训-采乐会</title>
+    <meta name="description" content="采乐会提供专业的招标采购培训课程，包括招标实务操作、政府采购政策解读、投标文件编制、评标实务等专题培训。">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: { extend: {
+                colors: {
+                    navy: { DEFAULT: "#0B1F3A", light: "#14346B", mid: "#1E4A8C" },
+                    gold: { DEFAULT: "#C9A227", light: "#E8D083", dark: "#A8851E" }
+                },
+                fontFamily: { sans: ['"Microsoft YaHei"', '"PingFang SC"', "sans-serif"] },
+            } }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+            background: #0B1F3A;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            padding-bottom: 100px;
+            font-size: 14px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* 手机外框 */
+        .phone {
+            width: 375px;
+            height: 812px;
+            background: #f5f6f8;
+            border-radius: 44px;
+            box-shadow: 0 0 0 2px #2a3a5a, 0 30px 80px rgba(0,0,0,0.6);
+            overflow: hidden;
+            position: relative;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        /* 刘海 */
+        .notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 30px;
+            background: #0B1F3A;
+            border-radius: 0 0 18px 18px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .notch .camera { width: 8px; height: 8px; background: #1a2a4a; border-radius: 50%; }
+        .notch .speaker { width: 50px; height: 6px; background: #1a2a4a; border-radius: 3px; }
+        /* 状态栏 */
+        .status-bar {
+            height: 44px;
+            padding: 0 28px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding-bottom: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #fff;
+            background: #0B1F3A;
+            position: relative;
+            z-index: 50;
+            flex-shrink: 0;
+        }
+        .status-bar .time { font-size: 14px; font-weight: 700; }
+        .status-icons { display: flex; align-items: center; gap: 5px; }
+        .status-icons svg { width: 16px; height: 16px; fill: #fff; }
+        /* 可滚动内容区 */
+        .scroll-area {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            background: #F2F4F7;
+        }
+        .scroll-area::-webkit-scrollbar { display: none; }
+        /* 底部主屏幕按钮 */
+        .home-bar {
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background: #fff;
+        }
+        .home-bar::after { content: ''; width: 134px; height: 5px; background: #c1c5cd; border-radius: 3px; }
+
+        /* === 商务风核心样式 === */
+        .gradient-hero {
+            background: linear-gradient(160deg, #0B1F3A 0%, #14346B 50%, #1E4A8C 100%);
+            position: relative;
+        }
+        .gradient-hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image:
+                radial-gradient(circle at 85% 15%, rgba(201,162,39,0.12) 0%, transparent 50%),
+                radial-gradient(circle at 15% 80%, rgba(30,74,140,0.3) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .gradient-hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 60px;
+            background: linear-gradient(to bottom, transparent, #F2F4F7);
+            pointer-events: none;
+        }
+        .btn-cta {
+            background: linear-gradient(135deg, #C9A227, #A8851E);
+            color: #fff;
+            border: none;
+            width: 100%;
+            padding: 13px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(201,162,39,0.35);
+            letter-spacing: 1px;
+        }
+        .btn-accent {
+            background: #14346B;
+            color: #fff;
+            border: none;
+            padding: 11px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+        .form-input {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1.5px solid #dfe3ea;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+            background: #fff;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-input:focus { border-color: #14346B; box-shadow: 0 0 0 3px rgba(20,52,107,0.08); }
+        .form-input::placeholder { color: #9ca3af; }
+
+        .course-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #e8ecf2;
+            box-shadow: 0 2px 12px rgba(11,31,58,0.04);
+            transition: box-shadow 0.2s;
+        }
+        .course-tag {
+            display: inline-block;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .countdown-num {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 5px;
+            min-width: 26px;
+            text-align: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .pain-card {
+            background: #fff;
+            border: 1px solid #e8ecf2;
+            border-radius: 12px;
+            padding: 12px 14px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(11,31,58,0.03);
+        }
+        .pain-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #14346B, #1E4A8C);
+            border-radius: 4px 0 0 4px;
+        }
+
+        .trust-logo {
+            width: 44px; height: 44px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; font-weight: 800; color: #fff;
+            margin: 0 auto 4px;
+        }
+
+        .review-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 14px 14px;
+            border: 1px solid #eef0f4;
+            width: 300px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(11,31,58,0.03);
+        }
+        .review-card .stars { font-size: 13px; color: #C9A227; margin-bottom: 4px; }
+        .review-card p { font-size: 13px; line-height: 1.5; color: #4b5563; margin-bottom: 6px; }
+        .review-card .name { font-size: 13px; font-weight: 600; }
+        .review-card .dept { font-size: 11px; color: #9ca3af; }
+        .review-row { overflow: hidden; }
+        .review-track { display: flex; gap: 12px; width: max-content; }
+        .marquee-slow { animation: scrollSlow 32s linear infinite; }
+        .marquee-fast { animation: scrollFast 18s linear infinite; }
+        @keyframes scrollSlow { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        @keyframes scrollFast { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        .teacher-thumb {
+            text-align: center;
+            padding: 6px 2px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        .teacher-thumb.active { background: #F0F4FA; border-color: #14346B; }
+        .teacher-thumb.active .t-avatar { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #C9A227; }
+        .t-avatar {
+            width: 42px; height: 58px;
+            border-radius: 9px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; font-weight: 700; color: #fff;
+            margin: 0 auto 3px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #0B1F3A;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+        }
+        .section-title-wrap { text-align: center; }
+        .section-title-wrap::after {
+            content: '';
+            display: block;
+            width: 32px;
+            height: 3px;
+            background: linear-gradient(90deg, #C9A227, #E8D083);
+            border-radius: 2px;
+            margin: 6px auto 0;
+        }
+        .section-sub { font-size: 12px; color: #9ca3af; text-align: center; margin-top: 6px; }
+
+        /* 底部通知横向无缝轮播 */
+        #mNotifyText {
+            display: inline-block;
+            white-space: nowrap;
+            line-height: 1.4em;
+            font-size: 11px;
+            color: #fff;
+        }
+        .notify-wrapper {
+            overflow: hidden;
+            position: relative;
+            height: 1.4em;
+            flex: 1;
+            min-width: 0;
+            line-height: 1.4em;
+        }
+
+        /* 品牌横向循环滚动 */
+        .brand-track { display: flex; gap: 16px; width: max-content; }
+        .brand-scroll-left { animation: brandScrollLeft 20s linear infinite; }
+        .brand-scroll-right { animation: brandScrollRight 20s linear infinite; }
+        @keyframes brandScrollLeft { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        @keyframes brandScrollRight { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
+        .brand-item { display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0; }
+
+        /* 照片横向循环滚动 */
+        .photo-scroll-wrap { overflow: hidden; }
+        .photo-scroll-track { display: flex; gap: 10px; width: max-content; }
+        .photo-scroll-left { animation: photoScrollLeft 25s linear infinite; }
+        .photo-scroll-right { animation: photoScrollRight 25s linear infinite; }
+        @keyframes photoScrollLeft { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        @keyframes photoScrollRight { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
+        .photo-scroll-card {
+            width: 260px;
+            flex-shrink: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+            position: relative;
+            aspect-ratio: 16/9;
+        }
+
+        /* 优势卡片 */
+        .feature-icon-box {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- 手机外框 -->
+    <div class="phone" id="phoneFrame">
+        <!-- 刘海 -->
+        <div class="notch"><div class="camera"></div><div class="speaker"></div></div>
+
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <span class="time" id="statusTime">9:41</span>
+            <div class="status-icons">
+                <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+            </div>
+        </div>
+
+        <!-- 可滚动内容 -->
+        <div class="scroll-area" id="scrollArea">
+            <!-- Hero -->
+            <section class="gradient-hero relative overflow-hidden">
+                <div class="px-4 py-5 relative z-10">
+                    <!-- 品牌 Logo 融入 Hero -->
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0" style="background: linear-gradient(135deg, #C9A227, #A8851E);">
+                            <span class="text-white font-extrabold text-sm">采</span>
+                        </div>
+                        <span class="text-white font-bold text-base tracking-wide">采乐会</span>
+                        <span class="text-gold-light text-[10px] ml-auto bg-white/10 px-2 py-0.5 rounded-full border border-white/15">招标采购培训</span>
+                    </div>
+                    <!-- 标签 -->
+                    <div class="inline-flex items-center gap-1 bg-white/10 backdrop-blur text-white text-[10px] px-2.5 py-1 rounded-full mb-2.5 border border-white/15">
+                        <span class="w-1 h-1 bg-gold rounded-full"></span>
+                        2026年度 · 招标采购领域TOP1培训品牌
+                    </div>
+                    <!-- 标题 -->
+                    <h1 class="text-xl font-extrabold text-white mb-2 leading-snug">招标采购全流程实战培训<br><span style="color:#E8D083;">学完就能用，用了就有效</span></h1>
+                    <p class="text-xs text-white/65 mb-3 leading-relaxed">覆盖招标、投标、评标、合同管理全链条。50+行业专家亲授，12,860+学员验证。</p>
+                    <div class="flex flex-wrap gap-1.5 mb-3">
+                        <span class="text-[10px] bg-white/8 rounded-lg px-2 py-0.5 border border-white/10 text-white/80">★ 4.9/5.0</span>
+                        <span class="text-[10px] bg-white/8 rounded-lg px-2 py-0.5 border border-white/10 text-white/80">✓ 12,860+ 学员</span>
+                        <span class="text-[10px] bg-white/8 rounded-lg px-2 py-0.5 border border-white/10 text-white/80">▲ 证书颁发</span>
+                    </div>
+
+                    <!-- 报名表单 -->
+                    <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
+                        <div class="px-4 py-2.5 text-center text-white" style="background: linear-gradient(90deg, #0B1F3A, #14346B);">
+                            <div class="flex items-center justify-center gap-1 text-sm font-bold">
+                                <span>本期报名截止</span>
+                                <span class="countdown-num" id="urg-days">02</span><span class="text-white/60 text-[10px]">天</span>
+                                <span class="countdown-num" id="urg-hours">18</span><span class="text-white/60 text-[10px]">时</span>
+                                <span class="countdown-num" id="urg-mins">45</span><span class="text-white/60 text-[10px]">分</span>
+                                <span class="countdown-num" id="urg-secs">30</span><span class="text-white/60 text-[10px]">秒</span>
+                            </div>
+                        </div>
+                        <div class="p-3.5">
+                            <div class="mb-2.5">
+                                <div class="flex items-center gap-1.5">
+                                    <div class="w-1 h-4 rounded-full" style="background:#C9A227;"></div>
+                                    <h3 class="text-sm font-bold text-gray-900">免费获取培训方案</h3>
+                                </div>
+                                <p class="text-[11px] text-gray-500 mt-0.5 pl-2.5">填写信息，顾问30分钟内联系您</p>
+                            </div>
+                            <form id="regForm">
+                                <div class="space-y-2.5">
+                                    <input type="text" class="form-input" placeholder="您的姓名 *" required id="regName">
+                                    <input type="tel" class="form-input" placeholder="手机号码 *" required id="regPhone">
+                                    <input type="text" class="form-input" placeholder="公司/单位名称">
+                                    <input type="text" class="form-input" placeholder="参会人数" id="regPeople">
+                                    <select class="form-input text-gray-500">
+                                        <option value="">感兴趣的课程方向</option>
+                                        <option>满分投标文件编制</option>
+                                        <option>招投标法规应用</option>
+                                        <option>异议投诉处理技巧</option>
+                                        <option>一击即中的投标技巧</option>
+                                        <option>内训定制课程</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn-cta mt-2.5" id="submitBtn">立即免费咨询</button>
+                            </form>
+                            <div id="regSuccess" class="hidden text-center py-4">
+                                <div class="w-11 h-11 rounded-full flex items-center justify-center mx-auto mb-1.5" style="background:#E8F5E9;">
+                                    <svg class="w-5 h-5" style="color:#2E7D32;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                </div>
+                                <h4 class="text-sm font-bold text-gray-900 mb-0.5">提交成功！</h4>
+                                <p class="text-xs text-gray-500">顾问将在 <strong style="color:#14346B;">30分钟内</strong> 联系您</p>
+                                <div class="mt-3 rounded-lg px-3 py-2 border" style="background:linear-gradient(90deg, rgba(11,31,58,0.04), rgba(201,162,39,0.06)); border-color:rgba(201,162,39,0.2);">
+                                    <p class="text-xs text-gray-500 text-center">全国服务热线：<a href="tel:13522890575" class="font-bold text-base no-underline" style="color:#C9A227;">13522890575</a><span class="text-gray-400">（微信同号）</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 痛点 -->
+            <section class="px-4 pt-5 pb-1">
+                <div class="section-title-wrap mb-3">
+                    <h2 class="section-title">您是否正在面临这些困境？</h2>
+                    <p class="section-sub">超过 80% 的招标采购从业者都遇到过</p>
+                </div>
+                <div class="space-y-2">
+                    <div class="pain-card">
+                        <div class="flex items-start gap-2.5">
+                            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-sm flex-shrink-0" style="background:#EEF0F4; color:#14346B;">01</div>
+                            <div>
+                                <div class="text-sm font-bold text-gray-900 mb-0.5">政策法规不熟悉</div>
+                                <div class="text-xs text-gray-500 leading-relaxed">政策了解滞后，法规不熟悉，操作容易踩坑。一个环节出错，整个项目白忙。</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pain-card">
+                        <div class="flex items-start gap-2.5">
+                            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-sm flex-shrink-0" style="background:#EEF0F4; color:#14346B;">02</div>
+                            <div>
+                                <div class="text-sm font-bold text-gray-900 mb-0.5">投标文件总被废</div>
+                                <div class="text-xs text-gray-500 leading-relaxed">格式总错误、废标条款理解不够。辛辛苦苦做的标书，评审直接废标。</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pain-card">
+                        <div class="flex items-start gap-2.5">
+                            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-sm flex-shrink-0" style="background:#EEF0F4; color:#14346B;">03</div>
+                            <div>
+                                <div class="text-sm font-bold text-gray-900 mb-0.5">暗标风险难把控</div>
+                                <div class="text-xs text-gray-500 leading-relaxed">人员专业度不够，投标经验欠缺，无法有效识别项目的雷点，稍不留神就会进入别人事先设好的暗标雷区。</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pain-card">
+                        <div class="flex items-start gap-2.5">
+                            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-sm flex-shrink-0" style="background:#EEF0F4; color:#14346B;">04</div>
+                            <div>
+                                <div class="text-sm font-bold text-gray-900 mb-0.5">屡次投标就是不中</div>
+                                <div class="text-xs text-gray-500 leading-relaxed">无法有效利用自身优势，师夷长技，合理利用法规做到质疑有声，先发制人，突破自身屏障，实现翻盘逆袭。</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 方案引导 -->
+                <div class="rounded-xl p-4 text-white mt-2.5" style="background: linear-gradient(135deg, #0B1F3A, #14346B);">
+                    <div class="flex items-center gap-2.5 mb-2">
+                        <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 backdrop-blur" style="background:rgba(201,162,39,0.2);">
+                            <svg class="w-5 h-5" style="color:#E8D083;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                        </div>
+                        <div>
+                            <div class="text-base font-bold">采乐会 · 全流程实战培训</div>
+                            <div class="text-xs text-white/65">已有 12,860+ 学员验证有效</div>
+                        </div>
+                    </div>
+                    <button onclick="document.getElementById('scrollArea').querySelector('#regForm').scrollIntoView({behavior:'smooth'})" class="w-full font-bold text-sm py-2.5 rounded-lg border-0 cursor-pointer" style="background: linear-gradient(90deg, #C9A227, #E8D083); color:#0B1F3A;">立即咨询 →</button>
+                </div>
+            </section>
+
+            <!-- 课程 -->
+            <section class="px-4 pt-5 pb-0" id="coursesSec">
+                <div class="section-title-wrap mb-3">
+                    <h2 class="section-title">王牌课程</h2>
+                    <p class="section-sub">学完就能用，用了就有效</p>
+                </div>
+                <div class="space-y-3">
+                    <!-- 课程1 -->
+                    <div class="course-card" style="border-left:3px solid #14346B;">
+                        <div class="p-3.5">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <h3 class="text-sm font-bold text-gray-900 flex-1 pr-2">满分投标文件编制实战训练营</h3>
+                                <span class="course-tag whitespace-nowrap" style="background:#FFF8E8; color:#A8851E;">热报</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                                <span class="flex items-center gap-0.5"><svg class="w-3.5 h-3.5" style="color:#14346B;" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>资深评标专家主讲</span>
+                                <span>2天集训</span>
+                                <span>含证书</span>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 mb-2">
+                                <span class="text-[10px] px-2 py-0.5 rounded-full" style="background:#EEF2F8; color:#14346B;">投标专员</span>
+                                <span class="text-[10px] px-2 py-0.5 rounded-full" style="background:#EEF2F8; color:#14346B;">商务经理</span>
+                            </div>
+                            <div class="text-xs text-gray-600 leading-relaxed mb-2.5 pl-2.5" style="border-left:2px solid #C9A227;">
+                                <span class="font-medium text-gray-700">你将收获：</span> 零废标编制要点 · 评分标准拆解策略 · 10+行业投标模板
+                            </div>
+                            <button onclick="document.getElementById('scrollArea').querySelector('#regForm').scrollIntoView({behavior:'smooth'})" class="w-full py-2 rounded-lg text-sm font-semibold transition cursor-pointer" style="border:1px solid #14346B; color:#14346B; background:rgba(20,52,107,0.04);">立即报名 →</button>
+                        </div>
+                    </div>
+                    <!-- 课程2 -->
+                    <div class="course-card" style="border-left:3px solid #14346B;">
+                        <div class="p-3.5">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <h3 class="text-sm font-bold text-gray-900 flex-1 pr-2">招投标法规精准应用与合规实务</h3>
+                                <span class="course-tag whitespace-nowrap" style="background:#FFF8E8; color:#A8851E;">新课</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                                <span class="flex items-center gap-0.5"><svg class="w-3.5 h-3.5" style="color:#14346B;" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>资深招标师主讲</span>
+                                <span>2天集训</span>
+                                <span>含证书</span>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 mb-2">
+                                <span class="text-[10px] px-2 py-0.5 rounded-full" style="background:#EEF2F8; color:#14346B;">法务人员</span>
+                                <span class="text-[10px] px-2 py-0.5 rounded-full" style="background:#EEF2F8; color:#14346B;">合规主管</span>
+                            </div>
+                            <div class="text-xs text-gray-600 leading-relaxed mb-2.5 pl-2.5" style="border-left:2px solid #C9A227;">
+                                <span class="font-medium text-gray-700">你将收获：</span> 吃透招标投标法 · 合规审查要点 · 15个真实案例
+                            </div>
+                            <button onclick="document.getElementById('scrollArea').querySelector('#regForm').scrollIntoView({behavior:'smooth'})" class="w-full py-2 rounded-lg text-sm font-semibold transition cursor-pointer" style="border:1px solid #14346B; color:#14346B; background:rgba(20,52,107,0.04);">立即报名 →</button>
+                        </div>
+                    </div>
+                    <!-- 课程3 -->
+                    <div class="course-card" style="border-left:3px solid #14346B;">
+                        <div class="p-3.5">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <h3 class="text-sm font-bold text-gray-900 flex-1 pr-2">异议与投诉处理技巧提升班</h3>
+                                <span class="course-tag whitespace-nowrap" style="background:#FFF8E8; color:#A8851E;">热报</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                                <span class="flex items-center gap-0.5"><svg class="w-3.5 h-3.5" style="color:#14346B;" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>资深招标师主讲</span>
+                                <span>2天集训</span>
+                                <span>含证书</span>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 mb-2">
+                                <span class="text-[10px] px-2 py-0.5 rounded-full" style="background:#EEF2F8; color:#14346B;">投标人</span>
+                                <span class="text-[10px] px-2 py-0.5 rounded-full" style="background:#EEF2F8; color:#14346B;">项目经理</span>
+                            </div>
+                            <div class="text-xs text-gray-600 leading-relaxed mb-2.5 pl-2.5" style="border-left:2px solid #C9A227;">
+                                <span class="font-medium text-gray-700">你将收获：</span> 投诉时效流程 · 投诉书撰写技巧 · 8个翻盘案例
+                            </div>
+                            <button onclick="document.getElementById('scrollArea').querySelector('#regForm').scrollIntoView({behavior:'smooth'})" class="w-full py-2 rounded-lg text-sm font-semibold transition cursor-pointer" style="border:1px solid #14346B; color:#14346B; background:rgba(20,52,107,0.04);">立即报名 →</button>
+                        </div>
+                    </div>
+                    <!-- 课程4 -->
+                    <div class="course-card" style="border-left:3px solid #14346B;">
+                        <div class="p-3.5">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <h3 class="text-sm font-bold text-gray-900 flex-1 pr-2">一击即中的投标策略与实战技巧</h3>
+                                <span class="course-tag whitespace-nowrap" style="background:#14346B; color:#E8D083;">王牌课</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                                <span class="flex items-center gap-0.5"><svg class="w-3.5 h-3.5" style="color:#14346B;" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>中标率90%+专家主讲</span>
+                                <span>2天集训</span>
+                                <span>含证书</span>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 mb-2">
+                                <span class="text-[10px] px-2 py-0.5 rounded-full" style="background:#EEF2F8; color:#14346B;">销售总监</span>
+                                <span class="text-[10px] px-2 py-0.5 rounded-full" style="background:#EEF2F8; color:#14346B;">投标负责人</span>
+                            </div>
+                            <div class="text-xs text-gray-600 leading-relaxed mb-2.5 pl-2.5" style="border-left:2px solid #C9A227;">
+                                <span class="font-medium text-gray-700">你将收获：</span> 情报分析报价 · 评标心理博弈 · 全流程SOP工具包
+                            </div>
+                            <button onclick="document.getElementById('scrollArea').querySelector('#regForm').scrollIntoView({behavior:'smooth'})" class="w-full py-2 rounded-lg text-sm font-semibold transition cursor-pointer" style="border:1px solid #14346B; color:#14346B; background:rgba(20,52,107,0.04);">立即报名 →</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 信任背书 -->
+            <section class="px-4 pt-5">
+                <div class="bg-white rounded-xl py-4 px-3 border border-gray-100 text-center" style="box-shadow: 0 2px 12px rgba(11,31,58,0.04);">
+                    <div class="text-[11px] text-gray-400 mb-2.5 font-medium tracking-wider">他们信赖采乐会</div>
+                <!-- 第一行：向左滚动 -->
+                <div class="overflow-hidden mb-2">
+                    <div class="brand-track brand-scroll-left">
+                        <div class="brand-item"><div class="w-[52px] h-[52px] rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-md" style="background:linear-gradient(135deg, #14346B, #1E4A8C);">盛隆</div><span class="text-[10px] text-gray-500">盛隆电气(北京)</span></div>
+                        <div class="brand-item"><div class="w-[52px] h-[52px] rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-md" style="background:linear-gradient(135deg, #14346B, #1E4A8C);">海丽雅</div><span class="text-[10px] text-gray-500">青岛海丽雅集团</span></div>
+                        <div class="brand-item"><div class="w-[52px] h-[52px] rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-md" style="background:linear-gradient(135deg, #14346B, #1E4A8C);">好心情</div><span class="text-[10px] text-gray-500">好心情健康产业</span></div>
+                        <div class="brand-item"><div class="w-[52px] h-[52px] rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-md" style="background:linear-gradient(135deg, #14346B, #1E4A8C);">啸驰</div><span class="text-[10px] text-gray-500">啸驰电气股份</span></div>
+                        <div class="brand-item"><div class="w-[52px] h-[52px] rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-md" style="background:linear-gradient(135deg, #14346B, #1E4A8C);">阳光</div><span class="text-[10px] text-gray-500">阳光财产保险</span></div>
+                        <!-- 克隆 -->
+                        <div class="brand-item"><div class="w-[52px] h-[52px] rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-md" style="background:linear-gradient(135deg, #14346B, #1E4A8C);">盛隆</div><span class="text-[10px] text-gray-500">盛隆电气(北京)</span></div>
+                        <div class="brand-item"><div class="w-[52px] h-[52px] rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-md" style="background:linear-gradient(135deg, #14346B, #1E4A8C);">海丽雅</div><span class="text-[10px] text-gray-500">青岛海丽雅集团</span></div>
+                        <div class="brand-item"><div class="w-[52px] h-[52px] rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-md" style="background:linear-gradient(135deg, #14346B, #1E4A8C);">好心情</div><span class="text-[10px] text-gray-500">好心情健康产业</span></div>
+                        <div class="brand-item"><div class="w-[52px] h-[52px] rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-md" style="background:linear-gradient(135deg, #14346B, #1E4A8C);">啸驰</div><span class="text-[10px] text-gray-500">啸驰电气股份</span></div>
+                        <div class="brand-item"><div class="w-[52px] h-[52px] rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-md" style="background:linear-gradient(135deg, #14346B, #1E4A8C);">阳光</div><span class="text-[10px] text-gray-500">阳光财产保险</span></div>
+                    </div>
+                </div>
+                <!-- 第二行：向右滚动 -->
+                <div class="overflow-hidden">
+                    <div class="brand-track brand-scroll-right">
+                        <div class="brand-item"><div class="w-[52px] h-[52px] rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-md" style="background:linear-gradient(135deg, #0B1F3A, #14346B);">贝壳</div><span class="text-[10px] text-gray-500">贝壳找房(北京)</span></div>
+                        <div class="brand-item"><div class="w-[52px] h-[52px] rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-md" style="background:linear-gradient(135deg, #0B1F3A, #14346B);">人寿</div><span class="text-[10px] text-gray-500">中国人寿财产保险</span></div>
+                        <div class="brand-item"><div class="w-[52px] h-[52px] rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-md" style="background:linear-gradient(135deg, #0B1F3A, #14346B);">联通</div><span class="text-[10px] text-gray-500">联通(江苏)产业互联网</span></div>
+                        <div class="brand-item"><div class="w-[52px] h-[52px] rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-md" style="background:linear-gradient(135deg, #0B1F3A, #14346B);">康护</div><span class="text-[10px] text-gray-500">泰心康护(天津)</span></div>
+                        <div class="brand-item"><div class="w-[52px] h-[52px] rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-md" style="background:linear-gradient(135deg, #0B1F3A, #14346B);">一机</div><span class="text-[10px] text-gray-500">宁波一机阀门制造</span></div>
+                        <!-- 克隆 -->
+                        <div class="brand-item"><div class="w-[52px] h-[52px] rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-md" style="background:linear-gradient(135deg, #0B1F3A, #14346B);">贝壳</div><span class="text-[10px] text-gray-500">贝壳找房(北京)</span></div>
+                        <div class="brand-item"><div class="w-[52px] h-[52px] rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-md" style="background:linear-gradient(135deg, #0B1F3A, #14346B);">人寿</div><span class="text-[10px] text-gray-500">中国人寿财产保险</span></div>
+                        <div class="brand-item"><div class="w-[52px] h-[52px] rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-md" style="background:linear-gradient(135deg, #0B1F3A, #14346B);">联通</div><span class="text-[10px] text-gray-500">联通(江苏)产业互联网</span></div>
+                        <div class="brand-item"><div class="w-[52px] h-[52px] rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-md" style="background:linear-gradient(135deg, #0B1F3A, #14346B);">康护</div><span class="text-[10px] text-gray-500">泰心康护(天津)</span></div>
+                        <div class="brand-item"><div class="w-[52px] h-[52px] rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-md" style="background:linear-gradient(135deg, #0B1F3A, #14346B);">一机</div><span class="text-[10px] text-gray-500">宁波一机阀门制造</span></div>
+                    </div>
+                </div>
+                </div>
+            </section>
+
+            <!-- 专家团队 -->
+            <section class="px-4 pt-5" id="teamSec">
+                <div class="section-title-wrap mb-3">
+                    <h2 class="section-title">实战派名师团队</h2>
+                    <p class="section-sub">来自一线的专家，教你能落地的真本事</p>
+                </div>
+                <!-- 头像 2行3列网格 -->
+                <div class="grid grid-cols-3 gap-x-2 gap-y-1.5" id="teacherThumbs">
+                        <div class="teacher-thumb active" data-index="0"><div class="t-avatar" style="background:linear-gradient(135deg, #C9A227, #A8851E);">陈</div><div class="text-xs font-bold text-gray-800">陈伟</div><div class="text-[10px] text-gray-400">十佳讲师</div></div>
+                        <div class="teacher-thumb" data-index="1"><div class="t-avatar" style="background:linear-gradient(135deg, #14346B, #1E4A8C);">杜</div><div class="text-xs font-bold text-gray-800">杜静</div><div class="text-[10px] text-gray-400">招标培训专家</div></div>
+                        <div class="teacher-thumb" data-index="2"><div class="t-avatar" style="background:linear-gradient(135deg, #1E4A8C, #2D6BBD);">阁</div><div class="text-xs font-bold text-gray-800">阁策</div><div class="text-[10px] text-gray-400">评标专家</div></div>
+                        <div class="teacher-thumb" data-index="3"><div class="t-avatar" style="background:linear-gradient(135deg, #0B1F3A, #14346B);">赵</div><div class="text-xs font-bold text-gray-800">赵中翔</div><div class="text-[10px] text-gray-400">招投标实战专家</div></div>
+                        <div class="teacher-thumb" data-index="4"><div class="t-avatar" style="background:linear-gradient(135deg, #2D6BBD, #4A90E2);">李</div><div class="text-xs font-bold text-gray-800">李峣</div><div class="text-[10px] text-gray-400">首席专家</div></div>
+                        <div class="teacher-thumb" data-index="5"><div class="t-avatar" style="background:linear-gradient(135deg, #C9A227, #E8D083);">何</div><div class="text-xs font-bold text-gray-800">何朔</div><div class="text-[10px] text-gray-400">招投标实战专家</div></div>
+                    </div>
+                <!-- 详情卡片 - 横向布局 -->
+                <div class="bg-white rounded-xl border border-gray-100 overflow-hidden mt-2" id="teacherDetail" style="box-shadow: 0 2px 12px rgba(11,31,58,0.04);">
+                    <div class="p-3.5" id="teacherPortraitWrap" style="background:linear-gradient(135deg, #F5EED6, #FAF5E6)">
+                        <div class="flex items-start gap-3">
+                            <div class="w-12 h-16 rounded-xl flex items-center justify-center text-xl font-bold text-white flex-shrink-0" style="background:linear-gradient(135deg, #C9A227, #A8851E);" id="teacherAvatarLetter">陈</div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center gap-1.5 mb-0.5">
+                                    <h3 class="text-sm font-bold text-gray-900" id="tName">陈伟</h3>
+                                    <span class="px-1.5 py-0.5 text-[9px] font-semibold rounded-full whitespace-nowrap" id="tTag" style="background:#FFF8E8; color:#A8851E;">十佳讲师</span>
+                                </div>
+                                <p class="text-xs font-medium text-gray-700 leading-tight" id="tTitle1">中国招投标行业十佳讲师</p>
+                                <p class="text-[10px] text-gray-500 leading-tight" id="tTitle2">发改委培训中心特聘讲师</p>
+                                <div id="tExtraTitles"></div>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-gray-600 leading-relaxed mt-2 mb-2.5" id="tDesc">发改委培训中心特聘讲师，中国招投标行业十佳讲师，中国企业联合会培训委员执委。招投标实战学院院长。</p>
+                        <div class="flex gap-4 border-t border-gray-200/60 pt-2.5" id="tStats">
+                            <div class="text-center flex-1"><div class="text-sm font-bold" style="color:#C9A227;">18年</div><div class="text-[9px] text-gray-400">培训经验</div></div>
+                            <div class="text-center flex-1"><div class="text-sm font-bold" style="color:#C9A227;">2000+</div><div class="text-[9px] text-gray-400">培训场次</div></div>
+                            <div class="text-center flex-1"><div class="text-sm font-bold" style="color:#C9A227;">98%</div><div class="text-[9px] text-gray-400">满意率</div></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 培训现场实拍 -->
+            <section class="px-4 pt-5 mb-2">
+                <div class="section-title-wrap mb-3">
+                    <h2 class="section-title">培训现场实拍</h2>
+                    <p class="section-sub">累计举办 200+ 场线下培训</p>
+                </div>
+                <!-- 课程班合影：横向循环 -->
+                <div class="text-xs font-semibold text-gray-600 mb-2">课程班合影</div>
+                <div class="photo-scroll-wrap mb-3">
+                    <div class="photo-scroll-track photo-scroll-left">
+                        <div class="photo-scroll-card" >
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><circle cx="12" cy="13" r="3" stroke-width="1.5"/></svg>
+                                <span class="text-xs">课程合影</span>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-1.5" style="background:linear-gradient(to top, rgba(11,31,58,0.7), transparent);">
+                                <span class="text-white text-[10px] font-medium">投标实务操作班合影</span>
+                            </div>
+                        </div>
+                        <div class="photo-scroll-card" >
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><circle cx="12" cy="13" r="3" stroke-width="1.5"/></svg>
+                                <span class="text-xs">课程合影</span>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-1.5" style="background:linear-gradient(to top, rgba(11,31,58,0.7), transparent);">
+                                <span class="text-white text-[10px] font-medium">政府采购专题培训合影</span>
+                            </div>
+                        </div>
+                        <div class="photo-scroll-card" >
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><circle cx="12" cy="13" r="3" stroke-width="1.5"/></svg>
+                                <span class="text-xs">课程合影</span>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-1.5" style="background:linear-gradient(to top, rgba(11,31,58,0.7), transparent);">
+                                <span class="text-white text-[10px] font-medium">招标文件编制实务班合影</span>
+                            </div>
+                        </div>
+                        <div class="photo-scroll-card" >
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><circle cx="12" cy="13" r="3" stroke-width="1.5"/></svg>
+                                <span class="text-xs">课程合影</span>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-1.5" style="background:linear-gradient(to top, rgba(11,31,58,0.7), transparent);">
+                                <span class="text-white text-[10px] font-medium">评标专家培训班合影</span>
+                            </div>
+                        </div>
+                        <!-- 克隆 -->
+                        <div class="photo-scroll-card" >
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><circle cx="12" cy="13" r="3" stroke-width="1.5"/></svg>
+                                <span class="text-xs">课程合影</span>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-1.5" style="background:linear-gradient(to top, rgba(11,31,58,0.7), transparent);">
+                                <span class="text-white text-[10px] font-medium">投标实务操作班合影</span>
+                            </div>
+                        </div>
+                        <div class="photo-scroll-card" >
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><circle cx="12" cy="13" r="3" stroke-width="1.5"/></svg>
+                                <span class="text-xs">课程合影</span>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-1.5" style="background:linear-gradient(to top, rgba(11,31,58,0.7), transparent);">
+                                <span class="text-white text-[10px] font-medium">政府采购专题培训合影</span>
+                            </div>
+                        </div>
+                        <div class="photo-scroll-card" >
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><circle cx="12" cy="13" r="3" stroke-width="1.5"/></svg>
+                                <span class="text-xs">课程合影</span>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-1.5" style="background:linear-gradient(to top, rgba(11,31,58,0.7), transparent);">
+                                <span class="text-white text-[10px] font-medium">招标文件编制实务班合影</span>
+                            </div>
+                        </div>
+                        <div class="photo-scroll-card" >
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><circle cx="12" cy="13" r="3" stroke-width="1.5"/></svg>
+                                <span class="text-xs">课程合影</span>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-1.5" style="background:linear-gradient(to top, rgba(11,31,58,0.7), transparent);">
+                                <span class="text-white text-[10px] font-medium">评标专家培训班合影</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 全国巡讲：横向循环 -->
+                <div class="text-xs font-semibold text-gray-600 mb-2">全国巡讲风采</div>
+                <div class="photo-scroll-wrap">
+                    <div class="photo-scroll-track photo-scroll-right">
+                        <div class="photo-scroll-card" >
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                <span class="text-xs">巡讲现场</span>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-1.5" style="background:linear-gradient(to top, rgba(11,31,58,0.7), transparent);">
+                                <span class="text-white text-[10px] font-medium">全国巡讲 · 北京站</span>
+                            </div>
+                        </div>
+                        <div class="photo-scroll-card" >
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                <span class="text-xs">巡讲现场</span>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-1.5" style="background:linear-gradient(to top, rgba(11,31,58,0.7), transparent);">
+                                <span class="text-white text-[10px] font-medium">全国巡讲 · 上海站</span>
+                            </div>
+                        </div>
+                        <div class="photo-scroll-card" >
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                <span class="text-xs">巡讲现场</span>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-1.5" style="background:linear-gradient(to top, rgba(11,31,58,0.7), transparent);">
+                                <span class="text-white text-[10px] font-medium">全国巡讲 · 南京站</span>
+                            </div>
+                        </div>
+                        <div class="photo-scroll-card" >
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                <span class="text-xs">巡讲现场</span>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-1.5" style="background:linear-gradient(to top, rgba(11,31,58,0.7), transparent);">
+                                <span class="text-white text-[10px] font-medium">全国巡讲 · 广州站</span>
+                            </div>
+                        </div>
+                        <!-- 克隆 -->
+                        <div class="photo-scroll-card" >
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                <span class="text-xs">巡讲现场</span>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-1.5" style="background:linear-gradient(to top, rgba(11,31,58,0.7), transparent);">
+                                <span class="text-white text-[10px] font-medium">全国巡讲 · 北京站</span>
+                            </div>
+                        </div>
+                        <div class="photo-scroll-card" >
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                <span class="text-xs">巡讲现场</span>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-1.5" style="background:linear-gradient(to top, rgba(11,31,58,0.7), transparent);">
+                                <span class="text-white text-[10px] font-medium">全国巡讲 · 上海站</span>
+                            </div>
+                        </div>
+                        <div class="photo-scroll-card" >
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                <span class="text-xs">巡讲现场</span>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-1.5" style="background:linear-gradient(to top, rgba(11,31,58,0.7), transparent);">
+                                <span class="text-white text-[10px] font-medium">全国巡讲 · 南京站</span>
+                            </div>
+                        </div>
+                        <div class="photo-scroll-card" >
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                <span class="text-xs">巡讲现场</span>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-1.5" style="background:linear-gradient(to top, rgba(11,31,58,0.7), transparent);">
+                                <span class="text-white text-[10px] font-medium">全国巡讲 · 广州站</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 学员评价 -->
+            <section class="px-4 pt-5" id="reviewsSec">
+                <div class="section-title-wrap mb-3">
+                    <h2 class="section-title">学员真实评价</h2>
+                    <p class="section-sub">来自 12,860+ 学员的真实反馈</p>
+                </div>
+                <!-- 第一行：慢速 -->
+                <div class="review-row mb-2.5">
+                    <div class="review-track marquee-slow">
+                        <!-- 原始 -->
+                        <div class="review-card"><div class="flex gap-3"><div class="w-1 flex-shrink-0 rounded-full" style="background:linear-gradient(180deg,#14346B,#1E4A8C)"></div><div class="flex-1 min-w-0"><div class="stars">★★★★★</div><p class="text-xs leading-relaxed text-gray-600 mb-2">"课程内容非常实用，老师用真实案例讲解，采购流程清晰多了，合规意识也提高了。"</p><div class="flex items-center gap-2"><div class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs" style="background:#EEF2F8; color:#14346B;">李</div><div><div class="text-xs font-semibold text-gray-800">李经理</div><div class="text-[10px] text-gray-400">某央企采购部</div></div></div></div></div></div>
+                        <div class="review-card"><div class="flex gap-3"><div class="w-1 flex-shrink-0 rounded-full" style="background:linear-gradient(180deg,#14346B,#1E4A8C)"></div><div class="flex-1 min-w-0"><div class="stars">★★★★★</div><p class="text-xs leading-relaxed text-gray-600 mb-2">"第二次参加采乐会的培训了，每次都有新收获。特别是招标文件编制那门课，中标率提高了30%。"</p><div class="flex items-center gap-2"><div class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs" style="background:#EEF2F8; color:#14346B;">王</div><div><div class="text-xs font-semibold text-gray-800">王主任</div><div class="text-[10px] text-gray-400">某市政单位</div></div></div></div></div></div>
+                        <div class="review-card"><div class="flex gap-3"><div class="w-1 flex-shrink-0 rounded-full" style="background:linear-gradient(180deg,#14346B,#1E4A8C)"></div><div class="flex-1 min-w-0"><div class="stars">★★★★★</div><p class="text-xs leading-relaxed text-gray-600 mb-2">"公司组织了30人参加内训定制，老师针对业务量身定制了课程，效果比通用课好太多了。"</p><div class="flex items-center gap-2"><div class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs" style="background:#EEF2F8; color:#14346B;">张</div><div><div class="text-xs font-semibold text-gray-800">张总监</div><div class="text-[10px] text-gray-400">某大型国企</div></div></div></div></div></div>
+                        <!-- 克隆 -->
+                        <div class="review-card"><div class="flex gap-3"><div class="w-1 flex-shrink-0 rounded-full" style="background:linear-gradient(180deg,#14346B,#1E4A8C)"></div><div class="flex-1 min-w-0"><div class="stars">★★★★★</div><p class="text-xs leading-relaxed text-gray-600 mb-2">"课程内容非常实用，老师用真实案例讲解，采购流程清晰多了，合规意识也提高了。"</p><div class="flex items-center gap-2"><div class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs" style="background:#EEF2F8; color:#14346B;">李</div><div><div class="text-xs font-semibold text-gray-800">李经理</div><div class="text-[10px] text-gray-400">某央企采购部</div></div></div></div></div></div>
+                        <div class="review-card"><div class="flex gap-3"><div class="w-1 flex-shrink-0 rounded-full" style="background:linear-gradient(180deg,#14346B,#1E4A8C)"></div><div class="flex-1 min-w-0"><div class="stars">★★★★★</div><p class="text-xs leading-relaxed text-gray-600 mb-2">"第二次参加采乐会的培训了，每次都有新收获。特别是招标文件编制那门课，中标率提高了30%。"</p><div class="flex items-center gap-2"><div class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs" style="background:#EEF2F8; color:#14346B;">王</div><div><div class="text-xs font-semibold text-gray-800">王主任</div><div class="text-[10px] text-gray-400">某市政单位</div></div></div></div></div></div>
+                        <div class="review-card"><div class="flex gap-3"><div class="w-1 flex-shrink-0 rounded-full" style="background:linear-gradient(180deg,#14346B,#1E4A8C)"></div><div class="flex-1 min-w-0"><div class="stars">★★★★★</div><p class="text-xs leading-relaxed text-gray-600 mb-2">"公司组织了30人参加内训定制，老师针对业务量身定制了课程，效果比通用课好太多了。"</p><div class="flex items-center gap-2"><div class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs" style="background:#EEF2F8; color:#14346B;">张</div><div><div class="text-xs font-semibold text-gray-800">张总监</div><div class="text-[10px] text-gray-400">某大型国企</div></div></div></div></div></div>
+                    </div>
+                </div>
+                <!-- 第二行：快速 -->
+                <div class="review-row">
+                    <div class="review-track marquee-fast">
+                        <!-- 原始 -->
+                        <div class="review-card"><div class="flex gap-3"><div class="w-1 flex-shrink-0 rounded-full" style="background:linear-gradient(180deg,#C9A227,#E8D083)"></div><div class="flex-1 min-w-0"><div class="stars">★★★★★</div><p class="text-xs leading-relaxed text-gray-600 mb-2">"作为新手小白，本来很忐忑。但课程从基础讲起，案例丰富，3天下来完全入门了。"</p><div class="flex items-center gap-2"><div class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs" style="background:#FFF8E8; color:#A8851E;">陈</div><div><div class="text-xs font-semibold text-gray-800">陈专员</div><div class="text-[10px] text-gray-400">某事业单位</div></div></div></div></div></div>
+                        <div class="review-card"><div class="flex gap-3"><div class="w-1 flex-shrink-0 rounded-full" style="background:linear-gradient(180deg,#C9A227,#E8D083)"></div><div class="flex-1 min-w-0"><div class="stars">★★★★★</div><p class="text-xs leading-relaxed text-gray-600 mb-2">"采购总监推荐我来学的，3天课程把招标全流程走了一遍，之前模糊的点全通了。"</p><div class="flex items-center gap-2"><div class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs" style="background:#FFF8E8; color:#A8851E;">刘</div><div><div class="text-xs font-semibold text-gray-800">刘主管</div><div class="text-[10px] text-gray-400">某上市公司采购部</div></div></div></div></div></div>
+                        <div class="review-card"><div class="flex gap-3"><div class="w-1 flex-shrink-0 rounded-full" style="background:linear-gradient(180deg,#C9A227,#E8D083)"></div><div class="flex-1 min-w-0"><div class="stars">★★★★★</div><p class="text-xs leading-relaxed text-gray-600 mb-2">"老师讲的投诉处理案例太精彩了，我们公司按照课程教的方法成功翻盘，挽回了几百万的损失。"</p><div class="flex items-center gap-2"><div class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs" style="background:#FFF8E8; color:#A8851E;">周</div><div><div class="text-xs font-semibold text-gray-800">周经理</div><div class="text-[10px] text-gray-400">某建筑企业</div></div></div></div></div></div>
+                        <!-- 克隆 -->
+                        <div class="review-card"><div class="flex gap-3"><div class="w-1 flex-shrink-0 rounded-full" style="background:linear-gradient(180deg,#C9A227,#E8D083)"></div><div class="flex-1 min-w-0"><div class="stars">★★★★★</div><p class="text-xs leading-relaxed text-gray-600 mb-2">"作为新手小白，本来很忐忑。但课程从基础讲起，案例丰富，3天下来完全入门了。"</p><div class="flex items-center gap-2"><div class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs" style="background:#FFF8E8; color:#A8851E;">陈</div><div><div class="text-xs font-semibold text-gray-800">陈专员</div><div class="text-[10px] text-gray-400">某事业单位</div></div></div></div></div></div>
+                        <div class="review-card"><div class="flex gap-3"><div class="w-1 flex-shrink-0 rounded-full" style="background:linear-gradient(180deg,#C9A227,#E8D083)"></div><div class="flex-1 min-w-0"><div class="stars">★★★★★</div><p class="text-xs leading-relaxed text-gray-600 mb-2">"采购总监推荐我来学的，3天课程把招标全流程走了一遍，之前模糊的点全通了。"</p><div class="flex items-center gap-2"><div class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs" style="background:#FFF8E8; color:#A8851E;">刘</div><div><div class="text-xs font-semibold text-gray-800">刘主管</div><div class="text-[10px] text-gray-400">某上市公司采购部</div></div></div></div></div></div>
+                        <div class="review-card"><div class="flex gap-3"><div class="w-1 flex-shrink-0 rounded-full" style="background:linear-gradient(180deg,#C9A227,#E8D083)"></div><div class="flex-1 min-w-0"><div class="stars">★★★★★</div><p class="text-xs leading-relaxed text-gray-600 mb-2">"老师讲的投诉处理案例太精彩了，我们公司按照课程教的方法成功翻盘，挽回了几百万的损失。"</p><div class="flex items-center gap-2"><div class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs" style="background:#FFF8E8; color:#A8851E;">周</div><div><div class="text-xs font-semibold text-gray-800">周经理</div><div class="text-[10px] text-gray-400">某建筑企业</div></div></div></div></div></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 为什么选择我们 -->
+            <section class="px-4 pt-5">
+                <div class="bg-white rounded-xl p-4 border border-gray-100" style="box-shadow: 0 2px 12px rgba(11,31,58,0.04);">
+                    <h2 class="text-sm font-bold text-gray-900 mb-3 text-center">为什么 12,860+ 学员选择采乐会？</h2>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="flex items-center gap-2.5"><div class="feature-icon-box" style="background:#EEF2F8;"><svg class="w-4 h-4" style="color:#14346B;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><div><div class="text-sm font-bold text-gray-800">实战为王</div><div class="text-[10px] text-gray-500">200+真实案例拆解</div></div></div>
+                        <div class="flex items-center gap-2.5"><div class="feature-icon-box" style="background:#EEF2F8;"><svg class="w-4 h-4" style="color:#14346B;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg></div><div><div class="text-sm font-bold text-gray-800">政策同步</div><div class="text-[10px] text-gray-500">紧跟最新法规</div></div></div>
+                        <div class="flex items-center gap-2.5"><div class="feature-icon-box" style="background:#FFF8E8;"><svg class="w-4 h-4" style="color:#A8851E;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div><div><div class="text-sm font-bold text-gray-800">专家亲授</div><div class="text-[10px] text-gray-500">50+行业一线专家</div></div></div>
+                        <div class="flex items-center gap-2.5"><div class="feature-icon-box" style="background:#FFF8E8;"><svg class="w-4 h-4" style="color:#A8851E;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg></div><div><div class="text-sm font-bold text-gray-800">证书权威</div><div class="text-[10px] text-gray-500">行业认可证书</div></div></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 底部信息 -->
+            <section class="px-4 pt-5 pb-3">
+                <div class="text-center text-[10px] text-gray-400 pt-3 border-t border-gray-200 leading-relaxed">
+                     <div class="rounded-lg px-3 py-2.5 border mb-2" style="background:linear-gradient(90deg, rgba(11,31,58,0.04), rgba(201,162,39,0.06)); border-color:rgba(201,162,39,0.2);">
+                         <p class="text-xs text-gray-500 text-center">全国服务热线：<a href="tel:13522890575" class="font-bold text-base no-underline" style="color:#C9A227;">13522890575</a><span class="text-gray-400">（微信同号）</span></p>
+                     </div>
+                    <p>京公网安备：11010802022993号</p>
+                    <p>京ICP备09044717号-2</p>
+                    <p>京ICP证070615号</p>
+                    <p class="pt-1 mt-1 border-t border-gray-200">版权所有©2006-2026 采招网</p>
+                    <p>(北京海诚通胜网络科技有限公司)</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- 底部报名横幅 -->
+        <div class="flex-shrink-0 text-white px-3 py-2.5 flex items-center gap-2" style="background: linear-gradient(90deg, #0B1F3A, #14346B);">
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-1.5 text-[11px] font-medium">
+                    <span class="flex-shrink-0 w-1.5 h-1.5 rounded-full" style="background:#C9A227;"></span>
+                    <div class="notify-wrapper">
+                        <span id="mNotifyText"></span>
+                    </div>
+                </div>
+                <div class="text-[9px] text-white/50 mt-0.5">现在咨询，免费获取培训方案</div>
+            </div>
+            <a href="javascript:void(0)" onclick="document.getElementById('scrollArea').scrollTo({top:0,behavior:'smooth'})" class="flex-shrink-0 font-bold text-xs px-5 py-2.5 rounded-lg no-underline shadow-lg" style="background:linear-gradient(90deg, #C9A227, #E8D083); color:#0B1F3A;">立即报名</a>
+        </div>
+
+        <!-- Home 指示条 -->
+        <div class="home-bar"></div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 状态栏时间
+        function updateTime() {
+            var d = new Date();
+            var h = d.getHours(), m = d.getMinutes();
+            document.getElementById('statusTime').textContent = h + ':' + String(m).padStart(2,'0');
+        }
+        updateTime();
+        setInterval(updateTime, 30000);
+
+        // 倒计时
+        var total = 2*86400+18*3600+45*60+30;
+        setInterval(function() {
+            if (total <= 0) return;
+            total--;
+            var d = Math.floor(total/86400), h = Math.floor((total%86400)/3600), m = Math.floor((total%3600)/60), s = total%60;
+            var pad = function(n){ return String(n).padStart(2,'0'); };
+            document.getElementById('urg-days').textContent = pad(d);
+            document.getElementById('urg-hours').textContent = pad(h);
+            document.getElementById('urg-mins').textContent = pad(m);
+            document.getElementById('urg-secs').textContent = pad(s);
+        }, 1000);
+
+        // 表单
+        document.getElementById('regForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var name = document.getElementById('regName').value.trim();
+            var phone = document.getElementById('regPhone').value.trim();
+            if (!name) { alert('请输入您的姓名'); return; }
+            if (!/^1[3-9]\d{9}$/.test(phone)) { alert('请输入正确的手机号'); return; }
+            var btn = document.getElementById('submitBtn');
+            btn.textContent = '提交中...';
+            btn.disabled = true;
+            setTimeout(function() {
+                document.getElementById('regForm').classList.add('hidden');
+                document.getElementById('regSuccess').classList.remove('hidden');
+                btn.textContent = '立即免费咨询';
+                btn.disabled = false;
+            }, 1200);
+        });
+
+        // 老师切换
+        (function() {
+            var teachers = [
+                { name:'陈伟', tag:'十佳讲师', title1:'中国招投标行业十佳讲师', title2:'发改委培训中心特聘讲师', desc:'发改委培训中心特聘讲师，中国招投标行业十佳讲师，中国企业联合会培训委员执委。招投标实战学院院长。', stats:[{n:'18年',l:'培训经验'},{n:'2000+',l:'培训场次'},{n:'98%',l:'满意率'}], avatarBg:'linear-gradient(135deg, #C9A227, #A8851E)', wrapBg:'linear-gradient(135deg, #F5EED6, #FAF5E6)' },
+                { name:'杜静', tag:'招标培训专家', title1:'著名招投标培训专家', title2:'国资委研究中心特聘讲师', desc:'著名招投标培训专家，国资委研究中心特聘讲师，北京大学、清华大学特邀教授，美国国际训练协会AITA职业资格认证讲师。', stats:[{n:'20年',l:'培训经验'},{n:'10000+',l:'培训学员'},{n:'95%',l:'满意率'}], avatarBg:'linear-gradient(135deg, #14346B, #1E4A8C)', wrapBg:'linear-gradient(135deg, #E8F0FA, #F0F5FC)' },
+                { name:'阁策', tag:'政府采购领域评标专家/律师', title1:'财政部政府采购评审专家', title2:'商务部机电产品国际招投标评标专家', desc:'9年评标专家经历，财政部、商务部、住建委、经信委、民航局、大型国企等多个专家库成员，曾参与上海市政府采购年度集中采购入围评审项目，共计参加评标项目超过500个，累计金额超过10亿元。', stats:[{n:'9年',l:'评标经验'},{n:'500+',l:'评标项目'},{n:'10亿+',l:'累计金额'}], avatarBg:'linear-gradient(135deg, #1E4A8C, #2D6BBD)', wrapBg:'linear-gradient(135deg, #E8F0FA, #F0F5FC)' },
+                { name:'赵中翔', tag:'招投标实战专家', title1:'国家注册招标师', title2:'美国ACI注册培训师', extraTitles:['华东理工大学理学硕士','政府采购信息报/中国投资协会/民航学院特聘讲师'], desc:'拥有15年企业一线招投标实践管理经验，多年来一直以专业招标从业人身份专注于招投标领域研究，具备了丰富的实战经验及系统思维能力，致力于最大化帮助企业实现项目采购效能的提升。15年间年均负责招标件数超过120个，接触投标人高达5000人次，经手招标项目超过1000个，累计中标金额100亿元以上，年均授课天数100天以上。', stats:[{n:'15年',l:'招投标管理实战经验'},{n:'1000+',l:'招标项目'},{n:'100亿+',l:'累计中标金额'}], avatarBg:'linear-gradient(135deg, #0B1F3A, #14346B)', wrapBg:'linear-gradient(135deg, #E8F0FA, #F0F5FC)' },
+                { name:'李峣', tag:'首席专家', title1:'发改委培训中心特聘讲师', title2:'中国采招网特聘首席专家', desc:'发改委培训中心特聘讲师，中国采招网特聘首席专家，大成律师事务所律师。精通招标投标法律法规。', stats:[{n:'15年',l:'法律经验'},{n:'500+',l:'培训场次'},{n:'98%',l:'满意率'}], avatarBg:'linear-gradient(135deg, #2D6BBD, #4A90E2)', wrapBg:'linear-gradient(135deg, #E8F0FA, #F0F5FC)' },
+                { name:'何朔', tag:'招投标实战专家', title1:'国家人资社保部（高级）招标采购师', title2:'国家工信部招标采购师（高级）', extraTitles:['国家工商总局企业合规师（高级）'], desc:'拥有15年招投标管理实战经验，擅长规范军政/企业招标流程、招投标谈判、企业招采、销售、审计监督等。专注合规高效采购团队建设与专业高质投标团队打造。', stats:[{n:'15年',l:'招投标管理实战经验'},{n:'军政/企采',l:'擅长领域'},{n:'96%+',l:'满意率'}], avatarBg:'linear-gradient(135deg, #C9A227, #E8D083)', wrapBg:'linear-gradient(135deg, #F5EED6, #FAF5E6)' }
+            ];
+            var thumbs = document.querySelectorAll('.teacher-thumb');
+            var wrap = document.getElementById('teacherPortraitWrap');
+            var avatarLetter = document.getElementById('teacherAvatarLetter');
+            var tName = document.getElementById('tName');
+            var tTag = document.getElementById('tTag');
+            var tTitle1 = document.getElementById('tTitle1');
+            var tTitle2 = document.getElementById('tTitle2');
+            var tDesc = document.getElementById('tDesc');
+            var tStats = document.getElementById('tStats');
+            function switchTeacher(idx) {
+                currentIdx = idx;
+                var t = teachers[idx];
+                for (var i = 0; i < thumbs.length; i++) thumbs[i].classList.toggle('active', parseInt(thumbs[i].getAttribute('data-index')) === idx);
+                wrap.style.background = t.wrapBg;
+                avatarLetter.style.background = t.avatarBg;
+                tName.textContent = t.name;
+                tTag.textContent = t.tag;
+                tTitle1.textContent = t.title1;
+                tTitle2.textContent = t.title2;
+                tDesc.textContent = t.desc;
+                var extraBox = document.getElementById('tExtraTitles');
+                var extraHtml = '';
+                if (t.extraTitles) {
+                    for (var e = 0; e < t.extraTitles.length; e++) {
+                        extraHtml += '<p class="text-[10px] text-gray-500 leading-tight">' + t.extraTitles[e] + '</p>';
+                    }
+                }
+                extraBox.innerHTML = extraHtml;
+                var html = '';
+                for (var s = 0; s < t.stats.length; s++) html += '<div class="text-center flex-1"><div class="text-sm font-bold" style="color:#C9A227;">' + t.stats[s].n + '</div><div class="text-[9px] text-gray-400">' + t.stats[s].l + '</div></div>';
+                tStats.innerHTML = html;
+            }
+            for (var i = 0; i < thumbs.length; i++) {
+                thumbs[i].addEventListener('click', function() {
+                    var idx = parseInt(this.getAttribute('data-index'));
+                    switchTeacher(idx);
+                    restartAutoPlay();
+                });
+            }
+            switchTeacher(0);
+
+            var currentIdx = 0;
+            var autoTimer = null;
+            function restartAutoPlay() {
+                if (autoTimer) clearInterval(autoTimer);
+                autoTimer = setInterval(function() {
+                    currentIdx = (currentIdx + 1) % teachers.length;
+                    switchTeacher(currentIdx);
+                }, 4000);
+            }
+            restartAutoPlay();
+        })();
+
+        // 底部通知无缝横向轮播
+        (function() {
+            try {
+                var notifyData = [
+                    {name:'赵总',company:'XXXX建筑企业',people:'7',phone:'177 XXXX 1542',time:'6'},
+                    {name:'王经理',company:'某央企建设集团',people:'3',phone:'138 XXXX 6789',time:'3'},
+                    {name:'张总监',company:'某大型国企',people:'5',phone:'159 XXXX 2345',time:'5'},
+                    {name:'李主任',company:'某市政工程公司',people:'2',phone:'186 XXXX 8901',time:'2'},
+                    {name:'刘主管',company:'某上市公司采购部',people:'4',phone:'135 XXXX 4567',time:'7'},
+                    {name:'陈专员',company:'某事业单位',people:'3',phone:'188 XXXX 3456',time:'4'},
+                    {name:'周经理',company:'某能源集团',people:'6',phone:'176 XXXX 7890',time:'8'}
+                ];
+                var mEl = document.getElementById("mNotifyText");
+                var wrap = mEl ? mEl.parentNode : null;
+                var scrollTimer = null;
+                var pos = 0;
+
+                function buildAllText() {
+                    var parts = [];
+                    for (var i = 0; i < notifyData.length; i++) {
+                        var d = notifyData[i];
+                        parts.push(d.name + "（" + d.company + "）" + d.people + "人 " + d.phone + " " + d.time + "分钟前报名了");
+                    }
+                    var single = parts.join("　　　　　");
+                    return single + "　　　　　" + single;
+                }
+
+                function startScroll() {
+                    if (scrollTimer) clearInterval(scrollTimer);
+                    var wrapWidth = wrap.offsetWidth;
+                    var textWidth = mEl.offsetWidth;
+                    var halfWidth = textWidth / 2;
+                    pos = wrapWidth;
+                    mEl.style.transform = 'translateX(' + pos + 'px)';
+                    scrollTimer = setInterval(function() {
+                        pos -= 1;
+                        mEl.style.transform = 'translateX(' + pos + 'px)';
+                        if (pos < -halfWidth) {
+                            pos = wrapWidth;
+                        }
+                    }, 16);
+                }
+
+                if (mEl && wrap) {
+                    mEl.textContent = buildAllText();
+                    if (document.readyState === 'complete') {
+                        startScroll();
+                    } else {
+                        window.addEventListener('load', startScroll);
+                    }
+                }
+            } catch(e) {}
+        })();
+    });
+    </script>
+</body>
+</html>

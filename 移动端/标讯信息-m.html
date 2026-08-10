@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>采招网 · 今日标讯（移动端演示）</title>
+<meta name="description" content="采招网移动端 H5 演示页：随机展示当天最新标讯 10-15 条，突出付费会员权益与立即开通入口。">
+
+<!-- Tailwind CDN（项目既有惯例，辅助布局） -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  /* shadcn 语义色 token 扩展（主色 #0D5CE0 / 重点色 #F59A23） */
+  tailwind.config = {
+    theme: { extend: {
+      colors: {
+        border:   "hsl(var(--border))",
+        input:    "hsl(var(--input))",
+        ring:     "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        primary: { DEFAULT: "hsl(var(--primary))", foreground: "hsl(var(--primary-foreground))" },
+        secondary: { DEFAULT: "hsl(var(--secondary))", foreground: "hsl(var(--secondary-foreground))" },
+        muted: { DEFAULT: "hsl(var(--muted))", foreground: "hsl(var(--muted-foreground))" },
+        accent: { DEFAULT: "hsl(var(--accent))", foreground: "hsl(var(--accent-foreground))" },
+        card: { DEFAULT: "hsl(var(--card))", foreground: "hsl(var(--card-foreground))" },
+        highlight: { DEFAULT: "hsl(var(--highlight))", foreground: "hsl(var(--highlight-foreground))" }
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)"
+      }
+    } }
+  };
+</script>
+
+<style>
+/* ===================== shadcn 风格设计 token ===================== */
+:root {
+  /* 主色 #0D5CE0 → hsl(218 89% 46.5%) */
+  --primary: 218 89% 46.5%;
+  --primary-foreground: 210 40% 98%;
+  /* 重点色 #F59A23 → hsl(34 75% 55%) */
+  --highlight: 34 75% 55%;
+  --highlight-foreground: 0 0% 100%;
+
+  --background: 218 30% 98%;
+  --foreground: 218 42% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 218 42% 11%;
+  --secondary: 218 46% 95%;
+  --secondary-foreground: 218 66% 32%;
+  --muted: 218 26% 95%;
+  --muted-foreground: 218 12% 45%;
+  --accent: 218 100% 96%;
+  --accent-foreground: 218 76% 30%;
+  --border: 218 24% 90%;
+  --input: 218 20% 88%;
+  --ring: 218 89% 46.5%;
+  --destructive: 0 72% 51%;
+  --radius: 0.75rem;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  background:
+    radial-gradient(1200px 800px at 15% -10%, hsl(218 89% 30%), transparent 60%),
+    radial-gradient(1000px 700px at 110% 10%, hsl(218 89% 20%), transparent 55%),
+    hsl(220 50% 8%);
+  color: hsl(var(--foreground));
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 16px 20px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ===================== 手机模型 ===================== */
+.phone {
+  width: 375px;
+  height: 812px;
+  background: hsl(0 0% 4%);
+  border-radius: 48px;
+  box-shadow:
+    0 0 0 2px hsl(220 30% 18%),
+    0 30px 80px rgba(0, 0, 0, 0.65);
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 刘海 */
+.notch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 30px;
+  background: hsl(0 0% 4%);
+  border-radius: 0 0 18px 18px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.notch .camera { width: 8px; height: 8px; background: hsl(220 12% 14%); border-radius: 50%; }
+.notch .speaker { width: 50px; height: 6px; background: hsl(220 12% 14%); border-radius: 3px; }
+
+/* 状态栏 */
+.status-bar {
+  height: 44px;
+  padding: 0 26px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-bottom: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: hsl(218 30% 15%);
+  background: hsl(var(--background));
+  position: relative;
+  z-index: 50;
+  flex-shrink: 0;
+}
+.status-bar .time { font-size: 15px; font-weight: 700; letter-spacing: .3px; }
+.status-icons { display: flex; align-items: center; gap: 5px; }
+.status-icons svg { width: 16px; height: 16px; fill: hsl(218 30% 15%); }
+
+/* 应用顶部导航 */
+.app-header {
+  background: hsl(var(--background));
+  padding: 10px 16px;
+  border-bottom: 1px solid hsl(var(--border));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.app-header .brand { display: flex; align-items: center; gap: 8px; }
+.logo-mark {
+  width: 30px; height: 30px;
+  background: linear-gradient(135deg, #0D5CE0, #3B82F6);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 800;
+  font-size: 14px;
+  box-shadow: 0 2px 8px hsl(218 89% 40% / .4);
+  flex-shrink: 0;
+}
+.brand-text { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
+.logo-text { font-size: 16px; font-weight: 800; color: hsl(218 70% 30%); }
+.logo-slogan {
+  font-size: 9.5px;
+  font-weight: 600;
+  color: hsl(var(--muted-foreground));
+  letter-spacing: .2px;
+  margin-top: 1px;
+  white-space: nowrap;
+}
+.header-actions { display: flex; align-items: center; gap: 6px; }
+.h-action {
+  width: 32px; height: 32px;
+  border-radius: 10px;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--card));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: hsl(var(--muted-foreground));
+  cursor: default;
+}
+.h-action svg { width: 16px; height: 16px; fill: none; stroke: currentColor; }
+
+/* 可滚动内容区 */
+.scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: hsl(var(--background));
+  scrollbar-width: none;
+}
+.scroll-area::-webkit-scrollbar { display: none; }
+
+/* ===================== 顶部会员权益横幅（重点橙） ===================== */
+.member-banner {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #F59A23 0%, #F97316 42%, #EF5B1C 100%);
+  padding: 16px 16px 14px;
+  color: #fff;
+}
+.member-banner::before {
+  content: "";
+  position: absolute;
+  top: -46px; right: -46px;
+  width: 150px; height: 150px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, .28), transparent 65%);
+  pointer-events: none;
+}
+.member-banner::after {
+  content: "";
+  position: absolute;
+  bottom: -70px; left: -30px;
+  width: 170px; height: 170px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, .16), transparent 62%);
+  pointer-events: none;
+}
+.mb-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .22);
+  border: 1px solid rgba(255, 255, 255, .35);
+  backdrop-filter: blur(4px);
+  position: relative;
+  z-index: 1;
+  margin-bottom: 8px;
+}
+.member-banner h2 {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: .5px;
+  position: relative;
+  z-index: 1;
+}
+.member-banner .mb-sub {
+  font-size: 11px;
+  color: rgba(255, 255, 255, .92);
+  margin-top: 2px;
+  position: relative;
+  z-index: 1;
+}
+.mb-benefits {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin: 11px 0 12px;
+  position: relative;
+  z-index: 1;
+}
+.mb-benefits li {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 6px 8px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, .16);
+  border: 1px solid rgba(255, 255, 255, .22);
+  line-height: 1.3;
+}
+.mb-btn {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: #fff;
+  color: #EF5B1C;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  cursor: default;
+  box-shadow: 0 6px 20px rgba(153, 47, 4, .35), inset 0 0 0 1px rgba(255, 255, 255, .5);
+}
+.mb-btn .arrow { font-size: 15px; }
+
+/* ===================== 今日标讯区头 ===================== */
+.list-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 10px;
+}
+.list-head .lh-l { display: flex; align-items: center; gap: 8px; }
+.list-head h3 { font-size: 15px; font-weight: 800; color: hsl(var(--card-foreground)); }
+.live-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: hsl(var(--destructive));
+  animation: pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 hsl(0 72% 51% / .5); }
+  70% { box-shadow: 0 0 0 6px hsl(0 72% 51% / 0); }
+  100% { box-shadow: 0 0 0 0 hsl(0 72% 51% / 0); }
+}
+.list-head .lh-count {
+  font-size: 10px;
+  font-weight: 700;
+  color: hsl(218 89% 45%);
+  background: hsl(218 100% 95%);
+  border: 1px solid hsl(218 89% 46% / .2);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+.list-head .lh-update { font-size: 10.5px; color: hsl(var(--muted-foreground)); }
+
+/* ===================== 标讯卡片 ===================== */
+.bis-list { padding: 0 12px 6px; display: flex; flex-direction: column; gap: 10px; }
+.bis-card {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 14px;
+  padding: 12px 13px 11px;
+  box-shadow: 0 1px 3px hsl(218 30% 45% / .06);
+  position: relative;
+}
+.bis-card::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 14px; bottom: 14px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: linear-gradient(180deg, #0D5CE0, #3B82F6);
+}
+.bis-head { display: flex; align-items: center; gap: 6px; margin-bottom: 7px; }
+.bis-tag {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: hsl(218 12% 45%);
+  background: hsl(218 14% 95%);
+  border: 1px solid hsl(var(--border));
+  border-radius: 6px;
+  padding: 2px 7px;
+}
+.cat-tag {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 6px;
+  padding: 2px 7px;
+  border: 1px solid transparent;
+}
+.cat-tag.c-blue   { color: hsl(218 89% 42%); background: hsl(218 100% 96%); border-color: hsl(218 89% 46% / .22); }
+.cat-tag.c-green  { color: hsl(150 60% 35%); background: hsl(150 70% 95%); border-color: hsl(150 60% 60% / .3); }
+.cat-tag.c-orange { color: hsl(28 80% 42%); background: hsl(34 95% 94%);  border-color: hsl(34 80% 70% / .4); }
+.cat-tag.c-purple { color: hsl(262 60% 45%); background: hsl(262 70% 95%); border-color: hsl(262 60% 70% / .3); }
+.cat-tag.c-gray   { color: hsl(218 12% 40%); background: hsl(218 20% 94%); border-color: hsl(218 12% 80%); }
+.bis-time { margin-left: auto; font-size: 10px; color: hsl(var(--muted-foreground)); }
+.bis-title {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.45;
+  color: hsl(var(--card-foreground));
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.bis-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 9px; }
+.bis-meta .mi { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; color: hsl(var(--muted-foreground)); }
+.bis-meta .mi b { color: hsl(218 40% 28%); font-weight: 600; }
+.bis-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr auto;
+  align-items: center;
+  gap: 8px;
+  background: hsl(218 40% 97%);
+  border: 1px solid hsl(var(--border));
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+.bi-label { display: block; font-size: 10px; color: hsl(var(--muted-foreground)); margin-bottom: 2px; }
+.bi-value { font-size: 14px; font-weight: 800; color: hsl(var(--card-foreground)); }
+.bi-value .lock { font-size: 10px; vertical-align: 1px; }
+.bi-deadline .bi-value { color: hsl(218 80% 38%); font-weight: 700; font-size: 13px; }
+.bis-count {
+  font-size: 11px;
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 4px 9px;
+  white-space: nowrap;
+}
+.bis-count.c-hot { background: hsl(34 95% 93%); color: hsl(28 80% 42%); }
+.bis-count.c-urgent { background: hsl(0 92% 95%); color: hsl(0 72% 46%); }
+.bis-count.c-ok { background: hsl(218 80% 94%); color: hsl(218 80% 38%); }
+.bis-count.c-na { background: hsl(218 14% 93%); color: hsl(var(--muted-foreground)); }
+.bi-na { font-size: 11px; font-weight: 600; color: hsl(var(--muted-foreground)); }
+.bis-lock {
+  margin-top: 9px;
+  padding-top: 8px;
+  border-top: 1px dashed hsl(var(--border));
+  font-size: 10.5px;
+  color: hsl(var(--muted-foreground));
+}
+.bis-lock-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.bis-goto {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #F59A23, #F97316);
+  border: none;
+  border-radius: 8px;
+  padding: 5px 11px;
+  cursor: default;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px hsl(34 75% 50% / .35);
+}
+.bis-lock-more {
+  margin-top: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #EF5B1C;
+}
+
+/* ===================== 底部会员权益卡（主色蓝） ===================== */
+.member-card-bottom {
+  margin: 8px 12px 14px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  background:
+    radial-gradient(120% 90% at 85% -10%, hsl(217 95% 68% / .55), transparent 55%),
+    linear-gradient(135deg, #0D5CE0 0%, #0A4BC0 100%);
+  color: #fff;
+  padding: 16px;
+  box-shadow: 0 10px 26px hsl(218 89% 30% / .32);
+}
+.member-card-bottom::after {
+  content: "";
+  position: absolute;
+  right: -34px; top: -34px;
+  width: 110px; height: 110px;
+  border: 1.5px dashed rgba(255, 255, 255, .25);
+  border-radius: 50%;
+}
+.mcb-head { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.mcb-lock {
+  width: 34px; height: 34px;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, .16);
+  border: 1px solid rgba(255, 255, 255, .28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+.mcb-head h4 { font-size: 15px; font-weight: 800; }
+.mcb-desc { font-size: 11px; color: rgba(255, 255, 255, .85); margin-bottom: 11px; }
+.mcb-benefits { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; position: relative; z-index: 1; }
+.mcb-benefits span {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .14);
+  border: 1px solid rgba(255, 255, 255, .22);
+}
+.mcb-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #F59A23, #F97316 55%, #EF5B1C);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  cursor: default;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .3), inset 0 1px 0 rgba(255, 255, 255, .25);
+}
+.mcb-btn .arrow { font-size: 16px; }
+.mcb-sub { text-align: center; font-size: 10px; color: rgba(255, 255, 255, .8); margin-top: 8px; }
+
+/* ===================== 悬浮「立即开通」按钮 ===================== */
+.float-cta {
+  position: absolute;
+  left: 50%;
+  bottom: 46px;
+  transform: translateX(-50%);
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 12px 36px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #F59A23, #F97316 55%, #EF5B1C);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  cursor: default;
+  white-space: nowrap;
+  box-shadow: 0 10px 26px rgba(153, 47, 4, .4), inset 0 1px 0 rgba(255, 255, 255, .3);
+  transition: opacity .25s ease, transform .25s ease;
+  opacity: 1;
+  pointer-events: none;
+}
+.float-cta .arrow { font-size: 16px; }
+.float-cta.hidden-cta {
+  opacity: 0;
+  transform: translateX(-50%) translateY(14px);
+  pointer-events: none;
+}
+
+/* ===================== 页脚 ===================== */
+.footer {
+  padding: 12px 16px 18px;
+  text-align: center;
+  font-size: 10px;
+  color: hsl(var(--muted-foreground));
+  line-height: 1.8;
+  border-top: 1px solid hsl(var(--border));
+  margin: 0 12px;
+}
+.footer b { color: hsl(218 89% 42%); font-weight: 700; }
+
+/* 底部主屏幕按钮 */
+.home-bar {
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: hsl(var(--background));
+}
+.home-bar::after {
+  content: '';
+  width: 134px;
+  height: 5px;
+  background: hsl(218 15% 82%);
+  border-radius: 3px;
+}
+</style>
+</head>
+<body>
+  <!-- 手机外框 -->
+  <div class="phone" id="phoneFrame">
+    <!-- 刘海 -->
+    <div class="notch"><div class="camera"></div><div class="speaker"></div></div>
+
+    <!-- 状态栏 -->
+    <div class="status-bar">
+      <span class="time" id="statusTime">9:41</span>
+      <div class="status-icons">
+        <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+      </div>
+    </div>
+
+    <!-- 顶部导航 -->
+    <div class="app-header">
+      <div class="brand">
+        <div class="logo-mark">采</div>
+        <div class="brand-text">
+          <span class="logo-text">采招网</span>
+          <span class="logo-slogan">找商机上采招 · 始于专业 重于服务</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="h-action" aria-label="搜索">
+          <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- 可滚动内容 -->
+    <div class="scroll-area" id="scrollArea">
+
+      <!-- 顶部会员权益横幅 -->
+      <section class="member-banner">
+        <div class="mb-badge">👑 采招网标讯 VIP</div>
+        <h2>今日最新标讯 抢先看</h2>
+        <p class="mb-sub">开通会员，解锁完整标讯信息，标讯先人一步</p>
+        <ul class="mb-benefits">
+          <li>🔔 每日实时推送 · 短信提醒</li>
+          <li>📄 完整详情 · 预算/联系人/采购方式/截止</li>
+          <li>🎯 行业精准筛选 · 关键词订阅</li>
+          <li>🎁 首次开通优惠价 · 赠子账号</li>
+        </ul>
+        <button class="mb-btn" type="button">立即开通<span class="arrow">→</span></button>
+      </section>
+
+      <!-- 今日标讯区头 -->
+      <div class="list-head">
+        <div class="lh-l">
+          <span class="live-dot"></span>
+          <h3 id="listTitle">今日最新标讯</h3>
+          <span class="lh-count" id="todayCount">128 条</span>
+        </div>
+        <span class="lh-update" id="updateTime">更新于 10:32</span>
+      </div>
+
+      <!-- 标讯列表（JS 渲染） -->
+      <div class="bis-list" id="bisList"></div>
+
+      <!-- 底部会员权益卡 -->
+      <section class="member-card-bottom">
+        <div class="mcb-head">
+          <div class="mcb-lock">🔒</div>
+          <h4>每日一推 · 标讯先人一步</h4>
+        </div>
+        <p class="mcb-desc">实时推送 + 完整详情 + 智能筛选，专为投标团队打造</p>
+        <div class="mcb-benefits">
+          <span>📲 短信实时提醒</span>
+          <span>📄 联系人/预算/标书</span>
+          <span>🎯 行业精准筛选</span>
+          <span>👥 赠 2 个子账号</span>
+        </div>
+        <button class="mcb-btn" type="button">立即开通<span class="arrow">→</span></button>
+        <div class="mcb-sub">首次开通赠送 2 个子账号 · 可开票 · 随时退订</div>
+      </section>
+
+      <!-- 页脚 -->
+      <footer class="footer">
+        数据来源：<b>采招网</b>信息平台 · 每日实时更新<br>
+        客服电话：400-888-0000（工作日 9:00 - 18:00）
+      </footer>
+    </div>
+
+    <!-- 悬浮「立即开通」按钮 -->
+    <button class="float-cta" type="button" id="floatCta">立即开通<span class="arrow">→</span></button>
+
+    <!-- 底部主屏幕按钮 -->
+    <div class="home-bar"></div>
+  </div>
+
+<script>
+/* ===================== 模拟标讯数据池（14 条，部分条目无预算/截止时间/剩余天数） ===================== */
+var ALL_NEWS = [
+  { t: '南京市中医院医疗设备采购项目（CT 球管 / DR 影像系统）', i: '医疗设备', r: '江苏 · 南京', m: '公开招标', b: 286, d: '08-27 17:00', dl: 17, cat: '招标公告', time: '08:25' },
+  { t: '杭州市数据资源管理局政务云平台运维服务项目', i: '政务信息化', r: '浙江 · 杭州', m: '竞争性磋商', b: 180, d: '08-19 09:00', dl: 9, cat: '招标公告', time: '08:47' },
+  { t: '合肥市瑶海区雨污分流管网改造工程（二期）', i: '市政工程', r: '安徽 · 合肥', m: '公开招标', b: 1250, d: '08-25 10:00', dl: 15, cat: '资格预审', time: '09:10' },
+  { t: '郑州市金水区中小学校舍外立面安全加固工程', i: '校园建设', r: '河南 · 郑州', m: '公开招标', b: 430, d: '08-20 14:00', dl: 10, cat: '更正公告', time: '09:02' },
+  { t: '武汉市东湖高新区城市道路照明节能改造项目', i: '市政工程', r: '湖北 · 武汉', m: '公开招标', b: 620, d: '08-18 17:30', dl: 8, cat: '招标公告', time: '08:56' },
+  { t: '福州市生态环境局水质自动监测站运维服务采购', i: '环保检测', r: '福建 · 福州', m: '竞争性磋商', b: null, d: '08-14 09:00', dl: 4, cat: '招标公告', time: '09:24' },
+  { t: '西安市雁塔区机关办公大楼物业服务采购项目', i: '物业管理', r: '陕西 · 西安', m: '公开招标', b: 75, d: '08-13 17:00', dl: 3, cat: '更正公告', time: '08:33' },
+  { t: '广州市天河区税务局税收宣传物料印制服务', i: '印刷服务', r: '广东 · 广州', m: '询价', b: null, d: null, dl: null, cat: '采购意向公开', time: '09:41' },
+  { t: '成都市医疗保障局医保结算系统升级改造项目', i: '软件开发', r: '四川 · 成都', m: '公开招标', b: 340, d: '08-22 10:00', dl: 12, cat: '招标公告', time: '07:58' },
+  { t: '长沙市浏阳河堤防加固整治工程（右岸段）', i: '水利工程', r: '湖南 · 长沙', m: '公开招标', b: null, d: '08-26 09:30', dl: 16, cat: '招标公告', time: '08:18' },
+  { t: '重庆市江北区安置房小区消防设施维修工程', i: '消防工程', r: '重庆', m: '竞争性磋商', b: null, d: null, dl: null, cat: '中标结果', time: '10:05' },
+  { t: '昆明市呈贡区市政道路绿化养护服务（2026 年度）', i: '园林绿化', r: '云南 · 昆明', m: '公开招标', b: null, d: null, dl: null, cat: '采购意向公开', time: '09:30' },
+  { t: '沈阳市和平区中小学营养餐食材配送服务采购', i: '食材配送', r: '辽宁 · 沈阳', m: '公开招标', b: null, d: null, dl: null, cat: '中标结果', time: '08:40' },
+  { t: '青岛市市南区老旧小区加装电梯采购与安装项目', i: '电梯采购', r: '山东 · 青岛', m: '框架协议', b: 520, d: '08-24 09:30', dl: 14, cat: '招标公告', time: '09:12' }
+];
+
+/* 预算模糊化：若非会员，仅保留首位数字，其余以 × 掩码 */
+function maskBudget(n) {
+  var s = String(n);
+  var out = s.charAt(0);
+  for (var i = 1; i < s.length; i++) out += '×';
+  return out;
+}
+
+/* 倒计时胶囊样式：≤3 天红色，≤7 天橙色，其余蓝色 */
+function countClass(dl) {
+  if (dl <= 3) return 'c-urgent';
+  if (dl <= 7) return 'c-hot';
+  return 'c-ok';
+}
+
+/* 公告类型标签配色：招标公告蓝 / 中标结果绿 / 更正公告橙 / 资格预审紫 / 采购意向灰 */
+function catClass(cat) {
+  if (cat === '招标公告') return 'c-blue';
+  if (cat === '中标结果') return 'c-green';
+  if (cat === '更正公告') return 'c-orange';
+  if (cat === '资格预审') return 'c-purple';
+  return 'c-gray';
+}
+
+/* Fisher–Yates 洗牌后随机取 12 条 */
+function pickRandom(list, n) {
+  var a = list.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a.slice(0, n);
+}
+
+function render() {
+  /* 状态栏时间 */
+  var now = new Date();
+  var hh = ('0' + now.getHours()).slice(-2);
+  var mm = ('0' + now.getMinutes()).slice(-2);
+  document.getElementById('statusTime').textContent = hh + ':' + mm;
+
+  /* 今日日期（今天：2026-08-10） */
+  var listTitle = document.getElementById('listTitle');
+  listTitle.textContent = '今日最新标讯 · ' + (now.getMonth() + 1) + '月' + now.getDate() + '日';
+
+  /* 更新时刻 */
+  document.getElementById('updateTime').textContent = '更新于 ' + hh + ':' + mm;
+
+  /* 随机抽取 12 条并渲染 */
+  var picks = pickRandom(ALL_NEWS, 12);
+  var html = '';
+  for (var i = 0; i < picks.length; i++) {
+    var n = picks[i];
+    /* 预算：缺失显示"未公开"，否则模糊化 + 锁标记 */
+    var budgetHtml = n.b != null
+      ? '¥ ' + maskBudget(n.b) + ' 万<span class="lock"> 🔒</span>'
+      : '<span class="bi-na">未公开</span>';
+    /* 投标截止：缺失显示"详见公告" */
+    var deadlineHtml = n.d != null ? n.d : '<span class="bi-na">详见公告</span>';
+    /* 剩余天数：缺失显示"以公告为准" */
+    var countHtml = n.dl != null
+      ? '<span class="bis-count ' + countClass(n.dl) + '">剩 ' + n.dl + ' 天</span>'
+      : '<span class="bis-count c-na">以公告为准</span>';
+    html +=
+      '<article class="bis-card">' +
+        '<div class="bis-head">' +
+          '<span class="bis-tag">' + n.i + '</span>' +
+          '<span class="cat-tag ' + catClass(n.cat) + '">' + n.cat + '</span>' +
+          '<span class="bis-time">' + n.time + ' 发布</span>' +
+        '</div>' +
+        '<h3 class="bis-title">' + n.t + '</h3>' +
+        '<div class="bis-meta">' +
+          '<span class="mi">📍 <b>' + n.r + '</b></span>' +
+          '<span class="mi">⚖️ <b>' + n.m + '</b></span>' +
+        '</div>' +
+        '<div class="bis-grid">' +
+          '<div class="bi bi-budget">' +
+            '<span class="bi-label">预算金额</span>' +
+            '<span class="bi-value">' + budgetHtml + '</span>' +
+          '</div>' +
+          '<div class="bi bi-deadline">' +
+            '<span class="bi-label">投标截止</span>' +
+            '<span class="bi-value">' + deadlineHtml + '</span>' +
+          '</div>' +
+          countHtml +
+        '</div>' +
+        '<div class="bis-lock">' +
+          '<div class="bis-lock-row">' +
+            '<span>📞 联系人 · 联系电话 · 完整标书</span>' +
+            '<button class="bis-goto" type="button">立即前往 →</button>' +
+          '</div>' +
+          '<div class="bis-lock-more">🔒 更多内容会员可见</div>' +
+        '</div>' +
+      '</article>';
+  }
+  document.getElementById('bisList').innerHTML = html;
+}
+
+render();
+
+/* 悬浮「立即开通」：当底部会员卡出现时隐藏 */
+(function () {
+  var cta = document.getElementById('floatCta');
+  var area = document.getElementById('scrollArea');
+  var target = document.querySelector('.member-card-bottom');
+  function onScroll() {
+    var rect = target.getBoundingClientRect();
+    var areaTop = area.getBoundingClientRect().top;
+    /* 底部会员卡顶部进入可视区 → 隐藏悬浮按钮 */
+    cta.classList.toggle('hidden-cta', rect.top < areaTop);
+  }
+  area.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+</body>
+</html>
