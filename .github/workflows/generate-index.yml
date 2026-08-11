@@ -16,66 +16,66 @@ jobs:
       - name: 从模板生成 index.html（含导航数据）
         run: |
           python3 << 'PYEOF'
-import os, json
+          import os, json
 
-# ---------- 扫描所有 HTML 文件 ----------
-items = []
-for root, dirs, files in os.walk('.'):
-    # 跳过隐藏目录和 node_modules
-    dirs[:] = [d for d in dirs if not d.startswith('.') and d != 'node_modules']
+          # ---------- 扫描所有 HTML 文件 ----------
+          items = []
+          for root, dirs, files in os.walk('.'):
+              # 跳过隐藏目录和 node_modules
+              dirs[:] = [d for d in dirs if not d.startswith('.') and d != 'node_modules']
 
-    for f in files:
-        if not f.endswith('.html'):
-            continue
+              for f in files:
+                  if not f.endswith('.html'):
+                      continue
 
-        path = os.path.join(root, f)
-        # 去掉开头的 ./
-        if path.startswith('./'):
-            path = path[2:]
-        else:
-            path = path
+                  path = os.path.join(root, f)
+                  # 去掉开头的 ./
+                  if path.startswith('./'):
+                      path = path[2:]
+                  else:
+                      path = path
 
-        # 跳过 index.html 和模板自身
-        if path in ('index.html', 'nav-template.html'):
-            continue
+                  # 跳过 index.html 和模板自身
+                  if path in ('index.html', 'nav-template.html'):
+                      continue
 
-        dirpart = os.path.dirname(path)
-        filepart = os.path.splitext(f)[0]
+                  dirpart = os.path.dirname(path)
+                  filepart = os.path.splitext(f)[0]
 
-        if filepart == 'index' and dirpart:
-            # 子目录下的 index.html → 视为文件夹
-            name = os.path.basename(dirpart)
-            items.append([path, name, 'folder'])
-        elif dirpart == '.' or dirpart == '':
-            # 根目录下的独立文件
-            name = filepart
-            items.append([path, name, 'file'])
-        else:
-            # 子目录下的非 index 文件
-            name = filepart
-            items.append([path, name, 'file'])
+                  if filepart == 'index' and dirpart:
+                      # 子目录下的 index.html → 视为文件夹
+                      name = os.path.basename(dirpart)
+                      items.append([path, name, 'folder'])
+                  elif dirpart == '.' or dirpart == '':
+                      # 根目录下的独立文件
+                      name = filepart
+                      items.append([path, name, 'file'])
+                  else:
+                      # 子目录下的非 index 文件
+                      name = filepart
+                      items.append([path, name, 'file'])
 
-# 排序：文件夹在前，按名称排序
-items.sort(key=lambda x: (0 if x[2] == 'folder' else 1, x[1]))
+          # 排序：文件夹在前，按名称排序
+          items.sort(key=lambda x: (0 if x[2] == 'folder' else 1, x[1]))
 
-# ---------- 读取模板，注入数据 ----------
-template_path = 'nav-template.html'
-if not os.path.exists(template_path):
-    print("错误: 找不到 nav-template.html 模板文件")
-    exit(1)
+          # ---------- 读取模板，注入数据 ----------
+          template_path = 'nav-template.html'
+          if not os.path.exists(template_path):
+              print("错误: 找不到 nav-template.html 模板文件")
+              exit(1)
 
-with open(template_path, 'r', encoding='utf-8') as f:
-    template = f.read()
+          with open(template_path, 'r', encoding='utf-8') as f:
+              template = f.read()
 
-data_json = json.dumps(items, ensure_ascii=False, indent=2)
-output = template.replace('__NAV_DATA__', data_json)
+          data_json = json.dumps(items, ensure_ascii=False, indent=2)
+          output = template.replace('__NAV_DATA__', data_json)
 
-with open('index.html', 'w', encoding='utf-8') as f:
-    f.write(output)
+          with open('index.html', 'w', encoding='utf-8') as f:
+              f.write(output)
 
-count = len(items)
-print(f"已生成 index.html，共收录 {count} 个条目")
-PYEOF
+          count = len(items)
+          print(f"已生成 index.html，共收录 {count} 个条目")
+          PYEOF
 
       - name: 提交自动生成的 index.html
         run: |
