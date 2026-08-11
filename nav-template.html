@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 页面导航</title>
+    <title>Knightsmith</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -102,6 +102,36 @@
         }
         .header-stats i { opacity: 0.7; margin-right: 0.3rem; }
         .header-stats strong { font-weight: 700; }
+
+        .refresh-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.35rem 0.85rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.12);
+            color: white;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .refresh-btn:hover {
+            background: rgba(255,255,255,0.22);
+            border-color: rgba(255,255,255,0.5);
+        }
+        .refresh-btn.loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        .refresh-btn.loading i {
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
 
         /* ========== 面包屑 ========== */
         .breadcrumb-bar {
@@ -497,12 +527,13 @@
         <div class="header-inner">
             <div class="logo-area" onclick="goHome()">
                 <div class="logo-icon"><i class="fas fa-compass"></i></div>
-                <span class="logo-text">AI 导航</span>
+                <span class="logo-text">Knightsmith</span>
                 <span class="logo-badge" id="levelBadge">首页</span>
             </div>
             <div class="header-stats">
                 <span><i class="fas fa-folder"></i><strong id="totalFolders">0</strong> 文件夹</span>
                 <span><i class="fas fa-file-code"></i><strong id="totalFiles">0</strong> 页面</span>
+                <button class="refresh-btn" id="refreshBtn" onclick="refreshFromGithub()" title="从 GitHub 获取最新文件列表"><i class="fas fa-sync-alt"></i> 刷新</button>
             </div>
         </div>
     </header>
@@ -559,7 +590,7 @@
         <div class="footer-inner">
             <div class="footer-left">
                 <div class="footer-copy">
-                    © 2026 <strong>AI 页面导航</strong> · 自动生成
+                    © 2026 <strong>Knightsmith</strong> · 自动生成
                 </div>
                 <div class="footer-stats">
                     <span class="footer-stat"><i class="fas fa-folder"></i> <strong id="ftFolders">0</strong> 文件夹</span>
@@ -1019,6 +1050,73 @@
 
     function safeAttr(str) {
         return str.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    // 从 GitHub API 实时拉取最新文件列表并重新渲染导航
+    function refreshFromGithub() {
+        var btn = document.getElementById('refreshBtn');
+        if (!btn || btn.classList.contains('loading')) return;
+
+        btn.classList.add('loading');
+        btn.innerHTML = '<i class="fas fa-sync-alt"></i> 加载中…';
+
+        var apiUrl = 'https://api.github.com/repos/Knightsmith/bidcenter-github.github.io/git/trees/main?recursive=1';
+
+        fetch(apiUrl)
+            .then(function(res) {
+                if (!res.ok) throw new Error('API 请求失败: ' + res.status);
+                return res.json();
+            })
+            .then(function(data) {
+                var raw = data.tree;
+                var newItems = [];
+                raw.forEach(function(node) {
+                    var p = node.path;
+                    if (!p.endsWith('.html')) return;
+                    if (p === 'index.html' || p === 'nav-template.html') return;
+
+                    var parts = p.split('/');
+                    var dir = parts.length > 1 ? parts.slice(0, -1).join('/') : '';
+                    var fn  = parts[parts.length - 1].replace('.html', '');
+
+                    var type, name;
+                    if (fn === 'index' && dir) {
+                        type = 'folder';
+                        name = dir.split('/').pop();
+                    } else {
+                        type = 'file';
+                        name = fn;
+                    }
+                    newItems.push([p, name, type]);
+                });
+
+                // 替换全局数据并重建树
+                NAV_ITEMS = newItems;
+                navTree = buildTree(NAV_ITEMS);
+
+                // 重置到首页视图
+                document.getElementById('searchInput').value = '';
+                document.getElementById('searchClear').classList.remove('visible');
+                state.crumbs = [];
+                document.getElementById('viewDetail').classList.remove('active');
+                document.getElementById('viewHome').classList.add('active');
+                document.getElementById('searchArea').style.display = 'block';
+                updateBreadcrumb();
+                updateBadge();
+                renderCardGrid(navTree, 'homeGrid', 'emptyHome', '暂无内容');
+                updateStats();
+
+                // 完成反馈
+                btn.classList.remove('loading');
+                btn.innerHTML = '<i class="fas fa-check"></i> 已刷新';
+                setTimeout(function() { btn.innerHTML = '<i class="fas fa-sync-alt"></i> 刷新'; }, 2000);
+            })
+            .catch(function(err) {
+                btn.classList.remove('loading');
+                btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> 失败';
+                setTimeout(function() { btn.innerHTML = '<i class="fas fa-sync-alt"></i> 刷新'; }, 2500);
+                console.error('刷新导航失败:', err);
+            });
     }
 
     function scrollToTop() {

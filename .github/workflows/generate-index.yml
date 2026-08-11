@@ -77,10 +77,14 @@ jobs:
           print(f"已生成 index.html，共收录 {count} 个条目")
           PYEOF
 
-      - name: 提交自动生成的 index.html
+      - name: 校验 index.html 是否过期（仅检查，不提交不推送）
         run: |
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html
-          git diff --cached --quiet || git commit -m "chore: 自动更新导航索引页 [skip ci]"
-          git push
+          if git diff --exit-code index.html; then
+            echo "✅ index.html 已是最新，无需更新。"
+          else
+            echo ""
+            echo "⚠️  index.html 已过时！"
+            echo "请在本地运行 generate-index-local.ps1 后重新推送，"
+            echo "或直接使用 push.ps1 一键推送（已内置自动生成功能）。"
+            echo "::warning::index.html 已过时，建议在本地运行 generate-index-local.ps1 后重新推送"
+          fi
