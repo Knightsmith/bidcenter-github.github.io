@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>全链路转化分析报表</title>
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB',
+                   'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 14px; line-height: 1.6; color: #1a1a1a;
+      background: #f5f6f8; min-width: 1400px;
+    }
+
+    /* ===== 左侧导航 ===== */
+    .sidebar {
+      position: fixed; left: 0; top: 0; bottom: 0; width: 196px;
+      background: #001529; color: #fff; z-index: 200;
+      display: flex; flex-direction: column;
+    }
+    .logo {
+      height: 56px; display: flex; align-items: center; gap: 8px;
+      padding: 0 18px; font-size: 15px; font-weight: 700;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      letter-spacing: 1px;
+    }
+    .logo-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: #07c160;
+      box-shadow: 0 0 6px #07c160;
+    }
+    .nav { flex: 1; padding: 10px 0; overflow-y: auto; }
+    .nav-group-label {
+      padding: 10px 20px 4px; font-size: 11px; color: rgba(255,255,255,.35);
+      letter-spacing: .5px; text-transform: uppercase;
+    }
+    .nav-item {
+      display: flex; align-items: center; gap: 9px;
+      padding: 9px 20px; font-size: 13.5px; color: rgba(255,255,255,.65);
+      cursor: pointer; transition: .15s; position: relative;
+    }
+    .nav-item:hover { color: #fff; background: rgba(255,255,255,.04); }
+    .nav-item.active {
+      color: #fff; background: linear-gradient(90deg, rgba(24,144,255,.2), transparent);
+    }
+    .nav-item.active::before {
+      content:''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px; background: #1890ff; border-radius: 0 3px 3px 0;
+    }
+    .nav-item svg { flex-shrink: 0; opacity: .85; }
+    .footer {
+      padding: 10px 18px; border-top: 1px solid rgba(255,255,255,.08);
+      font-size: 11px; color: rgba(255,255,255,.3);
+    }
+
+    /* ===== 主区域 ===== */
+    .main { margin-left: 196px; }
+    .header {
+      position: sticky; top: 0; z-index: 150; background: #fff;
+      height: 52px; display: flex; align-items: center; padding: 0 24px;
+      border-bottom: 1px solid #ebedf0;
+      box-shadow: 0 1px 4px rgba(0,0,0,.04);
+    }
+    .crumb { font-size: 13px; color: #b8b8b8; }
+    .crumb b { color: #1a1a1a; font-weight: 500; }
+    .header-right { margin-left: auto; display: flex; gap: 12px; align-items: center; }
+    .badge {
+      background: #fff7e6; border: 1px solid #ffe58f;
+      color: #d48806; font-size: 12px; padding: 2px 8px; border-radius: 4px;
+    }
+
+    /* ===== 内容区 ===== */
+    .content { padding: 18px 24px 48px; }
+
+    /* 顶部 Tab */
+    .tabs {
+      background: #fff; margin: -18px -24px 18px;
+      padding: 0 24px; border-bottom: 1px solid #ebedf0;
+      display: flex; align-items: center;
+    }
+    .tab-item {
+      padding: 14px 18px; font-size: 13.5px; color: #666; cursor: pointer;
+      position: relative; transition: .15s; white-space: nowrap;
+    }
+    .tab-item:hover { color: #1890ff; }
+    .tab-item.active { color: #1890ff; font-weight: 600; }
+    .tab-item.active::after {
+      content:''; position: absolute; bottom: -1px; left: 18px; right: 18px;
+      height: 2px; background: #1890ff; border-radius: 1px 1px 0 0;
+    }
+
+    /* 筛选栏 */
+    .filter {
+      display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .filter-label { font-size: 13px; color: #8c8c8c; }
+    .pill-group {
+      display: flex; background: #f5f5f5; border-radius: 4px; overflow: hidden;
+    }
+    .pill {
+      padding: 5px 14px; font-size: 13px; color: #595959;
+      cursor: pointer; background: transparent; border: none; transition: .15s;
+      white-space: nowrap;
+    }
+    .pill:hover { color: #1890ff; }
+    .pill.active {
+      color: #fff; background: #1890ff; border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(24,144,255,.25);
+    }
+    .filter-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+    .date-input {
+      border: 1px solid #d9d9d9; border-radius: 4px;
+      padding: 5px 10px; font-size: 13px; color: #1a1a1a; width: 120px;
+      outline: none; transition: border-color .15s;
+    }
+    .date-input:focus { border-color: #1890ff; box-shadow: 0 0 0 2px rgba(24,144,255,.08); }
+    .btn {
+      padding: 5px 14px; background: #fff; border: 1px solid #d9d9d9;
+      border-radius: 4px; font-size: 13px; color: #595959; cursor: pointer; transition: .15s;
+    }
+    .btn:hover { color: #1890ff; border-color: #1890ff; }
+    .btn-primary { background: #1890ff; color: #fff; border-color: #1890ff; }
+    .btn-primary:hover { background: #40a9ff; border-color: #40a9ff; color: #fff; }
+    .btn-sm { padding: 2px 10px; font-size: 12px; }
+    .date-sep { color: #d9d9d9; }
+
+    /* ===== 卡片容器 ===== */
+    .card {
+      background: #fff; border-radius: 6px; padding: 20px 24px;
+      margin-bottom: 16px; border: 1px solid #f0f0f0;
+      box-shadow: 0 1px 4px rgba(0,0,0,.03);
+    }
+    .card-hd {
+      display: flex; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 8px;
+    }
+    .card-tt {
+      font-size: 15px; font-weight: 600; color: #1a1a1a;
+      padding-left: 10px; position: relative;
+    }
+    .card-tt::before {
+      content:''; position: absolute; left: 0; top: 2px; bottom: 2px;
+      width: 3px; background: #1890ff; border-radius: 2px;
+    }
+    .card-desc {
+      font-size: 12px; color: #b8b8b8; margin-left: 10px;
+    }
+    .card-actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+
+    /* 开关 */
+    .switch {
+      position: relative; display: inline-block; width: 34px; height: 18px; vertical-align: middle;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .switch .slider {
+      position: absolute; inset: 0; background: #d9d9d9; border-radius: 18px; cursor: pointer; transition: .2s;
+    }
+    .switch .slider::before {
+      content:''; position: absolute; left: 3px; top: 3px; width: 12px; height: 12px;
+      background: #fff; border-radius: 50%; transition: .2s;
+    }
+    .switch input:checked + .slider { background: #1890ff; }
+    .switch input:checked + .slider::before { transform: translateX(16px); }
+    .switch-label { font-size: 12px; color: #595959; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+
+    /* 下拉 */
+    .select {
+      padding: 4px 8px; font-size: 13px; color: #595959;
+      border: 1px solid #d9d9d9; border-radius: 4px; background: #fff;
+      outline: none; cursor: pointer;
+    }
+    .select:focus { border-color: #1890ff; }
+
+    /* ===== KPI ===== */
+    .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 16px; }
+    .kpi-card {
+      background: #fff; border-radius: 6px; padding: 16px 18px;
+      border: 1px solid #f0f0f0; box-shadow: 0 1px 4px rgba(0,0,0,.03);
+    }
+    .kpi-label { font-size: 12px; color: #8c8c8c; margin-bottom: 6px; }
+    .kpi-num { font-size: 24px; font-weight: 700; color: #1a1a1a; font-variant-numeric: tabular-nums; }
+    .kpi-sub { font-size: 12px; margin-top: 4px; display: flex; align-items: center; gap: 4px; }
+    .up { color: #07c160; }
+    .down { color: #f5222d; }
+    .neutral { color: #8c8c8c; }
+
+    /* ===== 漏斗 ===== */
+    .funnel-row { display: flex; gap: 24px; }
+    .funnel-chart { flex: 0 0 400px; }
+    .funnel-table { flex: 1; min-width: 0; }
+
+    .f-step { display: flex; align-items: center; justify-content: center; margin-bottom: 6px; }
+    .f-bar {
+      height: 52px; border-radius: 5px; display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 14px; font-weight: 600; transition: .2s; position: relative; cursor: default;
+      min-width: 110px; padding: 0 16px;
+    }
+    .f-bar:hover { transform: scaleX(1.02); box-shadow: 0 4px 12px rgba(0,0,0,.1); }
+    .f-bar .v { font-size: 20px; font-weight: 700; }
+    .f-bar .l { font-size: 12px; opacity: .9; margin-left: 6px; }
+    .f-arr {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 2px 14px; margin-bottom: 6px; font-size: 12px; color: #8c8c8c;
+    }
+    .f-arr b { color: #1890ff; }
+    .f-arr .loss { color: #f5222d; }
+    .f-total {
+      text-align: center; margin-top: 14px; font-size: 12px; color: #8c8c8c;
+    }
+    .f-total b { color: #1890ff; font-size: 17px; }
+
+    /* ===== 表格 ===== */
+    .tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .tbl th {
+      background: #fafafa; color: #8c8c8c; font-weight: 500;
+      padding: 9px 12px; text-align: left; border-bottom: 1px solid #f0f0f0;
+      white-space: nowrap; font-size: 12px;
+    }
+    .tbl td { padding: 10px 12px; border-bottom: 1px solid #f5f5f5; color: #1a1a1a; white-space: nowrap; }
+    .tbl tr:hover { background: #fafbfc; }
+    .tbl .r { text-align: right; font-variant-numeric: tabular-nums; }
+    .tbl .rate { font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
+    .tbl tr.sum td { background: #fafafa; font-weight: 600; border-top: 2px solid #f0f0f0; }
+    .tag {
+      display: inline-block; padding: 2px 7px; border-radius: 3px;
+      font-size: 11px; font-weight: 500;
+    }
+    .tag-all { background: #f5f5f5; color: #595959; }
+    .tag-search { background: #e6f7ff; color: #1890ff; }
+    .tag-nature { background: #f6ffed; color: #07c160; }
+
+    /* mini sparkline */
+    .spark {
+      display: inline-block; width: 56px; height: 18px;
+      border-radius: 2px; vertical-align: middle; position: relative; overflow: hidden;
+    }
+
+    /* ===== Cohort 表 ===== */
+    .cohort-wrap { overflow-x: auto; }
+    .cohort { border-collapse: collapse; font-size: 12px; min-width: 100%; }
+    .cohort th, .cohort td {
+      padding: 8px 10px; text-align: center; white-space: nowrap;
+      border-bottom: 1px solid #f0f0f0; border-right: 1px solid #f5f5f5;
+    }
+    .cohort th {
+      background: #fafafa; color: #8c8c8c; font-weight: 500; font-size: 11px;
+      position: sticky; top: 0;
+    }
+    .cohort th:first-child, .cohort td:first-child {
+      text-align: left; position: sticky; left: 0; background: #fff; z-index: 2;
+      min-width: 110px;
+    }
+    .cohort th:first-child { z-index: 3; background: #fafafa; }
+    .cohort tr:hover td { background-color: rgba(24,144,255,.02) !important; }
+    .cohort tr:hover td:first-child { background: #fafbfc !important; }
+    .cohort .day-col { min-width: 56px; }
+    .cohort .mark-col {
+      background: #fffbe6 !important; font-weight: 600;
+    }
+    .cohort th.mark-col { background: #fff7cc !important; color: #ad8b00; }
+    .cohort .weekend-col { background: #fafafa; color: #b8b8b8; }
+    .cohort th.weekend-col { background: #f2f2f2; }
+    .cohort .future-col { background: #fafafa; }
+    .bell {
+      display: inline-block; font-size: 11px; margin-left: 2px;
+      color: #faad14; vertical-align: top;
+    }
+    .weekend-tag {
+      display: inline-block; font-size: 9px; color: #bfbfbf;
+      background: #f0f0f0; border-radius: 2px; padding: 0 3px;
+    }
+    .cell {
+      padding: 6px 0; border-radius: 3px; cursor: default;
+      position: relative; font-weight: 600; transition: .1s;
+    }
+    .cell:hover { outline: 2px solid #1890ff; outline-offset: -2px; z-index: 5; }
+    .cell-tooltip {
+      display: none; position: absolute; bottom: calc(100% + 6px); left: 50%;
+      transform: translateX(-50%); background: #1a1a1a; color: #fff;
+      font-size: 11px; padding: 8px 10px; border-radius: 4px;
+      white-space: nowrap; z-index: 100; pointer-events: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,.2); line-height: 1.6;
+    }
+    .cell-tooltip::after {
+      content:''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+      border: 4px solid transparent; border-top-color: #1a1a1a;
+    }
+    .cell:hover .cell-tooltip { display: block; }
+    .cell-null { color: #bfbfbf; font-weight: 400; }
+    .cell-pending {
+      background: #fffbe6; color: #ad8b00; font-size: 11px;
+    }
+
+    /* Cohort 热力图色阶（蓝色系-支付） */
+    .heat-0 { background: #f5f7fa; color: #b8b8b8; }
+    .heat-1 { background: #e6f4ff; color: #1a1a1a; }
+    .heat-2 { background: #b3dcff; color: #1a1a1a; }
+    .heat-3 { background: #69b8ff; color: #fff; }
+    .heat-4 { background: #1890ff; color: #fff; }
+    .heat-5 { background: #096dd9; color: #fff; }
+
+    /* 绿色系：短信打开 */
+    .heat-green-0 { background: #f6ffed; color: #b8b8b8; }
+    .heat-green-1 { background: #d9f7be; color: #1a1a1a; }
+    .heat-green-2 { background: #95de64; color: #1a1a1a; }
+    .heat-green-3 { background: #52c41a; color: #fff; }
+    .heat-green-4 { background: #389e0d; color: #fff; }
+    .heat-green-5 { background: #237804; color: #fff; }
+
+    /* 橙色系：短信点击 */
+    .heat-orange-0 { background: #fff7e6; color: #b8b8b8; }
+    .heat-orange-1 { background: #ffe7ba; color: #1a1a1a; }
+    .heat-orange-2 { background: #ffc53d; color: #1a1a1a; }
+    .heat-orange-3 { background: #faad14; color: #1a1a1a; }
+    .heat-orange-4 { background: #d48806; color: #fff; }
+    .heat-orange-5 { background: #ad6800; color: #fff; }
+
+    /* Cohort Tab */
+    .cohort-tabs { display: flex; gap: 2px; margin-bottom: 14px; flex-wrap: wrap; }
+    .cohort-tab {
+      padding: 5px 14px; font-size: 13px; color: #595959; cursor: pointer;
+      background: transparent; border: 1px solid #e8e8e8; transition: .15s; border-radius: 4px;
+    }
+    .cohort-tab:hover { color: #1890ff; border-color: #1890ff; }
+    .cohort-tab.active {
+      background: #e6f7ff; color: #1890ff; border-color: #91d5ff;
+    }
+
+    /* 色阶说明 */
+    .legend { display: flex; align-items: center; gap: 4px; font-size: 11px; color: #8c8c8c; margin-top: 10px; }
+    .legend-bar { display: flex; gap: 0; }
+    .legend-bar span { width: 18px; height: 12px; display: block; }
+
+    /* 分页 */
+    .pagination { display: flex; align-items: center; gap: 6px; }
+    .page-btn {
+      min-width: 28px; height: 28px; padding: 0 6px; font-size: 12px;
+      display: flex; align-items: center; justify-content: center;
+      background: #fff; border: 1px solid #d9d9d9; border-radius: 4px;
+      color: #595959; cursor: pointer; transition: .15s;
+    }
+    .page-btn:hover { color: #1890ff; border-color: #1890ff; }
+    .page-btn.active { background: #f0f5ff; border-color: #d6e4ff; color: #1890ff; font-weight: 600; }
+    .page-btn:disabled { color: #d9d9d9; cursor: not-allowed; }
+    .page-info { font-size: 12px; color: #8c8c8c; }
+
+    /* ===== 短信卡片区 ===== */
+    .sms-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 20px; }
+    .sms-card {
+      background: #fafafa; border: 1px solid #f0f0f0; border-radius: 6px;
+      padding: 18px; position: relative; overflow: hidden; transition: .2s;
+    }
+    .sms-card:hover { border-color: #1890ff; box-shadow: 0 4px 12px rgba(24,144,255,.08); transform: translateY(-2px); }
+    .sms-card::before {
+      content:''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    }
+    .sms-card:nth-child(1)::before { background: #1890ff; }
+    .sms-card:nth-child(2)::before { background: #07c160; }
+    .sms-card:nth-child(3)::before { background: #faad14; }
+    .sms-card:nth-child(4)::before { background: #f5222d; }
+    .sms-hd { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+    .sms-icon {
+      width: 34px; height: 34px; border-radius: 6px; display: flex;
+      align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;
+    }
+    .sms-card:nth-child(1) .sms-icon { background: #e6f7ff; }
+    .sms-card:nth-child(2) .sms-icon { background: #f6ffed; }
+    .sms-card:nth-child(3) .sms-icon { background: #fffbe6; }
+    .sms-card:nth-child(4) .sms-icon { background: #fff1f0; }
+    .sms-name { font-size: 13.5px; font-weight: 600; color: #1a1a1a; }
+    .sms-type { font-size: 11px; color: #8c8c8c; margin-top: 1px; }
+    .sms-body { font-size: 12px; color: #595959; line-height: 1.9; }
+    .sms-body .lb { display: inline-block; width: 56px; color: #8c8c8c; }
+    .sms-stats {
+      display: flex; gap: 10px; margin-top: 12px; padding-top: 12px;
+      border-top: 1px dashed #e8e8e8;
+    }
+    .sms-stat { text-align: center; flex: 1; }
+    .sms-stat .v { font-size: 15px; font-weight: 700; color: #1a1a1a; font-variant-numeric: tabular-nums; }
+    .sms-stat .l { font-size: 10px; color: #8c8c8c; margin-top: 2px; }
+
+    /* 时间轴 */
+    .timeline {
+      padding: 18px 20px; background: #fafafa; border-radius: 6px;
+      border: 1px solid #f0f0f0; margin-bottom: 20px;
+    }
+    .tl-title { font-size: 13px; font-weight: 600; color: #1a1a1a; margin-bottom: 14px; }
+    .tl-track { display: flex; position: relative; padding: 0 4px; }
+    .tl-axis {
+      position: absolute; top: 14px; left: 24px; right: 24px; height: 2px;
+      background: linear-gradient(90deg, #1890ff 0%, #07c160 46%, #faad14 47%, #f5222d 100%);
+      border-radius: 1px; z-index: 0;
+    }
+    .tl-day {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      position: relative; z-index: 1;
+    }
+    .tl-dot {
+      width: 10px; height: 10px; border-radius: 50%; background: #fff;
+      border: 2px solid #d9d9d9; margin-bottom: 6px; transition: .15s;
+    }
+    .tl-day.hl .tl-dot { width: 14px; height: 14px; margin-top: -2px; }
+    .tl-day.blue .tl-dot { border-color: #1890ff; background: #e6f7ff; }
+    .tl-day.green .tl-dot { border-color: #07c160; background: #f6ffed; }
+    .tl-day.yellow .tl-dot { border-color: #faad14; background: #fffbe6; }
+    .tl-day.red .tl-dot { border-color: #f5222d; background: #fff1f0; }
+    .tl-lbl { font-size: 11px; color: #8c8c8c; text-align: center; line-height: 1.3; }
+    .tl-lbl b { display: block; color: #1a1a1a; font-size: 11px; }
+    .tl-legend { display: flex; gap: 18px; margin-top: 12px; font-size: 12px; color: #8c8c8c; flex-wrap: wrap; }
+    .tl-legend-i { display: flex; align-items: center; gap: 4px; }
+    .tl-legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+    /* ===== 右侧锚点 ===== */
+    .anchor {
+      position: fixed; right: 20px; top: 120px; width: 110px; z-index: 40;
+    }
+    .anchor a {
+      display: block; padding: 7px 10px; font-size: 12px; color: #8c8c8c;
+      cursor: pointer; border-left: 2px solid transparent; transition: .15s;
+      margin-bottom: 2px; text-decoration: none;
+    }
+    .anchor a:hover { color: #1890ff; }
+    .anchor a.active { color: #1890ff; border-left-color: #1890ff; font-weight: 500; }
+
+    @media print {
+      .sidebar, .anchor { display: none; }
+      .main { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== 左侧导航 ===== -->
+<aside class="sidebar">
+  <div class="logo"><span class="logo-dot"></span>采招网 · 数据平台</div>
+  <nav class="nav">
+    <div class="nav-group-label">数据概览</div>
+    <div class="nav-item">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      数据看板
+    </div>
+    <div class="nav-item">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      核心数据
+    </div>
+    <div class="nav-group-label">转化分析</div>
+    <div class="nav-item active">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+      全链路漏斗
+    </div>
+    <div class="nav-item">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      留存分析
+    </div>
+    <div class="nav-item">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      短信触达
+    </div>
+    <div class="nav-group-label">用户分析</div>
+    <div class="nav-item">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      用户画像
+    </div>
+    <div class="nav-item">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      行为路径
+    </div>
+  </nav>
+  <div class="footer">v2.1.0 · Demo 原型</div>
+</aside>
+
+<!-- ===== 主区域 ===== -->
+<div class="main">
+
+<header class="header">
+  <div class="crumb">转化分析 &nbsp;/&nbsp; <b>全链路漏斗报表</b></div>
+  <div class="header-right">
+    <span class="badge">Demo 数据</span>
+  </div>
+</header>
+
+<div class="content">
+
+  <!-- Tab 导航 -->
+  <div class="tabs">
+    <div class="tab-item active">全链路漏斗</div>
+    <div class="tab-item">渠道归因</div>
+    <div class="tab-item">落地页分析</div>
+    <div class="tab-item">付费页分析</div>
+    <div class="tab-item">短信触达效果</div>
+  </div>
+
+  <!-- 筛选栏 -->
+  <div class="filter" id="filter">
+    <span class="filter-label">注册来源：</span>
+    <div class="pill-group" id="sourceFilter">
+      <button class="pill active" data-src="all">全部</button>
+      <button class="pill" data-src="search">搜索页注册</button>
+      <button class="pill" data-src="natural">自然流量注册</button>
+    </div>
+    <div class="filter-right">
+      <input class="date-input" value="2026-08-04" readonly>
+      <span class="date-sep">至</span>
+      <input class="date-input" value="2026-08-11" readonly>
+      <button class="btn btn-primary">导出</button>
+    </div>
+  </div>
+
+  <!-- ===== KPI ===== -->
+  <div class="kpi-grid" id="kpiSection">
+    <div class="kpi-card">
+      <div class="kpi-label">本周 · 发送短信总量</div>
+      <div class="kpi-num" id="kpi0">68,450</div>
+      <div class="kpi-sub"><span class="up">↑ 6.2%</span> <span class="neutral">vs 上周</span></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">本周 · 短链点击总量</div>
+      <div class="kpi-num" id="kpi1">58,324</div>
+      <div class="kpi-sub"><span class="up">↑ 8.3%</span> <span class="neutral">vs 上周</span></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">本周 · 落地页浏览</div>
+      <div class="kpi-num" id="kpi2">48,508</div>
+      <div class="kpi-sub"><span class="up">↑ 5.1%</span> <span class="neutral">vs 上周</span></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">本周 · 进入付费页</div>
+      <div class="kpi-num" id="kpi3">34,246</div>
+      <div class="kpi-sub"><span class="down">↓ 2.4%</span> <span class="neutral">vs 上周</span></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">本周 · 支付成功</div>
+      <div class="kpi-num" id="kpi4">20,650</div>
+      <div class="kpi-sub"><span class="up">↑ 12.7%</span> <span class="neutral">vs 上周</span></div>
+    </div>
+  </div>
+
+  <!-- ===== 漏斗 ===== -->
+  <div class="card" id="section-funnel">
+    <div class="card-hd">
+      <div class="card-tt">转化漏斗 · 周汇总</div>
+      <div class="card-desc">2026-08-04 至 2026-08-11（近1周）</div>
+      <div class="card-actions">
+        <label class="switch-label">
+          <span class="switch">
+            <input type="checkbox" id="funnelSmsToggle" checked>
+            <span class="slider"></span>
+          </span>
+          显示发送短信
+        </label>
+        <select class="select" id="funnelSmsType">
+          <option value="all">全部短信</option>
+          <option value="basic">基础短信</option>
+          <option value="summary">汇总短信</option>
+          <option value="conv">转化引导短信</option>
+          <option value="discount">优惠到期短信</option>
+        </select>
+      </div>
+    </div>
+    <div class="funnel-row">
+      <div class="funnel-chart" id="funnelChart"><!-- JS 渲染 --></div>
+      <div class="funnel-table" id="funnelTable"><!-- JS 渲染 --></div>
+    </div>
+  </div>
+
+  <!-- ===== Cohort 队列表 ===== -->
+  <div class="card" id="section-cohort">
+    <div class="card-hd">
+      <div class="card-tt">逐天 Cohort 队列分析</div>
+      <div class="card-desc">按注册日分组（倒序），观察 D0~D15 各阶段转化情况 · 短信发送时间 19:00-21:00</div>
+      <div class="card-actions">
+        <div class="pagination" id="cohortPagination"><!-- JS 渲染 --></div>
+      </div>
+    </div>
+
+    <!-- 指标 Tab -->
+    <div class="cohort-tabs" id="cohortTabs">
+      <button class="cohort-tab active" data-metric="pay">支付转化率</button>
+      <button class="cohort-tab" data-metric="land">回到付费页</button>
+      <button class="cohort-tab" data-metric="open">短信打开率</button>
+      <button class="cohort-tab" data-metric="click">短信点击率</button>
+    </div>
+
+    <div class="cohort-wrap">
+      <table class="cohort" id="cohortTable">
+        <!-- JS 动态渲染 -->
+      </table>
+    </div>
+    <div class="legend" id="cohortLegend">
+      低
+      <div class="legend-bar" id="legendBar">
+        <span style="background:#f5f7fa"></span>
+        <span style="background:#e6f4ff"></span>
+        <span style="background:#b3dcff"></span>
+        <span style="background:#69b8ff"></span>
+        <span style="background:#1890ff"></span>
+        <span style="background:#096dd9"></span>
+      </div>
+      高
+    </div>
+  </div>
+
+  <!-- ===== 周粒度明细表 ===== -->
+  <div class="card" id="section-weekly">
+    <div class="card-hd">
+      <div class="card-tt">周粒度明细</div>
+      <div class="card-desc">按注册来源分组 · 近5周数据</div>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="tbl" id="weeklyTable">
+        <thead>
+          <tr>
+            <th>周次</th>
+            <th>日期范围</th>
+            <th>注册来源</th>
+            <th class="r">发送短信</th>
+            <th class="r">短链点击</th>
+            <th class="r">落地页浏览</th>
+            <th class="r">付费页</th>
+            <th class="r">支付成功</th>
+            <th class="r">全链路</th>
+          </tr>
+        </thead>
+        <tbody id="weeklyBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== 短信策略 ===== -->
+  <div class="card" id="section-sms">
+    <div class="card-hd">
+      <div class="card-tt">短信触达策略 & 转化归因</div>
+      <div class="card-desc">短信触达窗口最长15个自然日 · 发送时间为每晚 19:00-21:00</div>
+    </div>
+
+    <div class="sms-grid">
+      <div class="sms-card">
+        <div class="sms-hd">
+          <div class="sms-icon">📨</div>
+          <div><div class="sms-name">基础短信</div><div class="sms-type">日常高频触达</div></div>
+        </div>
+        <div class="sms-body">
+          <div><span class="lb">触发规则</span>每个工作日发送</div>
+          <div><span class="lb">持续周期</span>最长15个自然日</div>
+          <div><span class="lb">发送时间</span>每晚 19:00-21:00</div>
+          <div><span class="lb">短信目的</span>欢迎引导 + 价值传递</div>
+        </div>
+        <div class="sms-stats">
+          <div class="sms-stat"><div class="v">23,450</div><div class="l">发送量</div></div>
+          <div class="sms-stat"><div class="v">4.2%</div><div class="l">打开率</div></div>
+          <div class="sms-stat"><div class="v">1.8%</div><div class="l">点击率</div></div>
+        </div>
+      </div>
+      <div class="sms-card">
+        <div class="sms-hd">
+          <div class="sms-icon">📋</div>
+          <div><div class="sms-name">汇总短信</div><div class="sms-type">周一 / 节后补位</div></div>
+        </div>
+        <div class="sms-body">
+          <div><span class="lb">触发规则</span>周一或节假日后首日</div>
+          <div><span class="lb">持续周期</span>补发周末/假期内容</div>
+          <div><span class="lb">发送时间</span>当晚 19:00-21:00</div>
+          <div><span class="lb">短信目的</span>弥补触达空窗期</div>
+        </div>
+        <div class="sms-stats">
+          <div class="sms-stat"><div class="v">5,620</div><div class="l">发送量</div></div>
+          <div class="sms-stat"><div class="v">5.8%</div><div class="l">打开率</div></div>
+          <div class="sms-stat"><div class="v">2.4%</div><div class="l">点击率</div></div>
+        </div>
+      </div>
+      <div class="sms-card">
+        <div class="sms-hd">
+          <div class="sms-icon">🎯</div>
+          <div><div class="sms-name">转化引导短信</div><div class="sms-type">注册后第7天</div></div>
+        </div>
+        <div class="sms-body">
+          <div><span class="lb">触发规则</span>注册后第7天触发</div>
+          <div><span class="lb">持续周期</span>单次触发</div>
+          <div><span class="lb">发送时间</span>当晚 19:00-21:00</div>
+          <div><span class="lb">短信目的</span>引导付费转化</div>
+        </div>
+        <div class="sms-stats">
+          <div class="sms-stat"><div class="v">3,280</div><div class="l">发送量</div></div>
+          <div class="sms-stat"><div class="v">7.6%</div><div class="l">打开率</div></div>
+          <div class="sms-stat"><div class="v">3.5%</div><div class="l">点击率</div></div>
+        </div>
+      </div>
+      <div class="sms-card">
+        <div class="sms-hd">
+          <div class="sms-icon">🔥</div>
+          <div><div class="sms-name">优惠到期促进</div><div class="sms-type">注册后第15天</div></div>
+        </div>
+        <div class="sms-body">
+          <div><span class="lb">触发规则</span>注册后第15天触发</div>
+          <div><span class="lb">持续周期</span>单次触发（最后窗口）</div>
+          <div><span class="lb">发送时间</span>当晚 19:00-21:00</div>
+          <div><span class="lb">短信目的</span>优惠到期紧迫感</div>
+        </div>
+        <div class="sms-stats">
+          <div class="sms-stat"><div class="v">1,856</div><div class="l">发送量</div></div>
+          <div class="sms-stat"><div class="v">9.3%</div><div class="l">打开率</div></div>
+          <div class="sms-stat"><div class="v">5.1%</div><div class="l">点击率</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 时间轴 -->
+    <div class="timeline">
+      <div class="tl-title">📅 短信触达时间轴（15天窗口）</div>
+      <div class="tl-track">
+        <div class="tl-axis"></div>
+        <div class="tl-day hl blue"><div class="tl-dot"></div><div class="tl-lbl"><b>D0</b>注册日<br>19:00基础短信</div></div>
+        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D1</b>基础短信</div></div>
+        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D2</b>基础短信</div></div>
+        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D3</b>基础短信</div></div>
+        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D4</b>基础短信</div></div>
+        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D5</b><span style="color:#d9d9d9">周末</span></div></div>
+        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D6</b><span style="color:#d9d9d9">周末</span></div></div>
+        <div class="tl-day hl green"><div class="tl-dot"></div><div class="tl-lbl"><b>D7</b>转化引导<br>+ 汇总短信</div></div>
+        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D8</b>基础短信</div></div>
+        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D9</b>基础短信</div></div>
+        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D10</b>基础短信</div></div>
+        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D11</b>基础短信</div></div>
+        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D12</b><span style="color:#d9d9d9">周末</span></div></div>
+        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D13</b><span style="color:#d9d9d9">周末</span></div></div>
+        <div class="tl-day hl yellow"><div class="tl-dot"></div><div class="tl-lbl"><b>D14</b>基础短信<br>+ 汇总短信</div></div>
+        <div class="tl-day hl red"><div class="tl-dot"></div><div class="tl-lbl"><b>D15</b>优惠到期<br>⏰ 最后窗口</div></div>
+      </div>
+      <div class="tl-legend">
+        <span class="tl-legend-i"><span class="tl-legend-dot" style="background:#e6f7ff;border:2px solid #1890ff;"></span>基础短信</span>
+        <span class="tl-legend-i"><span class="tl-legend-dot" style="background:#f6ffed;border:2px solid #07c160;"></span>汇总短信（补位）</span>
+        <span class="tl-legend-i"><span class="tl-legend-dot" style="background:#fffbe6;border:2px solid #faad14;"></span>转化引导短信（D7）</span>
+        <span class="tl-legend-i"><span class="tl-legend-dot" style="background:#fff1f0;border:2px solid #f5222d;"></span>优惠到期短信（D15）</span>
+      </div>
+    </div>
+
+    <!-- 短信归因表 -->
+    <div style="margin-top:16px;">
+      <div class="card-tt" style="margin-bottom:12px;">短信转化归因分析</div>
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>短信类型</th>
+            <th>触发时机</th>
+            <th class="r">发送量</th>
+            <th class="r">打开量</th>
+            <th class="r">打开率</th>
+            <th class="r">点击量</th>
+            <th class="r">点击率</th>
+            <th class="r">回到付费页</th>
+            <th class="r">支付成功</th>
+            <th class="r">增量转化率</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag tag-search">基础短信</span></td>
+            <td>每个工作日</td>
+            <td class="r">23,450</td>
+            <td class="r">985</td>
+            <td class="rate">4.2%</td>
+            <td class="r">422</td>
+            <td class="rate">1.8%</td>
+            <td class="r">286</td>
+            <td class="r">142</td>
+            <td class="rate up">0.61%</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-nature">汇总短信</span></td>
+            <td>周一/节后</td>
+            <td class="r">5,620</td>
+            <td class="r">326</td>
+            <td class="rate">5.8%</td>
+            <td class="r">135</td>
+            <td class="rate">2.4%</td>
+            <td class="r">98</td>
+            <td class="r">53</td>
+            <td class="rate up">0.94%</td>
+          </tr>
+          <tr>
+            <td><span class="tag" style="background:#fffbe6;color:#ad8b00">转化引导</span></td>
+            <td>注册后D7</td>
+            <td class="r">3,280</td>
+            <td class="r">249</td>
+            <td class="rate">7.6%</td>
+            <td class="r">115</td>
+            <td class="rate">3.5%</td>
+            <td class="r">89</td>
+            <td class="r">58</td>
+            <td class="rate up">1.77%</td>
+          </tr>
+          <tr>
+            <td><span class="tag" style="background:#fff1f0;color:#cf1322">优惠到期</span></td>
+            <td>注册后D15</td>
+            <td class="r">1,856</td>
+            <td class="r">173</td>
+            <td class="rate">9.3%</td>
+            <td class="r">95</td>
+            <td class="rate">5.1%</td>
+            <td class="r">78</td>
+            <td class="r">62</td>
+            <td class="rate up">3.34%</td>
+          </tr>
+          <tr class="sum">
+            <td colspan="2"><b>合计</b></td>
+            <td class="r"><b>34,206</b></td>
+            <td class="r"><b>1,733</b></td>
+            <td class="rate"><b>5.1%</b></td>
+            <td class="r"><b>767</b></td>
+            <td class="rate"><b>2.2%</b></td>
+            <td class="r"><b>551</b></td>
+            <td class="r"><b>315</b></td>
+            <td class="rate up"><b>0.92%</b></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /.content -->
+</div><!-- /.main -->
+
+<!-- 右侧锚点 -->
+<nav class="anchor" id="anchor">
+  <a class="active" href="#kpiSection">概览指标</a>
+  <a href="#section-funnel">转化漏斗</a>
+  <a href="#section-cohort">逐天Cohort</a>
+  <a href="#section-weekly">周粒度明细</a>
+  <a href="#section-sms">短信触达</a>
+</nav>
+
+<script>
+/* ========== 模拟“今天” ========== */
+var TODAY = new Date(2026, 7, 11); // 2026-08-11
+
+/* ========== 漏斗数据（按短信类型） ========== */
+var funnelData = {
+  all:      { send: 68450, click: 58324, land: 48508, pay: 34246, success: 20650 },
+  basic:    { send: 23450, click: 19860, land: 16520, pay: 11680, success: 6890  },
+  summary:  { send: 5620,  click: 4580,  land: 3860,  pay: 2740,  success: 1650  },
+  conv:     { send: 3280,  click: 2650,  land: 2210,  pay: 1580,  success: 980   },
+  discount: { send: 1856,  click: 1490,  land: 1240,  pay: 880,   success: 520   }
+};
+var funnelColors = {
+  send: 'linear-gradient(90deg, #722ed1, #b37feb)',
+  click: 'linear-gradient(90deg, #1890ff, #69c0ff)',
+  land: 'linear-gradient(90deg, #13c2c2, #5cdbd3)',
+  pay: 'linear-gradient(90deg, #faad14, #ffd666)',
+  success: 'linear-gradient(90deg, #f5222d, #ff7875)'
+};
+var funnelNames = {
+  send: '发送短信', click: '短链点击', land: '落地页浏览', pay: '付费页', success: '支付成功'
+};
+
+function fmt(n) { return n.toLocaleString(); }
+
+function renderFunnel() {
+  var type = document.getElementById('funnelSmsType').value;
+  var showSms = document.getElementById('funnelSmsToggle').checked;
+  var d = funnelData[type];
+
+  /* 构建环节数组 */
+  var steps = [];
+  if (showSms) steps.push('send');
+  steps.push('click', 'land', 'pay', 'success');
+
+  /* 漏斗图 */
+  var chartHtml = '';
+  var maxW = 100;
+  var total = d[steps[0]];
+  for (var i = 0; i < steps.length; i++) {
+    var key = steps[i];
+    var val = d[key];
+    var w = Math.max(20, Math.round(val / total * 100));
+    chartHtml += '<div class="f-step"><div class="f-bar" style="width:' + w + '%;background:' + funnelColors[key] + (key==='pay'?';color:#1a1a1a':'') + '">' +
+      '<span class="v">' + fmt(val) + '</span><span class="l">' + funnelNames[key] + '</span></div></div>';
+    if (i < steps.length - 1) {
+      var nextKey = steps[i + 1];
+      var rate = (d[nextKey] / val * 100).toFixed(1);
+      var loss = val - d[nextKey];
+      chartHtml += '<div class="f-arr"><span>转化率</span><b>' + rate + '%</b>' +
+        '<span class="loss">流失 ' + fmt(loss) + ' (' + (100 - parseFloat(rate)).toFixed(1) + '%)</span></div>';
+    }
+  }
+  var allRate = (d.success / d.click * 100).toFixed(1);
+  chartHtml += '<div class="f-total">全链路转化率（短链点击→支付成功）：<b>' + allRate + '%</b></div>';
+  if (showSms) {
+    var smsRate = (d.click / d.send * 100).toFixed(1);
+    chartHtml += '<div class="f-total">短信打开链路转化率（发送短信→短链点击）：<b>' + smsRate + '%</b></div>';
+  }
+  document.getElementById('funnelChart').innerHTML = chartHtml;
+
+  /* 漏斗表格 */
+  var tableHtml = '<table class="tbl"><thead><tr><th>漏斗环节</th><th class="r">用户数</th>' +
+    '<th class="r">环节转化</th><th class="r">全链路转化</th><th class="r">流失用户</th><th class="r">流失率</th></tr></thead><tbody>';
+  var first = steps[0];
+  var prev = d[first];
+  steps.forEach(function(key, idx) {
+    var val = d[key];
+    var stepRate = idx === 0 ? '—' : (val / prev * 100).toFixed(1) + '%';
+    var chainRate = (val / d.click * 100).toFixed(1) + '%';
+    var lossVal = idx === steps.length - 1 ? '—' : d[key] - d[steps[idx + 1]];
+    var lossRate = idx === steps.length - 1 ? '—' : (100 - d[steps[idx + 1]] / val * 100).toFixed(1) + '%';
+    var cls = idx === 0 ? 'neutral' : 'up';
+    tableHtml += '<tr><td><b>' + funnelNames[key] + '</b></td>' +
+      '<td class="r">' + fmt(val) + '</td>' +
+      '<td class="rate ' + cls + '">' + stepRate + '</td>' +
+      '<td class="rate ' + cls + '">' + chainRate + '</td>' +
+      '<td class="r">' + (lossVal === '—' ? '—' : fmt(lossVal)) + '</td>' +
+      '<td class="rate">' + lossRate + '</td></tr>';
+    prev = val;
+  });
+  tableHtml += '</tbody></table>';
+  document.getElementById('funnelTable').innerHTML = tableHtml;
+}
+
+/* ========== 周粒度数据 ========== */
+var weeklyData = [
+  { week:'W30', range:'07/27 - 08/02', src:'all',     send:66200, click:58200, land:48600, pay:34300, success:20600 },
+  { week:'W30', range:'07/27 - 08/02', src:'search',  send:39000, click:34000, land:28300, pay:20100, success:12100 },
+  { week:'W30', range:'07/27 - 08/02', src:'natural', send:27200, click:24200, land:20300, pay:14200, success:8500  },
+  { week:'W31', range:'08/03 - 08/09', src:'all',     send:68450, click:58324, land:48508, pay:34246, success:20650 },
+  { week:'W31', range:'08/03 - 08/09', src:'search',  send:40200, click:34100, land:28300, pay:20100, success:12200 },
+  { week:'W31', range:'08/03 - 08/09', src:'natural', send:28250, click:24224, land:20208, pay:14146, success:8450  },
+];
+
+var currentSource = 'all';
+function renderWeekly(src) {
+  var rows = weeklyData.filter(function(r){ return r.src === src; });
+  var html = '';
+  rows.forEach(function(r){
+    var tr = (r.success/r.click*100).toFixed(1);
+    var tc = src==='search'?'tag-search':(src==='natural'?'tag-nature':'tag-all');
+    var tn = src==='search'?'搜索页注册':(src==='natural'?'自然流量注册':'全部');
+    html += '<tr><td><b>'+r.week+'</b></td><td>'+r.range+'</td>'+
+      '<td><span class="tag '+tc+'">'+tn+'</span></td>'+
+      '<td class="r">'+r.send.toLocaleString()+'</td>'+
+      '<td class="r">'+r.click.toLocaleString()+'</td>'+
+      '<td class="r">'+r.land.toLocaleString()+'</td>'+
+      '<td class="r">'+r.pay.toLocaleString()+'</td>'+
+      '<td class="r">'+r.success.toLocaleString()+'</td>'+
+      '<td class="rate up">'+tr+'%</td></tr>';
+  });
+  var t = rows.reduce(function(a,r){ a.send+=r.send; a.click+=r.click; a.land+=r.land; a.pay+=r.pay; a.success+=r.success; return a; },
+    {send:0,click:0,land:0,pay:0,success:0});
+  html += '<tr class="sum"><td colspan="3"><b>近2周汇总</b></td>'+
+    '<td class="r"><b>'+t.send.toLocaleString()+'</b></td>'+
+    '<td class="r"><b>'+t.click.toLocaleString()+'</b></td>'+
+    '<td class="r"><b>'+t.land.toLocaleString()+'</b></td>'+
+    '<td class="r"><b>'+t.pay.toLocaleString()+'</b></td>'+
+    '<td class="r"><b>'+t.success.toLocaleString()+'</b></td>'+
+    '<td class="rate"><b>'+(t.success/t.click*100).toFixed(1)+'%</b></td></tr>';
+  document.getElementById('weeklyBody').innerHTML = html;
+}
+
+/* ========== Cohort 数据生成（倒排） ========== */
+/* 以“今天”(8/11)为基准往前推，最新注册日在最上面 */
+var dayNames = ['日','一','二','三','四','五','六'];
+var cohortRows = [];
+var COHORT_DAYS = 10;  // 展示10个注册日
+var PAGE_SIZE = 5;     // 每页5行
+
+/* 注册日当天的短信发送时间 */
+var SMS_START_HOUR = 19; // 19:00 开始发送
+
+for (var ci = 0; ci < COHORT_DAYS; ci++) {
+  /* 注册日 = 今天往前推 ci 天（ci=0 就是今天 8/11） */
+  var regDate = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate() - ci);
+  /* 已过去的天数（含注册日当天为第0天） */
+  var elapsedDays = ci; // 从注册日到今天过了 ci 天
+  var registered = Math.round(1100 + Math.random()*400);
+
+  var row = {
+    date: (regDate.getMonth()+1)+'/'+regDate.getDate(),
+    dayName: dayNames[regDate.getDay()],
+    regDate: regDate, /* 注册日期对象，用于计算周末列 */
+    registered: registered,
+    days: [],
+    elapsed: elapsedDays
+  };
+
+  for (var dd = 0; dd <= 15; dd++) {
+    var cell = { pay:null, land:null, open:null, click:null, pending:false, future:false };
+
+    /* 判断该天是否已经发生（注册日+dd 天 是否 <= 今天） */
+    var occurDate = new Date(regDate.getFullYear(), regDate.getMonth(), regDate.getDate() + dd);
+    var diffDays = Math.round((occurDate - TODAY) / 86400000);
+    if (diffDays > 0) {
+      /* 未来，尚未发生 */
+      cell.future = true;
+      row.days.push(cell);
+      continue;
+    }
+
+    /* 短信发送判断：发送时间为当晚 19:00-21:00。
+       如果是今天(diffDays==0)且还没到19点，短信待发送；Demo 默认当前已过 20 点，只有注册日=今天的 D0 短信已发 */
+    var smsSent = true;
+
+    /* 生成数值：基础随机 */
+    var base = dd===0 ? 2.5+Math.random()*1.5 : 1.5+Math.random()*1.2;
+    if (dd===7) base += 1.5 + Math.random()*0.8;      /* D7 转化引导短信跳升 */
+    if (dd===15) base += 2.0 + Math.random()*1.0;     /* D15 优惠到期跳升 */
+    if (dd>=8 && dd<=14) base += 0.5 + Math.random()*0.3;
+
+    cell.pay = Math.round(base*10)/10;
+    cell.land = Math.round((base*2.5 + Math.random()*1.5)*10)/10;
+    cell.open = dd%2===0 ? Math.round((4+Math.random()*4)*10)/10 : Math.round((2+Math.random()*2)*10)/10;
+    cell.click = Math.round(cell.open * (0.35+Math.random()*0.15)*10)/10;
+
+    /* 附加信息（tooltip用） */
+    cell.payCount = Math.round(registered * cell.pay/100);
+    cell.landCount = Math.round(registered * cell.land/100);
+    cell.openCount = Math.round(registered * cell.open/100);
+    cell.clickCount = Math.round(registered * cell.click/100);
+    row.days.push(cell);
+  }
+  cohortRows.push(row);
+}
+
+/* 热力图色阶 */
+var heatSchemes = {
+  pay:   { prefix: 'heat', levels: [[1,'0'],[2,'1'],[3,'2'],[4,'3'],[5,'4'],[100,'5']],
+           colors: ['#f5f7fa','#e6f4ff','#b3dcff','#69b8ff','#1890ff','#096dd9'] },
+  land:  { prefix: 'heat', levels: [[3,'0'],[6,'1'],[10,'2'],[14,'3'],[18,'4'],[100,'5']],
+           colors: ['#f5f7fa','#e6f4ff','#b3dcff','#69b8ff','#1890ff','#096dd9'] },
+  open:  { prefix: 'heat-green', levels: [[3,'0'],[5,'1'],[7,'2'],[9,'3'],[12,'4'],[100,'5']],
+           colors: ['#f6ffed','#d9f7be','#95de64','#52c41a','#389e0d','#237804'] },
+  click: { prefix: 'heat-orange', levels: [[1,'0'],[2,'1'],[3,'2'],[4,'3'],[5,'4'],[100,'5']],
+           colors: ['#fff7e6','#ffe7ba','#ffc53d','#faad14','#d48806','#ad6800'] },
+};
+
+function getHeatClass(val, metric) {
+  if (val === null) return '';
+  var s = heatSchemes[metric];
+  for (var i=0; i<s.levels.length; i++) {
+    if (val <= s.levels[i][0]) return s.prefix + '-' + s.levels[i][1];
+  }
+  return s.prefix + '-5';
+}
+
+var currentMetric = 'pay';
+var cohortPage = 1;
+
+function renderCohort(metric, page) {
+  currentMetric = metric;
+  cohortPage = page || 1;
+  var tbl = document.getElementById('cohortTable');
+
+  /* 表头：D0 对应每行各自的注册日，无法统一标注周末，因此表头不标周末，周末在单元格内标注 */
+  var th = '<thead><tr><th>注册日期</th><th class="r">注册人数</th>';
+  for (var dd=0; dd<=15; dd++) {
+    var cls = 'day-col';
+    var bell = '';
+    if (dd===7) { cls += ' mark-col'; bell = '<span class="bell" title="转化引导短信触发日">🔔</span>'; }
+    if (dd===15) { cls += ' mark-col'; bell = '<span class="bell" title="优惠到期短信触发日">🔔</span>'; }
+    var dayLabel = 'D'+dd+bell;
+    th += '<th class="'+cls+'">'+dayLabel+'</th>';
+  }
+  th += '</tr></thead>';
+
+  /* 分页切片：倒排，最新日期在第一页 */
+  var totalPages = Math.ceil(cohortRows.length / PAGE_SIZE);
+  var start = (cohortPage - 1) * PAGE_SIZE;
+  var pageRows = cohortRows.slice(start, start + PAGE_SIZE);
+
+  /* 数据行 */
+  var tb = '<tbody>';
+  pageRows.forEach(function(row){
+    tb += '<tr><td><b>'+row.date+'</b> <span style="color:#8c8c8c;font-size:11px;">周'+row.dayName+'</span>' +
+          (row.elapsed === 0 ? ' <span style="color:#1890ff;font-size:10px;background:#e6f7ff;border-radius:2px;padding:0 3px;">今天</span>' : '') + '</td>';
+    tb += '<td class="r" style="font-weight:600;font-variant-numeric:tabular-nums;">'+row.registered.toLocaleString()+'</td>';
+    row.days.forEach(function(cell,dd){
+      var cls = 'day-col';
+      /* 该行注册日 + dd 天的星期，用于周末标注 */
+      var dw = new Date(row.regDate.getFullYear(), row.regDate.getMonth(), row.regDate.getDate() + dd);
+      var dow = dw.getDay();
+      if (dow===0||dow===6) cls += ' weekend-col';
+      if (dd===7||dd===15) cls += ' mark-col';
+
+      if (cell.future) {
+        /* 未来：未发生 */
+        tb += '<td class="'+cls+'"><div class="cell cell-null">—</div></td>';
+        return;
+      }
+
+      var val = cell[metric];
+      var tipMetricName = metric==='pay'?'支付转化率':(metric==='land'?'回到付费页':(metric==='open'?'短信打开率':'短信点击率'));
+
+      /* 短信指标特殊处理：注册当天若尚未到发送时间，显示“待发送” */
+      var countKey = metric + 'Count';
+      var count = cell[countKey];
+
+      if ((metric==='open' || metric==='click') && dd===0 && row.elapsed===0) {
+        /* 今天注册、短信待发送（19:00-21:00） */
+        tb += '<td class="'+cls+'"><div class="cell cell-pending">待发送<small style="display:block;font-weight:400;">19:00-21:00</small></div></td>';
+        return;
+      }
+
+      var heatCls = getHeatClass(val, metric);
+      var tipHtml = tipMetricName+': <b>'+(val===null?'—':val+'%')+'</b><br>'+
+        (metric==='pay'?'支付笔数':metric==='land'?'浏览付费页':metric==='open'?'短信打开':'短信点击')+': '+count+
+        '<br>注册人数基数: '+row.registered;
+
+      tb += '<td class="'+cls+'"><div class="cell '+heatCls+'">'+(val===null?'—':val+'%')+
+        '<div class="cell-tooltip">'+tipHtml+'</div></div></td>';
+    });
+    tb += '</tr>';
+  });
+  tb += '</tbody>';
+  tbl.innerHTML = th + tb;
+
+  /* 更新色阶图例 */
+  var colors = heatSchemes[metric].colors;
+  document.getElementById('legendBar').innerHTML = colors.map(function(c){ return '<span style="background:'+c+'"></span>'; }).join('');
+
+  /* 分页渲染 */
+  renderPagination(totalPages);
+}
+
+function renderPagination(totalPages) {
+  var html = '<span class="page-info">第 '+cohortPage+'/'+totalPages+' 页 · 共 '+cohortRows.length+' 天</span>';
+  html += '<button class="page-btn" onclick="gotoCohortPage('+(cohortPage-1)+')" '+(cohortPage<=1?'disabled':'')+'>&lt;</button>';
+  for (var p=1; p<=totalPages; p++) {
+    html += '<button class="page-btn'+(p===cohortPage?' active':'')+'" onclick="gotoCohortPage('+p+')">'+p+'</button>';
+  }
+  html += '<button class="page-btn" onclick="gotoCohortPage('+(cohortPage+1)+')" '+(cohortPage>=totalPages?'disabled':'')+'>&gt;</button>';
+  document.getElementById('cohortPagination').innerHTML = html;
+}
+
+function gotoCohortPage(p) {
+  var totalPages = Math.ceil(cohortRows.length / PAGE_SIZE);
+  if (p < 1) p = 1;
+  if (p > totalPages) p = totalPages;
+  renderCohort(currentMetric, p);
+}
+
+/* ========== 交互 ========== */
+
+/* 注册来源筛选 */
+document.querySelectorAll('#sourceFilter .pill').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('#sourceFilter .pill').forEach(function(b){ b.classList.remove('active'); });
+    this.classList.add('active');
+    var src = this.dataset.src;
+    currentSource = src;
+    renderWeekly(src);
+    var kpi = {
+      all:     { s:['68,450','↑ 6.2%','up'], c:['58,324','↑ 8.3%','up'], l:['48,508','↑ 5.1%','up'], p:['34,246','↓ 2.4%','down'], s2:['20,650','↑ 12.7%','up'] },
+      search:  { s:['40,200','↑ 6.8%','up'], c:['34,100','↑ 9.1%','up'], l:['28,300','↑ 6.2%','up'], p:['20,100','↓ 1.8%','down'], s2:['12,200','↑ 11.5%','up'] },
+      natural: { s:['28,250','↑ 5.1%','up'], c:['24,224','↑ 7.0%','up'], l:['20,208','↑ 3.8%','up'], p:['14,146','↓ 3.1%','down'], s2:['8,450','↑ 14.2%','up'] },
+    };
+    var k = kpi[src];
+    document.getElementById('kpi0').textContent = k.s[0];
+    document.getElementById('kpi1').textContent = k.c[0];
+    document.getElementById('kpi2').textContent = k.l[0];
+    document.getElementById('kpi3').textContent = k.p[0];
+    document.getElementById('kpi4').textContent = k.s2[0];
+  });
+});
+
+/* Cohort 指标 Tab */
+document.querySelectorAll('#cohortTabs .cohort-tab').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('#cohortTabs .cohort-tab').forEach(function(b){ b.classList.remove('active'); });
+    this.classList.add('active');
+    renderCohort(this.dataset.metric, cohortPage);
+  });
+});
+
+/* 漏斗：短信类型切换 & 显示开关 */
+document.getElementById('funnelSmsType').addEventListener('change', renderFunnel);
+document.getElementById('funnelSmsToggle').addEventListener('change', renderFunnel);
+
+/* 右侧锚点 */
+function updateAnchor(){
+  var ids = ['kpiSection','section-funnel','section-cohort','section-weekly','section-sms'];
+  var st = window.scrollY + 100;
+  var active = ids[0];
+  ids.forEach(function(id){
+    var el = document.getElementById(id);
+    if (el && el.offsetTop <= st) active = id;
+  });
+  document.querySelectorAll('.anchor a').forEach(function(a){
+    a.classList.toggle('active', a.getAttribute('href') === '#'+active);
+  });
+}
+window.addEventListener('scroll', updateAnchor);
+document.querySelectorAll('.anchor a').forEach(function(a){
+  a.addEventListener('click', function(e){
+    e.preventDefault();
+    var target = document.querySelector(this.getAttribute('href'));
+    if (target) window.scrollTo({ top: target.offsetTop - 70, behavior: 'smooth' });
+  });
+});
+
+/* ========== 初始化 ========== */
+renderFunnel();
+renderWeekly('all');
+renderCohort('pay', 1);
+updateAnchor();
+</script>
+
+</body>
+</html>
