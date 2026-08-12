@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>全链路转化分析报表</title>
+  <title>全链路转化分析报表 · V2</title>
   <style>
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     html { scroll-behavior: smooth; }
@@ -190,15 +190,15 @@
     .funnel-chart { flex: 0 0 400px; }
     .funnel-table { flex: 1; min-width: 0; }
 
-    .f-step { display: flex; align-items: center; justify-content: center; margin-bottom: 6px; }
+    .f-step { display: flex; align-items: center; justify-content: flex-start; margin-bottom: 6px; }
     .f-bar {
-      height: 52px; border-radius: 5px; display: flex; align-items: center; justify-content: center;
-      color: #fff; font-size: 14px; font-weight: 600; transition: .2s; position: relative; cursor: default;
-      min-width: 110px; padding: 0 16px;
+      height: 58px; border-radius: 5px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: #fff; font-size: 13px; font-weight: 600; transition: .2s; position: relative; cursor: default;
+      min-width: 132px; padding: 4px 14px;
     }
     .f-bar:hover { transform: scaleX(1.02); box-shadow: 0 4px 12px rgba(0,0,0,.1); }
-    .f-bar .v { font-size: 20px; font-weight: 700; }
-    .f-bar .l { font-size: 12px; opacity: .9; margin-left: 6px; }
+    .f-bar .v { font-size: 19px; font-weight: 700; line-height: 1.3; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .f-bar .l { font-size: 11px; opacity: .92; margin-left: 0; line-height: 1.3; white-space: nowrap; }
     .f-arr {
       display: flex; align-items: center; justify-content: space-between;
       padding: 2px 14px; margin-bottom: 6px; font-size: 12px; color: #8c8c8c;
@@ -222,6 +222,9 @@
     .tbl .r { text-align: right; font-variant-numeric: tabular-nums; }
     .tbl .rate { font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
     .tbl tr.sum td { background: #fafafa; font-weight: 600; border-top: 2px solid #f0f0f0; }
+    .tbl tr.week-current td { background: #e6f7ff !important; }
+    .tbl tr.week-current:hover td { background: #d6eaff !important; }
+    .tbl tr.week-current td:first-child { box-shadow: inset 3px 0 0 #1890ff; }
     .tag {
       display: inline-block; padding: 2px 7px; border-radius: 3px;
       font-size: 11px; font-weight: 500;
@@ -372,12 +375,6 @@
     .sms-type { font-size: 11px; color: #8c8c8c; margin-top: 1px; }
     .sms-body { font-size: 12px; color: #595959; line-height: 1.9; }
     .sms-body .lb { display: inline-block; width: 56px; color: #8c8c8c; }
-    .sms-tpl {
-      margin-top: 10px; padding: 8px 10px; background: #fff;
-      border: 1px solid #f0f0f0; border-left: 3px solid #d9d9d9; border-radius: 4px;
-      font-size: 11px; line-height: 1.7; color: #595959; word-break: break-all;
-    }
-    .sms-tpl .lb { width: auto; color: #8c8c8c; font-size: 11px; }
     .sms-stats {
       display: flex; gap: 10px; margin-top: 12px; padding-top: 12px;
       border-top: 1px dashed #e8e8e8;
@@ -473,16 +470,16 @@
       行为路径
     </div>
   </nav>
-  <div class="footer">v2.1.0 · Demo 原型</div>
+  <div class="footer">v2.2.0 · Demo 原型（2 条短信策略）</div>
 </aside>
 
 <!-- ===== 主区域 ===== -->
 <div class="main">
 
 <header class="header">
-  <div class="crumb">转化分析 &nbsp;/&nbsp; <b>全链路漏斗报表</b></div>
+  <div class="crumb">转化分析 &nbsp;/&nbsp; <b>全链路漏斗报表 · V2</b></div>
   <div class="header-right">
-    <span class="badge">Demo 数据</span>
+    <span class="badge">Demo 数据 · V2</span>
   </div>
 </header>
 
@@ -517,28 +514,28 @@
   <div class="kpi-grid" id="kpiSection">
     <div class="kpi-card">
       <div class="kpi-label">本周 · 发送短信总量</div>
-      <div class="kpi-num" id="kpi0">68,450</div>
-      <div class="kpi-sub"><span class="up">↑ 6.2%</span> <span class="neutral">vs 上周</span></div>
+      <div class="kpi-num" id="kpi0">57,050</div>
+      <div class="kpi-sub"><span class="up">↑ 4.1%</span> <span class="neutral">vs 上周</span></div>
     </div>
     <div class="kpi-card">
       <div class="kpi-label">本周 · 短链点击总量</div>
-      <div class="kpi-num" id="kpi1">58,324</div>
-      <div class="kpi-sub"><span class="up">↑ 8.3%</span> <span class="neutral">vs 上周</span></div>
+      <div class="kpi-num" id="kpi1">1,690</div>
+      <div class="kpi-sub"><span class="up">↑ 4.3%</span> <span class="neutral">vs 上周</span></div>
     </div>
     <div class="kpi-card">
       <div class="kpi-label">本周 · 落地页浏览</div>
-      <div class="kpi-num" id="kpi2">48,508</div>
-      <div class="kpi-sub"><span class="up">↑ 5.1%</span> <span class="neutral">vs 上周</span></div>
+      <div class="kpi-num" id="kpi2">1,460</div>
+      <div class="kpi-sub"><span class="up">↑ 4.7%</span> <span class="neutral">vs 上周</span></div>
     </div>
     <div class="kpi-card">
       <div class="kpi-label">本周 · 进入付费页</div>
-      <div class="kpi-num" id="kpi3">34,246</div>
-      <div class="kpi-sub"><span class="down">↓ 2.4%</span> <span class="neutral">vs 上周</span></div>
+      <div class="kpi-num" id="kpi3">1,188</div>
+      <div class="kpi-sub"><span class="up">↑ 4.7%</span> <span class="neutral">vs 上周</span></div>
     </div>
     <div class="kpi-card">
       <div class="kpi-label">本周 · 支付成功</div>
-      <div class="kpi-num" id="kpi4">20,650</div>
-      <div class="kpi-sub"><span class="up">↑ 12.7%</span> <span class="neutral">vs 上周</span></div>
+      <div class="kpi-num" id="kpi4">778</div>
+      <div class="kpi-sub"><span class="up">↑ 8.1%</span> <span class="neutral">vs 上周</span></div>
     </div>
   </div>
 
@@ -557,10 +554,8 @@
         </label>
         <select class="select" id="funnelSmsType">
           <option value="all">全部短信</option>
-          <option value="basic">基础短信</option>
-          <option value="summary">汇总短信</option>
-          <option value="conv">转化引导短信</option>
-          <option value="discount">优惠到期短信</option>
+          <option value="basic">基础短信 · D3 价值证明</option>
+          <option value="summary">汇总短信 · D7 优惠引导</option>
         </select>
       </div>
     </div>
@@ -571,10 +566,10 @@
   </div>
 
   <!-- ===== Cohort 队列表 ===== -->
-  <div class="card" id="section-cohort">
+  <div class="card" id="section-cohort" style="display:none;">
     <div class="card-hd">
       <div class="card-tt">逐天 Cohort 队列分析</div>
-      <div class="card-desc">按注册日分组（倒序），观察 D0~D15 各阶段转化情况 · 短信发送时间 19:00-21:00</div>
+      <div class="card-desc">按注册日分组（倒序），观察 D0~D9 各阶段转化情况 · 基础短信 D3（工作日 15:30）/ 汇总短信 D7 后首个工作日（10:30）</div>
       <div class="card-actions">
         <div class="pagination" id="cohortPagination"><!-- JS 渲染 --></div>
       </div>
@@ -611,7 +606,7 @@
   <div class="card" id="section-weekly">
     <div class="card-hd">
       <div class="card-tt">周粒度明细</div>
-      <div class="card-desc">按注册来源分组 · 近5周数据</div>
+      <div class="card-desc">按注册来源分组 · 近5周 · 倒序（最新在前），当周 W31 高亮标注（数据未完结，可能异常）</div>
     </div>
     <div style="overflow-x:auto;">
       <table class="tbl" id="weeklyTable">
@@ -637,123 +632,82 @@
   <div class="card" id="section-sms">
     <div class="card-hd">
       <div class="card-tt">短信触达策略 & 转化归因</div>
-      <div class="card-desc">短信触达窗口最长15个自然日 · 发送时间为每晚 19:00-21:00</div>
+      <div class="card-desc">短信收敛为 2 条关键触点：D3 基础短信 + D7 汇总短信（节假日顺延）· 两模板均超 70 字/条限制，每次触达计费 2 条</div>
     </div>
 
     <div class="sms-grid">
       <div class="sms-card">
         <div class="sms-hd">
           <div class="sms-icon">📨</div>
-          <div><div class="sms-name">基础短信</div><div class="sms-type">日常高频触达</div></div>
+          <div><div class="sms-name">基础短信 · 价值证明</div><div class="sms-type">注册后第 3 天触发</div></div>
         </div>
         <div class="sms-body">
-          <div><span class="lb">触发规则</span>每个工作日发送</div>
-          <div><span class="lb">持续周期</span>最长15个自然日</div>
-          <div><span class="lb">发送时间</span>每晚 19:00-21:00</div>
-          <div><span class="lb">短信目的</span>欢迎引导 + 价值传递</div>
-          <div class="sms-tpl"><span class="lb">模板示例</span>〖海诚通胜〗您关注的{行业}{地区}。采招网今日新增{数量}条标讯，点此查收→{短链接} 请回R退订</div>
+          <div><span class="lb">触发规则</span>注册后第 3 天</div>
+          <div><span class="lb">持续周期</span>单次触发</div>
+          <div><span class="lb">发送时间</span>工作日 15:30（周末/节假日顺延）</div>
+          <div><span class="lb">短信目的</span>价值证明 + 商机触达</div>
+          <div><span class="lb">字数计费</span>≈76 字 → 计费 2 条/次</div>
         </div>
         <div class="sms-stats">
-          <div class="sms-stat"><div class="v">23,450</div><div class="l">发送量</div></div>
-          <div class="sms-stat"><div class="v">4.2%</div><div class="l">打开率</div></div>
-          <div class="sms-stat"><div class="v">1.8%</div><div class="l">点击率</div></div>
-        </div>
-      </div>
-      <div class="sms-card">
-        <div class="sms-hd">
-          <div class="sms-icon">📋</div>
-          <div><div class="sms-name">汇总短信</div><div class="sms-type">周一 / 节后补位</div></div>
-        </div>
-        <div class="sms-body">
-          <div><span class="lb">触发规则</span>周一或节假日后首日</div>
-          <div><span class="lb">持续周期</span>补发周末/假期内容</div>
-          <div><span class="lb">发送时间</span>当晚 19:00-21:00</div>
-          <div><span class="lb">短信目的</span>弥补触达空窗期</div>
-          <div class="sms-tpl"><span class="lb">模板示例</span>〖海诚通胜〗周末您错过的{行业}{地区}标讯已累计{数量}条，采招网为您全部保留，点此补看→{短链接} 请回R退订</div>
-        </div>
-        <div class="sms-stats">
-          <div class="sms-stat"><div class="v">5,620</div><div class="l">发送量</div></div>
-          <div class="sms-stat"><div class="v">5.8%</div><div class="l">打开率</div></div>
+          <div class="sms-stat"><div class="v">29,100</div><div class="l">发送量</div></div>
+          <div class="sms-stat"><div class="v">5.6%</div><div class="l">打开率</div></div>
           <div class="sms-stat"><div class="v">2.4%</div><div class="l">点击率</div></div>
         </div>
       </div>
       <div class="sms-card">
         <div class="sms-hd">
-          <div class="sms-icon">🎯</div>
-          <div><div class="sms-name">转化引导短信</div><div class="sms-type">注册后第7天</div></div>
+          <div class="sms-icon">📋</div>
+          <div><div class="sms-name">汇总短信 · 优惠引导</div><div class="sms-type">注册后首个工作日</div></div>
         </div>
         <div class="sms-body">
-          <div><span class="lb">触发规则</span>注册后第7天触发</div>
-          <div><span class="lb">持续周期</span>单次触发</div>
-          <div><span class="lb">发送时间</span>当晚 19:00-21:00</div>
-          <div><span class="lb">短信目的</span>引导付费转化</div>
-          <div class="sms-tpl"><span class="lb">模板示例</span>〖海诚通胜〗近7天{地区}{行业}，采招网持续更新{数量}条！开通会员立减{金额}元，随时掌握商机。立即开通→{短链接}请回R退订</div>
+          <div><span class="lb">触发规则</span>注册后第 7 天后的第一个工作日</div>
+          <div><span class="lb">持续周期</span>单次触发（节假日顺延）</div>
+          <div><span class="lb">发送时间</span>10:30</div>
+          <div><span class="lb">短信目的</span>汇总触达 + 付费引导</div>
+          <div><span class="lb">字数计费</span>≈138 字 → 计费 2 条/次</div>
         </div>
         <div class="sms-stats">
-          <div class="sms-stat"><div class="v">3,280</div><div class="l">发送量</div></div>
-          <div class="sms-stat"><div class="v">7.6%</div><div class="l">打开率</div></div>
+          <div class="sms-stat"><div class="v">27,950</div><div class="l">发送量</div></div>
+          <div class="sms-stat"><div class="v">6.8%</div><div class="l">打开率</div></div>
           <div class="sms-stat"><div class="v">3.5%</div><div class="l">点击率</div></div>
-        </div>
-      </div>
-      <div class="sms-card">
-        <div class="sms-hd">
-          <div class="sms-icon">🔥</div>
-          <div><div class="sms-name">优惠到期促进</div><div class="sms-type">注册后第15天</div></div>
-        </div>
-        <div class="sms-body">
-          <div><span class="lb">触发规则</span>注册后第15天触发</div>
-          <div><span class="lb">持续周期</span>单次触发（最后窗口）</div>
-          <div><span class="lb">发送时间</span>当晚 19:00-21:00</div>
-          <div><span class="lb">短信目的</span>优惠到期紧迫感</div>
-          <div class="sms-tpl"><span class="lb">模板示例</span>〖海诚通胜〗您的立减{金额}元优惠今晚24点到期！{行业}{地区}今日新增{数量}条标讯，采招网开通即享。最后机会→{短链接} 请回R退订</div>
-        </div>
-        <div class="sms-stats">
-          <div class="sms-stat"><div class="v">1,856</div><div class="l">发送量</div></div>
-          <div class="sms-stat"><div class="v">9.3%</div><div class="l">打开率</div></div>
-          <div class="sms-stat"><div class="v">5.1%</div><div class="l">点击率</div></div>
         </div>
       </div>
     </div>
 
     <!-- 时间轴 -->
     <div class="timeline">
-      <div class="tl-title">📅 短信触达时间轴（15天窗口）</div>
+      <div class="tl-title">📅 短信触达时间轴（注册后 D0~D9 · 共 2 条短信，节假日一律顺延）</div>
       <div class="tl-track">
         <div class="tl-axis"></div>
-        <div class="tl-day hl blue"><div class="tl-dot"></div><div class="tl-lbl"><b>D0</b>注册日<br>19:00基础短信</div></div>
-        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D1</b>基础短信</div></div>
-        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D2</b>基础短信</div></div>
-        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D3</b>基础短信</div></div>
-        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D4</b>基础短信</div></div>
+        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D0</b>注册日<br>（无短信）</div></div>
+        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D1</b>无短信</div></div>
+        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D2</b>无短信</div></div>
+        <div class="tl-day hl blue"><div class="tl-dot"></div><div class="tl-lbl"><b>D3</b>基础短信<br>工作日 15:30</div></div>
+        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D4</b>无短信</div></div>
         <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D5</b><span style="color:#d9d9d9">周末</span></div></div>
         <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D6</b><span style="color:#d9d9d9">周末</span></div></div>
-        <div class="tl-day hl green"><div class="tl-dot"></div><div class="tl-lbl"><b>D7</b>转化引导<br>+ 汇总短信</div></div>
-        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D8</b>基础短信</div></div>
-        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D9</b>基础短信</div></div>
-        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D10</b>基础短信</div></div>
-        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D11</b>基础短信</div></div>
-        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D12</b><span style="color:#d9d9d9">周末</span></div></div>
-        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D13</b><span style="color:#d9d9d9">周末</span></div></div>
-        <div class="tl-day hl yellow"><div class="tl-dot"></div><div class="tl-lbl"><b>D14</b>基础短信<br>+ 汇总短信</div></div>
-        <div class="tl-day hl red"><div class="tl-dot"></div><div class="tl-lbl"><b>D15</b>优惠到期<br>⏰ 最后窗口</div></div>
+        <div class="tl-day hl yellow"><div class="tl-dot"></div><div class="tl-lbl"><b>D7</b>汇总短信<br>首个工作日 10:30</div></div>
+        <div class="tl-day"><div class="tl-dot"></div><div class="tl-lbl"><b>D8~D9</b><span style="color:#d9d9d9">节后顺延<br>补发窗口</span></div></div>
       </div>
       <div class="tl-legend">
-        <span class="tl-legend-i"><span class="tl-legend-dot" style="background:#e6f7ff;border:2px solid #1890ff;"></span>基础短信</span>
-        <span class="tl-legend-i"><span class="tl-legend-dot" style="background:#f6ffed;border:2px solid #07c160;"></span>汇总短信（补位）</span>
-        <span class="tl-legend-i"><span class="tl-legend-dot" style="background:#fffbe6;border:2px solid #faad14;"></span>转化引导短信（D7）</span>
-        <span class="tl-legend-i"><span class="tl-legend-dot" style="background:#fff1f0;border:2px solid #f5222d;"></span>优惠到期短信（D15）</span>
+        <span class="tl-legend-i"><span class="tl-legend-dot" style="background:#e6f7ff;border:2px solid #1890ff;"></span>基础短信（D3 · 15:30）</span>
+        <span class="tl-legend-i"><span class="tl-legend-dot" style="background:#fffbe6;border:2px solid #faad14;"></span>汇总短信（D7 后首个工作日 · 10:30）</span>
       </div>
     </div>
 
     <!-- 短信归因表 -->
     <div style="margin-top:16px;">
-      <div class="card-tt" style="margin-bottom:12px;">短信转化归因分析</div>
+      <div style="margin-bottom:12px;">
+        <div class="card-tt" style="margin-bottom:6px;">短信转化归因分析</div>
+        <div class="card-desc" style="margin-left:10px;">增量转化率口径：支付成功 ÷ 发送量（例：302 ÷ 29,100 ≈ 1.04%），不设对照组，用于横向比较两条短信效果</div>
+      </div>
       <table class="tbl">
         <thead>
           <tr>
             <th>短信类型</th>
             <th>触发时机</th>
             <th class="r">发送量</th>
+            <th class="r">计费条数</th>
             <th class="r">打开量</th>
             <th class="r">打开率</th>
             <th class="r">点击量</th>
@@ -766,62 +720,41 @@
         <tbody>
           <tr>
             <td><span class="tag tag-search">基础短信</span></td>
-            <td>每个工作日</td>
-            <td class="r">23,450</td>
-            <td class="r">985</td>
-            <td class="rate">4.2%</td>
-            <td class="r">422</td>
-            <td class="rate">1.8%</td>
-            <td class="r">286</td>
-            <td class="r">142</td>
-            <td class="rate up">0.61%</td>
+            <td>注册后 D3（工作日 15:30）</td>
+            <td class="r">29,100</td>
+            <td class="r">58,200</td>
+            <td class="r">1,630</td>
+            <td class="rate">5.6%</td>
+            <td class="r">700</td>
+            <td class="rate">2.4%</td>
+            <td class="r">486</td>
+            <td class="r">302</td>
+            <td class="rate up">1.04%</td>
           </tr>
           <tr>
             <td><span class="tag tag-nature">汇总短信</span></td>
-            <td>周一/节后</td>
-            <td class="r">5,620</td>
-            <td class="r">326</td>
-            <td class="rate">5.8%</td>
-            <td class="r">135</td>
-            <td class="rate">2.4%</td>
-            <td class="r">98</td>
-            <td class="r">53</td>
-            <td class="rate up">0.94%</td>
-          </tr>
-          <tr>
-            <td><span class="tag" style="background:#fffbe6;color:#ad8b00">转化引导</span></td>
-            <td>注册后D7</td>
-            <td class="r">3,280</td>
-            <td class="r">249</td>
-            <td class="rate">7.6%</td>
-            <td class="r">115</td>
+            <td>注册后首个工作日（10:30）</td>
+            <td class="r">27,950</td>
+            <td class="r">55,900</td>
+            <td class="r">1,900</td>
+            <td class="rate">6.8%</td>
+            <td class="r">990</td>
             <td class="rate">3.5%</td>
-            <td class="r">89</td>
-            <td class="r">58</td>
-            <td class="rate up">1.77%</td>
-          </tr>
-          <tr>
-            <td><span class="tag" style="background:#fff1f0;color:#cf1322">优惠到期</span></td>
-            <td>注册后D15</td>
-            <td class="r">1,856</td>
-            <td class="r">173</td>
-            <td class="rate">9.3%</td>
-            <td class="r">95</td>
-            <td class="rate">5.1%</td>
-            <td class="r">78</td>
-            <td class="r">62</td>
-            <td class="rate up">3.34%</td>
+            <td class="r">702</td>
+            <td class="r">476</td>
+            <td class="rate up">1.70%</td>
           </tr>
           <tr class="sum">
             <td colspan="2"><b>合计</b></td>
-            <td class="r"><b>34,206</b></td>
-            <td class="r"><b>1,733</b></td>
-            <td class="rate"><b>5.1%</b></td>
-            <td class="r"><b>767</b></td>
-            <td class="rate"><b>2.2%</b></td>
-            <td class="r"><b>551</b></td>
-            <td class="r"><b>315</b></td>
-            <td class="rate up"><b>0.92%</b></td>
+            <td class="r"><b>57,050</b></td>
+            <td class="r"><b>114,100</b></td>
+            <td class="r"><b>3,530</b></td>
+            <td class="rate"><b>6.2%</b></td>
+            <td class="r"><b>1,690</b></td>
+            <td class="rate"><b>3.0%</b></td>
+            <td class="r"><b>1,188</b></td>
+            <td class="r"><b>778</b></td>
+            <td class="rate up"><b>1.36%</b></td>
           </tr>
         </tbody>
       </table>
@@ -835,7 +768,6 @@
 <nav class="anchor" id="anchor">
   <a class="active" href="#kpiSection">概览指标</a>
   <a href="#section-funnel">转化漏斗</a>
-  <a href="#section-cohort">逐天Cohort</a>
   <a href="#section-weekly">周粒度明细</a>
   <a href="#section-sms">短信触达</a>
 </nav>
@@ -844,13 +776,14 @@
 /* ========== 模拟“今天” ========== */
 var TODAY = new Date(2026, 7, 11); // 2026-08-11
 
-/* ========== 漏斗数据（按短信类型） ========== */
+/* ========== 漏斗数据（按短信类型） ==========
+   策略 V3：仅 2 条短信
+   1. 基础短信：注册后第 3 天（D3），工作日 15:30，价值证明
+   2. 汇总短信：注册后第 7 天后的第一个工作日，10:30，汇总 + 优惠引导（节假日顺延） */
 var funnelData = {
-  all:      { send: 68450, click: 58324, land: 48508, pay: 34246, success: 20650 },
-  basic:    { send: 23450, click: 19860, land: 16520, pay: 11680, success: 6890  },
-  summary:  { send: 5620,  click: 4580,  land: 3860,  pay: 2740,  success: 1650  },
-  conv:     { send: 3280,  click: 2650,  land: 2210,  pay: 1580,  success: 980   },
-  discount: { send: 1856,  click: 1490,  land: 1240,  pay: 880,   success: 520   }
+  all:      { send: 57050, click: 1690, land: 1460, pay: 1188, success: 778 },
+  basic:    { send: 29100, click: 700,  land: 598,  pay: 486,  success: 302 },
+  summary:  { send: 27950, click: 990,  land: 862,  pay: 702,  success: 476 }
 };
 var funnelColors = {
   send: 'linear-gradient(90deg, #722ed1, #b37feb)',
@@ -925,25 +858,37 @@ function renderFunnel() {
   document.getElementById('funnelTable').innerHTML = tableHtml;
 }
 
-/* ========== 周粒度数据 ========== */
+/* ========== 周粒度数据（近5周） ========== */
 var weeklyData = [
-  { week:'W30', range:'07/27 - 08/02', src:'all',     send:66200, click:58200, land:48600, pay:34300, success:20600 },
-  { week:'W30', range:'07/27 - 08/02', src:'search',  send:39000, click:34000, land:28300, pay:20100, success:12100 },
-  { week:'W30', range:'07/27 - 08/02', src:'natural', send:27200, click:24200, land:20300, pay:14200, success:8500  },
-  { week:'W31', range:'08/03 - 08/09', src:'all',     send:68450, click:58324, land:48508, pay:34246, success:20650 },
-  { week:'W31', range:'08/03 - 08/09', src:'search',  send:40200, click:34100, land:28300, pay:20100, success:12200 },
-  { week:'W31', range:'08/03 - 08/09', src:'natural', send:28250, click:24224, land:20208, pay:14146, success:8450  },
+  { week:'W27', range:'07/13 - 07/19', src:'all',     send:52300, click:1480, land:1290, pay:1060, success:660 },
+  { week:'W27', range:'07/13 - 07/19', src:'search',  send:31380, click:888,  land:774,  pay:636,  success:396 },
+  { week:'W27', range:'07/13 - 07/19', src:'natural', send:20920, click:592,  land:516,  pay:424,  success:264 },
+  { week:'W28', range:'07/20 - 07/26', src:'all',     send:53800, click:1540, land:1320, pay:1080, success:680 },
+  { week:'W28', range:'07/20 - 07/26', src:'search',  send:32280, click:924,  land:792,  pay:648,  success:408 },
+  { week:'W28', range:'07/20 - 07/26', src:'natural', send:21520, click:616,  land:528,  pay:432,  success:272 },
+  { week:'W29', range:'07/27 - 08/02', src:'all',     send:55200, click:1590, land:1360, pay:1120, success:710 },
+  { week:'W29', range:'07/27 - 08/02', src:'search',  send:33120, click:954,  land:816,  pay:672,  success:426 },
+  { week:'W29', range:'07/27 - 08/02', src:'natural', send:22080, click:636,  land:544,  pay:448,  success:284 },
+  { week:'W30', range:'08/03 - 08/09', src:'all',     send:54800, click:1620, land:1395, pay:1135, success:720 },
+  { week:'W30', range:'08/03 - 08/09', src:'search',  send:32880, click:972,  land:837,  pay:681,  success:432 },
+  { week:'W30', range:'08/03 - 08/09', src:'natural', send:21920, click:648,  land:558,  pay:454,  success:288 },
+  { week:'W31', range:'08/04 - 08/11', src:'all',     send:57050, click:1690, land:1460, pay:1188, success:778, cur:true },
+  { week:'W31', range:'08/04 - 08/11', src:'search',  send:34230, click:1014, land:876,  pay:713,  success:467, cur:true },
+  { week:'W31', range:'08/04 - 08/11', src:'natural', send:22820, click:676,  land:584,  pay:475,  success:311, cur:true },
 ];
 
 var currentSource = 'all';
 function renderWeekly(src) {
-  var rows = weeklyData.filter(function(r){ return r.src === src; });
+  /* 倒序排列：最新一周在最上；当周（cur:true）高亮标注 */
+  var rows = weeklyData.filter(function(r){ return r.src === src; }).slice().reverse();
   var html = '';
   rows.forEach(function(r){
     var tr = (r.success/r.click*100).toFixed(1);
     var tc = src==='search'?'tag-search':(src==='natural'?'tag-nature':'tag-all');
     var tn = src==='search'?'搜索页注册':(src==='natural'?'自然流量注册':'全部');
-    html += '<tr><td><b>'+r.week+'</b></td><td>'+r.range+'</td>'+
+    var curCls = r.cur ? ' week-current' : '';
+    var curTag = r.cur ? ' <span class="tag" style="background:#e6f7ff;color:#1890ff;">本周</span>' : '';
+    html += '<tr class="'+curCls+'"><td><b>'+r.week+'</b>'+curTag+'</td><td>'+r.range+'</td>'+
       '<td><span class="tag '+tc+'">'+tn+'</span></td>'+
       '<td class="r">'+r.send.toLocaleString()+'</td>'+
       '<td class="r">'+r.click.toLocaleString()+'</td>'+
@@ -954,7 +899,7 @@ function renderWeekly(src) {
   });
   var t = rows.reduce(function(a,r){ a.send+=r.send; a.click+=r.click; a.land+=r.land; a.pay+=r.pay; a.success+=r.success; return a; },
     {send:0,click:0,land:0,pay:0,success:0});
-  html += '<tr class="sum"><td colspan="3"><b>近2周汇总</b></td>'+
+  html += '<tr class="sum"><td colspan="3"><b>近5周汇总</b></td>'+
     '<td class="r"><b>'+t.send.toLocaleString()+'</b></td>'+
     '<td class="r"><b>'+t.click.toLocaleString()+'</b></td>'+
     '<td class="r"><b>'+t.land.toLocaleString()+'</b></td>'+
@@ -965,21 +910,33 @@ function renderWeekly(src) {
 }
 
 /* ========== Cohort 数据生成（倒排） ========== */
-/* 以“今天”(8/11)为基准往前推，最新注册日在最上面 */
+/* 以“今天”(8/11)为基准往前推，最新注册日在最上面。
+   短信日按实际顺延后的工作日计算：
+   - 基础短信：注册日 + 3 天（逢周末/节假日顺延至下一工作日）
+   - 汇总短信：注册日 + 7 天后的第一个工作日（节假日顺延） */
 var dayNames = ['日','一','二','三','四','五','六'];
 var cohortRows = [];
-var COHORT_DAYS = 10;  // 展示10个注册日
-var PAGE_SIZE = 5;     // 每页5行
+var COHORT_DAYS = 8;   // 展示 8 个注册日
+var PAGE_SIZE = 5;     // 每页 5 行
+var COHORT_COLS = 9;   // 观察 D0 ~ D9（覆盖 D7 周末顺延至下周一 D9 的场景）
 
-/* 注册日当天的短信发送时间 */
-var SMS_START_HOUR = 19; // 19:00 开始发送
+/* 顺延至最近工作日 */
+function nextWorkday(d) {
+  var wd = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  while (wd.getDay() === 0 || wd.getDay() === 6) wd.setDate(wd.getDate() + 1);
+  return wd;
+}
 
 for (var ci = 0; ci < COHORT_DAYS; ci++) {
   /* 注册日 = 今天往前推 ci 天（ci=0 就是今天 8/11） */
   var regDate = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate() - ci);
   /* 已过去的天数（含注册日当天为第0天） */
-  var elapsedDays = ci; // 从注册日到今天过了 ci 天
+  var elapsedDays = ci;
   var registered = Math.round(1100 + Math.random()*400);
+
+  /* 该队列的短信触发日（按顺延后工作日） */
+  var sms3Date = nextWorkday(new Date(regDate.getFullYear(), regDate.getMonth(), regDate.getDate() + 3));
+  var sms7Date = nextWorkday(new Date(regDate.getFullYear(), regDate.getMonth(), regDate.getDate() + 7));
 
   var row = {
     date: (regDate.getMonth()+1)+'/'+regDate.getDate(),
@@ -987,10 +944,12 @@ for (var ci = 0; ci < COHORT_DAYS; ci++) {
     regDate: regDate, /* 注册日期对象，用于计算周末列 */
     registered: registered,
     days: [],
-    elapsed: elapsedDays
+    elapsed: elapsedDays,
+    sms3Date: sms3Date,
+    sms7Date: sms7Date
   };
 
-  for (var dd = 0; dd <= 15; dd++) {
+  for (var dd = 0; dd <= COHORT_COLS; dd++) {
     var cell = { pay:null, land:null, open:null, click:null, pending:false, future:false };
 
     /* 判断该天是否已经发生（注册日+dd 天 是否 <= 今天） */
@@ -1003,26 +962,38 @@ for (var ci = 0; ci < COHORT_DAYS; ci++) {
       continue;
     }
 
-    /* 短信发送判断：发送时间为当晚 19:00-21:00。
-       如果是今天(diffDays==0)且还没到19点，短信待发送；Demo 默认当前已过 20 点，只有注册日=今天的 D0 短信已发 */
-    var smsSent = true;
+    /* 是否为本队列的短信触发日（顺延后） */
+    var isSms3 = occurDate.getTime() === sms3Date.getTime();
+    var isSms7 = occurDate.getTime() === sms7Date.getTime();
 
-    /* 生成数值：基础随机 */
-    var base = dd===0 ? 2.5+Math.random()*1.5 : 1.5+Math.random()*1.2;
-    if (dd===7) base += 1.5 + Math.random()*0.8;      /* D7 转化引导短信跳升 */
-    if (dd===15) base += 2.0 + Math.random()*1.0;     /* D15 优惠到期跳升 */
-    if (dd>=8 && dd<=14) base += 0.5 + Math.random()*0.3;
+    /* 支付转化率：无短信日基线；D3 价值证明温和抬升；D7 汇总+优惠引导明显抬升 */
+    var base = 0.8 + Math.random()*0.6;
+    if (dd>=1 && dd<=2) base += 0.3 + Math.random()*0.2;      /* 自然增长 */
+    if (isSms3) base += 1.0 + Math.random()*0.5;              /* D3 基础短信抬升 */
+    if (isSms7) base += 1.8 + Math.random()*0.8;              /* D7 汇总短信强抬升 */
 
     cell.pay = Math.round(base*10)/10;
-    cell.land = Math.round((base*2.5 + Math.random()*1.5)*10)/10;
-    cell.open = dd%2===0 ? Math.round((4+Math.random()*4)*10)/10 : Math.round((2+Math.random()*2)*10)/10;
-    cell.click = Math.round(cell.open * (0.35+Math.random()*0.15)*10)/10;
+    cell.land = Math.round((base*2.2 + Math.random()*1.2)*10)/10;
+
+    /* 短信打开/点击：仅短信触发日有值，其余天显示“—” */
+    if (isSms3 || isSms7) {
+      if (isSms7) {
+        cell.open = Math.round((5.5 + Math.random()*2.5)*10)/10;  /* 汇总短信打开率更高 */
+        cell.smsType = '汇总短信';
+      } else {
+        cell.open = Math.round((4 + Math.random()*2)*10)/10;      /* 基础短信打开率 */
+        cell.smsType = '基础短信';
+      }
+      cell.click = Math.round(cell.open*(0.35+Math.random()*0.15)*10)/10;
+    }
 
     /* 附加信息（tooltip用） */
     cell.payCount = Math.round(registered * cell.pay/100);
     cell.landCount = Math.round(registered * cell.land/100);
-    cell.openCount = Math.round(registered * cell.open/100);
-    cell.clickCount = Math.round(registered * cell.click/100);
+    if (cell.open !== null) {
+      cell.openCount = Math.round(registered * cell.open/100);
+      cell.clickCount = Math.round(registered * cell.click/100);
+    }
     row.days.push(cell);
   }
   cohortRows.push(row);
@@ -1057,13 +1028,14 @@ function renderCohort(metric, page) {
   cohortPage = page || 1;
   var tbl = document.getElementById('cohortTable');
 
-  /* 表头：D0 对应每行各自的注册日，无法统一标注周末，因此表头不标周末，周末在单元格内标注 */
+  /* 表头：D0 对应每行各自的注册日，无法统一标注周末，因此表头不标周末，周末在单元格内标注。
+     标记计划触发日：D3（基础短信）、D7（汇总短信，逢周末/节假日顺延至首个工作日） */
   var th = '<thead><tr><th>注册日期</th><th class="r">注册人数</th>';
-  for (var dd=0; dd<=15; dd++) {
+  for (var dd=0; dd<=COHORT_COLS; dd++) {
     var cls = 'day-col';
     var bell = '';
-    if (dd===7) { cls += ' mark-col'; bell = '<span class="bell" title="转化引导短信触发日">🔔</span>'; }
-    if (dd===15) { cls += ' mark-col'; bell = '<span class="bell" title="优惠到期短信触发日">🔔</span>'; }
+    if (dd===3) { cls += ' mark-col'; bell = '<span class="bell" title="基础短信计划日（D3，工作日 15:30，周末/节假日顺延）">🔔</span>'; }
+    if (dd===7) { cls += ' mark-col'; bell = '<span class="bell" title="汇总短信触发日（注册后第 7 天后的第一个工作日 10:30）">🔔</span>'; }
     var dayLabel = 'D'+dd+bell;
     th += '<th class="'+cls+'">'+dayLabel+'</th>';
   }
@@ -1086,7 +1058,7 @@ function renderCohort(metric, page) {
       var dw = new Date(row.regDate.getFullYear(), row.regDate.getMonth(), row.regDate.getDate() + dd);
       var dow = dw.getDay();
       if (dow===0||dow===6) cls += ' weekend-col';
-      if (dd===7||dd===15) cls += ' mark-col';
+      if (dd===3||dd===7) cls += ' mark-col';
 
       if (cell.future) {
         /* 未来：未发生 */
@@ -1097,22 +1069,22 @@ function renderCohort(metric, page) {
       var val = cell[metric];
       var tipMetricName = metric==='pay'?'支付转化率':(metric==='land'?'回到付费页':(metric==='open'?'短信打开率':'短信点击率'));
 
-      /* 短信指标特殊处理：注册当天若尚未到发送时间，显示“待发送” */
-      var countKey = metric + 'Count';
-      var count = cell[countKey];
-
-      if ((metric==='open' || metric==='click') && dd===0 && row.elapsed===0) {
-        /* 今天注册、短信待发送（19:00-21:00） */
-        tb += '<td class="'+cls+'"><div class="cell cell-pending">待发送<small style="display:block;font-weight:400;">19:00-21:00</small></div></td>';
+      /* 短信指标：非短信触发日无数据（显示“—”） */
+      if (val === null) {
+        tb += '<td class="'+cls+'"><div class="cell cell-null">—</div></td>';
         return;
       }
 
+      var countKey = metric + 'Count';
+      var count = cell[countKey];
+
       var heatCls = getHeatClass(val, metric);
-      var tipHtml = tipMetricName+': <b>'+(val===null?'—':val+'%')+'</b><br>'+
+      var tipHtml = tipMetricName+': <b>'+val+'%</b><br>'+
         (metric==='pay'?'支付笔数':metric==='land'?'浏览付费页':metric==='open'?'短信打开':'短信点击')+': '+count+
+        (cell.smsType ? '<br>短信类型: '+cell.smsType : '')+
         '<br>注册人数基数: '+row.registered;
 
-      tb += '<td class="'+cls+'"><div class="cell '+heatCls+'">'+(val===null?'—':val+'%')+
+      tb += '<td class="'+cls+'"><div class="cell '+heatCls+'">'+val+'%'+
         '<div class="cell-tooltip">'+tipHtml+'</div></div></td>';
     });
     tb += '</tr>';
@@ -1156,9 +1128,9 @@ document.querySelectorAll('#sourceFilter .pill').forEach(function(btn){
     currentSource = src;
     renderWeekly(src);
     var kpi = {
-      all:     { s:['68,450','↑ 6.2%','up'], c:['58,324','↑ 8.3%','up'], l:['48,508','↑ 5.1%','up'], p:['34,246','↓ 2.4%','down'], s2:['20,650','↑ 12.7%','up'] },
-      search:  { s:['40,200','↑ 6.8%','up'], c:['34,100','↑ 9.1%','up'], l:['28,300','↑ 6.2%','up'], p:['20,100','↓ 1.8%','down'], s2:['12,200','↑ 11.5%','up'] },
-      natural: { s:['28,250','↑ 5.1%','up'], c:['24,224','↑ 7.0%','up'], l:['20,208','↑ 3.8%','up'], p:['14,146','↓ 3.1%','down'], s2:['8,450','↑ 14.2%','up'] },
+      all:     { s:['57,050','↑ 4.1%','up'], c:['1,690','↑ 4.3%','up'], l:['1,460','↑ 4.7%','up'], p:['1,188','↑ 4.7%','up'], s2:['778','↑ 8.1%','up'] },
+      search:  { s:['34,230','↑ 4.1%','up'], c:['1,014','↑ 4.3%','up'], l:['876','↑ 4.7%','up'], p:['713','↑ 4.7%','up'], s2:['467','↑ 8.1%','up'] },
+      natural: { s:['22,820','↑ 4.1%','up'], c:['676','↑ 4.3%','up'], l:['584','↑ 4.7%','up'], p:['475','↑ 4.7%','up'], s2:['311','↑ 8.1%','up'] }
     };
     var k = kpi[src];
     document.getElementById('kpi0').textContent = k.s[0];
@@ -1184,7 +1156,7 @@ document.getElementById('funnelSmsToggle').addEventListener('change', renderFunn
 
 /* 右侧锚点 */
 function updateAnchor(){
-  var ids = ['kpiSection','section-funnel','section-cohort','section-weekly','section-sms'];
+  var ids = ['kpiSection','section-funnel','section-weekly','section-sms'];
   var st = window.scrollY + 100;
   var active = ids[0];
   ids.forEach(function(id){

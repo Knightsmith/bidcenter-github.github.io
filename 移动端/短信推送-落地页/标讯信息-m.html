@@ -382,6 +382,66 @@ body {
 .bis-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 9px; }
 .bis-meta .mi { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; color: hsl(var(--muted-foreground)); }
 .bis-meta .mi b { color: hsl(218 40% 28%); font-weight: 600; }
+
+/* ===================== 标讯正文区（项目概况） ===================== */
+.bis-desc { margin: 12px 0 10px; }
+.desc-text {
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: hsl(218 24% 32%);
+  text-align: justify;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 10; /* 完整展开时共 10 行 */
+}
+.desc-text.clamped { -webkit-line-clamp: 4; } /* 第一条默认仅展示前 4 行 */
+/* 展开全文 / 收起：按钮化，明显可见 */
+.desc-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid hsl(218 89% 46% / .4);
+  border-radius: 10px;
+  background: hsl(218 100% 96%);
+  color: hsl(218 89% 42%);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  user-select: none;
+  transition: background .15s ease;
+}
+.desc-toggle:active { background: hsl(218 90% 92%); }
+.desc-toggle .dt-arrow { transition: transform .2s ease; font-size: 11px; }
+.desc-toggle.open .dt-arrow { transform: rotate(180deg); }
+
+/* 其他标讯：无正文内容，显示「查看正文」引导，点击后弹会员提示 */
+.bis-expand {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 11px;
+  border: 1px dashed hsl(218 89% 46% / .4);
+  border-radius: 10px;
+  background: hsl(218 100% 96%);
+  color: hsl(218 89% 42%);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  user-select: none;
+  transition: background .15s ease;
+}
+.bis-expand:active { background: hsl(218 90% 92%); }
+.bis-expand .dt-arrow { font-size: 11px; transition: transform .2s ease; }
+
 .bis-grid {
   display: grid;
   grid-template-columns: 1.15fr 1fr auto;
@@ -415,26 +475,7 @@ body {
   font-size: 10.5px;
   color: hsl(var(--muted-foreground));
 }
-.bis-lock-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.bis-goto {
-  flex-shrink: 0;
-  font-size: 11px;
-  font-weight: 700;
-  color: #fff;
-  background: linear-gradient(135deg, #F59A23, #F97316);
-  border: none;
-  border-radius: 8px;
-  padding: 5px 11px;
-  cursor: default;
-  white-space: nowrap;
-  box-shadow: 0 2px 6px hsl(34 75% 50% / .35);
-}
-.bis-lock-more {
-  margin-top: 6px;
-  font-size: 10px;
-  font-weight: 600;
-  color: #EF5B1C;
-}
+.bis-lock-row { display: flex; align-items: center; gap: 8px; }
 
 /* ===================== 底部会员权益卡（主色蓝） ===================== */
 .member-card-bottom {
@@ -500,42 +541,155 @@ body {
 .mcb-btn .arrow { font-size: 16px; }
 .mcb-sub { text-align: center; font-size: 10px; color: rgba(255, 255, 255, .8); margin-top: 8px; }
 
-/* ===================== 悬浮「立即开通」按钮 ===================== */
-.float-cta {
+/* ===================== 右侧悬浮：客服 + 立即开通（不遮挡底部信息） ===================== */
+.float-dock {
   position: absolute;
-  left: 50%;
-  bottom: 46px;
-  transform: translateX(-50%);
+  right: 6px;
+  bottom: 62px;
   z-index: 70;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+}
+.float-dock > * { pointer-events: auto; }
+.float-service {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid hsl(218 89% 46% / .28);
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  font-size: 10px;
+  font-weight: 700;
+  color: hsl(218 89% 42%);
+  cursor: pointer;
+  box-shadow: 0 8px 20px hsl(218 89% 30% / .2), inset 0 0 0 4px hsl(218 100% 97%);
+}
+.float-service .cs-icon { font-size: 17px; line-height: 1; }
+.float-service:active { transform: scale(.96); }
+.float-open {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  padding: 12px 36px;
+  gap: 4px;
+  padding: 11px 17px;
   border: none;
   border-radius: 999px;
   background: linear-gradient(135deg, #F59A23, #F97316 55%, #EF5B1C);
   color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 10px 24px rgba(153, 47, 4, .35), inset 0 1px 0 rgba(255, 255, 255, .3);
+}
+.float-open:active { transform: scale(.97); }
+.float-open .arrow { font-size: 14px; }
+
+/* ===================== 会员弹窗 ===================== */
+.member-modal {
+  position: absolute;
+  inset: 0;
+  z-index: 90;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0 28px;
+}
+.member-modal.open { display: flex; }
+.modal-mask {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 18, 40, .55);
+  backdrop-filter: blur(2px);
+  animation: modalFade .2s ease;
+}
+.modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 26px 22px 22px;
+  text-align: center;
+  box-shadow: 0 24px 60px rgba(2, 12, 40, .35);
+  animation: modalPop .3s cubic-bezier(.22,1,.36,1);
+}
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: hsl(218 26% 95%);
+  color: hsl(var(--muted-foreground));
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-close:active { background: hsl(218 20% 90%); }
+.modal-icon {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 12px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #F59A23, #F97316 55%, #EF5B1C);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 10px 24px hsl(34 75% 50% / .35);
+}
+.modal-card h4 { font-size: 16px; font-weight: 800; color: hsl(218 42% 11%); }
+.modal-desc {
+  font-size: 12px;
+  line-height: 1.7;
+  color: hsl(var(--muted-foreground));
+  margin: 8px 0 18px;
+}
+.modal-actions { display: flex; flex-direction: column; gap: 10px; }
+.modal-btn {
+  width: 100%;
+  height: 44px;
+  border: none;
+  border-radius: 12px;
   font-size: 15px;
   font-weight: 800;
-  letter-spacing: 3px;
-  cursor: default;
-  white-space: nowrap;
-  box-shadow: 0 10px 26px rgba(153, 47, 4, .4), inset 0 1px 0 rgba(255, 255, 255, .3);
-  transition: opacity .25s ease, transform .25s ease;
-  opacity: 1;
-  pointer-events: none;
+  letter-spacing: 2px;
+  cursor: pointer;
 }
-.float-cta .arrow { font-size: 16px; }
-.float-cta.hidden-cta {
-  opacity: 0;
-  transform: translateX(-50%) translateY(14px);
-  pointer-events: none;
+.modal-btn-primary {
+  background: linear-gradient(135deg, #F59A23, #F97316 55%, #EF5B1C);
+  color: #fff;
+  box-shadow: 0 8px 22px rgba(153, 47, 4, .3), inset 0 1px 0 rgba(255, 255, 255, .25);
+}
+.modal-btn-primary:active { transform: scale(.98); }
+.modal-btn-outline {
+  background: #fff;
+  color: hsl(218 89% 42%);
+  border: 1px solid hsl(218 89% 46% / .35);
+}
+.modal-btn-outline:active { background: hsl(218 100% 96%); }
+@keyframes modalFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modalPop {
+  from { opacity: 0; transform: translateY(16px) scale(.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* ===================== 页脚 ===================== */
 .footer {
-  padding: 12px 16px 18px;
+  padding: 12px 16px 20px;
   text-align: center;
   font-size: 10px;
   color: hsl(var(--muted-foreground));
@@ -600,7 +754,7 @@ body {
       <!-- 顶部会员权益横幅 -->
       <section class="member-banner">
         <div class="mb-badge">👑 采招网标讯 VIP</div>
-        <h2>今日最新标讯 抢先看</h2>
+        <h2>最新标讯 抢先看</h2>
         <p class="mb-sub">开通会员，解锁完整标讯信息，标讯先人一步</p>
         <ul class="mb-benefits">
           <li>🔔 每日实时推送 · 短信提醒</li>
@@ -615,10 +769,9 @@ body {
       <div class="list-head">
         <div class="lh-l">
           <span class="live-dot"></span>
-          <h3 id="listTitle">今日最新标讯</h3>
-          <span class="lh-count" id="todayCount">128 条</span>
+          <h3 id="listTitle">最新标讯</h3>
+          <span class="lh-count" id="todayCount">10 条信息</span>
         </div>
-        <span class="lh-update" id="updateTime">更新于 10:32</span>
       </div>
 
       <!-- 标讯列表（JS 渲染） -->
@@ -638,18 +791,38 @@ body {
           <span>👥 赠 2 个子账号</span>
         </div>
         <button class="mcb-btn" type="button">立即开通<span class="arrow">→</span></button>
-        <div class="mcb-sub">首次开通赠送 2 个子账号 · 可开票 · 随时退订</div>
+        <div class="mcb-sub">首次开通赠送 2 个子账号 · 可开票</div>
       </section>
 
       <!-- 页脚 -->
       <footer class="footer">
         数据来源：<b>采招网</b>信息平台 · 每日实时更新<br>
-        客服电话：400-888-0000（工作日 9:00 - 18:00）
+        客服电话：400-810-9688（工作日 9:00 - 18:00）
       </footer>
     </div>
 
-    <!-- 悬浮「立即开通」按钮 -->
-    <button class="float-cta" type="button" id="floatCta">立即开通<span class="arrow">→</span></button>
+    <!-- 右侧悬浮：客服 + 立即开通（常驻，不遮挡底部信息） -->
+    <div class="float-dock">
+      <button class="float-service" type="button" id="serviceBtn">
+        <span class="cs-icon">💬</span>客服
+      </button>
+      <button class="float-open" type="button" id="floatCta">立即开通<span class="arrow">→</span></button>
+    </div>
+
+    <!-- 会员弹窗 -->
+    <div class="member-modal" id="memberModal">
+      <div class="modal-mask" id="modalMask"></div>
+      <div class="modal-card">
+        <button class="modal-close" id="modalClose" type="button" aria-label="关闭">✕</button>
+        <div class="modal-icon">🔒</div>
+        <h4>当前仅供付费会员查看</h4>
+        <p class="modal-desc">开通采招网会员，解锁联系人、联系电话、完整标书等更多权益</p>
+        <div class="modal-actions">
+          <button class="modal-btn modal-btn-primary" id="modalOpenBtn" type="button">立即开通</button>
+          <button class="modal-btn modal-btn-outline" id="modalServiceBtn" type="button">咨询客服</button>
+        </div>
+      </div>
+    </div>
 
     <!-- 底部主屏幕按钮 -->
     <div class="home-bar"></div>
@@ -658,30 +831,37 @@ body {
 <script>
 /* ===================== 模拟标讯数据池（14 条，部分条目无预算/截止时间/剩余天数） ===================== */
 var ALL_NEWS = [
-  { t: '南京市中医院医疗设备采购项目（CT 球管 / DR 影像系统）', i: '医疗设备', r: '江苏 · 南京', m: '公开招标', b: 286, d: '08-27 17:00', dl: 17, cat: '招标公告', time: '08:25' },
-  { t: '杭州市数据资源管理局政务云平台运维服务项目', i: '政务信息化', r: '浙江 · 杭州', m: '竞争性磋商', b: 180, d: '08-19 09:00', dl: 9, cat: '招标公告', time: '08:47' },
-  { t: '合肥市瑶海区雨污分流管网改造工程（二期）', i: '市政工程', r: '安徽 · 合肥', m: '公开招标', b: 1250, d: '08-25 10:00', dl: 15, cat: '资格预审', time: '09:10' },
-  { t: '郑州市金水区中小学校舍外立面安全加固工程', i: '校园建设', r: '河南 · 郑州', m: '公开招标', b: 430, d: '08-20 14:00', dl: 10, cat: '更正公告', time: '09:02' },
-  { t: '武汉市东湖高新区城市道路照明节能改造项目', i: '市政工程', r: '湖北 · 武汉', m: '公开招标', b: 620, d: '08-18 17:30', dl: 8, cat: '招标公告', time: '08:56' },
-  { t: '福州市生态环境局水质自动监测站运维服务采购', i: '环保检测', r: '福建 · 福州', m: '竞争性磋商', b: null, d: '08-14 09:00', dl: 4, cat: '招标公告', time: '09:24' },
-  { t: '西安市雁塔区机关办公大楼物业服务采购项目', i: '物业管理', r: '陕西 · 西安', m: '公开招标', b: 75, d: '08-13 17:00', dl: 3, cat: '更正公告', time: '08:33' },
-  { t: '广州市天河区税务局税收宣传物料印制服务', i: '印刷服务', r: '广东 · 广州', m: '询价', b: null, d: null, dl: null, cat: '采购意向公开', time: '09:41' },
-  { t: '成都市医疗保障局医保结算系统升级改造项目', i: '软件开发', r: '四川 · 成都', m: '公开招标', b: 340, d: '08-22 10:00', dl: 12, cat: '招标公告', time: '07:58' },
-  { t: '长沙市浏阳河堤防加固整治工程（右岸段）', i: '水利工程', r: '湖南 · 长沙', m: '公开招标', b: null, d: '08-26 09:30', dl: 16, cat: '招标公告', time: '08:18' },
-  { t: '重庆市江北区安置房小区消防设施维修工程', i: '消防工程', r: '重庆', m: '竞争性磋商', b: null, d: null, dl: null, cat: '中标结果', time: '10:05' },
-  { t: '昆明市呈贡区市政道路绿化养护服务（2026 年度）', i: '园林绿化', r: '云南 · 昆明', m: '公开招标', b: null, d: null, dl: null, cat: '采购意向公开', time: '09:30' },
-  { t: '沈阳市和平区中小学营养餐食材配送服务采购', i: '食材配送', r: '辽宁 · 沈阳', m: '公开招标', b: null, d: null, dl: null, cat: '中标结果', time: '08:40' },
-  { t: '青岛市市南区老旧小区加装电梯采购与安装项目', i: '电梯采购', r: '山东 · 青岛', m: '框架协议', b: 520, d: '08-24 09:30', dl: 14, cat: '招标公告', time: '09:12' }
+  { t: '南京市中医院医疗设备采购项目（CT 球管 / DR 影像系统）', i: '医疗设备', r: '江苏 · 南京', m: '公开招标', b: 286, d: '08-27 17:00', dl: 17, cat: '招标公告', time: '08:25',
+    c: '本项目已由南京市卫生健康委员会批准建设，资金来源为医院自筹资金，现已具备招标条件，对南京市中医院医疗设备采购项目（CT 球管 / DR 影像系统）进行公开招标。招标范围：采购 CT 球管 2 套、DR 影像系统 1 套及配套影像软件升级服务，包含设备供货、安装调试、操作培训及质保期内免费维保。投标人须为在中华人民共和国境内注册的独立法人，具备医疗器械经营许可证，所投产品须具有医疗器械注册证，近三年内具有同类三级医院供货业绩。凡有意参加投标者，请于 2026 年 8 月 12 日至 8 月 18 日每日 9:00 至 11:30、14:00 至 17:00，持法人授权委托书及营业执照复印件至南京市秦淮区汉中路 155 号报名并购买招标文件，每套售价 500 元，售后不退。投标文件递交截止时间为 2026 年 8 月 27 日 17:00，地点为南京市公共资源交易中心 5 楼开标室，逾期送达或未按招标文件要求密封的投标文件不予受理。' },
+  { t: '杭州市数据资源管理局政务云平台运维服务项目', i: '政务信息化', r: '浙江 · 杭州', m: '竞争性磋商', b: 180, d: '08-19 09:00', dl: 9, cat: '招标公告', time: '08:47',
+    c: '本项目已由杭州市数据资源管理局批准立项，资金来源为财政性资金，现已具备招标条件，对该项目进行竞争性磋商。采购内容：为杭州市政务云平台提供为期一年的运维服务，包括云资源监控、安全巡检、故障响应、数据备份与应急演练，以及不少于 3 名工程师的驻场技术支持，服务期自合同签订之日起 12 个月。供应商须具有云计算服务运营经验，具备 ITSS 运维服务能力等级证书，近三年内具有同类政务云运维业绩。凡有意参加磋商者，请于 2026 年 8 月 10 日至 8 月 15 日每日 9:00 至 17:00，登录杭州市公共资源交易平台在线报名并免费下载磋商文件。响应文件递交截止时间为 2026 年 8 月 19 日 09:00，地点为杭州市公共资源交易中心开标室，逾期递交的响应文件将被拒绝。' },
+  { t: '合肥市瑶海区雨污分流管网改造工程（二期）', i: '市政工程', r: '安徽 · 合肥', m: '公开招标', b: 1250, d: '08-25 10:00', dl: 15, cat: '资格预审', time: '09:10',
+    c: '本项目已由合肥市瑶海区发展和改革委员会批准建设，资金来源为区财政资金，现已具备招标条件，对合肥市瑶海区雨污分流管网改造工程（二期）进行公开招标。工程内容：对区内 8 条道路约 12.6 公里雨污水管网进行分流改造，含管道敷设、检查井砌筑、道路开挖恢复及相关附属设施建设，计划工期 300 日历天。投标人须具备市政公用工程施工总承包二级及以上资质，项目经理须持有一级建造师执业资格并具备安全生产考核合格证，近五年内具有类似雨污分流工程业绩。凡有意参加投标者，请于 2026 年 8 月 11 日至 8 月 17 日每日 8:30 至 17:00，持相关资质证书复印件至合肥市瑶海区公共资源交易中心报名并领取招标文件（资格预审）。投标文件递交截止时间为 2026 年 8 月 25 日 10:00，开标地点为合肥市瑶海区公共资源交易中心三楼开标厅，逾期送达不予受理。' },
+  { t: '郑州市金水区中小学校舍外立面安全加固工程', i: '校园建设', r: '河南 · 郑州', m: '公开招标', b: 430, d: '08-20 14:00', dl: 10, cat: '更正公告', time: '09:02',
+    c: '本项目已由郑州市金水区教育局批准实施，资金来源为区财政资金，现已具备招标条件，对郑州市金水区中小学校舍外立面安全加固工程进行公开招标。招标范围：对辖区 12 所中小学校舍外立面进行安全检测、结构加固及外立面翻新，含外墙饰面拆除、保温层施工、真石漆涂装等，计划工期 120 日历天，须在暑期完成施工。投标人须具备建筑工程施工总承包三级及以上资质或特种工程专业承包资质（结构补强），近三年内具有校舍加固类业绩。凡有意参加投标者，请于 2026 年 8 月 10 日至 8 月 16 日每日 9:00 至 17:30，至郑州市金水区信息大厦 12 楼招标代理机构处报名并购买招标文件，每套售价 800 元，售后不退。投标文件递交截止时间为 2026 年 8 月 20 日 14:00，地点为郑州市公共资源交易中心，逾期送达的投标文件将不予受理。' },
+  { t: '武汉市东湖高新区城市道路照明节能改造项目', i: '市政工程', r: '湖北 · 武汉', m: '公开招标', b: 620, d: '08-18 17:30', dl: 8, cat: '招标公告', time: '08:56',
+    c: '本项目已由武汉东湖新技术开发区管理委员会批准建设，资金来源为财政资金，现已具备招标条件，对武汉市东湖高新区城市道路照明节能改造项目进行公开招标。工程内容：对辖区 23 条主干道约 8600 盏高压钠灯更换为 LED 节能灯具，并加装智能照明控制系统，包含旧灯拆除、新灯安装、线路检测及系统调试，计划工期 180 日历天。投标人须具备城市及道路照明工程专业承包二级及以上资质，具有同类道路照明改造工程业绩，项目经理须持有一级建造师证书。凡有意参加投标者，请于 2026 年 8 月 10 日至 8 月 16 日每日 9:00 至 17:00，通过武汉东湖高新区电子招投标系统在线报名并下载招标文件，招标文件免费。投标文件递交截止时间为 2026 年 8 月 18 日 17:30，开标地点为武汉光谷公共服务中心 3 楼，逾期或不符合规定的投标文件恕不接受。' },
+  { t: '福州市生态环境局水质自动监测站运维服务采购', i: '环保检测', r: '福建 · 福州', m: '竞争性磋商', b: null, d: '08-14 09:00', dl: 4, cat: '招标公告', time: '09:24',
+    c: '本项目已由福州市生态环境局批准立项，资金来源为财政性资金，现已具备招标条件，对福州市水质自动监测站运维服务采购项目进行竞争性磋商。服务内容：对全市 42 座水质自动监测站进行为期一年的日常运维，包括仪器校准、试剂更换、数据审核上报、故障维修及站房保洁，要求数据有效率达到 95% 以上。供应商须具有生态环境监测运维服务资质，运维人员须持证上岗，近三年内具有同类水质自动监测站运维业绩。凡有意参加磋商者，请于 2026 年 8 月 11 日至 8 月 14 日每日 9:00 至 17:00，前往福州市鼓楼区环保大厦 6 楼报名并获取磋商文件，每份售价 200 元。响应文件递交截止时间为 2026 年 8 月 14 日 09:00，地点为福州市公共资源交易中心开标室，逾期递交的响应文件将被拒绝接收。' },
+  { t: '西安市雁塔区机关办公大楼物业服务采购项目', i: '物业管理', r: '陕西 · 西安', m: '公开招标', b: 75, d: '08-13 17:00', dl: 3, cat: '更正公告', time: '08:33',
+    c: '本项目已由西安市雁塔区机关事务服务中心批准实施，资金来源为财政资金，现已具备招标条件，对西安市雁塔区机关办公大楼物业服务采购项目进行公开招标。服务范围：机关办公大楼地上 12 层、地下 2 层，建筑面积约 3.2 万平方米，提供保洁、安保、绿化养护、工程维修及会议服务，服务期一年。投标人须具备物业服务企业二级及以上资质，服务团队须配备物业管理师及持证保安、电工人员，近三年内具有类似政府机关物业管理业绩。凡有意参加投标者，请于 2026 年 8 月 9 日至 8 月 13 日每日 9:00 至 17:00，持营业执照及资质证书复印件至雁塔区政务服务中心一楼报名并购买招标文件，每套售价 300 元。投标文件递交截止时间为 2026 年 8 月 13 日 17:00，地点为西安市雁塔区公共资源交易中心，逾期送达的投标文件不予受理。' },
+  { t: '广州市天河区税务局税收宣传物料印制服务', i: '印刷服务', r: '广东 · 广州', m: '询价', b: null, d: null, dl: null, cat: '采购意向公开', time: '09:41',
+    c: '本项目已由广州市天河区税务局批准实施，资金来源为财政资金，现已具备条件，对广州市天河区税务局税收宣传物料印制服务进行询价采购。采购内容：印制税收政策宣传折页 5 万份、宣传海报 8000 张、办税指南手册 2 万本及宣传横幅一批，含设计排版、印刷制作及配送服务，交付期 15 个日历天。供应商须具有印刷经营许可证，具备同类政务宣传物料印制经验，须免费提供打样服务。凡有意参与询价者，请于 2026 年 8 月 12 日至 8 月 13 日每日 9:00 至 17:00，携带营业执照及报价文件至广州市天河区税务局后勤服务中心报名，询价文件免费领取。报价文件递交截止时间为 2026 年 8 月 14 日 10:00，地点为广州市天河区税务局 2 楼会议室，逾期送达的报价文件不予受理。' },
+  { t: '成都市医疗保障局医保结算系统升级改造项目', i: '软件开发', r: '四川 · 成都', m: '公开招标', b: 340, d: '08-22 10:00', dl: 12, cat: '招标公告', time: '07:58',
+    c: '本项目已由成都市医疗保障局批准立项，资金来源为财政性资金，现已具备招标条件，对成都市医疗保障局医保结算系统升级改造项目进行公开招标。建设内容：对现有医保结算系统进行功能升级，包括新增跨省异地就医直接结算模块、DRG 付费结算接口改造、医保基金监管预警功能开发及历史数据迁移，工期 120 日历天。投标人须具备 CMMI3 及以上软件能力成熟度认证，具有同类医保或政务系统开发业绩，项目经理须具备信息系统项目管理师资质。凡有意参加投标者，请于 2026 年 8 月 10 日至 8 月 16 日每日 9:00 至 17:00，登录成都市公共资源交易服务中心网站报名并下载招标文件，招标文件免费。投标文件递交截止时间为 2026 年 8 月 22 日 10:00，地点为成都市公共资源交易服务中心开标厅，逾期递交的投标文件将被拒绝。' },
+  { t: '长沙市浏阳河堤防加固整治工程（右岸段）', i: '水利工程', r: '湖南 · 长沙', m: '公开招标', b: null, d: '08-26 09:30', dl: 16, cat: '招标公告', time: '08:18',
+    c: '本项目已由长沙市水利局批准建设，资金来源为市级财政资金，现已具备招标条件，对长沙市浏阳河堤防加固整治工程（右岸段）进行公开招标。工程内容：右岸段堤防全长约 5.8 公里，含堤身加高培厚、护坡砌筑、防渗处理及防汛道路修建，堤防等级为 I 级，计划工期 240 日历天。投标人须具备水利水电工程施工总承包一级及以上资质，近五年内具有同类堤防加固工程业绩，项目经理须持有一级建造师（水利水电）执业资格。凡有意参加投标者，请于 2026 年 8 月 11 日至 8 月 17 日每日 8:30 至 17:30，至长沙市水利局招标办公室报名并购买招标文件，每套售价 1000 元。投标文件递交截止时间为 2026 年 8 月 26 日 09:30，地点为长沙市公共资源交易中心，逾期送达的投标文件不予受理。' },
+  { t: '重庆市江北区安置房小区消防设施维修工程', i: '消防工程', r: '重庆', m: '竞争性磋商', b: null, d: null, dl: null, cat: '中标结果', time: '10:05',
+    c: '本项目已由重庆市江北区住房和城乡建设委员会批准实施，资金来源为专项维修资金，现已具备招标条件，对重庆市江北区安置房小区消防设施维修工程进行竞争性磋商。工程内容：对辖区 5 个安置房小区消防设施进行全面维修，含消防水泵更换、喷淋系统检修、火灾自动报警系统调试、应急照明更换及消防通道划线，计划工期 90 日历天。投标人须具备消防设施工程专业承包二级及以上资质，项目经理须具备机电工程注册建造师资格，近三年内具有同类消防维修工程业绩。凡有意参加磋商者，请于 2026 年 8 月 12 日至 8 月 15 日每日 9:00 至 17:00，至江北区行政服务中心住建委窗口报名并获取磋商文件。响应文件递交截止时间及磋商时间以磋商文件约定为准，地点为重庆市江北区公共资源交易中心。' },
+  { t: '昆明市呈贡区市政道路绿化养护服务（2026 年度）', i: '园林绿化', r: '云南 · 昆明', m: '公开招标', b: null, d: null, dl: null, cat: '采购意向公开', time: '09:30',
+    c: '本项目已由昆明市呈贡区城市管理局批准实施，资金来源为财政资金，现已具备采购条件，对昆明市呈贡区市政道路绿化养护服务（2026 年度）进行公开招标。服务内容：对辖区 36 条市政道路约 48 万平方米绿化带、行道树及街头绿地提供年度养护服务，含修剪、施肥、浇水、病虫害防治及补植，服务期一年。投标人须具备园林绿化相关经营范围，养护团队须配备园林工程师，近三年内具有同类绿化养护业绩。凡有意参加投标者，请于 2026 年 8 月 12 日至 8 月 18 日每日 9:00 至 17:00，登录昆明市公共资源交易电子服务系统报名并下载招标文件。投标文件递交截止时间以招标文件约定为准，地点为昆明市呈贡区公共资源交易中心，逾期递交的投标文件不予接收。' },
+  { t: '沈阳市和平区中小学营养餐食材配送服务采购', i: '食材配送', r: '辽宁 · 沈阳', m: '公开招标', b: null, d: null, dl: null, cat: '中标结果', time: '08:40',
+    c: '本项目已由沈阳市和平区教育局批准实施，资金来源为财政资金，现已具备招标条件，对沈阳市和平区中小学营养餐食材配送服务采购项目进行公开招标。服务内容：为辖区 28 所中小学校提供 2026 学年营养餐食材统一配送服务，含蔬菜、肉类、粮油及调料等，每日配送约 3.5 万份，须通过食品安全管理体系认证。投标人须具备食品经营许可证，配送车辆及仓储设施须符合食品卫生要求，近三年内具有学校食堂食材配送业绩。凡有意参加投标者，请于 2026 年 8 月 10 日至 8 月 15 日每日 9:00 至 17:00，至沈阳市和平区教育局后勤保障中心报名并购买招标文件，每套售价 400 元，售后不退。投标文件递交截止时间以招标文件约定为准，逾期送达的投标文件不予受理。' },
+  { t: '青岛市市南区老旧小区加装电梯采购与安装项目', i: '电梯采购', r: '山东 · 青岛', m: '框架协议', b: 520, d: '08-24 09:30', dl: 14, cat: '招标公告', time: '09:12',
+    c: '本项目已由青岛市市南区发展和改革局批准实施，资金来源为居民自筹与财政补贴相结合，现已具备招标条件，对青岛市市南区老旧小区加装电梯采购与安装项目进行框架协议采购。采购内容：确定 2 家电梯供应商及安装单位，为辖区 60 余个楼栋提供加装电梯的供货、安装、调试及两年质保服务，电梯须满足无障碍及消防要求。投标人须具备特种设备制造许可证及安装改造维修许可证（电梯），近三年内具有老旧小区加装电梯业绩。凡有意参加投标者，请于 2026 年 8 月 10 日至 8 月 16 日每日 9:00 至 17:00，通过青岛市公共资源交易平台报名并下载招标文件。投标文件递交截止时间为 2026 年 8 月 24 日 09:30，地点为青岛市市南区公共资源交易中心，逾期递交的投标文件不予受理。' }
 ];
 
 /* 预算模糊化：若非会员，仅保留首位数字，其余以 × 掩码 */
-function maskBudget(n) {
-  var s = String(n);
-  var out = s.charAt(0);
-  for (var i = 1; i < s.length; i++) out += '×';
-  return out;
-}
-
 /* 倒计时胶囊样式：≤3 天红色，≤7 天橙色，其余蓝色 */
 function countClass(dl) {
   if (dl <= 3) return 'c-urgent';
@@ -708,6 +888,23 @@ function pickRandom(list, n) {
   return a.slice(0, n);
 }
 
+/* 计算发布时间（本日显示"更新于X个小时前"） */
+function getTimeAgo(timeStr) {
+  var now = new Date();
+  var parts = timeStr.split(':');
+  var itemHours = parseInt(parts[0], 10);
+  var itemMinutes = parseInt(parts[1], 10);
+  var itemTotalMin = itemHours * 60 + itemMinutes;
+  var nowTotalMin = now.getHours() * 60 + now.getMinutes();
+  var deltaMin = nowTotalMin - itemTotalMin;
+  if (deltaMin < 0) deltaMin = 0;
+  if (deltaMin < 60) {
+    return '更新于' + deltaMin + '分钟前';
+  }
+  var hours = Math.floor(deltaMin / 60);
+  return '更新于' + hours + '个小时前';
+}
+
 function render() {
   /* 状态栏时间 */
   var now = new Date();
@@ -717,19 +914,17 @@ function render() {
 
   /* 今日日期（今天：2026-08-10） */
   var listTitle = document.getElementById('listTitle');
-  listTitle.textContent = '今日最新标讯 · ' + (now.getMonth() + 1) + '月' + now.getDate() + '日';
+  listTitle.textContent = '最新标讯 · ' + (now.getMonth() + 1) + '月' + now.getDate() + '日';
 
-  /* 更新时刻 */
-  document.getElementById('updateTime').textContent = '更新于 ' + hh + ':' + mm;
 
-  /* 随机抽取 12 条并渲染 */
-  var picks = pickRandom(ALL_NEWS, 12);
+  /* 随机抽取 10 条并渲染 */
+  var picks = pickRandom(ALL_NEWS, 10);
   var html = '';
   for (var i = 0; i < picks.length; i++) {
     var n = picks[i];
-    /* 预算：缺失显示"未公开"，否则模糊化 + 锁标记 */
+    /* 预算：缺失显示"未公开"，金额直接完整展示 */
     var budgetHtml = n.b != null
-      ? '¥ ' + maskBudget(n.b) + ' 万<span class="lock"> 🔒</span>'
+      ? '¥ ' + n.b + ' 万'
       : '<span class="bi-na">未公开</span>';
     /* 投标截止：缺失显示"详见公告" */
     var deadlineHtml = n.d != null ? n.d : '<span class="bi-na">详见公告</span>';
@@ -737,12 +932,23 @@ function render() {
     var countHtml = n.dl != null
       ? '<span class="bis-count ' + countClass(n.dl) + '">剩 ' + n.dl + ' 天</span>'
       : '<span class="bis-count c-na">以公告为准</span>';
+    /* 第一条：有正文内容（默认折叠 4 行 + 展开全文，置于简略信息下方）；
+       其余：无正文，仅「查看正文」引导按钮，点击卡片弹会员提示 */
+    var isFirst = (i === 0);
+    var descHtml = isFirst
+      ? '<div class="bis-desc">' +
+          '<p class="desc-text clamped">' + n.c + '</p>' +
+          '<button class="desc-toggle" type="button">展开全文<span class="dt-arrow">▾</span></button>' +
+        '</div>'
+      : '<div class="bis-desc">' +
+          '<button class="bis-expand" type="button">查看正文<span class="dt-arrow">▾</span></button>' +
+        '</div>';
     html +=
-      '<article class="bis-card">' +
+      '<article class="bis-card"' + (isFirst ? '' : ' data-lock="1"') + '>' +
         '<div class="bis-head">' +
           '<span class="bis-tag">' + n.i + '</span>' +
           '<span class="cat-tag ' + catClass(n.cat) + '">' + n.cat + '</span>' +
-          '<span class="bis-time">' + n.time + ' 发布</span>' +
+          '<span class="bis-time">' + getTimeAgo(n.time) + '</span>' +
         '</div>' +
         '<h3 class="bis-title">' + n.t + '</h3>' +
         '<div class="bis-meta">' +
@@ -760,12 +966,11 @@ function render() {
           '</div>' +
           countHtml +
         '</div>' +
+        descHtml +
         '<div class="bis-lock">' +
           '<div class="bis-lock-row">' +
-            '<span>📞 联系人 · 联系电话 · 完整标书</span>' +
-            '<button class="bis-goto" type="button">立即前往 →</button>' +
+            '<span>📞 联系人/联系方式/标书或附件</span>' +
           '</div>' +
-          '<div class="bis-lock-more">🔒 更多内容会员可见</div>' +
         '</div>' +
       '</article>';
   }
@@ -774,19 +979,43 @@ function render() {
 
 render();
 
-/* 悬浮「立即开通」：当底部会员卡出现时隐藏 */
+/* ===================== 第一条：展开全文 / 收起 ===================== */
 (function () {
-  var cta = document.getElementById('floatCta');
-  var area = document.getElementById('scrollArea');
-  var target = document.querySelector('.member-card-bottom');
-  function onScroll() {
-    var rect = target.getBoundingClientRect();
-    var areaTop = area.getBoundingClientRect().top;
-    /* 底部会员卡顶部进入可视区 → 隐藏悬浮按钮 */
-    cta.classList.toggle('hidden-cta', rect.top < areaTop);
-  }
-  area.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+  var toggle = document.querySelector('.bis-card .desc-toggle');
+  if (!toggle) return;
+  toggle.addEventListener('click', function () {
+    var desc = toggle.parentNode;
+    var text = desc.querySelector('.desc-text');
+    var open = toggle.classList.toggle('open');
+    text.classList.toggle('clamped', !open);
+    toggle.innerHTML = open
+      ? '收起<span class="dt-arrow">▾</span>'
+      : '展开全文<span class="dt-arrow">▾</span>';
+  });
+})();
+
+/* ===================== 会员弹窗 ===================== */
+(function () {
+  var modal = document.getElementById('memberModal');
+  function openModal() { modal.classList.add('open'); }
+  function closeModal() { modal.classList.remove('open'); }
+
+  /* 点击其他标讯卡片（整卡）→ 弹会员提示 */
+  var list = document.getElementById('bisList');
+  list.addEventListener('click', function (e) {
+    var card = e.target.closest ? e.target.closest('.bis-card[data-lock]') : null;
+    if (card) openModal();
+  });
+
+  /* 弹窗关闭 */
+  document.getElementById('modalMask').addEventListener('click', closeModal);
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  document.getElementById('modalOpenBtn').addEventListener('click', closeModal);
+  document.getElementById('modalServiceBtn').addEventListener('click', closeModal);
+
+  /* 右侧常驻：客服 / 立即开通 */
+  document.getElementById('floatCta').addEventListener('click', openModal);
+  document.getElementById('serviceBtn').addEventListener('click', openModal);
 })();
 </script>
 </body>
