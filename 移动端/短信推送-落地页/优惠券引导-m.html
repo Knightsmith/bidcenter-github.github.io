@@ -4,12 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>采招网 · 新人专享优惠</title>
-<meta name="description" content="采招网新人专享：1000元优惠券，或完善公司信息解锁更多免费项。">
+<meta name="description" content="采招网新人专享：会员立减福利包，完善信息得额外奖励">
 
-<!-- Tailwind CDN（项目既有惯例，辅助布局） -->
+<!-- Tailwind CDN -->
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
-  /* shadcn 语义色 token 扩展（主色 #0D5CE0 / 重点色 #F59A23） */
   tailwind.config = {
     theme: { extend: {
       colors: {
@@ -37,10 +36,8 @@
 <style>
 /* ===================== shadcn 风格设计 token ===================== */
 :root {
-  /* 主色 #0D5CE0 → hsl(218 89% 46.5%) */
   --primary: 218 89% 46.5%;
   --primary-foreground: 210 40% 98%;
-  /* 重点色 #F59A23 → hsl(34 75% 55%) */
   --highlight: 34 75% 55%;
   --highlight-foreground: 0 0% 100%;
 
@@ -97,7 +94,6 @@ body {
   flex-direction: column;
 }
 
-/* 刘海 */
 .notch {
   position: absolute;
   top: 0;
@@ -116,7 +112,6 @@ body {
 .notch .camera { width: 8px; height: 8px; background: hsl(220 12% 14%); border-radius: 50%; }
 .notch .speaker { width: 50px; height: 6px; background: hsl(220 12% 14%); border-radius: 3px; }
 
-/* 状态栏 */
 .status-bar {
   height: 44px;
   padding: 0 26px;
@@ -136,7 +131,6 @@ body {
 .status-icons { display: flex; align-items: center; gap: 5px; }
 .status-icons svg { width: 16px; height: 16px; fill: hsl(218 30% 15%); }
 
-/* 应用顶部导航 */
 .app-header {
   background: hsl(var(--background));
   padding: 10px 16px;
@@ -184,7 +178,6 @@ body {
 }
 .h-action svg { width: 16px; height: 16px; fill: none; stroke: currentColor; }
 
-/* 可滚动内容区 */
 .scroll-area {
   flex: 1;
   overflow-y: auto;
@@ -194,15 +187,15 @@ body {
 }
 .scroll-area::-webkit-scrollbar { display: none; }
 
-/* ===================== 顶部会员权益横幅（重点橙） ===================== */
-.member-banner {
+/* ===================== 顶部新人专享横幅 ===================== */
+.newcomer-banner {
   position: relative;
   overflow: hidden;
   background: linear-gradient(135deg, #F59A23 0%, #F97316 42%, #EF5B1C 100%);
   padding: 16px 16px 14px;
   color: #fff;
 }
-.member-banner::before {
+.newcomer-banner::before {
   content: "";
   position: absolute;
   top: -46px; right: -46px;
@@ -211,7 +204,7 @@ body {
   background: radial-gradient(circle, rgba(255, 255, 255, .28), transparent 65%);
   pointer-events: none;
 }
-.member-banner::after {
+.newcomer-banner::after {
   content: "";
   position: absolute;
   bottom: -70px; left: -30px;
@@ -220,7 +213,7 @@ body {
   background: radial-gradient(circle, rgba(255, 255, 255, .16), transparent 62%);
   pointer-events: none;
 }
-.mb-badge {
+.nb-badge {
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -236,21 +229,21 @@ body {
   z-index: 1;
   margin-bottom: 8px;
 }
-.member-banner h2 {
+.newcomer-banner h2 {
   font-size: 17px;
   font-weight: 800;
   letter-spacing: .5px;
   position: relative;
   z-index: 1;
 }
-.member-banner .mb-sub {
+.newcomer-banner .nb-sub {
   font-size: 11px;
   color: rgba(255, 255, 255, .92);
   margin-top: 2px;
   position: relative;
   z-index: 1;
 }
-.mb-benefits {
+.nb-benefits {
   list-style: none;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -259,7 +252,7 @@ body {
   position: relative;
   z-index: 1;
 }
-.mb-benefits li {
+.nb-benefits li {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -271,32 +264,12 @@ body {
   border: 1px solid rgba(255, 255, 255, .22);
   line-height: 1.3;
 }
-.mb-btn {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 12px;
-  background: #fff;
-  color: #EF5B1C;
-  font-size: 15px;
-  font-weight: 800;
-  letter-spacing: 2px;
-  cursor: default;
-  box-shadow: 0 6px 20px rgba(153, 47, 4, .35), inset 0 0 0 1px rgba(255, 255, 255, .5);
-}
-.mb-btn .arrow { font-size: 15px; }
 
-/* ===================== 优惠券区域 ===================== */
-.coupon-section {
+/* ===================== 福利区 ===================== */
+.benefit-section {
   padding: 16px 12px;
 }
-.coupon-section .section-title {
+.benefit-section .section-title {
   font-size: 15px;
   font-weight: 800;
   color: hsl(var(--card-foreground));
@@ -305,7 +278,7 @@ body {
   align-items: center;
   gap: 6px;
 }
-.coupon-section .section-title .tag {
+.benefit-section .section-title .tag {
   font-size: 10px;
   font-weight: 700;
   padding: 2px 8px;
@@ -314,8 +287,8 @@ body {
   color: #fff;
 }
 
-/* 优惠券卡片 */
-.coupon-card {
+/* 福利卡片 */
+.benefit-card {
   background: hsl(var(--card));
   border: 1.5px solid hsl(var(--border));
   border-radius: 16px;
@@ -323,19 +296,8 @@ body {
   margin-bottom: 12px;
   position: relative;
   overflow: hidden;
-  transition: all .2s ease;
-  cursor: pointer;
 }
-.coupon-card:active:not(.disabled) { transform: scale(.98); }
-.coupon-card.selected {
-  border-color: hsl(var(--highlight));
-  box-shadow: 0 4px 16px hsl(34 75% 55% / .18);
-}
-.coupon-card.disabled {
-  opacity: .55;
-  pointer-events: none;
-}
-.coupon-card::before {
+.benefit-card.card-a::before {
   content: "";
   position: absolute;
   left: 0; top: 0; bottom: 0;
@@ -343,18 +305,22 @@ body {
   border-radius: 0 3px 3px 0;
   background: linear-gradient(180deg, #0D5CE0, #3B82F6);
 }
-.coupon-card.card-b::before {
+.benefit-card.card-b::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  border-radius: 0 3px 3px 0;
   background: linear-gradient(180deg, #F59A23, #F97316);
 }
 
-/* 优惠券内部结构 */
-.coupon-head {
+.benefit-head {
   display: flex;
   align-items: flex-start;
   gap: 10px;
   margin-bottom: 12px;
 }
-.coupon-icon {
+.benefit-icon {
   width: 44px; height: 44px;
   border-radius: 12px;
   display: flex;
@@ -363,51 +329,50 @@ body {
   font-size: 22px;
   flex-shrink: 0;
 }
-.coupon-icon.icon-a {
+.benefit-icon.icon-a {
   background: linear-gradient(135deg, #0D5CE0, #3B82F6);
   box-shadow: 0 4px 12px hsl(218 89% 40% / .35);
 }
-.coupon-icon.icon-b {
+.benefit-icon.icon-b {
   background: linear-gradient(135deg, #F59A23, #EF5B1C);
   box-shadow: 0 4px 12px hsl(34 75% 50% / .35);
 }
-.coupon-info { flex: 1; min-width: 0; }
-.coupon-info .name {
+.benefit-info { flex: 1; min-width: 0; }
+.benefit-info .name {
   font-size: 14px;
   font-weight: 800;
   color: hsl(var(--card-foreground));
   margin-bottom: 2px;
 }
-.coupon-info .desc {
+.benefit-info .desc {
   font-size: 11px;
   color: hsl(var(--muted-foreground));
   line-height: 1.4;
 }
-.coupon-price {
+.benefit-value {
   display: flex;
   align-items: baseline;
   gap: 2px;
   margin-top: 2px;
 }
-.coupon-price .symbol { font-size: 14px; font-weight: 700; }
-.coupon-price .amount {
+.benefit-value .symbol { font-size: 14px; font-weight: 700; }
+.benefit-value .amount {
   font-size: 24px;
   font-weight: 900;
   letter-spacing: -1px;
   line-height: 1.1;
 }
-.coupon-price .unit { font-size: 11px; font-weight: 600; }
-.coupon-card.card-a .coupon-price { color: hsl(218 89% 42%); }
-.coupon-card.card-b .coupon-price { color: hsl(34 80% 42%); }
+.benefit-value .unit { font-size: 11px; font-weight: 600; }
+.benefit-card.card-a .benefit-value { color: hsl(218 89% 42%); }
+.benefit-card.card-b .benefit-value { color: hsl(34 80% 42%); }
 
-/* 优惠券标签 */
-.coupon-tags {
+.benefit-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
-  margin-bottom: 12px;
+  margin-bottom: 2px;
 }
-.coupon-tags span {
+.benefit-tags span {
   font-size: 10px;
   font-weight: 600;
   padding: 3px 8px;
@@ -417,124 +382,19 @@ body {
   color: hsl(218 40% 28%);
 }
 
-/* 优惠券按钮 */
-.coupon-btn {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  padding: 11px;
-  border: none;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 1.5px;
-  cursor: pointer;
-  transition: all .15s ease;
+.benefit-card .company-input-group {
+  margin-top: 10px;
 }
-.coupon-btn:active { transform: scale(.97); }
-.coupon-btn.btn-a {
-  background: linear-gradient(135deg, #0D5CE0, #1d5ee6);
-  color: #fff;
-  box-shadow: 0 6px 16px hsl(218 89% 40% / .3);
-}
-.coupon-btn.btn-b {
-  background: linear-gradient(135deg, #F59A23, #F97316 55%, #EF5B1C);
-  color: #fff;
-  box-shadow: 0 6px 16px rgba(153, 47, 4, .3);
-}
-
-/* 已选提示条 */
-.selected-hint {
-  display: none;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
-  border-radius: 10px;
-  background: hsl(34 95% 93%);
-  border: 1px dashed hsl(34 80% 70% / .6);
-  margin-bottom: 14px;
-  font-size: 12px;
-  color: hsl(28 80% 42%);
-  font-weight: 600;
-}
-.selected-hint.show { display: flex; }
-.selected-hint .sh-icon { font-size: 16px; }
-.selected-hint .sh-reset {
-  margin-left: auto;
-  font-size: 11px;
-  color: hsl(218 89% 42%);
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-/* ===================== 优惠券输入区域 ===================== */
-.coupon-input-area {
-  margin: 12px 0;
-  padding: 0 4px;
-}
-.coupon-input-area label {
+.company-input-group label {
   display: block;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
-  color: hsl(34 75% 42%);
+  color: hsl(218 42% 11%);
   margin-bottom: 6px;
 }
-.coupon-input-area input {
+.company-input-group input {
   width: 100%;
   height: 40px;
-  padding: 0 14px;
-  border: 1px solid hsl(34 75% 55%);
-  border-radius: 10px;
-  background: hsl(34 95% 93%);
-  font-size: 14px;
-  color: hsl(218 42% 11%);
-  outline: none;
-  transition: all .15s;
-  -webkit-appearance: none;
-}
-.coupon-input-area input:focus {
-  border-color: hsl(34 75% 70%);
-  background: #fff;
-  box-shadow: 0 0 0 3px hsl(34 75% 55% / .2);
-}
-.coupon-input-area input::placeholder {
-  color: hsl(34 80% 65%);
-}
-
-/* ===================== 内嵌完善信息区（选中券B时显示） ===================== */
-.info-inline {
-  display: none;
-  background: hsl(var(--card));
-  border: 1.5px solid hsl(var(--highlight));
-  border-radius: 16px;
-  padding: 16px;
-  margin-bottom: 14px;
-  box-shadow: 0 4px 16px hsl(34 75% 55% / .18);
-}
-.info-inline.show { display: block; animation: modalPop .3s cubic-bezier(.22,1,.36,1); }
-.info-inline-head {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  font-weight: 800;
-  color: hsl(218 42% 11%);
-  margin-bottom: 12px;
-}
-.info-inline-head .ii-icon { font-size: 18px; }
-.info-inline .form-row { margin-bottom: 12px; }
-.info-inline label {
-  display: block;
-  font-size: 12px;
-  font-weight: 600;
-  color: hsl(218 42% 11%);
-  margin-bottom: 4px;
-}
-.info-inline input {
-  width: 100%;
-  height: 42px;
   padding: 0 12px;
   border: 1px solid hsl(var(--border));
   border-radius: 10px;
@@ -545,95 +405,44 @@ body {
   transition: border-color .15s;
   -webkit-appearance: none;
 }
-.info-inline input:focus { border-color: hsl(var(--ring)); }
-.info-inline input::placeholder { color: hsl(var(--muted-foreground)); }
-.info-inline .ii-submit {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  padding: 12px;
-  border: none;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #F59A23, #F97316 55%, #EF5B1C);
-  color: #fff;
-  font-size: 15px;
-  font-weight: 800;
-  letter-spacing: 1.5px;
-  cursor: pointer;
-  box-shadow: 0 6px 16px rgba(153, 47, 4, .3);
-}
-.info-inline .ii-submit:active { transform: scale(.97); }
-.info-inline .ii-done {
-  display: none;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
-  border-radius: 10px;
-  background: hsl(142 60% 95%);
-  border: 1px dashed hsl(142 55% 70% / .7);
-  font-size: 12px;
-  color: hsl(142 55% 36%);
-  font-weight: 600;
-  margin-top: 4px;
-}
-.info-inline .ii-done.show { display: flex; }
+.company-input-group input:focus { border-color: hsl(var(--ring)); }
+.company-input-group input::placeholder { color: hsl(var(--muted-foreground)); }
 
-
-
-/* ===================== 右侧悬浮：客服 + 立即开通（不遮挡底部信息） ===================== */
+/* ===================== 右侧悬浮胶囊：了解更多（客服样式） ===================== */
 .float-dock {
   position: absolute;
-  right: 6px;
-  bottom: 62px;
+  right: 8px;
+  bottom: 118px;
   z-index: 70;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
   pointer-events: none;
 }
 .float-dock > * { pointer-events: auto; }
 .float-service {
-  width: 52px; height: 52px;
-  border-radius: 50%;
+  width: 52px;
+  min-width: 48px;
+  border-radius: 999px;
   border: 1px solid hsl(218 89% 46% / .28);
   background: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1px;
+  gap: 3px;
   font-size: 10px;
   font-weight: 700;
   color: hsl(218 89% 42%);
   cursor: pointer;
   box-shadow: 0 8px 20px hsl(218 89% 30% / .2), inset 0 0 0 4px hsl(218 100% 97%);
+  padding: 11px 6px;
+  line-height: 1.25;
 }
-.float-service .cs-icon { font-size: 17px; line-height: 1; }
+.float-service .cs-icon { font-size: 18px; line-height: 1; }
 .float-service:active { transform: scale(.96); }
-.float-open {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  padding: 11px 17px;
-  border: none;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #F59A23, #F97316 55%, #EF5B1C);
-  color: #fff;
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  cursor: pointer;
-  white-space: nowrap;
-  box-shadow: 0 10px 24px rgba(153, 47, 4, .35), inset 0 1px 0 rgba(255, 255, 255, .3);
-}
-.float-open:active { transform: scale(.97); }
-.float-open .arrow { font-size: 14px; }
 
-/* ===================== 弹窗（通用） ===================== */
+/* ===================== 弹窗（通用）===================== */
 .modal-overlay {
   position: absolute;
   inset: 0;
@@ -700,28 +509,6 @@ body {
   margin: 8px 0 18px;
 }
 .modal-actions { display: flex; flex-direction: column; gap: 10px; }
-.modal-btn {
-  width: 100%;
-  height: 44px;
-  border: none;
-  border-radius: 12px;
-  font-size: 15px;
-  font-weight: 800;
-  letter-spacing: 2px;
-  cursor: pointer;
-}
-.modal-btn-primary {
-  background: linear-gradient(135deg, #F59A23, #F97316 55%, #EF5B1C);
-  color: #fff;
-  box-shadow: 0 8px 22px rgba(153, 47, 4, .3), inset 0 1px 0 rgba(255, 255, 255, .25);
-}
-.modal-btn-primary:active { transform: scale(.98); }
-.modal-btn-outline {
-  background: #fff;
-  color: hsl(218 89% 42%);
-  border: 1px solid hsl(218 89% 46% / .35);
-}
-.modal-btn-outline:active { background: hsl(218 100% 96%); }
 @keyframes modalFade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes modalPop {
   from { opacity: 0; transform: translateY(16px) scale(.96); }
@@ -738,9 +525,7 @@ body {
   border-top: 1px solid hsl(var(--border));
   margin: 0 12px;
 }
-.footer b { color: hsl(218 89% 42%); font-weight: 700; }
 
-/* 底部主屏幕按钮 */
 .home-bar {
   height: 34px;
   display: flex;
@@ -757,21 +542,37 @@ body {
   border-radius: 3px;
 }
 
-/* 领取成功水印 */
-.claimed-stamp {
+/* 底部固定领取按钮 */
+.bottom-claim {
   position: absolute;
-  top: 10px;
-  right: -20px;
-  transform: rotate(25deg);
-  font-size: 13px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  background: hsl(var(--background));
+  border-top: 1px solid hsl(var(--border));
+  padding: 12px 16px;
+  padding-bottom: calc(12px + 34px);
+}
+.claim-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #F59A23, #F97316 55%, #EF5B1C);
+  color: #fff;
+  font-size: 16px;
   font-weight: 800;
   letter-spacing: 2px;
-  padding: 4px 30px;
-  border: 2px solid hsl(218 89% 42%);
-  color: hsl(218 89% 42%);
-  opacity: .35;
-  pointer-events: none;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(153, 47, 4, .35), inset 0 1px 0 rgba(255, 255, 255, .3);
 }
+.claim-btn:active { transform: scale(.98); }
+.claim-btn .arrow { font-size: 16px; }
 </style>
 </head>
 <body>
@@ -792,126 +593,103 @@ body {
     <!-- 顶部导航 -->
     <div class="app-header">
       <div class="brand">
-        <div class="logo-mark">采</div>
+        <div class="logo-mark">招</div>
         <div class="brand-text">
           <span class="logo-text">采招网</span>
           <span class="logo-slogan">找商机上采招 · 始于专业 重于服务</span>
         </div>
       </div>
       <div class="header-actions">
-        <div class="h-action" aria-label="搜索">
-          <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
-        </div>
       </div>
     </div>
 
-    <!-- 可滚动内容 -->
+    <!-- 可滚动内容区 -->
     <div class="scroll-area" id="scrollArea">
 
-      <!-- 顶部会员权益横幅 -->
-      <section class="member-banner">
-        <div class="mb-badge">🎁 新人专享</div>
-        <h2>最高立减 1000 元</h2>
-        <p class="mb-sub">限时优惠，二选一领取，开通会员更划算</p>
-        <ul class="mb-benefits">
-          <li>💰 年会员立减 1000 元</li>
-          <li>📄 完善公司信息解锁更多免费项</li>
-          <li>🎯 行业精准筛选 · 关键词订阅</li>
+      <!-- 顶部新人专享横幅 -->
+      <section class="newcomer-banner">
+        <div class="nb-badge">🎁 新人专享</div>
+        <h2>专属双重福利</h2>
+        <p class="nb-sub">新用户必得两份好礼，完善信息还可解锁更多免费查看项</p>
+        <ul class="nb-benefits">
+          <li>💰 会员立减 1000</li>
+          <li>📄 完善信息得福利包</li>
+          <li>🎯 多维度筛选</li>
           <li>👥 首次开通赠子账号</li>
         </ul>
       </section>
 
-      <!-- 优惠券二选一 -->
-      <div class="coupon-section">
+      <!-- 双重福利（均展示，无需选择） -->
+      <div class="benefit-section">
         <div class="section-title">
-          🎫 选择你的专属优惠<span class="tag">二选一</span>
+          🎁 你的福利<span class="tag">双重惊喜</span>
         </div>
 
-        <!-- 优惠券 A：1000 元立减券 -->
-        <div class="coupon-card card-a" id="cardA" data-type="a">
-          <div class="coupon-head">
-            <div class="coupon-icon icon-a">🎟️</div>
-            <div class="coupon-info">
-              <div class="name">年会员立减券</div>
-              <div class="desc">默认直接领取，无门槛使用</div>
-              <div class="coupon-price">
+        <!-- 福利一：立减 1000 -->
+        <div class="benefit-card card-a">
+          <div class="benefit-head">
+            <div class="benefit-icon icon-a">🎟️</div>
+            <div class="benefit-info">
+              <div class="name">福利一：直接领取全国会员立减 1000</div>
+              <div class="desc">开通会员时自动抵扣使用</div>
+              <div class="benefit-value">
                 <span class="symbol">¥</span>
                 <span class="amount">1000</span>
                 <span class="unit">立减</span>
               </div>
             </div>
           </div>
-          <div class="coupon-tags">
-            <span>📅 有效期 30 天</span>
-            <span>🔥 新用户专享</span>
-            <span>🎁 赠子账号</span>
+          <div class="benefit-tags">
+            <span>🔥 仅限今日</span>
           </div>
-          <button class="coupon-btn btn-a" type="button" id="btnA">立即领取 →</button>
         </div>
 
-        <!-- 优惠券 B：完善公司信息（直接包含输入框） -->
-        <div class="coupon-card card-b" id="cardB" data-type="b">
-          <div class="coupon-head">
-            <div class="coupon-icon icon-b">✏️</div>
-            <div class="coupon-info">
-              <div class="name">完善公司信息</div>
+        <!-- 福利二：完善公司信息 -->
+        <div class="benefit-card card-b">
+          <div class="benefit-head">
+            <div class="benefit-icon icon-b">✏️</div>
+            <div class="benefit-info">
+              <div class="name">福利二：完善信息得福利包 8888</div>
               <div class="desc">填写公司信息，解锁更多免费查看项</div>
-              <div class="coupon-price">
+              <div class="benefit-value">
                 <span class="symbol">🎁</span>
-                <span class="amount" style="font-size:18px;">更多免费项</span>
+                <span class="amount" style="font-size:18px;">价值 8888 福利包</span>
               </div>
             </div>
           </div>
-          <div class="coupon-tags">
+          <div class="benefit-tags">
             <span>🏢 绑定公司</span>
             <span>📍 精准地区推送</span>
             <span>📄 解锁免费详情</span>
           </div>
-          <div class="coupon-input-area">
+          <div class="company-input-group">
             <label for="inputCompany">企业名称</label>
             <input type="text" id="inputCompany" placeholder="请输入企业名称" autocomplete="off">
-          </div>
-          <button class="ii-submit" type="button" id="infoSubmit">提交并解锁 →</button>
-        </div>
-
-        <!-- 已选提示条 -->
-        <div class="selected-hint" id="selectedHint">
-          <span class="sh-icon">✅</span>
-          <span id="hintText">已选择</span>
-          <span class="sh-reset" id="resetBtn">重新选择</span>
-        </div>
-
-        <!-- 内嵌完善信息区（选中券B时显示，仅公司名称） -->
-        <div class="info-inline" id="infoInline">
-          <div class="info-inline-head">
-            <span class="ii-icon">🏢</span>
-            <span>完善公司信息，解锁更多免费项</span>
-          </div>
-          <div class="form-row">
-            <label for="inputCompany">企业名称</label>
-            <input type="text" id="inputCompany" placeholder="请输入企业名称" autocomplete="off">
-          </div>
-          <button class="ii-submit" type="button" id="infoSubmit">提交并解锁 →</button>
-          <div class="ii-done" id="infoDone">
-            <span>✅</span>
-            <span>公司已完善，更多免费查看项已解锁！</span>
           </div>
         </div>
       </div>
 
       <!-- 页脚 -->
       <footer class="footer">
-        数据来源：<b>采招网</b>信息平台 · 每日实时更新<br>
         客服电话：400-810-9688（工作日 9:00 - 18:00）
       </footer>
     </div>
 
-    <!-- 右侧悬浮 -->
-    <div class="float-dock">
-      <button class="float-service" type="button" id="serviceBtn">
-        <span class="cs-icon">💬</span>客服
+    <!-- 底部固定领取按钮 -->
+    <div class="bottom-claim">
+      <button class="claim-btn" type="button" id="claimBtn">
+        <span>🎉</span>
+        立即领取
+        <span class="arrow">→</span>
       </button>
-      <button class="float-open" type="button" id="floatCta">立即开通<span class="arrow">→</span></button>
+    </div>
+
+    <!-- 右侧悬浮：了解更多（客服样式） -->
+    <div class="float-dock">
+      <button class="float-service" type="button" id="infoBtn">
+        <span class="cs-icon">💬</span>了解
+        <span>更多</span>
+      </button>
     </div>
 
     <!-- ========== 弹窗 1：领取成功 ========== -->
@@ -921,25 +699,23 @@ body {
         <button class="modal-close" id="claimClose" type="button" aria-label="关闭">✕</button>
         <div class="modal-icon icon-highlight">🎉</div>
         <h4>领取成功！</h4>
-        <p class="modal-desc" id="claimDesc">您已成功领取 ¥1000 年会员立减券，开通会员时自动抵扣。</p>
+        <p class="modal-desc">您已成功领取所有福利，我们将在第一时间为您发放</p>
         <div class="modal-actions">
-          <button class="modal-btn modal-btn-primary" id="claimToOpen" type="button">立即开通会员</button>
-          <button class="modal-btn modal-btn-outline" id="claimCloseBtn" type="button">先逛逛</button>
+          <button class="modal-btn modal-btn-primary" id="claimOkBtn" type="button">我知道了</button>
         </div>
       </div>
     </div>
 
-    <!-- ========== 弹窗 2：会员引导 ========== -->
-    <div class="modal-overlay" id="memberModal">
-      <div class="modal-mask" id="memberMask"></div>
+    <!-- ========== 弹窗 2：了解更多（客服电话） ========== -->
+    <div class="modal-overlay" id="infoModal">
+      <div class="modal-mask" id="infoMask"></div>
       <div class="modal-card">
-        <button class="modal-close" id="memberClose" type="button" aria-label="关闭">✕</button>
-        <div class="modal-icon icon-highlight">🔒</div>
-        <h4>开通会员立享优惠</h4>
-        <p class="modal-desc">开通采招网会员，使用优惠券立减 ¥1000，解锁全部标讯详情与推送服务。</p>
+        <button class="modal-close" id="infoClose" type="button" aria-label="关闭">✕</button>
+        <div class="modal-icon icon-highlight">📞</div>
+        <h4>了解详情</h4>
+        <p class="modal-desc">欢迎咨询客服了解更多详情<br>客服电话：400-810-9688<br>工作时间：工作日 9:00 - 18:00</p>
         <div class="modal-actions">
-          <button class="modal-btn modal-btn-primary" id="memberOpenBtn" type="button">立即开通</button>
-          <button class="modal-btn modal-btn-outline" id="memberServiceBtn" type="button">咨询客服</button>
+          <button class="modal-btn modal-btn-primary" id="infoOkBtn" type="button">好的，知道了</button>
         </div>
       </div>
     </div>
@@ -957,108 +733,35 @@ body {
   document.getElementById('statusTime').textContent = hh + ':' + mm;
 })();
 
-/* ===================== 优惠券二选一逻辑 ===================== */
-var currentSelection = null; // 'a' or 'b'
-
-function selectCoupon(type) {
-  if (currentSelection === type) return;
-  currentSelection = type;
-
-  var cardA = document.getElementById('cardA');
-  var cardB = document.getElementById('cardB');
-  var hint = document.getElementById('selectedHint');
-  var hintText = document.getElementById('hintText');
-
-  if (type === 'a') {
-    cardA.classList.add('selected');
-    cardB.classList.add('disabled');
-    cardB.classList.remove('selected');
-    hintText.textContent = '已选择「¥1000 年会员立减券」';
-    openClaimModal('您已成功领取 ¥1000 年会员立减券，开通会员时自动抵扣。');
-  } else {
-    cardB.classList.add('selected');
-    cardA.classList.add('disabled');
-    cardA.classList.remove('selected');
-    hintText.textContent = '已选择「完善公司信息，解锁更多免费项」';
-  }
-
-  hint.classList.add('show');
-}
-
-function resetSelection() {
-  currentSelection = null;
-  document.getElementById('cardA').classList.remove('selected', 'disabled');
-  document.getElementById('cardB').classList.remove('selected', 'disabled');
-  document.getElementById('selectedHint').classList.remove('show');
-  document.getElementById('inputCompany').value = '';
-  document.getElementById('infoDone').classList.remove('show');
-}
-
 /* ===================== 弹窗通用 ===================== */
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
-/* 领取成功弹窗 */
-var claimDesc = document.getElementById('claimDesc');
-function openClaimModal(text) {
-  if (text) claimDesc.textContent = text;
-  openModal('claimModal');
-}
-
-/* 会员引导弹窗 */
-function openMemberModal() { openModal('memberModal'); }
-
 /* ===================== 事件绑定 ===================== */
 (function () {
-  /* 券 A */
-  document.getElementById('btnA').addEventListener('click', function () { selectCoupon('a'); });
-  document.getElementById('cardA').addEventListener('click', function (e) {
-    if (e.target.closest('.coupon-btn')) return;
-    selectCoupon('a');
+  /**
+   * 点击立即领取按钮
+   */
+  document.getElementById('claimBtn').addEventListener('click', function () {
+    openModal('claimModal');
   });
 
-  /* 券 B */
-  document.getElementById('btnB').addEventListener('click', function () { selectCoupon('b'); });
-  document.getElementById('cardB').addEventListener('click', function (e) {
-    if (e.target.closest('.coupon-btn')) return;
-    selectCoupon('b');
-  });
-
-  /* 重新选择 */
-  document.getElementById('resetBtn').addEventListener('click', resetSelection);
-
-  /* 领取成功弹窗 → 开通会员 */
+  /**
+   * 领取成功弹窗关闭
+   */
   document.getElementById('claimMask').addEventListener('click', function () { closeModal('claimModal'); });
   document.getElementById('claimClose').addEventListener('click', function () { closeModal('claimModal'); });
-  document.getElementById('claimCloseBtn').addEventListener('click', function () { closeModal('claimModal'); });
-  document.getElementById('claimToOpen').addEventListener('click', function () {
-    closeModal('claimModal');
-    openMemberModal();
-  });
+  document.getElementById('claimOkBtn').addEventListener('click', function () { closeModal('claimModal'); });
 
-  /* 会员引导弹窗 */
-  document.getElementById('memberMask').addEventListener('click', function () { closeModal('memberModal'); });
-  document.getElementById('memberClose').addEventListener('click', function () { closeModal('memberModal'); });
-  document.getElementById('memberOpenBtn').addEventListener('click', function () { closeModal('memberModal'); });
-  document.getElementById('memberServiceBtn').addEventListener('click', function () { closeModal('memberModal'); });
-
-  /* 内嵌完善信息区：仅公司名称 */
-  document.getElementById('infoSubmit').addEventListener('click', function () {
-    var company = document.getElementById('inputCompany').value.trim();
-    if (!company) {
-      alert('请输入公司名称');
-      return;
-    }
-    // 显示已完善状态，并提示已解锁免费项
-    document.getElementById('infoDone').classList.add('show');
-    document.getElementById('infoInline').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  /**
+   * 了解更多弹窗
+   */
+  document.getElementById('infoBtn').addEventListener('click', function () {
+    openModal('infoModal');
   });
-
-  /* 右侧悬浮 */
-  document.getElementById('floatCta').addEventListener('click', openMemberModal);
-  document.getElementById('serviceBtn').addEventListener('click', function () {
-    alert('客服电话：400-810-9688（工作日 9:00 - 18:00）');
-  });
+  document.getElementById('infoMask').addEventListener('click', function () { closeModal('infoModal'); });
+  document.getElementById('infoClose').addEventListener('click', function () { closeModal('infoModal'); });
+  document.getElementById('infoOkBtn').addEventListener('click', function () { closeModal('infoModal'); });
 })();
 </script>
 </body>
