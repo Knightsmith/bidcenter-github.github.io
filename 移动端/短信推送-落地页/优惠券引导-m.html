@@ -78,6 +78,35 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* ===================== 页面级 Tab 切换（手机框外） ===================== */
+.page-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 10;
+}
+.page-tab {
+  padding: 9px 22px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border: 1.5px solid hsl(var(--border));
+  background: hsl(var(--card));
+  color: hsl(var(--muted-foreground));
+  transition: all .15s ease;
+  -webkit-appearance: none;
+}
+.page-tab:active { transform: scale(.97); }
+.page-tab.active {
+  background: linear-gradient(135deg, #0D5CE0, #3B82F6);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 6px 16px hsl(218 89% 40% / .3);
+}
+
 /* ===================== 手机模型 ===================== */
 .phone {
   width: 375px;
@@ -576,6 +605,12 @@ body {
 </style>
 </head>
 <body>
+  <!-- 页面级 Tab 切换（手机框外） -->
+  <div class="page-tabs">
+    <button class="page-tab active" type="button" id="tabUnfilled">未完善信息</button>
+    <button class="page-tab" type="button" id="tabFilled">已完善</button>
+  </div>
+
   <!-- 手机外框 -->
   <div class="phone" id="phoneFrame">
     <!-- 刘海 -->
@@ -630,7 +665,7 @@ body {
           <div class="benefit-head">
             <div class="benefit-icon icon-a">🎟️</div>
             <div class="benefit-info">
-              <div class="name">福利一：直接领取全国会员立减 1000</div>
+              <div class="name">福利一：全国会员立减 1000</div>
               <div class="desc">开通会员时自动抵扣使用</div>
               <div class="benefit-value">
                 <span class="symbol">¥</span>
@@ -644,8 +679,8 @@ body {
           </div>
         </div>
 
-        <!-- 福利二：完善公司信息 -->
-        <div class="benefit-card card-b">
+        <!-- 福利二：完善公司信息（未完善态） -->
+        <div class="benefit-card card-b" id="cardBUnfilled">
           <div class="benefit-head">
             <div class="benefit-icon icon-b">✏️</div>
             <div class="benefit-info">
@@ -665,6 +700,21 @@ body {
           <div class="company-input-group">
             <label for="inputCompany">企业名称</label>
             <input type="text" id="inputCompany" placeholder="请输入企业名称" autocomplete="off">
+          </div>
+        </div>
+
+        <!-- 福利二：已完善态 -->
+        <div class="benefit-card card-b" id="cardBFilled" style="display:none;">
+          <div class="benefit-head">
+            <div class="benefit-icon icon-b">🎁</div>
+            <div class="benefit-info">
+              <div class="name">福利二：福利包 8888</div>
+              <div class="desc">多重会员优惠 开通会员时自动抵扣使用</div>
+              <div class="benefit-value">
+                <span class="symbol">🎁</span>
+                <span class="amount" style="font-size:18px;">价值 8888 福利包</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -762,6 +812,31 @@ function closeModal(id) { document.getElementById(id).classList.remove('open'); 
   document.getElementById('infoMask').addEventListener('click', function () { closeModal('infoModal'); });
   document.getElementById('infoClose').addEventListener('click', function () { closeModal('infoModal'); });
   document.getElementById('infoOkBtn').addEventListener('click', function () { closeModal('infoModal'); });
+
+  /**
+   * Tab 切换：未完善信息 / 已完善
+   * 未完善态显示「完善信息得福利包 8888」含输入框；
+   * 已完善态隐藏输入框，显示「福利包 8888 多重会员优惠」。
+   */
+  function switchTab(state) {
+    var unfilled = document.getElementById('cardBUnfilled');
+    var filled = document.getElementById('cardBFilled');
+    var tabU = document.getElementById('tabUnfilled');
+    var tabF = document.getElementById('tabFilled');
+    if (state === 'filled') {
+      tabF.classList.add('active');
+      tabU.classList.remove('active');
+      filled.style.display = '';
+      unfilled.style.display = 'none';
+    } else {
+      tabU.classList.add('active');
+      tabF.classList.remove('active');
+      unfilled.style.display = '';
+      filled.style.display = 'none';
+    }
+  }
+  document.getElementById('tabUnfilled').addEventListener('click', function () { switchTab('unfilled'); });
+  document.getElementById('tabFilled').addEventListener('click', function () { switchTab('filled'); });
 })();
 </script>
 </body>
