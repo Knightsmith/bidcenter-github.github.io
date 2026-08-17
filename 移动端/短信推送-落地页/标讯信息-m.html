@@ -851,7 +851,7 @@ var ALL_NEWS = [
     c: '本项目已由成都市医疗保障局批准立项，资金来源为财政性资金，现已具备招标条件，对成都市医疗保障局医保结算系统升级改造项目进行公开招标。建设内容：对现有医保结算系统进行功能升级，包括新增跨省异地就医直接结算模块、DRG 付费结算接口改造、医保基金监管预警功能开发及历史数据迁移，工期 120 日历天。投标人须具备 CMMI3 及以上软件能力成熟度认证，具有同类医保或政务系统开发业绩，项目经理须具备信息系统项目管理师资质。凡有意参加投标者，请于 2026 年 8 月 10 日至 8 月 16 日每日 9:00 至 17:00，登录成都市公共资源交易服务中心网站报名并下载招标文件，招标文件免费。投标文件递交截止时间为 2026 年 8 月 22 日 10:00，地点为成都市公共资源交易服务中心开标厅，逾期递交的投标文件将被拒绝。' },
   { t: '长沙市浏阳河堤防加固整治工程（右岸段）', i: '水利工程', r: '湖南 · 长沙', m: '公开招标', b: null, d: '08-26 09:30', dl: 16, cat: '招标公告', time: '08:18',
     c: '本项目已由长沙市水利局批准建设，资金来源为市级财政资金，现已具备招标条件，对长沙市浏阳河堤防加固整治工程（右岸段）进行公开招标。工程内容：右岸段堤防全长约 5.8 公里，含堤身加高培厚、护坡砌筑、防渗处理及防汛道路修建，堤防等级为 I 级，计划工期 240 日历天。投标人须具备水利水电工程施工总承包一级及以上资质，近五年内具有同类堤防加固工程业绩，项目经理须持有一级建造师（水利水电）执业资格。凡有意参加投标者，请于 2026 年 8 月 11 日至 8 月 17 日每日 8:30 至 17:30，至长沙市水利局招标办公室报名并购买招标文件，每套售价 1000 元。投标文件递交截止时间为 2026 年 8 月 26 日 09:30，地点为长沙市公共资源交易中心，逾期送达的投标文件不予受理。' },
-  { t: '重庆市江北区安置房小区消防设施维修工程', i: '消防工程', r: '重庆', m: '竞争性磋商', b: null, d: null, dl: null, cat: '中标结果', time: '10:05',
+  { t: '重庆市江北区安置房小区消防设施维修工程', i: '消防工程', r: '重庆', m: '竞争性磋商', b: 156, d: null, dl: null, cat: '中标结果', time: '10:05',
     c: '本项目已由重庆市江北区住房和城乡建设委员会批准实施，资金来源为专项维修资金，现已具备招标条件，对重庆市江北区安置房小区消防设施维修工程进行竞争性磋商。工程内容：对辖区 5 个安置房小区消防设施进行全面维修，含消防水泵更换、喷淋系统检修、火灾自动报警系统调试、应急照明更换及消防通道划线，计划工期 90 日历天。投标人须具备消防设施工程专业承包二级及以上资质，项目经理须具备机电工程注册建造师资格，近三年内具有同类消防维修工程业绩。凡有意参加磋商者，请于 2026 年 8 月 12 日至 8 月 15 日每日 9:00 至 17:00，至江北区行政服务中心住建委窗口报名并获取磋商文件。响应文件递交截止时间及磋商时间以磋商文件约定为准，地点为重庆市江北区公共资源交易中心。' },
   { t: '昆明市呈贡区市政道路绿化养护服务（2026 年度）', i: '园林绿化', r: '云南 · 昆明', m: '公开招标', b: null, d: null, dl: null, cat: '采购意向公开', time: '09:30',
     c: '本项目已由昆明市呈贡区城市管理局批准实施，资金来源为财政资金，现已具备采购条件，对昆明市呈贡区市政道路绿化养护服务（2026 年度）进行公开招标。服务内容：对辖区 36 条市政道路约 48 万平方米绿化带、行道树及街头绿地提供年度养护服务，含修剪、施肥、浇水、病虫害防治及补植，服务期一年。投标人须具备园林绿化相关经营范围，养护团队须配备园林工程师，近三年内具有同类绿化养护业绩。凡有意参加投标者，请于 2026 年 8 月 12 日至 8 月 18 日每日 9:00 至 17:00，登录昆明市公共资源交易电子服务系统报名并下载招标文件。投标文件递交截止时间以招标文件约定为准，地点为昆明市呈贡区公共资源交易中心，逾期递交的投标文件不予接收。' },
@@ -917,8 +917,9 @@ function render() {
   listTitle.textContent = '最新标讯 · ' + (now.getMonth() + 1) + '月' + now.getDate() + '日';
 
 
-  /* 随机抽取 10 条并渲染 */
-  var picks = pickRandom(ALL_NEWS, 10);
+  /* 固定三条：第一条招标 / 第二条中标 / 第三条无数据（写死索引，演示用） */
+  var picks = [ALL_NEWS[0], ALL_NEWS[10], ALL_NEWS[7]];
+  var tc = document.getElementById('todayCount'); if (tc) tc.textContent = '3 条信息';
   var html = '';
   for (var i = 0; i < picks.length; i++) {
     var n = picks[i];
@@ -935,6 +936,29 @@ function render() {
     /* 第一条：有正文内容（默认折叠 4 行 + 展开全文，置于简略信息下方）；
        其余：无正文，仅「查看正文」引导按钮，点击卡片弹会员提示 */
     var isFirst = (i === 0);
+    var isWin = (i === 1);
+    var gridHtml = isWin
+      ? '<div class="bis-grid" style="grid-template-columns: 1fr 1fr;">' +
+          '<div class="bi bi-budget">' +
+            '<span class="bi-label">中标金额</span>' +
+            '<span class="bi-value">' + budgetHtml + '</span>' +
+          '</div>' +
+          '<div class="bi bi-deadline">' +
+            '<span class="bi-label">发布时间</span>' +
+            '<span class="bi-value">' + (n.d != null ? n.d : ('今日 ' + n.time)) + '</span>' +
+          '</div>' +
+        '</div>'
+      : '<div class="bis-grid">' +
+          '<div class="bi bi-budget">' +
+            '<span class="bi-label">预算金额</span>' +
+            '<span class="bi-value">' + budgetHtml + '</span>' +
+          '</div>' +
+          '<div class="bi bi-deadline">' +
+            '<span class="bi-label">投标截止</span>' +
+            '<span class="bi-value">' + deadlineHtml + '</span>' +
+          '</div>' +
+          countHtml +
+        '</div>';
     var descHtml = isFirst
       ? '<div class="bis-desc">' +
           '<p class="desc-text clamped">' + n.c + '</p>' +
@@ -955,17 +979,7 @@ function render() {
           '<span class="mi">📍 <b>' + n.r + '</b></span>' +
           '<span class="mi">⚖️ <b>' + n.m + '</b></span>' +
         '</div>' +
-        '<div class="bis-grid">' +
-          '<div class="bi bi-budget">' +
-            '<span class="bi-label">预算金额</span>' +
-            '<span class="bi-value">' + budgetHtml + '</span>' +
-          '</div>' +
-          '<div class="bi bi-deadline">' +
-            '<span class="bi-label">投标截止</span>' +
-            '<span class="bi-value">' + deadlineHtml + '</span>' +
-          '</div>' +
-          countHtml +
-        '</div>' +
+        gridHtml +
         descHtml +
         '<div class="bis-lock">' +
           '<div class="bis-lock-row">' +
