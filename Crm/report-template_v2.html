@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no,email=no">
+<title>招投标分析报告</title>
+<!-- ECharts 动态图表引擎（本地文件，离线可用） -->
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+<style>
+  :root{
+    --primary:#1a3c6e;      /* 主色 深蓝 */
+    --primary-2:#2b6cb0;    /* 次蓝 */
+    --accent:#e8453c;       /* 强调 红 */
+    --gold:#f0a500;
+    --bg:#f4f6fa;
+    --card:#ffffff;
+    --text:#222a35;
+    --text-2:#5a6b80;
+    --line:#e4e9f2;
+    --radius:14px;
+    --shadow:0 4px 18px rgba(26,60,110,.08);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background:var(--bg);color:var(--text);line-height:1.6;
+    padding:12px;
+  }
+  .page{max-width:1080px;margin:0 auto}
+  .card{
+    background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);
+    padding:20px;margin-bottom:14px;
+  }
+  .card-title{
+    font-size:17px;font-weight:700;color:var(--primary);
+    display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;
+  }
+  .card-title::before{
+    content:"";width:4px;height:18px;border-radius:2px;
+    background:linear-gradient(180deg,var(--accent),var(--primary-2));flex-shrink:0;
+  }
+  .sub-title{font-size:12.5px;color:var(--text-2);font-weight:400;margin-left:auto}
+
+  /* ============ ECharts 容器 ============ */
+  .echart{width:100%;height:320px}
+  @media(max-width:520px){.echart{height:260px}}
+
+  /* ============ 封面 ============ */
+  .cover{
+    background:linear-gradient(135deg,#16325c 0%,#1a3c6e 45%,#2b6cb0 100%);
+    border-radius:var(--radius);color:#fff;padding:34px 24px;margin-bottom:14px;
+    position:relative;overflow:hidden;
+  }
+  .cover::after{
+    content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;
+    border-radius:50%;background:rgba(255,255,255,.06);
+  }
+  .cover::before{
+    content:"";position:absolute;right:40px;bottom:-80px;width:160px;height:160px;
+    border-radius:50%;background:rgba(255,255,255,.05);
+  }
+  .cover .en{font-size:12px;letter-spacing:2px;color:rgba(255,255,255,.65);text-transform:uppercase}
+  .cover h1{font-size:26px;margin:6px 0 10px;font-weight:800;letter-spacing:1px}
+  .cover .desc{font-size:13px;color:rgba(255,255,255,.8);max-width:640px}
+  .cover .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+  .meta-item{
+    background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+    border-radius:8px;padding:6px 14px;font-size:13px;
+  }
+  .meta-item b{font-size:15px;margin-left:4px;color:#ffd76a}
+
+  /* ============ 统计卡片 ============ */
+  .stat-total{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    background:linear-gradient(90deg,#fff5f4,#fff);border:1px solid #fbe0de;
+    border-radius:10px;padding:12px 16px;margin-bottom:14px;flex-wrap:wrap;
+  }
+  .stat-total .num{font-size:30px;font-weight:800;color:var(--accent);line-height:1.1}
+  .stat-total .num small{font-size:13px;font-weight:400;color:var(--text-2);margin-left:6px}
+  .stat-total .tip{font-size:13px;color:#c0392b}
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+  .stat-box{
+    background:linear-gradient(180deg,#f8fafd,#fff);border:1px solid var(--line);
+    border-radius:10px;padding:12px;text-align:center;
+  }
+  .stat-box .label{font-size:12px;color:var(--text-2)}
+  .stat-box .value{font-size:20px;font-weight:700;color:var(--primary);margin-top:4px}
+  .stat-box .unit{font-size:11px;color:var(--text-2);margin-left:2px}
+
+  /* ============ 表格 ============ */
+  .table-box{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:640px}
+  th,td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+  th{background:#f2f6fc;color:var(--primary);font-weight:600;position:sticky;top:0}
+  tr:nth-child(even) td{background:#fafcff}
+  td .title-cell{max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
+  .amount{color:var(--accent);font-weight:600}
+  .table-tip{font-size:12px;color:var(--text-2);margin-top:8px}
+
+  /* 地区占比 */
+  .region-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:14px;align-items:center}
+  .region-table td:first-child{font-weight:600;color:var(--primary)}
+  .ratio-cell{display:flex;align-items:center;gap:6px}
+  .ratio-bar{height:8px;border-radius:4px;background:linear-gradient(90deg,var(--primary-2),var(--accent));flex:1;min-width:40px}
+  @media(max-width:760px){.region-grid{grid-template-columns:1fr}}
+
+  /* 引流区 */
+  .cta{
+    background:linear-gradient(160deg,#16325c,#1a3c6e 60%,#2b6cb0);
+    border-radius:var(--radius);color:#fff;padding:28px 22px;margin-top:6px;
+  }
+  .cta h2{font-size:18px;margin-bottom:16px;text-align:center}
+  .cta-ways{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:20px}
+  .cta-way{
+    background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
+    border-radius:12px;padding:16px;text-align:center;
+  }
+  .cta-way .step{
+    width:26px;height:26px;border-radius:50%;background:var(--gold);color:#1a3c6e;
+    font-weight:800;font-size:14px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:8px;
+  }
+  .cta-way .qrcode{
+    width:120px;height:120px;background:#fff;border-radius:8px;margin:8px auto;
+    display:flex;align-items:center;justify-content:center;overflow:hidden;
+  }
+  .cta-way .qrcode img{width:100%;height:100%;object-fit:contain}
+  .cta-way .qr-placeholder{
+    width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+    color:#999;font-size:11px;background:repeating-conic-gradient(#eee 0 25%,#fff 0 50%) 0 0/10px 10px;
+  }
+  .cta-way .desc{font-size:13px}
+  .cta-way .url{font-size:12px;color:#ffd76a;word-break:break-all;margin-top:6px}
+  .cta-services{
+    background:rgba(255,255,255,.08);border-radius:12px;padding:16px;margin-bottom:18px;
+  }
+  .cta-services .s-title{font-size:14px;font-weight:700;margin-bottom:10px}
+  .cta-services .tags{display:flex;flex-wrap:wrap;gap:8px}
+  .cta-services .tag{
+    background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);
+    border-radius:20px;padding:5px 14px;font-size:12px;
+  }
+  .cta-slogan{text-align:center;font-size:14px;letter-spacing:1px;color:rgba(255,255,255,.85)}
+  .cta-slogan b{color:var(--gold)}
+  .footer-note{text-align:center;font-size:11px;color:var(--text-2);padding:10px 0 20px}
+
+  @media(max-width:520px){
+    body{padding:8px}
+    .card{padding:14px}
+    .cover{padding:24px 16px}
+    .cover h1{font-size:21px}
+    .stat-total .num{font-size:24px}
+  }
+</style>
+</head>
+<body>
+<div class="page" id="app"></div>
+
+<script>
+/* =====================================================================
+ * ① 数据层：所有动态数据都定义在这个 JSON 对象中，修改这里即可生成新报告
+ *    type: line=折线图 | bar=柱状图 | hbar=横向条形图 | pie=环形图
+ *    theme: blue=招标主题(蓝) | red=中标主题(红)
+ * ===================================================================== */
+const REPORT_DATA = {
+  /* ---- 报告元信息 ---- */
+  report: {
+    enTitle: "Bidcenter Bidding Analysis Report",
+    title: "采招网招投标分析报告",
+    desc: "本报告基于近一年采招网平台数据，对招标信息、中标结果、市场热点、主要业主与供应商进行多维度统计分析，助您快速掌握市场动态、发现商机。",
+    period: "2025年7月 — 2026年6月",
+    keyword: "服务器",
+    region: "内蒙古",
+    generateDate: "2026年7月21日"
+  },
+
+  /* ---- 市场概况 ---- */
+  marketOverview: {
+    totalInfo: 30404,
+    totalLabel: "信息总数",
+    tip: "当前存在大量招标，请尽快参与！",
+    infoTypes: [
+      { label: "招标公告", value: 30404 },
+      { label: "中标结果", value: 30404 },
+      { label: "招标预告", value: 30404 },
+      { label: "招标变更", value: 30404 },
+      { label: "工程项目", value: 30404 }
+    ],
+    metrics: [
+      { label: "招标公告", value: 30404, unit: "次" },
+      { label: "招标金额", value: 30404, unit: "元" },
+      { label: "中标数量", value: 30404, unit: "次" },
+      { label: "中标金额", value: 30404, unit: "元" },
+      { label: "招标业主", value: 30404, unit: "家" },
+      { label: "供应商", value: 30404, unit: "家" }
+    ]
+  },
+
+  /* ---- 图表配置（ECharts 动态绑定） ---- */
+  charts: {
+    tenderTrend: {
+      type: "line", theme: "blue",
+      title: "招标趋势", yAxis: "次数",
+      xAxis: ["26/08","26/09","25/10","25/11","25/12","26/01","26/02","26/03","26/04","26/05","26/06","26/07"],
+      data:  [350, 480, 420, 560, 610, 520, 470, 580, 630, 720, 680, 760]
+    },
+    shareAnalysis: {
+      type: "bar", theme: "blue",
+      title: "份额分析", yAxis: "金额(万元)",
+      xAxis: ["26/08","26/09","25/10","25/11","25/12","26/01","26/02","26/03","26/04","26/05","26/06","26/07"],
+      data:  [120, 180, 150, 220, 260, 200, 190, 240, 280, 310, 290, 340]
+    },
+    agencyAnalysis: {
+      type: "hbar", theme: "blue",
+      title: "招标代理机构次数分析 TOP10", unit: "次",
+      data: [
+        { name: "金诚招标代理有限公司", value: 86 },
+        { name: "恒远招标咨询有限公司", value: 74 },
+        { name: "中环招标代理有限公司", value: 62 },
+        { name: "百川招标服务有限公司", value: 55 },
+        { name: "联信招标代理有限公司", value: 48 },
+        { name: "宏达招标咨询有限公司", value: 41 },
+        { name: "中原招标代理有限公司", value: 36 },
+        { name: "新程招标服务有限公司", value: 30 },
+        { name: "华宇招标代理有限公司", value: 25 },
+        { name: "天工招标咨询有限公司", value: 18 }
+      ]
+    },
+    winTrend: {
+      type: "line", theme: "red",
+      title: "中标次数趋势", yAxis: "次数",
+      xAxis: ["26/08","26/09","25/10","25/11","25/12","26/01","26/02","26/03","26/04","26/05","26/06","26/07"],
+      data:  [280, 320, 300, 410, 450, 380, 360, 430, 470, 520, 500, 560]
+    },
+    winShare: {
+      type: "bar", theme: "red",
+      title: "中标份额", yAxis: "金额(万元)",
+      xAxis: ["26/08","26/09","25/10","25/11","25/12","26/01","26/02","26/03","26/04","26/05","26/06","26/07"],
+      data:  [95, 140, 120, 185, 210, 170, 160, 205, 230, 260, 245, 290]
+    }
+  },
+
+  /* ---- 市场份额-全国/地区 ---- */
+  regionShare: {
+    title: "市场份额 - 全国/地区",
+    note: "按招标次数统计，展示招标信息分布的主要地区",
+    columns: ["地区", "次数", "占比"],
+    data: [
+      { region: "北京",   count: 202565, ratio: 35 },
+      { region: "广东",   count: 145210, ratio: 25 },
+      { region: "江苏",   count: 98654,  ratio: 17 },
+      { region: "浙江",   count: 72640,  ratio: 12 },
+      { region: "山东",   count: 51230,  ratio: 9 },
+      { region: "四川",   count: 21450,  ratio: 4 }
+    ]
+  },
+
+  /* ---- 行业分布 TOP10 ---- */
+  industryDistribution: {
+    type: "hbar", theme: "blue",
+    title: "行业分布 TOP10", unit: "万元",
+    data: [
+      { name: "政府部门", value: 162532 },
+      { name: "能源化工", value: 148210 },
+      { name: "水利电力", value: 135480 },
+      { name: "文体教育", value: 122360 },
+      { name: "军队系统", value: 118420 },
+      { name: "医疗卫生", value: 105670 },
+      { name: "企事业单位", value: 98320 },
+      { name: "交通运输", value: 87450 },
+      { name: "科技通信", value: 76230 },
+      { name: "金融保险", value: 68120 }
+    ]
+  },
+
+  /* ---- TOP 业主单位 ---- */
+  topOwners: {
+    tenderCount: {
+      type: "hbar", theme: "blue",
+      title: "TOP业主单位招标次数分析 TOP10", unit: "次",
+      data: [
+        { name: "北京中亦安图科技股份有限公司", value: 50 },
+        { name: "上海华讯网络系统有限公司", value: 39 },
+        { name: "云南南天电子信息产业股份有限公司", value: 22 },
+        { name: "北京银信长远科技股份有限公司", value: 20 },
+        { name: "神州数码系统集成服务有限公司", value: 18 },
+        { name: "中兴通讯股份有限公司", value: 17 },
+        { name: "北明软件有限公司", value: 15 },
+        { name: "上海珑京信息科技有限公司", value: 13 },
+        { name: "阿里云计算有限公司", value: 12 },
+        { name: "四川信一创科技有限公司", value: 1 }
+      ]
+    },
+    tenderBudget: {
+      type: "hbar", theme: "blue",
+      title: "TOP业主单位招标预算分析 TOP10", unit: "万元",
+      data: [
+        { name: "天合建设集团有限公司", value: 382881.09 },
+        { name: "衢州恒威电子科技有限公司", value: 201254.05 },
+        { name: "云南华远电子有限公司", value: 147918.76 },
+        { name: "山东鲁嘉智远科技有限公司", value: 104575.00 },
+        { name: "浙江大华技术股份有限公司", value: 95140.00 },
+        { name: "北京神州新桥科技有限公司", value: 85170.07 },
+        { name: "北京先进数通信息技术股份公司", value: 83547.87 },
+        { name: "百信", value: 82000.00 },
+        { name: "武汉长江计算科技有限公司", value: 77176.80 },
+        { name: "林智半信息技术有限公司", value: 56800.00 }
+      ]
+    }
+  },
+
+  /* ---- TOP 中标单位 ---- */
+  topWinners: {
+    winCount: {
+      type: "hbar", theme: "red",
+      title: "TOP中标单位中标次数分析 TOP10", unit: "次",
+      data: [
+        { name: "北京中亦安图科技股份有限公司", value: 50 },
+        { name: "上海华讯网络系统有限公司", value: 39 },
+        { name: "云南南天电子信息产业股份有限公司", value: 22 },
+        { name: "北京银信长远科技股份有限公司", value: 20 },
+        { name: "神州数码系统集成服务有限公司", value: 18 },
+        { name: "中兴通讯股份有限公司", value: 17 },
+        { name: "北明软件有限公司", value: 15 },
+        { name: "上海珑京信息科技有限公司", value: 13 },
+        { name: "阿里云计算有限公司", value: 12 },
+        { name: "四川信一创科技有限公司", value: 1 }
+      ]
+    },
+    winAmount: {
+      type: "hbar", theme: "red",
+      title: "TOP中标单位中标金额分析 TOP10", unit: "万元",
+      data: [
+        { name: "北京中亦安图科技股份有限公司", value: 382881.09 },
+        { name: "上海华讯网络系统有限公司", value: 201254.05 },
+        { name: "云南南天电子信息产业股份有限公司", value: 147918.76 },
+        { name: "北京银信长远科技股份有限公司", value: 104575.00 },
+        { name: "神州数码系统集成服务有限公司", value: 95140.00 },
+        { name: "中兴通讯股份有限公司", value: 85170.07 },
+        { name: "北明软件有限公司", value: 83547.87 },
+        { name: "上海珑京信息科技有限公司", value: 82000.00 },
+        { name: "阿里云计算有限公司", value: 77176.80 },
+        { name: "四川信一创科技有限公司", value: 56800.00 }
+      ]
+    }
+  },
+
+  /* ---- 招标数据列表 ---- */
+  tenderList: {
+    title: "招标数据",
+    total: 4526,
+    showCount: 20,
+    tip: "当前仅展示前 20 条",
+    columns: ["时间", "地区", "信息标题", "公司名称", "金额"],
+    data: [
+      { time: "2025-10-15", region: "河北-涿州", title: "吉安至南康改扩建项目机电工程105国道线增设交通信号灯和电子抓拍设备及部分附属设施施工询比采购公告", company: "江西方兴科技股份有限公司", amount: 201254 },
+      { time: "2025-10-14", region: "北京", title: "中国铁塔股份有限公司北京市分公司2025年服务器设备集中采购项目招标公告", company: "中国铁塔股份有限公司", amount: 382881 },
+      { time: "2025-10-13", region: "广东-广州", title: "南方电网数字电网研究院服务器及存储设备框架采购招标公告", company: "南方电网数字电网研究院", amount: 147918 },
+      { time: "2025-10-12", region: "江苏-南京", title: "南京银行数据中心服务器扩容项目竞争性磋商公告", company: "南京银行股份有限公司", amount: 104575 },
+      { time: "2025-10-11", region: "浙江-杭州", title: "浙江省政务云平台服务器资源池建设项目招标公告", company: "浙江省大数据发展中心", amount: 95140 },
+      { time: "2025-10-10", region: "山东-济南", title: "山东省人民医院信息化服务器采购项目公开招标公告", company: "山东省人民医院", amount: 85170 },
+      { time: "2025-10-09", region: "上海", title: "上海证券交易所交易系统服务器更新采购项目招标公告", company: "上海证券交易所", amount: 83547 },
+      { time: "2025-10-08", region: "四川-成都", title: "成都市公安局大数据服务器集群采购项目招标公告", company: "成都市公安局", amount: 82000 },
+      { time: "2025-10-07", region: "湖北-武汉", title: "武汉理工大学高性能计算服务器采购项目竞争性谈判公告", company: "武汉理工大学", amount: 77176 },
+      { time: "2025-10-06", region: "湖南-长沙", title: "湖南省气象局气象数据服务器采购项目招标公告", company: "湖南省气象局", amount: 56800 }
+    ]
+  },
+
+  /* ---- 引流区 ---- */
+  cta: {
+    title: "如需获取更多维度分析报告，您可通过以下方式",
+    methods: [
+      { step: "1", label: "添加客服微信", qr: "", desc: "扫码添加客服，获取专属报告" },
+      { step: "2", label: "关注采招网公众号-咨询客服", qr: "", desc: "关注公众号，在线咨询客服" },
+      { step: "3", label: "在电脑端登录后查看“数据服务”", qr: "", desc: "更多数据服务在电脑端开放", url: "https://www.bidcenter.com.cn/" }
+    ],
+    services: {
+      title: "数据",
+      items: ["数据导出", "数据分析报告", "API数据接口", "采招大数据", "营销数据DBI", "数据库查询"]
+    },
+    slogan: "找商机上采招，始于专业，重于服务，专业招标采购大平台",
+    sloganHighlight: "找商机上采招"
+  }
+};
+
+/* =====================================================================
+ * ② 渲染层：ECharts 动态绑定 + 页面组装
+ * ===================================================================== */
+const $ = s => document.querySelector(s);
+const fmt = n => (n==null?"":Number(n).toLocaleString("zh-CN", {maximumFractionDigits:2}));
+function esc(s){
+  return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+/* ---- 根据 key 解析图表配置 ---- */
+function resolveChart(key){
+  const D = REPORT_DATA;
+  const map = {
+    tenderTrend:     D.charts.tenderTrend,
+    shareAnalysis:   D.charts.shareAnalysis,
+    agencyAnalysis:  D.charts.agencyAnalysis,
+    winTrend:        D.charts.winTrend,
+    winShare:        D.charts.winShare,
+    regionPie: {
+      type: "pie",
+      title: "地区分布占比",
+      data: D.regionShare.data.map(d=>({ name:d.region, value:d.ratio }))
+    },
+    industry:   D.industryDistribution,
+    ownerCount: D.topOwners.tenderCount,
+    ownerBudget:D.topOwners.tenderBudget,
+    winCount:   D.topWinners.winCount,
+    winAmount:  D.topWinners.winAmount
+  };
+  return map[key];
+}
+
+/* ---- 构建 ECharts option ---- */
+function buildOption(cfg){
+  const lineC = cfg.theme==="red" ? "#e8453c" : "#2b6cb0";
+  const pal   = cfg.theme==="red" ? ["#f08a4b","#e8453c"] : ["#2b6cb0","#1a3c6e"];
+  const tooltip = {
+    trigger: cfg.type==="hbar" ? "axis" : "axis",
+    axisPointer: { type: cfg.type==="hbar" ? "shadow" : "line" },
+    backgroundColor: "#fff", borderColor: "#dbe3f0",
+    textStyle: { color: "#222a35", fontSize: 12 }
+  };
+
+  /* 折线图 */
+  if (cfg.type === "line") {
+    return {
+      tooltip,
+      grid: { left: 52, right: 22, top: 40, bottom: 30 },
+      xAxis: {
+        type: "category", boundaryGap: false, data: cfg.xAxis,
+        axisLine: { lineStyle: { color: "#c9d8ee" } }, axisTick: { show: false },
+        axisLabel: { color: "#5a6b80", fontSize: 10, interval: 0 }
+      },
+      yAxis: {
+        type: "value", name: cfg.yAxis,
+        nameTextStyle: { color: "#5a6b80", fontSize: 10 },
+        axisLabel: { color: "#5a6b80", fontSize: 10 },
+        splitLine: { lineStyle: { color: "#eef2f8" } }
+      },
+      series: [{
+        name: cfg.title, type: "line", data: cfg.data, smooth: true,
+        symbol: "circle", symbolSize: 7,
+        lineStyle: { color: lineC, width: 3 },
+        itemStyle: { color: "#fff", borderColor: lineC, borderWidth: 2 },
+        areaStyle: {
+          color: { type: "linear", x: 0, y: 0, x2: 0, y2: 1,
+            colorStops: [
+              { offset: 0, color: lineC + "55" },
+              { offset: 1, color: lineC + "05" }
+            ] }
+        }
+      }]
+    };
+  }
+
+  /* 垂直柱状图 */
+  if (cfg.type === "bar") {
+    return {
+      tooltip,
+      grid: { left: 52, right: 22, top: 40, bottom: 30 },
+      xAxis: {
+        type: "category", data: cfg.xAxis,
+        axisLine: { lineStyle: { color: "#c9d8ee" } }, axisTick: { show: false },
+        axisLabel: { color: "#5a6b80", fontSize: 10, interval: 0, rotate: cfg.xAxis.length > 8 ? 30 : 0 }
+      },
+      yAxis: {
+        type: "value", name: cfg.yAxis,
+        nameTextStyle: { color: "#5a6b80", fontSize: 10 },
+        axisLabel: { color: "#5a6b80", fontSize: 10 },
+        splitLine: { lineStyle: { color: "#eef2f8" } }
+      },
+      series: [{
+        type: "bar", data: cfg.data, barMaxWidth: 36,
+        itemStyle: {
+          color: { type: "linear", x: 0, y: 0, x2: 0, y2: 1,
+            colorStops: [
+              { offset: 0, color: pal[0] },
+              { offset: 1, color: pal[1] }
+            ] },
+          borderRadius: [6, 6, 0, 0]
+        }
+      }]
+    };
+  }
+
+  /* 横向条形图 */
+  if (cfg.type === "hbar") {
+    const names = cfg.data.map(d=>d.name).reverse();
+    const vals  = cfg.data.map(d=>d.value).reverse();
+    return {
+      tooltip: {
+        trigger: "axis", axisPointer: { type: "shadow" },
+        backgroundColor: "#fff", borderColor: "#dbe3f0",
+        textStyle: { color: "#222a35", fontSize: 12 },
+        formatter: p => p[0].name + "：<b>" + fmt(p[0].value) + (cfg.unit ? " " + cfg.unit : "") + "</b>"
+      },
+      grid: { left: 8, right: 78, top: 8, bottom: 8, containLabel: true },
+      xAxis: { type: "value", show: false },
+      yAxis: {
+        type: "category", data: names,
+        axisLine: { show: false }, axisTick: { show: false },
+        axisLabel: { color: "#222a35", fontSize: 11, width: 150, overflow: "truncate" }
+      },
+      series: [{
+        type: "bar", data: vals, barWidth: 14,
+        itemStyle: {
+          color: { type: "linear", x: 0, y: 0, x2: 1, y2: 0,
+            colorStops: [
+              { offset: 0, color: pal[0] },
+              { offset: 1, color: pal[1] }
+            ] },
+          borderRadius: [0, 7, 7, 0]
+        },
+        label: {
+          show: true, position: "right", color: "#222a35", fontSize: 11,
+          formatter: p => fmt(p.value) + (cfg.unit ? " " + cfg.unit : "")
+        }
+      }]
+    };
+  }
+
+  /* 环形图 */
+  if (cfg.type === "pie") {
+    return {
+      tooltip: { trigger: "item", formatter: "{b}: {c}%", backgroundColor: "#fff", borderColor: "#dbe3f0", textStyle: { color: "#222a35", fontSize: 12 } },
+      legend: { bottom: 0, icon: "circle", itemWidth: 8, itemHeight: 8, textStyle: { color: "#5a6b80", fontSize: 11 } },
+      series: [{
+        type: "pie", radius: ["42%", "68%"], center: ["50%", "44%"],
+        data: cfg.data,
+        label: { color: "#5a6b80", fontSize: 11, formatter: "{b} {c}%" },
+        itemStyle: { borderColor: "#fff", borderWidth: 2 },
+        color: ["#1a3c6e", "#2b6cb0", "#e8453c", "#f0a500", "#27ae60", "#8e44ad"]
+      }]
+    };
+  }
+  return {};
+}
+
+/* ---- 页面组装 ---- */
+function render(){
+  const D = REPORT_DATA;
+  const C = D.charts;
+  const chartCard = (key, title, unit) => `
+    <div class="card">
+      <div class="card-title">${esc(title)}${unit?`<span class="sub-title">单位：${esc(unit)}</span>`:""}</div>
+      <div class="echart" data-chart="${key}"></div>
+    </div>`;
+
+  const html = `
+  <!-- 封面 -->
+  <div class="cover">
+    <div class="en">${esc(D.report.enTitle)}</div>
+    <h1>${esc(D.report.title)}</h1>
+    <div class="desc">${esc(D.report.desc)}</div>
+    <div class="meta">
+      <div class="meta-item">分析周期<b>${esc(D.report.period)}</b></div>
+      <div class="meta-item">关键词<b>${esc(D.report.keyword)}</b></div>
+      <div class="meta-item">区域<b>${esc(D.report.region)}</b></div>
+      <div class="meta-item">生成日期<b>${esc(D.report.generateDate)}</b></div>
+    </div>
+  </div>
+
+  <!-- 市场概况 -->
+  <div class="card">
+    <div class="card-title">市场概况</div>
+    <div class="stat-total">
+      <div><div style="font-size:12px;color:var(--text-2)">${esc(D.marketOverview.totalLabel)}</div>
+      <div class="num">${fmt(D.marketOverview.totalInfo)}<small>条</small></div></div>
+      <div class="tip">⚠ ${esc(D.marketOverview.tip)}</div>
+    </div>
+    <div class="stat-grid">
+      ${D.marketOverview.infoTypes.map(t=>`
+        <div class="stat-box"><div class="label">${esc(t.label)}</div><div class="value">${fmt(t.value)}</div></div>
+      `).join("")}
+    </div>
+    <div style="height:10px"></div>
+    <div class="stat-grid">
+      ${D.marketOverview.metrics.map(m=>`
+        <div class="stat-box"><div class="label">${esc(m.label)}</div><div class="value">${fmt(m.value)}<span class="unit">${esc(m.unit)}</span></div></div>
+      `).join("")}
+    </div>
+  </div>
+
+  <!-- 招标趋势 & 份额分析 -->
+  ${chartCard("tenderTrend", C.tenderTrend.title, C.tenderTrend.yAxis)}
+  ${chartCard("shareAnalysis", C.shareAnalysis.title, C.shareAnalysis.yAxis)}
+
+  <!-- 市场份额-全国/地区 -->
+  <div class="card">
+    <div class="card-title">${esc(D.regionShare.title)}<span class="sub-title">${esc(D.regionShare.note)}</span></div>
+    <div class="region-grid">
+      <div class="table-box" style="min-width:0">
+        <table style="min-width:0">
+          <thead><tr>${D.regionShare.columns.map(c=>`<th>${esc(c)}</th>`).join("")}</tr></thead>
+          <tbody>
+            ${D.regionShare.data.map(r=>`<tr>
+              <td>${esc(r.region)}</td>
+              <td>${fmt(r.count)}</td>
+              <td><div class="ratio-cell"><div class="ratio-bar" style="width:${r.ratio*2.4}px"></div>${r.ratio}%</div></td>
+            </tr>`).join("")}
+          </tbody>
+        </table>
+      </div>
+      <div class="echart" data-chart="regionPie" style="height:280px"></div>
+    </div>
+  </div>
+
+  <!-- 行业分布 -->
+  ${chartCard("industry", D.industryDistribution.title, D.industryDistribution.unit)}
+
+  <!-- TOP 业主单位 -->
+  ${chartCard("ownerCount", D.topOwners.tenderCount.title, D.topOwners.tenderCount.unit)}
+  ${chartCard("ownerBudget", D.topOwners.tenderBudget.title, D.topOwners.tenderBudget.unit)}
+
+  <!-- 招标代理机构 -->
+  ${chartCard("agencyAnalysis", C.agencyAnalysis.title, C.agencyAnalysis.unit)}
+
+  <!-- 招标数据列表 -->
+  <div class="card">
+    <div class="card-title">${esc(D.tenderList.title)}
+      <span class="sub-title">共计 <b style="color:var(--accent)">${fmt(D.tenderList.total)}</b> 条，${esc(D.tenderList.tip)}</span>
+    </div>
+    <div class="table-box">
+      <table>
+        <thead><tr>${D.tenderList.columns.map(c=>`<th>${esc(c)}</th>`).join("")}</tr></thead>
+        <tbody>
+          ${D.tenderList.data.map(r=>`<tr>
+            <td>${esc(r.time)}</td>
+            <td>${esc(r.region)}</td>
+            <td><span class="title-cell" title="${esc(r.title)}">${esc(r.title)}</span></td>
+            <td>${esc(r.company)}</td>
+            <td class="amount">${fmt(r.amount)} 元</td>
+          </tr>`).join("")}
+        </tbody>
+      </table>
+    </div>
+    <div class="table-tip">※ 数据来源：采招网（bidcenter.com.cn），仅供参考</div>
+  </div>
+
+  <!-- 中标趋势 & 份额 -->
+  ${chartCard("winTrend", C.winTrend.title, C.winTrend.yAxis)}
+  ${chartCard("winShare", C.winShare.title, C.winShare.yAxis)}
+
+  <!-- TOP 中标单位 -->
+  ${chartCard("winCount", D.topWinners.winCount.title, D.topWinners.winCount.unit)}
+  ${chartCard("winAmount", D.topWinners.winAmount.title, D.topWinners.winAmount.unit)}
+
+  <!-- 引流区 -->
+  <div class="cta">
+    <h2>${esc(D.cta.title)}</h2>
+    <div class="cta-ways">
+      ${D.cta.methods.map(m=>`
+        <div class="cta-way">
+          <div class="step">${esc(m.step)}</div>
+          <div class="desc">${esc(m.label)}</div>
+          ${m.qr
+            ? `<div class="qrcode"><img src="${esc(m.qr)}" alt="二维码"></div>`
+            : `<div class="qrcode"><div class="qr-placeholder">二维码占位<br>替换 qr 字段</div></div>`}
+          ${m.desc?`<div class="desc" style="color:rgba(255,255,255,.75);font-size:12px">${esc(m.desc)}</div>`:""}
+          ${m.url?`<div class="url">${esc(m.url)}</div>`:""}
+        </div>`).join("")}
+    </div>
+    <div class="cta-services">
+      <div class="s-title">${esc(D.cta.services.title)}</div>
+      <div class="tags">
+        ${D.cta.services.items.map(i=>`<span class="tag">${esc(i)}</span>`).join("")}
+      </div>
+    </div>
+    <div class="cta-slogan"><b>${esc(D.cta.sloganHighlight)}</b>${esc(D.cta.slogan.replace(D.cta.sloganHighlight,""))}</div>
+  </div>
+
+  <div class="footer-note">本报告由采招网数据服务生成 · 数据仅供参考 · 最终解释权归平台所有</div>
+  `;
+
+  $("#app").innerHTML = html;
+}
+
+/* ---- ECharts 初始化绑定 ---- */
+const _charts = [];
+function initCharts(){
+  document.querySelectorAll("[data-chart]").forEach(el=>{
+    const cfg = resolveChart(el.getAttribute("data-chart"));
+    if(!cfg) return;
+    const inst = echarts.init(el);
+    inst.setOption(buildOption(cfg));
+    _charts.push(inst);
+  });
+  window.addEventListener("resize", ()=>{ _charts.forEach(c=>c.resize()); });
+}
+
+render();
+initCharts();
+</script>
+</body>
+</html>

@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>采招网招投标分析报告</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --blue: #3b82f6;
+      --blue-dark: #2563eb;
+      --blue-light: #93c5fd;
+      --red: #ef4444;
+      --text: #334155;
+      --text-sub: #64748b;
+      --text-light: #94a3b8;
+      --bg-page: linear-gradient(180deg, #c9e4ff 0%, #e8f5ff 35%, #f4fbff 100%);
+      --card-bg: #ffffff;
+      --card-shadow: 0 8px 32px rgba(59, 130, 246, 0.09);
+      --card-radius: 20px;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg-page);
+      color: var(--text);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+    .page { max-width: 960px; margin: 0 auto; padding: 18px 14px 40px; }
+
+    /* Header */
+    .report-header {
+      position: relative;
+      border-radius: 24px;
+      padding: 34px 30px 30px;
+      background: linear-gradient(135deg, #2563eb 0%, #3b82f6 55%, #60a5fa 100%);
+      color: #fff;
+      overflow: hidden;
+      margin-bottom: 22px;
+      box-shadow: 0 12px 40px rgba(37, 99, 235, 0.22);
+    }
+    .report-header::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 80% 20%, rgba(255,255,255,0.18) 0%, transparent 45%),
+                  radial-gradient(circle at 20% 100%, rgba(255,255,255,0.12) 0%, transparent 40%);
+      pointer-events: none;
+    }
+    .header-content { position: relative; z-index: 2; max-width: 68%; }
+    .header-title { font-size: 32px; font-weight: 800; letter-spacing: 1px; margin-bottom: 4px; text-shadow: 0 2px 4px rgba(0,0,0,0.08); }
+    .header-subtitle { font-size: 14px; color: rgba(255,255,255,0.85); letter-spacing: 0.6px; margin-bottom: 18px; }
+    .header-desc { font-size: 13px; line-height: 1.8; color: rgba(255,255,255,0.92); margin-bottom: 20px; max-width: 520px; }
+    .header-meta { display: flex; flex-wrap: wrap; gap: 10px; }
+    .meta-tag {
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 13px;
+      color: #fff;
+      backdrop-filter: blur(4px);
+    }
+    .meta-tag b { opacity: 0.85; font-weight: 500; margin-right: 4px; }
+
+    /* 3D Illustration */
+    .header-illustration {
+      position: absolute;
+      right: 28px; top: 50%;
+      transform: translateY(-50%);
+      width: 230px; height: 180px;
+      z-index: 1;
+    }
+    .cube { position: absolute; width: 42px; height: 42px; border-radius: 8px; opacity: 0.95; box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+    .cube::before {
+      content: ""; position: absolute; inset: 0; border-radius: 8px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.35) 0%, transparent 60%);
+    }
+    .cube.c1 { background: #f59e0b; right: 110px; top: 10px; transform: perspective(600px) rotateX(55deg) rotateZ(-30deg); }
+    .cube.c2 { background: #10b981; right: 60px; top: 45px; transform: perspective(600px) rotateX(55deg) rotateZ(-30deg); }
+    .cube.c3 { background: #ef4444; right: 140px; top: 70px; transform: perspective(600px) rotateX(55deg) rotateZ(-30deg); }
+    .cube.c4 { background: #3b82f6; right: 85px; top: 100px; transform: perspective(600px) rotateX(55deg) rotateZ(-30deg); }
+    .laptop {
+      position: absolute; right: 10px; top: 55px;
+      width: 110px; height: 70px;
+      background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+      border-radius: 8px 8px 4px 4px;
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.25);
+      transform: perspective(600px) rotateX(20deg) rotateY(-15deg);
+    }
+    .laptop::before {
+      content: ""; position: absolute; left: 8px; right: 8px; top: 8px; bottom: 14px;
+      background: rgba(255,255,255,0.92); border-radius: 4px;
+    }
+    .laptop::after {
+      content: ""; position: absolute; left: -10px; right: -10px; bottom: -8px; height: 10px;
+      background: linear-gradient(180deg, #93c5fd 0%, #60a5fa 100%); border-radius: 0 0 6px 6px;
+    }
+    .screen-line {
+      position: absolute; left: 16px; right: 16px; top: 18px; height: 4px;
+      background: #bfdbfe; border-radius: 2px; z-index: 2;
+    }
+    .screen-line:nth-child(2) { top: 28px; width: 60%; }
+    .screen-line:nth-child(3) { top: 38px; width: 80%; }
+
+    @media (max-width: 768px) {
+      .header-content { max-width: 100%; }
+      .header-illustration { display: none; }
+      .header-title { font-size: 24px; }
+      .header-desc { max-width: 100%; }
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--card-radius);
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .sec-head {
+      display: flex; align-items: center;
+      padding: 16px 22px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .sec-head::before {
+      content: "";
+      width: 5px; height: 20px;
+      background: linear-gradient(180deg, var(--blue-dark) 0%, var(--blue) 100%);
+      border-radius: 3px;
+      margin-right: 10px;
+    }
+    .sec-head h2 { font-size: 17px; font-weight: 700; color: #1e293b; margin: 0; }
+    .sec-head .sub { margin-left: auto; font-size: 13px; color: var(--blue); font-weight: 600; }
+
+    /* Market overview */
+    .market-body { padding: 22px; }
+    .market-top { display: flex; gap: 22px; flex-wrap: wrap; }
+    .market-left { flex: 1; min-width: 220px; }
+    .market-right { flex: 1.6; min-width: 280px; display: flex; flex-direction: column; gap: 14px; }
+    .total-label { font-size: 15px; color: var(--text-sub); font-weight: 600; }
+    .total-num { font-size: 44px; font-weight: 800; color: var(--red); line-height: 1.1; margin: 6px 0 8px; }
+    .total-hint { font-size: 13px; color: var(--text-light); }
+    .cat-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+    }
+    .cat-item {
+      display: flex; justify-content: space-between; align-items: center;
+      background: #f8fafc; border-radius: 8px; padding: 10px 12px;
+    }
+    .cat-item span:first-child { font-size: 13px; color: var(--text-sub); }
+    .cat-item span:last-child { font-size: 15px; color: var(--red); font-weight: 700; }
+    .metrics-row {
+      display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px;
+      border-top: 1px solid #f1f5f9; padding-top: 16px; margin-top: 4px;
+    }
+    .metric-item { text-align: center; }
+    .metric-item .label { font-size: 12px; color: var(--text-sub); margin-bottom: 4px; }
+    .metric-item .value { font-size: 15px; color: var(--red); font-weight: 700; }
+
+    @media (max-width: 768px) {
+      .cat-grid { grid-template-columns: repeat(2, 1fr); }
+      .metrics-row { grid-template-columns: repeat(3, 1fr); row-gap: 14px; }
+    }
+
+    /* Charts */
+    .chart-wrap { height: 300px; padding: 10px 18px 18px; }
+    @media (max-width: 768px) { .chart-wrap { height: 260px; padding: 6px 12px 14px; } }
+
+    /* Region share */
+    .region-body { display: grid; grid-template-columns: 1.3fr 1fr; gap: 20px; padding: 20px 22px; align-items: center; }
+    .map-box {
+      background: #f8fafc; border-radius: 16px;
+      min-height: 300px; display: flex; align-items: center; justify-content: center;
+      padding: 16px;
+    }
+    .map-box svg { width: 100%; max-width: 380px; height: auto; }
+    .region-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .region-table th { background: #f1f5f9; color: var(--text-sub); font-weight: 600; padding: 10px 8px; text-align: center; }
+    .region-table td { padding: 10px 8px; text-align: center; border-bottom: 1px solid #f1f5f9; color: var(--text); }
+    .region-table td:nth-child(2), .region-table td:nth-child(3) { color: var(--red); font-weight: 600; }
+    @media (max-width: 768px) { .region-body { grid-template-columns: 1fr; } }
+
+    /* Two-column tables */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding: 18px 22px; }
+    .col-card { border: 1px solid #f1f5f9; border-radius: 12px; overflow: hidden; }
+    .col-head { background: #f8fafc; padding: 12px 14px; font-size: 14px; font-weight: 700; color: #1e293b; border-bottom: 1px solid #f1f5f9; }
+    .table-scroll { overflow-x: auto; }
+    .rank-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .rank-table th { background: #f8fafc; color: var(--text-sub); font-weight: 600; padding: 10px 8px; text-align: center; }
+    .rank-table td { padding: 10px 8px; text-align: center; border-bottom: 1px solid #f1f5f9; color: var(--text); }
+    .rank-table td:first-child { color: var(--blue); font-weight: 700; }
+    .rank-table td:nth-child(2) { text-align: left; max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .rank-table td:last-child { color: var(--red); font-weight: 600; }
+    @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* Tender list */
+    .list-head { display: flex; justify-content: space-between; align-items: center; padding: 16px 22px; border-bottom: 1px solid #f1f5f9; }
+    .list-head h2 { font-size: 17px; font-weight: 700; color: #1e293b; margin: 0; }
+    .list-head span { font-size: 14px; color: var(--blue); font-weight: 600; }
+    .list-head span small { color: var(--text-light); font-weight: 400; }
+    .list-scroll { overflow-x: auto; padding: 0 22px 22px; }
+    .data-table { width: 100%; min-width: 760px; border-collapse: collapse; font-size: 12px; }
+    .data-table th { background: #f8fafc; color: var(--text-sub); font-weight: 600; padding: 12px 10px; text-align: left; }
+    .data-table td { padding: 12px 10px; border-bottom: 1px solid #f1f5f9; color: var(--text); vertical-align: top; }
+    .data-table td:nth-child(1) { color: var(--text-sub); white-space: nowrap; }
+    .data-table td:nth-child(2) { color: var(--text-sub); white-space: nowrap; }
+    .data-table td:nth-child(4) { color: var(--text-sub); }
+    .data-table td:nth-child(5) { color: var(--red); font-weight: 600; text-align: right; white-space: nowrap; }
+
+    /* CTA */
+    .cta-section {
+      background: linear-gradient(180deg, #3b82f6 0%, #60a5fa 100%);
+      border-radius: 24px; padding: 28px 22px 22px;
+      color: #fff; text-align: center; box-shadow: 0 12px 40px rgba(37,99,235,0.2);
+    }
+    .cta-title { font-size: 18px; font-weight: 700; margin-bottom: 22px; }
+    .cta-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 22px; }
+    .cta-card { background: rgba(255,255,255,0.12); border-radius: 16px; padding: 16px 12px; }
+    .qr-box {
+      width: 110px; height: 110px; background: #fff; border-radius: 8px;
+      margin: 0 auto 12px; display: flex; align-items: center; justify-content: center;
+      color: #94a3b8; font-size: 11px; overflow: hidden;
+    }
+    .qr-box img { width: 100%; height: 100%; object-fit: cover; }
+    .cta-card p { font-size: 13px; line-height: 1.4; margin: 0; }
+    .cta-card p small { display: block; opacity: 0.8; font-size: 12px; }
+    .service-box {
+      background: rgba(255,255,255,0.12); border-radius: 14px; padding: 18px;
+      display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; align-items: flex-start;
+    }
+    .service-col { text-align: left; min-width: 140px; }
+    .service-col h4 { font-size: 14px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+    .service-col h4::before { content: ""; width: 6px; height: 6px; background: #fff; border-radius: 50%; }
+    .service-col p { font-size: 12px; opacity: 0.9; margin: 0 0 6px; }
+    .cta-footer { margin-top: 18px; font-size: 13px; opacity: 0.9; }
+    @media (max-width: 768px) {
+      .cta-grid { grid-template-columns: 1fr; }
+      .service-box { flex-direction: column; align-items: center; text-align: center; }
+      .service-col { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- Header -->
+    <header class="report-header">
+      <div class="header-content">
+        <h1 class="header-title">采招网招投标分析报告</h1>
+        <p class="header-subtitle">Bidcenter Bidding Analysis Report</p>
+        <p class="header-desc">本报告基于近一年采招网数据，对“服务器”招投标市场进行多维度分析，涵盖市场概况、市场份额、招标次数、市场区域、行业分布，以及TOP业主、TOP供应商、TOP代理机构排名与部分区域信息。</p>
+        <div class="header-meta">
+          <span class="meta-tag"><b>分析周期：</b>2025年7月 — 2026年6月</span>
+          <span class="meta-tag"><b>关键词：</b>服务器</span>
+          <span class="meta-tag"><b>区域：</b>内蒙古</span>
+          <span class="meta-tag"><b>报告生成日期：</b>2026年7月21日</span>
+        </div>
+      </div>
+      <div class="header-illustration">
+        <div class="cube c1"></div>
+        <div class="cube c2"></div>
+        <div class="cube c3"></div>
+        <div class="cube c4"></div>
+        <div class="laptop">
+          <div class="screen-line"></div>
+          <div class="screen-line"></div>
+          <div class="screen-line"></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 市场概况 -->
+    <section class="card">
+      <div class="sec-head"><h2>市场概况</h2></div>
+      <div class="market-body">
+        <div class="market-top">
+          <div class="market-left">
+            <div class="total-label">信息总数</div>
+            <div class="total-num">30,404</div>
+            <div class="total-hint">当前存在大量招标，请尽快参与！</div>
+          </div>
+          <div class="market-right">
+            <div class="cat-grid" id="categoryGrid"></div>
+          </div>
+        </div>
+        <div class="metrics-row" id="metricsRow"></div>
+      </div>
+    </section>
+
+    <!-- 招标趋势 -->
+    <section class="card">
+      <div class="sec-head"><h2>招标趋势</h2></div>
+      <div class="chart-wrap" id="chart-tender-trend"></div>
+    </section>
+
+    <!-- 份额分析 -->
+    <section class="card">
+      <div class="sec-head"><h2>份额分析</h2></div>
+      <div class="chart-wrap" id="chart-share-analysis"></div>
+    </section>
+
+    <!-- 市场份额 -->
+    <section class="card">
+      <div class="sec-head"><h2>市场份额-全国/地区</h2></div>
+      <div class="region-body">
+        <div class="map-box" id="chinaMapBox">
+          <svg viewBox="0 0 600 460" xmlns="http://www.w3.org/2000/svg">
+            <path d="M150,95 L175,78 L210,68 L255,60 L305,55 L355,58 L400,68 L445,85 L485,110 L510,145 L505,185 L485,225 L460,260 L430,290 L395,312 L355,322 L315,326 L270,324 L225,318 L185,305 L150,280 L120,245 L100,205 L90,165 L95,130 Z" fill="#d1d5db" stroke="#9ca3af" stroke-width="1.5"/>
+            <path d="M440,210 L460,200 L475,215 L470,240 L450,250 L435,235 Z" fill="#d1d5db" stroke="#9ca3af" stroke-width="1"/>
+            <path d="M480,160 L505,150 L520,165 L515,190 L490,195 Z" fill="#d1d5db" stroke="#9ca3af" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="table-scroll">
+          <table class="region-table" id="regionTable">
+            <thead><tr><th>地区</th><th>次数</th><th>占比</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 行业分布 TOP10 -->
+    <section class="card">
+      <div class="sec-head"><h2>行业分布 TOP10</h2></div>
+      <div class="chart-wrap" id="chart-industry"></div>
+    </section>
+
+    <!-- TOP业主单位 -->
+    <section class="card">
+      <div class="two-col">
+        <div class="col-card">
+          <div class="col-head">TOP业主单位招标次数分析</div>
+          <div class="table-scroll">
+            <table class="rank-table" id="ownerTimesTable"><thead><tr><th>排序</th><th>公司名称</th><th>次数</th></tr></thead><tbody></tbody></table>
+          </div>
+        </div>
+        <div class="col-card">
+          <div class="col-head">TOP业主单位招标预算分析</div>
+          <div class="table-scroll">
+            <table class="rank-table" id="ownerBudgetTable"><thead><tr><th>排序</th><th>公司名称</th><th>金额</th></tr></thead><tbody></tbody></table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 招标代理机构 -->
+    <section class="card">
+      <div class="sec-head"><h2>招标代理机构次数分析TOP10</h2></div>
+      <div class="chart-wrap" id="chart-agency"></div>
+    </section>
+
+    <!-- 招标数据 -->
+    <section class="card">
+      <div class="list-head"><h2>招标数据</h2><span>共计 4526 条 <small>当前仅展示前20条</small></span></div>
+      <div class="list-scroll">
+        <table class="data-table" id="tenderTable">
+          <thead><tr><th>时间</th><th>地区</th><th>信息标题</th><th>公司名称</th><th>金额</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 中标次数趋势 -->
+    <section class="card">
+      <div class="sec-head"><h2>中标次数趋势</h2></div>
+      <div class="chart-wrap" id="chart-win-trend"></div>
+    </section>
+
+    <!-- 中标份额 -->
+    <section class="card">
+      <div class="sec-head"><h2>中标份额</h2></div>
+      <div class="chart-wrap" id="chart-win-share"></div>
+    </section>
+
+    <!-- TOP中标单位 -->
+    <section class="card">
+      <div class="two-col">
+        <div class="col-card">
+          <div class="col-head">TOP中标单位中标次数分析</div>
+          <div class="table-scroll">
+            <table class="rank-table" id="winnerTimesTable"><thead><tr><th>排序</th><th>公司名称</th><th>次数</th></tr></thead><tbody></tbody></table>
+          </div>
+        </div>
+        <div class="col-card">
+          <div class="col-head">TOP中标单位中标金额分析</div>
+          <div class="table-scroll">
+            <table class="rank-table" id="winnerAmountTable"><thead><tr><th>排序</th><th>公司名称</th><th>金额</th></tr></thead><tbody></tbody></table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+      <div class="cta-title">如需获取更多维度分析报告，您可通过以下方式</div>
+      <div class="cta-grid">
+        <div class="cta-card">
+          <div class="qr-box"><img id="qrWechat" alt="客服微信"></div>
+          <p>1.添加客服微信</p>
+        </div>
+        <div class="cta-card">
+          <div class="qr-box"><img id="qrOfficial" alt="公众号"></div>
+          <p>2.关注采招网公众号<br><small>—咨询客服</small></p>
+        </div>
+        <div class="cta-card">
+          <div class="service-box">
+            <div class="service-col">
+              <h4>数据</h4>
+              <p>数据导出</p>
+              <p>API数据接口</p>
+              <p>营销数据DBI</p>
+            </div>
+            <div class="service-col">
+              <h4>&nbsp;</h4>
+              <p>数据分析报告</p>
+              <p>采招大数据</p>
+              <p>数据库查询</p>
+            </div>
+          </div>
+          <p>3.在电脑端登录后查看“数据服务”<br><small>https://www.bidcenter.com.cn/</small></p>
+        </div>
+      </div>
+      <div class="cta-footer">找商机上采招，始于专业，重于服务，专业招标采购大平台</div>
+    </section>
+  </div>
+
+  <script>
+    const REPORT_DATA = {
+      header: {
+        title: "采招网招投标分析报告",
+        subtitle: "Bidcenter Bidding Analysis Report",
+        desc: "本报告基于近一年采招网数据，对“服务器”招投标市场进行多维度分析，涵盖市场概况、市场份额、招标次数、市场区域、行业分布，以及TOP业主、TOP供应商、TOP代理机构排名与部分区域信息。",
+        period: "2025年7月 — 2026年6月",
+        keyword: "服务器",
+        region: "内蒙古",
+        generateDate: "2026年7月21日"
+      },
+      market: {
+        total: "30,404",
+        hint: "当前存在大量招标，请尽快参与！",
+        categories: [
+          { label: "招标公告", value: "30,404" },
+          { label: "中标结果", value: "30,404" },
+          { label: "招标预告", value: "30,404" },
+          { label: "招标变更", value: "30,404" },
+          { label: "工程项目", value: "30,404" }
+        ],
+        metrics: [
+          { label: "招标公告", value: "30,404次" },
+          { label: "招标金额", value: "30,404元" },
+          { label: "中标数量", value: "30,404次" },
+          { label: "中标金额", value: "30,404元" },
+          { label: "招标业主", value: "30,404家" },
+          { label: "供应商", value: "30,404家" }
+        ]
+      },
+      charts: {
+        tenderTrend: {
+          title: "招标趋势",
+          yName: "次数",
+          xAxis: ["26/08", "26/09", "25/10", "25/11", "25/12", "26/01", "26/02", "26/03", "26/04", "26/05", "26/06", "26/07"],
+          data: [250, 120, 360, 200, 150, 220, 130, 290, 210, 300, 190, 310]
+        },
+        shareAnalysis: {
+          title: "份额分析",
+          yName: "金额",
+          xAxis: ["26/08", "26/09", "25/10", "25/11", "25/12", "26/01", "26/02", "26/03", "26/04", "26/05", "26/06", "26/07"],
+          data: [200, 320, 150, 260, 210, 330, 180, 230, 130, 270, 210, 250]
+        },
+        agencyAnalysis: {
+          title: "招标代理机构次数分析TOP10",
+          yName: "金额",
+          xAxis: ["金诚招标公司", "滁州市城投工程...", "金诚招标公司", "滁州市城投工程...", "金诚招标公司", "滁州市城投工程...", "金诚招标公司", "滁州市城投工程...", "金诚招标公司", "滁州市城投工程..."],
+          data: [200, 300, 150, 250, 210, 180, 230, 130, 270, 250]
+        },
+        winTrend: {
+          title: "中标次数趋势",
+          yName: "次数",
+          xAxis: ["26/08", "26/09", "25/10", "25/11", "25/12", "26/01", "26/02", "26/03", "26/04", "26/05", "26/06", "26/07"],
+          data: [250, 120, 360, 200, 150, 220, 130, 290, 210, 300, 190, 310]
+        },
+        winShare: {
+          title: "中标份额",
+          yName: "金额",
+          xAxis: ["26/08", "26/09", "25/10", "25/11", "25/12", "26/01", "26/02", "26/03", "26/04", "26/05", "26/06", "26/07"],
+          data: [200, 320, 150, 260, 210, 330, 180, 230, 130, 270, 210, 250]
+        }
+      },
+      industryDistribution: {
+        title: "行业分布 TOP10",
+        data: [
+          { name: "政府部门", value: 210000 },
+          { name: "能源化工", value: 195000 },
+          { name: "水利电力", value: 180000 },
+          { name: "文体教育", value: 165000 },
+          { name: "军队系统", value: 155000 },
+          { name: "医疗卫生", value: 145000 },
+          { name: "企事业单位", value: 135000 },
+          { name: "交通运输", value: 120000 },
+          { name: "科技通信", value: 110000 },
+          { name: "金融保险", value: 100000 }
+        ]
+      },
+      regionShare: {
+        title: "市场份额-全国/地区",
+        rows: [
+          { region: "北京", count: 202565, ratio: "35%" },
+          { region: "北京", count: 202565, ratio: "35%" },
+          { region: "北京", count: 202565, ratio: "35%" },
+          { region: "北京", count: 202565, ratio: "35%" },
+          { region: "北京", count: 202565, ratio: "35%" },
+          { region: "北京", count: 202565, ratio: "35%" },
+          { region: "北京", count: 202565, ratio: "35%" },
+          { region: "北京", count: 202565, ratio: "35%" },
+          { region: "北京", count: 202565, ratio: "35%" },
+          { region: "北京", count: 202565, ratio: "35%" }
+        ]
+      },
+      topOwners: {
+        times: [
+          { rank: 1, name: "北京中亦安图科技股份有限公司", value: 50 },
+          { rank: 2, name: "上海华讯网络系统有限公司", value: 39 },
+          { rank: 3, name: "云南南天电子信息产业股份有限公司", value: 22 },
+          { rank: 4, name: "北京银信长远科技股份有限公司", value: 20 },
+          { rank: 5, name: "神州数码系统集成服务有限公司", value: 18 },
+          { rank: 6, name: "中兴通讯股份有限公司", value: 17 },
+          { rank: 7, name: "北明软件有限公司", value: 15 },
+          { rank: 8, name: "上海珑京信息科技有限公司", value: 13 },
+          { rank: 9, name: "阿里云计算有限公司", value: 12 },
+          { rank: 10, name: "四川信一创科技有限公司", value: 1 }
+        ],
+        budget: [
+          { rank: 1, name: "天合建设集团有限公司", value: "382881.09" },
+          { rank: 2, name: "衢州恒威电子科技有限公司", value: "201254.05" },
+          { rank: 3, name: "云南华远电子有限公司", value: "147918.76" },
+          { rank: 4, name: "山东鲁嘉智远科技有限公司", value: "104575.00" },
+          { rank: 5, name: "浙江大华技术股份有限公司", value: "95140.00" },
+          { rank: 6, name: "北京神州新桥科技有限公司", value: "85170.07" },
+          { rank: 7, name: "北京先进数通信息技术股份公司", value: "83547.87" },
+          { rank: 8, name: "百信", value: "82000.00" },
+          { rank: 9, name: "武汉长江计算科技有限公司", value: "77176.80" },
+          { rank: 10, name: "林智半信息技术有限公司", value: "56800.00" }
+        ]
+      },
+      topWinners: {
+        times: [
+          { rank: 1, name: "北京中亦安图科技股份有限公司", value: 50 },
+          { rank: 2, name: "上海华讯网络系统有限公司", value: 39 },
+          { rank: 3, name: "云南南天电子信息产业股份有限公司", value: 22 },
+          { rank: 4, name: "北京银信长远科技股份有限公司", value: 20 },
+          { rank: 5, name: "神州数码系统集成服务有限公司", value: 18 },
+          { rank: 6, name: "中兴通讯股份有限公司", value: 17 },
+          { rank: 7, name: "北明软件有限公司", value: 15 },
+          { rank: 8, name: "上海珑京信息科技有限公司", value: 13 },
+          { rank: 9, name: "阿里云计算有限公司", value: 12 },
+          { rank: 10, name: "四川信一创科技有限公司", value: 1 }
+        ],
+        amount: [
+          { rank: 1, name: "北京中亦安图科技股份有限公司", value: 50 },
+          { rank: 2, name: "上海华讯网络系统有限公司", value: 39 },
+          { rank: 3, name: "云南南天电子信息产业股份有限公司", value: 22 },
+          { rank: 4, name: "北京银信长远科技股份有限公司", value: 20 },
+          { rank: 5, name: "神州数码系统集成服务有限公司", value: 18 },
+          { rank: 6, name: "中兴通讯股份有限公司", value: 17 },
+          { rank: 7, name: "北明软件有限公司", value: 15 },
+          { rank: 8, name: "上海珑京信息科技有限公司", value: 13 },
+          { rank: 9, name: "阿里云计算有限公司", value: 12 },
+          { rank: 10, name: "四川信一创科技有限公司", value: 1 }
+        ]
+      },
+      tenderList: {
+        total: 4526,
+        show: 20,
+        sample: {
+          date: "2022-10-15",
+          region: "河北-涿州",
+          title: "吉安至南康改扩建项目机电工程105国道线增设交通信号灯和电子抓拍设备及部分附属设施施工询比采购公告",
+          company: "江西方兴科技股份有限公司",
+          amount: "201,254 元"
+        }
+      },
+      cta: {
+        title: "如需获取更多维度分析报告，您可通过以下方式",
+        qrWechat: "",
+        qrOfficial: "",
+        url: "https://www.bidcenter.com.cn/",
+        slogan: "找商机上采招，始于专业，重于服务，专业招标采购大平台"
+      }
+    };
+
+    function fmt(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+
+    function renderStatic() {
+      const catGrid = document.getElementById("categoryGrid");
+      REPORT_DATA.market.categories.forEach(c => {
+        const div = document.createElement("div");
+        div.className = "cat-item";
+        div.innerHTML = `<span>${c.label}</span><span>${c.value}</span>`;
+        catGrid.appendChild(div);
+      });
+
+      const metricsRow = document.getElementById("metricsRow");
+      REPORT_DATA.market.metrics.forEach(m => {
+        const div = document.createElement("div");
+        div.className = "metric-item";
+        div.innerHTML = `<div class="label">${m.label}</div><div class="value">${m.value}</div>`;
+        metricsRow.appendChild(div);
+      });
+
+      const regionTbody = document.querySelector("#regionTable tbody");
+      REPORT_DATA.regionShare.rows.forEach(r => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${r.region}</td><td>${fmt(r.count)}</td><td>${r.ratio}</td>`;
+        regionTbody.appendChild(tr);
+      });
+
+      const fillTable = (id, rows, suffix = "") => {
+        const tbody = document.querySelector(`#${id} tbody`);
+        rows.forEach(r => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td>${r.rank}</td><td title="${r.name}">${r.name}</td><td>${r.value}${suffix}</td>`;
+          tbody.appendChild(tr);
+        });
+      };
+      fillTable("ownerTimesTable", REPORT_DATA.topOwners.times);
+      fillTable("ownerBudgetTable", REPORT_DATA.topOwners.budget);
+      fillTable("winnerTimesTable", REPORT_DATA.topWinners.times);
+      fillTable("winnerAmountTable", REPORT_DATA.topWinners.amount);
+
+      const tenderTbody = document.querySelector("#tenderTable tbody");
+      const s = REPORT_DATA.tenderList.sample;
+      for (let i = 0; i < REPORT_DATA.tenderList.show; i++) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${s.date}</td><td>${s.region}</td><td>${s.title}</td><td>${s.company}</td><td>${s.amount}</td>`;
+        tenderTbody.appendChild(tr);
+      }
+    }
+
+    const chartInstances = [];
+
+    function lineChart(el, cfg, color) {
+      const instance = echarts.init(el);
+      instance.setOption({
+        tooltip: { trigger: "axis", backgroundColor: "rgba(255,255,255,0.95)", borderColor: "#e2e8f0", textStyle: { color: "#334155" } },
+        grid: { left: 46, right: 18, top: 34, bottom: 28 },
+        xAxis: {
+          type: "category", boundaryGap: false,
+          data: cfg.xAxis,
+          axisLine: { lineStyle: { color: "#e2e8f0" } },
+          axisTick: { show: false },
+          axisLabel: { color: "#64748b", fontSize: 11 }
+        },
+        yAxis: {
+          type: "value", name: cfg.yName,
+          nameTextStyle: { color: "#64748b", fontSize: 12, padding: [0, 0, 0, -30] },
+          min: 0, max: 350, interval: 50,
+          axisLine: { show: false },
+          axisTick: { show: false },
+          splitLine: { lineStyle: { color: "#f1f5f9" } },
+          axisLabel: { color: "#94a3b8", fontSize: 11 }
+        },
+        series: [{
+          data: cfg.data, type: "line", smooth: true, symbol: "none",
+          lineStyle: { width: 3, color: color },
+          areaStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              { offset: 0, color: color.replace(")", ",0.35)") },
+              { offset: 1, color: color.replace(")", ",0.02)") }
+            ])
+          }
+        }]
+      });
+      chartInstances.push(instance);
+    }
+
+    function barChart(el, cfg, colorStart, colorEnd) {
+      const instance = echarts.init(el);
+      instance.setOption({
+        tooltip: { trigger: "axis", backgroundColor: "rgba(255,255,255,0.95)", borderColor: "#e2e8f0", textStyle: { color: "#334155" } },
+        grid: { left: 46, right: 18, top: 34, bottom: 28 },
+        xAxis: {
+          type: "category", data: cfg.xAxis,
+          axisLine: { lineStyle: { color: "#e2e8f0" } },
+          axisTick: { show: false },
+          axisLabel: { color: "#64748b", fontSize: 11 }
+        },
+        yAxis: {
+          type: "value", name: cfg.yName,
+          nameTextStyle: { color: "#64748b", fontSize: 12, padding: [0, 0, 0, -30] },
+          min: 0, max: 350, interval: 50,
+          axisLine: { show: false }, axisTick: { show: false },
+          splitLine: { lineStyle: { color: "#f1f5f9" } },
+          axisLabel: { color: "#94a3b8", fontSize: 11 }
+        },
+        series: [{
+          data: cfg.data, type: "bar", barWidth: "45%",
+          itemStyle: {
+            borderRadius: [6, 6, 0, 0],
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              { offset: 0, color: colorStart },
+              { offset: 1, color: colorEnd }
+            ])
+          }
+        }]
+      });
+      chartInstances.push(instance);
+    }
+
+    function hbarChart(el, cfg) {
+      const instance = echarts.init(el);
+      const names = cfg.data.map(d => d.name);
+      const values = cfg.data.map(d => d.value);
+      instance.setOption({
+        tooltip: { trigger: "axis", backgroundColor: "rgba(255,255,255,0.95)", borderColor: "#e2e8f0", textStyle: { color: "#334155" }, formatter: "{b}: {c}万元" },
+        grid: { left: 86, right: 90, top: 16, bottom: 16 },
+        xAxis: { type: "value", show: false },
+        yAxis: {
+          type: "category", data: names, inverse: true,
+          axisLine: { show: false }, axisTick: { show: false },
+          axisLabel: { color: "#64748b", fontSize: 11, width: 80, overflow: "truncate" }
+        },
+        series: [{
+          data: values, type: "bar", barWidth: 12,
+          itemStyle: {
+            borderRadius: [0, 6, 6, 0],
+            color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+              { offset: 0, color: "#93c5fd" },
+              { offset: 1, color: "#3b82f6" }
+            ])
+          },
+          label: { show: true, position: "right", color: "#64748b", fontSize: 11, formatter: "{c}万元" }
+        }]
+      });
+      chartInstances.push(instance);
+    }
+
+    function agencyChart(el, cfg) {
+      const instance = echarts.init(el);
+      instance.setOption({
+        tooltip: { trigger: "axis", backgroundColor: "rgba(255,255,255,0.95)", borderColor: "#e2e8f0", textStyle: { color: "#334155" } },
+        grid: { left: 46, right: 18, top: 34, bottom: 70 },
+        xAxis: {
+          type: "category", data: cfg.xAxis,
+          axisLine: { lineStyle: { color: "#e2e8f0" } },
+          axisTick: { show: false },
+          axisLabel: { color: "#64748b", fontSize: 10, rotate: 45, interval: 0 }
+        },
+        yAxis: {
+          type: "value", name: cfg.yName,
+          nameTextStyle: { color: "#64748b", fontSize: 12, padding: [0, 0, 0, -30] },
+          min: 0, max: 350, interval: 50,
+          axisLine: { show: false }, axisTick: { show: false },
+          splitLine: { lineStyle: { color: "#f1f5f9" } },
+          axisLabel: { color: "#94a3b8", fontSize: 11 }
+        },
+        series: [{
+          data: cfg.data, type: "bar", barWidth: "35%",
+          itemStyle: {
+            borderRadius: [6, 6, 0, 0],
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              { offset: 0, color: "#60a5fa" },
+              { offset: 1, color: "#3b82f6" }
+            ])
+          }
+        }]
+      });
+      chartInstances.push(instance);
+    }
+
+    function initCharts() {
+      lineChart(document.getElementById("chart-tender-trend"), REPORT_DATA.charts.tenderTrend, "rgba(59,130,246,1)");
+      barChart(document.getElementById("chart-share-analysis"), REPORT_DATA.charts.shareAnalysis, "#60a5fa", "#3b82f6");
+      hbarChart(document.getElementById("chart-industry"), REPORT_DATA.industryDistribution);
+      agencyChart(document.getElementById("chart-agency"), REPORT_DATA.charts.agencyAnalysis);
+      lineChart(document.getElementById("chart-win-trend"), REPORT_DATA.charts.winTrend, "rgba(239,68,68,1)");
+      barChart(document.getElementById("chart-win-share"), REPORT_DATA.charts.winShare, "#f87171", "#ef4444");
+    }
+
+    renderStatic();
+    initCharts();
+
+    if (REPORT_DATA.cta.qrWechat) document.getElementById("qrWechat").src = REPORT_DATA.cta.qrWechat;
+    if (REPORT_DATA.cta.qrOfficial) document.getElementById("qrOfficial").src = REPORT_DATA.cta.qrOfficial;
+    if (!REPORT_DATA.cta.qrWechat) document.getElementById("qrWechat").textContent = "二维码";
+    if (!REPORT_DATA.cta.qrOfficial) document.getElementById("qrOfficial").textContent = "二维码";
+
+    window.addEventListener("resize", () => {
+      chartInstances.forEach(c => c.resize());
+    });
+  </script>
+</body>
+</html>

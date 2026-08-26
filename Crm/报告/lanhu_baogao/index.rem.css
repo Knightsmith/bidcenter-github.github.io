@@ -1,0 +1,1345 @@
+﻿html {
+  font-size: 37.5px;
+}
+
+.page {
+  background-color: rgba(255, 255, 255, 1);
+  position: relative;
+  width: 15.867rem;
+  height: 22.454rem;
+  overflow: hidden;
+}
+
+.box_1 {
+}
+
+.block_1 {
+  background: url(./img/SketchPngc2816611bafbcd9a2b567b25e0fd429ad12e4ae7dbfa2c5d53aac9d2a6ef092a.png)
+    100% no-repeat;
+  background-size: 100% 100%;
+  margin-bottom: 12.374rem;
+  padding-bottom: 1.147rem;
+}
+
+.section_1 {
+  background: url(./img/SketchPng0cfd38081a65084eb67a64b643377a56955102490a6fda36ae4f8ee35ba75095.png)
+    100% no-repeat;
+  background-size: 100% 100%;
+  padding: 1.147rem 0.48rem 0.134rem 0.774rem;
+}
+
+.text_1 {
+  height: 0.8rem;
+  overflow-wrap: break-word;
+  color: rgba(255, 255, 255, 1);
+  font-size: 0.8rem;
+  font-family: "Noto Sans SC";
+  font-weight: 900;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 1.2rem;
+  margin-right: 6.614rem;
+}
+
+.text_2 {
+  overflow-wrap: break-word;
+  color: rgba(97, 151, 244, 1);
+  font-size: 0.373rem;
+  letter-spacing: 2.299999952316284px;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.534rem;
+  margin: 0.08rem 6.64rem 0 0.027rem;
+}
+
+.group_1 {
+  margin: 0.4rem 0 0 0.027rem;
+}
+
+.group_2 {
+  margin-bottom: 1.867rem;
+}
+
+.paragraph_1 {
+  width: 8.054rem;
+  height: 1.814rem;
+  overflow-wrap: break-word;
+  color: rgba(5, 23, 150, 1);
+  font-size: 0.32rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  line-height: 0.454rem;
+}
+
+.block_2 {
+  background: url(./img/SketchPng1035541ebe30e6b56c4054109a28b51c8520dd0b34b69c6dccc424da8923ecd6.png)
+    100% no-repeat;
+  background-size: 100% 100%;
+  margin: 0.267rem 0.614rem 0 0;
+  padding: 0.134rem 1.414rem 0.16rem 0.267rem;
+}
+
+.text-wrapper_1 {
+  width: 5.76rem;
+  height: 1.6rem;
+  overflow-wrap: break-word;
+  font-size: 0;
+  font-family: "Noto Sans SC";
+  font-weight: 600;
+  text-align: left;
+  line-height: 0.534rem;
+}
+
+.paragraph_2 {
+  width: 5.76rem;
+  height: 1.6rem;
+  overflow-wrap: break-word;
+  color: rgba(255, 255, 255, 1);
+  font-size: 0.32rem;
+  font-family: "Noto Sans SC";
+  font-weight: 600;
+  text-align: left;
+  line-height: 0.534rem;
+}
+
+.text_3 {
+  width: 5.76rem;
+  height: 1.6rem;
+  overflow-wrap: break-word;
+  color: rgba(255, 255, 255, 1);
+  font-size: 0.32rem;
+  font-family: "Noto Sans SC";
+  font-weight: 600;
+  text-align: left;
+  line-height: 0.534rem;
+}
+
+.paragraph_3 {
+  width: 5.76rem;
+  height: 1.6rem;
+  overflow-wrap: break-word;
+  color: rgba(255, 255, 255, 1);
+  font-size: 0.32rem;
+  font-family: "Noto Sans SC";
+  font-weight: 600;
+  text-align: left;
+  line-height: 0.534rem;
+}
+
+.group_3 {
+  background: url(./img/SketchPng4152000c4b39ee537174d4126277cd672f8e2a281d167b633f9a9dfce957dec7.png)
+    100% no-repeat;
+  background-size: 100% 100%;
+  margin: 0.854rem 0 0 -0.907rem;
+}
+
+.text-wrapper_2 {
+  height: 5.28rem;
+  background: url(./img/SketchPnge96835f600a9f0bd0c71279077b5bd4b0557b4fcdeec4a26d8caca74daf63e68.png)
+    0.054rem 0rem no-repeat;
+  background-size: 4.907rem 5.307rem;
+  margin: -3.014rem 1.76rem 2.72rem 0.747rem;
+}
+
+.text_4 {
+  background-image: linear-gradient(
+    180deg,
+    rgba(109, 156, 254, 1) 0,
+    rgba(15, 87, 231, 1) 100%
+  );
+  width: 8rem;
+  height: 0.8rem;
+  overflow-wrap: break-word;
+  color: rgba(38, 110, 239, 1);
+  font-size: 0.8rem;
+  font-family: "Noto Sans SC";
+  font-weight: 900;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 1.2rem;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0.32rem 4.827rem 4.16rem -7.894rem;
+}
+
+.block_3 {
+  background-color: rgba(217, 233, 249, 1);
+  width: 15.867rem;
+  height: 12.48rem;
+  margin: 9.974rem 0 0 -15.867rem;
+}
+
+.box_2 {
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 10px;
+  position: absolute;
+  left: 0.8rem;
+  top: 7.734rem;
+  width: 14.267rem;
+  height: 14.72rem;
+  border: 1px rgba(106, 169, 251, 1);
+  padding: 0.507rem 0.507rem 0.24rem 0.507rem;
+}
+
+.block_4 {
+  width: 1.734rem;
+  margin-right: 11.467rem;
+}
+
+.box_3 {
+  background-color: rgba(29, 97, 234, 1);
+  width: 0.08rem;
+  height: 0.32rem;
+  margin: 0.107rem 0 0.107rem 0;
+}
+
+.text_5 {
+  overflow-wrap: break-word;
+  color: rgba(29, 97, 234, 1);
+  font-size: 0.373rem;
+  font-family: "Noto Sans SC";
+  font-weight: 900;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.534rem;
+}
+
+.block_5 {
+  background-color: rgba(249, 250, 252, 1);
+  border-radius: 8px;
+  width: 13.2rem;
+  margin-top: 0.267rem;
+  padding: 0.187rem 0.187rem 0.187rem 0.4rem;
+}
+
+.group_4 {
+  margin: 0.134rem 0 0.24rem 0;
+}
+
+.section_2 {
+  width: 2.107rem;
+  margin-right: 1.894rem;
+}
+
+.thumbnail_1 {
+  width: 0.48rem;
+  height: 0.48rem;
+  margin-top: 0.054rem;
+}
+
+.text_6 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.373rem;
+  font-family: "Noto Sans SC";
+  font-weight: 900;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.534rem;
+}
+
+.text_7 {
+  overflow-wrap: break-word;
+  color: rgba(216, 0, 0, 1);
+  font-size: 0.48rem;
+  font-family: "Noto Sans SC";
+  font-weight: 900;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.667rem;
+  margin: 0.267rem 2.427rem 0 0;
+}
+
+.text_8 {
+  overflow-wrap: break-word;
+  color: rgba(102, 102, 102, 1);
+  font-size: 0.266rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.374rem;
+  margin-top: 0.187rem;
+}
+
+.group_5 {
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 10px;
+  width: 7.414rem;
+  border: 0.5px rgba(232, 234, 238, 1);
+  padding-right: 0.454rem;
+}
+
+.image_1 {
+  width: 7.414rem;
+  height: 0.054rem;
+  margin: 1.574rem 0 0.774rem 0;
+}
+
+.image_2 {
+  width: 7.414rem;
+  height: 0.054rem;
+  margin: 0.774rem 0 1.574rem -7.414rem;
+}
+
+.text_9 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.32rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.454rem;
+  margin: 1.787rem 0 0 -7.147rem;
+}
+
+.text_10 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.32rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.454rem;
+  margin: 0.987rem 0 0 -1.28rem;
+}
+
+.text_11 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.32rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.454rem;
+  margin: 0.187rem 0 0 -1.28rem;
+}
+
+.text_12 {
+  overflow-wrap: break-word;
+  color: rgba(216, 0, 0, 1);
+  font-size: 0.32rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.454rem;
+  margin: 1.787rem 0 0 0.587rem;
+}
+
+.text_13 {
+  overflow-wrap: break-word;
+  color: rgba(216, 0, 0, 1);
+  font-size: 0.32rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.454rem;
+  margin: 0.987rem 0 0 -1.067rem;
+}
+
+.text_14 {
+  overflow-wrap: break-word;
+  color: rgba(216, 0, 0, 1);
+  font-size: 0.32rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.454rem;
+  margin: 0.187rem 0 0 -1.067rem;
+}
+
+.image_3 {
+  width: 0.054rem;
+  height: 2.4rem;
+  margin-left: 0.48rem;
+}
+
+.text_15 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.32rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.454rem;
+  margin: 0.987rem 0 0 0.267rem;
+}
+
+.text_16 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.32rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.454rem;
+  margin: 0.187rem 0 0 -1.28rem;
+}
+
+.text_17 {
+  overflow-wrap: break-word;
+  color: rgba(216, 0, 0, 1);
+  font-size: 0.32rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.454rem;
+  margin: 0.987rem 0 0 0.587rem;
+}
+
+.text_18 {
+  overflow-wrap: break-word;
+  color: rgba(216, 0, 0, 1);
+  font-size: 0.32rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.454rem;
+  margin: 0.187rem 0 0 -1.067rem;
+}
+
+.block_6 {
+  background-color: rgba(249, 250, 252, 1);
+  border-radius: 8px;
+  position: relative;
+  border: 0.5px rgba(232, 234, 238, 1);
+  margin-top: 0.134rem;
+  padding: 0.16rem 0.16rem 0.134rem 0.16rem;
+}
+
+.text-wrapper_3 {
+  width: 11.68rem;
+  margin: 0 0.88rem 0 0.267rem;
+}
+
+.text_19 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.32rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.454rem;
+}
+
+.text_20 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.32rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.454rem;
+}
+
+.text_21 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.32rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.454rem;
+}
+
+.text_22 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.32rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.454rem;
+}
+
+.text_23 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.32rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.454rem;
+}
+
+.text_24 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.32rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.454rem;
+}
+
+.image_4 {
+  width: 12.827rem;
+  height: 0.054rem;
+  margin-top: 0.134rem;
+}
+
+.text-wrapper_4 {
+  width: 12.107rem;
+  margin: 0.16rem 0.454rem 0 0.267rem;
+}
+
+.text_25 {
+  overflow-wrap: break-word;
+  color: rgba(216, 0, 0, 1);
+  font-size: 0.32rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.454rem;
+}
+
+.text_26 {
+  overflow-wrap: break-word;
+  color: rgba(216, 0, 0, 1);
+  font-size: 0.32rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.454rem;
+}
+
+.text_27 {
+  overflow-wrap: break-word;
+  color: rgba(216, 0, 0, 1);
+  font-size: 0.32rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.454rem;
+}
+
+.text_28 {
+  overflow-wrap: break-word;
+  color: rgba(216, 0, 0, 1);
+  font-size: 0.32rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.454rem;
+}
+
+.text_29 {
+  overflow-wrap: break-word;
+  color: rgba(216, 0, 0, 1);
+  font-size: 0.32rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.454rem;
+}
+
+.text_30 {
+  overflow-wrap: break-word;
+  color: rgba(216, 0, 0, 1);
+  font-size: 0.32rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.454rem;
+}
+
+.image_5 {
+  position: absolute;
+  left: 2.24rem;
+  top: 0;
+  width: 0.054rem;
+  height: 1.6rem;
+}
+
+.image_6 {
+  position: absolute;
+  left: 4.374rem;
+  top: 0;
+  width: 0.054rem;
+  height: 1.6rem;
+}
+
+.image_7 {
+  position: absolute;
+  left: 6.507rem;
+  top: 0;
+  width: 0.054rem;
+  height: 1.6rem;
+}
+
+.image_8 {
+  position: absolute;
+  left: 8.667rem;
+  top: 0;
+  width: 0.054rem;
+  height: 1.6rem;
+}
+
+.image_9 {
+  position: absolute;
+  left: 10.8rem;
+  top: 0;
+  width: 0.054rem;
+  height: 1.6rem;
+}
+
+.block_7 {
+  width: 1.734rem;
+  margin: 0.56rem 11.467rem 0 0;
+}
+
+.block_8 {
+  background-color: rgba(29, 97, 234, 1);
+  width: 0.08rem;
+  height: 0.32rem;
+  margin: 0.107rem 0 0.107rem 0;
+}
+
+.text_31 {
+  overflow-wrap: break-word;
+  color: rgba(29, 97, 234, 1);
+  font-size: 0.373rem;
+  font-family: "Noto Sans SC";
+  font-weight: 900;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.534rem;
+}
+
+.text_32 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin: 0.267rem 12.774rem 0 0;
+}
+
+.block_9 {
+  width: 0.56rem;
+  margin: 0.08rem 12.587rem 0 0.054rem;
+}
+
+.text-wrapper_5 {
+  margin-bottom: 0.267rem;
+}
+
+.text_33 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+}
+
+.text_34 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin-top: 0.134rem;
+}
+
+.text_35 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin-top: 0.08rem;
+}
+
+.text_36 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin: 0.134rem 0 0 0.054rem;
+}
+
+.text_37 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin: 0.08rem 0 0 0.054rem;
+}
+
+.image_10 {
+  width: 0.054rem;
+  height: 2rem;
+  margin-top: 0.16rem;
+}
+
+.text-wrapper_6 {
+  margin: 0.134rem 0.08rem 0 0.587rem;
+}
+
+.text_38 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+}
+
+.text_39 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin-left: 0.454rem;
+}
+
+.text_40 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin-left: 0.48rem;
+}
+
+.text_41 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin-left: 0.48rem;
+}
+
+.text_42 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin-left: 0.454rem;
+}
+
+.text_43 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin-left: 0.48rem;
+}
+
+.text_44 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin-left: 0.48rem;
+}
+
+.text_45 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin-left: 0.48rem;
+}
+
+.text_46 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin-left: 0.454rem;
+}
+
+.text_47 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin-left: 0.454rem;
+}
+
+.text_48 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin-left: 0.454rem;
+}
+
+.text_49 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin-left: 0.454rem;
+}
+
+.block_10 {
+  width: 1.734rem;
+  margin: 0.534rem 11.467rem 0 0;
+}
+
+.group_6 {
+  background-color: rgba(29, 97, 234, 1);
+  width: 0.08rem;
+  height: 0.32rem;
+  margin: 0.107rem 0 0.107rem 0;
+}
+
+.text_50 {
+  overflow-wrap: break-word;
+  color: rgba(29, 97, 234, 1);
+  font-size: 0.373rem;
+  font-family: "Noto Sans SC";
+  font-weight: 900;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.534rem;
+}
+
+.text_51 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin: 0.267rem 12.774rem 0 0;
+}
+
+.block_11 {
+  width: 13.147rem;
+  margin: 0.107rem 0 0 0.054rem;
+}
+
+.text-wrapper_7 {
+  margin-bottom: 0.24rem;
+}
+
+.text_52 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+}
+
+.text_53 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin-top: 0.107rem;
+}
+
+.text_54 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin-top: 0.107rem;
+}
+
+.text_55 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin: 0.107rem 0 0 0.054rem;
+}
+
+.text_56 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin: 0.107rem 0 0 0.054rem;
+}
+
+.image-wrapper_1 {
+  margin-top: 0.107rem;
+}
+
+.image_11 {
+  width: 12.614rem;
+  height: 0.027rem;
+  margin-left: 0.027rem;
+}
+
+.image_12 {
+  width: 0.054rem;
+  height: 2rem;
+  margin-right: 12.587rem;
+}
+
+.image_13 {
+  width: 12.614rem;
+  height: 0.027rem;
+  margin-left: 0.587rem;
+}
+
+.text-wrapper_8 {
+  margin: 0.107rem 0.08rem 0 0.587rem;
+}
+
+.text_57 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+}
+
+.text_58 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin-left: 0.454rem;
+}
+
+.text_59 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin-left: 0.48rem;
+}
+
+.text_60 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin-left: 0.48rem;
+}
+
+.text_61 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin-left: 0.454rem;
+}
+
+.text_62 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin-left: 0.48rem;
+}
+
+.text_63 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin-left: 0.48rem;
+}
+
+.text_64 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin-left: 0.48rem;
+}
+
+.text_65 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin-left: 0.454rem;
+}
+
+.text_66 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin-left: 0.454rem;
+}
+
+.text_67 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin-left: 0.454rem;
+}
+
+.text_68 {
+  overflow-wrap: break-word;
+  color: rgba(51, 51, 51, 1);
+  font-size: 0.213rem;
+  font-family: "Noto Sans SC";
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 0.294rem;
+  margin-left: 0.454rem;
+}
+
+.image_14 {
+  position: absolute;
+  left: 1.12rem;
+  top: 9.707rem;
+  width: 12.614rem;
+  height: 0.027rem;
+}
+
+.image_15 {
+  position: absolute;
+  left: 1.12rem;
+  top: 9.334rem;
+  width: 12.614rem;
+  height: 0.027rem;
+}
+
+.image_16 {
+  position: absolute;
+  left: 1.12rem;
+  top: 8.907rem;
+  width: 12.614rem;
+  height: 0.027rem;
+}
+
+.image_17 {
+  position: absolute;
+  left: 1.12rem;
+  top: 8.534rem;
+  width: 12.614rem;
+  height: 0.027rem;
+}
+
+.image_18 {
+  position: absolute;
+  left: 1.12rem;
+  top: 8.107rem;
+  width: 12.614rem;
+  height: 0.027rem;
+}
+
+.image_19 {
+  position: absolute;
+  left: 1.12rem;
+  top: 7.734rem;
+  width: 12.614rem;
+  height: 0.027rem;
+}
+
+.image_20 {
+  position: absolute;
+  left: 1.12rem;
+  top: 7.387rem;
+  width: 12.267rem;
+  height: 2.347rem;
+}
+
+.image_21 {
+  position: absolute;
+  left: 1.12rem;
+  top: 13.6rem;
+  width: 12.614rem;
+  height: 0.027rem;
+}
+
+.image_22 {
+  position: absolute;
+  left: 1.12rem;
+  top: 13.227rem;
+  width: 12.614rem;
+  height: 0.027rem;
+}
+
+.image_23 {
+  position: absolute;
+  left: 1.12rem;
+  top: 12.8rem;
+  width: 12.614rem;
+  height: 0.027rem;
+}
+
+.image_24 {
+  position: absolute;
+  left: 1.12rem;
+  top: 12.427rem;
+  width: 12.614rem;
+  height: 0.027rem;
+}
+
+.block_12 {
+  background-color: rgba(29, 97, 234, 1);
+  border-radius: 100px 100px 0px 0px;
+  position: absolute;
+  left: 1.28rem;
+  top: 12.747rem;
+  width: 0.347rem;
+  height: 1.28rem;
+}
+
+.block_13 {
+  background-color: rgba(29, 97, 234, 1);
+  border-radius: 100px 100px 0px 0px;
+  position: absolute;
+  left: 2.374rem;
+  top: 12.107rem;
+  width: 0.347rem;
+  height: 1.92rem;
+}
+
+.block_14 {
+  background-color: rgba(29, 97, 234, 1);
+  border-radius: 100px 100px 0px 0px;
+  position: absolute;
+  left: 3.44rem;
+  top: 13.147rem;
+  width: 0.347rem;
+  height: 0.88rem;
+}
+
+.block_15 {
+  background-color: rgba(29, 97, 234, 1);
+  border-radius: 100px 100px 0px 0px;
+  position: absolute;
+  left: 4.507rem;
+  top: 12.427rem;
+  width: 0.347rem;
+  height: 1.6rem;
+}
+
+.block_16 {
+  background-color: rgba(29, 97, 234, 1);
+  border-radius: 100px 100px 0px 0px;
+  position: absolute;
+  left: 5.547rem;
+  top: 12.747rem;
+  width: 0.347rem;
+  height: 1.28rem;
+}
+
+.block_17 {
+  background-color: rgba(29, 97, 234, 1);
+  border-radius: 100px 100px 0px 0px;
+  position: absolute;
+  left: 6.614rem;
+  top: 12.107rem;
+  width: 0.347rem;
+  height: 1.92rem;
+}
+
+.block_18 {
+  background-color: rgba(29, 97, 234, 1);
+  border-radius: 100px 100px 0px 0px;
+  position: absolute;
+  left: 7.707rem;
+  top: 12.96rem;
+  width: 0.347rem;
+  height: 1.067rem;
+}
+
+.block_19 {
+  background-color: rgba(29, 97, 234, 1);
+  border-radius: 100px 100px 0px 0px;
+  position: absolute;
+  left: 8.8rem;
+  top: 12.587rem;
+  width: 0.347rem;
+  height: 1.44rem;
+}
+
+.block_20 {
+  background-color: rgba(29, 97, 234, 1);
+  border-radius: 100px 100px 0px 0px;
+  position: absolute;
+  left: 9.894rem;
+  top: 13.307rem;
+  width: 0.347rem;
+  height: 0.72rem;
+}
+
+.block_21 {
+  background-color: rgba(29, 97, 234, 1);
+  border-radius: 100px 100px 0px 0px;
+  position: absolute;
+  left: 10.987rem;
+  top: 12.294rem;
+  width: 0.347rem;
+  height: 1.734rem;
+}
+
+.block_22 {
+  background-color: rgba(29, 97, 234, 1);
+  border-radius: 100px 100px 0px 0px;
+  position: absolute;
+  left: 12.107rem;
+  top: 12.747rem;
+  width: 0.347rem;
+  height: 1.28rem;
+}
+
+.block_23 {
+  background-color: rgba(29, 97, 234, 1);
+  border-radius: 100px 100px 0px 0px;
+  position: absolute;
+  left: 13.174rem;
+  top: 12.427rem;
+  width: 0.347rem;
+  height: 1.6rem;
+}
