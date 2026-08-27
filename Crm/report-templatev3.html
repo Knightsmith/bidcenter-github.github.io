@@ -27,7 +27,7 @@
       line-height: 1.55;
       -webkit-font-smoothing: antialiased;
     }
-    .page { max-width: 960px; margin: 0 auto; padding: 18px 14px 40px; }
+    .page { max-width: 750px; margin: 0 auto; padding: 18px 14px 40px; }
 
     /* Header */
     .report-header {
@@ -175,6 +175,7 @@
       padding: 16px;
     }
     .map-box svg { width: 100%; max-width: 380px; height: auto; }
+    .map-loading { font-size: 13px; color: var(--text-light); }
     .region-table { width: 100%; border-collapse: collapse; font-size: 13px; }
     .region-table th { background: #f1f5f9; color: var(--text-sub); font-weight: 600; padding: 10px 8px; text-align: center; }
     .region-table td { padding: 10px 8px; text-align: center; border-bottom: 1px solid #f1f5f9; color: var(--text); }
@@ -207,6 +208,13 @@
     .data-table td:nth-child(2) { color: var(--text-sub); white-space: nowrap; }
     .data-table td:nth-child(4) { color: var(--text-sub); }
     .data-table td:nth-child(5) { color: var(--red); font-weight: 600; text-align: right; white-space: nowrap; }
+    .more-wrap { display: flex; justify-content: center; padding: 4px 22px 18px; }
+    .more-btn {
+      border: 1px solid var(--blue); color: var(--blue); background: #fff;
+      border-radius: 20px; padding: 8px 26px; font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: all .2s;
+    }
+    .more-btn:hover { background: var(--blue); color: #fff; }
 
     /* CTA */
     .cta-section {
@@ -238,6 +246,45 @@
       .cta-grid { grid-template-columns: 1fr; }
       .service-box { flex-direction: column; align-items: center; text-align: center; }
       .service-col { text-align: center; }
+    }
+
+    /* ============ 打印 / 导出 PDF（竖版 A4）样式 ============ */
+    @media print {
+      @page { size: A4 portrait; margin: 6mm; }
+      /* 强制保留背景色（否则页头白字会变隐形） */
+      *, *::before, *::after {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      /* 部分浏览器打印会丢弃 linear-gradient，页头/底部CTA 改用纯色，避免顶部背景异常、白字隐形 */
+      .report-header { background: #2563eb !important; }
+      .report-header::before, .report-header::after { display: none !important; }
+      .cta-section { background: #3b82f6 !important; }
+      .meta-tag { background: #1d4ed8 !important; border-color: #93c5fd !important; }
+      html, body { background: #fff !important; }
+      body { padding: 0 !important; }
+      .page { max-width: 100% !important; width: 100% !important; padding: 0 !important; margin: 0 !important; }
+      /* 关键：强制保持多列桌面布局，避免窄屏触发移动端堆叠导致变形 */
+      .header-illustration { display: none !important; }
+      .header-content { max-width: 100% !important; }
+      .cat-grid { grid-template-columns: repeat(3, 1fr) !important; }
+      .metrics-row { grid-template-columns: repeat(6, 1fr) !important; }
+      .region-body { grid-template-columns: 1.3fr 1fr !important; }
+      .two-col { grid-template-columns: 1fr 1fr !important; }
+      .cta-grid { grid-template-columns: repeat(3, 1fr) !important; }
+      .card { box-shadow: none !important; margin-bottom: 10px !important; }
+      .chart-wrap { break-inside: avoid; height: 300px !important; padding: 6px 18px 14px !important; }
+      .map-box { break-inside: avoid; }
+      .market-body { padding: 16px !important; }
+      .sec-head { padding: 12px 22px !important; break-after: avoid !important; }
+      .col-head { break-after: avoid !important; }
+      .two-col, .region-body { gap: 14px !important; }
+      /* 招标数据表在打印时取消最小宽度，避免横向溢出裁掉“金额”列 */
+      .data-table { min-width: 0 !important; }
+      .list-scroll, .table-scroll { overflow: visible !important; }
+      /* 底部 CTA 允许跨页拆分，避免被整体挤到下一页造成空白 */
+      .cta-section { break-inside: auto !important; }
+      .cta-card { break-inside: auto !important; }
     }
   </style>
 </head>
@@ -304,11 +351,7 @@
       <div class="sec-head"><h2>市场份额-全国/地区</h2></div>
       <div class="region-body">
         <div class="map-box" id="chinaMapBox">
-          <svg viewBox="0 0 600 460" xmlns="http://www.w3.org/2000/svg">
-            <path d="M150,95 L175,78 L210,68 L255,60 L305,55 L355,58 L400,68 L445,85 L485,110 L510,145 L505,185 L485,225 L460,260 L430,290 L395,312 L355,322 L315,326 L270,324 L225,318 L185,305 L150,280 L120,245 L100,205 L90,165 L95,130 Z" fill="#d1d5db" stroke="#9ca3af" stroke-width="1.5"/>
-            <path d="M440,210 L460,200 L475,215 L470,240 L450,250 L435,235 Z" fill="#d1d5db" stroke="#9ca3af" stroke-width="1"/>
-            <path d="M480,160 L505,150 L520,165 L515,190 L490,195 Z" fill="#d1d5db" stroke="#9ca3af" stroke-width="1"/>
-          </svg>
+          <div class="map-loading">地图加载中…</div>
         </div>
         <div class="table-scroll">
           <table class="region-table" id="regionTable">
@@ -358,6 +401,7 @@
           <tbody></tbody>
         </table>
       </div>
+      <div class="more-wrap"><button class="more-btn" id="moreTenderBtn" type="button">查看更多 ›</button></div>
     </section>
 
     <!-- 中标次数趋势 -->
@@ -388,6 +432,18 @@
           </div>
         </div>
       </div>
+    </section>
+
+    <!-- 中标数据 -->
+    <section class="card">
+      <div class="list-head"><h2>中标数据</h2><span>共计 3890 条 <small>当前仅展示前20条</small></span></div>
+      <div class="list-scroll">
+        <table class="data-table" id="winTable">
+          <thead><tr><th>时间</th><th>地区</th><th>信息标题</th><th>公司名称</th><th>金额</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="more-wrap"><button class="more-btn" id="moreWinBtn" type="button">查看更多 ›</button></div>
     </section>
 
     <!-- CTA -->
@@ -440,18 +496,18 @@
         hint: "当前存在大量招标，请尽快参与！",
         categories: [
           { label: "招标公告", value: "30,404" },
-          { label: "中标结果", value: "30,404" },
-          { label: "招标预告", value: "30,404" },
-          { label: "招标变更", value: "30,404" },
-          { label: "工程项目", value: "30,404" }
+          { label: "中标结果", value: "21,876" },
+          { label: "招标预告", value: "5,621" },
+          { label: "招标变更", value: "8,932" },
+          { label: "工程项目", value: "14,530" }
         ],
         metrics: [
           { label: "招标公告", value: "30,404次" },
-          { label: "招标金额", value: "30,404元" },
-          { label: "中标数量", value: "30,404次" },
-          { label: "中标金额", value: "30,404元" },
-          { label: "招标业主", value: "30,404家" },
-          { label: "供应商", value: "30,404家" }
+          { label: "招标金额", value: "186.5亿元" },
+          { label: "中标数量", value: "21,876次" },
+          { label: "中标金额", value: "142.3亿元" },
+          { label: "招标业主", value: "8,654家" },
+          { label: "供应商", value: "12,380家" }
         ]
       },
       charts: {
@@ -463,27 +519,31 @@
         },
         shareAnalysis: {
           title: "份额分析",
-          yName: "金额",
+          yName: "金额(万元)",
           xAxis: ["26/08", "26/09", "25/10", "25/11", "25/12", "26/01", "26/02", "26/03", "26/04", "26/05", "26/06", "26/07"],
           data: [200, 320, 150, 260, 210, 330, 180, 230, 130, 270, 210, 250]
         },
         agencyAnalysis: {
           title: "招标代理机构次数分析TOP10",
-          yName: "金额",
-          xAxis: ["金诚招标公司", "滁州市城投工程...", "金诚招标公司", "滁州市城投工程...", "金诚招标公司", "滁州市城投工程...", "金诚招标公司", "滁州市城投工程...", "金诚招标公司", "滁州市城投工程..."],
-          data: [200, 300, 150, 250, 210, 180, 230, 130, 270, 250]
+          yName: "次数",
+          xAxis: [
+            "金诚招标代理有限公司", "恒远招标咨询有限公司", "中环国际招标有限公司",
+            "百川招标服务有限公司", "联信招标代理有限公司", "宏达工程咨询有限公司",
+            "中原招标代理有限公司", "新程招标服务有限公司", "华宇招标代理有限公司", "天工招标咨询有限公司"
+          ],
+          data: [320, 286, 254, 231, 198, 176, 154, 132, 118, 95]
         },
         winTrend: {
           title: "中标次数趋势",
           yName: "次数",
           xAxis: ["26/08", "26/09", "25/10", "25/11", "25/12", "26/01", "26/02", "26/03", "26/04", "26/05", "26/06", "26/07"],
-          data: [250, 120, 360, 200, 150, 220, 130, 290, 210, 300, 190, 310]
+          data: [220, 110, 330, 180, 160, 240, 150, 270, 190, 280, 200, 300]
         },
         winShare: {
           title: "中标份额",
-          yName: "金额",
+          yName: "金额(万元)",
           xAxis: ["26/08", "26/09", "25/10", "25/11", "25/12", "26/01", "26/02", "26/03", "26/04", "26/05", "26/06", "26/07"],
-          data: [200, 320, 150, 260, 210, 330, 180, 230, 130, 270, 210, 250]
+          data: [180, 290, 140, 230, 190, 300, 160, 210, 120, 250, 190, 230]
         }
       },
       industryDistribution: {
@@ -501,19 +561,45 @@
           { name: "金融保险", value: 100000 }
         ]
       },
-      regionShare: {
-        title: "市场份额-全国/地区",
-        rows: [
-          { region: "北京", count: 202565, ratio: "35%" },
-          { region: "北京", count: 202565, ratio: "35%" },
-          { region: "北京", count: 202565, ratio: "35%" },
-          { region: "北京", count: 202565, ratio: "35%" },
-          { region: "北京", count: 202565, ratio: "35%" },
-          { region: "北京", count: 202565, ratio: "35%" },
-          { region: "北京", count: 202565, ratio: "35%" },
-          { region: "北京", count: 202565, ratio: "35%" },
-          { region: "北京", count: 202565, ratio: "35%" },
-          { region: "北京", count: 202565, ratio: "35%" }
+      /* 中国地图：各省份招标次数分布，name 必须与 GeoJSON 省份全称一致 */
+      chinaMap: {
+        title: "招标地区分布（中国）",
+        unit: "次",
+        data: [
+          { name: "北京市", value: 202565 },
+          { name: "广东省", value: 145210 },
+          { name: "江苏省", value: 98654 },
+          { name: "浙江省", value: 72640 },
+          { name: "山东省", value: 51230 },
+          { name: "四川省", value: 21450 },
+          { name: "上海市", value: 68900 },
+          { name: "河南省", value: 54300 },
+          { name: "河北省", value: 47800 },
+          { name: "湖北省", value: 41200 },
+          { name: "湖南省", value: 38600 },
+          { name: "福建省", value: 35400 },
+          { name: "安徽省", value: 33100 },
+          { name: "陕西省", value: 28700 },
+          { name: "辽宁省", value: 25900 },
+          { name: "重庆市", value: 24300 },
+          { name: "天津市", value: 22100 },
+          { name: "江西省", value: 19800 },
+          { name: "云南省", value: 17600 },
+          { name: "广西壮族自治区", value: 15300 },
+          { name: "山西省", value: 14200 },
+          { name: "贵州省", value: 12800 },
+          { name: "吉林省", value: 9600 },
+          { name: "黑龙江省", value: 8900 },
+          { name: "新疆维吾尔自治区", value: 7600 },
+          { name: "内蒙古自治区", value: 6800 },
+          { name: "甘肃省", value: 5900 },
+          { name: "海南省", value: 4200 },
+          { name: "宁夏回族自治区", value: 3100 },
+          { name: "青海省", value: 2400 },
+          { name: "西藏自治区", value: 1500 },
+          { name: "台湾省", value: 3200 },
+          { name: "香港特别行政区", value: 1100 },
+          { name: "澳门特别行政区", value: 400 }
         ]
       },
       topOwners: {
@@ -530,16 +616,16 @@
           { rank: 10, name: "四川信一创科技有限公司", value: 1 }
         ],
         budget: [
-          { rank: 1, name: "天合建设集团有限公司", value: "382881.09" },
-          { rank: 2, name: "衢州恒威电子科技有限公司", value: "201254.05" },
-          { rank: 3, name: "云南华远电子有限公司", value: "147918.76" },
-          { rank: 4, name: "山东鲁嘉智远科技有限公司", value: "104575.00" },
-          { rank: 5, name: "浙江大华技术股份有限公司", value: "95140.00" },
-          { rank: 6, name: "北京神州新桥科技有限公司", value: "85170.07" },
-          { rank: 7, name: "北京先进数通信息技术股份公司", value: "83547.87" },
-          { rank: 8, name: "百信", value: "82000.00" },
-          { rank: 9, name: "武汉长江计算科技有限公司", value: "77176.80" },
-          { rank: 10, name: "林智半信息技术有限公司", value: "56800.00" }
+          { rank: 1, name: "天合建设集团有限公司", value: "382,881.09" },
+          { rank: 2, name: "衢州恒威电子科技有限公司", value: "201,254.05" },
+          { rank: 3, name: "云南华远电子有限公司", value: "147,918.76" },
+          { rank: 4, name: "山东鲁嘉智远科技有限公司", value: "104,575.00" },
+          { rank: 5, name: "浙江大华技术股份有限公司", value: "95,140.00" },
+          { rank: 6, name: "北京神州新桥科技有限公司", value: "85,170.07" },
+          { rank: 7, name: "北京先进数通信息技术股份公司", value: "83,547.87" },
+          { rank: 8, name: "百信", value: "82,000.00" },
+          { rank: 9, name: "武汉长江计算科技有限公司", value: "77,176.80" },
+          { rank: 10, name: "林智半信息技术有限公司", value: "56,800.00" }
         ]
       },
       topWinners: {
@@ -556,28 +642,71 @@
           { rank: 10, name: "四川信一创科技有限公司", value: 1 }
         ],
         amount: [
-          { rank: 1, name: "北京中亦安图科技股份有限公司", value: 50 },
-          { rank: 2, name: "上海华讯网络系统有限公司", value: 39 },
-          { rank: 3, name: "云南南天电子信息产业股份有限公司", value: 22 },
-          { rank: 4, name: "北京银信长远科技股份有限公司", value: 20 },
-          { rank: 5, name: "神州数码系统集成服务有限公司", value: 18 },
-          { rank: 6, name: "中兴通讯股份有限公司", value: 17 },
-          { rank: 7, name: "北明软件有限公司", value: 15 },
-          { rank: 8, name: "上海珑京信息科技有限公司", value: 13 },
-          { rank: 9, name: "阿里云计算有限公司", value: 12 },
-          { rank: 10, name: "四川信一创科技有限公司", value: 1 }
+          { rank: 1, name: "北京中亦安图科技股份有限公司", value: "382,881.09" },
+          { rank: 2, name: "上海华讯网络系统有限公司", value: "201,254.05" },
+          { rank: 3, name: "云南南天电子信息产业股份有限公司", value: "147,918.76" },
+          { rank: 4, name: "北京银信长远科技股份有限公司", value: "104,575.00" },
+          { rank: 5, name: "神州数码系统集成服务有限公司", value: "95,140.00" },
+          { rank: 6, name: "中兴通讯股份有限公司", value: "85,170.07" },
+          { rank: 7, name: "北明软件有限公司", value: "83,547.87" },
+          { rank: 8, name: "上海珑京信息科技有限公司", value: "82,000.00" },
+          { rank: 9, name: "阿里云计算有限公司", value: "77,176.80" },
+          { rank: 10, name: "四川信一创科技有限公司", value: "56,800.00" }
         ]
       },
       tenderList: {
         total: 4526,
         show: 20,
-        sample: {
-          date: "2022-10-15",
-          region: "河北-涿州",
-          title: "吉安至南康改扩建项目机电工程105国道线增设交通信号灯和电子抓拍设备及部分附属设施施工询比采购公告",
-          company: "江西方兴科技股份有限公司",
-          amount: "201,254 元"
-        }
+        moreUrl: "https://www.bidcenter.com.cn/",
+        rows: [
+          { date: "2025-10-15", region: "河北-涿州", title: "吉安至南康改扩建项目机电工程105国道线增设交通信号灯和电子抓拍设备及部分附属设施施工询比采购公告", company: "江西方兴科技股份有限公司", amount: "201,254 元" },
+          { date: "2025-10-14", region: "北京", title: "中国铁塔股份有限公司北京市分公司2025年服务器设备集中采购项目招标公告", company: "中国铁塔股份有限公司", amount: "382,881 元" },
+          { date: "2025-10-13", region: "广东-广州", title: "南方电网数字电网研究院服务器及存储设备框架采购招标公告", company: "南方电网数字电网研究院", amount: "147,918 元" },
+          { date: "2025-10-12", region: "江苏-南京", title: "南京银行数据中心服务器扩容项目竞争性磋商公告", company: "南京银行股份有限公司", amount: "104,575 元" },
+          { date: "2025-10-11", region: "浙江-杭州", title: "浙江省政务云平台服务器资源池建设项目招标公告", company: "浙江省大数据发展中心", amount: "95,140 元" },
+          { date: "2025-10-10", region: "山东-济南", title: "山东省人民医院信息化服务器采购项目公开招标公告", company: "山东省人民医院", amount: "85,170 元" },
+          { date: "2025-10-09", region: "上海", title: "上海证券交易所交易系统服务器更新采购项目招标公告", company: "上海证券交易所", amount: "83,547 元" },
+          { date: "2025-10-08", region: "四川-成都", title: "成都市公安局大数据服务器集群采购项目招标公告", company: "成都市公安局", amount: "82,000 元" },
+          { date: "2025-10-07", region: "湖北-武汉", title: "武汉理工大学高性能计算服务器采购项目竞争性谈判公告", company: "武汉理工大学", amount: "77,176 元" },
+          { date: "2025-10-06", region: "湖南-长沙", title: "湖南省气象局气象数据服务器采购项目招标公告", company: "湖南省气象局", amount: "56,800 元" },
+          { date: "2025-10-05", region: "陕西-西安", title: "西安交通大学教学科研高性能服务器集群采购招标公告", company: "西安交通大学", amount: "49,300 元" },
+          { date: "2025-10-04", region: "福建-福州", title: "福建省政务云扩容服务器采购项目公开招标公告", company: "福建省数字福建建设领导小组", amount: "45,620 元" },
+          { date: "2025-10-03", region: "河南-郑州", title: "郑州市公安局智能交通服务器采购项目招标公告", company: "郑州市公安局", amount: "41,980 元" },
+          { date: "2025-10-02", region: "辽宁-沈阳", title: "辽宁省疾控中心医疗服务器采购竞争性磋商公告", company: "辽宁省疾病预防控制中心", amount: "38,540 元" },
+          { date: "2025-10-01", region: "重庆", title: "重庆轨道交通数据中心服务器采购项目招标公告", company: "重庆市轨道交通集团", amount: "36,210 元" },
+          { date: "2025-09-30", region: "天津", title: "天津滨海新区政务云服务器扩容项目招标公告", company: "天津滨海新区管委会", amount: "33,870 元" },
+          { date: "2025-09-29", region: "安徽-合肥", title: "中国科技大学超算服务器采购项目公开招标公告", company: "中国科学技术大学", amount: "31,450 元" },
+          { date: "2025-09-28", region: "云南-昆明", title: "云南省公安厅警务云服务器采购项目招标公告", company: "云南省公安厅", amount: "29,760 元" },
+          { date: "2025-09-27", region: "广西-南宁", title: "广西电网服务器及存储框架采购招标公告", company: "广西电网有限责任公司", amount: "27,330 元" },
+          { date: "2025-09-26", region: "贵州-贵阳", title: "贵州大数据交易所服务器采购项目竞争性谈判公告", company: "贵阳大数据交易所", amount: "24,980 元" }
+        ]
+      },
+      winList: {
+        total: 3890,
+        show: 20,
+        moreUrl: "https://www.bidcenter.com.cn/",
+        rows: [
+          { date: "2025-10-15", region: "北京", title: "中国铁塔北京市分公司2025年服务器设备集中采购项目中标公告", company: "北京中亦安图科技股份有限公司", amount: "378,420 元" },
+          { date: "2025-10-14", region: "广东-广州", title: "南方电网数字电网研究院服务器及存储设备框架采购中标公告", company: "神州数码系统集成服务有限公司", amount: "142,560 元" },
+          { date: "2025-10-13", region: "江苏-南京", title: "南京银行数据中心服务器扩容项目中标公告", company: "阿里云计算有限公司", amount: "98,310 元" },
+          { date: "2025-10-12", region: "浙江-杭州", title: "浙江省政务云平台服务器资源池建设项目中标公告", company: "浙江大华技术股份有限公司", amount: "91,280 元" },
+          { date: "2025-10-11", region: "山东-济南", title: "山东省人民医院信息化服务器采购项目中标公告", company: "山东鲁嘉智远科技有限公司", amount: "82,640 元" },
+          { date: "2025-10-10", region: "上海", title: "上海证券交易所交易系统服务器更新采购项目中标公告", company: "上海华讯网络系统有限公司", amount: "80,120 元" },
+          { date: "2025-10-09", region: "四川-成都", title: "成都市公安局大数据服务器集群采购项目中标公告", company: "成都市公安局信息中心", amount: "79,500 元" },
+          { date: "2025-10-08", region: "湖北-武汉", title: "武汉理工大学高性能计算服务器采购项目中标公告", company: "湖北长江计算科技有限公司", amount: "74,300 元" },
+          { date: "2025-10-07", region: "湖南-长沙", title: "湖南省气象局气象数据服务器采购项目中标公告", company: "湖南天工科技有限公司", amount: "54,900 元" },
+          { date: "2025-10-06", region: "陕西-西安", title: "西安交通大学教学科研高性能服务器集群中标公告", company: "西安交大科技园有限公司", amount: "47,800 元" },
+          { date: "2025-10-05", region: "福建-福州", title: "福建省政务云扩容服务器采购项目中标公告", company: "福建省数字有限公司", amount: "44,200 元" },
+          { date: "2025-10-04", region: "河南-郑州", title: "郑州市公安局智能交通服务器采购中标公告", company: "河南中原电子有限公司", amount: "40,600 元" },
+          { date: "2025-10-03", region: "辽宁-沈阳", title: "辽宁省疾控中心医疗服务器采购中标公告", company: "沈阳医疗信息有限公司", amount: "37,200 元" },
+          { date: "2025-10-02", region: "重庆", title: "重庆轨道交通数据中心服务器采购项目中标公告", company: "重庆轨道交通科技", amount: "35,000 元" },
+          { date: "2025-10-01", region: "天津", title: "天津滨海新区政务云服务器扩容项目中标公告", company: "天津滨海数据公司", amount: "32,700 元" },
+          { date: "2025-09-30", region: "安徽-合肥", title: "中国科技大学超算服务器采购项目中标公告", company: "中国科学技术大学", amount: "30,400 元" },
+          { date: "2025-09-29", region: "云南-昆明", title: "云南省公安厅警务云服务器采购项目中标公告", company: "云南南天电子信息产业股份有限公司", amount: "28,500 元" },
+          { date: "2025-09-28", region: "广西-南宁", title: "广西电网服务器及存储框架采购中标公告", company: "广西电网有限责任公司", amount: "26,100 元" },
+          { date: "2025-09-27", region: "贵州-贵阳", title: "贵州大数据交易所服务器采购项目中标公告", company: "贵阳大数据交易所", amount: "23,800 元" },
+          { date: "2025-09-26", region: "黑龙江-哈尔滨", title: "黑龙江省政务云服务器采购项目中标公告", company: "黑龙江云数公司", amount: "21,300 元" }
+        ]
       },
       cta: {
         title: "如需获取更多维度分析报告，您可通过以下方式",
@@ -589,6 +718,15 @@
     };
 
     function fmt(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+    /* 根据数据最大值计算“整齐”的坐标轴上限，避免写死刻度导致图形被截断 */
+    function niceCeil(v) {
+      if (v <= 0) return 100;
+      const pow = Math.pow(10, Math.floor(Math.log10(v)));
+      const n = v / pow;
+      let m;
+      if (n <= 1) m = 1; else if (n <= 2) m = 2; else if (n <= 2.5) m = 2.5; else if (n <= 5) m = 5; else m = 10;
+      return m * pow;
+    }
 
     function renderStatic() {
       const catGrid = document.getElementById("categoryGrid");
@@ -607,18 +745,24 @@
         metricsRow.appendChild(div);
       });
 
+      /* 市场份额表格：依据地图省份数据生成 TOP10，避免重复占位数据 */
       const regionTbody = document.querySelector("#regionTable tbody");
-      REPORT_DATA.regionShare.rows.forEach(r => {
+      const regionAll = REPORT_DATA.chinaMap.data;
+      const regionSum = regionAll.reduce((s, d) => s + d.value, 0);
+      const regionTop = regionAll.slice().sort((a, b) => b.value - a.value).slice(0, 10);
+      regionTop.forEach(d => {
         const tr = document.createElement("tr");
-        tr.innerHTML = `<td>${r.region}</td><td>${fmt(r.count)}</td><td>${r.ratio}</td>`;
+        const ratio = ((d.value / regionSum) * 100).toFixed(1);
+        const shortName = d.name.replace(/(省|市|自治区|特别行政区)$/, "");
+        tr.innerHTML = `<td>${shortName}</td><td>${fmt(d.value)}</td><td>${ratio}%</td>`;
         regionTbody.appendChild(tr);
       });
 
-      const fillTable = (id, rows, suffix = "") => {
+      const fillTable = (id, rows) => {
         const tbody = document.querySelector(`#${id} tbody`);
         rows.forEach(r => {
           const tr = document.createElement("tr");
-          tr.innerHTML = `<td>${r.rank}</td><td title="${r.name}">${r.name}</td><td>${r.value}${suffix}</td>`;
+          tr.innerHTML = `<td>${r.rank}</td><td title="${r.name}">${r.name}</td><td>${r.value}</td>`;
           tbody.appendChild(tr);
         });
       };
@@ -627,19 +771,26 @@
       fillTable("winnerTimesTable", REPORT_DATA.topWinners.times);
       fillTable("winnerAmountTable", REPORT_DATA.topWinners.amount);
 
-      const tenderTbody = document.querySelector("#tenderTable tbody");
-      const s = REPORT_DATA.tenderList.sample;
-      for (let i = 0; i < REPORT_DATA.tenderList.show; i++) {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `<td>${s.date}</td><td>${s.region}</td><td>${s.title}</td><td>${s.company}</td><td>${s.amount}</td>`;
-        tenderTbody.appendChild(tr);
-      }
+      /* 招标数据 / 中标数据 列表 + “查看更多”按钮 */
+      const renderDataList = (tableId, rows, moreBtnId, moreUrl) => {
+        const tbody = document.querySelector(`#${tableId} tbody`);
+        rows.forEach(s => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td>${s.date}</td><td>${s.region}</td><td>${s.title}</td><td>${s.company}</td><td>${s.amount}</td>`;
+          tbody.appendChild(tr);
+        });
+        const btn = document.getElementById(moreBtnId);
+        if (btn) btn.addEventListener("click", () => window.open(moreUrl, "_blank"));
+      };
+      renderDataList("tenderTable", REPORT_DATA.tenderList.rows, "moreTenderBtn", REPORT_DATA.tenderList.moreUrl);
+      renderDataList("winTable", REPORT_DATA.winList.rows, "moreWinBtn", REPORT_DATA.winList.moreUrl);
     }
 
     const chartInstances = [];
 
-    function lineChart(el, cfg, color) {
-      const instance = echarts.init(el);
+    function lineChart(el, cfg, color, areaColor) {
+      const instance = echarts.init(el, null, { renderer: "svg" });
+      const yMax = niceCeil(Math.max(...cfg.data) * 1.1);
       instance.setOption({
         tooltip: { trigger: "axis", backgroundColor: "rgba(255,255,255,0.95)", borderColor: "#e2e8f0", textStyle: { color: "#334155" } },
         grid: { left: 46, right: 18, top: 34, bottom: 28 },
@@ -653,7 +804,7 @@
         yAxis: {
           type: "value", name: cfg.yName,
           nameTextStyle: { color: "#64748b", fontSize: 12, padding: [0, 0, 0, -30] },
-          min: 0, max: 350, interval: 50,
+          min: 0, max: yMax, interval: yMax / 5,
           axisLine: { show: false },
           axisTick: { show: false },
           splitLine: { lineStyle: { color: "#f1f5f9" } },
@@ -663,10 +814,12 @@
           data: cfg.data, type: "line", smooth: true, symbol: "none",
           lineStyle: { width: 3, color: color },
           areaStyle: {
-            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-              { offset: 0, color: color.replace(")", ",0.35)") },
-              { offset: 1, color: color.replace(")", ",0.02)") }
-            ])
+            color: areaColor
+              ? areaColor
+              : new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  { offset: 0, color: color.replace(")", ",0.35)") },
+                  { offset: 1, color: color.replace(")", ",0.02)") }
+                ])
           }
         }]
       });
@@ -674,7 +827,8 @@
     }
 
     function barChart(el, cfg, colorStart, colorEnd) {
-      const instance = echarts.init(el);
+      const instance = echarts.init(el, null, { renderer: "svg" });
+      const yMax = niceCeil(Math.max(...cfg.data) * 1.1);
       instance.setOption({
         tooltip: { trigger: "axis", backgroundColor: "rgba(255,255,255,0.95)", borderColor: "#e2e8f0", textStyle: { color: "#334155" } },
         grid: { left: 46, right: 18, top: 34, bottom: 28 },
@@ -687,7 +841,7 @@
         yAxis: {
           type: "value", name: cfg.yName,
           nameTextStyle: { color: "#64748b", fontSize: 12, padding: [0, 0, 0, -30] },
-          min: 0, max: 350, interval: 50,
+          min: 0, max: yMax, interval: yMax / 5,
           axisLine: { show: false }, axisTick: { show: false },
           splitLine: { lineStyle: { color: "#f1f5f9" } },
           axisLabel: { color: "#94a3b8", fontSize: 11 }
@@ -707,7 +861,7 @@
     }
 
     function hbarChart(el, cfg) {
-      const instance = echarts.init(el);
+      const instance = echarts.init(el, null, { renderer: "svg" });
       const names = cfg.data.map(d => d.name);
       const values = cfg.data.map(d => d.value);
       instance.setOption({
@@ -735,20 +889,21 @@
     }
 
     function agencyChart(el, cfg) {
-      const instance = echarts.init(el);
+      const instance = echarts.init(el, null, { renderer: "svg" });
+      const yMax = niceCeil(Math.max(...cfg.data) * 1.1);
       instance.setOption({
         tooltip: { trigger: "axis", backgroundColor: "rgba(255,255,255,0.95)", borderColor: "#e2e8f0", textStyle: { color: "#334155" } },
-        grid: { left: 46, right: 18, top: 34, bottom: 70 },
+        grid: { left: 64, right: 18, top: 34, bottom: 96 },
         xAxis: {
           type: "category", data: cfg.xAxis,
           axisLine: { lineStyle: { color: "#e2e8f0" } },
           axisTick: { show: false },
-          axisLabel: { color: "#64748b", fontSize: 10, rotate: 45, interval: 0 }
+          axisLabel: { color: "#64748b", fontSize: 10, rotate: 38, interval: 0, hideOverlap: false }
         },
         yAxis: {
           type: "value", name: cfg.yName,
           nameTextStyle: { color: "#64748b", fontSize: 12, padding: [0, 0, 0, -30] },
-          min: 0, max: 350, interval: 50,
+          min: 0, max: yMax, interval: yMax / 5,
           axisLine: { show: false }, axisTick: { show: false },
           splitLine: { lineStyle: { color: "#f1f5f9" } },
           axisLabel: { color: "#94a3b8", fontSize: 11 }
@@ -767,17 +922,78 @@
       chartInstances.push(instance);
     }
 
+    /* 中国地图：异步加载 GeoJSON 并注册，失败则保留加载提示 */
+    function chinaMapChart(el, cfg) {
+      const instance = echarts.init(el, null, { renderer: "svg" });
+      const values = cfg.data.map(d => d.value);
+      const max = Math.max(...values);
+      instance.setOption({
+        tooltip: {
+          trigger: "item",
+          backgroundColor: "rgba(255,255,255,0.95)",
+          borderColor: "#e2e8f0",
+          textStyle: { color: "#334155" },
+          formatter: p => `${p.name}：${fmt(p.value)} ${cfg.unit}`
+        },
+        visualMap: {
+          min: 0, max: max,
+          left: 12, bottom: 14,
+          itemWidth: 12, itemHeight: 110,
+          text: ["高", "低"],
+          textStyle: { color: "#64748b", fontSize: 11 },
+          calculable: true,
+          inRange: { color: ["#e8f5ff", "#93c5fd", "#3b82f6", "#2563eb", "#1e3a8a"] }
+        },
+        series: [{
+          type: "map", map: "china", roam: true,
+          layoutCenter: ["50%", "50%"], layoutSize: "92%",
+          label: { show: false },
+          itemStyle: { borderColor: "#ffffff", borderWidth: 0.6, areaColor: "#f1f5f9" },
+          emphasis: {
+            label: { show: true, color: "#1e293b", fontSize: 11 },
+            itemStyle: { areaColor: "#60a5fa" }
+          },
+          data: cfg.data
+        }]
+      });
+      chartInstances.push(instance);
+    }
+
+    function loadChinaMap() {
+      const box = document.getElementById("chinaMapBox");
+      if (!box) return;
+      const url = "https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json";
+      fetch(url)
+        .then(r => r.json())
+        .then(geo => {
+          echarts.registerMap("china", geo);
+          box.innerHTML = "";
+          box.style.display = "block";
+          box.style.minHeight = "400px";
+          const mapEl = document.createElement("div");
+          mapEl.style.width = "100%";
+          mapEl.style.height = "400px";
+          box.appendChild(mapEl);
+          chinaMapChart(mapEl, REPORT_DATA.chinaMap);
+        })
+        .catch(err => {
+          console.warn("中国地图数据加载失败，保留提示：", err);
+          box.innerHTML = '<div class="map-loading">地图数据加载失败（请检查网络后刷新）</div>';
+        });
+    }
+
     function initCharts() {
-      lineChart(document.getElementById("chart-tender-trend"), REPORT_DATA.charts.tenderTrend, "rgba(59,130,246,1)");
+      lineChart(document.getElementById("chart-tender-trend"), REPORT_DATA.charts.tenderTrend, "rgba(59,130,246,1)", "rgba(183,204,244,0.78)");
       barChart(document.getElementById("chart-share-analysis"), REPORT_DATA.charts.shareAnalysis, "#60a5fa", "#3b82f6");
       hbarChart(document.getElementById("chart-industry"), REPORT_DATA.industryDistribution);
       agencyChart(document.getElementById("chart-agency"), REPORT_DATA.charts.agencyAnalysis);
-      lineChart(document.getElementById("chart-win-trend"), REPORT_DATA.charts.winTrend, "rgba(239,68,68,1)");
+      lineChart(document.getElementById("chart-win-trend"), REPORT_DATA.charts.winTrend, "rgba(239,68,68,1)", "rgba(244,183,188,0.78)");
       barChart(document.getElementById("chart-win-share"), REPORT_DATA.charts.winShare, "#f87171", "#ef4444");
     }
 
     renderStatic();
     initCharts();
+    loadChinaMap();
 
     if (REPORT_DATA.cta.qrWechat) document.getElementById("qrWechat").src = REPORT_DATA.cta.qrWechat;
     if (REPORT_DATA.cta.qrOfficial) document.getElementById("qrOfficial").src = REPORT_DATA.cta.qrOfficial;
@@ -787,6 +1003,17 @@
     window.addEventListener("resize", () => {
       chartInstances.forEach(c => c.resize());
     });
+
+    /* 导出/打印 PDF 前，按打印版式宽度同步重绘图表（SVG 矢量，避免画布被截断/变形） */
+    function resizeChartsForPrint() { chartInstances.forEach(c => c.resize()); }
+    if (window.matchMedia) {
+      const pm = window.matchMedia("print");
+      const handler = (e) => { if (e.matches) resizeChartsForPrint(); };
+      if (pm.addEventListener) pm.addEventListener("change", handler);
+      else if (pm.addListener) pm.addListener(handler);
+    }
+    window.addEventListener("beforeprint", resizeChartsForPrint);
+    window.addEventListener("afterprint", resizeChartsForPrint);
   </script>
 </body>
 </html>
