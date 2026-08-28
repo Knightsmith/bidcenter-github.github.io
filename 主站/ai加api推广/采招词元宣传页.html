@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>采招词元——30 秒招投标数据接入你的桌面办公智能体</title>
+<style>
+  :root {
+    --bg: #f7f9ff;
+    --bg-2: #eef2ff;
+    --card: rgba(255, 255, 255, 0.82);
+    --card-border: rgba(99, 102, 241, 0.16);
+    --text: #1c2340;
+    --text-dim: #5b6389;
+    --blue: #3b82f6;
+    --purple: #8b5cf6;
+    --cyan: #0e7490;
+    --radius: 18px;
+    --shadow: 0 18px 48px rgba(99, 102, 241, 0.14);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ===== 流动渐变背景（加强雾气） ===== */
+  .bg-flow {
+    position: fixed;
+    inset: -20%;
+    z-index: -2;
+    background:
+      radial-gradient(ellipse 70% 55% at 8% -8%, rgba(139, 92, 246, 0.32), transparent 72%),
+      radial-gradient(ellipse 65% 50% at 92% 5%, rgba(59, 130, 246, 0.28), transparent 72%),
+      radial-gradient(ellipse 58% 52% at 50% 46%, rgba(147, 130, 255, 0.22), transparent 70%),
+      radial-gradient(ellipse 65% 55% at 50% 108%, rgba(147, 130, 255, 0.24), transparent 72%),
+      linear-gradient(180deg, #ffffff 0%, #f4f6ff 50%, #eef2ff 100%);
+    animation: bgFlow 9s ease-in-out infinite;
+  }
+  @keyframes bgFlow {
+    0%   { transform: translate(0, 0) scale(1); }
+    33%  { transform: translate(-85px, 60px) scale(1.07); }
+    66%  { transform: translate(95px, -55px) scale(1.12); }
+    100% { transform: translate(0, 0) scale(1.04); }
+  }
+
+  .orb {
+    position: fixed;
+    z-index: -1;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.75;
+    pointer-events: none;
+    animation: drift 9s ease-in-out infinite;
+  }
+  .orb-1 { width: 620px; height: 620px; left: -160px; top: -100px; background: radial-gradient(circle, rgba(139,92,246,0.42), transparent 70%); }
+  .orb-2 { width: 540px; height: 540px; right: -140px; top: 28%; background: radial-gradient(circle, rgba(59,130,246,0.38), transparent 70%); animation-delay: -3s; }
+  .orb-3 { width: 580px; height: 580px; left: 28%; bottom: -200px; background: radial-gradient(circle, rgba(147,197,253,0.42), transparent 70%); animation-delay: -6s; }
+  .orb-4 { width: 460px; height: 460px; left: -120px; bottom: 8%; background: radial-gradient(circle, rgba(96,165,250,0.34), transparent 70%); animation-delay: -8s; }
+  .orb-5 { width: 420px; height: 420px; right: -90px; top: -60px; background: radial-gradient(circle, rgba(167,139,250,0.36), transparent 70%); animation-delay: -2s; }
+  .orb-center {
+    width: 760px; height: 760px;
+    left: 50%; top: 50%;
+    background: radial-gradient(circle, rgba(139,92,246,0.30), rgba(59,130,246,0.18) 42%, transparent 70%);
+    animation: driftCenter 10s ease-in-out infinite;
+  }
+  @keyframes driftCenter {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.22); }
+  }
+
+  @keyframes drift {
+    0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+    33% { transform: translate(160px, -120px) rotate(14deg) scale(1.16); }
+    66% { transform: translate(-120px, 140px) rotate(-12deg) scale(0.88); }
+  }
+
+  .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+
+  section { padding: 60px 0; position: relative; }
+
+  .section-head { text-align: center; margin-bottom: 38px; }
+  .section-tag {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: var(--cyan);
+    background: rgba(34, 211, 238, 0.08);
+    border: 1px solid rgba(34, 211, 238, 0.25);
+    margin-bottom: 16px;
+  }
+  .section-title { font-size: 34px; font-weight: 700; letter-spacing: 1px; }
+  .section-sub { color: var(--text-dim); margin-top: 12px; font-size: 16px; }
+
+  /* ===== 导航 ===== */
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    background: rgba(255, 255, 255, 0.74);
+    border-bottom: 1px solid rgba(99, 102, 241, 0.24);
+  }
+  .nav-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .logo-badge {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+  }
+  .nav-links { display: flex; gap: 32px; align-items: center; }
+  .nav-links a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 15px;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-auth { display: flex; gap: 12px; align-items: center; }
+  .btn-text {
+    color: var(--text);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: 10px;
+    transition: background 0.2s;
+  }
+  .btn-text:hover { background: rgba(99, 102, 241, 0.08); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 12px;
+    padding: 12px 24px;
+    transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+    text-decoration: none;
+    font-family: inherit;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary {
+    color: #fff;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+  }
+  .btn-primary:hover { box-shadow: 0 14px 38px rgba(99, 102, 241, 0.55); filter: brightness(1.05); }
+  .btn-ghost {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(99, 102, 241, 0.22);
+  }
+  .btn-ghost:hover { background: rgba(255, 255, 255, 1); border-color: rgba(99, 102, 241, 0.42); }
+
+  /* ===== Hero ===== */
+  .hero {
+    padding: 112px 0 60px;
+    text-align: center;
+  }
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    font-size: 13px;
+    color: #5b3fd4;
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(139, 92, 246, 0.30);
+    margin-bottom: 20px;
+  }
+  .hero-eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 12px var(--cyan); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+  .hero h1 {
+    font-size: clamp(34px, 5.2vw, 58px);
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: 1px;
+    background: linear-gradient(120deg, #232b52 30%, #5b6ad8 55%, #8b5cf6 80%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero h1 .hl {
+    background: linear-gradient(120deg, var(--blue), var(--purple), var(--cyan));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .typewriter-wrap { margin-top: 18px; min-height: 40px; font-size: clamp(18px, 2.6vw, 24px); color: var(--text-dim); }
+  .typewriter-wrap .tw {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .typewriter-caret {
+    display: inline-block;
+    width: 2px;
+    height: 1.1em;
+    background: var(--cyan);
+    vertical-align: -0.15em;
+    margin-left: 4px;
+    animation: blink 0.8s steps(1) infinite;
+  }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+  .hero-desc { color: var(--text-dim); max-width: 640px; margin: 18px auto 0; font-size: 16px; }
+
+  /* 快速接入区（简洁面板） */
+  .quick-connect {
+    max-width: 720px;
+    margin: 32px auto 0;
+    text-align: left;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(99, 102, 241, 0.16);
+    border-radius: 16px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 10px 32px rgba(99, 102, 241, 0.10);
+    overflow: hidden;
+  }
+  .qc-tip { margin-top: 14px; font-size: 13px; color: var(--text-dim); text-align: center; }
+  .nav-doc { color: var(--purple) !important; font-weight: 600; }
+
+  /* 六大核心能力：左导航 + 右对话 */
+  .cap-wrap {
+    display: flex;
+    gap: 26px;
+    align-items: stretch;
+    max-width: 980px;
+    margin: 0 auto;
+  }
+  .cap-nav {
+    flex: 0 0 240px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .cap-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-height: 0;
+    padding: 13px 18px;
+    border-radius: 14px;
+    border: 1px solid rgba(99, 102, 241, 0.14);
+    background: rgba(255, 255, 255, 0.8);
+    color: var(--text-dim);
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.25s;
+  }
+  .cap-item .cap-ico { font-size: 20px; }
+  .cap-item:hover { border-color: rgba(99, 102, 241, 0.35); color: var(--text); transform: translateX(3px); }
+  .cap-item.active {
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 8px 22px rgba(99, 102, 241, 0.35);
+    transform: translateX(3px);
+  }
+  .cap-panel {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(99, 102, 241, 0.30);
+    border-radius: 20px;
+    padding: 26px;
+    box-shadow: 0 18px 48px rgba(99, 102, 241, 0.12);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+  .cap-panel { display: flex; flex-direction: column; }
+  .cap-panel { height: 378px; min-height: 0; }
+  .cap-panel .demo-chat { margin-top: 0; flex: 1; min-height: 0; overflow-y: auto; max-height: none; padding: 18px 18px 14px; display: flex; flex-direction: column; justify-content: space-between; }
+  .cap-panel .demo-chat::-webkit-scrollbar { width: 6px; }
+  .cap-panel .demo-chat::-webkit-scrollbar-track { background: transparent; }
+  .cap-panel .demo-chat::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.3); border-radius: 999px; }
+  .cap-panel .demo-chat { scrollbar-width: thin; scrollbar-color: rgba(139,92,246,0.3) transparent; }
+
+  /* 数据规模：中央数据面板（新版样式） */
+  .stats-board {
+    position: relative;
+    max-width: 980px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, rgba(255,255,255,0.92), rgba(245,247,255,0.88));
+    border: 1px solid rgba(99,102,241,0.18);
+    border-radius: 28px;
+    padding: 52px 56px 44px;
+    box-shadow: 0 24px 70px rgba(99,102,241,0.14);
+    overflow: hidden;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+  .stats-board::before {
+    content: "";
+    position: absolute;
+    inset: -40%;
+    background:
+      radial-gradient(ellipse 50% 42% at 18% 0%, rgba(139,92,246,0.20), transparent 70%),
+      radial-gradient(ellipse 50% 42% at 85% 20%, rgba(59,130,246,0.18), transparent 70%),
+      radial-gradient(ellipse 45% 40% at 50% 115%, rgba(147,197,253,0.22), transparent 70%);
+    animation: boardGlow 10s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes boardGlow {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(16px, 12px) scale(1.1); }
+  }
+  .board-main { position: relative; text-align: center; }
+  .board-num {
+    font-size: 76px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    line-height: 1;
+    background: linear-gradient(120deg, var(--blue), var(--purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .board-num .board-plus { font-size: 42px; font-weight: 800; }
+  .board-title { font-size: 18px; font-weight: 700; margin-top: 12px; color: var(--text); }
+  .board-tag {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4c3a8a;
+    background: linear-gradient(135deg, rgba(139,92,246,0.12), rgba(59,130,246,0.10));
+    border: 1px solid rgba(139,92,246,0.24);
+  }
+  .board-divider {
+    height: 2px;
+    margin: 34px 0 30px;
+    background: linear-gradient(90deg, transparent, rgba(99,102,241,0.65), transparent);
+  }
+  .board-metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    position: relative;
+  }
+  .board-metric { text-align: center; }
+  .board-metric b {
+    display: block;
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    background: linear-gradient(120deg, var(--blue), var(--purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .board-metric span { font-size: 13.5px; color: var(--text-dim); margin-top: 6px; display: block; }
+  .board-metric + .board-metric { position: relative; }
+  .board-metric + .board-metric::before {
+    content: "";
+    position: absolute;
+    left: -10px;
+    top: 6px;
+    bottom: 6px;
+    width: 1px;
+    background: linear-gradient(180deg, transparent, rgba(99,102,241,0.45), transparent);
+  }
+  .stats-capsules {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 26px;
+  }
+  .stat-capsule {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4c3a8a;
+    background: linear-gradient(135deg, rgba(139,92,246,0.10), rgba(59,130,246,0.08));
+    border: 1px solid rgba(139, 92, 246, 0.22);
+    white-space: nowrap;
+  }
+  .stats-note { margin-top: 26px; font-size: 13px; color: var(--text-dim); text-align: center; }
+
+  @media (max-width: 860px) {
+    .cap-wrap { flex-direction: column; }
+    .cap-nav { flex-direction: row; flex-wrap: wrap; flex: auto; height: auto; }
+    .cap-item { flex: 1 1 45%; }
+    .cap-panel { height: auto; }
+    .cap-panel .demo-chat { max-height: 340px; }
+    .stats-board { padding: 38px 24px 34px; }
+    .board-metrics { grid-template-columns: repeat(2, 1fr); gap: 26px 12px; }
+    .board-metric + .board-metric::before { display: none; }
+  }
+
+  /* 快速接入区 */
+  .quick-connect {
+    max-width: 860px;
+    margin: 36px auto 0;
+    text-align: left;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .qc-head { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; border-bottom: 1px solid rgba(99,102,241,0.10); }
+  .qc-title { font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .qc-title .badge { font-size: 11px; padding: 2px 10px; border-radius: 999px; background: rgba(34,211,238,0.12); color: var(--cyan); border: 1px solid rgba(34,211,238,0.3); }
+  .tabs { display: flex; gap: 6px; background: rgba(99,102,241,0.08); padding: 5px; border-radius: 12px; }
+  .tab {
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-size: 13px;
+    padding: 7px 16px;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .tab.active { background: linear-gradient(135deg, var(--blue), var(--purple)); color: #fff; box-shadow: 0 4px 14px rgba(99,102,241,0.35); }
+  .qc-body { padding: 22px; }
+  .code-wrap { position: relative; }
+  .code-block {
+    background: #fbfcff;
+    border: 1px solid rgba(99, 102, 241, 0.18);
+    border-radius: 14px;
+    padding: 18px 20px;
+    font-family: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 13.5px;
+    line-height: 1.8;
+    color: #333c66;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .copy-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    border: 1px solid rgba(99,102,241,0.20);
+    background: rgba(255,255,255,0.9);
+    color: var(--text);
+    font-size: 12.5px;
+    padding: 6px 14px;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .copy-btn:hover { background: rgba(255,255,255,1); border-color: rgba(99,102,241,0.4); }
+  .copy-btn.done { background: rgba(14,116,144,0.14); color: var(--cyan); border-color: rgba(14,116,144,0.4); }
+  .steps { display: flex; gap: 16px; margin-top: 22px; flex-wrap: wrap; }
+  .step { flex: 1; min-width: 160px; display: flex; gap: 12px; align-items: flex-start; padding: 14px; border-radius: 14px; background: rgba(255,255,255,0.75); border: 1px solid rgba(99,102,241,0.14); }
+  .step-num {
+    flex-shrink: 0;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    color: #fff;
+  }
+  .step p { font-size: 13.5px; color: var(--text-dim); }
+  .step p strong { color: var(--text); font-weight: 600; display: block; font-size: 14px; }
+  .qc-actions { display: flex; gap: 14px; margin-top: 24px; justify-content: center; flex-wrap: wrap; }
+
+  /* 痛点与价值 */
+  .pv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: stretch; }
+  .pv-col { border-radius: 22px; padding: 28px; background: var(--card); border: 1px solid var(--card-border); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: var(--shadow); }
+  .pv-col.pain { border-color: rgba(248, 113, 113, 0.2); }
+  .pv-col.value { border-color: rgba(34, 211, 238, 0.25); }
+  .pv-title { font-size: 20px; font-weight: 700; margin-bottom: 22px; display: flex; align-items: center; gap: 10px; }
+  .pv-col.pain .pv-title { color: #e05252; }
+  .pv-col.value .pv-title { color: #0e7490; }
+  .pv-list { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+  .pv-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 15px; color: var(--text-dim); }
+  .pv-list li .icon { flex-shrink: 0; width: 22px; height: 22px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 12px; margin-top: 2px; }
+  .pv-col.pain .icon { background: rgba(248,113,113,0.14); color: #e05252; }
+  .pv-col.value .icon { background: rgba(14,116,144,0.12); color: #0e7490; }
+
+  /* 六宫格 */
+  .grid-6 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 30px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: var(--shadow);
+    transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.3s;
+    background: radial-gradient(ellipse 80% 60% at 20% 0%, rgba(59,130,246,0.12), transparent 70%), radial-gradient(ellipse 60% 50% at 90% 100%, rgba(139,92,246,0.14), transparent 70%);
+  }
+  .card:hover { transform: translateY(-6px); border-color: rgba(139,92,246,0.35); box-shadow: 0 24px 60px rgba(99,102,241,0.25); }
+  .card:hover::before { opacity: 1; }
+  .card > * { position: relative; z-index: 1; }
+  .card-icon {
+    width: 52px; height: 52px;
+    border-radius: 15px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 25px;
+    background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(139,92,246,0.2));
+    border: 1px solid rgba(139,92,246,0.3);
+    margin-bottom: 18px;
+  }
+  .card h3 { font-size: 19px; font-weight: 700; margin-bottom: 8px; }
+  .card .desc { color: var(--text-dim); font-size: 14.5px; }
+  .card .example { margin-top: 14px; font-size: 13px; color: #6d4fd6; background: rgba(139,92,246,0.08); border: 1px dashed rgba(139,92,246,0.35); border-radius: 10px; padding: 10px 12px; }
+
+  /* 接入形态 */
+  .forms-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  .form-card { border-radius: var(--radius); padding: 30px; background: var(--card); border: 1px solid var(--card-border); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 12px; transition: transform 0.25s, border-color 0.25s; }
+  .form-card:hover { transform: translateY(-5px); border-color: rgba(59,130,246,0.4); }
+  .form-card.main { border-color: rgba(139,92,246,0.5); box-shadow: 0 20px 55px rgba(99,102,241,0.28); }
+  .form-top { display: flex; align-items: center; gap: 10px; }
+  .form-top .tag { font-size: 12px; padding: 3px 12px; border-radius: 999px; }
+  .form-top .tag.main-tag { background: linear-gradient(135deg, var(--blue), var(--purple)); color: #fff; }
+  .form-top .tag.norm-tag { background: rgba(99,102,241,0.07); color: var(--text-dim); border: 1px solid rgba(99,102,241,0.18); }
+  .form-card h3 { font-size: 20px; }
+  .form-card .sub { color: var(--text-dim); font-size: 14.5px; }
+  .demo-chat {
+    background: #fbfcff;
+    border: 1px solid rgba(99,102,241,0.16);
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 6px;
+  }
+  .demo-chat .msg { max-width: 92%; padding: 12px 16px; border-radius: 12px; line-height: 1.75; }
+  .demo-chat .user { align-self: flex-end; background: rgba(59,130,246,0.22); color: #1e3a8a; border: 1px solid rgba(59,130,246,0.38); }
+  .demo-chat .ai { align-self: flex-start; background: rgba(139,92,246,0.18); color: #4c1d95; border: 1px solid rgba(139,92,246,0.34); }
+  .demo-chat .fname {
+    color: #7c3aed;
+    font-weight: 700;
+    font-family: Consolas, "Microsoft YaHei", monospace;
+    font-size: 0.94em;
+  }
+  .demo-chat .dnum {
+    color: #2563eb;
+    font-weight: 800;
+    font-size: 1.04em;
+  }
+  .demo-chat .rgn {
+    color: #0e7490;
+    font-weight: 700;
+  }
+  .cli-line { font-family: "JetBrains Mono", "Cascadia Code", Consolas, monospace; font-size: 12.5px; background: #fbfcff; border: 1px solid rgba(99,102,241,0.16); border-radius: 10px; padding: 12px 14px; color: #0e7490; overflow-x: auto; white-space: nowrap; }
+  .form-card .price-link { color: var(--cyan); font-size: 13.5px; text-decoration: none; margin-top: 2px; display: inline-flex; align-items: center; gap: 4px; }
+  .form-card .price-link:hover { text-decoration: underline; }
+
+  /* 数据规模 */
+  .stats-section { text-align: center; }
+
+  /* 场景案例：单排首尾相接慢速滚动 */
+  .scenes-viewport {
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  }
+  .scenes-track { display: flex; width: max-content; animation: scenesMarquee 38s linear infinite; }
+  .scenes-track:hover { animation-play-state: paused; }
+  .scenes-half { display: flex; gap: 18px; padding-right: 18px; }
+  @keyframes scenesMarquee { to { transform: translateX(-50%); } }
+  .scene-card { flex: 0 0 300px; border-radius: var(--radius); padding: 30px; background: var(--card); border: 1px solid var(--card-border); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: var(--shadow); transition: transform 0.25s, border-color 0.25s; }
+  .scene-card:hover { transform: translateY(-4px); border-color: rgba(139,92,246,0.4); }
+  .scene-card .role { font-size: 13px; color: var(--cyan); margin-bottom: 10px; letter-spacing: 1px; }
+  .scene-card h3 {
+    font-size: 22px;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+    background: linear-gradient(120deg, var(--blue), var(--purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .scene-card ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .scene-card li { font-size: 14px; color: var(--text-dim); padding-left: 18px; position: relative; }
+  .scene-card li::before { content: "›"; position: absolute; left: 2px; color: var(--purple); font-weight: 700; }
+
+  /* FAQ */
+  .faq-list { max-width: 820px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+  .faq-item { background: var(--card); border: 1px solid var(--card-border); border-radius: 16px; overflow: hidden; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+  .faq-q {
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 600;
+    padding: 20px 24px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    font-family: inherit;
+  }
+  .faq-q .arrow { color: var(--purple); font-size: 18px; transition: transform 0.3s; flex-shrink: 0; }
+  .faq-item.open .faq-q .arrow { transform: rotate(45deg); }
+  .faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+    color: var(--text-dim);
+    font-size: 14.5px;
+  }
+  .faq-a-inner { padding: 0 24px 20px; }
+
+  /* 底部 */
+  .footer {
+    border-top: 1px solid rgba(99,102,241,0.12);
+    padding: 44px 0;
+    margin-top: 40px;
+  }
+  .footer-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 18px; }
+  .footer-copy { color: var(--text-dim); font-size: 13.5px; }
+  .footer-links { display: flex; gap: 24px; align-items: center; }
+  .footer-links a { color: var(--text-dim); text-decoration: none; font-size: 13.5px; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--text); }
+
+  /* 响应式 */
+  @media (max-width: 960px) {
+    section { padding: 52px 0; }
+    .grid-6 { grid-template-columns: repeat(2, 1fr); }
+    .forms-grid { grid-template-columns: 1fr; }
+    .scenes-track { animation-duration: 30s; }
+
+    .pv-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+  }
+  @media (max-width: 600px) {
+    .grid-6 { grid-template-columns: 1fr; }
+    .hero { padding-top: 140px; }
+    .qc-actions .btn { width: 100%; }
+    .scene-card { flex-basis: 260px; padding: 24px; }
+    .board-num { font-size: 58px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-flow"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="orb orb-4"></div>
+<div class="orb orb-5"></div>
+<div class="orb orb-center"></div>
+
+<!-- ===== 导航 ===== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="#top">
+      <span class="logo-badge">采</span>
+      <span>采招词元</span>
+    </a>
+    <div class="nav-links">
+      <a href="#access">快速接入</a>
+      <a href="#capabilities">核心能力</a>
+      <a href="#scenes">使用场景</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div class="nav-auth">
+      <a class="btn-text nav-doc" href="#access">接入文档</a>
+      <button class="btn-text" onclick="alert('登录功能即将开放，敬请期待')">登录</button>
+      <button class="btn btn-primary" style="padding: 9px 20px; font-size: 14px;" onclick="alert('注册功能即将开放，敬请期待')">注册</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== Hero ===== -->
+<header class="hero" id="top">
+  <div class="container">
+    <div class="hero-eyebrow"><span class="dot"></span>招投标数据 · Skill / MCP / CLI / API 全形态接入</div>
+    <h1>采招词元——<span class="hl">30 秒</span>招投标数据<br>接入你的桌面办公智能体</h1>
+    <div class="typewriter-wrap">六大核心能力，即刻上手：<span class="tw" id="typewriter"></span><span class="typewriter-caret"></span></div>
+    <p class="hero-desc">为 AI Agent 而生的一站式招投标数据引擎。市场分析、标讯订阅、对手分析、业主分析、商机预测、合同查询，一次接入全部拥有。</p>
+
+    <!-- 快速接入区 -->
+    <div class="quick-connect" id="access">
+      <div class="qc-head">
+        <div class="qc-title">快速接入 <span class="badge">30 秒上手</span></div>
+        <div class="tabs">
+          <button class="tab active" data-tab="skill" onclick="switchTab('skill')">Skill</button>
+          <button class="tab" data-tab="mcp" onclick="switchTab('mcp')">MCP</button>
+          <button class="tab" data-tab="cli" onclick="switchTab('cli')">CLI</button>
+        </div>
+      </div>
+      <div class="qc-body">
+        <div class="code-wrap">
+          <pre class="code-block" id="code-skill">npm install -g caizhao-token-skill
+# 在你的 AI Agent 中安装并激活
+agent install caizhao-token-skill</pre>
+          <pre class="code-block" id="code-mcp" style="display:none">npx -y @caizhao/token-mcp</pre>
+          <pre class="code-block" id="code-cli" style="display:none">npm install -g caizhao-token-cli
+cz init</pre>
+          <button class="copy-btn" id="copy-btn" onclick="copyCode()">复制</button>
+        </div>
+        <p class="qc-tip">复制安装命令 → 粘贴到你的 AI Agent → 30 秒完成接入</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== 痛点与价值 ===== -->
+<section id="pain-value">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-tag">WHY</span>
+      <h2 class="section-title">为什么你需要采招词元</h2>
+      <p class="section-sub">告别低效，把数据获取交给 AI</p>
+    </div>
+    <div class="pv-grid">
+      <div class="pv-col pain">
+        <div class="pv-title">✕ 现状痛点</div>
+        <ul class="pv-list">
+          <li><span class="icon">✕</span>多平台来回切换，标讯分散，信息孤岛严重，效率低下</li>
+          <li><span class="icon">✕</span>人工盯标易漏易错，错过关键商机与截标时间</li>
+          <li><span class="icon">✕</span>数据难以与你的 AI 工作流打通，无法自动分析决策</li>
+          <li><span class="icon">✕</span>订阅推送不及时，关键动态滞后一步</li>
+        </ul>
+      </div>
+      <div class="pv-col value">
+        <div class="pv-title">✓ 采招词元价值</div>
+        <ul class="pv-list">
+          <li><span class="icon">✓</span>一次接入，覆盖全国招投标公开信息，全量检索</li>
+          <li><span class="icon">✓</span>实时订阅推送，标讯动态第一时间触达</li>
+          <li><span class="icon">✓</span>六大能力开箱即用，市场/对手/业主/商机全视角</li>
+          <li><span class="icon">✓</span>支持 Agent 自动调用，数据直达你的分析流程</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 六大核心能力 ===== -->
+<section id="capabilities">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-tag">CAPABILITIES</span>
+      <h2 class="section-title">六大核心能力</h2>
+      <p class="section-sub">覆盖招投标业务全链路，为分析与决策提供数据底座</p>
+    </div>
+    <div class="cap-wrap">
+      <div class="cap-nav">
+        <button class="cap-item active" data-cap="0"><span class="cap-ico">📊</span>市场分析</button>
+        <button class="cap-item" data-cap="1"><span class="cap-ico">🔔</span>标讯订阅</button>
+        <button class="cap-item" data-cap="2"><span class="cap-ico">🎯</span>对手分析</button>
+        <button class="cap-item" data-cap="3"><span class="cap-ico">🏢</span>业主分析</button>
+        <button class="cap-item" data-cap="4"><span class="cap-ico">🔮</span>商机预测</button>
+        <button class="cap-item" data-cap="5"><span class="cap-ico">📄</span>合同查询</button>
+      </div>
+      <div class="cap-panel">
+        <div class="demo-chat" id="cap-chat">
+          <div class="msg user">帮我分析一下今年医疗信息化行业的招标趋势</div>
+          <div class="msg ai">已调用市场分析能力，为您生成华东、华北、华南三大区域趋势对比，共覆盖 12,847 条公开标讯。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ===== 数据规模 ===== -->
+<section id="stats">
+  <div class="container stats-section">
+    <div class="section-head">
+      <span class="section-tag">DATA</span>
+      <h2 class="section-title">数据规模与合规</h2>
+    </div>
+    <div class="stats-board">
+      <div class="board-main">
+        <div class="board-num">3亿<span class="board-plus">+</span></div>
+        <div class="board-title">标讯数据总量</div>
+        <span class="board-tag">每日更新近 30 万条</span>
+      </div>
+      <div class="board-divider"></div>
+      <div class="board-metrics">
+        <div class="board-metric"><b>30万+</b><span>每日新增标讯</span></div>
+        <div class="board-metric"><b>20年</b><span>专注招投标行业</span></div>
+        <div class="board-metric"><b>100+</b><span>覆盖行业</span></div>
+        <div class="board-metric"><b>全国</b><span>公共资源交易中心</span></div>
+      </div>
+    </div>
+    <div class="stats-capsules">
+      <span class="stat-capsule">涵盖政府 / 国企 / 央企数据</span>
+      <span class="stat-capsule">覆盖各省公共资源交易中心</span>
+      <span class="stat-capsule">合法合规 · 公开信息整合</span>
+    </div>
+    <p class="stats-note">采招词元仅整合公开渠道发布的招投标信息，数据来源合法合规。</p>
+  </div>
+</section>
+
+<!-- ===== 使用场景 ===== -->
+<section id="scenes">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-tag">SCENARIOS</span>
+      <h2 class="section-title">分析师高频使用场景</h2>
+      <p class="section-sub">让数据分析师从"找数据"中解放，专注于"用数据"</p>
+    </div>
+    <div class="scenes-viewport">
+      <div class="scenes-track">
+        <div class="scenes-half">
+<div class="scene-card">
+        <h3>市场分析</h3>
+        <ul>
+          <li>按区域 / 行业 / 金额多维聚合趋势</li>
+          <li>自动生成招标热力与增长报告</li>
+          <li>支撑季度战略与区域拓展决策</li>
+        </ul>
+      </div>
+<div class="scene-card">
+        <h3>盯标订阅</h3>
+        <ul>
+          <li>关键词 + 地区 + 金额组合订阅</li>
+          <li>新标讯实时推送，不再人工刷新</li>
+          <li>关键截标时间自动提醒</li>
+        </ul>
+      </div>
+<div class="scene-card">
+        <h3>竞对监控</h3>
+        <ul>
+          <li>跟踪竞争对手投标中标动态</li>
+          <li>洞察对手报价策略与活跃区域</li>
+          <li>构建竞争情报看板</li>
+        </ul>
+      </div>
+<div class="scene-card">
+        <h3>业主尽调</h3>
+        <ul>
+          <li>挖掘业主采购规律与偏好</li>
+          <li>关联项目历史成交价</li>
+          <li>一键输出业主画像报告</li>
+        </ul>
+      </div>
+<div class="scene-card">
+        <h3>商机预警</h3>
+        <ul>
+          <li>提前预测潜在商机窗口</li>
+          <li>预算区间与发布时间预估</li>
+          <li>投标前 7 天自动提醒</li>
+        </ul>
+      </div>
+<div class="scene-card">
+        <h3>合同核查</h3>
+        <ul>
+          <li>合同与履约记录一键查询</li>
+          <li>供应商风险快速筛查</li>
+          <li>尽调报告自动导出</li>
+        </ul>
+      </div>
+        </div>
+        <div class="scenes-half">
+<div class="scene-card">
+        <h3>市场分析</h3>
+        <ul>
+          <li>按区域 / 行业 / 金额多维聚合趋势</li>
+          <li>自动生成招标热力与增长报告</li>
+          <li>支撑季度战略与区域拓展决策</li>
+        </ul>
+      </div>
+<div class="scene-card">
+        <h3>盯标订阅</h3>
+        <ul>
+          <li>关键词 + 地区 + 金额组合订阅</li>
+          <li>新标讯实时推送，不再人工刷新</li>
+          <li>关键截标时间自动提醒</li>
+        </ul>
+      </div>
+<div class="scene-card">
+        <h3>竞对监控</h3>
+        <ul>
+          <li>跟踪竞争对手投标中标动态</li>
+          <li>洞察对手报价策略与活跃区域</li>
+          <li>构建竞争情报看板</li>
+        </ul>
+      </div>
+<div class="scene-card">
+        <h3>业主尽调</h3>
+        <ul>
+          <li>挖掘业主采购规律与偏好</li>
+          <li>关联项目历史成交价</li>
+          <li>一键输出业主画像报告</li>
+        </ul>
+      </div>
+<div class="scene-card">
+        <h3>商机预警</h3>
+        <ul>
+          <li>提前预测潜在商机窗口</li>
+          <li>预算区间与发布时间预估</li>
+          <li>投标前 7 天自动提醒</li>
+        </ul>
+      </div>
+<div class="scene-card">
+        <h3>合同核查</h3>
+        <ul>
+          <li>合同与履约记录一键查询</li>
+          <li>供应商风险快速筛查</li>
+          <li>尽调报告自动导出</li>
+        </ul>
+      </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ===== FAQ ===== -->
+<section id="faq">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-tag">FAQ</span>
+      <h2 class="section-title">常见问题</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">数据来源是什么？<span class="arrow">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">采招词元整合全国各级公共资源交易平台、政府采购网等公开渠道发布的招投标信息，所有数据来源合法合规，仅提供公开信息的检索与整合服务。</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">数据多久更新一次？<span class="arrow">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">数据每日更新 30w+ 条，收录后几十秒内即可检索到，订阅推送可通过 AI Agent 自定义设置。</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">查询结果是否可以用于商业用途？<span class="arrow">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">可以，但请注意：信息数据由 AI 提取，可能存在误差，使用时请自行核对；数据仅可自己使用，不得恶意传播或转交第三方；如发现标讯数据被售卖或转交第三方使用，我们将保留追责权利。</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">可以开发票吗？<span class="arrow">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">可以。所有付费套餐均支持开具正规增值税发票，企业用户可申请增值税专用发票，个人用户可申请增值税普通发票。</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">遇到问题如何获得技术支持？<span class="arrow">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">可以咨询技术客服与客服经理，工作时间：工作日 9:00-17:30，我们将及时为你解答。</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">接入需要多长时间？<span class="arrow">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Skill 接入只需复制安装代码粘贴到你的 AI Agent，30 秒即可完成；MCP 与 CLI 配置通常 5 分钟内完成；API 接入提供完整文档，最快当天上线。</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 底部 ===== -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-copy">© 2026 采招词元 · 把招投标数据装进你的 AI</div>
+    <div class="footer-links">
+      <a href="mailto:support@caizhaotoken.com">邮箱：support@caizhaotoken.com</a>
+      <a href="javascript:void(0)" onclick="alert('公众号即将上线，敬请期待')">微信公众号</a>
+      <a href="javascript:void(0)" onclick="alert('接入文档即将上线，敬请期待')">接入文档</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ===== 打字机轮播 ===== */
+  const phrases = ["市场分析", "标讯订阅", "对手分析", "业主分析", "商机预测", "合同查询"];
+  let pi = 0, ci = 0, deleting = false;
+  const twEl = document.getElementById("typewriter");
+
+  function type() {
+    const cur = phrases[pi];
+    if (!deleting) {
+      ci++;
+      twEl.textContent = cur.slice(0, ci);
+      if (ci === cur.length) {
+        deleting = true;
+        setTimeout(type, 1600);
+        return;
+      }
+      setTimeout(type, 90);
+    } else {
+      ci--;
+      twEl.textContent = cur.slice(0, ci);
+      if (ci === 0) {
+        deleting = false;
+        pi = (pi + 1) % phrases.length;
+        setTimeout(type, 350);
+        return;
+      }
+      setTimeout(type, 45);
+    }
+  }
+  type();
+
+  /* ===== Tab 切换 ===== */
+  let currentTab = "skill";
+  function switchTab(tab) {
+    currentTab = tab;
+    document.querySelectorAll(".tab").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
+    document.getElementById("code-skill").style.display = tab === "skill" ? "block" : "none";
+    document.getElementById("code-mcp").style.display = tab === "mcp" ? "block" : "none";
+    document.getElementById("code-cli").style.display = tab === "cli" ? "block" : "none";
+    const btn = document.getElementById("copy-btn");
+    btn.textContent = "复制";
+    btn.classList.remove("done");
+  }
+
+  /* ===== 六大能力：多轮对话 + 自动轮播 ===== */
+  const capChats = [
+    {
+      msgs: [
+        { r: "u", t: "帮我分析一下今年医疗信息化行业的招标趋势" },
+        { r: "a", t: "已结合近 30 天 12,847 条标讯完成分析：<br>① 区域：华东 34% 领跑，华南 22%、华北 19%；<br>② 品类：智慧医院、远程诊疗、数据平台建设占 65%；<br>③ 增速：整体同比增长 41%，Q2 起明显提速。" },
+        { r: "u", t: "把结论整理成 Excel 发我" },
+        { r: "a", t: "已生成《医疗信息化招标趋势分析.xlsx》：含区域分布、品类占比、增速对比 3 个 Sheet，可直接下载。" },
+        { r: "u", t: "把原始标讯明细也导一份给我" },
+        { r: "a", t: "已导出《医疗信息化标讯明细.csv》：覆盖 12,847 条原始记录，含项目名称、预算金额、发布时间，可二次分析。" }
+      ]
+    },
+    {
+      msgs: [
+        { r: "u", t: "帮我设置一个定时任务：每天上午 9 点，检索「数据中心建设」金额 500 万以上的新标讯" },
+        { r: "a", t: "定时任务已创建：每天 9:00 自动检索，命中即推送。<br>已补拉今日数据：共 12 条相关标讯，其中 3 条为今日新发布，已按紧急程度排序。" },
+        { r: "u", t: "好，标讯摘要也一起发我" },
+        { r: "a", t: "已开启摘要推送：每条标讯附带项目名称、预算金额、截止时间与关键附件，随时可查。" },
+        { r: "u", t: "好，把今日新增的标讯推给我看下" },
+        { r: "a", t: "已推送今日 3 条新标讯：含预算金额与截标时间，其中 1 条预算 500 万以上，点击即可查看全文。" }
+      ]
+    },
+    {
+      msgs: [
+        { r: "u", t: "查一下 XX 公司近半年投标和中标情况" },
+        { r: "a", t: "已完成对手分析：投标 23 次、中标 9 次（中标率 39%），金额合计 3,200 万，集中在智慧城市与安防领域。" },
+        { r: "u", t: "他们最近在哪些省份动作比较多？" },
+        { r: "a", t: "主要集中在华东与华南：浙江、广东各占 30% 以上，与贵司在智慧城市方向存在直接竞争，建议重点关注。" }
+      ]
+    },
+    {
+      msgs: [
+        { r: "u", t: "分析一下 XX 教育局的采购规律" },
+        { r: "a", t: "已完成业主分析：教学设备 42%、信息化建设 31%、运维服务 27%；年均 40+ 批次，集中在 3-4 月与 9-10 月，预算以 100-500 万为主。" },
+        { r: "u", t: "帮我建一个业主档案" },
+        { r: "a", t: "业主档案已创建：可订阅其新标讯与中标结果，后续数据自动归档更新，无需手动维护。" }
+      ]
+    },
+    {
+      msgs: [
+        { r: "u", t: "最近有什么值得提前布局的商机？" },
+        { r: "a", t: "已生成商机清单：华东 3 市教育信息化项目预计 1-2 个月内发布，预算合计约 2,400 万；医疗升级改造需求活跃，预测命中概率 78%。" },
+        { r: "u", t: "帮我按预算排序，出一份表格" },
+        { r: "a", t: "已生成《商机预测清单.xlsx》：按预算金额降序排列，附预计发布时间与建议行动项。" }
+      ]
+    },
+    {
+      msgs: [
+        { r: "u", t: "查一下某供应商的历史合同和履约记录" },
+        { r: "a", t: "已查询合同数据：近 5 年 32 份合同、累计 8,600 万，履约记录良好，无重大违约。" },
+        { r: "u", t: "导出完整合同清单" },
+        { r: "a", t: "已导出《供应商合同清单.xlsx》：含合同金额、签订时间、履约状态，可下载留档。" }
+      ]
+    }
+  ];
+  let capIndex = 0;
+  let capTimer = null;
+  function renderCap(i) {
+    const d = capChats[i];
+    const chat = document.getElementById("cap-chat");
+    chat.innerHTML = d.msgs.map(m => {
+      let t = m.t.replace(/《([^》]+?\.(?:xlsx|csv))》/g, '<span class="fname">《$1》</span>');
+      t = t.replace(/(华东|华南|华北|华中|西南|西北|东北|浙江|广东|江苏|上海|北京|深圳|山东|福建|四川|安徽|湖南|湖北|河南|河北|重庆|天津|陕西)/g, '<span class="rgn">$1</span>');
+      t = t.replace(/(\d[\d,]*(?:\.\d+)?%?)/g, '<span class="dnum">$1</span>');
+      return '<div class="msg ' + (m.r === "u" ? "user" : "ai") + '">' + t + "</div>";
+    }).join("");
+    chat.scrollTop = 0;
+  }
+  function goCap(i) {
+    capIndex = (i + capChats.length) % capChats.length;
+    document.querySelectorAll(".cap-item").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".cap-item")[capIndex].classList.add("active");
+    renderCap(capIndex);
+    restartCap();
+  }
+  let capPaused = false;
+  function restartCap() {
+    if (capTimer) clearInterval(capTimer);
+    if (capPaused) return;
+    capTimer = setInterval(function () { goCap(capIndex + 1); }, 4000);
+  }
+  document.querySelectorAll(".cap-item").forEach(function (item, i) {
+    item.addEventListener("click", function () { goCap(i); });
+  });
+  const capWrapEl = document.querySelector(".cap-wrap");
+  capWrapEl.addEventListener("mouseenter", function () { capPaused = true; if (capTimer) clearInterval(capTimer); });
+  capWrapEl.addEventListener("mouseleave", function () { capPaused = false; restartCap(); });
+  goCap(0);
+
+  /* ===== 复制代码 ===== */
+  function copyCode() {
+    const code = currentTab === "skill"
+      ? document.getElementById("code-skill").innerText
+      : (currentTab === "mcp" ? document.getElementById("code-mcp").innerText : document.getElementById("code-cli").innerText);
+    navigator.clipboard.writeText(code.trim()).then(() => {
+      const btn = document.getElementById("copy-btn");
+      btn.textContent = "已复制";
+      btn.classList.add("done");
+      setTimeout(() => { btn.textContent = "复制"; btn.classList.remove("done"); }, 2000);
+    }).catch(() => {
+      const ta = document.createElement("textarea");
+      ta.value = code.trim();
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); } catch (e) {}
+      document.body.removeChild(ta);
+      const btn = document.getElementById("copy-btn");
+      btn.textContent = "已复制";
+      btn.classList.add("done");
+      setTimeout(() => { btn.textContent = "复制"; btn.classList.remove("done"); }, 2000);
+    });
+  }
+
+  /* ===== FAQ 手风琴 ===== */
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    const answer = item.querySelector(".faq-a");
+    const isOpen = item.classList.contains("open");
+    document.querySelectorAll(".faq-item.open").forEach(i => {
+      i.classList.remove("open");
+      i.querySelector(".faq-a").style.maxHeight = null;
+    });
+    if (!isOpen) {
+      item.classList.add("open");
+      answer.style.maxHeight = answer.scrollHeight + "px";
+    }
+  }
+</script>
+
+</body>
+</html>
