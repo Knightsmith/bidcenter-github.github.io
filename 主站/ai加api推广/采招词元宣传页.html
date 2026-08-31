@@ -42,7 +42,11 @@
       radial-gradient(ellipse 58% 52% at 50% 46%, rgba(147, 130, 255, 0.22), transparent 70%),
       radial-gradient(ellipse 65% 55% at 50% 108%, rgba(147, 130, 255, 0.24), transparent 72%),
       linear-gradient(180deg, #ffffff 0%, #f4f6ff 50%, #eef2ff 100%);
-    animation: bgFlow 9s ease-in-out infinite;
+    animation: bgFlow 9s ease-in-out infinite, bgHue 18s ease-in-out infinite;
+  }
+  @keyframes bgHue {
+    0%, 100% { filter: hue-rotate(0deg); }
+    50% { filter: hue-rotate(18deg); }
   }
   @keyframes bgFlow {
     0%   { transform: translate(0, 0) scale(1); }
@@ -58,7 +62,12 @@
     filter: blur(90px);
     opacity: 0.75;
     pointer-events: none;
-    animation: drift 9s ease-in-out infinite;
+    animation: drift 9s ease-in-out infinite, orbColor 14s ease-in-out infinite;
+  }
+  @keyframes orbColor {
+    0%, 100% { filter: blur(90px) hue-rotate(0deg); }
+    33% { filter: blur(90px) hue-rotate(45deg); }
+    66% { filter: blur(90px) hue-rotate(-25deg); }
   }
   .orb-1 { width: 620px; height: 620px; left: -160px; top: -100px; background: radial-gradient(circle, rgba(139,92,246,0.42), transparent 70%); }
   .orb-2 { width: 540px; height: 540px; right: -140px; top: 28%; background: radial-gradient(circle, rgba(59,130,246,0.38), transparent 70%); animation-delay: -3s; }
@@ -69,7 +78,7 @@
     width: 760px; height: 760px;
     left: 50%; top: 50%;
     background: radial-gradient(circle, rgba(139,92,246,0.30), rgba(59,130,246,0.18) 42%, transparent 70%);
-    animation: driftCenter 10s ease-in-out infinite;
+    animation: driftCenter 10s ease-in-out infinite, orbColor 14s ease-in-out infinite;
   }
   @keyframes driftCenter {
     0%, 100% { transform: translate(-50%, -50%) scale(1); }
@@ -140,6 +149,7 @@
     align-items: center;
     justify-content: center;
     font-size: 18px;
+    color: #ffffff;
     background: linear-gradient(135deg, var(--blue), var(--purple));
     box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
   }
@@ -321,6 +331,16 @@
   .cap-panel .demo-chat::-webkit-scrollbar-track { background: transparent; }
   .cap-panel .demo-chat::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.3); border-radius: 999px; }
   .cap-panel .demo-chat { scrollbar-width: thin; scrollbar-color: rgba(139,92,246,0.3) transparent; }
+  .cap-disclaimer {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(99, 102, 241, 0.10);
+    font-size: 12px;
+    color: #8f96b8;
+    text-align: center;
+    flex-shrink: 0;
+    line-height: 1.6;
+  }
 
   /* 数据规模：中央数据面板（新版样式） */
   .stats-board {
@@ -425,8 +445,6 @@
     border: 1px solid rgba(139, 92, 246, 0.22);
     white-space: nowrap;
   }
-  .stats-note { margin-top: 26px; font-size: 13px; color: var(--text-dim); text-align: center; }
-
   @media (max-width: 860px) {
     .cap-wrap { flex-direction: column; }
     .cap-nav { flex-direction: row; flex-wrap: wrap; flex: auto; height: auto; }
@@ -485,18 +503,27 @@
     position: absolute;
     top: 12px;
     right: 12px;
-    border: 1px solid rgba(99,102,241,0.20);
-    background: rgba(255,255,255,0.9);
-    color: var(--text);
+    border: none;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6, #3b82f6);
+    background-size: 200% 200%;
+    color: #fff;
     font-size: 12.5px;
+    font-weight: 600;
     padding: 6px 14px;
     border-radius: 9px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.25s;
     font-family: inherit;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+    animation: gradientFlow 3s ease infinite;
   }
-  .copy-btn:hover { background: rgba(255,255,255,1); border-color: rgba(99,102,241,0.4); }
-  .copy-btn.done { background: rgba(14,116,144,0.14); color: var(--cyan); border-color: rgba(14,116,144,0.4); }
+  .copy-btn:hover { box-shadow: 0 6px 22px rgba(99,102,241,0.55); filter: brightness(1.1); }
+  .copy-btn.done { background: linear-gradient(135deg, #06b6d4, #0891b2); background-size: 100% 100%; color: #fff; animation: none; }
+  @keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
   .steps { display: flex; gap: 16px; margin-top: 22px; flex-wrap: wrap; }
   .step { flex: 1; min-width: 160px; display: flex; gap: 12px; align-items: flex-start; padding: 14px; border-radius: 14px; background: rgba(255,255,255,0.75); border: 1px solid rgba(99,102,241,0.14); }
   .step-num {
@@ -816,6 +843,7 @@ cz init</pre>
           <div class="msg user">帮我分析一下今年医疗信息化行业的招标趋势</div>
           <div class="msg ai">已调用市场分析能力，为您生成华东、华北、华南三大区域趋势对比，共覆盖 12,847 条公开标讯。</div>
         </div>
+        <p class="cap-disclaimer">AI 对话实际能力与 AI Agent 本身能力有关，展示对话仅供参考</p>
       </div>
     </div>
   </div>
@@ -849,7 +877,6 @@ cz init</pre>
       <span class="stat-capsule">覆盖各省公共资源交易中心</span>
       <span class="stat-capsule">合法合规 · 公开信息整合</span>
     </div>
-    <p class="stats-note">采招词元仅整合公开渠道发布的招投标信息，数据来源合法合规。</p>
   </div>
 </section>
 

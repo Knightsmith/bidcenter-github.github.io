@@ -1,0 +1,1749 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>配置 | 采招词元——招投标数据接入你的 AI</title>
+<style>
+  :root {
+    --bg: #f7f9ff;
+    --bg-2: #eef2ff;
+    --card: rgba(255, 255, 255, 0.82);
+    --card-border: rgba(99, 102, 241, 0.16);
+    --text: #1c2340;
+    --text-dim: #5b6389;
+    --blue: #3b82f6;
+    --purple: #8b5cf6;
+    --cyan: #0e7490;
+    --radius: 18px;
+    --shadow: 0 18px 48px rgba(99, 102, 241, 0.14);
+    --nav-h: 68px;
+    --sidebar-w: 260px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ===== 流动渐变背景 ===== */
+  .bg-flow {
+    position: fixed;
+    inset: -20%;
+    z-index: -2;
+    background:
+      radial-gradient(ellipse 70% 55% at 8% -8%, rgba(139, 92, 246, 0.32), transparent 72%),
+      radial-gradient(ellipse 65% 50% at 92% 5%, rgba(59, 130, 246, 0.28), transparent 72%),
+      radial-gradient(ellipse 58% 52% at 50% 46%, rgba(147, 130, 255, 0.22), transparent 70%),
+      radial-gradient(ellipse 65% 55% at 50% 108%, rgba(147, 130, 255, 0.24), transparent 72%),
+      linear-gradient(180deg, #ffffff 0%, #f4f6ff 50%, #eef2ff 100%);
+    animation: bgFlow 9s ease-in-out infinite, bgHue 18s ease-in-out infinite;
+  }
+  @keyframes bgHue {
+    0%, 100% { filter: hue-rotate(0deg); }
+    50% { filter: hue-rotate(18deg); }
+  }
+  @keyframes bgFlow {
+    0%   { transform: translate(0, 0) scale(1); }
+    33%  { transform: translate(-85px, 60px) scale(1.07); }
+    66%  { transform: translate(95px, -55px) scale(1.12); }
+    100% { transform: translate(0, 0) scale(1.04); }
+  }
+
+  .orb {
+    position: fixed;
+    z-index: -1;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.75;
+    pointer-events: none;
+    animation: drift 9s ease-in-out infinite, orbColor 14s ease-in-out infinite;
+  }
+  @keyframes orbColor {
+    0%, 100% { filter: blur(90px) hue-rotate(0deg); }
+    33% { filter: blur(90px) hue-rotate(45deg); }
+    66% { filter: blur(90px) hue-rotate(-25deg); }
+  }
+  @keyframes drift {
+    0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+    33% { transform: translate(160px, -120px) rotate(14deg) scale(1.16); }
+    66% { transform: translate(-120px, 140px) rotate(-12deg) scale(0.88); }
+  }
+  .orb-1 { width: 620px; height: 620px; left: -160px; top: -100px; background: radial-gradient(circle, rgba(139,92,246,0.42), transparent 70%); }
+  .orb-2 { width: 540px; height: 540px; right: -140px; top: 28%; background: radial-gradient(circle, rgba(59,130,246,0.38), transparent 70%); animation-delay: -3s; }
+  .orb-3 { width: 580px; height: 580px; left: 28%; bottom: -200px; background: radial-gradient(circle, rgba(147,197,253,0.42), transparent 70%); animation-delay: -6s; }
+  .orb-center {
+    width: 760px; height: 760px;
+    left: 50%; top: 50%;
+    background: radial-gradient(circle, rgba(139,92,246,0.30), rgba(59,130,246,0.18) 42%, transparent 70%);
+    animation: driftCenter 10s ease-in-out infinite, orbColor 14s ease-in-out infinite;
+  }
+  @keyframes driftCenter {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.22); }
+  }
+
+  /* ===== 顶部导航 ===== */
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    background: rgba(255, 255, 255, 0.74);
+    border-bottom: 1px solid rgba(99, 102, 241, 0.24);
+  }
+  .nav-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: var(--nav-h);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .logo-badge {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+  }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 15px;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-links a.nav-active { color: var(--purple); font-weight: 600; }
+  .nav-auth { display: flex; gap: 12px; align-items: center; }
+  .btn-text {
+    color: var(--text);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: 10px;
+    transition: background 0.2s;
+    font-family: inherit;
+  }
+  .btn-text:hover { background: rgba(99, 102, 241, 0.08); }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 12px;
+    padding: 12px 24px;
+    transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+    text-decoration: none;
+    font-family: inherit;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary {
+    color: #fff;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+  }
+  .btn-primary:hover { box-shadow: 0 14px 38px rgba(99, 102, 241, 0.55); filter: brightness(1.05); }
+  .btn-ghost {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(99, 102, 241, 0.22);
+  }
+  .btn-ghost:hover { background: rgba(255, 255, 255, 1); border-color: rgba(99, 102, 241, 0.42); }
+
+  /* ===== 文档布局 ===== */
+  .doc-layout {
+    display: flex;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: calc(var(--nav-h) + 24px) 24px 0;
+    align-items: flex-start;
+    gap: 32px;
+  }
+
+  /* 左侧侧边栏 */
+  .sidebar {
+    position: sticky;
+    top: calc(var(--nav-h) + 24px);
+    flex: 0 0 var(--sidebar-w);
+    width: var(--sidebar-w);
+    max-height: calc(100vh - var(--nav-h) - 48px);
+    overflow-y: auto;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: var(--shadow);
+    padding: 18px 12px;
+  }
+  .sidebar::-webkit-scrollbar { width: 5px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.3); border-radius: 999px; }
+  .side-group { margin-bottom: 18px; }
+  .side-group:last-child { margin-bottom: 0; }
+  .side-group-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #8f96b8;
+    text-transform: uppercase;
+    padding: 0 12px;
+    margin-bottom: 8px;
+  }
+  .side-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 14px;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+  }
+  .side-link:hover { color: var(--text); background: rgba(99, 102, 241, 0.06); }
+  .side-link.active {
+    color: #fff;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    box-shadow: 0 6px 18px rgba(99, 102, 241, 0.35);
+  }
+
+  /* 主内容区 */
+  .doc-main {
+    flex: 1;
+    min-width: 0;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  /* 移动端目录按钮 */
+  .doc-drawer-btn {
+    display: none;
+    position: fixed;
+    left: 16px;
+    bottom: 24px;
+    z-index: 90;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    padding: 11px 18px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    box-shadow: 0 10px 26px rgba(99, 102, 241, 0.5);
+    font-family: inherit;
+  }
+  .doc-drawer-btn:hover { filter: brightness(1.08); }
+
+  /* 目录抽屉遮罩 */
+  .drawer-mask {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 110;
+    background: rgba(28, 35, 64, 0.4);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+  }
+  .drawer-mask.show { display: block; }
+  .drawer-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 290px;
+    z-index: 120;
+    background: rgba(255, 255, 255, 0.98);
+    border-right: 1px solid var(--card-border);
+    box-shadow: 0 20px 60px rgba(99, 102, 241, 0.25);
+    transform: translateX(-105%);
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+    padding: 20px 14px;
+  }
+  .drawer-panel.open { transform: translateX(0); }
+  .drawer-panel .drawer-close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    border: none;
+    background: rgba(99, 102, 241, 0.08);
+    color: var(--text-dim);
+    font-size: 20px;
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .drawer-panel .drawer-close:hover { background: rgba(99, 102, 241, 0.16); }
+
+  /* ===== 文档内容样式 ===== */
+  .doc-hero { padding: 26px 0 8px; }
+  .doc-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    color: #5b3fd4;
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(139, 92, 246, 0.30);
+    margin-bottom: 18px;
+  }
+  .doc-eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 12px var(--cyan); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+  .doc-hero h1 {
+    font-size: clamp(32px, 4.6vw, 46px);
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: 1px;
+    background: linear-gradient(120deg, #232b52 30%, #5b6ad8 55%, #8b5cf6 80%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .doc-hero .lead { color: var(--text-dim); font-size: 16px; margin-top: 14px; max-width: 720px; }
+  .doc-hero .lead code, .doc-main p code, .doc-main li code, .doc-main td code {
+    font-family: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 0.88em;
+    background: rgba(139, 92, 246, 0.09);
+    border: 1px solid rgba(139, 92, 246, 0.22);
+    color: #6d4fd6;
+    padding: 1px 7px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+
+  /* ===== 简介板块 ===== */
+  .intro-sub { font-size: 22px; font-weight: 700; margin: 30px 0 16px; }
+  .quick-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 26px; }
+  @media (max-width: 860px) { .quick-steps { grid-template-columns: 1fr; } }
+  .step-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 18px 18px 16px;
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.08);
+  }
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 800;
+    color: #fff;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    margin-bottom: 10px;
+  }
+  .step-card h3 { font-size: 16px; margin-bottom: 6px; }
+  .step-card p { color: var(--text-dim); font-size: 13.5px; }
+  .cap-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 860px) { .cap-grid { grid-template-columns: 1fr 1fr; } }
+  .cap-item {
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(99, 102, 241, 0.14);
+    border-radius: 14px;
+    padding: 14px 16px;
+  }
+  .cap-item strong { display: block; font-size: 15px; color: var(--text); }
+  .cap-item span { font-size: 12.5px; color: var(--text-dim); }
+
+  .doc-section { margin-top: 44px; }
+  .doc-section > h2 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    scroll-margin-top: calc(var(--nav-h) + 20px);
+  }
+  .doc-section > h2 .anchor-icon {
+    opacity: 0;
+    color: var(--purple);
+    font-size: 20px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .doc-section > h2:hover .anchor-icon { opacity: 1; }
+  .doc-section > h3 {
+    font-size: 19px;
+    font-weight: 700;
+    margin: 30px 0 10px;
+    scroll-margin-top: calc(var(--nav-h) + 20px);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .doc-section > h3 .anchor-icon {
+    opacity: 0;
+    color: var(--purple);
+    font-size: 17px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .doc-section > h3:hover .anchor-icon { opacity: 1; }
+  .doc-section p { color: var(--text-dim); font-size: 15px; margin-bottom: 12px; }
+  .doc-section ul, .doc-section ol { color: var(--text-dim); font-size: 15px; padding-left: 22px; margin-bottom: 12px; }
+  .doc-section li { margin-bottom: 6px; }
+  .doc-section li strong { color: var(--text); }
+
+  /* 提示卡 */
+  .tip-card {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: linear-gradient(135deg, rgba(139,92,246,0.10), rgba(59,130,246,0.08));
+    border: 1px solid rgba(139, 92, 246, 0.24);
+    border-radius: 14px;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 14px;
+    color: var(--text-dim);
+  }
+  .tip-card .tip-ico {
+    flex-shrink: 0;
+    width: 24px; height: 24px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    color: #fff;
+  }
+  .tip-card b { color: var(--text); }
+
+  /* 代码块 */
+  .code-wrap { position: relative; margin: 16px 0; }
+  .code-block {
+    background: #fbfcff;
+    border: 1px solid rgba(99, 102, 241, 0.18);
+    border-radius: 14px;
+    padding: 18px 20px;
+    font-family: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: #333c66;
+    overflow-x: auto;
+    white-space: pre;
+    margin: 0;
+  }
+  .code-block .cmt { color: #8f96b8; }
+  .copy-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    border: none;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6, #3b82f6);
+    background-size: 200% 200%;
+    color: #fff;
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: all 0.25s;
+    font-family: inherit;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+    animation: gradientFlow 3s ease infinite;
+  }
+  .copy-btn:hover { box-shadow: 0 6px 22px rgba(99,102,241,0.55); filter: brightness(1.1); }
+  .copy-btn.done { background: linear-gradient(135deg, #06b6d4, #0891b2); background-size: 100% 100%; color: #fff; animation: none; }
+  @keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* 表格 */
+  .doc-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 16px 0;
+    font-size: 14px;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    overflow: hidden;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .doc-table th {
+    text-align: left;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, rgba(59,130,246,0.10), rgba(139,92,246,0.10));
+    color: var(--text);
+    font-weight: 700;
+    font-size: 13.5px;
+    letter-spacing: 0.3px;
+  }
+  .doc-table td {
+    padding: 11px 16px;
+    color: var(--text-dim);
+    border-top: 1px solid rgba(99, 102, 241, 0.10);
+    vertical-align: top;
+  }
+  .doc-table td b { color: var(--text); font-weight: 600; }
+
+  /* 配置项卡片 */
+  .opt-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: var(--shadow);
+    margin: 22px 0;
+  }
+  .opt-card .opt-name {
+    font-size: 16px;
+    font-weight: 700;
+    font-family: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+    color: var(--purple);
+    margin-bottom: 4px;
+  }
+  .opt-card .opt-desc { color: var(--text-dim); font-size: 14.5px; }
+
+  /* 优先级步骤条 */
+  .priority-list { list-style: none; padding: 0; counter-reset: pri; }
+  .priority-list li {
+    counter-increment: pri;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 13px 18px;
+    margin-bottom: 10px;
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(99, 102, 241, 0.14);
+    border-radius: 14px;
+    font-size: 14.5px;
+    color: var(--text-dim);
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .priority-list li:hover { transform: translateX(3px); border-color: rgba(139, 92, 246, 0.4); }
+  .priority-list li::before {
+    content: counter(pri);
+    flex-shrink: 0;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    color: #fff;
+    margin-top: 2px;
+  }
+  .priority-list li b { color: var(--text); font-weight: 600; }
+
+  /* ===== 底部 CTA ===== */
+  .doc-cta {
+    margin: 56px 0 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.92), rgba(245,247,255,0.88));
+    border: 1px solid rgba(99,102,241,0.18);
+    border-radius: 24px;
+    padding: 40px 32px;
+    text-align: center;
+    box-shadow: 0 24px 70px rgba(99,102,241,0.14);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+  .doc-cta::before {
+    content: "";
+    position: absolute;
+    inset: -40%;
+    background:
+      radial-gradient(ellipse 50% 42% at 18% 0%, rgba(139,92,246,0.20), transparent 70%),
+      radial-gradient(ellipse 50% 42% at 85% 20%, rgba(59,130,246,0.18), transparent 70%);
+    animation: boardGlow 10s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes boardGlow {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(16px, 12px) scale(1.1); }
+  }
+  .doc-cta > * { position: relative; }
+  .doc-cta h2 {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    background: linear-gradient(120deg, var(--blue), var(--purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .doc-cta p { color: var(--text-dim); font-size: 15px; margin-bottom: 24px; }
+  .cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+  /* 页脚 */
+  .footer {
+    border-top: 1px solid rgba(99,102,241,0.12);
+    padding: 44px 0;
+    margin-top: 56px;
+  }
+  .footer-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 18px; max-width: 1440px; margin: 0 auto; padding: 0 24px; }
+  .footer-copy { color: var(--text-dim); font-size: 13.5px; }
+  .footer-links { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+  .footer-links a { color: var(--text-dim); text-decoration: none; font-size: 13.5px; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--text); }
+
+  /* 回到顶部 */
+  .back-top {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 90;
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    box-shadow: 0 10px 26px rgba(99, 102, 241, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(12px);
+    transition: all 0.3s;
+    font-family: inherit;
+  }
+  .back-top.show { opacity: 1; visibility: visible; transform: translateY(0); }
+  .back-top:hover { filter: brightness(1.1); }
+
+  /* ===== 响应式 ===== */
+  @media (max-width: 1180px) {
+    .sidebar { flex-basis: 230px; width: 230px; }
+  }
+  @media (max-width: 960px) {
+    .nav-links { display: none; }
+    .sidebar { display: none; }
+    .doc-drawer-btn { display: inline-flex; }
+    .doc-layout { padding: calc(var(--nav-h) + 16px) 18px 0; }
+    .doc-main { max-width: 100%; }
+  }
+  @media (max-width: 600px) {
+    .doc-hero h1 { font-size: 30px; }
+    .doc-section > h2 { font-size: 22px; }
+    .doc-cta { padding: 30px 20px; }
+    .cta-actions .btn { width: 100%; }
+    .back-top { right: 16px; bottom: 80px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-flow"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="orb orb-center"></div>
+
+<!-- ===== 顶部导航 ===== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="#top">
+      <span class="logo-badge">采</span>
+      <span>采招词元</span>
+    </a>
+    <div class="nav-links">
+      <a href="采招词元宣传页.html#access">快速接入</a>
+      <a href="采招词元宣传页.html#capabilities">核心能力</a>
+      <a href="采招词元宣传页.html#scenes">使用场景</a>
+      <a href="采招词元宣传页.html#faq">FAQ</a>
+      <a href="#top" class="nav-active">配置</a>
+    </div>
+    <div class="nav-auth">
+      <button class="btn-text" onclick="alert('登录功能即将开放，敬请期待')">登录</button>
+      <button class="btn btn-primary" style="padding: 9px 20px; font-size: 14px;" onclick="alert('注册功能即将开放，敬请期待')">注册</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== 文档布局 ===== -->
+<div class="doc-layout" id="top">
+
+  <!-- 左侧目录侧边栏 -->
+  <aside class="sidebar" id="sidebar">
+    <div class="side-group">
+      <div class="side-group-title">快速开始</div>
+      <a class="side-link" href="#intro">简介</a>
+      <a class="side-link" href="#install">安装</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">配置</div>
+      <a class="side-link active" href="#config-overview">配置概览</a>
+      <a class="side-link" href="#config-example">配置示例</a>
+      <a class="side-link" href="#config-location">配置位置</a>
+      <a class="side-link" href="#config-options">配置项</a>
+      <a class="side-link" href="#environment-variables">环境变量</a>
+      <a class="side-link" href="#variable-substitution">变量替换</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">Skill 接入</div>
+      <a class="side-link" href="#skill-overview">SKILL 概览</a>
+      <a class="side-link" href="#skill-install">安装</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">MCP</div>
+      <a class="side-link" href="#mcp-overview">功能概述</a>
+      <a class="side-link" href="#mcp-install">安装配置</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">CLI</div>
+      <a class="side-link" href="#cli-install">安装说明</a>
+      <a class="side-link" href="#cli-usage">使用说明</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">API 参考</div>
+      <a class="side-link" href="#api-overview">API 概述</a>
+      <a class="side-link" href="#api-price">API 价格</a>
+    </div>
+  </aside>
+
+  <!-- 主内容区 -->
+  <main class="doc-main">
+
+    <header class="doc-hero" id="intro">
+      <div class="doc-eyebrow"><span class="dot"></span>快速开始 · Skill / MCP / CLI / API 全形态统一接入</div>
+      <h1>简介</h1>
+      <p class="lead">采招词元是面向招投标领域的 AI 数据平台，提供全国招标、中标公告的智能查询与分析能力。通过 Skill / MCP / CLI / API 四种形态接入，让 AI Agent 自动完成标讯检索、市场分析、对手与业主洞察等任务，把招投标数据装进你的 AI。</p>
+
+      <div class="quick-steps">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <h3>获取 API Key</h3>
+          <p>注册账号后在个人中心创建 API Key，新用户赠送 200 积分。</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <h3>选择接入形态</h3>
+          <p>Skill / MCP / CLI / API 四种方式任选，共用同一 API Key 与积分。</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <h3>开始使用</h3>
+          <p>在 AI Agent 或终端中直接调用，30 秒完成接入。</p>
+        </div>
+      </div>
+
+      <h2 class="intro-sub">六大核心能力</h2>
+      <div class="cap-grid">
+        <div class="cap-item"><strong>市场分析</strong><span>行业与区域趋势洞察</span></div>
+        <div class="cap-item"><strong>标讯订阅</strong><span>按条件自动推送招标信息</span></div>
+        <div class="cap-item"><strong>对手分析</strong><span>竞争对手中标动态追踪</span></div>
+        <div class="cap-item"><strong>业主分析</strong><span>采购方行为与偏好洞察</span></div>
+        <div class="cap-item"><strong>商机预测</strong><span>潜在商机智能推荐</span></div>
+        <div class="cap-item"><strong>合同查询</strong><span>中标合同数据检索</span></div>
+      </div>
+    </header>
+
+    <!-- 安装 -->
+    <section class="doc-section" id="install">
+      <h2>安装 <a class="anchor-icon" href="#install">#</a></h2>
+      <p>采招词元提供 Skill、MCP、CLI 三种本地接入形态，按需选择一种即可；API 无需安装，直接调用接口。所有形态共用同一 API Key 与积分。</p>
+
+      <h3>环境要求</h3>
+      <ul>
+        <li>Node.js 16 或更高版本（Skill / MCP / CLI 均依赖）</li>
+        <li>npm 包管理器</li>
+        <li>已获取采招词元 API Key（新用户注册赠送 200 积分）</li>
+      </ul>
+
+      <h3>方式一：安装 Skill（推荐）</h3>
+      <p>安装后 AI Agent 可自动识别招投标需求并调用查询能力，即装即用。</p>
+      <div class="code-wrap">
+        <pre class="code-block">npm install -g caizhao-token-skill</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+
+      <h3>方式二：安装 MCP</h3>
+      <p>通过 Model Context Protocol 接入，让 AI 助手直接调用招投标数据查询能力。</p>
+      <div class="code-wrap">
+        <pre class="code-block">npx -y @caizhao/token-mcp</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+
+      <h3>方式三：安装 CLI</h3>
+      <p>命令行工具，在终端中快速查询和分析招投标数据。</p>
+      <div class="code-wrap">
+        <pre class="code-block">npm install -g caizhao-token-cli</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+
+      <h3>初始化与验证</h3>
+      <div class="code-wrap">
+        <pre class="code-block"># 初始化配置（生成含全部注释的默认配置文件）
+cz init
+
+# 查看版本，验证安装成功
+cz --version
+
+# 测试查询：搜索最近 30 天广东省的信息安全类招标公告
+cz search --keywords '["信息安全"]' --provinces '["广东"]' --begin-date "2026-08-01"</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+
+      <h3>升级</h3>
+      <div class="code-wrap">
+        <pre class="code-block"># 升级 Skill
+npm update -g caizhao-token-skill
+
+# 升级 CLI
+npm update -g caizhao-token-cli
+
+# 升级 MCP
+npx -y @caizhao/token-mcp@latest</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+
+      <div class="tip-card"><span class="tip-ico">i</span><div><b>提示：</b>四种接入形态共用同一 API Key 与积分，调用同一能力扣同样的积分，与接入方式无关。</div></div>
+    </section>
+
+    <!-- 配置概览 -->
+    <section class="doc-section" id="config-overview">
+      <h2>配置概览 <a class="anchor-icon" href="#config-overview">#</a></h2>
+      <p>所有接入形态（Skill / MCP / CLI / API）共享同一套配置体系。配置主要解决四类问题：</p>
+      <ul>
+        <li><strong>凭证与端点</strong>：API Key、Base URL，安全地通过环境变量或密钥文件引用；</li>
+        <li><strong>模型与触发</strong>：默认模型、轻量任务模型，以及 Skill 的自动触发开关；</li>
+        <li><strong>服务与行为</strong>：MCP 服务器、CLI 输出格式、订阅通知渠道与规则；</li>
+        <li><strong>安全与边界</strong>：哪些操作需要确认、哪些指令文件会被注入到 AI Agent。</li>
+      </ul>
+      <div class="tip-card"><span class="tip-ico">i</span><div><b>快速上手：</b>安装 CLI 后执行 <code>cz init</code> 会在 <code>~/.config/caizhao-token/config.json</code> 生成一份带全部注释的默认配置文件，直接编辑即可完成接入。</div></div>
+    </section>
+
+    <!-- 配置示例 -->
+    <section class="doc-section" id="config-example">
+      <h2>配置示例 <a class="anchor-icon" href="#config-example">#</a></h2>
+      <p>下面是一份完整的配置文件示例，包含采招词元常用的全部配置键。将以下内容保存为 <code>config.json</code> 并放入配置位置即可生效：</p>
+      <div class="code-wrap">
+<pre class="code-block" id="code-full-example">{
+  "$schema": "https://caizhao-token.com/schema/config.json",
+  "apiKey": "{env:CZ_TOKEN}",
+  "baseUrl": "https://api.caizhao-token.com",
+  "model": "deepseek-chat",
+  "small_model": "deepseek-lite",
+
+  "skill": {
+    "enabled": true,
+    "autoTrigger": true,
+    "description": "招投标数据查询：搜索标讯、分析市场、追踪对手与业主",
+    "skillPath": "./skills/caizhao-token/SKILL.md"
+  },
+
+  "mcp": {
+    "servers": {
+      "caizhao": {
+        "url": "https://mcp.caizhao-token.com",
+        "enabled": true
+      }
+    }
+  },
+
+  "cli": {
+    "language": "zh-CN",
+    "outputFormat": "table",
+    "subscriptionFile": "~/.config/caizhao-token/subscriptions.json"
+  },
+
+  "notify": {
+    "channel": "webhook",
+    "webhookUrl": "https://example.com/hook",
+    "dailyTime": "09:00",
+    "keywords": ["数据中心", "智慧城市", "医疗信息化"]
+  },
+
+  "permission": {
+    "requireConfirm": ["query", "export"]
+  },
+
+  "instructions": ["docs/caizhao-guidelines.md"]
+}</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+      <p>上面的示例覆盖了：凭证（<code>apiKey</code> / <code>baseUrl</code>）、模型（<code>model</code> / <code>small_model</code>）、Skill 触发（<code>skill</code>）、MCP 服务（<code>mcp</code>）、CLI 行为（<code>cli</code>）、订阅通知（<code>notify</code>）、权限控制（<code>permission</code>）以及指令注入（<code>instructions</code>）。每个配置项详见「<a href="#config-options">配置项详解</a>」。</p>
+    </section>
+
+    <!-- 配置位置与优先级 -->
+    <section class="doc-section" id="config-location">
+      <h2>配置位置与优先级 <a class="anchor-icon" href="#config-location">#</a></h2>
+      <p>你可以将配置放置在不同的位置，它们具有不同的优先级。配置文件是<strong>合并</strong>的，而不是被替换：来自以下配置位置的设置会被合并，后面的源仅在键冲突时覆盖前面的源，所有非冲突设置都会被保留。</p>
+      <p>例如，如果全局配置设置了 <code>model: "deepseek-chat"</code>，而项目配置设置了 <code>notify: { "dailyTime": "08:30" }</code>，最终配置将同时包含这两项。</p>
+
+      <h3>加载顺序</h3>
+      <p>配置源按以下顺序加载（后面的源覆盖前面的源）：</p>
+      <ol class="priority-list">
+        <li><b>远程配置</b>（组织默认值，通过 <code>.well-known/caizhao-token</code> 端点自动下发）</li>
+        <li><b>全局配置</b>（<code>~/.config/caizhao-token/config.json</code>，用户偏好）</li>
+        <li><b>自定义配置</b>（<code>CZ_CONFIG</code> 环境变量指定的文件路径，自定义覆盖）</li>
+        <li><b>项目配置</b>（项目目录下的 <code>.caizhaorc.json</code>，项目特定设置）</li>
+      </ol>
+      <p>这意味着：项目配置可以覆盖全局默认值，全局配置可以覆盖远程组织默认值。各位置配置合并示例：</p>
+      <div class="code-wrap">
+<pre class="code-block">// 1. 远程配置（组织默认值，由管理员在控制台维护，自动下发）
+{
+  "model": "deepseek-chat",
+  "skill": { "autoTrigger": true }
+}
+
+// 2. 全局配置 ~/.config/caizhao-token/config.json
+{
+  "apiKey": "{env:CZ_TOKEN}",
+  "model": "deepseek-reasoner"
+}
+
+// 3. 自定义配置（CZ_CONFIG 指向的文件）
+{
+  "notify": { "channel": "webhook" }
+}
+
+// 4. 项目配置 ./.caizhaorc.json
+{
+  "model": "qwen-max",
+  "notify": { "dailyTime": "08:30" }
+}</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+      <p>上例最终生效的配置：<code>apiKey</code> 来自全局配置，<code>model</code> 被项目配置覆盖为 <code>qwen-max</code>，<code>skill.autoTrigger</code> 保留远程默认值 <code>true</code>，<code>notify</code> 来自全局与项目配置的合并（channel=webhook + dailyTime=08:30）。</p>
+
+      <h3>组织远程配置</h3>
+      <p>组织可以通过 <code>.well-known/caizhao-token</code> 端点提供默认配置。当你使用支持该功能的账号进行身份验证时，采招词元会自动获取此配置。远程配置最先加载，作为基础层，所有其他配置源都可以覆盖这些默认值。</p>
+      <p>例如，如果组织默认禁用了某个 MCP 服务器：</p>
+      <div class="code-wrap">
+<pre class="code-block">{
+  "mcp": {
+    "servers": {
+      "jira": { "url": "https://jira.example.com/mcp", "enabled": false }
+    }
+  }
+}</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+      <p>你可以在本地配置中启用它：</p>
+      <div class="code-wrap">
+<pre class="code-block">{
+  "mcp": {
+    "servers": {
+      "jira": { "enabled": true }
+    }
+  }
+}</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+
+      <h3>全局配置</h3>
+      <p>将采招词元的全局配置放在 <code>~/.config/caizhao-token/config.json</code>。使用全局配置来设置用户级别的偏好，例如默认模型、API Key、订阅通知等。全局配置覆盖远程组织默认值。</p>
+      <div class="code-wrap">
+<pre class="code-block">// ~/.config/caizhao-token/config.json
+{
+  "apiKey": "{env:CZ_TOKEN}",
+  "model": "deepseek-chat",
+  "notify": { "channel": "webhook", "dailyTime": "09:00" }
+}</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+
+      <h3>项目配置</h3>
+      <p>在项目根目录添加 <code>.caizhaorc.json</code>。项目配置在标准配置文件中具有最高优先级——它会覆盖全局配置和远程配置。该文件可以安全地提交到 Git 中，使用与全局配置相同的 Schema。注意：<code>.caizhaorc.json</code> 内应避免写入密钥，如需使用 API Key 请用 <code>{env:CZ_TOKEN}</code> 引用环境变量。</p>
+      <div class="code-wrap">
+<pre class="code-block">// ./.caizhaorc.json
+{
+  "model": "qwen-max",
+  "skill": { "autoTrigger": false },
+  "cli": { "outputFormat": "json" }
+}</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+
+      <h3>Schema 与编辑器支持</h3>
+      <p>配置文件使用定义在 <a href="#config-example">https://caizhao-token.com/schema/config.json</a> 的 JSON Schema。你的编辑器应该能够基于该 Schema 对配置进行校验和自动补全（VS Code 支持 JSONC 注释）。</p>
+    </section>
+
+    <!-- 配置项详解 -->
+    <section class="doc-section" id="config-options">
+      <h2>配置项详解 <a class="anchor-icon" href="#config-options">#</a></h2>
+      <p>以下为各配置项的使用说明与代码示例。所有配置项均为可选，未配置时使用产品默认值。</p>
+
+      <div class="opt-card" id="opt-apikey">
+        <div class="opt-name">apiKey</div>
+        <div class="opt-desc">API 密钥，用于身份认证与用量计费。建议通过环境变量引用，避免明文写入配置文件。配置后所有接入形态（Skill / MCP / CLI / API）共用同一密钥。</div>
+      </div>
+      <div class="code-wrap">
+<pre class="code-block">{
+  "apiKey": "{env:CZ_TOKEN}",
+  "baseUrl": "https://api.caizhao-token.com"
+}</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+
+      <div class="opt-card" id="opt-model">
+        <div class="opt-name">model / small_model</div>
+        <div class="opt-desc"><code>model</code> 为默认模型，用于招投标分析、报告生成等主任务；<code>small_model</code> 为轻量任务模型，用于标题生成、意图判断等轻量级任务。默认情况下，采招词元会优先使用更轻量的模型处理轻量任务，否则回退到主模型。</div>
+      </div>
+      <div class="code-wrap">
+<pre class="code-block">{
+  "model": "deepseek-chat",
+  "small_model": "deepseek-lite"
+}</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+
+      <div class="opt-card" id="opt-skill">
+        <div class="opt-name">skill</div>
+        <div class="opt-desc">Skill 配置：<code>enabled</code> 控制是否启用采招词元 Skill；<code>autoTrigger</code> 控制 AI Agent 是否根据对话内容自动触发（description 触发开关，默认开启）；<code>description</code> 是触发开关本身，AI Agent 平时只读取这段描述来判断是否需要读取 SKILL.md 全文；<code>skillPath</code> 指定 SKILL.md 文件路径。</div>
+      </div>
+      <div class="code-wrap">
+<pre class="code-block">{
+  "skill": {
+    "enabled": true,
+    "autoTrigger": true,
+    "description": "招投标数据查询：搜索标讯、分析市场、追踪对手与业主",
+    "skillPath": "./skills/caizhao-token/SKILL.md"
+  }
+}</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+      <div class="tip-card"><span class="tip-ico">i</span><div><b>触发机制：</b>AI Agent 平时只看 <code>description</code>（几十个字）判断是否需要触发，只有判断「需要用这个 Skill」时才读取 <code>skillPath</code> 指定的 SKILL.md 全文。因此 description 是触发开关，正文是操作手册。</div></div>
+
+      <div class="opt-card" id="opt-mcp">
+        <div class="opt-name">mcp</div>
+        <div class="opt-desc">MCP 服务器配置：通过 <code>servers</code> 声明要连接的 MCP 服务器，每个服务器包含 <code>name</code>（服务器名）、<code>url</code>（SSE/HTTP 端点地址）、<code>enabled</code>（是否启用）。</div>
+      </div>
+      <div class="code-wrap">
+<pre class="code-block">{
+  "mcp": {
+    "servers": {
+      "caizhao": {
+        "name": "caizhao",
+        "url": "https://mcp.caizhao-token.com",
+        "enabled": true
+      }
+    }
+  }
+}</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+
+      <div class="opt-card" id="opt-cli">
+        <div class="opt-name">cli</div>
+        <div class="opt-desc">CLI 行为配置：<code>language</code> 默认输出语言（zh-CN / en）；<code>outputFormat</code> 输出格式（table / json / csv）；<code>subscriptionFile</code> 订阅规则文件路径，用于 <code>cz sub</code> 命令持久化订阅规则。</div>
+      </div>
+      <div class="code-wrap">
+<pre class="code-block">{
+  "cli": {
+    "language": "zh-CN",
+    "outputFormat": "table",
+    "subscriptionFile": "~/.config/caizhao-token/subscriptions.json"
+  }
+}</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+
+      <div class="opt-card" id="opt-notify">
+        <div class="opt-name">notify</div>
+        <div class="opt-desc">订阅通知配置：<code>channel</code> 推送渠道（webhook / email / dingtalk / wecom）；<code>webhookUrl</code> 回调地址；<code>dailyTime</code> 每日订阅汇总推送时间；<code>keywords</code> 关键词规则，命中关键词的新标讯将被推送。支持与 Skill 定时任务、CLI <code>cz sub</code> 组合使用。</div>
+      </div>
+      <div class="code-wrap">
+<pre class="code-block">{
+  "notify": {
+    "channel": "webhook",
+    "webhookUrl": "https://example.com/hook",
+    "dailyTime": "09:00",
+    "keywords": ["数据中心", "智慧城市", "医疗信息化"]
+  }
+}</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+
+      <div class="opt-card" id="opt-permission">
+        <div class="opt-name">permission</div>
+        <div class="opt-desc">权限控制：指定哪些操作需要用户确认后才可执行。默认采招词元允许所有查询类操作自动执行；<code>requireConfirm</code> 数组中的操作在触发前会请求用户确认，例如 <code>query</code>（数据查询）、<code>export</code>（导出文件）、<code>subscribe</code>（创建订阅）。</div>
+      </div>
+      <div class="code-wrap">
+<pre class="code-block">{
+  "permission": {
+    "requireConfirm": ["export", "subscribe"]
+  }
+}</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+
+      <div class="opt-card" id="opt-instructions">
+        <div class="opt-name">instructions</div>
+        <div class="opt-desc">指令文件引用：配置额外的指令文件路径或 glob 模式，这些文件的内容会被注入到 AI Agent 的上下文，用于约束分析口径、输出规范等。支持相对路径（相对于配置文件所在目录）与 <code>~</code> 开头的主目录路径。</div>
+      </div>
+      <div class="code-wrap">
+<pre class="code-block">{
+  "instructions": [
+    "docs/caizhao-guidelines.md",
+    "docs/analysis-rules/*.md"
+  ]
+}</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+    </section>
+
+    <!-- 环境变量 -->
+    <section class="doc-section" id="environment-variables">
+      <h2>环境变量 <a class="anchor-icon" href="#environment-variables">#</a></h2>
+      <p>除配置文件外，采招词元支持通过环境变量覆盖关键配置。环境变量在配置合并中的优先级低于项目配置，适用于容器化部署、CI/CD 等无法直接编辑配置文件的场景。</p>
+      <table class="doc-table">
+        <thead>
+          <tr><th>环境变量</th><th>说明</th><th>示例</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>CZ_TOKEN</code></td><td>API 密钥，最常用的注入方式，可在配置中用 <code>{env:CZ_TOKEN}</code> 引用</td><td><code>cz_live_xxxxxxxx</code></td></tr>
+          <tr><td><code>CZ_BASE_URL</code></td><td>API 服务地址，私有化部署或代理场景使用</td><td><code>https://api.caizhao-token.com</code></td></tr>
+          <tr><td><code>CZ_MODEL</code></td><td>默认模型名，覆盖配置中的 <code>model</code> 键</td><td><code>deepseek-chat</code></td></tr>
+          <tr><td><code>CZ_CONFIG</code></td><td>自定义配置文件路径，优先级位于全局配置与项目配置之间</td><td><code>/path/to/custom-config.json</code></td></tr>
+        </tbody>
+      </table>
+      <div class="code-wrap">
+<pre class="code-block"># Windows PowerShell
+$env:CZ_TOKEN = "cz_live_xxxxxxxx"
+$env:CZ_BASE_URL = "https://api.caizhao-token.com"
+$env:CZ_MODEL = "deepseek-chat"
+$env:CZ_CONFIG = "D:\config\caizhao-custom.json"
+
+# macOS / Linux
+export CZ_TOKEN=cz_live_xxxxxxxx
+export CZ_BASE_URL=https://api.caizhao-token.com
+export CZ_MODEL=deepseek-chat
+export CZ_CONFIG=/path/to/my/custom-config.json</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+    </section>
+
+    <!-- 变量替换 -->
+    <section class="doc-section" id="variable-substitution">
+      <h2>变量替换 <a class="anchor-icon" href="#variable-substitution">#</a></h2>
+      <p>你可以在配置文件中使用变量替换来引用环境变量和文件内容，避免在配置中明文写入敏感信息。</p>
+
+      <h3>{env:VARIABLE_NAME} — 环境变量</h3>
+      <p>使用 <code>{env:VARIABLE_NAME}</code> 替换环境变量：</p>
+      <div class="code-wrap">
+<pre class="code-block">{
+  "apiKey": "{env:CZ_TOKEN}",
+  "model": "{env:CZ_MODEL}",
+  "baseUrl": "{env:CZ_BASE_URL}"
+}</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+      <p>如果环境变量未设置，它将被替换为空字符串。建议在部署脚本中提前校验必需的环境变量是否存在。</p>
+
+      <h3>{file:path/to/file} — 文件内容</h3>
+      <p>使用 <code>{file:path}</code> 引用文件内容：</p>
+      <div class="code-wrap">
+<pre class="code-block">{
+  "apiKey": "{file:~/.secrets/caizhao-token-key}",
+  "instructions": ["./custom-instructions.md"],
+  "notify": {
+    "webhookUrl": "{file:~/secrets/notify-hook-url}"
+  }
+}</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+      <p>文件路径可以是：</p>
+      <ul>
+        <li>相对于配置文件所在目录的路径；</li>
+        <li>以 <code>/</code> 或 <code>~</code> 开头的绝对路径。</li>
+      </ul>
+      <div class="tip-card"><span class="tip-ico">i</span><div><b>典型用法：</b>① 将 API Key 等敏感数据保存在单独文件中；② 引入大型指令文件而不会使配置变得杂乱；③ 在多个配置文件之间共享通用配置片段。</div></div>
+    </section>
+
+    <!-- ===== Skill 接入 ===== -->
+    <section class="doc-section" id="skill-overview">
+      <h2>SKILL 概览 <a class="anchor-icon" href="#skill-overview">#</a></h2>
+      <p>采招词元 Skill 是一份可安装到任意 AI Agent 的「招投标数据查询能力包」。安装后，Agent 会依据 <code>SKILL.md</code> 中的操作手册自动调用采招词元数据接口，覆盖招投标业务全链路，为分析与决策提供数据底座。</p>
+      <p>六大核心能力，开箱即用：</p>
+      <div class="priority-list">
+        <div class="opt-card">
+          <div class="opt-name">市场分析</div>
+          <div class="opt-desc">按行业、地区、时间聚合标讯趋势，输出市场规模、区域分布、品类结构与同比增速，支撑竞品研究与预算编制。</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-name">标讯订阅</div>
+          <div class="opt-desc">按关键词、地区、金额、时间等多维度搜索招中标公告；支持实时订阅推送与临期续约商机提醒。</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-name">对手分析</div>
+          <div class="opt-desc">通过共同投标记录与中标统计识别竞争对手，输出竞争格局、优势区域与投标策略建议。</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-name">业主分析</div>
+          <div class="opt-desc">查询采购单位画像与历史采购记录，定位目标客户、评估合作机会，匹配供应商与中标方。</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-name">商机预测</div>
+          <div class="opt-desc">从拟建项目、采购意向、临期续约中提前发现早期商机，为招标项目智能推荐潜在供应商。</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-name">合同查询</div>
+          <div class="opt-desc">获取标讯完整正文、附件与联系人字段，查看历史中标价格趋势，辅助报价与成本控制。</div>
+        </div>
+      </div>
+      <div class="tip-card"><span class="tip-ico">i</span><div><b>与其它接入形态的关系：</b>Skill、MCP、CLI、API 四种形态共用同一 API Key 与积分钱包，安装任一形态即可使用全部六大能力，无需重复开通。</div></div>
+      <p>示例问题：</p>
+      <ul>
+        <li>帮我分析一下今年医疗信息化行业的招标趋势</li>
+        <li>查找最近 30 天广东省的信息安全类招标公告</li>
+        <li>分析华为在北京市的历史中标情况和主要合作单位</li>
+        <li>推荐哪些企业适合参与政府数字化转型项目投标</li>
+        <li>查找即将到期、可能进行续约采购的 IT 运维服务项目</li>
+      </ul>
+      <p>安装方式：复制安装命令发送给任意 AI 助手，或在终端执行 <code>npm install -g caizhao-token-skill</code> 后运行 <code>agent install caizhao-token-skill</code> 完成激活，详见<a href="#skill-install">安装</a>。</p>
+    </section>
+
+    <section class="doc-section" id="skill-install">
+      <h2>安装 <a class="anchor-icon" href="#skill-install">#</a></h2>
+      <p>按照以下 3 步完成安装，即可在任意 AI Agent 中查询全国招投标数据。安装方式与 API Key 对全部 Skill 通用。</p>
+      <h3>步骤 1：安装 Skill</h3>
+      <p>将以下命令发送给任意 AI 助手（支持 OpenClaw、WorkBuddy、QClaw、Kimi、Claude 等），或在终端执行后激活：</p>
+      <div class="code-wrap">
+        <pre class="code-block">npm install -g caizhao-token-skill
+# 在你的 AI Agent 中安装并激活
+agent install caizhao-token-skill</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+      <h3>步骤 2：配置 API Key</h3>
+      <p>登录采招词元控制台，进入「个人中心 → API Key 管理」创建 Key（新用户注册自动赠送 200 积分）。然后执行 <code>cz init</code> 生成配置文件，将 API Key 写入：</p>
+      <div class="code-wrap">
+        <pre class="code-block">{ "apiKey": "{env:CZ_TOKEN}", "skill": { "enabled": true, "autoTrigger": true, "skillPath": "./skills/caizhao-token/SKILL.md" } }</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+      <div class="tip-card"><span class="tip-ico">i</span><div><b>安全提示：</b>请妥善保管 API Key，不要泄露给他人。API Key 具有调用接口的完整权限，建议通过环境变量 <code>{env:CZ_TOKEN}</code> 引用。</div></div>
+      <h3>步骤 3：开始使用</h3>
+      <p>在 AI Agent 对话框中直接发送以下问题，即可体验招投标智能查询：</p>
+      <ul>
+        <li>帮我查找最近 30 天广东省的信息安全类招标公告</li>
+        <li>分析华为在北京市的历史中标情况和主要合作单位</li>
+        <li>查询 2024 年云计算相关项目的中标金额趋势分析</li>
+        <li>推荐哪些企业适合参与政府数字化转型项目投标</li>
+        <li>查找即将到期、可能进行续约采购的 IT 运维服务项目</li>
+      </ul>
+    </section>
+
+    <!-- ===== MCP ===== -->
+    <section class="doc-section" id="mcp-overview">
+      <h2>MCP 功能概述 <a class="anchor-icon" href="#mcp-overview">#</a></h2>
+      <p>采招词元 MCP（Model Context Protocol）服务器将招投标数据查询能力封装为标准工具，供 Cursor、TRAE、Claude Desktop 等支持 MCP 的 AI 工具直接调用。</p>
+      <p>相比传统 API 接入，MCP 具备四大优势：</p>
+      <ul>
+        <li><strong>自然语言交互</strong>：用日常语言描述需求，AI 自动选择合适的工具与参数，无需手写请求；</li>
+        <li><strong>即时响应</strong>：无需在 AI 工具与数据接口之间复制粘贴，数据直达对话与分析流程；</li>
+        <li><strong>安全可控</strong>：工具调用按接口单价计费，权限与配额可控，数据合规可审计；</li>
+        <li><strong>持续更新</strong>：新能力发布后自动生效，无需升级 AI 工具或重新配置。</li>
+      </ul>
+      <p>工作流程：</p>
+      <div class="priority-list">
+        <div class="opt-card">
+          <div class="opt-name">① 配置服务器</div>
+          <div class="opt-desc">在 AI 工具中接入采招词元 MCP 服务器并填入 API Key。</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-name">② 自然语言提问</div>
+          <div class="opt-desc">直接用对话描述查询需求，例如「帮我搜索最近北京地区关于智慧城市的招标项目」。</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-name">③ AI 调用工具</div>
+          <div class="opt-desc">AI 助手自动选择并调用对应工具完成数据查询与聚合分析。</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-name">④ 获取结果</div>
+          <div class="opt-desc">结构化结果返回对话，可直接对比、汇总或生成分析报告。</div>
+        </div>
+      </div>
+      <p>MCP 工具覆盖六大能力，按场景分为五类：</p>
+      <ul>
+        <li><strong>搜索</strong>：多维度搜索招中标公告、即将到期项目、拟建项目，返回联系人字段；</li>
+        <li><strong>公司</strong>：公司画像、客户/供应商、业务关键词、公司联系人聚合；</li>
+        <li><strong>分析</strong>：Top 中标品牌、Top 采购单位、Top 供应商、价格趋势、推荐供应商、竞争对手分析；</li>
+        <li><strong>详情</strong>：标讯完整正文、附件内容与联系人字段；</li>
+        <li><strong>高级</strong>：多组关键词 AND 组合的高级查询，按时间、地区、行业聚合的高级分析。</li>
+      </ul>
+      <div class="tip-card"><span class="tip-ico">i</span><div><b>计费说明：</b>每次工具调用按接口单价计费（不同接口消耗不同积分），与 API 接口共享积分钱包。</div></div>
+    </section>
+
+    <section class="doc-section" id="mcp-install">
+      <h2>MCP 安装配置 <a class="anchor-icon" href="#mcp-install">#</a></h2>
+      <p>按照以下步骤在您的 AI 工具中配置采招词元 MCP 服务器。</p>
+      <h3>前置要求</h3>
+      <ul>
+        <li>已获取采招词元 API Key（<a href="采招词元宣传页.html#access">点击获取</a>，新用户注册赠送 200 积分）；</li>
+        <li>支持 MCP 的 AI 工具（Cursor、TRAE、Claude Desktop 等）。</li>
+      </ul>
+      <h3>步骤 1：获取 API Key</h3>
+      <p>登录采招词元 AI 开放平台 → 个人中心 → API Key 管理 → 点击「创建新 Key」，复制生成的 API Key。API Key 具有调用接口的完整权限，请妥善保管。</p>
+      <h3>步骤 2：配置 MCP 服务器</h3>
+      <p>采招词元提供两种接入方式，任选其一：</p>
+      <p><strong>方式 A：远程 MCP（推荐）</strong>——使用 Streamable HTTP 传输的远程服务器，地址为：</p>
+      <div class="code-wrap">
+        <pre class="code-block">https://mcp.caizhao-token.com/mcp</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+      <p>以 Cursor 为例：打开设置（Cmd/Ctrl + ,）→ 搜索 MCP 或进入 Features → MCP → 点击 Edit Config，将以下配置添加到 <code>mcp.json</code>，替换 <code>你的API_KEY</code> 后保存并重启 Cursor：</p>
+      <div class="code-wrap">
+        <pre class="code-block">{
+  "mcpServers": {
+    "caizhao": {
+      "transport": "streamable-http",
+      "url": "https://mcp.caizhao-token.com/mcp",
+      "headers": {
+        "X-API-Key": "你的API_KEY"
+      }
+    }
+  }
+}</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+      <p><strong>方式 B：本地 MCP</strong>——通过 npx 启动本地服务器，适合需要自定义端点的场景：</p>
+      <div class="code-wrap">
+        <pre class="code-block">npx -y @caizhao/token-mcp</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+      <h3>步骤 3：验证配置</h3>
+      <p>在 AI 助手中输入以下内容：</p>
+      <div class="code-wrap">
+        <pre class="code-block">帮我搜索最近关于"智慧城市"的招标项目</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+      <p>如果配置正确，AI 助手会调用搜索工具并返回相关招标信息。</p>
+      <h3>使用示例</h3>
+      <ul>
+        <li><strong>搜索招标项目</strong>：帮我搜索最近北京地区关于智慧城市的招标项目</li>
+        <li><strong>查询公司画像</strong>：查一下华为技术有限公司的中标情况</li>
+        <li><strong>价格趋势分析</strong>：帮我查看服务器采购的价格趋势</li>
+        <li><strong>智能推荐供应商</strong>：我们要采购一批办公家具，预算 50 万，帮我推荐一些供应商</li>
+      </ul>
+      <div class="tip-card"><span class="tip-ico">i</span><div><b>使用技巧：</b>描述需求时尽量具体，包含地区、行业、时间等关键信息；可在一次对话中进行多轮查询，AI 会记住上下文；结果不满意时，可要求 AI 调整搜索条件重新查询。</div></div>
+      <h3>常见问题</h3>
+      <div class="priority-list">
+        <div class="opt-card">
+          <div class="opt-name">MCP 服务器连接失败</div>
+          <div class="opt-desc">请检查网络是否能访问 mcp.caizhao-token.com；如连接失败，请确认网络环境是否有访问限制。</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-name">API Key 认证失败</div>
+          <div class="opt-desc">检查 API Key 是否正确复制、没有多余空格；如果 Key 已被禁用，请在个人中心重新创建。</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-name">积分已用完</div>
+          <div class="opt-desc">前往充值页面购买更多积分，新用户注册赠送 200 积分。</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-name">工具列表不显示</div>
+          <div class="opt-desc">重启 AI 工具并等待 MCP 服务器初始化完成；Cursor 中可在 MCP 设置页查看服务器状态是否为绿色。</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CLI ===== -->
+    <section class="doc-section" id="cli-install">
+      <h2>CLI 安装说明 <a class="anchor-icon" href="#cli-install">#</a></h2>
+      <p>采招词元命令行工具，让您在终端中快速查询和分析全国招投标数据。</p>
+      <h3>环境要求</h3>
+      <ul>
+        <li>Node.js 16 或更高版本</li>
+        <li>npm 包管理器</li>
+        <li>已获取采招词元 API Key（新用户注册赠送 200 积分）</li>
+      </ul>
+      <h3>步骤 1：安装 CLI</h3>
+      <div class="code-wrap">
+        <pre class="code-block">npm install -g caizhao-token-cli</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+      <h3>步骤 2：初始化配置</h3>
+      <p>执行 <code>cz init</code> 生成默认配置文件（含全部注释），按提示填入 API Key：</p>
+      <div class="code-wrap">
+        <pre class="code-block">cz init
+# 生成 ~/.config/caizhao-token/config.json，编辑 apiKey 字段完成接入</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+      <h3>步骤 3：验证安装</h3>
+      <div class="code-wrap">
+        <pre class="code-block"># 查看版本
+cz --version
+# 测试查询：搜索最近 30 天广东省的信息安全类招标公告
+cz search --keywords '["信息安全"]' --provinces '["广东"]' --begin-date "2026-08-01"</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+      <h3>环境变量</h3>
+      <div class="doc-table">
+        <table>
+          <thead><tr><th>变量名</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td><code>CZ_TOKEN</code></td><td>API 密钥，优先于配置文件</td></tr>
+            <tr><td><code>CZ_API_BASE</code></td><td>API 基础 URL（默认：<code>https://api.caizhao-token.com</code>）</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tip-card"><span class="tip-ico">i</span><div><b>安全提示：</b>请妥善保管 API Key，不要泄露给他人。API Key 具有调用接口的完整权限，建议通过环境变量 <code>CZ_TOKEN</code> 引用。</div></div>
+    </section>
+
+    <section class="doc-section" id="cli-usage">
+      <h2>CLI 使用说明 <a class="anchor-icon" href="#cli-usage">#</a></h2>
+      <p>采招词元 CLI 的完整命令参考，覆盖六大能力的常用操作。</p>
+      <h3>基本语法</h3>
+      <div class="code-wrap">
+        <pre class="code-block">cz &lt;command&gt; [options]</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+      <h3>常用命令</h3>
+      <div class="doc-table">
+        <table>
+          <thead><tr><th>命令</th><th>说明</th><th>示例</th></tr></thead>
+          <tbody>
+            <tr><td><code>cz init</code></td><td>初始化配置</td><td><code>cz init</code></td></tr>
+            <tr><td><code>cz search</code></td><td>搜索招中标公告</td><td><code>cz search --keywords '["服务器"]' --begin-date "2026-01-01"</code></td></tr>
+            <tr><td><code>cz market</code></td><td>市场分析（行业/区域趋势聚合）</td><td><code>cz market --industry "医疗信息化"</code></td></tr>
+            <tr><td><code>cz rival</code></td><td>对手分析（共同投标记录识别）</td><td><code>cz rival --company "华为"</code></td></tr>
+            <tr><td><code>cz owner</code></td><td>业主分析（采购单位画像与历史采购）</td><td><code>cz owner --company "华为"</code></td></tr>
+            <tr><td><code>cz predict</code></td><td>商机预测（拟建/临期/续约商机）</td><td><code>cz predict --keywords '["智慧城市"]'</code></td></tr>
+            <tr><td><code>cz contract</code></td><td>合同查询（标讯详情与价格趋势）</td><td><code>cz contract --id "bid_123456"</code></td></tr>
+            <tr><td><code>cz sub</code></td><td>订阅管理（创建/查看标讯订阅）</td><td><code>cz sub add --keywords '["数据中心"]'</code></td></tr>
+            <tr><td><code>cz config</code></td><td>查看/修改配置</td><td><code>cz config get apiKey</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>全局选项</h3>
+      <div class="doc-table">
+        <table>
+          <thead><tr><th>选项</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td><code>-h, --help</code></td><td>显示帮助信息</td></tr>
+            <tr><td><code>-v, --version</code></td><td>显示版本信息</td></tr>
+            <tr><td><code>-f, --format</code></td><td>输出格式：table（默认）、json、csv</td></tr>
+            <tr><td><code>-o, --output</code></td><td>输出到文件</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>示例</h3>
+      <div class="code-wrap">
+        <pre class="code-block"># 多关键词 + 指定地区
+cz search --keywords '["大模型", "人工智能"]' --provinces '["北京"]'
+# 金额范围 + 分页
+cz search --keywords '["医疗设备"]' --min-amount 100000 --page 2 --page-size 50
+# 输出 JSON 到文件
+cz search --keywords '["服务器"]' --format json -o result.json
+# 订阅关键词，命中后按 notify 配置推送
+cz sub add --keywords '["数据中心", "智慧城市"]'</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+      <div class="tip-card"><span class="tip-ico">i</span><div><b>提示：</b>中文参数请使用单引号包裹；列表参数使用 JSON 数组格式，例如 <code>--keywords '["服务器", "网络设备"]'</code>。</div></div>
+    </section>
+
+    <!-- ===== API ===== -->
+    <section class="doc-section" id="api-overview">
+      <h2>API 概述 <a class="anchor-icon" href="#api-overview">#</a></h2>
+      <p>采招词元 AI 开放平台通过统一的 HTTP 接口暴露全部能力：所有接口均为 <code>POST</code>，路径为 <code>/api_v2/{tool_name}</code>，使用 <code>X-API-Key</code> 鉴权。</p>
+      <h3>Base URL</h3>
+      <div class="code-wrap">
+        <pre class="code-block">https://api.caizhao-token.com</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+      <p>完整请求地址示例：<code>https://api.caizhao-token.com/api_v2/search_bids</code></p>
+      <h3>认证方式</h3>
+      <p>所有请求须在 Header 中携带 API Key（非 Bearer Token）：</p>
+      <div class="code-wrap">
+        <pre class="code-block">X-API-Key: YOUR_API_KEY</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+      <ul>
+        <li>获取 API Key：在个人中心创建，新用户注册赠送 200 积分；</li>
+        <li>安全传输：请使用 HTTPS；</li>
+        <li>按积分计费：每个接口单价不同，以返回的 <code>cost_units</code> 积分为准。</li>
+      </ul>
+      <h3>快速开始</h3>
+      <p>以下示例调用「搜索招中标」工具：</p>
+      <div class="code-wrap">
+        <pre class="code-block">curl -X POST "https://api.caizhao-token.com/api_v2/search_bids" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "keywords": ["智慧城市", "信息化"],
+    "page": 1,
+    "page_size": 20
+  }'</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+      <h3>响应格式</h3>
+      <p>统一 JSON 结构如下：</p>
+      <div class="code-wrap">
+        <pre class="code-block">{
+  "success": true,
+  "data": { },
+  "error": null,
+  "meta": {
+    "request_id": "req_abc123",
+    "tool_name": "search_bids",
+    "cost_units": 1,
+    "execution_time_ms": 128
+  }
+}</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+      <p>失败时 <code>success</code> 为 false，<code>error</code> 含错误码与说明：</p>
+      <div class="code-wrap">
+        <pre class="code-block">{
+  "success": false,
+  "data": null,
+  "error": {
+    "code": "INVALID_REQUEST",
+    "message": "keywords 不能为空"
+  },
+  "meta": {
+    "request_id": "req_xyz789",
+    "tool_name": "search_bids",
+    "cost_units": 0,
+    "execution_time_ms": 12
+  }
+}</pre>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+      <h3>错误码</h3>
+      <div class="doc-table">
+        <table>
+          <thead><tr><th>错误码</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td><code>AUTHENTICATION_FAILED</code></td><td>API Key 无效、缺失或无权访问</td></tr>
+            <tr><td><code>INSUFFICIENT_BALANCE</code></td><td>账户余额或可用次数不足</td></tr>
+            <tr><td><code>RATE_LIMITED</code></td><td>触发频率限制</td></tr>
+            <tr><td><code>INVALID_REQUEST</code></td><td>请求参数不合法或缺少必填项</td></tr>
+            <tr><td><code>INTERNAL_ERROR</code></td><td>服务内部错误</td></tr>
+            <tr><td><code>TOOL_EXECUTION_ERROR</code></td><td>工具执行失败（下游或业务逻辑异常）</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>频率限制</h3>
+      <p>每个 API Key：每秒最多 5 次请求，每小时最多 2000 次请求。超出限制将返回 <code>RATE_LIMITED</code>，需降低并发或联系商务提升配额。</p>
+    </section>
+
+    <section class="doc-section" id="api-price">
+      <h2>API 价格 <a class="anchor-icon" href="#api-price">#</a></h2>
+      <p>按调用次数计费，单价以积分计。下表列出每个能力的单次调用消耗。</p>
+      <div class="tip-card"><span class="tip-ico">i</span><div><b>统一价目：</b>Skill、MCP、CLI、API 共用同一套价目——同一个能力无论从哪种方式调用，单价完全一致，不因接入方式产生差价；积分也从同一个账户扣减，无需为不同接入方式分别充值。</div></div>
+      <div class="doc-table">
+        <table>
+          <thead><tr><th>接口名称</th><th>API 调用名</th><th>单次调用</th></tr></thead>
+          <tbody>
+            <tr><td>搜索招中标</td><td><code>search_bids</code></td><td>1 积分</td></tr>
+            <tr><td>即将到期项目</td><td><code>search_expiring_projects</code></td><td>2 积分</td></tr>
+            <tr><td>拟建项目</td><td><code>search_proposed_projects</code></td><td>2 积分</td></tr>
+            <tr><td>标讯高级查询</td><td><code>query_bids_advanced</code></td><td>2 积分</td></tr>
+            <tr><td>招标项目推荐供应商</td><td><code>find_potential_bidders</code></td><td>1 积分</td></tr>
+            <tr><td>标讯详情</td><td><code>get_bid_detail</code></td><td>1 积分</td></tr>
+            <tr><td>公司基础工商信息</td><td><code>get_company_profile</code></td><td>1 积分</td></tr>
+            <tr><td>搜索公司</td><td><code>search_company</code></td><td>免费</td></tr>
+            <tr><td>项目时间线</td><td><code>get_bid_timeline</code></td><td>1 积分</td></tr>
+            <tr><td>公司业务关键词</td><td><code>get_company_business_keywords</code></td><td>1 积分</td></tr>
+            <tr><td>公司合作客户/供应商</td><td><code>get_company_partners</code></td><td>3 积分</td></tr>
+            <tr><td>公司竞争对手分析</td><td><code>find_competitors</code></td><td>3 积分</td></tr>
+            <tr><td>公司联系电话</td><td><code>get_company_contacts</code></td><td>5 积分</td></tr>
+            <tr><td>Top 采购单位</td><td><code>get_top_purchasers</code></td><td>3 积分</td></tr>
+            <tr><td>Top 中标供应商</td><td><code>get_top_suppliers</code></td><td>3 积分</td></tr>
+            <tr><td>Top 中标品牌</td><td><code>get_top_brands</code></td><td>3 积分</td></tr>
+            <tr><td>聚合统计</td><td><code>aggregate_bids_advanced</code></td><td>3 积分</td></tr>
+            <tr><td>品牌/型号价格趋势</td><td><code>get_price_trends</code></td><td>2 积分</td></tr>
+            <tr><td>账户余额</td><td><code>get_account_balance</code></td><td>免费</td></tr>
+            <tr><td>每日消耗</td><td><code>get_daily_consumption</code></td><td>免费</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>计费说明</h3>
+      <ul>
+        <li>接口报错（如服务异常、鉴权失败等）<strong>不扣除积分</strong>；</li>
+        <li>传参错误（参数缺失或格式不合法）<strong>不扣除积分</strong>；</li>
+        <li>查询无数据（命中 0 条结果）<strong>不扣除积分</strong>；</li>
+        <li>仅在接口成功返回有效数据时，按上表单价扣除对应积分，实际消耗以返回的 <code>cost_units</code> 为准；</li>
+        <li>计费只看调用了哪个能力，<strong>与接入方式无关</strong>：Skill、MCP、CLI、API 调用同一能力扣同样的积分。</li>
+      </ul>
+    </section>
+
+    <!-- 底部 CTA -->
+    <div class="doc-cta">
+      <h2>开始安装采招词元</h2>
+      <p>30 秒完成接入，让 AI Agent 自动调用全国招投标数据。每日更新 30w+ 条，3 亿+ 标讯，合法合规。</p>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="采招词元宣传页.html#access">开始安装</a>
+        <a class="btn btn-ghost" href="#api-overview">查看 API 文档</a>
+        <a class="btn btn-ghost" href="#api-price">API 价格</a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- 页脚 -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-copy">© 2026 采招词元 · 把招投标数据装进你的 AI</div>
+    <div class="footer-links">
+      <a href="mailto:support@caizhaotoken.com">邮箱：support@caizhaotoken.com</a>
+      <a href="javascript:void(0)" onclick="alert('公众号即将上线，敬请期待')">微信公众号</a>
+      <a href="采招词元宣传页.html">产品主页</a>
+    </div>
+  </div>
+</footer>
+
+<!-- 移动端目录抽屉 -->
+<button class="doc-drawer-btn" onclick="openDrawer()">☰ 文档目录</button>
+<div class="drawer-mask" id="drawerMask" onclick="closeDrawer()"></div>
+<div class="drawer-panel" id="drawerPanel">
+  <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  <div class="side-group">
+    <div class="side-group-title">快速开始</div>
+    <a class="side-link" href="#intro" onclick="closeDrawer()">简介</a>
+    <a class="side-link" href="#install" onclick="closeDrawer()">安装</a>
+  </div>
+  <div class="side-group">
+    <div class="side-group-title">配置</div>
+    <a class="side-link active" href="#config-overview" onclick="closeDrawer()">配置概览</a>
+    <a class="side-link" href="#config-example" onclick="closeDrawer()">配置示例</a>
+    <a class="side-link" href="#config-location" onclick="closeDrawer()">配置位置</a>
+    <a class="side-link" href="#config-options" onclick="closeDrawer()">配置项</a>
+    <a class="side-link" href="#environment-variables" onclick="closeDrawer()">环境变量</a>
+    <a class="side-link" href="#variable-substitution" onclick="closeDrawer()">变量替换</a>
+  </div>
+  <div class="side-group">
+    <div class="side-group-title">Skill 接入</div>
+    <a class="side-link" href="#skill-overview" onclick="closeDrawer()">SKILL 概览</a>
+    <a class="side-link" href="#skill-install" onclick="closeDrawer()">安装</a>
+  </div>
+  <div class="side-group">
+    <div class="side-group-title">MCP</div>
+    <a class="side-link" href="#mcp-overview" onclick="closeDrawer()">功能概述</a>
+    <a class="side-link" href="#mcp-install" onclick="closeDrawer()">安装配置</a>
+  </div>
+  <div class="side-group">
+    <div class="side-group-title">CLI</div>
+    <a class="side-link" href="#cli-install" onclick="closeDrawer()">安装说明</a>
+    <a class="side-link" href="#cli-usage" onclick="closeDrawer()">使用说明</a>
+  </div>
+  <div class="side-group">
+    <div class="side-group-title">API 参考</div>
+    <a class="side-link" href="#api-overview" onclick="closeDrawer()">API 概述</a>
+    <a class="side-link" href="#api-price" onclick="closeDrawer()">API 价格</a>
+  </div>
+</div>
+
+<!-- 回到顶部 -->
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="回到顶部">↑</button>
+
+<script>
+  /* ===== 复制代码（支持多个代码块） ===== */
+  function copyCode(btn) {
+    const wrap = btn.parentElement;
+    const pre = wrap.querySelector(".code-block");
+    if (!pre) return;
+    const code = pre.innerText;
+    navigator.clipboard.writeText(code.trim()).then(() => {
+      btn.textContent = "已复制";
+      btn.classList.add("done");
+      setTimeout(() => { btn.textContent = "复制"; btn.classList.remove("done"); }, 2000);
+    }).catch(() => {
+      const ta = document.createElement("textarea");
+      ta.value = code.trim();
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); } catch (e) {}
+      document.body.removeChild(ta);
+      btn.textContent = "已复制";
+      btn.classList.add("done");
+      setTimeout(() => { btn.textContent = "复制"; btn.classList.remove("done"); }, 2000);
+    });
+  }
+
+  /* ===== 回到顶部显隐 ===== */
+  const backTop = document.getElementById("backTop");
+  window.addEventListener("scroll", function () {
+    if (window.scrollY > 400) {
+      backTop.classList.add("show");
+    } else {
+      backTop.classList.remove("show");
+    }
+    updateActiveSideLink();
+  }, { passive: true });
+
+  /* ===== 侧边栏 active 高亮（滚动监听） ===== */
+  const sideLinks = document.querySelectorAll(".side-link");
+  function updateActiveSideLink() {
+    let currentId = "config-overview";
+    const sections = document.querySelectorAll(".doc-section[id], .doc-hero[id]");
+    sections.forEach(function (sec) {
+      const rect = sec.getBoundingClientRect();
+      if (rect.top <= 120 && rect.bottom > 120) {
+        currentId = sec.id;
+      }
+    });
+    // 若在页面末尾，定位到最后一个可见分组锚点
+    if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 40) {
+      const lastVisible = document.querySelectorAll(".doc-section[id]");
+      if (lastVisible.length) {
+        const vis = Array.from(lastVisible).filter(function (s) { return s.offsetParent !== null && getComputedStyle(s).display !== "none"; });
+        if (vis.length) currentId = vis[vis.length - 1].id;
+      }
+    }
+    sideLinks.forEach(function (link) {
+      link.classList.toggle("active", link.getAttribute("href") === "#" + currentId);
+    });
+  }
+
+  /* ===== 移动端目录抽屉 ===== */
+  function openDrawer() {
+    document.getElementById("drawerPanel").classList.add("open");
+    document.getElementById("drawerMask").classList.add("show");
+  }
+  function closeDrawer() {
+    document.getElementById("drawerPanel").classList.remove("open");
+    document.getElementById("drawerMask").classList.remove("show");
+  }
+</script>
+
+</body>
+</html>
