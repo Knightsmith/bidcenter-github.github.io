@@ -1,0 +1,969 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>采招词元 - API 管理</title>
+<style>
+  :root {
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.145 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.145 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.145 0 0);
+    --primary: oklch(0.488 0.243 264.376);
+    --primary-foreground: oklch(0.97 0.014 254.604);
+    --secondary: oklch(0.967 0.001 286.375);
+    --secondary-foreground: oklch(0.21 0.006 285.885);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --accent: oklch(0.97 0 0);
+    --accent-foreground: oklch(0.205 0 0);
+    --destructive: oklch(0.577 0.245 27.325);
+    --border: oklch(0.922 0 0);
+    --input: oklch(0.922 0 0);
+    --ring: oklch(0.708 0 0);
+    --chart-1: oklch(0.809 0.105 251.813);
+    --chart-2: oklch(0.623 0.214 259.815);
+    --chart-3: oklch(0.546 0.245 262.881);
+    --chart-4: oklch(0.488 0.243 264.376);
+    --chart-5: oklch(0.424 0.199 265.638);
+    --radius: 0.45rem;
+    --sidebar: oklch(0.985 0 0);
+    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-primary: oklch(0.546 0.245 262.881);
+    --sidebar-primary-foreground: oklch(0.97 0.014 254.604);
+    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-ring: oklch(0.708 0 0);
+    --sidebar-w: 224px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--background);
+    color: var(--foreground);
+    font-size: 14px;
+    line-height: 1.5;
+    zoom: 1.25;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ===== 整体布局 ===== */
+  .layout { display: flex; min-height: 100vh; }
+  .sidebar {
+    width: var(--sidebar-w);
+    background: var(--card);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; bottom: 0; left: 0;
+    z-index: 20;
+  }
+  .sidebar-brand {
+    padding: 20px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sidebar-brand .logo {
+    width: 26px; height: 26px;
+    background: var(--foreground);
+    color: var(--primary-foreground);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+  }
+  .sidebar-nav { padding: 10px 8px; flex: 1; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    color: var(--muted-foreground);
+    font-size: 14px;
+    margin-bottom: 2px;
+    user-select: none;
+    transition: background 0.15s, color 0.15s;
+  }
+  .nav-item:hover { background: var(--accent); color: var(--accent-foreground); }
+  .nav-item.active { background: var(--secondary); color: var(--foreground); font-weight: 500; }
+  .nav-icon { width: 18px; text-align: center; font-size: 15px; }
+  .sidebar-footer { padding: 14px 16px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted-foreground); }
+
+  .main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  .topbar {
+    position: sticky; top: 0;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+  }
+  .topbar-title { font-size: 15px; font-weight: 600; }
+  .topbar-right { display: flex; align-items: center; gap: 12px; }
+  .credit-pill {
+    background: var(--secondary);
+    border: 1px solid var(--border);
+    border-radius: 9999px;
+    padding: 4px 12px;
+    font-size: 13px;
+    color: var(--secondary-foreground);
+    cursor: pointer;
+  }
+  .avatar {
+    width: 30px; height: 30px;
+    border-radius: 9999px;
+    background: var(--foreground);
+    color: var(--primary-foreground);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer;
+  }
+  .content { padding: 24px; max-width: 1100px; width: 100%; margin: 0 auto; }
+  .page { display: none; }
+  .page.active { display: block; }
+  .page-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .page-desc { color: var(--muted-foreground); margin-bottom: 20px; font-size: 13px; }
+
+  /* ===== 通用组件 ===== */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .card-title { font-size: 15px; font-weight: 600; margin-bottom: 14px; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 7px 14px;
+    border-radius: var(--radius);
+    border: 1px solid transparent;
+    font-size: 13px;
+    cursor: pointer;
+    background: transparent;
+    transition: background 0.15s, opacity 0.15s;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .btn-primary { background: var(--primary); color: var(--primary-foreground); }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-outline { border-color: var(--border); background: var(--card); }
+  .btn-outline:hover { background: var(--accent); }
+  .btn-ghost { color: var(--muted-foreground); }
+  .btn-ghost:hover { background: var(--accent); color: var(--foreground); }
+  .btn-destructive { background: var(--destructive); color: var(--destructive-foreground); }
+  .btn-destructive:hover { opacity: 0.9; }
+  .btn-sm { padding: 4px 10px; font-size: 12px; }
+  .btn-link { color: #2563eb; cursor: pointer; background: none; border: none; font-size: 13px; padding: 0; }
+  .btn-link:hover { text-decoration: underline; }
+  .btn-link.danger { color: var(--destructive); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th {
+    text-align: left;
+    padding: 8px 10px;
+    color: var(--muted-foreground);
+    font-weight: 500;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+  }
+  td { padding: 10px; border-bottom: 1px solid var(--border); }
+  tr:last-child td { border-bottom: none; }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .badge-success { background: #dcfce7; color: #15803d; }
+  .badge-warning { background: #fef9c3; color: #a16207; }
+  .badge-muted { background: var(--muted); color: var(--muted-foreground); }
+  .badge-primary { background: var(--secondary); color: var(--foreground); }
+  .key-status { cursor: pointer; user-select: none; transition: opacity 0.15s; }
+  .key-status:hover { opacity: 0.75; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 16px; }
+  .stat-card { padding: 20px; }
+  .stat-label { color: var(--muted-foreground); font-size: 13px; margin-bottom: 8px; }
+  .stat-value { font-size: 26px; font-weight: 700; }
+  .stat-unit { font-size: 13px; color: var(--muted-foreground); font-weight: 400; margin-left: 4px; }
+  .stat-sub { margin-top: 8px; font-size: 12px; color: var(--muted-foreground); }
+
+  .seg {
+    display: inline-flex;
+    background: var(--muted);
+    border-radius: var(--radius);
+    padding: 3px;
+    gap: 2px;
+    margin-bottom: 12px;
+  }
+  .seg-btn {
+    padding: 5px 14px;
+    border-radius: calc(var(--radius) - 2px);
+    font-size: 13px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--muted-foreground);
+    transition: all 0.15s;
+  }
+  .seg-btn.active { background: var(--card); color: var(--foreground); box-shadow: 0 1px 2px rgba(0,0,0,0.06); font-weight: 500; }
+
+  .chart-box {
+    background: var(--muted);
+    border-radius: var(--radius);
+    height: 220px;
+    padding: 12px 12px 4px;
+    position: relative;
+  }
+  .chart-box svg { width: 100%; height: 100%; display: block; overflow: visible; }
+  .line-grid { stroke: var(--border); stroke-dasharray: 3 3; }
+  .line-area { fill: url(#areaGrad); }
+  .line-path { fill: none; stroke: var(--primary); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+  .line-dot { fill: var(--card); stroke: var(--primary); stroke-width: 1.8; }
+  .line-dot-hit { fill: transparent; stroke: none; pointer-events: all; cursor: pointer; }
+  .line-x { font-size: 10px; fill: var(--muted-foreground); }
+  .line-y { font-size: 10px; fill: var(--muted-foreground); }
+  .line-tip { font-size: 10px; fill: var(--primary-foreground); }
+
+  /* 热力图（日历视图：每行=一周，左=周日期，顶=周日→周一） */
+  .heatmap-wrap { display: flex; align-items: flex-start; }
+  .heat-week-col { display: flex; flex-direction: column; margin-right: 12px; padding-top: 26px; }
+  .heat-week-col .w-label {
+    height: 54px; line-height: 54px;
+    font-size: 16px; font-weight: 600;
+    color: var(--muted-foreground);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+  .hm-right { display: flex; flex-direction: column; overflow-x: auto; }
+  .heat-head { display: grid; grid-template-columns: repeat(7, 48px); gap: 6px; margin-bottom: 6px; }
+  .heat-head span { font-size: 13px; color: var(--muted-foreground); height: 20px; line-height: 20px; text-align: center; }
+  .heatmap { display: grid; grid-template-columns: repeat(7, 48px); grid-auto-rows: 48px; gap: 6px; padding-bottom: 4px; }
+  .heat-cell {
+    width: 48px; height: 48px;
+    border-radius: 8px;
+    background: var(--secondary);
+  }
+  .heat-cell.l1 { background: #eff6ff; }
+  .heat-cell.l2 { background: #bfdbfe; }
+  .heat-cell.l3 { background: #60a5fa; }
+  .heat-cell.l4 { background: #2563eb; }
+  .heat-cell.future { background: transparent; border: 2px dashed var(--border); }
+  .heat-legend { display: flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 12px; color: var(--muted-foreground); }
+  .heat-legend .heat-cell { width: 16px; height: 16px; border-radius: 4px; }
+
+  /* 图表悬浮提示（大号浮层，替代原生 title） */
+  .chart-tip {
+    position: fixed;
+    z-index: 300;
+    display: none;
+    max-width: 340px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: var(--foreground);
+    color: var(--background);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.5;
+    white-space: nowrap;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+    pointer-events: none;
+  }
+  .chart-tip b { color: #bfdbfe; font-weight: 700; }
+
+  .input, .select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--input);
+    border-radius: var(--radius);
+    font-size: 13px;
+    background: var(--card);
+    color: var(--foreground);
+    outline: none;
+  }
+  .input:focus, .select:focus { border-color: var(--ring); box-shadow: 0 0 0 1px var(--ring); }
+  .form-row { margin-bottom: 14px; }
+  .form-label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; }
+  .form-hint { font-size: 12px; color: var(--muted-foreground); margin-top: 4px; }
+
+  /* 弹窗 */
+  .modal-mask {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: none; align-items: center; justify-content: center;
+    z-index: 100;
+  }
+  .modal-mask.open { display: flex; }
+  .modal {
+    background: var(--card);
+    border-radius: var(--radius);
+    width: 400px;
+    max-width: calc(100vw - 32px);
+    padding: 22px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  }
+  .modal-title { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+  .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+
+  /* key 显示 */
+  .key-box {
+    background: var(--muted);
+    border-radius: var(--radius);
+    padding: 10px 12px;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    font-size: 13px;
+    word-break: break-all;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    margin-bottom: 6px;
+  }
+  .copy-btn { flex-shrink: 0; }
+
+  .plan-list { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+  .plan-card {
+    flex: 1; min-width: 180px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    text-align: center;
+  }
+  .plan-card:hover { border-color: var(--foreground); }
+  .plan-card.selected { border-color: var(--foreground); box-shadow: 0 0 0 1px var(--foreground); }
+  .plan-price { font-size: 22px; font-weight: 700; }
+  .plan-credit { color: var(--muted-foreground); font-size: 13px; margin-top: 4px; }
+  .plan-ratio { font-size: 12px; color: #15803d; margin-top: 2px; }
+  .plan-recommend { font-size: 11px; color: var(--muted-foreground); margin-top: 6px; }
+
+  .radio-row { display: flex; gap: 16px; margin-bottom: 14px; }
+  .radio-item { display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 13px; }
+
+  .doc-link-card { display: flex; align-items: center; gap: 14px; }
+  .doc-icon { width: 40px; height: 40px; border-radius: 8px; background: var(--secondary); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .doc-text { flex: 1; }
+  .doc-text .t { font-weight: 600; margin-bottom: 2px; }
+  .doc-text .d { font-size: 12px; color: var(--muted-foreground); }
+
+  .qr-box { display: flex; justify-content: center; margin: 10px 0 14px; }
+  .qr {
+    width: 180px; height: 180px;
+    background: repeating-conic-gradient(#18181b 0% 25%, #fff 0% 50%) 0 0/16px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .qr::after { content: "客服二维码"; color: #fff; font-size: 12px; background: rgba(0,0,0,0.35); padding: 4px 8px; border-radius: 4px; }
+
+  .danger-box { border: 1px solid #fecaca; border-radius: var(--radius); padding: 16px; margin-top: 8px; }
+  .danger-title { color: var(--destructive); font-weight: 600; margin-bottom: 6px; }
+  .danger-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .danger-item:last-child { border-bottom: none; }
+
+  .feedback-toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px);
+    background: var(--foreground); color: var(--primary-foreground);
+    padding: 10px 18px; border-radius: var(--radius);
+    font-size: 13px; opacity: 0; transition: all 0.3s; z-index: 200;
+  }
+  .feedback-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  .toast-warning { background: #b45309; }
+  .toast-danger { background: var(--destructive); }
+</style>
+</head>
+<body>
+<div class="layout">
+  <!-- ===== 侧边栏 ===== -->
+  <aside class="sidebar">
+    <div class="sidebar-brand"><span class="logo">采</span>采招词元</div>
+    <nav class="sidebar-nav">
+      <div class="nav-item active" data-page="overview"><span class="nav-icon">📊</span>概览</div>
+      <div class="nav-item" data-page="keys"><span class="nav-icon">🔑</span>API Keys</div>
+      <div class="nav-item" data-page="recharge"><span class="nav-icon">💰</span>充值</div>
+      <div class="nav-item" data-page="orders"><span class="nav-icon">📋</span>订单</div>
+      <div class="nav-item" data-page="docs"><span class="nav-icon">📄</span>接口文档</div>
+      <div class="nav-item" data-page="service"><span class="nav-icon">💬</span>客服</div>
+      <div class="nav-item" data-page="account"><span class="nav-icon">⚙️</span>账户设置</div>
+    </nav>
+    <div class="sidebar-footer">© 2026 采招词元</div>
+  </aside>
+
+  <!-- ===== 主区域 ===== -->
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-title">API 管理控制台</div>
+      <div class="topbar-right">
+        <div class="credit-pill" onclick="goPage('recharge')">积分余额 8,520 · 去充值</div>
+        <div class="avatar" onclick="goPage('account')">采</div>
+      </div>
+    </header>
+
+    <div class="content">
+      <!-- ============ 概览 ============ -->
+      <section class="page active" id="page-overview">
+        <div class="page-title">概览</div>
+        <div class="page-desc">用量数据与积分消耗统计</div>
+
+        <div class="stat-grid">
+          <div class="card stat-card">
+            <div class="stat-label">积分余额</div>
+            <div class="stat-value">8,520<span class="stat-unit">积分</span></div>
+            <div class="stat-sub">上次充值：2026-08-01</div>
+          </div>
+          <div class="card stat-card">
+            <div class="stat-label">累计消耗</div>
+            <div class="stat-value">52,180<span class="stat-unit">积分</span></div>
+            <div class="stat-sub">共调用 18,204 次</div>
+          </div>
+        </div>
+        <div style="margin-top: 4px; margin-bottom: 14px;"><button class="btn btn-primary" onclick="goPage('recharge')">去充值</button></div>
+
+        <div class="card">
+          <div class="card-title">消耗趋势</div>
+          <div class="seg" id="trendSeg">
+            <button class="seg-btn active" data-dim="time" onclick="switchTrend('time')">时间维度</button>
+            <button class="seg-btn" data-dim="api" onclick="switchTrend('api')">API 维度</button>
+          </div>
+          <div id="trendTime">
+            <div class="chart-box" id="timeChart"></div>
+          </div>
+          <div id="trendApi" style="display:none;">
+            <table>
+              <thead><tr><th>接口</th><th>中文说明</th><th style="text-align:right">调用次数</th><th style="text-align:right">消耗积分</th></tr></thead>
+              <tbody>
+                <tr><td><code>search_bids</code></td><td>标讯搜索</td><td style="text-align:right">8,204</td><td style="text-align:right">8,204</td></tr>
+                <tr><td><code>get_company_info</code></td><td>企业深度信息（75积分）</td><td style="text-align:right">356</td><td style="text-align:right">26,700</td></tr>
+                <tr><td><code>query_bids_advanced</code></td><td>高级组合搜索</td><td style="text-align:right">1,930</td><td style="text-align:right">3,860</td></tr>
+                <tr><td><code>get_bid_detail</code></td><td>标讯详情</td><td style="text-align:right">3,102</td><td style="text-align:right">3,102</td></tr>
+                <tr><td><code>get_top_purchasers</code></td><td>Top 业主</td><td style="text-align:right">1,118</td><td style="text-align:right">3,354</td></tr>
+                <tr><td><code>get_top_suppliers</code></td><td>Top 供应商</td><td style="text-align:right">986</td><td style="text-align:right">2,958</td></tr>
+                <tr><td><code>get_top_agents</code></td><td>Top 代理机构</td><td style="text-align:right">412</td><td style="text-align:right">1,236</td></tr>
+                <tr><td><code>aggregate_bids_advanced</code></td><td>多维聚合统计</td><td style="text-align:right">664</td><td style="text-align:right">1,992</td></tr>
+                <tr><td><code>find_competitors</code></td><td>竞争对手分析</td><td style="text-align:right">428</td><td style="text-align:right">1,284</td></tr>
+                <tr><td><code>get_company_contacts</code></td><td>项目联系人（5积分）</td><td style="text-align:right">198</td><td style="text-align:right">990</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">消耗热力图（近 5 周 · 日历视图）</div>
+          <div class="heatmap-wrap">
+            <div class="heat-week-col" id="heatWeekCol"></div>
+            <div class="hm-right">
+              <div class="heat-head"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div>
+              <div class="heatmap" id="heatmap"></div>
+            </div>
+          </div>
+          <div class="heat-legend">少 <span class="heat-cell l1"></span><span class="heat-cell l2"></span><span class="heat-cell l3"></span><span class="heat-cell l4"></span> 多</div>
+        </div>
+      </section>
+
+      <!-- ============ API Keys ============ -->
+      <section class="page" id="page-keys">
+        <div class="page-title">API Keys</div>
+        <div class="page-desc">管理访问密钥。完整 Key 仅在创建时显示一次，请立即复制保存。</div>
+        <div style="margin-bottom: 16px;"><button class="btn btn-primary" onclick="openModal('newKeyModal')">+ 新建 API Key</button></div>
+        <div class="card" style="padding: 8px 12px;">
+          <table>
+            <thead><tr><th>Key 名称</th><th>Key 前缀</th><th>状态</th><th>最近使用</th><th>创建时间</th><th>操作</th></tr></thead>
+            <tbody id="keyTableBody">
+              <tr>
+                <td>生产环境</td>
+                <td><code>cz_live_8f3a…</code></td>
+                <td><span class="badge badge-success key-status" onclick="toggleKey(this)" title="点击切换状态">启用中</span></td>
+                <td>2026-09-02 09:41</td>
+                <td>2026-07-18</td>
+                <td>
+                  <button class="btn btn-ghost btn-sm" onclick="openEditKey(this)">编辑</button>
+                  <button class="btn btn-ghost btn-sm" style="color:#ef4444" onclick="openDeleteKey(this)">删除</button>
+                </td>
+              </tr>
+              <tr>
+                <td>测试环境</td>
+                <td><code>cz_test_b1c2…</code></td>
+                <td><span class="badge badge-muted key-status" onclick="toggleKey(this)" title="点击切换状态">禁用</span></td>
+                <td>2026-08-20 15:07</td>
+                <td>2026-08-05</td>
+                <td>
+                  <button class="btn btn-ghost btn-sm" onclick="openEditKey(this)">编辑</button>
+                  <button class="btn btn-ghost btn-sm" style="color:#ef4444" onclick="openDeleteKey(this)">删除</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ 充值 ============ -->
+      <section class="page" id="page-recharge">
+        <div class="page-title">充值</div>
+        <div class="page-desc">充值比例 1 元 = 10 积分</div>
+        <div class="card">
+          <div class="card-title">选择充值金额</div>
+          <div class="plan-list">
+            <div class="plan-card selected" onclick="selectPlan(this, 1000, 10000)">
+              <div class="plan-price">¥1000</div>
+              <div class="plan-credit">10000 积分</div>
+              <div class="plan-ratio">按 1:10</div>
+            </div>
+            <div class="plan-card" onclick="selectPlan(this, 3000, 35000)">
+              <div class="plan-price">¥3000</div>
+              <div class="plan-credit">35000 积分</div>
+              <div class="plan-ratio">额外赠送 5000 积分</div>
+              <div class="plan-recommend">推荐</div>
+            </div>
+            <div class="plan-card" onclick="selectPlan(this, 3500, 60000)">
+              <div class="plan-price">¥3500</div>
+              <div class="plan-credit">60000 积分</div>
+              <div class="plan-ratio">额外赠送 25000 积分</div>
+              <div class="plan-recommend">最划算</div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-label">支付方式</div>
+            <div class="radio-row">
+              <label class="radio-item"><input type="radio" name="pay" checked> 微信支付</label>
+              <label class="radio-item"><input type="radio" name="pay"> 支付宝</label>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="doRecharge()">立即充值</button>
+        </div>
+      </section>
+
+      <!-- ============ 订单 ============ -->
+      <section class="page" id="page-orders">
+        <div class="page-title">订单</div>
+        <div class="page-desc">充值订单记录</div>
+        <div class="card" style="padding: 8px 12px;">
+          <table>
+            <thead><tr><th>订单号</th><th>金额</th><th>积分</th><th>支付方式</th><th>状态</th><th>时间</th></tr></thead>
+            <tbody>
+              <tr><td>CZ20260801001</td><td>¥1,000</td><td>10,000</td><td>微信支付</td><td><span class="badge badge-success">已完成</span></td><td>2026-08-01 10:24</td></tr>
+              <tr><td>CZ20260720002</td><td>¥3,000</td><td>35,000</td><td>支付宝</td><td><span class="badge badge-success">已完成</span></td><td>2026-07-20 14:02</td></tr>
+              <tr><td>CZ20260715003</td><td>¥3,500</td><td>60,000</td><td>微信支付</td><td><span class="badge badge-success">已完成</span></td><td>2026-07-15 09:41</td></tr>
+              <tr><td>CZ20260630004</td><td>¥1,000</td><td>10,000</td><td>微信支付</td><td><span class="badge badge-success">已完成</span></td><td>2026-06-30 16:18</td></tr>
+              <tr><td>CZ20260612005</td><td>¥100</td><td>1,000</td><td>支付宝</td><td><span class="badge badge-warning">待支付</span></td><td>2026-06-12 11:05</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ 接口文档 ============ -->
+      <section class="page" id="page-docs">
+        <div class="page-title">API 接口文档</div>
+        <div class="page-desc">完整接口说明：工具列表、参数、积分、调用示例</div>
+        <div class="card doc-link-card">
+          <div class="doc-icon">📄</div>
+          <div class="doc-text">
+            <div class="t">采招词元 API 接口文档</div>
+            <div class="d">17+ 工具 · 参数说明 · 积分定价 · 调用示例 · 错误码</div>
+          </div>
+          <button class="btn btn-primary" onclick="toast('正在跳转到接口文档…')">前往查看 →</button>
+        </div>
+        <div class="card">
+          <div class="card-title">快速入门</div>
+          <div style="font-size:13px; line-height:2;">
+            <div>Base URL：<code>https://api.caizhao-token.com/api_v2/{工具名}</code></div>
+            <div>认证方式：<code>X-API-Key</code> Header</div>
+            <div>调用方式：POST（账户类 GET）</div>
+            <div>限流：5 次/秒，2000 次/小时</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 客服 ============ -->
+      <section class="page" id="page-service">
+        <div class="page-title">客服</div>
+        <div class="page-desc">扫码添加专属客服</div>
+        <div class="card" style="max-width: 420px; text-align:center;">
+          <div class="qr-box"><div class="qr"></div></div>
+          <div style="font-size:14px; font-weight:600; margin-bottom:4px;">扫码添加专属客服</div>
+          <div style="font-size:12px; color:var(--muted-foreground); margin-bottom:16px;">企业微信 / 微信，工作日 9:00-18:00</div>
+          <div style="display:flex; gap:10px; justify-content:center;">
+            <button class="btn btn-primary" onclick="toast('客服二维码已唤起')">打开二维码</button>
+            <button class="btn btn-outline" onclick="toast('二维码已下载')">下载二维码</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 账户设置 ============ -->
+      <section class="page" id="page-account">
+        <div class="page-title">账户设置</div>
+        <div class="page-desc">个人信息与账户安全</div>
+        <div class="card" style="max-width: 560px;">
+          <div class="card-title">个人信息</div>
+          <div class="form-row">
+            <div class="form-label">昵称</div>
+            <input class="input" id="nickname" value="采招用户">
+          </div>
+          <div class="form-row">
+            <div class="form-label">邮箱</div>
+            <input class="input" id="email" value="user@example.com">
+          </div>
+          <button class="btn btn-primary" onclick="toast('个人信息已保存')">保存</button>
+        </div>
+        <div class="card" style="max-width: 560px;">
+          <div class="card-title">安全</div>
+          <div class="form-row" style="display:flex; align-items:center; justify-content:space-between;">
+            <div>
+              <div style="font-size:13px;">登录密码</div>
+              <div style="font-size:12px; color:var(--muted-foreground);">建议定期更换</div>
+            </div>
+            <button class="btn btn-outline" onclick="toast('密码修改流程开发中')">去修改</button>
+          </div>
+          <div class="form-row" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0;">
+            <div>
+              <div style="font-size:13px;">绑定手机</div>
+              <div style="font-size:12px; color:var(--muted-foreground);">138****1234</div>
+            </div>
+            <button class="btn btn-outline" onclick="toast('手机号绑定流程开发中')">去绑定</button>
+          </div>
+        </div>
+        <div class="card" style="max-width: 560px; border-color:#fecaca;">
+          <div class="danger-title">危险区</div>
+          <div class="danger-item">
+            <div>
+              <div style="font-size:13px;">退出登录</div>
+              <div style="font-size:12px; color:var(--muted-foreground);">退出当前账号，不影响数据</div>
+            </div>
+            <button class="btn btn-outline" onclick="openModal('logoutModal')">退出</button>
+          </div>
+          <div class="danger-item">
+            <div>
+              <div style="font-size:13px;">注销账户</div>
+              <div style="font-size:12px; color:var(--muted-foreground);">清除全部数据，不可恢复</div>
+            </div>
+            <button class="btn btn-destructive" onclick="openModal('deleteModal')">注销</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 新建 Key 弹窗 ===== -->
+<div class="modal-mask" id="newKeyModal" onclick="if(event.target===this)closeModal(this)">
+  <div class="modal">
+    <div class="modal-title">新建 API Key</div>
+    <div class="form-row">
+      <div class="form-label">Key 名称（必填）</div>
+      <input class="input" id="newKeyName" placeholder="如：生产环境 / 测试环境">
+    </div>
+    <div class="form-row">
+      <div class="form-label">完整 Key</div>
+      <div class="key-box" id="newKeyValue">—（创建后生成）—</div>
+      <div class="form-hint" id="newKeyHint" style="color:#b45309;">完整 Key 仅显示一次，请立即复制保存</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('newKeyModal')">取消</button>
+      <button class="btn btn-primary" id="newKeyBtn" onclick="createKey()">创建</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 编辑 Key 弹窗 ===== -->
+<div class="modal-mask" id="editKeyModal" onclick="if(event.target===this)closeModal(this)">
+  <div class="modal">
+    <div class="modal-title">编辑 Key 名称</div>
+    <div class="form-row">
+      <div class="form-label">Key 名称</div>
+      <input class="input" id="editKeyName">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('editKeyModal')">取消</button>
+      <button class="btn btn-primary" onclick="saveEditKey()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 删除 Key 弹窗 ===== -->
+<div class="modal-mask" id="deleteKeyModal" onclick="if(event.target===this)closeModal(this)">
+  <div class="modal">
+    <div class="modal-title">删除 API Key</div>
+    <div style="font-size:13px; color:var(--muted-foreground);">确定删除 Key <b id="deleteKeyName" style="color:var(--foreground);"></b> 吗？删除后该 Key 立即失效，且不可恢复。使用该 Key 的服务将无法访问 API。</div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('deleteKeyModal')">取消</button>
+      <button class="btn btn-destructive" onclick="confirmDeleteKey()">确认删除</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 退出登录弹窗 ===== -->
+<div class="modal-mask" id="logoutModal" onclick="if(event.target===this)closeModal(this)">
+  <div class="modal">
+    <div class="modal-title">退出登录</div>
+    <div style="font-size:13px; color:var(--muted-foreground);">确定退出当前账号吗？退出后需重新登录才能使用 API 管理功能。</div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('logoutModal')">取消</button>
+      <button class="btn btn-primary" onclick="toast('已退出登录'); closeModal('logoutModal')">退出</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 注销弹窗 ===== -->
+<div class="modal-mask" id="deleteModal" onclick="if(event.target===this)closeModal(this)">
+  <div class="modal">
+    <div class="modal-title" style="color:var(--destructive);">注销账户</div>
+    <div style="font-size:13px; color:var(--muted-foreground); line-height:1.7;">注销后：<br>· 所有 API Key 立即失效<br>· 剩余积分全部清零<br>· 订单与用量数据不可恢复</div>
+    <div class="form-row" style="margin-top:12px;">
+      <div class="form-label">请输入“注销”确认</div>
+      <input class="input" id="deleteConfirm" placeholder="输入「注销」">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('deleteModal')">取消</button>
+      <button class="btn btn-destructive" onclick="confirmDeleteAccount()">确认注销</button>
+    </div>
+  </div>
+</div>
+
+<div class="feedback-toast" id="toast"></div>
+<div class="chart-tip" id="chartTip"></div>
+
+<script>
+  // ===== 导航 =====
+  function goPage(page) {
+    document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+    document.querySelector('.nav-item[data-page="' + page + '"]').classList.add('active');
+    document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+    document.getElementById('page-' + page).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+  document.querySelectorAll('.nav-item').forEach(function(n) {
+    n.addEventListener('click', function() { goPage(n.dataset.page); });
+  });
+
+  // ===== Toast =====
+  var toastTimer;
+  function toast(msg, cls) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'feedback-toast show' + (cls ? ' ' + cls : '');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() { t.classList.remove('show'); }, 2200);
+  }
+
+  // ===== 弹窗 =====
+  function openModal(id) { document.getElementById(id).classList.add('open'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+  // ===== 消耗趋势切换 =====
+  function switchTrend(dim) {
+    document.querySelectorAll('#trendSeg .seg-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.dim === dim); });
+    document.getElementById('trendTime').style.display = dim === 'time' ? '' : 'none';
+    document.getElementById('trendApi').style.display = dim === 'api' ? '' : 'none';
+  }
+
+  // ===== 图表大号悬浮提示 =====
+  function bindChartTips(root) {
+    if (!root) { return; }
+    var tip = document.getElementById('chartTip');
+    var els = root.querySelectorAll('[data-tip]');
+    for (var i = 0; i < els.length; i++) {
+      (function(el) {
+        el.addEventListener('mouseenter', function(e) {
+          tip.innerHTML = el.getAttribute('data-tip');
+          tip.style.display = 'block';
+          moveTip(e);
+        });
+        el.addEventListener('mousemove', moveTip);
+        el.addEventListener('mouseleave', function() { tip.style.display = 'none'; });
+      })(els[i]);
+    }
+  }
+  function moveTip(e) {
+    var tip = document.getElementById('chartTip');
+    if (tip.style.display !== 'block') { return; }
+    var z = parseFloat(getComputedStyle(document.body).zoom) || 1;
+    var x = e.clientX / z + 16, y = e.clientY / z + 18;
+    var r = tip.getBoundingClientRect();
+    if (x + r.width * z > window.innerWidth / z - 8) { x = e.clientX / z - r.width - 12; }
+    if (y + r.height * z > window.innerHeight / z - 8) { y = e.clientY / z - r.height - 12; }
+    tip.style.left = x + 'px';
+    tip.style.top = y + 'px';
+  }
+
+  // ===== 时间维度折线图（近 30 天） =====
+  (function() {
+    var data = [86,120,95,150,210,180,135,98,160,220,190,145,110,88,132,175,240,205,160,120,95,140,185,230,195,150,110,90,130,170];
+    var c = document.getElementById('timeChart');
+    var W = 1040, H = 200, PL = 44, PR = 14, PT = 14, PB = 22;
+    var iw = W - PL - PR, ih = H - PT - PB;
+    var max = Math.max.apply(null, data);
+    var yMax = Math.ceil(max / 50) * 50;
+    var stepX = iw / (data.length - 1);
+    var x = function(i) { return PL + i * stepX; };
+    var y = function(v) { return PT + ih - (v / yMax) * ih; };
+    var pts = data.map(function(v, i) { return [x(i), y(v)]; });
+    var path = pts.map(function(p, i) { return (i === 0 ? 'M' : 'L') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join(' ');
+    var area = path + ' L' + x(data.length - 1).toFixed(1) + ' ' + (PT + ih) + ' L' + x(0).toFixed(1) + ' ' + (PT + ih) + ' Z';
+    var html = '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">';
+    html += '<defs><linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" style="stop-color:var(--primary)" stop-opacity="0.22"/><stop offset="100%" style="stop-color:var(--primary)" stop-opacity="0.02"/></linearGradient></defs>';
+    for (var g = 0; g <= 4; g++) {
+      var gy = PT + (ih / 4) * g;
+      var gv = Math.round(yMax - (yMax / 4) * g);
+      html += '<line class="line-grid" x1="' + PL + '" y1="' + gy + '" x2="' + (W - PR) + '" y2="' + gy + '"/>';
+      html += '<text class="line-y" x="' + (PL - 8) + '" y="' + (gy + 3) + '" text-anchor="end">' + gv + '</text>';
+    }
+    html += '<path class="line-area" d="' + area + '"/>';
+    html += '<path class="line-path" d="' + path + '"/>';
+    data.forEach(function(v, i) {
+      if (i % 5 === 0) {
+        html += '<text class="line-x" x="' + x(i) + '" y="' + (H - 4) + '" text-anchor="middle">' + (i + 1) + '日</text>';
+      }
+      html += '<circle class="line-dot" cx="' + x(i).toFixed(1) + '" cy="' + y(v).toFixed(1) + '" r="2.5"/>';
+      html += '<circle class="line-dot-hit" data-tip="' + (i + 1) + '日<b>：' + v + ' 积分</b>" cx="' + x(i).toFixed(1) + '" cy="' + y(v).toFixed(1) + '" r="11"/>';
+    });
+    html += '</svg>';
+    c.innerHTML = html;
+    bindChartTips(c.querySelector('svg'));
+  })();
+
+  // ===== 消耗热力图（近 5 周 · 日历视图：每行=一周，左=周日期，顶=周日→周一） =====
+  (function() {
+    var hm = document.getElementById('heatmap');
+    var wc = document.getElementById('heatWeekCol');
+    // 锚定今天（2026-09-02 周三）所在周的周日为末周，向前取 5 周
+    var today = new Date(2026, 8, 2);
+    var thisSunday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
+    var firstSunday = new Date(thisSunday.getFullYear(), thisSunday.getMonth(), thisSunday.getDate() - 4 * 7);
+    var wNames = ['日','一','二','三','四','五','六'];
+    // 确定性业务规律：工作日高、周末低，且随周数整体小幅上升（按真实星期映射）
+    var dayPattern = [18, 26, 34, 30, 52, 71, 12]; // 周日~周六基准值
+    function level(v) { return v >= 72 ? 'l4' : v >= 48 ? 'l3' : v >= 28 ? 'l2' : 'l1'; }
+
+    // 左侧：每周日期范围（如 6/15-6/21）；顶部表头已静态写在 HTML
+    var weekHtml = '';
+    var cellHtml = '';
+    for (var w = 0; w < 5; w++) {
+      var sunday = new Date(firstSunday.getFullYear(), firstSunday.getMonth(), firstSunday.getDate() + w * 7);
+      var saturday = new Date(sunday.getFullYear(), sunday.getMonth(), sunday.getDate() + 6);
+      weekHtml += '<div class="w-label">' + (sunday.getMonth() + 1) + '/' + sunday.getDate() + '-' + (saturday.getMonth() + 1) + '/' + saturday.getDate() + '</div>';
+      for (var d = 0; d < 7; d++) {
+        var cur = new Date(sunday.getFullYear(), sunday.getMonth(), sunday.getDate() + d);
+        var cls = 'heat-cell';
+        var tip;
+        if (cur > today) {
+          cls += ' future';
+          tip = (cur.getMonth() + 1) + '月' + cur.getDate() + '日 周' + wNames[d] + '<b>：尚未到来</b>';
+        } else {
+          var v = Math.round(dayPattern[d] * (1 + w * 0.045) * (0.92 + (d * 7 + w) % 5 * 0.04));
+          cls += ' ' + level(v);
+          tip = (cur.getMonth() + 1) + '月' + cur.getDate() + '日 周' + wNames[d] + '<b>：消耗 ' + v + ' 积分</b>';
+        }
+        cellHtml += '<div class="' + cls + '" data-tip="' + tip + '"></div>';
+      }
+    }
+    wc.innerHTML = weekHtml;
+    hm.innerHTML = cellHtml;
+    bindChartTips(hm);
+  })();
+
+  // ===== API Key 状态切换 =====
+  function toggleKey(el) {
+    var active = el.classList.contains('badge-success');
+    if (active) {
+      el.className = 'badge badge-muted key-status';
+      el.textContent = '禁用';
+      toast('Key 已禁用');
+    } else {
+      el.className = 'badge badge-success key-status';
+      el.textContent = '启用中';
+      toast('Key 已启用');
+    }
+  }
+
+  // ===== API Key 管理 =====
+  var currentRow = null;
+
+  function createKey() {
+    var name = document.getElementById('newKeyName').value.trim();
+    if (!name) { toast('请输入 Key 名称', 'toast-warning'); return; }
+    var prefix = 'cz_' + name.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, '').slice(0, 4) || 'key';
+    var key = 'cz_' + rand(16) + '_' + rand(8);
+    document.getElementById('newKeyValue').textContent = key;
+    document.getElementById('newKeyValue').setAttribute('data-key', key);
+    document.getElementById('newKeyBtn').textContent = '复制并保存';
+    document.getElementById('newKeyBtn').onclick = function() { copyKey(); };
+    document.getElementById('newKeyName').disabled = true;
+    document.getElementById('newKeyHint').style.color = '#15803d';
+    document.getElementById('newKeyHint').textContent = '请复制保存，关闭后不再显示';
+    toast('Key 已生成，请立即复制');
+  }
+  function rand(n) {
+    var s = '';
+    var chars = 'abcdef0123456789';
+    for (var i = 0; i < n; i++) s += chars.charAt(Math.floor(Math.random() * chars.length));
+    return s;
+  }
+  function copyKey() {
+    var v = document.getElementById('newKeyValue').getAttribute('data-key') || document.getElementById('newKeyValue').textContent;
+    if (navigator.clipboard) { navigator.clipboard.writeText(v); }
+    toast('已复制到剪贴板');
+  }
+
+  function openEditKey(btn) {
+    currentRow = btn.closest('tr');
+    document.getElementById('editKeyName').value = currentRow.cells[0].textContent.trim();
+    openModal('editKeyModal');
+  }
+  function saveEditKey() {
+    var name = document.getElementById('editKeyName').value.trim();
+    if (!name) { toast('名称不能为空', 'toast-warning'); return; }
+    currentRow.cells[0].textContent = name;
+    closeModal('editKeyModal');
+    toast('Key 名称已更新');
+  }
+  function openDeleteKey(btn) {
+    currentRow = btn.closest('tr');
+    document.getElementById('deleteKeyName').textContent = currentRow.cells[0].textContent.trim();
+    openModal('deleteKeyModal');
+  }
+  function confirmDeleteKey() {
+    currentRow.remove();
+    closeModal('deleteKeyModal');
+    toast('Key 已删除');
+  }
+
+  // ===== 充值 =====
+  var selectedAmount = 1000;
+  function selectPlan(el, amount, credit) {
+    document.querySelectorAll('.plan-card').forEach(function(p) { p.classList.remove('selected'); });
+    el.classList.add('selected');
+    selectedAmount = amount;
+  }
+  function doRecharge() {
+    toast('已发起充值 ¥' + selectedAmount.toLocaleString() + '，请完成支付');
+  }
+
+  // ===== 注销 =====
+  function confirmDeleteAccount() {
+    var v = document.getElementById('deleteConfirm').value.trim();
+    if (v !== '注销') { toast('请输入「注销」确认', 'toast-warning'); return; }
+    closeModal('deleteModal');
+    toast('账户已注销', 'toast-danger');
+  }
+</script>
+</body>
+</html>

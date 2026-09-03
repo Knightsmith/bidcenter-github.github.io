@@ -129,6 +129,7 @@
     align-items: center;
     justify-content: center;
     font-size: 18px;
+    color: #fff;
     background: linear-gradient(135deg, var(--blue), var(--purple));
     box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
   }
@@ -675,6 +676,7 @@
     .cta-actions .btn { width: 100%; }
     .back-top { right: 16px; bottom: 80px; }
   }
+  .doc-section > h4 { font-size: 15px; font-weight: 700; margin: 24px 0 8px; color: var(--text); }
 </style>
 </head>
 <body>
@@ -744,6 +746,7 @@
       <div class="side-group-title">API 参考</div>
       <a class="side-link" href="#api-overview">API 概述</a>
       <a class="side-link" href="#api-price">API 价格</a>
+      <a class="side-link" href="#api-reference">接口参考</a>
     </div>
   </aside>
 
@@ -1606,6 +1609,3776 @@ cz sub add --keywords '["数据中心", "智慧城市"]'</pre>
       </ul>
     </section>
 
+<!-- ===== API 接口参考 ===== -->
+<section class="doc-section" id="api-reference">
+<h2>API 接口参考 <a class="anchor-icon" href="#api-reference">#</a></h2>
+<p>全部接口统一走 <code>https://api.caizhao-token.com</code>，认证方式、响应结构与错误码见上方「API 概述」。下表为全部 20 个接口的速查索引，点击名称可跳转到对应参数与示例。</p>
+<div class="doc-table"><table>
+<thead><tr><th>#</th><th>接口名称</th><th>API 调用名</th><th>方法</th><th>端点</th><th>单价</th></tr></thead><tbody>
+<tr><td>1</td><td><a href="#api-search-bids">搜索招中标</a></td><td><code>search_bids</code></td><td>POST</td><td><code>/api_v2/search_bids</code></td><td>1 积分</td></tr>
+<tr><td>2</td><td><a href="#api-search-expiring">即将到期项目</a></td><td><code>search_expiring_projects</code></td><td>POST</td><td><code>/api_v2/search_expiring_projects</code></td><td>2 积分</td></tr>
+<tr><td>3</td><td><a href="#api-search-proposed-projects">拟建项目</a></td><td><code>search_proposed_projects</code></td><td>POST</td><td><code>/api_v2/search_proposed_projects</code></td><td>2 积分</td></tr>
+<tr><td>4</td><td><a href="#api-query-advanced">标讯高级查询</a></td><td><code>query_bids_advanced</code></td><td>POST</td><td><code>/api_v2/query_bids_advanced</code></td><td>2 积分</td></tr>
+<tr><td>5</td><td><a href="#api-find-bidders">招标项目推荐供应商</a></td><td><code>find_potential_bidders</code></td><td>POST</td><td><code>/api_v2/find_potential_bidders</code></td><td>1 积分</td></tr>
+<tr><td>6</td><td><a href="#api-bid-detail">标讯详情</a></td><td><code>get_bid_detail</code></td><td>POST</td><td><code>/api_v2/get_bid_detail</code></td><td>1 积分</td></tr>
+<tr><td>7</td><td><a href="#api-company-profile">公司基础工商信息</a></td><td><code>get_company_profile</code></td><td>POST</td><td><code>/api_v2/get_company_profile</code></td><td>1 积分</td></tr>
+<tr><td>8</td><td><a href="#api-search-company">搜索公司</a></td><td><code>search_company</code></td><td>POST</td><td><code>/api_v2/search_company</code></td><td>免费</td></tr>
+<tr><td>9</td><td><a href="#api-bid-timeline">项目时间线</a></td><td><code>get_bid_timeline</code></td><td>POST</td><td><code>/api_v2/get_bid_timeline</code></td><td>1 积分</td></tr>
+<tr><td>10</td><td><a href="#api-company-keywords">公司业务关键词</a></td><td><code>get_company_business_keywords</code></td><td>POST</td><td><code>/api_v2/get_company_business_keywords</code></td><td>1 积分</td></tr>
+<tr><td>11</td><td><a href="#api-company-partners">公司合作客户/供应商</a></td><td><code>get_company_partners</code></td><td>POST</td><td><code>/api_v2/get_company_partners</code></td><td>3 积分</td></tr>
+<tr><td>12</td><td><a href="#api-competitors">公司竞争对手分析</a></td><td><code>find_competitors</code></td><td>POST</td><td><code>/api_v2/find_competitors</code></td><td>3 积分</td></tr>
+<tr><td>13</td><td><a href="#api-company-contacts">公司联系电话</a></td><td><code>get_company_contacts</code></td><td>POST</td><td><code>/api_v2/get_company_contacts</code></td><td>5 积分</td></tr>
+<tr><td>14</td><td><a href="#api-top-purchasers">Top采购单位</a></td><td><code>get_top_purchasers</code></td><td>POST</td><td><code>/api_v2/get_top_purchasers</code></td><td>3 积分</td></tr>
+<tr><td>15</td><td><a href="#api-top-suppliers">Top中标供应商</a></td><td><code>get_top_suppliers</code></td><td>POST</td><td><code>/api_v2/get_top_suppliers</code></td><td>3 积分</td></tr>
+<tr><td>16</td><td><a href="#api-top-brands">Top中标品牌</a></td><td><code>get_top_brands</code></td><td>POST</td><td><code>/api_v2/get_top_brands</code></td><td>3 积分</td></tr>
+<tr><td>17</td><td><a href="#api-aggregate-advanced">聚合统计</a></td><td><code>aggregate_bids_advanced</code></td><td>POST</td><td><code>/api_v2/aggregate_bids_advanced</code></td><td>3 积分</td></tr>
+<tr><td>18</td><td><a href="#api-price-trends">品牌/型号价格趋势</a></td><td><code>get_price_trends</code></td><td>POST</td><td><code>/api_v2/get_price_trends</code></td><td>2 积分</td></tr>
+<tr><td>19</td><td><a href="#api-account-balance">账户余额</a></td><td><code>get_account_balance</code></td><td>GET</td><td><code>/api_v2/account/balance</code></td><td>免费</td></tr>
+<tr><td>20</td><td><a href="#api-account-daily-consumption">每日消耗</a></td><td><code>get_daily_consumption</code></td><td>GET</td><td><code>/api_v2/account/daily_consumption</code></td><td>免费</td></tr>
+</tbody></table></div>
+<h3 id="api-search-bids">1. 搜索招中标 <a class="anchor-icon" href="#api-search-bids">#</a></h3>
+<p>按关键词、地区、金额、时间等条件检索招标、中标及相关公告。</p>
+<div class="doc-table"><table><tbody>
+<tr><th style="width:120px">调用方式</th><td>POST</td></tr>
+<tr><th>请求地址</th><td><code>https://api.caizhao-token.com/api_v2/search_bids</code></td></tr>
+<tr><th>单次费用</th><td>1 积分</td></tr>
+</tbody></table></div>
+<h4>请求参数</h4>
+<div class="doc-table"><table><thead><tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>keywords</code></td><td><code>string[]</code></td><td>是</td><td>搜索关键词列表</td></tr>
+<tr><td><code>match_modes</code></td><td><code>string[]</code></td><td>否</td><td>匹配模式（all:全部 sm:标的物/产品 title:标题 brand:品牌 fulltext:全文 caller:招标公司/采购公司/招标方 winner:中标公司/供应商/中标方 winner_tender:中标公司或投标方 tender:投标公司/供应商/投标方 agency:招标代理公司 ），如['sm','title']</td></tr>
+<tr><td><code>bid_type</code></td><td><code>string</code></td><td>否</td><td>公告类型: 招标/中标/全部（默认 全部）</td></tr>
+<tr><td><code>bid_process</code></td><td><code>int[]</code></td><td>否</td><td>公告阶段(1:采购意向 2:预招标 4:招标 5:变更公告 6:中标候选人 7:中标结果 8:合同 9:验收公告 10:废标公告)，默认[1,2,4,7,8]</td></tr>
+<tr><td><code>begin_date</code></td><td><code>string</code></td><td>否</td><td>公告发布开始日期，YYYY-MM-DD</td></tr>
+<tr><td><code>end_date</code></td><td><code>string</code></td><td>否</td><td>公告发布结束日期，YYYY-MM-DD</td></tr>
+<tr><td><code>provinces</code></td><td><code>string[]</code></td><td>否</td><td>省份列表，如：['北京', '内蒙古']</td></tr>
+<tr><td><code>cities</code></td><td><code>string[]</code></td><td>否</td><td>城市列表，如：['石家庄', '合肥']</td></tr>
+<tr><td><code>counties</code></td><td><code>string[]</code></td><td>否</td><td>区县列表，如：['长安区', '瑶海区']</td></tr>
+<tr><td><code>min_amount</code></td><td><code>number</code></td><td>否</td><td>金额下限（元）</td></tr>
+<tr><td><code>max_amount</code></td><td><code>number</code></td><td>否</td><td>金额上限（元）</td></tr>
+<tr><td><code>page</code></td><td><code>number</code></td><td>否</td><td>页码（默认 1）</td></tr>
+<tr><td><code>page_size</code></td><td><code>number</code></td><td>否</td><td>每页条数（默认 20）</td></tr>
+</tbody></table></div>
+<h4>请求示例</h4>
+<div class="code-wrap"><pre class="code-block">curl -X POST "https://api.caizhao-token.com/api_v2/search_bids" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "keywords": [
+    "智慧城市",
+    "信息化"
+  ],
+  "bid_type": "全部",
+  "provinces": [
+    "北京市"
+  ],
+  "begin_date": "2024-01-01",
+  "end_date": "2024-12-31",
+  "page": 1,
+  "page_size": 20
+}'</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h4>响应字段</h4>
+<div class="doc-table"><table><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>success</code></td><td><code>boolean</code></td><td>请求是否成功</td></tr>
+<tr><td><code>data</code></td><td><code>object</code></td><td>业务数据，结构随接口而异，字段见下表</td></tr>
+<tr><td><code>error</code></td><td><code>object|null</code></td><td>错误信息，含 code 与 message，成功时为 null</td></tr>
+<tr><td><code>meta</code></td><td><code>object</code></td><td>元信息，含 request_id、tool_name、cost_units、execution_time_ms</td></tr>
+<tr><td><code>data.total</code></td><td><code>int</code></td><td>全库命中总数</td></tr>
+<tr><td><code>data.returned</code></td><td><code>int</code></td><td>本次实际返回条数</td></tr>
+<tr><td><code>data.items[]</code></td><td><code>object[]</code></td><td>公告列表，元素字段见下</td></tr>
+<tr><td><code>data.items[].bid_id</code></td><td><code>int</code></td><td>标讯 ID</td></tr>
+<tr><td><code>data.items[].title</code></td><td><code>string</code></td><td>公告标题</td></tr>
+<tr><td><code>data.items[].bid_type</code></td><td><code>string</code></td><td>标讯类型，如 招标公告/中标公告</td></tr>
+<tr><td><code>data.items[].bid_process</code></td><td><code>string</code></td><td>招标流程阶段，如 招标/中标结果</td></tr>
+<tr><td><code>data.items[].pub_time</code></td><td><code>string</code></td><td>发布时间</td></tr>
+<tr><td><code>data.items[].money</code></td><td><code>float</code></td><td>金额（元）</td></tr>
+<tr><td><code>data.items[].money_wan</code></td><td><code>float</code></td><td>金额（万元）</td></tr>
+<tr><td><code>data.items[].province</code></td><td><code>string</code></td><td>省份</td></tr>
+<tr><td><code>data.items[].city</code></td><td><code>string</code></td><td>城市</td></tr>
+<tr><td><code>data.items[].county</code></td><td><code>string</code></td><td>区县</td></tr>
+<tr><td><code>data.items[].caller_name</code></td><td><code>string</code></td><td>招标方名称</td></tr>
+<tr><td><code>data.items[].caller_id</code></td><td><code>int</code></td><td>招标方 ID</td></tr>
+<tr><td><code>data.items[].caller_type</code></td><td><code>string</code></td><td>招标方类型</td></tr>
+<tr><td><code>data.items[].winner_names</code></td><td><code>string[]</code></td><td>中标方名称列表</td></tr>
+<tr><td><code>data.items[].winner_ids</code></td><td><code>int[]</code></td><td>中标方 ID 列表</td></tr>
+<tr><td><code>data.items[].winner_moneys</code></td><td><code>float[]</code></td><td>各中标方中标金额（元）</td></tr>
+<tr><td><code>data.items[].tender_names</code></td><td><code>string[]</code></td><td>投标人名称列表</td></tr>
+<tr><td><code>data.items[].sm_names</code></td><td><code>string[]</code></td><td>标的物名称列表</td></tr>
+<tr><td><code>data.items[].brand_names</code></td><td><code>string[]</code></td><td>品牌名称列表</td></tr>
+<tr><td><code>data.items[].bid_method</code></td><td><code>string</code></td><td>招标方式</td></tr>
+<tr><td><code>data.items[].bid_no</code></td><td><code>string</code></td><td>招标编号</td></tr>
+<tr><td><code>data.items[].signup_time</code></td><td><code>string</code></td><td>报名/购买标书截止时间</td></tr>
+<tr><td><code>data.items[].tender_time</code></td><td><code>string</code></td><td>投标截止时间（开标时间）</td></tr>
+<tr><td><code>data.items[].service_end_date</code></td><td><code>string</code></td><td>服务结束日期</td></tr>
+<tr><td><code>data.items[].agency_name</code></td><td><code>string</code></td><td>招标代理公司</td></tr>
+<tr><td><code>data.items[].exists_bid_file</code></td><td><code>string</code></td><td>是否存在招标文件</td></tr>
+<tr><td><code>data.items[].url</code></td><td><code>string</code></td><td>采招词元公告链接</td></tr>
+</tbody></table></div>
+<h4>响应示例</h4>
+<div class="code-wrap"><pre class="code-block">{
+	"success": true,
+	"data": {
+		"total": 1286,
+		"page": 1,
+		"page_size": 20,
+		"items": [{
+			"bid_id": 501091134,
+			"title": "2026年度软件中心支持服务（大模型技术服务）结果公告",
+			"bid_type": "中标",
+			"bid_process": "中标结果",
+			"pub_time": "2026-03-20",
+			"money": 1840000,
+			"money_wan": 184.0,
+			"province": "北京",
+			"city": "北京",
+			"caller_name": "中国银行股份有限公司",
+			"caller_id": 244316,
+			"caller_type": "医院",
+			"winner_names": ["科大讯飞股份有限公司"],
+			"winner_ids": [21267],
+			"winner_moneys": [1840000],
+			"tender_names": [],
+			"sm_names": ["软件中心支持服务", "大模型技术服务"],
+			"brand_names": [],
+			"bid_method": "公开招标",
+			"bid_no": "2540STC75791",
+			"service_end_date": None,
+			"url": "https://www.caizhao-token.com/content/501091134/b2?sk=5114E2&amp;from=skill"
+		}]
+	},
+	"error": null,
+	"meta": {
+		"request_id": "req_7f3a9c21",
+		"tool_name": "search_bids",
+		"cost_units": 1,
+		"execution_time_ms": 156
+	}
+}</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h3 id="api-search-expiring">2. 即将到期项目 <a class="anchor-icon" href="#api-search-expiring">#</a></h3>
+<p>聚焦周期性项目，并且即将到期的项目，便于参与续期。</p>
+<div class="doc-table"><table><tbody>
+<tr><th style="width:120px">调用方式</th><td>POST</td></tr>
+<tr><th>请求地址</th><td><code>https://api.caizhao-token.com/api_v2/search_expiring_projects</code></td></tr>
+<tr><th>单次费用</th><td>2 积分</td></tr>
+</tbody></table></div>
+<h4>请求参数</h4>
+<div class="doc-table"><table><thead><tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>keywords</code></td><td><code>string[]</code></td><td>是</td><td>搜索关键词列表</td></tr>
+<tr><td><code>begin_date</code></td><td><code>string</code></td><td>否</td><td>筛选即将到期的项目起始日期，YYYY-MM-DD，比如：2026-04-01</td></tr>
+<tr><td><code>end_date</code></td><td><code>string</code></td><td>否</td><td>筛选即将到期的项目结束日期，YYYY-MM-DD，比如：2026-12-31</td></tr>
+<tr><td><code>provinces</code></td><td><code>string[]</code></td><td>否</td><td>省份列表，如：['北京', '内蒙古']</td></tr>
+<tr><td><code>cities</code></td><td><code>string[]</code></td><td>否</td><td>城市列表，如：['石家庄', '合肥']</td></tr>
+<tr><td><code>counties</code></td><td><code>string[]</code></td><td>否</td><td>区县列表，如：['长安区', '瑶海区']</td></tr>
+<tr><td><code>min_amount</code></td><td><code>number</code></td><td>否</td><td>项目金额下限（元）</td></tr>
+<tr><td><code>company_type</code></td><td><code>string[]</code></td><td>否</td><td>采购单位类型等筛选（学校、医院、政府及事业单位、军队、银行、证券、保险、通信运营商、国有企业、其他）</td></tr>
+<tr><td><code>page</code></td><td><code>number</code></td><td>否</td><td>页码（默认 1）</td></tr>
+<tr><td><code>page_size</code></td><td><code>number</code></td><td>否</td><td>每页条数（默认 20）</td></tr>
+</tbody></table></div>
+<h4>请求示例</h4>
+<div class="code-wrap"><pre class="code-block">curl -X POST "https://api.caizhao-token.com/api_v2/search_expiring_projects" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "keywords": [
+    "职工体检"
+  ],
+  "provinces": [
+    "北京",
+    "上海"
+  ],
+  "page": 1,
+  "page_size": 3
+}'</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h4>响应字段</h4>
+<div class="doc-table"><table><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>success</code></td><td><code>boolean</code></td><td>请求是否成功</td></tr>
+<tr><td><code>data</code></td><td><code>object</code></td><td>业务数据，结构随接口而异，字段见下表</td></tr>
+<tr><td><code>error</code></td><td><code>object|null</code></td><td>错误信息，含 code 与 message，成功时为 null</td></tr>
+<tr><td><code>meta</code></td><td><code>object</code></td><td>元信息，含 request_id、tool_name、cost_units、execution_time_ms</td></tr>
+<tr><td><code>data.total</code></td><td><code>int</code></td><td>全库命中总数</td></tr>
+<tr><td><code>data.returned</code></td><td><code>int</code></td><td>本次实际返回条数</td></tr>
+<tr><td><code>data.items[]</code></td><td><code>object[]</code></td><td>即将到期项目列表，元素字段见下</td></tr>
+<tr><td><code>data.items[].bid_id</code></td><td><code>int</code></td><td>标讯 ID</td></tr>
+<tr><td><code>data.items[].title</code></td><td><code>string</code></td><td>公告标题</td></tr>
+<tr><td><code>data.items[].caller_name</code></td><td><code>string</code></td><td>招标方名称</td></tr>
+<tr><td><code>data.items[].caller_id</code></td><td><code>int</code></td><td>招标方 ID</td></tr>
+<tr><td><code>data.items[].caller_type</code></td><td><code>string</code></td><td>招标方类型</td></tr>
+<tr><td><code>data.items[].money</code></td><td><code>float</code></td><td>金额（元）</td></tr>
+<tr><td><code>data.items[].money_wan</code></td><td><code>float</code></td><td>金额（万元）</td></tr>
+<tr><td><code>data.items[].province</code></td><td><code>string</code></td><td>省份</td></tr>
+<tr><td><code>data.items[].city</code></td><td><code>string</code></td><td>城市</td></tr>
+<tr><td><code>data.items[].county</code></td><td><code>string</code></td><td>区县</td></tr>
+<tr><td><code>data.items[].service_end_date</code></td><td><code>string</code></td><td>服务结束日期</td></tr>
+<tr><td><code>data.items[].days_until_expiry</code></td><td><code>int|null</code></td><td>距到期天数</td></tr>
+<tr><td><code>data.items[].winner_names</code></td><td><code>string[]</code></td><td>中标方名称列表</td></tr>
+<tr><td><code>data.items[].winner_ids</code></td><td><code>int[]</code></td><td>中标方 ID 列表</td></tr>
+<tr><td><code>data.items[].winner_moneys</code></td><td><code>float[]</code></td><td>各中标方中标金额（元）</td></tr>
+<tr><td><code>data.items[].tender_names</code></td><td><code>string[]</code></td><td>投标人名称列表</td></tr>
+<tr><td><code>data.items[].sm_names</code></td><td><code>string[]</code></td><td>标的物名称列表</td></tr>
+<tr><td><code>data.items[].agency_name</code></td><td><code>string</code></td><td>招标代理公司</td></tr>
+<tr><td><code>data.items[].caller_person</code></td><td><code>string</code></td><td>招标联系人姓名</td></tr>
+<tr><td><code>data.items[].caller_contact</code></td><td><code>string</code></td><td>招标联系人电话</td></tr>
+<tr><td><code>data.items[].agency_person</code></td><td><code>string</code></td><td>代理机构联系人姓名</td></tr>
+<tr><td><code>data.items[].agency_contact</code></td><td><code>string</code></td><td>代理机构联系人电话</td></tr>
+<tr><td><code>data.items[].winner_person</code></td><td><code>string</code></td><td>中标人联系人姓名</td></tr>
+<tr><td><code>data.items[].winner_contact</code></td><td><code>string</code></td><td>中标人联系人电话</td></tr>
+<tr><td><code>data.items[].url</code></td><td><code>string</code></td><td>采招词元公告链接</td></tr>
+</tbody></table></div>
+<h4>响应示例</h4>
+<div class="code-wrap"><pre class="code-block">{
+  "success": true,
+  "data": {
+    "total": 21,
+    "items": [
+      {
+        "bid_id": 496337799,
+        "title": "北京市产品质量监督检验研究院2025年职工体检服务采购项目成交公告",
+        "caller_name": "北京市产品质量监督检验研究院",
+        "caller_id": 1350338761,
+        "money": 2170240,
+        "money_wan": 217.02,
+        "province": "北京",
+        "city": "北京",
+        "service_end_date": "2026-03-31",
+        "days_until_expiry": 8,
+        "winner_names": [
+          "慈铭健康体检管理集团有限公司"
+        ],
+        "winner_ids": [
+          552101
+        ],
+        "winner_moneys": [
+          2170240
+        ],
+        "tender_names": [],
+        "sm_names": [
+          "职工体检服务"
+        ],
+        "url": "https://www.caizhao-token.com/content/496337799/b2?sk=5114E2&amp;from=skill",
+        "caller_person": "张*",
+        "caller_contact": "10000000000",
+        "winner_person": "张*",
+        "winner_contact": "10000000000",
+        "agency_person": "张*",
+        "agency_contact": "10000000000"
+      },
+      {
+        "bid_id": 485823947,
+        "title": "北京工业职业技术学院2024年度职工和学生体检服务项目成交公告",
+        "caller_name": "北京工业职业技术学院",
+        "caller_id": 11598,
+        "money": 0,
+        "money_wan": 0,
+        "province": "北京",
+        "city": "北京",
+        "service_end_date": "2026-04-01",
+        "days_until_expiry": 9,
+        "winner_names": [
+          "首都医科大学附属北京康复医院"
+        ],
+        "winner_ids": [
+          297555
+        ],
+        "winner_moneys": [
+          0
+        ],
+        "tender_names": [],
+        "sm_names": [
+          "职工体检",
+          "职工和学生体检服务项目"
+        ],
+        "url": "https://www.caizhao-token.com/content/485823947/b2?sk=5114E2&amp;from=skill",
+        "caller_person": "张*",
+        "caller_contact": "10000000000",
+        "winner_person": "张*",
+        "winner_contact": "10000000000",
+        "agency_person": "张*",
+        "agency_contact": "10000000000",
+      },
+      {
+        "bid_id": 394105404,
+        "title": "国家卫生健康委科学技术研究所职工体检采购项目成交公告",
+        "caller_name": "国家卫生健康委科学技术研究所",
+        "caller_id": 2727586,
+        "money": 0,
+        "money_wan": 0,
+        "province": "北京",
+        "city": "北京",
+        "service_end_date": "2026-04-01",
+        "days_until_expiry": 9,
+        "winner_names": [
+          "北京爱康国宾中关门诊部有限公司"
+        ],
+        "winner_ids": [
+          2845623
+        ],
+        "winner_moneys": [
+          0
+        ],
+        "tender_names": [],
+        "sm_names": [
+          "职工体检服务"
+        ],
+        "url": "https://www.caizhao-token.com/content/394105404/b2?sk=5114E2&amp;from=skill",
+        "caller_person": "张*",
+        "caller_contact": "10000000000",
+        "winner_person": "张*",
+        "winner_contact": "10000000000",
+        "agency_person": "张*",
+        "agency_contact": "10000000000",
+      }
+    ]
+  },
+  "error": "",
+  "meta": {
+    "request_id": "req_9cc75c7ac5004444",
+    "tool_name": "search_expiring_projects",
+    "cost_units": 1,
+    "execution_time_ms": 114
+  }
+}</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h3 id="api-search-proposed-projects">3. 拟建项目 <a class="anchor-icon" href="#api-search-proposed-projects">#</a></h3>
+<p>检索审批备案、建议书、可行性研究等阶段的拟建项目，提前发现早期商机。</p>
+<div class="doc-table"><table><tbody>
+<tr><th style="width:120px">调用方式</th><td>POST</td></tr>
+<tr><th>请求地址</th><td><code>https://api.caizhao-token.com/api_v2/search_proposed_projects</code></td></tr>
+<tr><th>单次费用</th><td>2 积分</td></tr>
+</tbody></table></div>
+<h4>请求参数</h4>
+<div class="doc-table"><table><thead><tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>keywords</code></td><td><code>string[]</code></td><td>是</td><td>搜索关键词列表</td></tr>
+<tr><td><code>match_type</code></td><td><code>int</code></td><td>否</td><td>匹配模式：0=标题（默认），3=全文（默认 0）</td></tr>
+<tr><td><code>approval_status_code</code></td><td><code>int</code></td><td>否</td><td>审批状态：1未审批 2审批中 3办结 4未通过 5撤销 6其他（默认 0）</td></tr>
+<tr><td><code>begin_date</code></td><td><code>string</code></td><td>否</td><td>发布开始日期，YYYY-MM-DD</td></tr>
+<tr><td><code>end_date</code></td><td><code>string</code></td><td>否</td><td>发布结束日期，YYYY-MM-DD</td></tr>
+<tr><td><code>provinces</code></td><td><code>string[]</code></td><td>否</td><td>省份列表</td></tr>
+<tr><td><code>cities</code></td><td><code>string[]</code></td><td>否</td><td>城市列表</td></tr>
+<tr><td><code>page</code></td><td><code>number</code></td><td>否</td><td>页码（默认 1）</td></tr>
+<tr><td><code>page_size</code></td><td><code>number</code></td><td>否</td><td>每页条数（默认 20）</td></tr>
+<tr><td><code>need_fulltext</code></td><td><code>boolean</code></td><td>否</td><td>是否返回公告正文（默认 false）</td></tr>
+</tbody></table></div>
+<h4>请求示例</h4>
+<div class="code-wrap"><pre class="code-block">curl -X POST "https://api.caizhao-token.com/api_v2/search_proposed_projects" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "keywords": [
+    "智慧城市",
+    "信息化"
+  ],
+  "provinces": [
+    "北京市"
+  ],
+  "begin_date": "2024-01-01",
+  "end_date": "2024-12-31",
+  "page": 1,
+  "page_size": 20
+}'</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h4>响应字段</h4>
+<div class="doc-table"><table><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>success</code></td><td><code>boolean</code></td><td>请求是否成功</td></tr>
+<tr><td><code>data</code></td><td><code>object</code></td><td>业务数据，结构随接口而异，字段见下表</td></tr>
+<tr><td><code>error</code></td><td><code>object|null</code></td><td>错误信息，含 code 与 message，成功时为 null</td></tr>
+<tr><td><code>meta</code></td><td><code>object</code></td><td>元信息，含 request_id、tool_name、cost_units、execution_time_ms</td></tr>
+<tr><td><code>data.total</code></td><td><code>int</code></td><td>全库命中总数</td></tr>
+<tr><td><code>data.returned</code></td><td><code>int</code></td><td>本次实际返回条数</td></tr>
+<tr><td><code>data.items[]</code></td><td><code>object[]</code></td><td>拟建项目列表，元素字段见下</td></tr>
+<tr><td><code>data.items[].bid_id</code></td><td><code>int</code></td><td>拟建项目 ID</td></tr>
+<tr><td><code>data.items[].project_name</code></td><td><code>string</code></td><td>项目名称</td></tr>
+<tr><td><code>data.items[].project_code</code></td><td><code>string</code></td><td>项目编码</td></tr>
+<tr><td><code>data.items[].built_area</code></td><td><code>string</code></td><td>建设地点</td></tr>
+<tr><td><code>data.items[].province</code></td><td><code>string</code></td><td>省份</td></tr>
+<tr><td><code>data.items[].city</code></td><td><code>string</code></td><td>城市</td></tr>
+<tr><td><code>data.items[].pub_time</code></td><td><code>string</code></td><td>发布时间</td></tr>
+<tr><td><code>data.items[].money</code></td><td><code>float</code></td><td>投资金额（元）</td></tr>
+<tr><td><code>data.items[].money_format</code></td><td><code>string</code></td><td>金额可读格式，如 1200万</td></tr>
+<tr><td><code>data.items[].caller_name</code></td><td><code>string</code></td><td>建设单位名称</td></tr>
+<tr><td><code>data.items[].approval_status</code></td><td><code>string</code></td><td>审批状态，如 办结（通过）</td></tr>
+<tr><td><code>data.items[].content</code></td><td><code>string</code></td><td>公告正文（need_fulltext=true 时返回）</td></tr>
+<tr><td><code>data.items[].url</code></td><td><code>string</code></td><td>拟建项目详情链接</td></tr>
+</tbody></table></div>
+<h4>响应示例</h4>
+<div class="code-wrap"><pre class="code-block">{
+  "success": true,
+  "data": {
+    "total": 326,
+    "page": 1,
+    "page_size": 20,
+    "items": [
+      {
+        "bid_id": 982451336,
+        "project_name": "北京市朝阳区智慧城市管理平台建设项目",
+        "project_code": "110105-2024-01-001",
+        "built_area": "北京市朝阳区",
+        "province": "北京市",
+        "city": "北京市",
+        "pub_time": "2024-03-20",
+        "money": 1200.0,
+        "money_wan": 1200.0,
+        "money_format": "1200万",
+        "caller_name": "北京市朝阳区城市管理委员会",
+        "approval_status": "办结（通过）",
+        "content": ""
+      }
+    ]
+  },
+  "error": null,
+  "meta": {
+    "request_id": "req_7f3a9c21",
+    "tool_name": "search_proposed_projects",
+    "cost_units": 1,
+    "execution_time_ms": 156
+  }
+}</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h3 id="api-query-advanced">4. 标讯高级查询 <a class="anchor-icon" href="#api-query-advanced">#</a></h3>
+<p>支持关键词分组、地区多级、金额区间、行业与流程等组合条件，对标讯列表进行检索与分页。</p>
+<div class="doc-table"><table><tbody>
+<tr><th style="width:120px">调用方式</th><td>POST</td></tr>
+<tr><th>请求地址</th><td><code>https://api.caizhao-token.com/api_v2/query_bids_advanced</code></td></tr>
+<tr><th>单次费用</th><td>2 积分</td></tr>
+</tbody></table></div>
+<h4>请求参数</h4>
+<div class="doc-table"><table><thead><tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>keywords</code></td><td><code>list[string]</code></td><td>否</td><td>关键词列表，与 match_modes 组合查询</td></tr>
+<tr><td><code>match_modes</code></td><td><code>list[string]</code></td><td>否</td><td>与 keywords 对应的匹配范围（all:全部 sm:标的物/产品 title:标题 brand:品牌 fulltext:全文 caller:招标公司/采购公司/招标方 winner:中标公司/供应商/中标方 winner_tender:中标公司或投标方 tender:投标公司/供应商/投标方 agency:招标代理公司），如['sm','title']</td></tr>
+<tr><td><code>keyword_groups</code></td><td><code>list[dict]</code></td><td>否</td><td>关键词分组，用于组内 AND、组间 OR 等复杂逻辑，结构为：[{'keywords': ['服务器'], 'match_modes': ['sm', 'title']}, {'keywords': ['大模型'], 'match_modes': ['sm', 'title']}]</td></tr>
+<tr><td><code>bid_type</code></td><td><code>int</code></td><td>否</td><td>标讯类型枚举值(1: 招标、2: 中标)</td></tr>
+<tr><td><code>bid_process</code></td><td><code>list[int]</code></td><td>否</td><td>标讯细分类型(1:采购意向 2:预招标 4:招标 5:变更公告 6:中标候选人 7:中标结果 8:合同 9:验收公告 10:废标公告)，默认[1,2,4,7,8]</td></tr>
+<tr><td><code>begin_date</code></td><td><code>string</code></td><td>否</td><td>开始日期，格式 YYYY-MM-DD</td></tr>
+<tr><td><code>end_date</code></td><td><code>string</code></td><td>否</td><td>结束日期，格式 YYYY-MM-DD</td></tr>
+<tr><td><code>provinces</code></td><td><code>list[string]</code></td><td>否</td><td>省份列表，如：['北京', '内蒙古']</td></tr>
+<tr><td><code>cities</code></td><td><code>list[string]</code></td><td>否</td><td>城市列表，如：['石家庄', '合肥']</td></tr>
+<tr><td><code>counties</code></td><td><code>list[string]</code></td><td>否</td><td>区县列表，如：['长安区', '瑶海区']</td></tr>
+<tr><td><code>min_money</code></td><td><code>float</code></td><td>否</td><td>金额下限（单位：元）</td></tr>
+<tr><td><code>max_money</code></td><td><code>float</code></td><td>否</td><td>金额上限（单位：元）</td></tr>
+<tr><td><code>slop</code></td><td><code>int</code></td><td>否</td><td>短语匹配允许的词间距（常见于全文检索）</td></tr>
+<tr><td><code>exclude_keywords</code></td><td><code>list[string]</code></td><td>否</td><td>排除关键词</td></tr>
+<tr><td><code>sort_field</code></td><td><code>string</code></td><td>否</td><td>排序字段，默认发布时间（默认 pub_time）</td></tr>
+<tr><td><code>sort_order</code></td><td><code>string</code></td><td>否</td><td>排序方向 asc/desc（默认 desc）</td></tr>
+<tr><td><code>page</code></td><td><code>int</code></td><td>否</td><td>页码（默认 1）</td></tr>
+<tr><td><code>page_size</code></td><td><code>int</code></td><td>否</td><td>每页条数（默认 20）</td></tr>
+</tbody></table></div>
+<h4>请求示例</h4>
+<div class="code-wrap"><pre class="code-block">curl -X POST "https://api.caizhao-token.com/api_v2/query_bids_advanced" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "keywords": [
+    "大语言模型"
+  ],
+  "exclude_keywords": [
+    "运行环境",
+    "公安局",
+    "信息技术有限"
+  ],
+  "page": 1,
+  "page_size": 3
+}'</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h4>响应字段</h4>
+<div class="doc-table"><table><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>success</code></td><td><code>boolean</code></td><td>请求是否成功</td></tr>
+<tr><td><code>data</code></td><td><code>object</code></td><td>业务数据，结构随接口而异，字段见下表</td></tr>
+<tr><td><code>error</code></td><td><code>object|null</code></td><td>错误信息，含 code 与 message，成功时为 null</td></tr>
+<tr><td><code>meta</code></td><td><code>object</code></td><td>元信息，含 request_id、tool_name、cost_units、execution_time_ms</td></tr>
+<tr><td><code>data.total</code></td><td><code>int</code></td><td>全库命中总数</td></tr>
+<tr><td><code>data.returned</code></td><td><code>int</code></td><td>本次实际返回条数</td></tr>
+<tr><td><code>data.items[]</code></td><td><code>object[]</code></td><td>公告列表，元素字段见下</td></tr>
+<tr><td><code>data.items[].bid_id</code></td><td><code>int</code></td><td>标讯 ID</td></tr>
+<tr><td><code>data.items[].title</code></td><td><code>string</code></td><td>公告标题</td></tr>
+<tr><td><code>data.items[].bid_type</code></td><td><code>string</code></td><td>标讯类型，如 招标公告/中标公告</td></tr>
+<tr><td><code>data.items[].bid_process</code></td><td><code>string</code></td><td>招标流程阶段</td></tr>
+<tr><td><code>data.items[].pub_time</code></td><td><code>string</code></td><td>发布时间</td></tr>
+<tr><td><code>data.items[].money</code></td><td><code>float</code></td><td>金额（元）</td></tr>
+<tr><td><code>data.items[].money_wan</code></td><td><code>float</code></td><td>金额（万元）</td></tr>
+<tr><td><code>data.items[].province</code></td><td><code>string</code></td><td>省份</td></tr>
+<tr><td><code>data.items[].city</code></td><td><code>string</code></td><td>城市</td></tr>
+<tr><td><code>data.items[].county</code></td><td><code>string</code></td><td>区县</td></tr>
+<tr><td><code>data.items[].caller_name</code></td><td><code>string</code></td><td>招标方名称</td></tr>
+<tr><td><code>data.items[].caller_id</code></td><td><code>int</code></td><td>招标方 ID</td></tr>
+<tr><td><code>data.items[].caller_type</code></td><td><code>string</code></td><td>招标方类型</td></tr>
+<tr><td><code>data.items[].winner_names</code></td><td><code>string[]</code></td><td>中标方名称列表</td></tr>
+<tr><td><code>data.items[].winner_ids</code></td><td><code>int[]</code></td><td>中标方 ID 列表</td></tr>
+<tr><td><code>data.items[].winner_moneys</code></td><td><code>float[]</code></td><td>各中标方中标金额（元）</td></tr>
+<tr><td><code>data.items[].tender_names</code></td><td><code>string[]</code></td><td>投标人名称列表</td></tr>
+<tr><td><code>data.items[].sm_names</code></td><td><code>string[]</code></td><td>标的物名称列表</td></tr>
+<tr><td><code>data.items[].brand_names</code></td><td><code>string[]</code></td><td>品牌名称列表</td></tr>
+<tr><td><code>data.items[].bid_method</code></td><td><code>string</code></td><td>招标方式</td></tr>
+<tr><td><code>data.items[].bid_no</code></td><td><code>string</code></td><td>招标编号</td></tr>
+<tr><td><code>data.items[].service_end_date</code></td><td><code>string</code></td><td>服务结束日期</td></tr>
+<tr><td><code>data.items[].agency_name</code></td><td><code>string</code></td><td>招标代理公司</td></tr>
+<tr><td><code>data.items[].caller_person</code></td><td><code>string</code></td><td>招标联系人姓名</td></tr>
+<tr><td><code>data.items[].caller_contact</code></td><td><code>string</code></td><td>招标联系人电话</td></tr>
+<tr><td><code>data.items[].agency_person</code></td><td><code>string</code></td><td>代理机构联系人姓名</td></tr>
+<tr><td><code>data.items[].agency_contact</code></td><td><code>string</code></td><td>代理机构联系人电话</td></tr>
+<tr><td><code>data.items[].winner_person</code></td><td><code>string</code></td><td>中标人联系人姓名</td></tr>
+<tr><td><code>data.items[].winner_contact</code></td><td><code>string</code></td><td>中标人联系人电话</td></tr>
+<tr><td><code>data.items[].url</code></td><td><code>string</code></td><td>采招词元公告链接</td></tr>
+</tbody></table></div>
+<h4>响应示例</h4>
+<div class="code-wrap"><pre class="code-block">{
+  "success": true,
+  "data": {
+    "total": 974,
+    "items": [
+      {
+        "bid_id": 501115821,
+        "title": "中央网络安全和信息化委员会办公室维语语料库及专用大语言模型原型系统开发项目成交公告",
+        "bid_type": "中标",
+        "bid_process": "中标结果",
+        "pub_time": "2026-03-20",
+        "money": 1700000,
+        "money_wan": 170,
+        "province": "北京",
+        "city": "北京",
+        "caller_name": "中央网络安全和信息化委员会",
+        "caller_id": 727174391,
+        "caller_type": "",
+        "winner_names": [
+          "新疆华域卓信科技股份有限公司",
+          "新疆西北星信息技术有限责任公司"
+        ],
+        "winner_ids": [
+          1263849,
+          3269262
+        ],
+        "winner_moneys": [
+          0,
+          1690000
+        ],
+        "tender_names": [
+          "中通服公众信息产业股份有限公司"
+        ],
+        "sm_names": [
+          "维语语料库及专用大语言模型原型系统开发项目",
+          "维语语料库及专用大语言模型原型系统div开发项目"
+        ],
+        "brand_names": [],
+        "bid_method": "询价",
+        "bid_no": "&lt;/span&gt;2641STC60596",
+        "service_end_date": "",
+        "url": "https://www.caizhao-token.com/content/501115821/b2?sk=5114E2&amp;from=skill",
+        "caller_person": "张*",
+        "caller_contact": "10000000000",
+        "winner_person": "张*",
+        "winner_contact": "10000000000",
+        "agency_person": "张*",
+        "agency_contact": "10000000000"
+      },
+      {
+        "bid_id": 589604344,
+        "title": "中国五冶《基于大语言模型的建设工程专业文档辅助撰写系统》子课题一软件新增计算功能开发服务",
+        "bid_type": "招标",
+        "bid_process": "招标",
+        "pub_time": "2026-03-19",
+        "money": 0,
+        "money_wan": 0,
+        "province": "北京",
+        "city": "北京",
+        "caller_name": "中国五矿集团有限公司",
+        "caller_id": 608329,
+        "caller_type": "政府",
+        "winner_names": [],
+        "winner_ids": [],
+        "winner_moneys": [],
+        "tender_names": [],
+        "sm_names": [
+          "计算功能开发服务",
+          "研发技术服务"
+        ],
+        "brand_names": [],
+        "bid_method": "公开招标",
+        "bid_no": "210025341130509",
+        "service_end_date": "",
+        "url": "https://www.caizhao-token.com/content/589604344/b1?sk=5114E2&amp;from=skill",
+        "caller_person": "张*",
+        "caller_contact": "10000000000",
+        "winner_person": "张*",
+        "winner_contact": "10000000000",
+        "agency_person": "张*",
+        "agency_contact": "10000000000"
+      },
+      {
+        "bid_id": 589669407,
+        "title": "中国航信结算公司基于LLM大语言模型的AI代码助手系统招标公告",
+        "bid_type": "招标",
+        "bid_process": "招标",
+        "pub_time": "2026-03-19",
+        "money": 0,
+        "money_wan": 0,
+        "province": "",
+        "city": "",
+        "caller_name": "中国航信结算公司",
+        "caller_id": 1457804054,
+        "caller_type": "其他",
+        "winner_names": [],
+        "winner_ids": [],
+        "winner_moneys": [],
+        "tender_names": [],
+        "sm_names": [
+          "AI代码助手系统"
+        ],
+        "brand_names": [],
+        "bid_method": "公开招标",
+        "bid_no": "BIECC-26CG20013",
+        "service_end_date": "",
+        "url": "https://www.caizhao-token.com/content/589669407/b1?sk=5114E2&amp;from=skill",
+        "caller_person": "张*",
+        "caller_contact": "10000000000",
+        "winner_person": "张*",
+        "winner_contact": "10000000000",
+        "agency_person": "张*",
+        "agency_contact": "10000000000"
+      }
+    ]
+  },
+  "error": "",
+  "meta": {
+    "request_id": "req_545313135866449f",
+    "tool_name": "query_bids_advanced",
+    "cost_units": 2,
+    "execution_time_ms": 589
+  }
+}</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h3 id="api-find-bidders">5. 招标项目推荐供应商 <a class="anchor-icon" href="#api-find-bidders">#</a></h3>
+<p>根据标讯唯一键、链接或项目标题，推荐历史上参与同类项目较多的潜在供应商。</p>
+<div class="doc-table"><table><tbody>
+<tr><th style="width:120px">调用方式</th><td>POST</td></tr>
+<tr><th>请求地址</th><td><code>https://api.caizhao-token.com/api_v2/find_potential_bidders</code></td></tr>
+<tr><th>单次费用</th><td>1 积分</td></tr>
+</tbody></table></div>
+<h4>请求参数</h4>
+<div class="doc-table"><table><thead><tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>uniq_key</code></td><td><code>string</code></td><td>否</td><td>平台标讯唯一键（与下列组合互斥，四选一必填场景之一）</td></tr>
+<tr><td><code>bid_id</code></td><td><code>int | string</code></td><td>否</td><td>标讯 ID，需配合 bid_type</td></tr>
+<tr><td><code>bid_type</code></td><td><code>int</code></td><td>否</td><td>标讯类型枚举值，与 bid_id 同时提供（1: 招标, 2: 中标）</td></tr>
+<tr><td><code>bid_url</code></td><td><code>string</code></td><td>否</td><td>采招词元公告详情页链接</td></tr>
+<tr><td><code>project_title</code></td><td><code>string</code></td><td>否</td><td>项目标题文本（无 ID 时用于召回相似项目）</td></tr>
+<tr><td><code>limit</code></td><td><code>number</code></td><td>否</td><td>返回推荐数量（默认 20）</td></tr>
+</tbody></table></div>
+<h4>请求示例</h4>
+<div class="code-wrap"><pre class="code-block">curl -X POST "https://api.caizhao-token.com/api_v2/find_potential_bidders" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "uniq_key": "48fc44301b90abf69a6bf5d0a7818438641615ce",
+  "limit": 10
+}'</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h4>响应字段</h4>
+<div class="doc-table"><table><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>success</code></td><td><code>boolean</code></td><td>请求是否成功</td></tr>
+<tr><td><code>data</code></td><td><code>object</code></td><td>业务数据，结构随接口而异，字段见下表</td></tr>
+<tr><td><code>error</code></td><td><code>object|null</code></td><td>错误信息，含 code 与 message，成功时为 null</td></tr>
+<tr><td><code>meta</code></td><td><code>object</code></td><td>元信息，含 request_id、tool_name、cost_units、execution_time_ms</td></tr>
+<tr><td><code>data.project_title</code></td><td><code>string</code></td><td>目标项目标题</td></tr>
+<tr><td><code>data.project_bid_id</code></td><td><code>int</code></td><td>目标项目标讯 ID</td></tr>
+<tr><td><code>data.project_bid_type</code></td><td><code>int</code></td><td>目标项目标讯类型</td></tr>
+<tr><td><code>data.caller_name</code></td><td><code>string</code></td><td>招标方名称</td></tr>
+<tr><td><code>data.province</code></td><td><code>string</code></td><td>省份</td></tr>
+<tr><td><code>data.city</code></td><td><code>string</code></td><td>城市</td></tr>
+<tr><td><code>data.sm_names</code></td><td><code>string[]</code></td><td>标的物列表</td></tr>
+<tr><td><code>data.total</code></td><td><code>int</code></td><td>推荐供应商数量</td></tr>
+<tr><td><code>data.bidders[]</code></td><td><code>object[]</code></td><td>推荐供应商列表，元素字段见下</td></tr>
+<tr><td><code>data.bidders[].company_name</code></td><td><code>string</code></td><td>供应商名称</td></tr>
+<tr><td><code>data.bidders[].company_id</code></td><td><code>int</code></td><td>供应商 ID</td></tr>
+<tr><td><code>data.bidders[].match_reason</code></td><td><code>string</code></td><td>推荐理由</td></tr>
+<tr><td><code>data.bidders[].caller_history_count</code></td><td><code>int</code></td><td>曾为该招标方供货次数</td></tr>
+<tr><td><code>data.bidders[].caller_history_amount_wan</code></td><td><code>float</code></td><td>历史供货金额（万元）</td></tr>
+<tr><td><code>data.bidders[].region_win_count</code></td><td><code>int</code></td><td>该地区同类产品中标次数</td></tr>
+<tr><td><code>data.bidders[].region_win_amount_wan</code></td><td><code>float</code></td><td>该地区中标金额（万元）</td></tr>
+<tr><td><code>data.bidders[].last_cooperation_time</code></td><td><code>string</code></td><td>最近与该招标方合作时间</td></tr>
+<tr><td><code>data.bidders[].latest_win_time</code></td><td><code>string</code></td><td>最近中标时间</td></tr>
+<tr><td><code>data.bidders[].matched_products</code></td><td><code>string[]</code></td><td>匹配的标的物（Top10）</td></tr>
+<tr><td><code>data.bidders[].main_customers</code></td><td><code>string[]</code></td><td>主要客户（Top10）</td></tr>
+</tbody></table></div>
+<h4>响应示例</h4>
+<div class="code-wrap"><pre class="code-block">{
+  "success": true,
+  "data": {
+    "project_title": "广州医科大学附属中医医院医疗设备采购需求[202614]调研公告二次公告",
+    "project_bid_id": 589562672,
+    "project_bid_type": 1,
+    "caller_name": "广州医科大学附属中医医院",
+    "province": "广东",
+    "city": "广州",
+    "sm_names": [
+      "负极板回路垫",
+      "医疗设备"
+    ],
+    "total": 10,
+    "bidders": [
+      {
+        "company_name": "广东国信医疗科技发展有限公司",
+        "company_id": 348256430,
+        "match_reason": "曾为该招标方供货16次",
+        "caller_history_count": 16,
+        "caller_history_amount_wan": 665.99,
+        "region_win_count": 0,
+        "region_win_amount_wan": 0,
+        "last_cooperation_time": "2025-04-30",
+        "latest_win_time": "",
+        "matched_products": [
+          "医疗设备"
+        ],
+        "main_customers": []
+      },
+      {
+        "company_name": "广州永腾医疗科技有限公司",
+        "company_id": 1445283489,
+        "match_reason": "曾为该招标方供货15次",
+        "caller_history_count": 15,
+        "caller_history_amount_wan": 1200.95,
+        "region_win_count": 0,
+        "region_win_amount_wan": 0,
+        "last_cooperation_time": "2025-01-02",
+        "latest_win_time": "",
+        "matched_products": [
+          "医疗设备"
+        ],
+        "main_customers": []
+      },
+      {
+        "company_name": "广州钺力医疗科技有限公司",
+        "company_id": 12333150,
+        "match_reason": "曾为该招标方供货15次",
+        "caller_history_count": 15,
+        "caller_history_amount_wan": 768.24,
+        "region_win_count": 0,
+        "region_win_amount_wan": 0,
+        "last_cooperation_time": "2023-09-19",
+        "latest_win_time": "",
+        "matched_products": [
+          "医疗设备"
+        ],
+        "main_customers": []
+      },
+      {
+        "company_name": "广州宸安信生物医药有限公司",
+        "company_id": 1083507831,
+        "match_reason": "曾为该招标方供货14次",
+        "caller_history_count": 14,
+        "caller_history_amount_wan": 1175.82,
+        "region_win_count": 0,
+        "region_win_amount_wan": 0,
+        "last_cooperation_time": "2024-05-31",
+        "latest_win_time": "",
+        "matched_products": [
+          "医疗设备"
+        ],
+        "main_customers": []
+      },
+      {
+        "company_name": "广州康诺威医疗器械有限公司",
+        "company_id": 1427460270,
+        "match_reason": "曾为该招标方供货14次",
+        "caller_history_count": 14,
+        "caller_history_amount_wan": 831.22,
+        "region_win_count": 0,
+        "region_win_amount_wan": 0,
+        "last_cooperation_time": "2024-08-30",
+        "latest_win_time": "",
+        "matched_products": [
+          "医疗设备"
+        ],
+        "main_customers": []
+      },
+      {
+        "company_name": "吉安市世安贸易有限公司",
+        "company_id": 1445916667,
+        "match_reason": "曾为该招标方供货14次",
+        "caller_history_count": 14,
+        "caller_history_amount_wan": 389.65,
+        "region_win_count": 0,
+        "region_win_amount_wan": 0,
+        "last_cooperation_time": "2024-06-13",
+        "latest_win_time": "",
+        "matched_products": [
+          "医疗设备"
+        ],
+        "main_customers": []
+      },
+      {
+        "company_name": "广州德佑帝生物科技有限公司",
+        "company_id": 1444421948,
+        "match_reason": "曾为该招标方供货10次",
+        "caller_history_count": 10,
+        "caller_history_amount_wan": 862.23,
+        "region_win_count": 0,
+        "region_win_amount_wan": 0,
+        "last_cooperation_time": "2024-01-18",
+        "latest_win_time": "",
+        "matched_products": [
+          "医疗设备"
+        ],
+        "main_customers": []
+      },
+      {
+        "company_name": "广州市振粤贸易有限公司",
+        "company_id": 5152011,
+        "match_reason": "曾为该招标方供货9次",
+        "caller_history_count": 9,
+        "caller_history_amount_wan": 728.83,
+        "region_win_count": 0,
+        "region_win_amount_wan": 0,
+        "last_cooperation_time": "2022-12-20",
+        "latest_win_time": "",
+        "matched_products": [
+          "医疗设备"
+        ],
+        "main_customers": []
+      },
+      {
+        "company_name": "广东省中科进出口有限公司",
+        "company_id": 2456,
+        "match_reason": "曾为该招标方供货7次；该地区同类产品中标21次",
+        "caller_history_count": 7,
+        "caller_history_amount_wan": 1751.75,
+        "region_win_count": 21,
+        "region_win_amount_wan": 8254.14,
+        "last_cooperation_time": "2024-11-28",
+        "latest_win_time": "2026-03-22",
+        "matched_products": [
+          "医疗设备"
+        ],
+        "main_customers": [
+          "广州市中西医结合医院",
+          "惠来县仙庵镇卫生院",
+          "广州中医药大学第一附属医院",
+          "广东省妇幼保健院",
+          "广州市增城区石滩镇中心卫生院",
+          "广州市第一人民医院",
+          "广州市第一人民医院南沙医院",
+          "揭阳市榕城区中心医院",
+          "阳山县人民医院",
+          "广东医科大学附属医院"
+        ]
+      },
+      {
+        "company_name": "广东大琦医疗器械有限公司",
+        "company_id": 108326,
+        "match_reason": "曾为该招标方供货7次；该地区同类产品中标4次",
+        "caller_history_count": 7,
+        "caller_history_amount_wan": 281.21,
+        "region_win_count": 4,
+        "region_win_amount_wan": 776.74,
+        "last_cooperation_time": "2025-09-10",
+        "latest_win_time": "2026-03-03",
+        "matched_products": [
+          "医疗设备"
+        ],
+        "main_customers": [
+          "广州医科大学附属第一医院",
+          "广东省妇幼保健院",
+          "梅州市人民医院"
+        ]
+      }
+    ]
+  },
+  "error": "",
+  "meta": {
+    "request_id": "req_7818e8d0e16e42fe",
+    "tool_name": "find_potential_bidders",
+    "cost_units": 1,
+    "execution_time_ms": 322
+  }
+}</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h3 id="api-bid-detail">6. 标讯详情 <a class="anchor-icon" href="#api-bid-detail">#</a></h3>
+<p>通过 uniq_key、bid_id 或 bid_url 之一获取单条标讯的结构化详情与正文信息。</p>
+<div class="doc-table"><table><tbody>
+<tr><th style="width:120px">调用方式</th><td>POST</td></tr>
+<tr><th>请求地址</th><td><code>https://api.caizhao-token.com/api_v2/get_bid_detail</code></td></tr>
+<tr><th>单次费用</th><td>1 积分</td></tr>
+</tbody></table></div>
+<h4>请求参数</h4>
+<div class="doc-table"><table><thead><tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>bid_id</code></td><td><code>int</code></td><td>否</td><td>标讯内部 ID</td></tr>
+<tr><td><code>bid_type</code></td><td><code>int</code></td><td>否</td><td>1=招标 2=中标，与 bid_id 等组合使用</td></tr>
+<tr><td><code>uniq_key</code></td><td><code>string</code></td><td>否</td><td>平台侧唯一键；与 bid_id、bid_url 三者至少填其一</td></tr>
+<tr><td><code>bid_url</code></td><td><code>string</code></td><td>否</td><td>采招词元公告详情页链接；与 bid_id、uniq_key 三者至少填其一</td></tr>
+</tbody></table></div>
+<h4>请求示例</h4>
+<div class="code-wrap"><pre class="code-block">curl -X POST "https://api.caizhao-token.com/api_v2/get_bid_detail" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "bid_url": "https://www.caizhao-token.com/content/501195842/b2"
+}'</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h4>响应字段</h4>
+<div class="doc-table"><table><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>success</code></td><td><code>boolean</code></td><td>请求是否成功</td></tr>
+<tr><td><code>data</code></td><td><code>object</code></td><td>业务数据，结构随接口而异，字段见下表</td></tr>
+<tr><td><code>error</code></td><td><code>object|null</code></td><td>错误信息，含 code 与 message，成功时为 null</td></tr>
+<tr><td><code>meta</code></td><td><code>object</code></td><td>元信息，含 request_id、tool_name、cost_units、execution_time_ms</td></tr>
+<tr><td><code>data.bid_id</code></td><td><code>int</code></td><td>标讯 ID</td></tr>
+<tr><td><code>data.bid_type</code></td><td><code>string</code></td><td>标讯类型，如 招标/中标</td></tr>
+<tr><td><code>data.bid_process</code></td><td><code>string</code></td><td>招标流程阶段</td></tr>
+<tr><td><code>data.title</code></td><td><code>string</code></td><td>公告标题</td></tr>
+<tr><td><code>data.pub_time</code></td><td><code>string</code></td><td>发布时间</td></tr>
+<tr><td><code>data.money</code></td><td><code>float</code></td><td>金额（元）</td></tr>
+<tr><td><code>data.money_wan</code></td><td><code>float</code></td><td>金额（万元）</td></tr>
+<tr><td><code>data.province</code></td><td><code>string</code></td><td>省份</td></tr>
+<tr><td><code>data.city</code></td><td><code>string</code></td><td>城市</td></tr>
+<tr><td><code>data.county</code></td><td><code>string</code></td><td>区县</td></tr>
+<tr><td><code>data.caller_name</code></td><td><code>string</code></td><td>招标方名称</td></tr>
+<tr><td><code>data.caller_type</code></td><td><code>string</code></td><td>招标方类型</td></tr>
+<tr><td><code>data.winner_names</code></td><td><code>string[]</code></td><td>中标方名称列表</td></tr>
+<tr><td><code>data.tender_names</code></td><td><code>string[]</code></td><td>投标人名称列表</td></tr>
+<tr><td><code>data.sm_names</code></td><td><code>string[]</code></td><td>标的物名称列表</td></tr>
+<tr><td><code>data.brand_names</code></td><td><code>string[]</code></td><td>品牌名称列表</td></tr>
+<tr><td><code>data.bid_no</code></td><td><code>string</code></td><td>招标编号</td></tr>
+<tr><td><code>data.uniq_key</code></td><td><code>string</code></td><td>平台侧唯一键</td></tr>
+<tr><td><code>data.service_end_date</code></td><td><code>string</code></td><td>服务结束日期</td></tr>
+<tr><td><code>data.agency_name</code></td><td><code>string</code></td><td>招标代理公司</td></tr>
+<tr><td><code>data.has_source</code></td><td><code>boolean</code></td><td>是否含公告正文</td></tr>
+<tr><td><code>data.has_attachment</code></td><td><code>boolean</code></td><td>是否含附件内容</td></tr>
+<tr><td><code>data.has_attach_file</code></td><td><code>boolean</code></td><td>是否存在招标文件</td></tr>
+<tr><td><code>data.attachment_urls</code></td><td><code>string[]</code></td><td>附件链接列表</td></tr>
+<tr><td><code>data.source</code></td><td><code>string</code></td><td>公告正文</td></tr>
+<tr><td><code>data.source_ext</code></td><td><code>string</code></td><td>附件内容</td></tr>
+<tr><td><code>data.url</code></td><td><code>string</code></td><td>采招词元公告链接</td></tr>
+<tr><td><code>data.caller_person</code></td><td><code>string</code></td><td>招标联系人姓名</td></tr>
+<tr><td><code>data.caller_contact</code></td><td><code>string</code></td><td>招标联系人电话</td></tr>
+<tr><td><code>data.agency_person</code></td><td><code>string</code></td><td>代理机构联系人姓名</td></tr>
+<tr><td><code>data.agency_contact</code></td><td><code>string</code></td><td>代理机构联系人电话</td></tr>
+<tr><td><code>data.winner_person</code></td><td><code>string</code></td><td>中标人联系人姓名</td></tr>
+<tr><td><code>data.winner_contact</code></td><td><code>string</code></td><td>中标人联系人电话</td></tr>
+</tbody></table></div>
+<h4>响应示例</h4>
+<div class="code-wrap"><pre class="code-block">{
+  "success": true,
+  "data": {
+    "bid_id": 501195842,
+    "bid_type": "中标",
+    "bid_process": "合同",
+    "title": "烟台市政务AI大模型服务项目合同",
+    "pub_time": "2026-03-23",
+    "money": 44800,
+    "money_wan": 4.48,
+    "province": "山东",
+    "city": "烟台",
+    "county": "",
+    "caller_name": "烟台市大数据局",
+    "caller_type": "",
+    "winner_names": [
+      "道普信息技术有限公司"
+    ],
+    "tender_names": [],
+    "sm_names": [
+      "政务AI大模型服务项目"
+    ],
+    "brand_names": [],
+    "bid_no": "",
+    "uniq_key": "372e10211139e706caa353921778184ca46818ae",
+    "service_end_date": "",
+    "agency_name": "",
+    "source": "&lt;div class='detail'&gt;&lt;h4 class='h4_o'&gt;烟台市政务AI大模型服务项目合同&lt;/h4&gt; .... &lt;/div&gt;",
+    "source_ext": "",
+    "url": "https://www.caizhao-token.com/content/501195842/b2?from=mcp",
+    "source_url": "https://www.ggzy.gov.cn/information/deal/html/a/370000/0203/20260323/0037f943d4c8b0844c8d9f565715a2da8887.html",
+    "caller_person": "张*",
+    "caller_contact": "10000000000",
+    "winner_person": "张*",
+    "winner_contact": "10000000000",
+    "agency_person": "张*",
+    "agency_contact": "10000000000",
+    "attachment_urls": [
+      "https://cdn-001.bailian-ai.com/xxxxx.pdf"
+    ]
+  },
+  "error": "",
+  "meta": {
+    "request_id": "req_0778b04a4c274e86",
+    "tool_name": "get_bid_detail",
+    "cost_units": 1,
+    "execution_time_ms": 360
+  }
+}</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h3 id="api-company-profile">7. 公司基础工商信息 <a class="anchor-icon" href="#api-company-profile">#</a></h3>
+<p>公司基础工商信息，及行业、招中标次数等画像指标。</p>
+<div class="doc-table"><table><tbody>
+<tr><th style="width:120px">调用方式</th><td>POST</td></tr>
+<tr><th>请求地址</th><td><code>https://api.caizhao-token.com/api_v2/get_company_profile</code></td></tr>
+<tr><th>单次费用</th><td>1 积分</td></tr>
+</tbody></table></div>
+<h4>请求参数</h4>
+<div class="doc-table"><table><thead><tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>company</code></td><td><code>string | int</code></td><td>否</td><td>公司名称或内部公司 ID（与 company_url 二选一必填）</td></tr>
+<tr><td><code>company_url</code></td><td><code>string</code></td><td>否</td><td>采招词元公司详情页链接</td></tr>
+</tbody></table></div>
+<h4>请求示例</h4>
+<div class="code-wrap"><pre class="code-block">curl -X POST "https://api.caizhao-token.com/api_v2/get_company_profile" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "company": "华为技术有限公司"
+}'</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h4>响应字段</h4>
+<div class="doc-table"><table><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>success</code></td><td><code>boolean</code></td><td>请求是否成功</td></tr>
+<tr><td><code>data</code></td><td><code>object</code></td><td>业务数据，结构随接口而异，字段见下表</td></tr>
+<tr><td><code>error</code></td><td><code>object|null</code></td><td>错误信息，含 code 与 message，成功时为 null</td></tr>
+<tr><td><code>meta</code></td><td><code>object</code></td><td>元信息，含 request_id、tool_name、cost_units、execution_time_ms</td></tr>
+<tr><td><code>data.id</code></td><td><code>int</code></td><td>公司 ID</td></tr>
+<tr><td><code>data.fullname</code></td><td><code>string</code></td><td>公司全称</td></tr>
+<tr><td><code>data.name</code></td><td><code>string</code></td><td>公司简称</td></tr>
+<tr><td><code>data.org_base_type</code></td><td><code>string</code></td><td>企业类型</td></tr>
+<tr><td><code>data.industry</code></td><td><code>string</code></td><td>所属行业</td></tr>
+<tr><td><code>data.industry_l1</code></td><td><code>string</code></td><td>一级行业</td></tr>
+<tr><td><code>data.industry_l2</code></td><td><code>string</code></td><td>二级行业</td></tr>
+<tr><td><code>data.province</code></td><td><code>string</code></td><td>省份</td></tr>
+<tr><td><code>data.city</code></td><td><code>string</code></td><td>城市</td></tr>
+<tr><td><code>data.county</code></td><td><code>string</code></td><td>区县</td></tr>
+<tr><td><code>data.capital</code></td><td><code>string</code></td><td>注册资本</td></tr>
+<tr><td><code>data.size</code></td><td><code>string</code></td><td>企业规模</td></tr>
+<tr><td><code>data.business_status</code></td><td><code>string</code></td><td>经营状态</td></tr>
+<tr><td><code>data.bid_count</code></td><td><code>int</code></td><td>招标次数</td></tr>
+<tr><td><code>data.win_count</code></td><td><code>int</code></td><td>中标次数</td></tr>
+<tr><td><code>data.taxpayer_number</code></td><td><code>string</code></td><td>统一社会信用代码</td></tr>
+<tr><td><code>data.establishment_date</code></td><td><code>string</code></td><td>成立日期</td></tr>
+<tr><td><code>data.business_scope</code></td><td><code>string</code></td><td>经营范围</td></tr>
+<tr><td><code>data.url</code></td><td><code>string</code></td><td>公司详情页链接</td></tr>
+</tbody></table></div>
+<h4>响应示例</h4>
+<div class="code-wrap"><pre class="code-block">{
+  "success": true,
+  "data": {
+    "id": 2911,
+    "fullname": "华为技术有限公司",
+    "name": "",
+    "org_base_type": "民营企业",
+    "industry": "计算机、通信和其他电子设备制造业",
+    "industry_l1": "",
+    "industry_l2": "",
+    "province": "广东",
+    "city": "深圳",
+    "county": "",
+    "capital": 4094113,
+    "size": 10000,
+    "business_status": "存续",
+    "caller_count": 33,
+    "winner_count": 10078,
+    "taxpayer_number": "914403001922038216",
+    "establishment_date": "19870915",
+    "business_scope": "程控交换机、传输设备、数据通信设备、宽带多媒体设备、电源、无线通信设备、微电子产品、软件、系统集成工程、计算机及配套设备、终端设备及相关通信信息产品、数据中心机房基础设施及配套产品（含供配电、空调制冷设备、智能管理监控等）的开发、生产、销售、技术服务、工程安装、维修、咨询、代理、租赁；信息系统设计、集成、运行维护；集成电路设计、研发；统一通信及协作类产品，服务器及配套软硬件产品，存储设备及相关软件的研发、生产、销售；无线数据产品（不含限制项目）的研发、生产、销售；通信站点机房基础设施及通信配套设备（含通信站点、通信机房、通信电源、机柜、天线、通信线缆、配电、智能管理监控、锂电及储能系统等）的研发、生产、销售；能源科学技术研究及能源相关产品的研发、生产、销售；大数据产品、物联网及通信相关领域产品的研发、生产、销售；汽车零部件及智能系统的研发、生产、销售及服务；建筑工程；设计、制作、发布、代理各类广告；通信设备租赁（不含限制项目）；培训服务；技术认证服务；信息咨询（不含限制项目）；企业管理咨询（不含限制项目）；进出口业务；国内商业、物资供销业业务（不含专营、专控、专卖商品）；对外经济技术合作业务；房屋租赁业务（持许可经营证）；以及其他法律法规不禁止的经营活动（依法须经批准的项目，经相关部门批准后方可开展经营活动）。^增值电信业务经营。",
+    "url": "https://www.caizhao-token.com/company/2911?from=mcp"
+  },
+  "error": "",
+  "meta": {
+    "request_id": "req_856c97c74e164000",
+    "tool_name": "get_company_profile",
+    "cost_units": 1,
+    "execution_time_ms": 46
+  }
+}</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h3 id="api-search-company">8. 搜索公司 <a class="anchor-icon" href="#api-search-company">#</a></h3>
+<p>根据公司名称（全称、简称或别名）搜索匹配的公司列表，适用于用户输入模糊名称时先确认目标公司，再进行后续分析查询。此接口免费，不扣除积分。</p>
+<div class="doc-table"><table><tbody>
+<tr><th style="width:120px">调用方式</th><td>POST</td></tr>
+<tr><th>请求地址</th><td><code>https://api.caizhao-token.com/api_v2/search_company</code></td></tr>
+<tr><th>单次费用</th><td>免费</td></tr>
+</tbody></table></div>
+<h4>请求参数</h4>
+<div class="doc-table"><table><thead><tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>company_name</code></td><td><code>string</code></td><td>是</td><td>公司名称，支持全称、简称或别名，如「华为」「中国建筑」</td></tr>
+<tr><td><code>province</code></td><td><code>string</code></td><td>否</td><td>省份筛选，如「北京」「广东」，不传则全国搜索</td></tr>
+<tr><td><code>city</code></td><td><code>string</code></td><td>否</td><td>城市筛选，如「深圳」「上海」</td></tr>
+<tr><td><code>page</code></td><td><code>integer</code></td><td>否</td><td>页码，从 1 开始，默认 1</td></tr>
+<tr><td><code>page_size</code></td><td><code>integer</code></td><td>否</td><td>每页数量，最大 20，默认 10</td></tr>
+</tbody></table></div>
+<h4>请求示例</h4>
+<div class="code-wrap"><pre class="code-block">curl -X POST "https://api.caizhao-token.com/api_v2/search_company" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "company_name": "华为",
+  "page": 1,
+  "page_size": 10
+}'</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h4>响应字段</h4>
+<div class="doc-table"><table><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>success</code></td><td><code>boolean</code></td><td>请求是否成功</td></tr>
+<tr><td><code>data</code></td><td><code>object</code></td><td>业务数据，结构随接口而异，字段见下表</td></tr>
+<tr><td><code>error</code></td><td><code>object|null</code></td><td>错误信息，含 code 与 message，成功时为 null</td></tr>
+<tr><td><code>meta</code></td><td><code>object</code></td><td>元信息，含 request_id、tool_name、cost_units、execution_time_ms</td></tr>
+<tr><td><code>data.total</code></td><td><code>int</code></td><td>全库命中总数</td></tr>
+<tr><td><code>data.page</code></td><td><code>int</code></td><td>当前页码</td></tr>
+<tr><td><code>data.page_size</code></td><td><code>int</code></td><td>每页条数</td></tr>
+<tr><td><code>data.items[]</code></td><td><code>object[]</code></td><td>公司列表，元素字段见下</td></tr>
+<tr><td><code>data.items[].id</code></td><td><code>int</code></td><td>公司 ID</td></tr>
+<tr><td><code>data.items[].fullname</code></td><td><code>string</code></td><td>公司全称</td></tr>
+<tr><td><code>data.items[].name</code></td><td><code>string</code></td><td>公司简称</td></tr>
+<tr><td><code>data.items[].province</code></td><td><code>string</code></td><td>省份</td></tr>
+<tr><td><code>data.items[].city</code></td><td><code>string</code></td><td>城市</td></tr>
+<tr><td><code>data.items[].win_count</code></td><td><code>int</code></td><td>中标次数</td></tr>
+<tr><td><code>data.items[].cal_count</code></td><td><code>int</code></td><td>招标次数</td></tr>
+<tr><td><code>data.items[].org_count</code></td><td><code>int</code></td><td>招投标记录总数</td></tr>
+<tr><td><code>data.items[].url</code></td><td><code>string</code></td><td>公司详情页链接</td></tr>
+</tbody></table></div>
+<h4>响应示例</h4>
+<div class="code-wrap"><pre class="code-block">{
+  "success": true,
+  "data": {
+    "total": 3,
+    "page": 1,
+    "page_size": 10,
+    "items": [
+      {
+        "id": 12345,
+        "fullname": "华为技术有限公司",
+        "name": "华为",
+        "province": "广东",
+        "city": "深圳市",
+        "win_count": 8920,
+        "bid_count": 15600,
+        "url": "https://www.caizhao-token.com/company/12345?from=mcp"
+      },
+      {
+        "id": 67890,
+        "fullname": "华为云计算技术有限公司",
+        "name": "华为云",
+        "province": "广东",
+        "city": "深圳市",
+        "win_count": 3200,
+        "bid_count": 5800,
+        "url": "https://www.caizhao-token.com/company/67890?from=mcp"
+      }
+    ]
+  },
+  "meta": {
+    "tool_name": "search_company",
+    "cost_units": 0,
+    "request_id": "req_abc123"
+  }
+}</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h3 id="api-bid-timeline">9. 项目时间线 <a class="anchor-icon" href="#api-bid-timeline">#</a></h3>
+<p>根据任一阶段的标讯，获取同一项目所有阶段的公告（采购意向、招标、变更、中标候选人、中标结果、合同等），按发布时间正序返回。</p>
+<div class="doc-table"><table><tbody>
+<tr><th style="width:120px">调用方式</th><td>POST</td></tr>
+<tr><th>请求地址</th><td><code>https://api.caizhao-token.com/api_v2/get_bid_timeline</code></td></tr>
+<tr><th>单次费用</th><td>1 积分</td></tr>
+</tbody></table></div>
+<h4>请求参数</h4>
+<div class="doc-table"><table><thead><tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>bid_id</code></td><td><code>int</code></td><td>否</td><td>标讯ID（与 bid_url 二选一；与 bid_type 配合使用）</td></tr>
+<tr><td><code>bid_type</code></td><td><code>int | string</code></td><td>否</td><td>公告类型：1=招标 2=中标（与 bid_id 配合使用）</td></tr>
+<tr><td><code>bid_url</code></td><td><code>string</code></td><td>否</td><td>采招词元公告链接，可替代 bid_id+bid_type，如 https://www.caizhao-token.com/content/1234567890/b1</td></tr>
+</tbody></table></div>
+<h4>请求示例</h4>
+<div class="code-wrap"><pre class="code-block">curl -X POST "https://api.caizhao-token.com/api_v2/get_bid_timeline" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "bid_id": 589738777,
+  "bid_type": 1
+}'</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h4>响应字段</h4>
+<div class="doc-table"><table><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>success</code></td><td><code>boolean</code></td><td>请求是否成功</td></tr>
+<tr><td><code>data</code></td><td><code>object</code></td><td>业务数据，结构随接口而异，字段见下表</td></tr>
+<tr><td><code>error</code></td><td><code>object|null</code></td><td>错误信息，含 code 与 message，成功时为 null</td></tr>
+<tr><td><code>meta</code></td><td><code>object</code></td><td>元信息，含 request_id、tool_name、cost_units、execution_time_ms</td></tr>
+<tr><td><code>data.total</code></td><td><code>int</code></td><td>该项目各阶段公告总数</td></tr>
+<tr><td><code>data.items[]</code></td><td><code>object[]</code></td><td>按发布时间正序排列的公告列表，元素字段见下</td></tr>
+<tr><td><code>data.items[].bid_id</code></td><td><code>int</code></td><td>标讯 ID</td></tr>
+<tr><td><code>data.items[].title</code></td><td><code>string</code></td><td>公告标题</td></tr>
+<tr><td><code>data.items[].bid_type</code></td><td><code>string</code></td><td>公告类型，如 招标/中标</td></tr>
+<tr><td><code>data.items[].bid_process</code></td><td><code>string</code></td><td>流程阶段，如 采购意向/招标/中标结果</td></tr>
+<tr><td><code>data.items[].pub_time</code></td><td><code>string</code></td><td>发布时间</td></tr>
+<tr><td><code>data.items[].money</code></td><td><code>float|null</code></td><td>金额（元）</td></tr>
+<tr><td><code>data.items[].money_wan</code></td><td><code>float|null</code></td><td>金额（万元）</td></tr>
+<tr><td><code>data.items[].province</code></td><td><code>string</code></td><td>省份</td></tr>
+<tr><td><code>data.items[].city</code></td><td><code>string</code></td><td>城市</td></tr>
+<tr><td><code>data.items[].county</code></td><td><code>string</code></td><td>区县</td></tr>
+<tr><td><code>data.items[].caller_name</code></td><td><code>string</code></td><td>招标方名称</td></tr>
+<tr><td><code>data.items[].caller_id</code></td><td><code>int</code></td><td>招标方 ID</td></tr>
+<tr><td><code>data.items[].winner_names</code></td><td><code>string[]</code></td><td>中标方名称列表</td></tr>
+<tr><td><code>data.items[].sm_names</code></td><td><code>string[]</code></td><td>标的物名称列表</td></tr>
+<tr><td><code>data.items[].url</code></td><td><code>string</code></td><td>采招词元公告链接</td></tr>
+</tbody></table></div>
+<h4>响应示例</h4>
+<div class="code-wrap"><pre class="code-block">{
+  "success": true,
+  "data": {
+    "total": 3,
+    "items": [
+      {
+        "bid_id": 588000001,
+        "title": "某市政务云平台建设项目采购意向",
+        "bid_type": "招标",
+        "bid_process": "采购意向",
+        "pub_time": "2024-01-10",
+        "money": null,
+        "money_wan": null,
+        "province": "广东省",
+        "city": "深圳市",
+        "county": "南山区",
+        "caller_name": "深圳市南山区政务服务数据管理局",
+        "caller_id": 10086001,
+        "winner_names": [],
+        "sm_names": [
+          "政务云"
+        ],
+        "url": "https://www.caizhao-token.com/content/588000001/b1?from=mcp"
+      },
+      {
+        "bid_id": 589738777,
+        "title": "某市政务云平台建设项目（公开招标）",
+        "bid_type": "招标",
+        "bid_process": "招标",
+        "pub_time": "2024-03-18",
+        "money": 28500000,
+        "money_wan": 2850,
+        "province": "广东省",
+        "city": "深圳市",
+        "county": "南山区",
+        "caller_name": "深圳市南山区政务服务数据管理局",
+        "caller_id": 10086001,
+        "winner_names": [],
+        "sm_names": [
+          "政务云"
+        ],
+        "url": "https://www.caizhao-token.com/content/589738777/b1?from=mcp"
+      },
+      {
+        "bid_id": 590112233,
+        "title": "某市政务云平台建设项目中标结果公告",
+        "bid_type": "中标",
+        "bid_process": "中标结果",
+        "pub_time": "2024-04-25",
+        "money": 27800000,
+        "money_wan": 2780,
+        "province": "广东省",
+        "city": "深圳市",
+        "county": "南山区",
+        "caller_name": "深圳市南山区政务服务数据管理局",
+        "caller_id": 10086001,
+        "winner_names": [
+          "某某科技股份有限公司"
+        ],
+        "sm_names": [
+          "政务云"
+        ],
+        "url": "https://www.caizhao-token.com/content/590112233/b2?from=mcp"
+      }
+    ]
+  },
+  "error": null,
+  "meta": {
+    "request_id": "req_t1m2e3l4",
+    "tool_name": "get_bid_timeline",
+    "cost_units": 1,
+    "execution_time_ms": 132
+  }
+}</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h3 id="api-company-keywords">10. 公司业务关键词 <a class="anchor-icon" href="#api-company-keywords">#</a></h3>
+<p>在给定时间与地区范围内，从企业参与或中标的公告中提炼业务关键词。</p>
+<div class="doc-table"><table><tbody>
+<tr><th style="width:120px">调用方式</th><td>POST</td></tr>
+<tr><th>请求地址</th><td><code>https://api.caizhao-token.com/api_v2/get_company_business_keywords</code></td></tr>
+<tr><th>单次费用</th><td>1 积分</td></tr>
+</tbody></table></div>
+<h4>请求参数</h4>
+<div class="doc-table"><table><thead><tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>company</code></td><td><code>string | int</code></td><td>否</td><td>公司名称或内部公司 ID；与 company_url 二选一至少填一个</td></tr>
+<tr><td><code>company_url</code></td><td><code>string</code></td><td>否</td><td>采招词元公司详情页链接</td></tr>
+<tr><td><code>begin_date</code></td><td><code>string</code></td><td>否</td><td>统计起始日期，格式 YYYY-MM-DD</td></tr>
+<tr><td><code>end_date</code></td><td><code>string</code></td><td>否</td><td>统计结束日期，格式 YYYY-MM-DD</td></tr>
+<tr><td><code>provinces</code></td><td><code>list[string]</code></td><td>否</td><td>仅统计指定省份范围内的项目，如：['北京', '内蒙古']</td></tr>
+<tr><td><code>cities</code></td><td><code>list[string]</code></td><td>否</td><td>仅统计指定城市范围内的项目，如：['石家庄', '合肥']</td></tr>
+<tr><td><code>limit</code></td><td><code>int</code></td><td>否</td><td>返回关键词条数上限（默认 50）</td></tr>
+</tbody></table></div>
+<h4>请求示例</h4>
+<div class="code-wrap"><pre class="code-block">curl -X POST "https://api.caizhao-token.com/api_v2/get_company_business_keywords" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "company": "道普信息技术有限公司",
+  "limit": 10
+}'</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h4>响应字段</h4>
+<div class="doc-table"><table><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>success</code></td><td><code>boolean</code></td><td>请求是否成功</td></tr>
+<tr><td><code>data</code></td><td><code>object</code></td><td>业务数据，结构随接口而异，字段见下表</td></tr>
+<tr><td><code>error</code></td><td><code>object|null</code></td><td>错误信息，含 code 与 message，成功时为 null</td></tr>
+<tr><td><code>meta</code></td><td><code>object</code></td><td>元信息，含 request_id、tool_name、cost_units、execution_time_ms</td></tr>
+<tr><td><code>data.company_name</code></td><td><code>string</code></td><td>公司名称</td></tr>
+<tr><td><code>data.company_id</code></td><td><code>int</code></td><td>公司 ID</td></tr>
+<tr><td><code>data.total_projects</code></td><td><code>int</code></td><td>统计的中标项目总数</td></tr>
+<tr><td><code>data.total_keywords</code></td><td><code>int</code></td><td>提取的关键词总数</td></tr>
+<tr><td><code>data.keywords[]</code></td><td><code>object[]</code></td><td>业务关键词列表，元素字段见下</td></tr>
+<tr><td><code>data.keywords[].keyword</code></td><td><code>string</code></td><td>关键词/标的物名称</td></tr>
+<tr><td><code>data.keywords[].win_count</code></td><td><code>int</code></td><td>中标次数</td></tr>
+<tr><td><code>data.keywords[].win_amount</code></td><td><code>float</code></td><td>中标金额（元）</td></tr>
+<tr><td><code>data.keywords[].win_amount_wan</code></td><td><code>float</code></td><td>中标金额（万元）</td></tr>
+<tr><td><code>data.keywords[].top_callers</code></td><td><code>object[]</code></td><td>Top 甲方，含 name/count</td></tr>
+<tr><td><code>data.keywords[].top_provinces</code></td><td><code>object[]</code></td><td>Top 省份，含 name/count</td></tr>
+<tr><td><code>data.keywords[].top_cities</code></td><td><code>object[]</code></td><td>Top 城市，含 name/count</td></tr>
+</tbody></table></div>
+<h4>响应示例</h4>
+<div class="code-wrap"><pre class="code-block">{
+  "success": true,
+  "data": {
+    "company_name": "道普信息技术有限公司",
+    "total_projects": 1000,
+    "total_keywords": 803,
+    "keywords": [
+      {
+        "keyword": "测试评估认证服务",
+        "win_count": 236,
+        "win_amount": 28936302,
+        "win_amount_wan": 2893.63,
+        "top_callers": [
+          {
+            "name": "山东省计算中心",
+            "count": 30
+          },
+          {
+            "name": "山东省公安厅",
+            "count": 24
+          },
+          {
+            "name": "山东省大数据中心",
+            "count": 23
+          },
+          {
+            "name": "济南市康养事业发展中心",
+            "count": 18
+          },
+          {
+            "name": "山东省疾病预防控制中心",
+            "count": 10
+          },
+          {
+            "name": "山东省交通运输厅数据应用和收费结算中心",
+            "count": 7
+          },
+          {
+            "name": "山东省教育厅",
+            "count": 7
+          },
+          {
+            "name": "山东省发展和改革委员会",
+            "count": 6
+          },
+          {
+            "name": "山东省国土空间数据和遥感技术研究院",
+            "count": 6
+          },
+          {
+            "name": "中共山东省委金融委员会",
+            "count": 4
+          }
+        ],
+        "top_provinces": [
+          {
+            "name": "山东",
+            "count": 235
+          },
+          {
+            "name": "广东",
+            "count": 1
+          }
+        ],
+        "top_cities": [
+          {
+            "name": "济南",
+            "count": 180
+          },
+          {
+            "name": "青岛",
+            "count": 12
+          },
+          {
+            "name": "烟台",
+            "count": 5
+          },
+          {
+            "name": "临沂",
+            "count": 4
+          },
+          {
+            "name": "潍坊",
+            "count": 3
+          },
+          {
+            "name": "济宁",
+            "count": 2
+          },
+          {
+            "name": "德州",
+            "count": 1
+          },
+          {
+            "name": "菏泽",
+            "count": 1
+          },
+          {
+            "name": "广州",
+            "count": 1
+          },
+          {
+            "name": "泰安",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "keyword": "信息化工程监理服务",
+        "win_count": 43,
+        "win_amount": 25556290,
+        "win_amount_wan": 2555.63,
+        "top_callers": [
+          {
+            "name": "济南市康养事业发展中心",
+            "count": 10
+          },
+          {
+            "name": "山东省发展和改革委员会",
+            "count": 4
+          },
+          {
+            "name": "山东省药品监督管理局",
+            "count": 3
+          },
+          {
+            "name": "聊城市大数据局",
+            "count": 3
+          },
+          {
+            "name": "山东省大数据中心",
+            "count": 3
+          },
+          {
+            "name": "青岛市崂山区电子政务和大数据中心",
+            "count": 2
+          },
+          {
+            "name": "山东省通信网络保障中心",
+            "count": 2
+          },
+          {
+            "name": "中国共产党山东省委员会办公厅",
+            "count": 2
+          },
+          {
+            "name": "山东省疾病预防控制中心",
+            "count": 2
+          },
+          {
+            "name": "山东省供销合作社联合社",
+            "count": 1
+          }
+        ],
+        "top_provinces": [
+          {
+            "name": "山东",
+            "count": 43
+          }
+        ],
+        "top_cities": [
+          {
+            "name": "济南",
+            "count": 26
+          },
+          {
+            "name": "聊城",
+            "count": 3
+          },
+          {
+            "name": "潍坊",
+            "count": 3
+          },
+          {
+            "name": "青岛",
+            "count": 2
+          },
+          {
+            "name": "德州",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "keyword": "软件测评",
+        "win_count": 26,
+        "win_amount": 6541515,
+        "win_amount_wan": 654.15,
+        "top_callers": [
+          {
+            "name": "山东省交通运输厅数据应用和收费结算中心",
+            "count": 11
+          },
+          {
+            "name": "青岛市退役军人事务局",
+            "count": 3
+          },
+          {
+            "name": "山东省物化探勘查院",
+            "count": 2
+          },
+          {
+            "name": "长岛海洋生态文明综合试验区大数据服务中心",
+            "count": 1
+          },
+          {
+            "name": "合肥市生态环境局",
+            "count": 1
+          },
+          {
+            "name": "安徽省大数据中心",
+            "count": 1
+          },
+          {
+            "name": "德州市城市管理局",
+            "count": 1
+          },
+          {
+            "name": "青岛市公共就业和人才服务中心",
+            "count": 1
+          },
+          {
+            "name": "安徽省长江河道管理局",
+            "count": 1
+          },
+          {
+            "name": "山东省计算中心",
+            "count": 1
+          }
+        ],
+        "top_provinces": [
+          {
+            "name": "山东",
+            "count": 23
+          },
+          {
+            "name": "安徽",
+            "count": 3
+          }
+        ],
+        "top_cities": [
+          {
+            "name": "济南",
+            "count": 16
+          },
+          {
+            "name": "青岛",
+            "count": 4
+          },
+          {
+            "name": "烟台",
+            "count": 2
+          },
+          {
+            "name": "合肥",
+            "count": 2
+          },
+          {
+            "name": "德州",
+            "count": 1
+          },
+          {
+            "name": "芜湖",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "keyword": "软件测评服务",
+        "win_count": 25,
+        "win_amount": 1724500,
+        "win_amount_wan": 172.45,
+        "top_callers": [
+          {
+            "name": "安徽省大数据中心",
+            "count": 6
+          },
+          {
+            "name": "青岛市大数据中心",
+            "count": 3
+          },
+          {
+            "name": "安徽省市场监督管理局",
+            "count": 2
+          },
+          {
+            "name": "青岛市公共就业和人才服务中心",
+            "count": 2
+          },
+          {
+            "name": "青岛市中心血站",
+            "count": 2
+          },
+          {
+            "name": "安徽省卫生健康委员会信息中心",
+            "count": 2
+          },
+          {
+            "name": "山东省大数据中心",
+            "count": 2
+          },
+          {
+            "name": "安徽省环境信息中心",
+            "count": 2
+          },
+          {
+            "name": "合肥市生态环境局",
+            "count": 1
+          },
+          {
+            "name": "铜陵经济技术开发区化工园区管理处",
+            "count": 1
+          }
+        ],
+        "top_provinces": [
+          {
+            "name": "安徽",
+            "count": 14
+          },
+          {
+            "name": "山东",
+            "count": 11
+          }
+        ],
+        "top_cities": [
+          {
+            "name": "合肥",
+            "count": 13
+          },
+          {
+            "name": "青岛",
+            "count": 7
+          },
+          {
+            "name": "铜陵",
+            "count": 1
+          },
+          {
+            "name": "烟台",
+            "count": 1
+          },
+          {
+            "name": "济南",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "keyword": "软件测试服务",
+        "win_count": 22,
+        "win_amount": 924240,
+        "win_amount_wan": 92.42,
+        "top_callers": [
+          {
+            "name": "济南市康养事业发展中心",
+            "count": 7
+          },
+          {
+            "name": "山东省大数据中心",
+            "count": 7
+          },
+          {
+            "name": "中国共产党山东省委员会社会工作部",
+            "count": 2
+          },
+          {
+            "name": "山东省计算中心",
+            "count": 2
+          },
+          {
+            "name": "山东省教育厅",
+            "count": 2
+          },
+          {
+            "name": "北京电信",
+            "count": 1
+          }
+        ],
+        "top_provinces": [
+          {
+            "name": "山东",
+            "count": 21
+          },
+          {
+            "name": "北京",
+            "count": 1
+          }
+        ],
+        "top_cities": [
+          {
+            "name": "济南",
+            "count": 16
+          },
+          {
+            "name": "北京",
+            "count": 1
+          },
+          {
+            "name": "德州",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "keyword": "网络安全等级保护测评服务",
+        "win_count": 20,
+        "win_amount": 11651000,
+        "win_amount_wan": 1165.1,
+        "top_callers": [
+          {
+            "name": "安徽省财政信息中心",
+            "count": 7
+          },
+          {
+            "name": "济南市历城区教育和体育局",
+            "count": 2
+          },
+          {
+            "name": "广东省生态环境监测中心",
+            "count": 2
+          },
+          {
+            "name": "济南市康养事业发展中心",
+            "count": 2
+          },
+          {
+            "name": "济南市公安局",
+            "count": 2
+          },
+          {
+            "name": "烟台市奇山医院",
+            "count": 1
+          },
+          {
+            "name": "临沂市妇幼保健院",
+            "count": 1
+          },
+          {
+            "name": "青岛市黄岛区工业和信息化局",
+            "count": 1
+          },
+          {
+            "name": "重庆市合川区卫生健康委员会",
+            "count": 1
+          }
+        ],
+        "top_provinces": [
+          {
+            "name": "山东",
+            "count": 9
+          },
+          {
+            "name": "安徽",
+            "count": 7
+          },
+          {
+            "name": "广东",
+            "count": 2
+          },
+          {
+            "name": "重庆",
+            "count": 1
+          }
+        ],
+        "top_cities": [
+          {
+            "name": "合肥",
+            "count": 7
+          },
+          {
+            "name": "济南",
+            "count": 6
+          },
+          {
+            "name": "广州",
+            "count": 2
+          },
+          {
+            "name": "烟台",
+            "count": 1
+          },
+          {
+            "name": "临沂",
+            "count": 1
+          },
+          {
+            "name": "青岛",
+            "count": 1
+          },
+          {
+            "name": "重庆",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "keyword": "信息技术服务",
+        "win_count": 19,
+        "win_amount": 4015810,
+        "win_amount_wan": 401.58,
+        "top_callers": [
+          {
+            "name": "济南市信息中心",
+            "count": 3
+          },
+          {
+            "name": "政协山东省委员会办公厅",
+            "count": 2
+          },
+          {
+            "name": "山东省粮食和物资储备局",
+            "count": 2
+          },
+          {
+            "name": "山东省公安厅",
+            "count": 2
+          },
+          {
+            "name": "烟台市档案馆",
+            "count": 1
+          },
+          {
+            "name": "烟台卫生健康职业学院",
+            "count": 1
+          },
+          {
+            "name": "广州市市长专线电话受理中心",
+            "count": 1
+          },
+          {
+            "name": "中国共产党山东省委员会宣传部",
+            "count": 1
+          },
+          {
+            "name": "烟台市水利局",
+            "count": 1
+          },
+          {
+            "name": "菏泽市公安局",
+            "count": 1
+          }
+        ],
+        "top_provinces": [
+          {
+            "name": "山东",
+            "count": 18
+          },
+          {
+            "name": "广东",
+            "count": 1
+          }
+        ],
+        "top_cities": [
+          {
+            "name": "济南",
+            "count": 13
+          },
+          {
+            "name": "烟台",
+            "count": 3
+          },
+          {
+            "name": "广州",
+            "count": 1
+          },
+          {
+            "name": "菏泽",
+            "count": 1
+          },
+          {
+            "name": "东营",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "keyword": "信息安全服务",
+        "win_count": 17,
+        "win_amount": 797835,
+        "win_amount_wan": 79.78,
+        "top_callers": [
+          {
+            "name": "山东省人民政府办公厅",
+            "count": 3
+          },
+          {
+            "name": "山东省人民代表大会常务委员会办公厅",
+            "count": 2
+          },
+          {
+            "name": "济南市科学技术局",
+            "count": 1
+          },
+          {
+            "name": "山东省信访局",
+            "count": 1
+          },
+          {
+            "name": "济南市应急管理局",
+            "count": 1
+          },
+          {
+            "name": "潍坊市应急管理局",
+            "count": 1
+          },
+          {
+            "name": "中共山东省委金融委员会",
+            "count": 1
+          },
+          {
+            "name": "东营市大数据局",
+            "count": 1
+          },
+          {
+            "name": "中国共产党山东省委员会社会工作部",
+            "count": 1
+          },
+          {
+            "name": "烟台市民政局",
+            "count": 1
+          }
+        ],
+        "top_provinces": [
+          {
+            "name": "山东",
+            "count": 16
+          },
+          {
+            "name": "北京",
+            "count": 1
+          }
+        ],
+        "top_cities": [
+          {
+            "name": "济南",
+            "count": 3
+          },
+          {
+            "name": "东营",
+            "count": 2
+          },
+          {
+            "name": "潍坊",
+            "count": 1
+          },
+          {
+            "name": "烟台",
+            "count": 1
+          },
+          {
+            "name": "北京",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "keyword": "保测评服务",
+        "win_count": 16,
+        "win_amount": 1182800,
+        "win_amount_wan": 118.28,
+        "top_callers": [
+          {
+            "name": "济南市康养事业发展中心",
+            "count": 5
+          },
+          {
+            "name": "山东省退役军人事务厅",
+            "count": 2
+          },
+          {
+            "name": "中国电信北京公司",
+            "count": 1
+          },
+          {
+            "name": "山东老年大学",
+            "count": 1
+          },
+          {
+            "name": "山东省应急管理厅",
+            "count": 1
+          },
+          {
+            "name": "山东省计算中心",
+            "count": 1
+          },
+          {
+            "name": "中锐（青岛）信息安全技术有限公司",
+            "count": 1
+          },
+          {
+            "name": "山东管理学院",
+            "count": 1
+          },
+          {
+            "name": "浪潮软件股份有限公司",
+            "count": 1
+          },
+          {
+            "name": "成都蜀智云链科技股份有限公司",
+            "count": 1
+          }
+        ],
+        "top_provinces": [
+          {
+            "name": "山东",
+            "count": 13
+          },
+          {
+            "name": "北京",
+            "count": 1
+          },
+          {
+            "name": "四川",
+            "count": 1
+          },
+          {
+            "name": "广东",
+            "count": 1
+          }
+        ],
+        "top_cities": [
+          {
+            "name": "济南",
+            "count": 10
+          },
+          {
+            "name": "北京",
+            "count": 1
+          },
+          {
+            "name": "青岛",
+            "count": 1
+          },
+          {
+            "name": "成都",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "keyword": "保测评服务项目",
+        "win_count": 16,
+        "win_amount": 2374100,
+        "win_amount_wan": 237.41,
+        "top_callers": [
+          {
+            "name": "山东省计算中心",
+            "count": 2
+          },
+          {
+            "name": "济南市历下区教育和体育局",
+            "count": 2
+          },
+          {
+            "name": "山东省人民检察院",
+            "count": 2
+          },
+          {
+            "name": "山东省鲁南地质工程勘察院",
+            "count": 2
+          },
+          {
+            "name": "东营市人民政府",
+            "count": 2
+          },
+          {
+            "name": "山东省医疗器械和药品包装检验研究院",
+            "count": 1
+          },
+          {
+            "name": "国家开发投资集团有限公司",
+            "count": 1
+          },
+          {
+            "name": "国投湄洲湾港口有限公司",
+            "count": 1
+          },
+          {
+            "name": "济南新旧动能转换起步区管理委员会数字城市部",
+            "count": 1
+          },
+          {
+            "name": "山东中烟工业有限责任公司青岛卷烟厂",
+            "count": 1
+          }
+        ],
+        "top_provinces": [
+          {
+            "name": "山东",
+            "count": 13
+          },
+          {
+            "name": "北京",
+            "count": 1
+          },
+          {
+            "name": "福建",
+            "count": 1
+          },
+          {
+            "name": "广东",
+            "count": 1
+          }
+        ],
+        "top_cities": [
+          {
+            "name": "济南",
+            "count": 8
+          },
+          {
+            "name": "济宁",
+            "count": 2
+          },
+          {
+            "name": "东营",
+            "count": 2
+          },
+          {
+            "name": "北京",
+            "count": 1
+          },
+          {
+            "name": "莆田",
+            "count": 1
+          },
+          {
+            "name": "青岛",
+            "count": 1
+          },
+          {
+            "name": "东莞",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  "error": "",
+  "meta": {
+    "request_id": "req_7f66fd0ce20d42fa",
+    "tool_name": "get_company_business_keywords",
+    "cost_units": 1,
+    "execution_time_ms": 389
+  }
+}</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h3 id="api-company-partners">11. 公司合作客户/供应商 <a class="anchor-icon" href="#api-company-partners">#</a></h3>
+<p>从招中标数据中识别企业的主要采购方与分包/供应关系，企业上下游关系网络。</p>
+<div class="doc-table"><table><tbody>
+<tr><th style="width:120px">调用方式</th><td>POST</td></tr>
+<tr><th>请求地址</th><td><code>https://api.caizhao-token.com/api_v2/get_company_partners</code></td></tr>
+<tr><th>单次费用</th><td>3 积分</td></tr>
+</tbody></table></div>
+<h4>请求参数</h4>
+<div class="doc-table"><table><thead><tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>company</code></td><td><code>string | int</code></td><td>否</td><td>公司名称或内部公司 ID（与 company_url 二选一必填）</td></tr>
+<tr><td><code>company_url</code></td><td><code>string</code></td><td>否</td><td>采招词元公司详情页链接</td></tr>
+<tr><td><code>partner_type</code></td><td><code>string</code></td><td>否</td><td>合作方向：如 全部 / 客户 / 供应商（以实际枚举为准）（默认 全部）</td></tr>
+<tr><td><code>begin_date</code></td><td><code>string</code></td><td>否</td><td>统计起始日期 YYYY-MM-DD</td></tr>
+<tr><td><code>end_date</code></td><td><code>string</code></td><td>否</td><td>统计结束日期 YYYY-MM-DD</td></tr>
+<tr><td><code>provinces</code></td><td><code>string[]</code></td><td>否</td><td>按省份筛选合作标讯，如：['北京', '内蒙古']</td></tr>
+<tr><td><code>cities</code></td><td><code>string[]</code></td><td>否</td><td>按城市筛选，如：['石家庄', '合肥']</td></tr>
+<tr><td><code>keywords</code></td><td><code>string[]</code></td><td>否</td><td>标讯关键词过滤</td></tr>
+<tr><td><code>min_amount</code></td><td><code>number</code></td><td>否</td><td>合作金额下限（元）</td></tr>
+<tr><td><code>limit</code></td><td><code>number</code></td><td>否</td><td>返回合作方数量上限（默认 20）</td></tr>
+</tbody></table></div>
+<h4>请求示例</h4>
+<div class="code-wrap"><pre class="code-block">curl -X POST "https://api.caizhao-token.com/api_v2/get_company_partners" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "company": "华为技术有限公司",
+  "partner_type": "客户",
+  "begin_date": "2026-01-01",
+  "end_date": "2026-03-20",
+  "limit": 20
+}'</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h4>响应字段</h4>
+<div class="doc-table"><table><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>success</code></td><td><code>boolean</code></td><td>请求是否成功</td></tr>
+<tr><td><code>data</code></td><td><code>object</code></td><td>业务数据，结构随接口而异，字段见下表</td></tr>
+<tr><td><code>error</code></td><td><code>object|null</code></td><td>错误信息，含 code 与 message，成功时为 null</td></tr>
+<tr><td><code>meta</code></td><td><code>object</code></td><td>元信息，含 request_id、tool_name、cost_units、execution_time_ms</td></tr>
+<tr><td><code>data.company</code></td><td><code>string</code></td><td>查询的公司名/公司 ID</td></tr>
+<tr><td><code>data.partner_type</code></td><td><code>string</code></td><td>合作方向：全部/客户/供应商</td></tr>
+<tr><td><code>data.total</code></td><td><code>int</code></td><td>返回合作方数量</td></tr>
+<tr><td><code>data.partners[]</code></td><td><code>object[]</code></td><td>合作方列表，元素字段见下</td></tr>
+<tr><td><code>data.partners[].company_name</code></td><td><code>string</code></td><td>合作方名称</td></tr>
+<tr><td><code>data.partners[].company_id</code></td><td><code>int</code></td><td>合作方 ID</td></tr>
+<tr><td><code>data.partners[].cooperation_count</code></td><td><code>int</code></td><td>合作次数</td></tr>
+<tr><td><code>data.partners[].cooperation_amount</code></td><td><code>float</code></td><td>合作金额（元）</td></tr>
+<tr><td><code>data.partners[].cooperation_amount_wan</code></td><td><code>float</code></td><td>合作金额（万元）</td></tr>
+<tr><td><code>data.partners[].last_cooperation_time</code></td><td><code>string</code></td><td>最近合作时间</td></tr>
+<tr><td><code>data.partners[].products</code></td><td><code>string[]</code></td><td>合作涉及的标的物（Top10）</td></tr>
+</tbody></table></div>
+<h4>响应示例</h4>
+<div class="code-wrap"><pre class="code-block">{
+  "success": true,
+  "data": {
+    "company": "华为技术有限公司",
+    "partner_type": "客户",
+    "total": 3,
+    "partners": [
+      {
+        "company_name": "北京市经济和信息化局网络安全管理中心",
+        "company_id": 1456457588,
+        "cooperation_count": 1,
+        "cooperation_amount": 1465102,
+        "cooperation_amount_wan": 146.51,
+        "last_cooperation_time": "2026-03-20",
+        "products": [
+          "服务器",
+          "数据盘",
+          "网络安全管理",
+          "系统盘"
+        ]
+      },
+      {
+        "company_name": "中国电信股份有限公司黑龙江分公司",
+        "company_id": 134134,
+        "cooperation_count": 1,
+        "cooperation_amount": 0,
+        "cooperation_amount_wan": 0,
+        "last_cooperation_time": "2026-03-20",
+        "products": [
+          "智算服务器"
+        ]
+      },
+      {
+        "company_name": "首都医科大学附属北京儿童医院黑龙江医院",
+        "company_id": 1451336227,
+        "cooperation_count": 1,
+        "cooperation_amount": 19570000,
+        "cooperation_amount_wan": 1957,
+        "last_cooperation_time": "2026-03-16",
+        "products": [
+          "IT机柜",
+          "无线网络设备",
+          "高拍仪",
+          "核心交换机",
+          "集群控制器",
+          "POE交换机",
+          "台式计算机",
+          "监控系统",
+          "超融合存储交换机",
+          "平板电脑"
+        ]
+      }
+    ]
+  },
+  "error": "",
+  "meta": {
+    "request_id": "req_0b8e2d513ed44246",
+    "tool_name": "get_company_partners",
+    "cost_units": 1,
+    "execution_time_ms": 300
+  }
+}</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h3 id="api-competitors">12. 公司竞争对手分析 <a class="anchor-icon" href="#api-competitors">#</a></h3>
+<p>从招投标画像出发，列出在区域、行业、项目类型上与目标公司高度重叠的竞争企业列表。</p>
+<div class="doc-table"><table><tbody>
+<tr><th style="width:120px">调用方式</th><td>POST</td></tr>
+<tr><th>请求地址</th><td><code>https://api.caizhao-token.com/api_v2/find_competitors</code></td></tr>
+<tr><th>单次费用</th><td>3 积分</td></tr>
+</tbody></table></div>
+<h4>请求参数</h4>
+<div class="doc-table"><table><thead><tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>company</code></td><td><code>string | int</code></td><td>否</td><td>公司名称或内部公司 ID；与 company_url 二选一至少填一个</td></tr>
+<tr><td><code>company_url</code></td><td><code>string</code></td><td>否</td><td>采招词元公司详情页链接</td></tr>
+<tr><td><code>limit</code></td><td><code>int</code></td><td>否</td><td>返回竞争对手数量上限（默认 20）</td></tr>
+</tbody></table></div>
+<h4>请求示例</h4>
+<div class="code-wrap"><pre class="code-block">curl -X POST "https://api.caizhao-token.com/api_v2/find_competitors" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "company_url": "https://www.caizhao-token.com/company/35680931",
+  "limit": 5
+}'</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h4>响应字段</h4>
+<div class="doc-table"><table><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>success</code></td><td><code>boolean</code></td><td>请求是否成功</td></tr>
+<tr><td><code>data</code></td><td><code>object</code></td><td>业务数据，结构随接口而异，字段见下表</td></tr>
+<tr><td><code>error</code></td><td><code>object|null</code></td><td>错误信息，含 code 与 message，成功时为 null</td></tr>
+<tr><td><code>meta</code></td><td><code>object</code></td><td>元信息，含 request_id、tool_name、cost_units、execution_time_ms</td></tr>
+<tr><td><code>data.company_name</code></td><td><code>string</code></td><td>目标公司名称</td></tr>
+<tr><td><code>data.company_id</code></td><td><code>int|string</code></td><td>目标公司 ID</td></tr>
+<tr><td><code>data.total_projects</code></td><td><code>int</code></td><td>统计的项目总数</td></tr>
+<tr><td><code>data.total_competitors</code></td><td><code>int</code></td><td>竞争对手总数</td></tr>
+<tr><td><code>data.competitors[]</code></td><td><code>object[]</code></td><td>竞争对手列表，元素字段见下</td></tr>
+<tr><td><code>data.competitors[].company_name</code></td><td><code>string</code></td><td>竞争对手名称</td></tr>
+<tr><td><code>data.competitors[].company_id</code></td><td><code>int</code></td><td>竞争对手 ID</td></tr>
+<tr><td><code>data.competitors[].co_bid_count</code></td><td><code>int</code></td><td>共同投标次数</td></tr>
+<tr><td><code>data.competitors[].latest_co_bid_time</code></td><td><code>string</code></td><td>最近共同投标时间</td></tr>
+<tr><td><code>data.competitors[].top_co_bid_products</code></td><td><code>object[]</code></td><td>Top 共同投标标的物，含 name/count</td></tr>
+<tr><td><code>data.competitors[].top_co_bid_callers</code></td><td><code>object[]</code></td><td>Top 共同投标招标方，含 name/count</td></tr>
+<tr><td><code>data.competitors[].top_co_bid_provinces</code></td><td><code>object[]</code></td><td>Top 共同投标省份，含 name/count</td></tr>
+<tr><td><code>data.competitors[].top_co_bid_cities</code></td><td><code>object[]</code></td><td>Top 共同投标城市，含 name/count</td></tr>
+</tbody></table></div>
+<h4>响应示例</h4>
+<div class="code-wrap"><pre class="code-block">{
+  "success": true,
+  "data": {
+    "company_name": "北京百炼智能科技有限公司",
+    "company_id": 35680931,
+    "total_projects": 12,
+    "total_competitors": 50,
+    "competitors": [
+      {
+        "company_name": "北京庖丁科技有限公司",
+        "company_id": 511886631,
+        "co_bid_count": 2,
+        "latest_co_bid_time": "2025-10-11",
+        "top_co_bid_products": [
+          {
+            "name": "智能撰写助手服务项目",
+            "count": 1
+          },
+          {
+            "name": "智能刷报系统采购及定制开发",
+            "count": 1
+          },
+          {
+            "name": "重特大数据安全事件智能发现与有效响应技术项目",
+            "count": 1
+          },
+          {
+            "name": "非结构化数据识别引擎模块",
+            "count": 1
+          },
+          {
+            "name": "数据安全风险事件规则库模块",
+            "count": 1
+          }
+        ],
+        "top_co_bid_callers": [
+          {
+            "name": "长城证券股份有限公司",
+            "count": 1
+          },
+          {
+            "name": "北京亚鸿世纪科技发展有限公司",
+            "count": 1
+          }
+        ],
+        "top_co_bid_provinces": [
+          {
+            "name": "广东",
+            "count": 1
+          },
+          {
+            "name": "北京",
+            "count": 1
+          }
+        ],
+        "top_co_bid_cities": [
+          {
+            "name": "深圳",
+            "count": 1
+          },
+          {
+            "name": "北京",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "company_name": "达观数据有限公司",
+        "company_id": 1450042732,
+        "co_bid_count": 2,
+        "latest_co_bid_time": "2024-12-20",
+        "top_co_bid_products": [
+          {
+            "name": "重特大数据安全事件智能发现与有效响应技术项目",
+            "count": 1
+          },
+          {
+            "name": "非结构化数据识别引擎模块",
+            "count": 1
+          },
+          {
+            "name": "数据安全风险事件规则库模块",
+            "count": 1
+          },
+          {
+            "name": "智能辅助培训课件开发环境",
+            "count": 1
+          }
+        ],
+        "top_co_bid_callers": [
+          {
+            "name": "北京亚鸿世纪科技发展有限公司",
+            "count": 1
+          },
+          {
+            "name": "中国航空工业集团公司成都飞机设计研究所",
+            "count": 1
+          }
+        ],
+        "top_co_bid_provinces": [
+          {
+            "name": "北京",
+            "count": 1
+          },
+          {
+            "name": "四川",
+            "count": 1
+          }
+        ],
+        "top_co_bid_cities": [
+          {
+            "name": "北京",
+            "count": 1
+          },
+          {
+            "name": "成都",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "company_name": "北京软信天成科技有限公司",
+        "company_id": 1117488,
+        "co_bid_count": 1,
+        "latest_co_bid_time": "2025-12-15",
+        "top_co_bid_products": [
+          {
+            "name": "数据质量自动化检测探索项目",
+            "count": 1
+          }
+        ],
+        "top_co_bid_callers": [
+          {
+            "name": "泸州老窖",
+            "count": 1
+          }
+        ],
+        "top_co_bid_provinces": [
+          {
+            "name": "四川",
+            "count": 1
+          }
+        ],
+        "top_co_bid_cities": [
+          {
+            "name": "泸州",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "company_name": "北京云锦汇智信息技术有限公司",
+        "company_id": 26146939,
+        "co_bid_count": 1,
+        "latest_co_bid_time": "2025-12-15",
+        "top_co_bid_products": [
+          {
+            "name": "数据质量自动化检测探索项目",
+            "count": 1
+          }
+        ],
+        "top_co_bid_callers": [
+          {
+            "name": "泸州老窖",
+            "count": 1
+          }
+        ],
+        "top_co_bid_provinces": [
+          {
+            "name": "四川",
+            "count": 1
+          }
+        ],
+        "top_co_bid_cities": [
+          {
+            "name": "泸州",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "company_name": "中国石油集团工程技术研究有限公司",
+        "company_id": 20201,
+        "co_bid_count": 1,
+        "latest_co_bid_time": "2025-10-11",
+        "top_co_bid_products": [
+          {
+            "name": "智能撰写助手服务项目",
+            "count": 1
+          },
+          {
+            "name": "智能刷报系统采购及定制开发",
+            "count": 1
+          }
+        ],
+        "top_co_bid_callers": [
+          {
+            "name": "长城证券股份有限公司",
+            "count": 1
+          }
+        ],
+        "top_co_bid_provinces": [
+          {
+            "name": "广东",
+            "count": 1
+          }
+        ],
+        "top_co_bid_cities": [
+          {
+            "name": "深圳",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  "error": "",
+  "meta": {
+    "request_id": "req_4741815f15424c26",
+    "tool_name": "find_competitors",
+    "cost_units": 1,
+    "execution_time_ms": 73
+  }
+}</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h3 id="api-company-contacts">13. 公司联系电话 <a class="anchor-icon" href="#api-company-contacts">#</a></h3>
+<p>获取公司/机构在招中标中的联系电话，包括最近出现时间、最近负责项目、负责项目数量、负责主要标的、负责项目链接等信息。精准触达关键联系人。</p>
+<div class="doc-table"><table><tbody>
+<tr><th style="width:120px">调用方式</th><td>POST</td></tr>
+<tr><th>请求地址</th><td><code>https://api.caizhao-token.com/api_v2/get_company_contacts</code></td></tr>
+<tr><th>单次费用</th><td>5 积分</td></tr>
+</tbody></table></div>
+<h4>请求参数</h4>
+<div class="doc-table"><table><thead><tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>company</code></td><td><code>string</code></td><td>否</td><td>公司名称，和company_url必填其中一个</td></tr>
+<tr><td><code>company_url</code></td><td><code>string</code></td><td>否</td><td>采招词元公司详情链接，和company必填其中一个</td></tr>
+<tr><td><code>keywords</code></td><td><code>string[]</code></td><td>否</td><td>搜索联系人相关的关键词项目</td></tr>
+<tr><td><code>match_modes</code></td><td><code>string[]</code></td><td>否</td><td>匹配模式（all:全部 sm:标的物/产品 title:标题 brand:品牌 fulltext:全文），如['sm','title']（默认 ['sm', 'title']）</td></tr>
+<tr><td><code>role</code></td><td><code>int</code></td><td>否</td><td>联系人类型：1=招标联系人，2=中标联系人，0=全部（先招标后中标补充）（默认 0）</td></tr>
+<tr><td><code>begin_date</code></td><td><code>string</code></td><td>否</td><td>公告发布开始日期，YYYY-MM-DD</td></tr>
+<tr><td><code>end_date</code></td><td><code>string</code></td><td>否</td><td>公告发布结束日期，YYYY-MM-DD</td></tr>
+<tr><td><code>limit</code></td><td><code>number</code></td><td>否</td><td>返回联系人个数（默认 5）</td></tr>
+</tbody></table></div>
+<h4>请求示例</h4>
+<div class="code-wrap"><pre class="code-block">curl -X POST "https://api.caizhao-token.com/api_v2/get_company_contacts" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "company": "阿里云计算有限公司",
+  "limit": 10,
+  "role": 2
+}'</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h4>响应字段</h4>
+<div class="doc-table"><table><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>success</code></td><td><code>boolean</code></td><td>请求是否成功</td></tr>
+<tr><td><code>data</code></td><td><code>object</code></td><td>业务数据，结构随接口而异，字段见下表</td></tr>
+<tr><td><code>error</code></td><td><code>object|null</code></td><td>错误信息，含 code 与 message，成功时为 null</td></tr>
+<tr><td><code>meta</code></td><td><code>object</code></td><td>元信息，含 request_id、tool_name、cost_units、execution_time_ms</td></tr>
+<tr><td><code>data.total</code></td><td><code>int</code></td><td>返回联系人数量</td></tr>
+<tr><td><code>data.contact_privacy</code></td><td><code>string</code></td><td>电话隐私级别：full=完整（付费），masked=脱敏（免费/试用）</td></tr>
+<tr><td><code>data.contacts[]</code></td><td><code>object[]</code></td><td>联系人列表，元素字段见下</td></tr>
+<tr><td><code>data.contacts[].phone</code></td><td><code>string</code></td><td>联系电话（免费/试用账户脱敏）</td></tr>
+<tr><td><code>data.contacts[].name</code></td><td><code>string</code></td><td>联系人姓名（脱敏，仅保留姓氏）</td></tr>
+<tr><td><code>data.contacts[].bid_count</code></td><td><code>int</code></td><td>关联标讯条数</td></tr>
+<tr><td><code>data.contacts[].last_pub_time</code></td><td><code>string</code></td><td>最近一次标讯发布时间</td></tr>
+<tr><td><code>data.contacts[].last_bid_title</code></td><td><code>string</code></td><td>最近一次标讯标题</td></tr>
+<tr><td><code>data.contacts[].last_bid_url</code></td><td><code>string</code></td><td>最近一次标讯链接</td></tr>
+<tr><td><code>data.contacts[].top_products</code></td><td><code>string[]</code></td><td>Top 关联标的物（Top10）</td></tr>
+</tbody></table></div>
+<h4>响应示例</h4>
+<div class="code-wrap"><pre class="code-block">{
+  "success": true,
+  "data": {
+    "total": 10,
+    "contacts": [
+      {
+        "phone": "18912973072",
+        "name": "",
+        "bid_count": 2,
+        "last_pub_time": "2026-03-31",
+        "last_bid_title": "江苏教育报刊总社小数报2026年度服务器续租项目合同",
+        "last_bid_url": "https://www.caizhao-token.com/content/501852831/b2?from=mcp",
+        "top_products": [
+          "服务器续租项目",
+          "服务器续租服务"
+        ]
+      },
+      {
+        "phone": "186****1621",
+        "name": "",
+        "bid_count": 1,
+        "last_pub_time": "2026-03-23",
+        "last_bid_title": "浙江省担保集团有限公司政务云资源租赁服务采购项目合同公告",
+        "last_bid_url": "https://www.caizhao-token.com/content/501231858/b2?from=mcp",
+        "top_products": [
+          "政务云资源租赁服务"
+        ]
+      },
+      {
+        "phone": "188****3527",
+        "name": "",
+        "bid_count": 9,
+        "last_pub_time": "2026-03-19",
+        "last_bid_title": "包头市检验检测中心阿里云计算服务履约验收公告(第1批)",
+        "last_bid_url": "https://www.caizhao-token.com/content/500980451/b2?from=mcp",
+        "top_products": [
+          "信息技术服务",
+          "社会治理网格化智慧工作平台运维项目服务",
+          "智慧公安建设云平台和零信任体系扩容",
+          "阿里云计算服务",
+          "云计算服务",
+          "数据信息安全",
+          "社会治理网格化智慧工作平台运维项目",
+          "情指勤舆融合作战平台数据源及业务功能拓展",
+          "情指勤舆融合作战平台数数据源及业务功能拓展"
+        ]
+      },
+      {
+        "phone": "147****5888",
+        "name": "",
+        "bid_count": 1,
+        "last_pub_time": "2026-01-28",
+        "last_bid_title": "辽望客户端阿里云服务器，等保合规，媒资库相关产品续费项目合同公告",
+        "last_bid_url": "https://www.caizhao-token.com/content/498486044/b2?from=mcp",
+        "top_products": [
+          "阿里云服务器",
+          "媒资库相关产品续费项目"
+        ]
+      },
+      {
+        "phone": "139****7132",
+        "name": "李*",
+        "bid_count": 1,
+        "last_pub_time": "2026-01-16",
+        "last_bid_title": "北京科技大学共青团“第二课堂成绩单”网络管理系统云存储产品及服务合同公告",
+        "last_bid_url": "https://www.caizhao-token.com/content/497474239/b2?from=mcp",
+        "top_products": [
+          "网络管理系统云存储产品及服务"
+        ]
+      }
+    ]
+  },
+  "error": "",
+  "meta": {
+    "request_id": "req_e777301107e74745",
+    "tool_name": "get_company_contacts",
+    "cost_units": 1,
+    "execution_time_ms": 42
+  }
+}</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h3 id="api-top-purchasers">14. Top采购单位 <a class="anchor-icon" href="#api-top-purchasers">#</a></h3>
+<p>通过业务关键词及其他筛选组合，获取符合要求的Top采购单位列表，以及相关统计字段。可以用来进行市场调研、精准获客</p>
+<div class="doc-table"><table><tbody>
+<tr><th style="width:120px">调用方式</th><td>POST</td></tr>
+<tr><th>请求地址</th><td><code>https://api.caizhao-token.com/api_v2/get_top_purchasers</code></td></tr>
+<tr><th>单次费用</th><td>3 积分</td></tr>
+</tbody></table></div>
+<h4>请求参数</h4>
+<div class="doc-table"><table><thead><tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>keywords</code></td><td><code>string[]</code></td><td>是</td><td>搜索关键词列表</td></tr>
+<tr><td><code>match_modes</code></td><td><code>string[]</code></td><td>否</td><td>匹配模式（all:全部 sm:标的物/产品 title:标题 brand:品牌 fulltext:全文 caller:招标公司/采购公司/招标方 winner:中标公司/供应商/中标方 winner_tender:中标公司或投标方 tender:投标公司/供应商/投标方），如['sm','title']</td></tr>
+<tr><td><code>exclude_keywords</code></td><td><code>string[]</code></td><td>否</td><td>排除关键词，如['维修', '耗材']</td></tr>
+<tr><td><code>begin_date</code></td><td><code>string</code></td><td>否</td><td>公告发布开始日期，YYYY-MM-DD</td></tr>
+<tr><td><code>end_date</code></td><td><code>string</code></td><td>否</td><td>公告发布结束日期，YYYY-MM-DD</td></tr>
+<tr><td><code>provinces</code></td><td><code>string[]</code></td><td>否</td><td>省份列表，如：['北京', '内蒙古']</td></tr>
+<tr><td><code>cities</code></td><td><code>string[]</code></td><td>否</td><td>城市列表，如：['石家庄', '合肥']</td></tr>
+<tr><td><code>min_amount</code></td><td><code>number</code></td><td>否</td><td>金额下限（元）</td></tr>
+<tr><td><code>max_amount</code></td><td><code>number</code></td><td>否</td><td>金额上限（元）</td></tr>
+<tr><td><code>limit</code></td><td><code>number</code></td><td>否</td><td>返回数量，默认20，最大100（默认 20）</td></tr>
+<tr><td><code>sort_field</code></td><td><code>string</code></td><td>否</td><td>排序字段: count(中标次数) amount(中标总金额) pub_time(最近一次中标时间)，倒序（默认 count）</td></tr>
+</tbody></table></div>
+<h4>请求示例</h4>
+<div class="code-wrap"><pre class="code-block">curl -X POST "https://api.caizhao-token.com/api_v2/get_top_purchasers" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "keywords": [
+    "大语言模型"
+  ],
+  "begin_date": "2025-01-01",
+  "end_date": "2026-03-31",
+  "limit": 5,
+  "sort_field": "count"
+}'</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h4>响应字段</h4>
+<div class="doc-table"><table><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>success</code></td><td><code>boolean</code></td><td>请求是否成功</td></tr>
+<tr><td><code>data</code></td><td><code>object</code></td><td>业务数据，结构随接口而异，字段见下表</td></tr>
+<tr><td><code>error</code></td><td><code>object|null</code></td><td>错误信息，含 code 与 message，成功时为 null</td></tr>
+<tr><td><code>meta</code></td><td><code>object</code></td><td>元信息，含 request_id、tool_name、cost_units、execution_time_ms</td></tr>
+<tr><td><code>data.total</code></td><td><code>int</code></td><td>返回采购单位数量</td></tr>
+<tr><td><code>data.items[]</code></td><td><code>object[]</code></td><td>采购单位列表，元素字段见下</td></tr>
+<tr><td><code>data.items[].company_name</code></td><td><code>string</code></td><td>采购单位名称</td></tr>
+<tr><td><code>data.items[].company_id</code></td><td><code>int</code></td><td>采购单位 ID</td></tr>
+<tr><td><code>data.items[].purchase_count</code></td><td><code>int</code></td><td>采购次数</td></tr>
+<tr><td><code>data.items[].total_amount</code></td><td><code>float</code></td><td>采购总金额（元）</td></tr>
+<tr><td><code>data.items[].total_amount_wan</code></td><td><code>float</code></td><td>采购总金额（万元）</td></tr>
+<tr><td><code>data.items[].latest_purchase_time</code></td><td><code>string</code></td><td>最近采购时间</td></tr>
+<tr><td><code>data.items[].top_winners</code></td><td><code>object[]</code></td><td>Top 合作中标公司，含 name/count</td></tr>
+<tr><td><code>data.items[].company_url</code></td><td><code>string</code></td><td>采购单位详情页链接</td></tr>
+</tbody></table></div>
+<h4>响应示例</h4>
+<div class="code-wrap"><pre class="code-block">{
+  "success": true,
+  "data": {
+    "total": 4,
+    "items": [
+      {
+        "company_name": "福建医科大学附属第一医院",
+        "company_id": 3763,
+        "purchase_count": 5,
+        "total_amount": 1155000,
+        "total_amount_wan": 115.5,
+        "latest_purchase_time": "2025-03-05",
+        "top_winners": [],
+        "company_url": "https://www.caizhao-token.com/company/3763?from=mcp"
+      },
+      {
+        "company_name": "中国长江三峡集团有限公司",
+        "company_id": 178096,
+        "purchase_count": 4,
+        "total_amount": 0,
+        "total_amount_wan": 0,
+        "latest_purchase_time": "2025-12-03",
+        "top_winners": [],
+        "company_url": "https://www.caizhao-token.com/company/178096?from=mcp"
+      },
+      {
+        "company_name": "中国五冶集团有限公司",
+        "company_id": 178140,
+        "purchase_count": 4,
+        "total_amount": 1560000,
+        "total_amount_wan": 156,
+        "latest_purchase_time": "2026-03-18",
+        "top_winners": [],
+        "company_url": "https://www.caizhao-token.com/company/178140?from=mcp"
+      },
+      {
+        "company_name": "合肥工业大学",
+        "company_id": 3138,
+        "purchase_count": 3,
+        "total_amount": 2401000,
+        "total_amount_wan": 240.1,
+        "latest_purchase_time": "2025-08-26",
+        "top_winners": [],
+        "company_url": "https://www.caizhao-token.com/company/3138?from=mcp"
+      }
+    ]
+  },
+  "error": "",
+  "meta": {
+    "request_id": "req_6c7671c2e3f248bd",
+    "tool_name": "get_top_purchasers",
+    "cost_units": 1,
+    "execution_time_ms": 3694
+  }
+}</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h3 id="api-top-suppliers">15. Top中标供应商 <a class="anchor-icon" href="#api-top-suppliers">#</a></h3>
+<p>通过业务关键词及其他筛选组合，获取符合要求的Top中标公司列表，以及相关统计字段。可以用来进行市场调研、渠道扩展、竞对分析等场景。</p>
+<div class="doc-table"><table><tbody>
+<tr><th style="width:120px">调用方式</th><td>POST</td></tr>
+<tr><th>请求地址</th><td><code>https://api.caizhao-token.com/api_v2/get_top_suppliers</code></td></tr>
+<tr><th>单次费用</th><td>3 积分</td></tr>
+</tbody></table></div>
+<h4>请求参数</h4>
+<div class="doc-table"><table><thead><tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>keywords</code></td><td><code>string[]</code></td><td>是</td><td>搜索关键词列表</td></tr>
+<tr><td><code>match_modes</code></td><td><code>string[]</code></td><td>否</td><td>匹配模式（all:全部 sm:标的物/产品 title:标题 brand:品牌 fulltext:全文 caller:招标公司/采购公司/招标方 winner:中标公司/供应商/中标方 winner_tender:中标公司或投标方 tender:投标公司/供应商/投标方），如['sm','title']</td></tr>
+<tr><td><code>exclude_keywords</code></td><td><code>string[]</code></td><td>否</td><td>排除关键词，如['维修', '耗材']</td></tr>
+<tr><td><code>begin_date</code></td><td><code>string</code></td><td>否</td><td>公告发布开始日期，YYYY-MM-DD</td></tr>
+<tr><td><code>end_date</code></td><td><code>string</code></td><td>否</td><td>公告发布结束日期，YYYY-MM-DD</td></tr>
+<tr><td><code>provinces</code></td><td><code>string[]</code></td><td>否</td><td>省份列表，如：['北京', '内蒙古']</td></tr>
+<tr><td><code>cities</code></td><td><code>string[]</code></td><td>否</td><td>城市列表，如：['石家庄', '合肥']</td></tr>
+<tr><td><code>min_amount</code></td><td><code>number</code></td><td>否</td><td>金额下限（元）</td></tr>
+<tr><td><code>max_amount</code></td><td><code>number</code></td><td>否</td><td>金额上限（元）</td></tr>
+<tr><td><code>limit</code></td><td><code>number</code></td><td>否</td><td>返回数量，默认20，最大100（默认 20）</td></tr>
+<tr><td><code>sort_field</code></td><td><code>string</code></td><td>否</td><td>排序字段: count(中标次数) amount(中标总金额) pub_time(最近一次中标时间)，倒序（默认 count）</td></tr>
+</tbody></table></div>
+<h4>请求示例</h4>
+<div class="code-wrap"><pre class="code-block">curl -X POST "https://api.caizhao-token.com/api_v2/get_top_suppliers" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "keywords": [
+    "大语言模型"
+  ],
+  "begin_date": "2025-01-01",
+  "end_date": "2026-03-31",
+  "limit": 5,
+  "sort_field": "count"
+}'</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h4>响应字段</h4>
+<div class="doc-table"><table><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>success</code></td><td><code>boolean</code></td><td>请求是否成功</td></tr>
+<tr><td><code>data</code></td><td><code>object</code></td><td>业务数据，结构随接口而异，字段见下表</td></tr>
+<tr><td><code>error</code></td><td><code>object|null</code></td><td>错误信息，含 code 与 message，成功时为 null</td></tr>
+<tr><td><code>meta</code></td><td><code>object</code></td><td>元信息，含 request_id、tool_name、cost_units、execution_time_ms</td></tr>
+<tr><td><code>data.total</code></td><td><code>int</code></td><td>返回供应商数量</td></tr>
+<tr><td><code>data.items[]</code></td><td><code>object[]</code></td><td>供应商列表，元素字段见下</td></tr>
+<tr><td><code>data.items[].company_name</code></td><td><code>string</code></td><td>供应商名称</td></tr>
+<tr><td><code>data.items[].company_id</code></td><td><code>int</code></td><td>供应商 ID</td></tr>
+<tr><td><code>data.items[].win_count</code></td><td><code>int</code></td><td>中标次数</td></tr>
+<tr><td><code>data.items[].total_amount</code></td><td><code>float</code></td><td>中标总金额（元）</td></tr>
+<tr><td><code>data.items[].total_amount_wan</code></td><td><code>float</code></td><td>中标总金额（万元）</td></tr>
+<tr><td><code>data.items[].latest_win_time</code></td><td><code>string</code></td><td>最近中标时间</td></tr>
+<tr><td><code>data.items[].top_provinces</code></td><td><code>object[]</code></td><td>Top 中标省份，含 name/count</td></tr>
+<tr><td><code>data.items[].top_cities</code></td><td><code>object[]</code></td><td>Top 中标城市，含 name/count</td></tr>
+<tr><td><code>data.items[].top_callers</code></td><td><code>object[]</code></td><td>Top 合作采购单位，含 name/count</td></tr>
+<tr><td><code>data.items[].company_url</code></td><td><code>string</code></td><td>供应商详情页链接</td></tr>
+</tbody></table></div>
+<h4>响应示例</h4>
+<div class="code-wrap"><pre class="code-block">{
+  "success": true,
+  "data": {
+    "total": 10,
+    "items": [
+      {
+        "company_name": "北京智谱华章科技股份有限公司",
+        "company_id": 1457235389,
+        "win_count": 4,
+        "total_amount": 13321160,
+        "total_amount_wan": 1332.12,
+        "latest_win_time": "2026-02-11",
+        "top_provinces": [
+          {
+            "name": "湖北",
+            "count": 2
+          },
+          {
+            "name": "上海",
+            "count": 1
+          },
+          {
+            "name": "北京",
+            "count": 1
+          }
+        ],
+        "top_cities": [
+          {
+            "name": "武汉",
+            "count": 2
+          },
+          {
+            "name": "上海",
+            "count": 1
+          },
+          {
+            "name": "北京",
+            "count": 1
+          }
+        ],
+        "top_callers": [
+          {
+            "name": "中国长江三峡集团有限公司",
+            "count": 2
+          },
+          {
+            "name": "上海中心气象台",
+            "count": 1
+          },
+          {
+            "name": "中国气象局公共气象服务中心",
+            "count": 1
+          }
+        ],
+        "company_url": "https://www.caizhao-token.com/company/1457235389?from=mcp"
+      },
+      {
+        "company_name": "中电信数智科技有限公司",
+        "company_id": 1335161343,
+        "win_count": 3,
+        "total_amount": 31323300,
+        "total_amount_wan": 3132.33,
+        "latest_win_time": "2026-01-13",
+        "top_provinces": [
+          {
+            "name": "贵州",
+            "count": 2
+          },
+          {
+            "name": "湖北",
+            "count": 1
+          }
+        ],
+        "top_cities": [
+          {
+            "name": "贵阳",
+            "count": 2
+          },
+          {
+            "name": "武汉",
+            "count": 1
+          }
+        ],
+        "top_callers": [
+          {
+            "name": "贵州师范大学",
+            "count": 2
+          },
+          {
+            "name": "湖北省商务厅",
+            "count": 1
+          }
+        ],
+        "company_url": "https://www.caizhao-token.com/company/1335161343?from=mcp"
+      },
+      {
+        "company_name": "佰聆数据股份有限公司",
+        "company_id": 4598872,
+        "win_count": 3,
+        "total_amount": 105027,
+        "total_amount_wan": 10.5,
+        "latest_win_time": "2025-07-22",
+        "top_provinces": [
+          {
+            "name": "广东",
+            "count": 2
+          },
+          {
+            "name": "北京",
+            "count": 1
+          }
+        ],
+        "top_cities": [
+          {
+            "name": "广州",
+            "count": 2
+          },
+          {
+            "name": "北京",
+            "count": 1
+          }
+        ],
+        "top_callers": [
+          {
+            "name": "南方电网数字电网集团（广东）有限公司",
+            "count": 2
+          },
+          {
+            "name": "国网能源研究院有限公司",
+            "count": 1
+          }
+        ],
+        "company_url": "https://www.caizhao-token.com/company/4598872?from=mcp"
+      },
+      {
+        "company_name": "南京南瑞信息通信科技有限公司",
+        "company_id": 150514,
+        "win_count": 3,
+        "total_amount": 0,
+        "total_amount_wan": 0,
+        "latest_win_time": "2025-10-27",
+        "top_provinces": [
+          {
+            "name": "北京",
+            "count": 1
+          },
+          {
+            "name": "贵州",
+            "count": 1
+          },
+          {
+            "name": "重庆",
+            "count": 1
+          }
+        ],
+        "top_cities": [
+          {
+            "name": "北京",
+            "count": 1
+          },
+          {
+            "name": "贵阳",
+            "count": 1
+          },
+          {
+            "name": "重庆",
+            "count": 1
+          }
+        ],
+        "top_callers": [
+          {
+            "name": "国网能源研究院有限公司",
+            "count": 1
+          },
+          {
+            "name": "国网重庆市电力公司",
+            "count": 1
+          },
+          {
+            "name": "贵州电网有限责任公司智能作业中心",
+            "count": 1
+          }
+        ],
+        "company_url": "https://www.caizhao-token.com/company/150514?from=mcp"
+      },
+      {
+        "company_name": "一脉云数（上海）科技有限公司",
+        "company_id": 1455124993,
+        "win_count": 2,
+        "total_amount": 1030000,
+        "total_amount_wan": 103,
+        "latest_win_time": "2025-08-25",
+        "top_provinces": [
+          {
+            "name": "江苏",
+            "count": 2
+          }
+        ],
+        "top_cities": [
+          {
+            "name": "南京",
+            "count": 1
+          },
+          {
+            "name": "徐州",
+            "count": 1
+          }
+        ],
+        "top_callers": [
+          {
+            "name": "江苏省生态环境评估中心",
+            "count": 2
+          }
+        ],
+        "company_url": "https://www.caizhao-token.com/company/1455124993?from=mcp"
+      }
+    ]
+  },
+  "error": "",
+  "meta": {
+    "request_id": "req_0c169369da4d43df",
+    "tool_name": "get_top_suppliers",
+    "cost_units": 1,
+    "execution_time_ms": 14011
+  }
+}</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h3 id="api-top-brands">16. Top中标品牌 <a class="anchor-icon" href="#api-top-brands">#</a></h3>
+<p>在给定产品与区域、时间范围内统计中标频次与金额领先的品牌。</p>
+<div class="doc-table"><table><tbody>
+<tr><th style="width:120px">调用方式</th><td>POST</td></tr>
+<tr><th>请求地址</th><td><code>https://api.caizhao-token.com/api_v2/get_top_brands</code></td></tr>
+<tr><th>单次费用</th><td>3 积分</td></tr>
+</tbody></table></div>
+<h4>请求参数</h4>
+<div class="doc-table"><table><thead><tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>product</code></td><td><code>string</code></td><td>是</td><td>产品/品类关键词，如「服务器」「医用超声」</td></tr>
+<tr><td><code>exclude_keywords</code></td><td><code>string[]</code></td><td>否</td><td>排除词，减少噪声命中，如：['耗材', '维保']</td></tr>
+<tr><td><code>min_price</code></td><td><code>number</code></td><td>否</td><td>中标产品单价下限（元）</td></tr>
+<tr><td><code>max_price</code></td><td><code>number</code></td><td>否</td><td>中标产品单价上限（元）</td></tr>
+<tr><td><code>begin_date</code></td><td><code>string</code></td><td>否</td><td>统计开始日期 YYYY-MM-DD</td></tr>
+<tr><td><code>end_date</code></td><td><code>string</code></td><td>否</td><td>统计结束日期 YYYY-MM-DD</td></tr>
+<tr><td><code>provinces</code></td><td><code>string[]</code></td><td>否</td><td>省份列表，如：['北京', '内蒙古']</td></tr>
+<tr><td><code>cities</code></td><td><code>string[]</code></td><td>否</td><td>城市列表，如：['石家庄', '合肥']</td></tr>
+<tr><td><code>counties</code></td><td><code>string[]</code></td><td>否</td><td>区县列表，如：['长安区', '瑶海区']</td></tr>
+<tr><td><code>limit</code></td><td><code>number</code></td><td>否</td><td>返回品牌数量（默认 10）</td></tr>
+</tbody></table></div>
+<h4>请求示例</h4>
+<div class="code-wrap"><pre class="code-block">curl -X POST "https://api.caizhao-token.com/api_v2/get_top_brands" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "product": "呼吸机",
+  "exclude_keywords": [
+    "耗材",
+    "维保",
+    "维修"
+  ],
+  "limit": 10,
+  "begin_date": "2025-01-01",
+  "end_date": "2025-12-31"
+}'</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h4>响应字段</h4>
+<div class="doc-table"><table><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>success</code></td><td><code>boolean</code></td><td>请求是否成功</td></tr>
+<tr><td><code>data</code></td><td><code>object</code></td><td>业务数据，结构随接口而异，字段见下表</td></tr>
+<tr><td><code>error</code></td><td><code>object|null</code></td><td>错误信息，含 code 与 message，成功时为 null</td></tr>
+<tr><td><code>meta</code></td><td><code>object</code></td><td>元信息，含 request_id、tool_name、cost_units、execution_time_ms</td></tr>
+<tr><td><code>data.product</code></td><td><code>string</code></td><td>查询的产品/品类关键词</td></tr>
+<tr><td><code>data.total</code></td><td><code>int</code></td><td>返回品牌数量</td></tr>
+<tr><td><code>data.brands[]</code></td><td><code>object[]</code></td><td>品牌列表，元素字段见下</td></tr>
+<tr><td><code>data.brands[].brand</code></td><td><code>string</code></td><td>品牌名称</td></tr>
+<tr><td><code>data.brands[].win_count</code></td><td><code>int</code></td><td>中标次数</td></tr>
+<tr><td><code>data.brands[].total_amount</code></td><td><code>float</code></td><td>中标总金额（元）</td></tr>
+<tr><td><code>data.brands[].total_amount_wan</code></td><td><code>float</code></td><td>中标总金额（万元）</td></tr>
+<tr><td><code>data.brands[].total_count</code></td><td><code>int</code></td><td>中标总数量</td></tr>
+<tr><td><code>data.brands[].avg_price</code></td><td><code>float</code></td><td>平均单价（元）</td></tr>
+<tr><td><code>data.brands[].avg_price_wan</code></td><td><code>float</code></td><td>平均单价（万元）</td></tr>
+<tr><td><code>data.brands[].top_models</code></td><td><code>string[]</code></td><td>Top 型号列表</td></tr>
+<tr><td><code>data.brands[].last_win_time</code></td><td><code>string</code></td><td>最近中标时间</td></tr>
+</tbody></table></div>
+<h4>响应示例</h4>
+<div class="code-wrap"><pre class="code-block">{
+  "success": true,
+  "data": {
+    "product": "呼吸机",
+    "total": 10,
+    "brands": [
+      {
+        "brand_id": 430,
+        "brand_name": "迈瑞",
+        "win_count": 2343,
+        "total_amount": 878417735.404,
+        "total_amount_wan": 87841.77,
+        "total_count": 5353,
+        "avg_price": 164098.21,
+        "avg_price_wan": 16.41,
+        "top_models": [
+          "SV300",
+          "TV50S",
+          "SV600",
+          "SV650",
+          "NB350",
+          "SV70S",
+          "SV350",
+          "SV60",
+          "TV50"
+        ],
+        "last_win_time": "2025-12-31"
+      },
+      {
+        "brand_id": 4029,
+        "brand_name": "科曼",
+        "win_count": 1047,
+        "total_amount": 268574625,
+        "total_amount_wan": 26857.46,
+        "total_count": 3023,
+        "avg_price": 88843.74,
+        "avg_price_wan": 8.88,
+        "top_models": [
+          "EV20",
+          "NV8",
+          "V6A",
+          "VN6HFO",
+          "NV60A",
+          "EV5",
+          "V3A",
+          "V1A",
+          "V1D"
+        ],
+        "last_win_time": "2025-12-31"
+      },
+      {
+        "brand_id": 1085,
+        "brand_name": "德尔格",
+        "win_count": 526,
+        "total_amount": 336248550.2987,
+        "total_amount_wan": 33624.86,
+        "total_count": 1150,
+        "avg_price": 292390.04,
+        "avg_price_wan": 29.24,
+        "top_models": [
+          "Savina300Classic",
+          "Babylog VN600",
+          "Evita V600Classic",
+          "Babylog VN600Classic",
+          "BabylogVN600",
+          "Evita V600Essential",
+          "Infinity Acute Care System Workstation Neonatal Care",
+          "BabylogVN600Classic",
+          "Evita V600"
+        ],
+        "last_win_time": "2025-12-31"
+      },
+      {
+        "brand_id": 13331,
+        "brand_name": "谊安",
+        "win_count": 217,
+        "total_amount": 104775790,
+        "total_amount_wan": 10477.58,
+        "total_count": 495,
+        "avg_price": 211668.26,
+        "avg_price_wan": 21.17,
+        "top_models": [
+          "VG70",
+          "Shangrila510S",
+          "VG55",
+          "VT6000",
+          "Shangrila510s",
+          "510s",
+          "Aconmcd",
+          "VS500S",
+          "aeonmed510s"
+        ],
+        "last_win_time": "2025-12-31"
+      },
+      {
+        "brand_id": 2531,
+        "brand_name": "安保",
+        "win_count": 188,
+        "total_amount": 33777450,
+        "total_amount_wan": 3377.74,
+        "total_count": 377,
+        "avg_price": 89595.36,
+        "avg_price_wan": 8.96,
+        "top_models": [
+          "T6",
+          "T500",
+          "T300",
+          "T5",
+          "T7",
+          "AII6000B Plus",
+          "6000S",
+          "VK300",
+          "AII6000B plus"
+        ],
+        "last_win_time": "2025-12-30"
+      },
+      {
+        "brand_id": 2795,
+        "brand_name": "斯百瑞",
+        "win_count": 108,
+        "total_amount": 15114020,
+        "total_amount_wan": 1511.4,
+        "total_count": 237,
+        "avg_price": 63772.24,
+        "avg_price_wan": 6.38,
+        "top_models": [
+          "ST-30C",
+          "ST-30K",
+          "ST-30M",
+          "T600K",
+          "ST-30H",
+          "T600",
+          "T600H",
+          "OH-80K",
+          "OH-70C"
+        ],
+        "last_win_time": "2025-12-30"
+      },
+      {
+        "brand_id": 11497,
+        "brand_name": "迈柯唯",
+        "win_count": 94,
+        "total_amount": 59605785,
+        "total_amount_wan": 5960.58,
+        "total_count": 188,
+        "avg_price": 317052.05,
+        "avg_price_wan": 31.71,
+        "top_models": [
+          "SERVO-air",
+          "Servo-i",
+          "SERVO-U",
+          "Servo-air",
+          "Servo-c",
+          "SERV0-air",
+          "SERVO-air280",
+          "SERVO-C",
+          "SERVO-i"
+        ],
+        "last_win_time": "2025-12-23"
+      },
+      {
+        "brand_id": 5765,
+        "brand_name": "易世恒",
+        "win_count": 82,
+        "total_amount": 9216700,
+        "total_amount_wan": 921.67,
+        "total_count": 87,
+        "avg_price": 105939.08,
+        "avg_price_wan": 10.59,
+        "top_models": [
+          "SH200",
+          "SH230",
+          "MR-V2",
+          "MR-V1",
+          "EN51",
+          "SH300",
+          "EV10",
+          "SH120",
+          "EN52"
+        ],
+        "last_win_time": "2025-12-23"
+      },
+      {
+        "brand_id": 8280,
+        "brand_name": "舒普思达",
+        "win_count": 78,
+        "total_amount": 11588806,
+        "total_amount_wan": 1158.88,
+        "total_count": 137,
+        "avg_price": 84589.82,
+        "avg_price_wan": 8.46,
+        "top_models": [
+          "S9930T",
+          "S1100",
+          "S1600",
+          "S9130",
+          "S9940T",
+          "S1900DT",
+          "NLF-200E",
+          "S1900A",
+          "S9125"
+        ],
+        "last_win_time": "2025-12-18"
+      },
+      {
+        "brand_id": 10307,
+        "brand_name": "普博",
+        "win_count": 68,
+        "total_amount": 13644750,
+        "total_amount_wan": 1364.47,
+        "total_count": 165,
+        "avg_price": 82695.45,
+        "avg_price_wan": 8.27,
+        "top_models": [
+          "Padus7",
+          "PN55",
+          "PN50",
+          "Padus5",
+          "Padus8",
+          "Padus5m",
+          "Boaray1000B",
+          "Boaray1000D",
+          "Boaray2000C"
+        ],
+        "last_win_time": "2025-12-23"
+      }
+    ]
+  },
+  "error": "",
+  "meta": {
+    "request_id": "req_f58fc42f64044c3f",
+    "tool_name": "get_top_brands",
+    "cost_units": 1,
+    "execution_time_ms": 4686
+  }
+}</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h3 id="api-aggregate-advanced">17. 聚合统计 <a class="anchor-icon" href="#api-aggregate-advanced">#</a></h3>
+<p>在统一筛选条件下，按时间、地区、行业、品牌等维度聚合标讯数量与金额，并支持对比分析。</p>
+<div class="doc-table"><table><tbody>
+<tr><th style="width:120px">调用方式</th><td>POST</td></tr>
+<tr><th>请求地址</th><td><code>https://api.caizhao-token.com/api_v2/aggregate_bids_advanced</code></td></tr>
+<tr><th>单次费用</th><td>3 积分</td></tr>
+</tbody></table></div>
+<h4>请求参数</h4>
+<div class="doc-table"><table><thead><tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>filters</code></td><td><code>dict</code></td><td>是</td><td>筛选条件，可包含：keywords、match_modes、keyword_groups、exclude_keywords、bid_type、begin_date、end_date、provinces、cities、min_money、max_money等字段</td></tr>
+<tr><td><code>group_by</code></td><td><code>list[string]</code></td><td>是</td><td>聚合维度，可取：month（月）、quarter（季度）、year（年）、province、city、industry（行业）、brand（品牌）、company_type（招标公司类型）、bid_method（采购方式）</td></tr>
+<tr><td><code>metrics</code></td><td><code>list[string]</code></td><td>否</td><td>统计指标：count（公告个数）、sum_amount（金额合计）、avg_amount（平均金额）</td></tr>
+</tbody></table></div>
+<h4>请求示例</h4>
+<div class="code-wrap"><pre class="code-block">curl -X POST "https://api.caizhao-token.com/api_v2/aggregate_bids_advanced" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "filters": {
+    "keywords": [
+      "大语言模型"
+    ],
+    "begin_date": "2025-01-01",
+    "end_date": "2026-03-31"
+  },
+  "group_by": [
+    "month",
+    "quarter"
+  ]
+}'</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h4>响应字段</h4>
+<div class="doc-table"><table><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>success</code></td><td><code>boolean</code></td><td>请求是否成功</td></tr>
+<tr><td><code>data</code></td><td><code>object</code></td><td>业务数据，结构随接口而异，字段见下表</td></tr>
+<tr><td><code>error</code></td><td><code>object|null</code></td><td>错误信息，含 code 与 message，成功时为 null</td></tr>
+<tr><td><code>meta</code></td><td><code>object</code></td><td>元信息，含 request_id、tool_name、cost_units、execution_time_ms</td></tr>
+<tr><td><code>data.total_count</code></td><td><code>int</code></td><td>命中标讯总条数</td></tr>
+<tr><td><code>data.total_amount</code></td><td><code>float</code></td><td>金额合计（元）</td></tr>
+<tr><td><code>data.total_amount_wan</code></td><td><code>float</code></td><td>金额合计（万元）</td></tr>
+<tr><td><code>data.group_by</code></td><td><code>string[]</code></td><td>本次聚合维度</td></tr>
+<tr><td><code>data.buckets[]</code></td><td><code>object[]</code></td><td>聚合分桶结果，元素字段见下</td></tr>
+<tr><td><code>data.buckets[].key</code></td><td><code>string</code></td><td>分桶维度值，如 月份/省份/行业</td></tr>
+<tr><td><code>data.buckets[].count</code></td><td><code>int</code></td><td>该桶标讯条数</td></tr>
+<tr><td><code>data.buckets[].sum_amount</code></td><td><code>float</code></td><td>该桶金额合计（元）</td></tr>
+<tr><td><code>data.buckets[].sum_amount_wan</code></td><td><code>float</code></td><td>该桶金额合计（万元）</td></tr>
+<tr><td><code>data.buckets[].avg_amount</code></td><td><code>float</code></td><td>该桶平均金额（元）</td></tr>
+</tbody></table></div>
+<h4>响应示例</h4>
+<div class="code-wrap"><pre class="code-block">{
+  "success": true,
+  "data": {
+    "total_count": 513,
+    "total_amount": 1265558766,
+    "total_amount_wan": 126555.88,
+    "buckets": [
+      {
+        "key": "2025-01-01",
+        "count": 19,
+        "sum_amount": 9290538,
+        "sum_amount_wan": 929.05,
+        "avg_amount": 488975.68
+      },
+      {
+        "key": "2025-02-01",
+        "count": 8,
+        "sum_amount": 18549430,
+        "sum_amount_wan": 1854.94,
+        "avg_amount": 2318678.75
+      },
+      {
+        "key": "2025-03-01",
+        "count": 23,
+        "sum_amount": 12095300,
+        "sum_amount_wan": 1209.53,
+        "avg_amount": 525882.61
+      },
+      {
+        "key": "2025-04-01",
+        "count": 29,
+        "sum_amount": 26448848,
+        "sum_amount_wan": 2644.88,
+        "avg_amount": 912029.24
+      },
+      {
+        "key": "2025-05-01",
+        "count": 36,
+        "sum_amount": 51438490,
+        "sum_amount_wan": 5143.85,
+        "avg_amount": 1428846.94
+      },
+      {
+        "key": "2025-06-01",
+        "count": 41,
+        "sum_amount": 36759413,
+        "sum_amount_wan": 3675.94,
+        "avg_amount": 896571.05
+      },
+      {
+        "key": "2025-07-01",
+        "count": 56,
+        "sum_amount": 49629888,
+        "sum_amount_wan": 4962.99,
+        "avg_amount": 886248
+      },
+      {
+        "key": "2025-08-01",
+        "count": 41,
+        "sum_amount": 31682750,
+        "sum_amount_wan": 3168.28,
+        "avg_amount": 772750
+      },
+      {
+        "key": "2025-09-01",
+        "count": 45,
+        "sum_amount": 56591290,
+        "sum_amount_wan": 5659.13,
+        "avg_amount": 1257584.22
+      },
+      {
+        "key": "2025-10-01",
+        "count": 45,
+        "sum_amount": 104572519,
+        "sum_amount_wan": 10457.25,
+        "avg_amount": 2323833.76
+      },
+      {
+        "key": "2025-11-01",
+        "count": 58,
+        "sum_amount": 27981238,
+        "sum_amount_wan": 2798.12,
+        "avg_amount": 482435.14
+      },
+      {
+        "key": "2025-12-01",
+        "count": 46,
+        "sum_amount": 77719780,
+        "sum_amount_wan": 7771.98,
+        "avg_amount": 1689560.43
+      },
+      {
+        "key": "2026-01-01",
+        "count": 28,
+        "sum_amount": 37033440,
+        "sum_amount_wan": 3703.34,
+        "avg_amount": 1322622.86
+      },
+      {
+        "key": "2026-02-01",
+        "count": 18,
+        "sum_amount": 61349092,
+        "sum_amount_wan": 6134.91,
+        "avg_amount": 3408282.89
+      },
+      {
+        "key": "2026-03-01",
+        "count": 20,
+        "sum_amount": 31637367,
+        "sum_amount_wan": 3163.74,
+        "avg_amount": 1581868.35
+      },
+      {
+        "key": "2025-01-01",
+        "count": 50,
+        "sum_amount": 39935268,
+        "sum_amount_wan": 3993.53,
+        "avg_amount": 798705.36
+      },
+      {
+        "key": "2025-04-01",
+        "count": 106,
+        "sum_amount": 114646751,
+        "sum_amount_wan": 11464.68,
+        "avg_amount": 1081573.12
+      },
+      {
+        "key": "2025-07-01",
+        "count": 142,
+        "sum_amount": 137903928,
+        "sum_amount_wan": 13790.39,
+        "avg_amount": 971154.42
+      },
+      {
+        "key": "2025-10-01",
+        "count": 149,
+        "sum_amount": 210273537,
+        "sum_amount_wan": 21027.35,
+        "avg_amount": 1411231.79
+      },
+      {
+        "key": "2026-01-01",
+        "count": 66,
+        "sum_amount": 130019899,
+        "sum_amount_wan": 13001.99,
+        "avg_amount": 1969998.47
+      }
+    ],
+    "group_by": [
+      "month",
+      "quarter"
+    ]
+  },
+  "error": "",
+  "meta": {
+    "request_id": "req_3917cfc2a4b648a5",
+    "tool_name": "aggregate_bids_advanced",
+    "cost_units": 2,
+    "execution_time_ms": 47
+  }
+}</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h3 id="api-price-trends">18. 品牌/型号价格趋势 <a class="anchor-icon" href="#api-price-trends">#</a></h3>
+<p>基于历史中标明细，观察指定品牌与型号的中标单价随时间的变化。</p>
+<div class="doc-table"><table><tbody>
+<tr><th style="width:120px">调用方式</th><td>POST</td></tr>
+<tr><th>请求地址</th><td><code>https://api.caizhao-token.com/api_v2/get_price_trends</code></td></tr>
+<tr><th>单次费用</th><td>2 积分</td></tr>
+</tbody></table></div>
+<h4>请求参数</h4>
+<div class="doc-table"><table><thead><tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>brand</code></td><td><code>string</code></td><td>是</td><td>品牌名称，如「华为」「戴尔」</td></tr>
+<tr><td><code>model</code></td><td><code>string</code></td><td>否</td><td>型号，可缩小统计范围，如「TD1100」</td></tr>
+<tr><td><code>product</code></td><td><code>string</code></td><td>否</td><td>产品词，与型号组合提高精度，如「笔记本电脑」</td></tr>
+<tr><td><code>exclude_keywords</code></td><td><code>string[]</code></td><td>否</td><td>排除词，如：['耗材', '维修']</td></tr>
+<tr><td><code>min_price</code></td><td><code>number</code></td><td>否</td><td>产品单价下限（元）</td></tr>
+<tr><td><code>max_price</code></td><td><code>number</code></td><td>否</td><td>产品单价上限（元）</td></tr>
+<tr><td><code>begin_date</code></td><td><code>string</code></td><td>否</td><td>统计开始日期</td></tr>
+<tr><td><code>end_date</code></td><td><code>string</code></td><td>否</td><td>统计结束日期</td></tr>
+<tr><td><code>provinces</code></td><td><code>string[]</code></td><td>否</td><td>省份列表，如：['北京', '内蒙古']</td></tr>
+<tr><td><code>cities</code></td><td><code>string[]</code></td><td>否</td><td>城市列表，如：['石家庄', '合肥']</td></tr>
+<tr><td><code>counties</code></td><td><code>string[]</code></td><td>否</td><td>区县列表，如：['长安区', '瑶海区']</td></tr>
+<tr><td><code>limit</code></td><td><code>number</code></td><td>否</td><td>趋势采样点数量上限（默认 50）</td></tr>
+</tbody></table></div>
+<h4>请求示例</h4>
+<div class="code-wrap"><pre class="code-block">curl -X POST "https://api.caizhao-token.com/api_v2/get_price_trends" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "product": "呼吸机",
+  "model": "SV300",
+  "brand": "迈瑞",
+  "exclude_keywords": [
+    "耗材",
+    "维修",
+    "维保"
+  ],
+  "limit": 2
+}'</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h4>响应字段</h4>
+<div class="doc-table"><table><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>success</code></td><td><code>boolean</code></td><td>请求是否成功</td></tr>
+<tr><td><code>data</code></td><td><code>object</code></td><td>业务数据，结构随接口而异，字段见下表</td></tr>
+<tr><td><code>error</code></td><td><code>object|null</code></td><td>错误信息，含 code 与 message，成功时为 null</td></tr>
+<tr><td><code>meta</code></td><td><code>object</code></td><td>元信息，含 request_id、tool_name、cost_units、execution_time_ms</td></tr>
+<tr><td><code>data.brand</code></td><td><code>string</code></td><td>品牌名称</td></tr>
+<tr><td><code>data.model</code></td><td><code>string</code></td><td>型号</td></tr>
+<tr><td><code>data.product</code></td><td><code>string</code></td><td>产品词</td></tr>
+<tr><td><code>data.total</code></td><td><code>int</code></td><td>全库命中总数</td></tr>
+<tr><td><code>data.page</code></td><td><code>int</code></td><td>当前页码</td></tr>
+<tr><td><code>data.page_size</code></td><td><code>int</code></td><td>每页条数</td></tr>
+<tr><td><code>data.price_stats</code></td><td><code>object</code></td><td>价格统计，含 count/min/max/avg/median</td></tr>
+<tr><td><code>data.records[]</code></td><td><code>object[]</code></td><td>价格明细列表，元素字段见下</td></tr>
+<tr><td><code>data.records[].bid_id</code></td><td><code>int</code></td><td>标讯 ID</td></tr>
+<tr><td><code>data.records[].bid_type</code></td><td><code>string</code></td><td>标讯类型</td></tr>
+<tr><td><code>data.records[].title</code></td><td><code>string</code></td><td>公告标题</td></tr>
+<tr><td><code>data.records[].sm_name</code></td><td><code>string</code></td><td>标的物名称</td></tr>
+<tr><td><code>data.records[].brand</code></td><td><code>string</code></td><td>品牌</td></tr>
+<tr><td><code>data.records[].model</code></td><td><code>string</code></td><td>型号</td></tr>
+<tr><td><code>data.records[].sku_price</code></td><td><code>float</code></td><td>单价（元）</td></tr>
+<tr><td><code>data.records[].sku_count</code></td><td><code>int</code></td><td>数量</td></tr>
+<tr><td><code>data.records[].sku_total_money</code></td><td><code>float</code></td><td>小计金额（元）</td></tr>
+<tr><td><code>data.records[].caller_name</code></td><td><code>string</code></td><td>招标方名称</td></tr>
+<tr><td><code>data.records[].pub_time</code></td><td><code>string</code></td><td>发布时间</td></tr>
+<tr><td><code>data.records[].province</code></td><td><code>string</code></td><td>省份</td></tr>
+<tr><td><code>data.records[].city</code></td><td><code>string</code></td><td>城市</td></tr>
+<tr><td><code>data.records[].county</code></td><td><code>string</code></td><td>区县</td></tr>
+<tr><td><code>data.records[].winner_names</code></td><td><code>string[]</code></td><td>中标方名称列表</td></tr>
+<tr><td><code>data.records[].url</code></td><td><code>string</code></td><td>采招词元公告链接</td></tr>
+</tbody></table></div>
+<h4>响应示例</h4>
+<div class="code-wrap"><pre class="code-block">{
+  "success": true,
+  "data": {
+    "brand": "迈瑞",
+    "model": "SV300",
+    "total": 2367,
+    "price_stats": {
+      "count": 1,
+      "min": 92800,
+      "max": 92800,
+      "avg": 92800,
+      "median": 92800
+    },
+    "records": [
+      {
+        "bid_id": 501133758,
+        "bid_type": "",
+        "title": "医疗设备采购分标6合同公告",
+        "sm_name": "呼吸机",
+        "brand": "迈瑞",
+        "model": "SV300",
+        "sku_price": 92800,
+        "sku_count": 4,
+        "sku_total_money": 371200,
+        "caller_name": "河池市中医医院",
+        "pub_time": "2026-03-20",
+        "province": "广西",
+        "city": "河池",
+        "county": "",
+        "winner_names": [
+          "广西申恒医疗器械有限公司"
+        ],
+        "winner_ids": [
+          117537
+        ],
+        "url": "https://www.caizhao-token.com/content/501133758/b2?from=mcp"
+      },
+      {
+        "bid_id": 501133758,
+        "bid_type": "",
+        "title": "医疗设备采购分标6合同公告",
+        "sm_name": "呼吸机",
+        "brand": "迈瑞",
+        "model": "SV300",
+        "sku_price": 0,
+        "sku_count": 0,
+        "sku_total_money": 0,
+        "caller_name": "河池市中医医院",
+        "pub_time": "2026-03-20",
+        "province": "广西",
+        "city": "河池",
+        "county": "",
+        "winner_names": [
+          "广西申恒医疗器械有限公司"
+        ],
+        "winner_ids": [
+          117537
+        ],
+        "url": "https://www.caizhao-token.com/content/501133758/b2?from=mcp"
+      }
+    ]
+  },
+  "error": "",
+  "meta": {
+    "request_id": "req_20f924cec41a4dc8",
+    "tool_name": "get_price_trends",
+    "cost_units": 1,
+    "execution_time_ms": 21
+  }
+}</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h3 id="api-account-balance">19. 账户余额 <a class="anchor-icon" href="#api-account-balance">#</a></h3>
+<p>查询当前 API Key 对应账户的可用积分、累计充值与累计消费。此接口免费，不扣除积分，可在每次任务前后自助查询。</p>
+<div class="doc-table"><table><tbody>
+<tr><th style="width:120px">调用方式</th><td>GET</td></tr>
+<tr><th>请求地址</th><td><code>https://api.caizhao-token.com/api_v2/account/balance</code></td></tr>
+<tr><th>单次费用</th><td>免费</td></tr>
+</tbody></table></div>
+<h4>请求参数</h4>
+<p>无请求参数。</p>
+<h4>请求示例</h4>
+<div class="code-wrap"><pre class="code-block">curl -X GET "https://api.caizhao-token.com/api_v2/account/balance" \
+  -H "X-API-Key: YOUR_API_KEY"</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h4>响应字段</h4>
+<div class="doc-table"><table><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>success</code></td><td><code>boolean</code></td><td>请求是否成功</td></tr>
+<tr><td><code>data</code></td><td><code>object</code></td><td>业务数据，结构随接口而异，字段见下表</td></tr>
+<tr><td><code>error</code></td><td><code>object|null</code></td><td>错误信息，含 code 与 message，成功时为 null</td></tr>
+<tr><td><code>meta</code></td><td><code>object</code></td><td>元信息，含 request_id、tool_name、cost_units、execution_time_ms</td></tr>
+<tr><td><code>data.balance</code></td><td><code>float</code></td><td>当前可用积分</td></tr>
+<tr><td><code>data.total_charged</code></td><td><code>float</code></td><td>累计充值积分</td></tr>
+<tr><td><code>data.total_consumed</code></td><td><code>float</code></td><td>累计消费积分</td></tr>
+</tbody></table></div>
+<h4>响应示例</h4>
+<div class="code-wrap"><pre class="code-block">{
+  "success": true,
+  "data": {
+    "balance": 186,
+    "total_charged": 200,
+    "total_consumed": 14
+  },
+  "meta": {
+    "tool_name": "get_account_balance",
+    "cost_units": 0
+  }
+}</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h3 id="api-account-daily-consumption">20. 每日消耗 <a class="anchor-icon" href="#api-account-daily-consumption">#</a></h3>
+<p>查询当前 API Key 对应账户在指定区间内的逐日积分消耗与调用次数，无消耗的日期补 0，返回连续日序列。此接口免费，不扣除积分。</p>
+<div class="doc-table"><table><tbody>
+<tr><th style="width:120px">调用方式</th><td>GET</td></tr>
+<tr><th>请求地址</th><td><code>https://api.caizhao-token.com/api_v2/account/daily_consumption</code></td></tr>
+<tr><th>单次费用</th><td>免费</td></tr>
+</tbody></table></div>
+<h4>请求参数</h4>
+<div class="doc-table"><table><thead><tr><th>参数</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>api_key</code></td><td><code>string</code></td><td>否</td><td>查询指定API_KEY的消耗记录，默认/不传查询全部</td></tr>
+<tr><td><code>days</code></td><td><code>int</code></td><td>否</td><td>最近 N 天，默认 15；与 start_date/end_date 二选一</td></tr>
+<tr><td><code>start_date</code></td><td><code>string</code></td><td>否</td><td>开始日期 YYYY-MM-DD，闭区间</td></tr>
+<tr><td><code>end_date</code></td><td><code>string</code></td><td>否</td><td>结束日期 YYYY-MM-DD，闭区间</td></tr>
+</tbody></table></div>
+<h4>请求示例</h4>
+<div class="code-wrap"><pre class="code-block">curl -X GET "https://api.caizhao-token.com/api_v2/account/daily_consumption?days=15" \
+  -H "X-API-Key: YOUR_API_KEY"</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+<h4>响应字段</h4>
+<div class="doc-table"><table><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>success</code></td><td><code>boolean</code></td><td>请求是否成功</td></tr>
+<tr><td><code>data</code></td><td><code>object</code></td><td>业务数据，结构随接口而异，字段见下表</td></tr>
+<tr><td><code>error</code></td><td><code>object|null</code></td><td>错误信息，含 code 与 message，成功时为 null</td></tr>
+<tr><td><code>meta</code></td><td><code>object</code></td><td>元信息，含 request_id、tool_name、cost_units、execution_time_ms</td></tr>
+<tr><td><code>data.total_consumed</code></td><td><code>float</code></td><td>区间内累计消耗积分</td></tr>
+<tr><td><code>data.total_calls</code></td><td><code>int</code></td><td>区间内累计调用次数</td></tr>
+<tr><td><code>data.daily[]</code></td><td><code>object[]</code></td><td>逐日消耗序列（无消耗日期补 0），元素字段见下</td></tr>
+<tr><td><code>data.daily[].date</code></td><td><code>string</code></td><td>日期 YYYY-MM-DD</td></tr>
+<tr><td><code>data.daily[].consumed</code></td><td><code>float</code></td><td>当日消耗积分</td></tr>
+<tr><td><code>data.daily[].calls</code></td><td><code>int</code></td><td>当日调用次数</td></tr>
+</tbody></table></div>
+<h4>响应示例</h4>
+<div class="code-wrap"><pre class="code-block">{
+  "success": true,
+  "data": {
+    "total_consumed": 14,
+    "total_calls": 14,
+    "daily": [
+      {
+        "date": "2026-08-03",
+        "consumed": 9,
+        "calls": 9
+      },
+      {
+        "date": "2026-08-04",
+        "consumed": 5,
+        "calls": 5
+      }
+    ]
+  },
+  "meta": {
+    "tool_name": "get_daily_consumption",
+    "cost_units": 0
+  }
+}</pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>
+</section>
+
     <!-- 底部 CTA -->
     <div class="doc-cta">
       <h2>开始安装采招词元</h2>
@@ -1669,6 +5442,7 @@ cz sub add --keywords '["数据中心", "智慧城市"]'</pre>
     <div class="side-group-title">API 参考</div>
     <a class="side-link" href="#api-overview" onclick="closeDrawer()">API 概述</a>
     <a class="side-link" href="#api-price" onclick="closeDrawer()">API 价格</a>
+    <a class="side-link" href="#api-reference" onclick="closeDrawer()">接口参考</a>
   </div>
 </div>
 
