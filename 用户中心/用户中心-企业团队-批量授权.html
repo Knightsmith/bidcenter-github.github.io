@@ -1,0 +1,3088 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>用户中心-企业团队-批量授权</title>
+<style>
+/* ============================================================
+   1. Token Layer — tweakcn preset bfWY7cH32（:root + .dark）
+   ============================================================ */
+/**
+ * Token Layer — tweakcn preset bfWY7cH32 (蓝紫主色)
+ * Semantic CSS custom properties + .dark 暗色配套
+ */
+:root {
+  color-scheme: light;
+
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.488 0.243 264.376);
+  --primary-foreground: oklch(0.97 0.014 254.604);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.809 0.105 251.813);
+  --chart-2: oklch(0.623 0.214 259.815);
+  --chart-3: oklch(0.546 0.245 262.881);
+  --chart-4: oklch(0.488 0.243 264.376);
+  --chart-5: oklch(0.424 0.199 265.638);
+  --radius: 0.45rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.546 0.245 262.881);
+  --sidebar-primary-foreground: oklch(0.97 0.014 254.604);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar-w: 224px;
+
+  /* -- Derived tokens（radius/typography/shadow 衍生，匹配组件 css） -- */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --spacing: 0.25rem;
+  --tracking-normal: 0em;
+  --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+  --shadow-xs:  0 1px 3px 0px hsl(0 0% 0% / 0.05);
+  --shadow-sm:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+  --shadow:     0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+  --shadow-md:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
+  --shadow-lg:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
+  --shadow-xl:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
+  --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+
+  --sidebar-width: var(--sidebar-w);
+}
+
+/* -- Dark mode（蓝紫主色暗色下使用较亮蓝紫，保证可读） ---------- */
+.dark {
+  color-scheme: dark;
+
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.269 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.688 0.19 264.376);
+  --primary-foreground: oklch(0.18 0.03 265);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.371 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.275 0 0);
+  --input: oklch(0.325 0 0);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.809 0.105 251.813);
+  --chart-2: oklch(0.623 0.214 259.815);
+  --chart-3: oklch(0.546 0.245 262.881);
+  --chart-4: oklch(0.488 0.243 264.376);
+  --chart-5: oklch(0.424 0.199 265.638);
+  --radius: 0.45rem;
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.688 0.19 264.376);
+  --sidebar-primary-foreground: oklch(0.18 0.03 265);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.275 0 0);
+  --sidebar-ring: oklch(0.439 0 0);
+  --sidebar-w: 224px;
+  --sidebar-width: var(--sidebar-w);
+}
+</style>
+<style>
+/* ============================================================
+   2. shadcn-lib 官方组件 CSS（@layer components，原样取自
+   shadcn-lib/components/<name>/<name>.css，禁止手写近似）
+   ============================================================ */
+/* ---- shadcn-lib components/icon/icon.css ---- */
+/* -- Icon component ---------------------------------------- */
+/* Styling for Lucide CDN icons (<i data-lucide="name">).     */
+/* Lucide replaces <i> with <svg>, these styles target that.  */
+
+@layer components {
+  [data-lucide] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    vertical-align: middle;
+    width: 1rem;
+    height: 1rem;
+    pointer-events: none;
+
+    /* -- Sizes via data-size --------------------------------- */
+    &[data-size="xs"] { width: 0.75rem; height: 0.75rem; }
+    &[data-size="sm"] { width: 0.875rem; height: 0.875rem; }
+    &[data-size="md"] { width: 1.25rem; height: 1.25rem; }
+    &[data-size="lg"] { width: 1.5rem; height: 1.5rem; }
+    &[data-size="xl"] { width: 2rem; height: 2rem; }
+
+    /* -- Spin animation ------------------------------------- */
+    &[data-animate="spin"] {
+      animation: icon-spin 1s linear infinite;
+    }
+  }
+
+  @keyframes icon-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* ---- Accessibility ---------------------------------------- */
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-lucide] {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
+  @media (prefers-contrast: more) {
+    [data-lucide] {
+      stroke-width: 2.5;
+    }
+  }
+
+  @media (forced-colors: active) {
+    [data-lucide] {
+      color: CanvasText;
+    }
+  }
+}
+
+/* ---- shadcn-lib components/button/button.css ---- */
+/* -- Button component ------------------------------------------ */
+
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--font-sans);
+    line-height: 1;
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 150ms ease;
+    outline: none;
+    flex-shrink: 0;
+    height: 2.25rem;
+    padding: 0 1rem;
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+
+    & svg {
+      pointer-events: none;
+      flex-shrink: 0;
+
+      &:not([class*="size-"]) { width: 1rem; height: 1rem; }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &:disabled, &[aria-disabled="true"] {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    /* -- Variants -------------------------------------------- */
+    &[data-variant="default"] {
+      background-color: var(--primary);
+      color: var(--primary-foreground);
+
+      &:hover { opacity: 0.9; }
+    }
+
+    &[data-variant="secondary"] {
+      background-color: var(--secondary);
+      color: var(--secondary-foreground);
+
+      &:hover { opacity: 0.8; }
+    }
+
+    &[data-variant="outline"] {
+      background-color: var(--background);
+      color: var(--foreground);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-xs);
+
+      &:hover {
+        background-color: var(--accent);
+        color: var(--accent-foreground);
+      }
+    }
+
+    &[data-variant="ghost"] {
+      background-color: transparent;
+      color: var(--foreground);
+      border-color: transparent;
+
+      &:hover {
+        background-color: var(--accent);
+        color: var(--accent-foreground);
+      }
+    }
+
+    &[data-variant="destructive"] {
+      background-color: var(--destructive);
+      color: var(--destructive-foreground);
+
+      &:hover { opacity: 0.9; }
+    }
+
+    &[data-variant="link"] {
+      background-color: transparent;
+      color: var(--primary);
+      height: auto;
+      padding: 0;
+      text-underline-offset: 4px;
+
+      &:hover { text-decoration: underline; }
+    }
+
+    /* -- Sizes ----------------------------------------------- */
+    &[data-size="xs"]      { height: 1.75rem; padding: 0 0.5rem;  font-size: 0.75rem; border-radius: var(--radius-sm); }
+    &[data-size="sm"]      { height: 2rem;    padding: 0 0.75rem; font-size: 0.8125rem; }
+    &[data-size="lg"]      { height: 2.75rem; padding: 0 2rem;    font-size: 1rem; }
+    &[data-size="icon"]    { height: 2.25rem; width: 2.25rem;  padding: 0; }
+    &[data-size="icon-xs"] { height: 1.75rem; width: 1.75rem;  padding: 0; border-radius: var(--radius-sm); }
+    &[data-size="icon-sm"] { height: 2rem;    width: 2rem;     padding: 0; }
+    &[data-size="icon-lg"] { height: 2.75rem; width: 2.75rem;  padding: 0; }
+  }
+
+  /* -- Accessibility ------------------------------------------ */
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn { transition: none; }
+  }
+
+  @media (prefers-contrast: more) {
+    .btn {
+      border: 2px solid transparent;
+
+      &[data-variant="default"],
+      &[data-variant="secondary"],
+      &[data-variant="destructive"] {
+        border-color: currentColor;
+      }
+
+      &[data-variant="outline"],
+      &[data-variant="ghost"] {
+        border-color: var(--foreground);
+      }
+    }
+  }
+
+  @media (forced-colors: active) {
+    .btn {
+      border: 1px solid ButtonText;
+
+      &:disabled, &[aria-disabled="true"] {
+        border-color: GrayText;
+        color: GrayText;
+      }
+    }
+  }
+}
+
+/* ---- shadcn-lib components/badge/badge.css ---- */
+/* -- Badge component ------------------------------------------- */
+
+@layer components {
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+    padding: 0.125rem 0.625rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    line-height: 1.5rem;
+
+    &[data-variant="outline"] {
+      border: 1px solid var(--border);
+      color: var(--muted-foreground);
+    }
+
+    &[data-variant="secondary"] {
+      background: var(--secondary);
+      color: var(--secondary-foreground);
+    }
+
+    &[data-variant="default"] {
+      background: var(--primary);
+      color: var(--primary-foreground);
+    }
+  }
+}
+
+/* ---- shadcn-lib components/card/card.css ---- */
+/* -- Card component -------------------------------------------- */
+
+@layer components {
+  .card {
+    background-color: var(--card);
+    color: var(--card-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    container-type: inline-size;
+  }
+
+  .card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1.5rem;
+    padding-bottom: 0;
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+
+  .card-description {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .card-content {
+    padding: 1.5rem;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    padding-top: 0;
+  }
+
+  /* -- Container query: compact card in narrow containers -- */
+  @container (max-width: 280px) {
+    .card-header { padding: 1rem; padding-bottom: 0; }
+    .card-content { padding: 1rem; }
+    .card-footer { padding: 1rem; padding-top: 0; }
+    .card-title { font-size: 1rem; }
+  }
+}
+
+/* ---- shadcn-lib components/input/input.css ---- */
+/* -- Input component ------------------------------------------- */
+
+@layer components {
+  .input {
+    height: 2.5rem;
+    width: 100%;
+    border: 1px solid var(--input);
+    border-radius: var(--radius-md);
+    background: var(--background);
+    padding: 0 0.75rem;
+    font-size: 0.875rem;
+    font-family: var(--font-sans);
+    color: var(--foreground);
+    outline: none;
+    box-shadow: var(--shadow-xs);
+    transition: border-color 150ms, box-shadow 150ms;
+
+    &:focus {
+      border-color: var(--ring);
+      box-shadow: 0 0 0 2px oklch(from var(--ring) l c h / 0.2);
+    }
+
+    &::placeholder { color: var(--muted-foreground); }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* -- Readonly state -------------------------------------- */
+    &:read-only:not([type="file"]) {
+      background: var(--muted);
+      cursor: default;
+      opacity: 0.7;
+
+      &:focus {
+        border-color: var(--input);
+        box-shadow: var(--shadow-xs);
+      }
+    }
+
+    /* -- Invalid state --------------------------------------- */
+    &:is([aria-invalid="true"], :user-invalid) {
+      border-color: var(--destructive);
+
+      &:focus {
+        border-color: var(--destructive);
+        box-shadow: 0 0 0 2px oklch(from var(--destructive) l c h / 0.2);
+      }
+    }
+
+    /* -- File input ------------------------------------------ */
+    &[type="file"] {
+      padding: 0;
+      font-size: 0.875rem;
+
+      &::file-selector-button {
+        height: 100%;
+        border: none;
+        border-right: 1px solid var(--input);
+        background: var(--muted);
+        color: var(--foreground);
+        font-size: 0.875rem;
+        font-weight: 500;
+        font-family: var(--font-sans);
+        padding: 0 0.75rem;
+        margin-right: 0.75rem;
+        cursor: pointer;
+        transition: background 150ms;
+
+        &:hover { background: var(--accent); }
+      }
+    }
+
+    /* -- Sizes ----------------------------------------------- */
+    &[data-size="sm"] { height: 2rem;    padding: 0 0.625rem; font-size: 0.8125rem; }
+    &[data-size="lg"] { height: 2.75rem; padding: 0 1rem;     font-size: 1rem; }
+  }
+
+  /* -- Auto-growing textarea --------------------------------- */
+  textarea.input {
+    field-sizing: content;
+    min-height: 5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  /* -- Field description ------------------------------------- */
+  .field-description {
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    margin: 0.375rem 0 0;
+  }
+
+  /* -- Field error ------------------------------------------- */
+  .field-error {
+    font-size: 0.8125rem;
+    color: var(--destructive);
+    margin: 0.375rem 0 0;
+  }
+
+  /* -- Accessibility ---------------------------------------- */
+  @media (prefers-reduced-motion: reduce) {
+    .input {
+      transition: none;
+    }
+
+    .input[type="file"]::file-selector-button {
+      transition: none;
+    }
+  }
+
+  @media (prefers-contrast: more) {
+    .input {
+      border-width: 2px;
+    }
+
+    .input:disabled {
+      opacity: 0.7;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .input {
+      border-color: ButtonBorder;
+      color: ButtonText;
+      background: Field;
+    }
+
+    .input:focus {
+      outline: 2px solid Highlight;
+      outline-offset: 1px;
+    }
+
+    .input:disabled {
+      opacity: 1;
+      color: GrayText;
+      border-color: GrayText;
+    }
+
+    .input:is([aria-invalid="true"], :user-invalid) {
+      border-color: LinkText;
+    }
+
+    .field-error {
+      color: LinkText;
+    }
+  }
+}
+
+/* ---- shadcn-lib components/label/label.css ---- */
+/* -- Label component -------------------------------------------- */
+
+@layer components {
+  .label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--font-sans);
+    line-height: 1;
+    color: var(--foreground);
+    display: block;
+    margin-bottom: 0.375rem;
+    cursor: default;
+
+    /* Disabled — explicit attribute */
+    &[data-disabled] {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    /* Disabled — auto-detect via adjacent disabled control */
+    &:has(+ :disabled),
+    &:has(+ [data-disabled]) {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+  }
+
+  /* -- Hint text (optional, required indicators) ----------- */
+  .label-hint {
+    font-weight: 400;
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+  }
+
+  /* -- Accessibility ---------------------------------------- */
+  @media (prefers-contrast: more) {
+    .label[data-disabled],
+    .label:has(+ :disabled),
+    .label:has(+ [data-disabled]) {
+      opacity: 0.85;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .label {
+      color: LinkText;
+    }
+
+    .label[data-disabled],
+    .label:has(+ :disabled),
+    .label:has(+ [data-disabled]) {
+      opacity: 1;
+      color: GrayText;
+    }
+  }
+}
+
+/* ---- shadcn-lib components/select/select.css ---- */
+/* -- Select component ------------------------------------------- */
+
+@layer components {
+  .select {
+    appearance: none;
+    height: 2.5rem;
+    width: 100%;
+    border: 1px solid var(--input);
+    border-radius: var(--radius-md);
+    background: var(--background);
+    padding: 0 2rem 0 0.75rem;
+    font-size: 0.875rem;
+    font-family: var(--font-sans);
+    color: var(--foreground);
+    outline: none;
+    box-shadow: var(--shadow-xs);
+    cursor: pointer;
+    transition: border-color 150ms, box-shadow 150ms;
+
+    /* Custom chevron */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1rem;
+
+    &:focus {
+      border-color: var(--ring);
+      box-shadow: 0 0 0 2px oklch(from var(--ring) l c h / 0.2);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &:is([aria-invalid="true"], :user-invalid) {
+      border-color: var(--destructive);
+
+      &:focus {
+        border-color: var(--destructive);
+        box-shadow: 0 0 0 2px oklch(from var(--destructive) l c h / 0.2);
+      }
+    }
+
+    /* -- Sizes ----------------------------------------------- */
+    &[data-size="sm"] { height: 2rem;    padding-left: 0.625rem; font-size: 0.8125rem; }
+    &[data-size="lg"] { height: 2.75rem; padding-left: 1rem;     font-size: 1rem; }
+  }
+}
+
+/* ---- shadcn-lib components/checkbox/checkbox.css ---- */
+/* -- Checkbox component ----------------------------------------- */
+
+@layer components {
+  .checkbox {
+    appearance: none;
+    width: 1.125rem;
+    height: 1.125rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--background);
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+    transition: background-color 150ms, border-color 150ms;
+
+    &:checked {
+      background-color: var(--primary);
+      border-color: var(--primary);
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 45%;
+        width: 6px;
+        height: 10px;
+        border: solid var(--primary-foreground);
+        border-width: 0 2px 2px 0;
+        transform: translate(-50%, -50%) rotate(45deg);
+      }
+    }
+
+    &:indeterminate {
+      background-color: var(--primary);
+      border-color: var(--primary);
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 10px;
+        height: 2px;
+        background: var(--primary-foreground);
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &:is([aria-invalid="true"], :user-invalid) {
+      border-color: var(--destructive);
+    }
+  }
+
+  /* -- Checkbox item layout --------------------------------- */
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    & > label {
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+  }
+
+  .checkbox-item-block {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+
+    & > label {
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+
+    & > .checkbox {
+      margin-top: 0.125rem;
+    }
+  }
+
+  /* Disabled auto-styling */
+  .checkbox-item:has(.checkbox:disabled),
+  .checkbox-item-block:has(.checkbox:disabled) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* -- Accessibility ---------------------------------------- */
+  @media (prefers-reduced-motion: reduce) {
+    .checkbox {
+      transition: none;
+    }
+  }
+
+  @media (prefers-contrast: more) {
+    .checkbox {
+      border-width: 2px;
+    }
+
+    .checkbox:disabled {
+      opacity: 0.7;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .checkbox {
+      appearance: auto;
+    }
+  }
+}
+
+/* ---- shadcn-lib components/radio/radio.css ---- */
+/* -- Radio Group component -------------------------------------- */
+
+@layer components {
+  .radio-group {
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    & > legend {
+      margin-bottom: 0.375rem;
+    }
+
+    /* Horizontal layout */
+    &[data-orientation="horizontal"] {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+  }
+
+  .radio-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    & > label {
+      font-size: 0.875rem;
+      font-weight: 400;
+      cursor: pointer;
+    }
+  }
+
+  /* -- With-description layout -------------------------------- */
+  .radio-item-block {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0 0.5rem;
+
+    & > .radio {
+      grid-row: 1 / 3;
+      margin-top: 0.125rem;
+    }
+
+    & > label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      line-height: 1.4;
+    }
+
+    & > .radio-description {
+      grid-column: 2;
+      font-size: 0.8125rem;
+      color: var(--muted-foreground);
+      line-height: 1.5;
+    }
+  }
+
+  /* -- Card variant ------------------------------------------- */
+  .radio-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: border-color 150ms, background 150ms;
+
+    &:hover {
+      background: var(--accent);
+    }
+
+    &:has(.radio:checked) {
+      border-color: var(--primary);
+    }
+
+    &:has(.radio:focus-visible) {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &:has(.radio:disabled) {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    & > .radio {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+    }
+
+    & > label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    & > .radio-description {
+      font-size: 0.8125rem;
+      color: var(--muted-foreground);
+      line-height: 1.5;
+    }
+  }
+
+  .radio {
+    appearance: none;
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--background);
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+    transition: border-color 150ms;
+
+    &:checked {
+      border-color: var(--primary);
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        background: var(--primary);
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+
+      & + label { opacity: 0.5; cursor: not-allowed; }
+    }
+
+    &[aria-invalid="true"] {
+      border-color: var(--destructive);
+
+      &:checked {
+        border-color: var(--destructive);
+
+        &::after {
+          background: var(--destructive);
+        }
+      }
+    }
+  }
+
+  /* Helper text for group-level descriptions */
+  .radio-group-description {
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    margin: -0.125rem 0 0.25rem;
+  }
+
+  /* -- Accessibility ------------------------------------------ */
+  @media (prefers-reduced-motion: reduce) {
+    .radio,
+    .radio-card {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .radio {
+      border-color: ButtonText;
+
+      &:checked {
+        border-color: Highlight;
+
+        &::after {
+          background: Highlight;
+        }
+      }
+
+      &:disabled {
+        border-color: GrayText;
+
+        &:checked::after {
+          background: GrayText;
+        }
+      }
+    }
+
+    .radio-card {
+      border-color: ButtonText;
+
+      &:has(.radio:checked) {
+        border-color: Highlight;
+      }
+    }
+  }
+}
+
+/* ---- shadcn-lib components/table/table.css ---- */
+@layer components {
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    container-type: inline-size;
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    text-align: left;
+    caption-side: bottom;
+  }
+
+  .table-caption {
+    padding: 0.75rem 1rem;
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    text-align: center;
+  }
+
+  .table-head {
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    color: var(--muted-foreground);
+    background-color: var(--muted);
+    white-space: nowrap;
+    border-bottom: 1px solid var(--border);
+
+    &:first-child {
+      border-top-left-radius: var(--radius-lg);
+    }
+
+    &:last-child {
+      border-top-right-radius: var(--radius-lg);
+    }
+  }
+
+  .table-row {
+    border-bottom: 1px solid var(--border);
+    transition: background-color 150ms ease;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    tbody &:hover {
+      background-color: var(--muted);
+    }
+  }
+
+  .table-cell {
+    padding: 0.75rem 1rem;
+    vertical-align: middle;
+    color: var(--foreground);
+  }
+
+  tfoot .table-row {
+    background-color: var(--muted);
+    border-top: 1px solid var(--border);
+    font-weight: 500;
+  }
+
+  tfoot .table-cell:first-child {
+    border-bottom-left-radius: var(--radius-lg);
+  }
+
+  tfoot .table-cell:last-child {
+    border-bottom-right-radius: var(--radius-lg);
+  }
+
+  /* -- Container query: compact table in narrow containers -- */
+  @container (max-width: 480px) {
+    .table-head,
+    .table-cell { padding: 0.5rem 0.75rem; font-size: 0.8125rem; }
+  }
+}
+
+/* ---- shadcn-lib components/separator/separator.css ---- */
+/* -- Separator component ---------------------------------------- */
+
+@layer components {
+  .separator {
+    border: none;
+    margin: 0;
+    flex-shrink: 0;
+    background: var(--border);
+
+    /* Horizontal (default) */
+    height: 1px;
+    width: 100%;
+
+    /* Vertical */
+    &[data-orientation="vertical"] {
+      height: auto;
+      width: 1px;
+      align-self: stretch;
+    }
+
+    /* Decorative — hidden from assistive technology */
+    &[aria-hidden="true"],
+    &[role="none"] {
+      /* No visual change — purely semantic */
+    }
+  }
+
+  /* -- Labeled separator ------------------------------------- */
+  .separator-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    & .separator { flex: 1; }
+
+    & span {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--muted-foreground);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+  }
+
+  /* -- Accessibility ----------------------------------------- */
+  @media (forced-colors: active) {
+    .separator {
+      background: CanvasText;
+    }
+  }
+
+  @media (prefers-contrast: more) {
+    .separator {
+      background: var(--foreground);
+      height: 2px;
+
+      &[data-orientation="vertical"] {
+        width: 2px;
+        height: auto;
+      }
+    }
+  }
+}
+
+/* ---- shadcn-lib components/tabs/tabs.css ---- */
+/* -- Tabs component -------------------------------------------- */
+
+@layer components {
+  /* -- Default (pill) variant ----------------------------------- */
+  .tab-list {
+    display: inline-flex;
+    align-items: center;
+    background: var(--muted);
+    border-radius: var(--radius-lg);
+    padding: 0.25rem;
+    gap: 0.125rem;
+
+    /* -- Line variant --------------------------------------------- */
+    &[data-variant="line"] {
+      background: transparent;
+      border-radius: 0;
+      padding: 0;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+
+      & .tab-trigger {
+        border-radius: 0;
+        padding: 0.5rem 1rem;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -1px;
+
+        &[aria-selected="true"] {
+          background: transparent;
+          color: var(--foreground);
+          border-bottom-color: var(--primary);
+          box-shadow: none;
+        }
+      }
+    }
+
+    /* -- Vertical orientation ------------------------------------ */
+    &[aria-orientation="vertical"] {
+      flex-direction: column;
+      width: auto;
+
+      & .tab-trigger {
+        justify-content: flex-start;
+        width: 100%;
+      }
+    }
+  }
+
+  .tab-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: calc(var(--radius) * 0.6);
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: none;
+    background: transparent;
+    color: var(--muted-foreground);
+    cursor: pointer;
+    transition: all 150ms ease;
+    white-space: nowrap;
+    outline: none;
+
+    &[aria-selected="true"] {
+      background: var(--background);
+      color: var(--foreground);
+      box-shadow: 0 1px 3px oklch(0 0 0 / 0.08), 0 0 0 1px var(--border);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+  }
+
+  /* -- Vertical layout container ----------------------------- */
+  .tabs:has(.tab-list[aria-orientation="vertical"]) {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+
+    & > .tab-content {
+      margin-top: 0;
+      flex: 1;
+    }
+  }
+
+  /* -- Panel ---------------------------------------------------- */
+  .tab-content {
+    margin-top: 0.75rem;
+
+    &:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &[hidden] { display: none; }
+  }
+
+  /* -- Accessibility ------------------------------------------ */
+
+  @media (prefers-reduced-motion: reduce) {
+    .tab-trigger { transition: none; }
+  }
+
+  @media (forced-colors: active) {
+    .tab-trigger[aria-selected="true"] {
+      border: 2px solid Highlight;
+      box-shadow: none;
+    }
+
+    .tab-list[data-variant="line"] .tab-trigger[aria-selected="true"] {
+      border: none;
+      border-bottom: 2px solid Highlight;
+    }
+  }
+}
+
+/* ---- shadcn-lib components/avatar/avatar.css ---- */
+@layer components {
+  .avatar {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background-color: var(--muted);
+
+    &[data-size="sm"] {
+      width: 2rem;
+      height: 2rem;
+      font-size: 0.6875rem;
+    }
+
+    &[data-size="lg"] {
+      width: 3rem;
+      height: 3rem;
+      font-size: 0.875rem;
+    }
+  }
+
+  .avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+  }
+
+  .avatar-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--muted-foreground);
+    background-color: var(--muted);
+    position: absolute;
+    inset: 0;
+  }
+
+  /* Hide fallback when image is loaded */
+  .avatar:has(.avatar-image:not([data-error])) .avatar-fallback {
+    display: none;
+  }
+
+  .avatar-badge {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 9999px;
+    background-color: #16a34a;
+    border: 2px solid var(--background);
+  }
+
+  /* Avatar group */
+  .avatar-group {
+    display: flex;
+    align-items: center;
+
+    & .avatar {
+      border: 2px solid var(--background);
+      margin-left: -0.5rem;
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+  }
+
+  .avatar-group-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    background-color: var(--muted);
+    color: var(--muted-foreground);
+    font-size: 0.75rem;
+    font-weight: 500;
+    border: 2px solid var(--background);
+    margin-left: -0.5rem;
+  }
+}
+
+/* ---- shadcn-lib components/dialog/dialog.css ---- */
+/* -- Dialog component ------------------------------------------ */
+
+@layer components {
+  dialog.dialog {
+    border: none;
+    border-radius: var(--radius-xl);
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+    padding: 0;
+    margin: auto;
+    position: fixed;
+    inset: 0;
+    max-width: 28rem;
+    width: calc(100vw - 2rem);
+    max-height: calc(100vh - 2rem);
+    box-shadow: 0 25px 80px oklch(0 0 0 / 0.25), 0 0 0 1px var(--border);
+    opacity: 0;
+    transform: translateY(-0.5rem) scale(0.98);
+    transition: opacity 200ms ease, transform 200ms ease, display 200ms allow-discrete;
+
+    &[open] {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* -- Sizes ------------------------------------------------ */
+    &[data-size="sm"]   { max-width: 24rem; }
+    &[data-size="lg"]   { max-width: 32rem; }
+    &[data-size="xl"]   { max-width: 40rem; }
+    &[data-size="full"] { max-width: calc(100vw - 2rem); }
+
+    /* -- Backdrop --------------------------------------------- */
+    &::backdrop {
+      background: oklch(0 0 0 / 0);
+      backdrop-filter: blur(0px);
+      transition: all 200ms ease, display 200ms allow-discrete;
+    }
+
+    &[open]::backdrop {
+      background: oklch(0 0 0 / 0.45);
+      backdrop-filter: blur(3px);
+    }
+  }
+
+  @starting-style {
+    dialog.dialog[open] {
+      opacity: 0;
+      transform: translateY(-0.5rem) scale(0.98);
+    }
+
+    dialog.dialog[open]::backdrop {
+      background: oklch(0 0 0 / 0);
+      backdrop-filter: blur(0px);
+    }
+  }
+
+  /* -- Content sections ------------------------------------- */
+  .dialog-content { padding: 1.5rem; }
+  .dialog-header  { margin-bottom: 1rem; }
+  .dialog-title   { font-size: 1.0625rem; font-weight: 600; margin: 0 0 0.375rem; letter-spacing: -0.01em; }
+  .dialog-description { font-size: 0.875rem; color: var(--muted-foreground); margin: 0; line-height: 1.6; }
+  .dialog-body    { margin-top: 1rem; }
+  .dialog-footer  { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.5rem; }
+}
+
+/* ---- shadcn-lib components/toast/toast.css ---- */
+/* -- Toast component ------------------------------------------- */
+
+@layer components {
+  /* -- Container ------------------------------------------------ */
+  .toast-container {
+    position: fixed;
+    z-index: 100;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+    padding: 1rem;
+    max-height: 100vh;
+    pointer-events: none;
+
+    &[data-position="bottom-right"] { bottom: 0; right: 0; }
+    &[data-position="bottom-left"]  { bottom: 0; left: 0; }
+    &[data-position="top-right"]    { top: 0; right: 0; flex-direction: column; }
+    &[data-position="top-left"]     { top: 0; left: 0; flex-direction: column; }
+    &[data-position="top-center"]   { top: 0; left: 50%; transform: translateX(-50%); flex-direction: column; align-items: center; }
+    &[data-position="bottom-center"]{ bottom: 0; left: 50%; transform: translateX(-50%); align-items: center; }
+  }
+
+  /* -- Toast ---------------------------------------------------- */
+  .toast {
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    min-width: 20rem;
+    max-width: 26rem;
+    box-shadow: 0 4px 16px oklch(0 0 0 / 0.12);
+    pointer-events: auto;
+    opacity: 0;
+    transform: translateY(0.5rem);
+    transition: opacity 200ms ease, transform 200ms ease;
+
+    &:popover-open {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* -- Variants ------------------------------------------------- */
+    &[data-variant="destructive"] {
+      background-color: var(--destructive);
+      color: var(--destructive-foreground);
+      border-color: var(--destructive);
+
+      & .toast-description {
+        color: var(--destructive-foreground);
+        opacity: 0.85;
+      }
+    }
+
+    /* -- Semantic variants (border + icon color) ----------------- */
+    &[data-variant="success"] {
+      border-color: oklch(0.65 0.2 145);
+
+      & .toast-icon { color: oklch(0.65 0.2 145); }
+    }
+
+    &[data-variant="warning"] {
+      border-color: oklch(0.75 0.18 75);
+
+      & .toast-icon { color: oklch(0.75 0.18 75); }
+    }
+
+    &[data-variant="info"] {
+      border-color: oklch(0.6 0.15 250);
+
+      & .toast-icon { color: oklch(0.6 0.15 250); }
+    }
+  }
+
+  @starting-style {
+    .toast:popover-open {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+  }
+
+  /* -- Inner elements ------------------------------------------- */
+  .toast-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .toast-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .toast-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .toast-description {
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    margin: 0.125rem 0 0;
+    line-height: 1.5;
+  }
+
+  .toast-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: none;
+    background: transparent;
+    color: var(--muted-foreground);
+    cursor: pointer;
+    flex-shrink: 0;
+    border-radius: calc(var(--radius) * 0.5);
+    transition: color 150ms, background 150ms;
+
+    &:hover {
+      color: var(--foreground);
+      background: var(--accent);
+    }
+  }
+
+  .toast-icon {
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+  }
+
+  .toast-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+}
+
+/* ---- shadcn-lib components/sidebar/sidebar.css ---- */
+/* -- Sidebar component ------------------------------------------ */
+/* Application sidebar with collapsible state, mobile sheet overlay, */
+/* collapsible groups, submenus, and keyboard shortcut (Cmd+B).      */
+
+@layer components {
+
+  /* ── Shell layout ─────────────────────────────────────────── */
+  .sidebar-layout {
+    display: flex;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  /* ── Sidebar panel ────────────────────────────────────────── */
+  .app-sidebar {
+    display: flex;
+    flex-direction: column;
+    width: var(--sidebar-width, 16rem);
+    height: 100vh;
+    height: 100dvh;
+    position: sticky;
+    top: 0;
+    background-color: var(--sidebar);
+    border-right: 1px solid var(--sidebar-border);
+    flex-shrink: 0;
+    transition: width 200ms ease;
+    overflow: hidden;
+    z-index: 30;
+
+    /* Right side */
+    &[data-side="right"] {
+      border-right: none;
+      border-left: 1px solid var(--sidebar-border);
+      order: 1;
+    }
+
+    /* Collapsed — icon-only rail */
+    &[data-state="collapsed"] {
+      width: var(--sidebar-width-collapsed, 3.5rem);
+
+      & .sidebar-link span,
+      & .sidebar-section-title,
+      & .sidebar-badge,
+      & .sidebar-logo-text { display: none; }
+
+      & .sidebar-link { justify-content: center; padding: 0.5rem; }
+      & .sidebar-header { justify-content: center; padding: 0.75rem 0.5rem; }
+      & .sidebar-group > summary { justify-content: center; }
+      & .sidebar-group > summary span { display: none; }
+      & .sidebar-group > summary svg:last-child { display: none; }
+    }
+
+    /* Hidden on mobile by default — shown via dialog */
+    @media (max-width: 767px) {
+      display: none;
+    }
+  }
+
+  /* ── Sidebar header ───────────────────────────────────────── */
+  .sidebar-header {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--sidebar-border);
+    flex-shrink: 0;
+  }
+
+  .sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--sidebar-foreground);
+    text-decoration: none;
+  }
+
+  /* ── Sidebar content (scrollable area) ────────────────────── */
+  .sidebar-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0.5rem;
+    gap: 0.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--sidebar-border) transparent;
+  }
+
+  /* ── Sidebar nav ──────────────────────────────────────────── */
+  .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  /* ── Nav links ────────────────────────────────────────────── */
+  .sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    color: var(--sidebar-foreground);
+    text-decoration: none;
+    transition: background-color 150ms ease;
+    position: relative;
+
+    &:hover {
+      background-color: var(--sidebar-accent);
+      color: var(--sidebar-accent-foreground);
+    }
+
+    &[data-active="true"],
+    &[aria-current="page"] {
+      background-color: var(--sidebar-accent);
+      color: var(--sidebar-accent-foreground);
+      font-weight: 500;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--sidebar-ring);
+      outline-offset: -2px;
+    }
+
+    & svg {
+      width: 1rem;
+      height: 1rem;
+      flex-shrink: 0;
+    }
+  }
+
+  /* ── Menu badge ───────────────────────────────────────────── */
+  .sidebar-badge {
+    margin-left: auto;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    padding: 0.125rem 0.375rem;
+    border-radius: var(--radius-sm);
+    background-color: var(--sidebar-primary);
+    color: var(--sidebar-primary-foreground);
+    line-height: 1;
+  }
+
+  /* ── Section title ────────────────────────────────────────── */
+  .sidebar-section-title {
+    padding: 0.75rem 0.75rem 0.375rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted-foreground);
+  }
+
+  /* ── Collapsible group (uses <details>) ────────────────────── */
+  .sidebar-group {
+    & > summary {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted-foreground);
+      cursor: pointer;
+      list-style: none;
+      border-radius: var(--radius-md);
+      transition: background-color 150ms ease;
+
+      &:hover { background-color: var(--sidebar-accent); }
+      &::-webkit-details-marker { display: none; }
+
+      & svg:last-child {
+        width: 0.875rem;
+        height: 0.875rem;
+        margin-left: auto;
+        transition: rotate 200ms ease;
+      }
+    }
+
+    &[open] > summary svg:last-child { rotate: 90deg; }
+    & > .sidebar-nav { padding: 0.25rem 0 0.25rem 0.75rem; }
+  }
+
+  /* ── Submenu (nested <details>) ────────────────────────────── */
+  .sidebar-submenu {
+    & > summary {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      color: var(--sidebar-foreground);
+      cursor: pointer;
+      list-style: none;
+      transition: background-color 150ms ease;
+
+      &:hover {
+        background-color: var(--sidebar-accent);
+        color: var(--sidebar-accent-foreground);
+      }
+      &::-webkit-details-marker { display: none; }
+
+      & svg:last-child {
+        width: 0.875rem;
+        height: 0.875rem;
+        margin-left: auto;
+        transition: rotate 200ms ease;
+      }
+    }
+
+    &[open] > summary svg:last-child { rotate: 90deg; }
+
+    & > .sidebar-nav {
+      padding: 0.25rem 0 0.25rem 1.5rem;
+      border-left: 1px solid var(--sidebar-border);
+      margin-left: 0.75rem;
+    }
+  }
+
+  /* ── Sidebar trigger ──────────────────────────────────────── */
+  .sidebar-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border: none;
+    background: transparent;
+    color: var(--foreground);
+    cursor: pointer;
+    border-radius: var(--radius-md);
+
+    &:hover { background-color: var(--accent); }
+    &:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+    & svg { width: 1rem; height: 1rem; }
+  }
+
+  /* ── Mobile sidebar (<dialog> sheet overlay) ──────────────── */
+  .sidebar-mobile {
+    border: none;
+    padding: 0;
+    margin: 0;
+    position: fixed;
+    inset: 0;
+    width: var(--sidebar-width, 16rem);
+    max-width: 80vw;
+    height: 100%;
+    background-color: var(--sidebar);
+    color: var(--sidebar-foreground);
+    z-index: 50;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    opacity: 0;
+    translate: -100% 0;
+    transition: opacity 200ms ease, translate 200ms ease,
+                display 200ms allow-discrete;
+
+    &[open] {
+      opacity: 1;
+      translate: 0 0;
+    }
+
+    &[data-side="right"] {
+      right: 0;
+      left: auto;
+      translate: 100% 0;
+      &[open] { translate: 0 0; }
+    }
+
+    &::backdrop {
+      background: oklch(0 0 0 / 0.5);
+      opacity: 0;
+      transition: opacity 200ms ease, display 200ms allow-discrete;
+    }
+
+    &[open]::backdrop { opacity: 1; }
+
+    & .sidebar-mobile-close {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 1.5rem;
+      height: 1.5rem;
+      border: none;
+      background: transparent;
+      color: var(--sidebar-foreground);
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover { background-color: var(--sidebar-accent); }
+      & svg { width: 0.875rem; height: 0.875rem; }
+    }
+
+    @media (min-width: 768px) {
+      display: none;
+    }
+  }
+
+  @starting-style {
+    .sidebar-mobile[open] { opacity: 0; translate: -100% 0; }
+    .sidebar-mobile[open]::backdrop { opacity: 0; }
+    .sidebar-mobile[data-side="right"][open] { opacity: 0; translate: 100% 0; }
+  }
+
+  /* ── Reduced motion ───────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    .app-sidebar { transition: none; }
+    .sidebar-link { transition: none; }
+    .sidebar-group > summary svg:last-child { transition: none; }
+    .sidebar-submenu > summary svg:last-child { transition: none; }
+    .sidebar-mobile { transition: none; }
+    .sidebar-mobile::backdrop { transition: none; }
+  }
+}
+</style>
+<style>
+/* 3. 页面布局层（仅页面排版/业务类；组件样式一律不在此层）——同步自 temp/page_layout.css */
+/* -- 页面基础排版（非组件层；组件样式由官方 css 提供） ---------- */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  background: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; }
+h1, h2, h3, h4, p { margin: 0; }
+
+.sidebar-layout { background: var(--background); }
+
+/* -- 主区 / Topbar -- */
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.topbar {
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--background);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  flex-shrink: 0;
+}
+.topbar .brand-mobile { display: none; }
+.topbar-spacer { flex: 1; }
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+}
+.breadcrumb .crumb-sep { color: var(--muted-foreground); opacity: 0.6; }
+.breadcrumb .crumb-current { color: var(--foreground); font-weight: 500; }
+.topbar-right { display: flex; align-items: center; gap: 0.75rem; }
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  height: 2rem;
+  padding: 0 0.625rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--input);
+  background: var(--background);
+  color: var(--muted-foreground);
+  width: 13rem;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+.search-box:focus-within { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in oklch, var(--ring) 25%, transparent); }
+.search-box input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--foreground);
+  font-size: 0.8125rem;
+  font-family: inherit;
+}
+.search-box input::placeholder { color: var(--muted-foreground); }
+.user-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem 0.25rem 0.25rem;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+.user-chip:hover { background: var(--accent); }
+.user-chip .user-name { font-size: 0.8125rem; font-weight: 500; }
+.theme-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2rem; height: 2rem; border-radius: var(--radius-md);
+  border: none; background: transparent; color: var(--foreground); cursor: pointer;
+  transition: background-color 150ms ease;
+}
+.theme-btn:hover { background: var(--accent); }
+
+/* -- 页面内容区 -- */
+.page {
+  flex: 1;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+.doc-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+}
+.doc-tab {
+  display: inline-flex; align-items: center; gap: 0.375rem;
+  padding: 0.5rem 0.875rem;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  border: none; background: transparent;
+  cursor: pointer; white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 150ms ease, border-color 150ms ease;
+}
+.doc-tab:hover { color: var(--foreground); }
+.doc-tab[aria-selected="true"] {
+  color: var(--foreground);
+  border-bottom-color: var(--primary);
+  font-weight: 500;
+}
+.doc-tab .close {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.125rem; height: 1.125rem; border-radius: var(--radius-sm);
+  color: var(--muted-foreground); transition: background-color 150ms ease;
+}
+.doc-tab .close:hover { background: var(--muted); color: var(--foreground); }
+
+.uc-panel { display: flex; flex-direction: column; gap: 1.25rem; }
+.page-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.page-title-row { display: flex; align-items: center; gap: 0.5rem; }
+.page-title { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.01em; }
+.page-title-help { color: var(--muted-foreground); }
+.page-desc { margin-top: 0.25rem; font-size: 0.8125rem; color: var(--muted-foreground); }
+.head-actions { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; }
+
+/* -- 团队概览 -- */
+.team-overview-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.team-overview-title { font-size: 0.9375rem; font-weight: 600; }
+.team-overview-sub { font-size: 0.75rem; color: var(--muted-foreground); margin-top: 0.125rem; }
+.team-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.875rem;
+}
+/* 统计卡内部纵向排布，为卡内操作按钮提供吸底能力；四卡等高由 .team-overview-grid 的 stretch 保证 */
+.ov-stat {
+  display: flex;
+  flex-direction: column;
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+}
+.ov-label { font-size: 0.75rem; color: var(--muted-foreground); }
+.ov-value { margin-top: 0.375rem; font-size: 1.375rem; font-weight: 700; letter-spacing: -0.01em; color: var(--foreground); }
+.ov-value .ov-unit { font-size: 0.8125rem; font-weight: 500; color: var(--muted-foreground); margin-left: 0.125rem; }
+.ov-value--seat { color: var(--primary); margin-bottom: 0.75rem; }
+.ov-value--seat .ov-unit { color: var(--primary); }
+/* 剩余授权卡内操作按钮：使用官方 .btn[data-variant="default"] 实心 primary，
+   占满卡片内容宽度（左右与其它统计卡同为卡片 padding 1rem）+ 吸底对齐，避免撑破卡片或四卡高度不齐 */
+.ov-stat-action { width: 100%; margin-top: auto; }
+
+/* -- 成员表工具栏 -- */
+/* 水平内边距与表格内容区（.table-scroll 的 1.5rem）对齐；垂直留 0.75rem 卡片留白，避免控件贴卡片边框 */
+.toolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding: 0.75rem 1.5rem; }
+.list-filters { display: flex; align-items: center; gap: 0.5rem; flex-wrap: nowrap; }
+/* 输入框遵循官方 input 规范（height 2.5rem / 水平内边距 0.75rem），显式上下内边距 0.5rem 保证文字不贴边 */
+.list-filters .input { flex: 0 1 12rem; min-width: 0; height: 2.5rem; padding: 0.5rem 0.75rem; }
+/* 同行按钮与输入框等高（2.5rem），消除 2.25rem/2.5rem 混排的上下错位 */
+.list-filters .btn { height: 2.5rem; }
+.filter-field { display: flex; align-items: center; gap: 0.375rem; }
+.filter-label { font-size: 0.8125rem; color: var(--muted-foreground); }
+.list-actions { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+.batch-tip { display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; color: var(--muted-foreground); }
+.batch-tip .batch-selected-count { color: var(--primary); font-weight: 600; }
+
+/* -- 表格卡片细节 -- */
+.table-card .card-content { padding: 0; }
+.table-scroll { overflow-x: auto; }
+.table-meta { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.75rem 1.5rem; border-top: 1px solid var(--border); flex-wrap: wrap; }
+.meta-total { font-size: 0.8125rem; color: var(--muted-foreground); }
+.pager { display: flex; align-items: center; gap: 0.25rem; }
+.pager .pager-arrow {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2rem; height: 2rem; border-radius: var(--radius-md);
+  border: none; background: transparent; color: var(--muted-foreground); cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+.pager .pager-arrow:hover:not(:disabled) { background: var(--accent); color: var(--foreground); }
+.pager .pager-arrow:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* -- 表格行内业务类（由渲染函数输出，非组件层） -- */
+.member-cell { display: flex; align-items: center; gap: 0.625rem; }
+.avatar-sm {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2rem; height: 2rem; border-radius: 9999px;
+  background: var(--muted); color: var(--muted-foreground);
+  font-size: 0.75rem; font-weight: 600; flex-shrink: 0;
+}
+.name-line { display: flex; flex-direction: column; gap: 0.125rem; }
+.name-line .nm { font-weight: 500; color: var(--foreground); line-height: 1.3; }
+.name-line .sub { font-size: 0.75rem; color: var(--muted-foreground); line-height: 1.3; }
+.mono { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--muted-foreground); }
+.admin-tag {
+  display: inline-flex; align-items: center; height: 1.25rem; padding: 0 0.5rem;
+  font-size: 0.6875rem; font-weight: 500; border-radius: var(--radius-sm);
+  background: var(--accent); color: var(--accent-foreground);
+}
+.row-ops { display: inline-flex; align-items: center; gap: 0.375rem; flex-wrap: wrap; }
+.row-op-btn {
+  display: inline-flex; align-items: center; gap: 0.25rem;
+  height: 1.75rem; padding: 0 0.5rem;
+  font-size: 0.75rem; font-weight: 500;
+  border-radius: var(--radius-sm);
+  border: none; background: transparent; color: var(--muted-foreground); cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+.row-op-btn:hover { background: var(--accent); color: var(--foreground); }
+.row-op-btn--primary { color: var(--primary); }
+.row-op-btn--primary:hover { background: color-mix(in oklch, var(--primary) 10%, transparent); color: var(--primary); }
+.row-op-sep { width: 1px; height: 1rem; background: var(--border); margin: 0 0.125rem; }
+
+/* badge 业务变体：outline + primary 文字（官方 badge 无此变体） */
+.badge[data-variant="outline-primary"] {
+  border: 1px solid color-mix(in oklch, var(--primary) 45%, transparent);
+  color: var(--primary);
+  background: color-mix(in oklch, var(--primary) 7%, transparent);
+}
+
+/* -- 表格卡片底部（官方 card-footer 的应用态） -- */
+.card-footer.table-footer {
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.875rem 1.5rem;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.table-footer .footer-total { font-size: 0.8125rem; color: var(--muted-foreground); }
+.table-footer .footer-total b { color: var(--foreground); font-weight: 600; }
+.table-footer .pager { display: flex; align-items: center; gap: 0.375rem; }
+
+/* -- 表头/主工具按钮组在卡片内容区 -- */
+.table-scroll { overflow-x: auto; padding: 0 1.5rem; }
+.mode-row { display: flex; align-items: center; gap: 1rem; margin: 0.25rem 0 1rem; flex-wrap: wrap; }
+.assign-select { width: 11rem; min-width: 9rem; }
+.row-op-btn.danger { color: var(--destructive); }
+.row-op-btn.danger:hover { background: color-mix(in oklch, var(--destructive) 10%, transparent); color: var(--destructive); }
+.dialog-field .label { margin-bottom: 0; }
+
+/* -- 侧栏品牌区 -- */
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.625rem;
+  height: 1.625rem;
+  border-radius: 0.5rem;
+  background: var(--sidebar-primary);
+  color: var(--sidebar-primary-foreground);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+/* -- 团队概览 -- */
+.team-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.team-overview-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.team-overview-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--foreground);
+  letter-spacing: -0.01em;
+}
+.team-overview-sub { font-size: 0.8125rem; color: var(--muted-foreground); margin-top: 0.125rem; }
+/* -- 补充业务类（与最终 html 同步）-- */
+.td-admin { text-align: right; white-space: nowrap; }
+.doc-tab-active {
+  color: var(--foreground);
+  border-color: var(--foreground);
+  font-weight: 600;
+}
+.doc-tabs .doc-tab-active .close { color: var(--muted-foreground); }
+.table-head .checkbox { vertical-align: middle; margin: 0; }
+
+/* -- 弹窗内容辅助 -- */
+.dialog-field { display: flex; flex-direction: column; gap: 0.375rem; margin-bottom: 0.875rem; }
+.dialog-field:last-child { margin-bottom: 0; }
+.section-label { display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; }
+.dialog-desc { font-size: 0.8125rem; color: var(--muted-foreground); margin-top: 0.25rem; }
+.auto-hint { display: flex; align-items: center; gap: 0.375rem; margin-top: 0.5rem; font-size: 0.8125rem; color: var(--muted-foreground); }
+.auto-hint strong { color: var(--foreground); font-weight: 600; }
+.tip-line {
+  display: flex; align-items: flex-start; gap: 0.5rem;
+  padding: 0.625rem 0.75rem; margin-top: 0.875rem;
+  border-radius: var(--radius-md);
+  background: var(--muted); color: var(--muted-foreground);
+  font-size: 0.8125rem; line-height: 1.5;
+}
+.tip-line svg { flex-shrink: 0; margin-top: 0.125rem; }
+.tip-line--primary { background: color-mix(in oklch, var(--primary) 8%, transparent); color: color-mix(in oklch, var(--primary) 70%, var(--foreground)); }
+.tip-line strong { color: inherit; font-weight: 600; }
+.member-assign-list { display: flex; flex-direction: column; max-height: 16rem; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--radius-lg); }
+.assign-row {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.75rem;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+.assign-row:last-child { border-bottom: none; }
+.assign-info { display: flex; align-items: center; gap: 0.625rem; min-width: 0; }
+.assign-name { font-size: 0.8125rem; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.assign-state { display: flex; align-items: center; gap: 0.25rem; font-size: 0.75rem; color: var(--muted-foreground); white-space: nowrap; }
+.assign-state .dot { width: 0.375rem; height: 0.375rem; border-radius: 9999px; background: var(--muted-foreground); }
+.assign-state--danger { color: var(--destructive); }
+.assign-state--danger .dot { background: var(--destructive); }
+.assign-select-wrap { display: flex; align-items: center; gap: 0.375rem; }
+.seat-hint { font-size: 0.75rem; color: var(--muted-foreground); }
+.seat-hint strong { color: var(--primary); font-weight: 600; }
+
+/* badge 在日期行文字变体 */
+.date-cell { font-variant-numeric: tabular-nums; }
+
+@media (max-width: 767px) {
+  .topbar .brand-mobile { display: inline-flex; align-items: center; }
+  .search-box { display: none; }
+  .team-overview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .page { padding: 1rem; }
+  .head-actions { width: 100%; justify-content: flex-end; }
+}
+</style>
+</head>
+<body>
+
+<div class="sidebar-layout">
+
+  <!-- ===================== 侧边栏 ===================== -->
+  <aside class="app-sidebar">
+    <div class="sidebar-header">
+      <a class="sidebar-logo" href="#"><span class="brand-logo">采</span><span class="sidebar-logo-text">采招网 · 用户中心</span></a>
+      <button class="sidebar-trigger" type="button" data-sidebar-trigger aria-label="收起侧栏"><i data-lucide="panel-left-close"></i></button>
+    </div>
+    <div class="sidebar-content">
+      <nav class="sidebar-nav">
+        <a class="sidebar-link" href="#"><i data-lucide="layout-dashboard"></i><span>工作台</span></a>
+        <a class="sidebar-link" href="#"><i data-lucide="layers"></i><span>订阅中心</span><i data-lucide="chevron-right"></i></a>
+        <a class="sidebar-link" href="#"><i data-lucide="star"></i><span>收藏中心</span><i data-lucide="chevron-right"></i></a>
+        <a class="sidebar-link" href="#"><i data-lucide="radar"></i><span>追踪与监控</span><i data-lucide="chevron-right"></i></a>
+        <a class="sidebar-link" href="#"><i data-lucide="boxes"></i><span>轻SaaS应用</span><i data-lucide="chevron-right"></i></a>
+        <a class="sidebar-link" href="#"><i data-lucide="briefcase"></i><span>行业解决方案</span><i data-lucide="chevron-right"></i></a>
+        <a class="sidebar-link" href="#"><i data-lucide="database"></i><span>数据中心</span><i data-lucide="chevron-right"></i></a>
+        <a class="sidebar-link" href="#"><i data-lucide="send"></i><span>信息发布</span><i data-lucide="chevron-right"></i></a>
+        <a class="sidebar-link" href="#"><i data-lucide="handshake"></i><span>采招服务</span><i data-lucide="chevron-right"></i></a>
+      </nav>
+
+      <div class="sidebar-section-title">账号中心</div>
+      <details class="sidebar-submenu" open>
+        <summary><i data-lucide="user-circle"></i><span>账号中心</span><i data-lucide="chevron-right"></i></summary>
+        <div class="sidebar-nav">
+          <a class="sidebar-link" href="#"><span>个人信息</span></a>
+          <a class="sidebar-link" href="#"><span>安全设置</span></a>
+          <a class="sidebar-link" href="#"><span>积分余额</span></a>
+          <a class="sidebar-link" href="#"><span>我的发票</span></a>
+          <a class="sidebar-link" href="#" aria-current="page"><span>企业团队(子账户)</span></a>
+          <a class="sidebar-link" href="#"><span>导出/下载</span></a>
+          <a class="sidebar-link" href="#"><span>注销</span></a>
+        </div>
+      </details>
+    </div>
+  </aside>
+
+  <!-- ===================== 主区 ===================== -->
+  <div class="main">
+    <header class="topbar">
+      <div class="breadcrumb"><span>账号中心</span><span class="crumb-sep">/</span><b class="crumb-current">企业团队(子账户)</b></div>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-right">
+        <div class="search-box"><i data-lucide="search"></i><input placeholder="搜索成员 / 功能" aria-label="搜索成员 / 功能"></div>
+        <button class="theme-btn" id="theme-toggle" title="切换主题" aria-label="切换主题"><i data-lucide="moon"></i></button>
+        <span class="user-chip"><span class="avatar" data-size="sm"><span class="avatar-fallback">15</span></span><span class="user-name">15550132296</span></span>
+      </div>
+    </header>
+
+    <div class="page">
+      <div class="doc-tabs">
+        <button type="button" class="doc-tab">工作台</button>
+        <button type="button" class="doc-tab">订阅信息 <span class="close" aria-hidden="true">×</span></button>
+        <button type="button" class="doc-tab doc-tab-active">企业团队(子账户) <span class="close" aria-hidden="true">×</span></button>
+      </div>
+
+      <div class="uc-panel">
+
+        <!-- 页头 -->
+        <div class="page-head">
+          <div class="page-head-text">
+            <h1 class="page-title">企业账户管理
+              <button class="page-title-help" type="button" title="帮助说明" aria-label="帮助说明"><i data-lucide="circle-help"></i></button>
+            </h1>
+            <p class="page-desc">管理团队成员并为其开通独立的子账户会员</p>
+          </div>
+          <div class="head-actions">
+            <button class="btn" data-variant="default" type="button" id="head-invite-btn" data-dialog-trigger="invite-dialog"><i data-lucide="user-plus"></i>邀请公司成员</button>
+          </div>
+        </div>
+
+        <!-- 团队概览（无渐变强调，统计用文字/badge 级收敛） -->
+        <section class="team-overview" aria-label="团队概览">
+          <div class="team-overview-head">
+            <div>
+              <div class="team-overview-title">团队概览</div>
+            </div>
+          </div>
+          <div class="team-overview-grid">
+            <div class="card ov-stat">
+              <div class="ov-label">团队成员</div>
+              <div class="ov-value"><span id="ov-member-count">0</span><span class="ov-unit">人</span></div>
+            </div>
+            <div class="card ov-stat">
+              <div class="ov-label">已开通子账户</div>
+              <div class="ov-value"><span id="ov-active-count">0</span><span class="ov-unit">人</span></div>
+            </div>
+            <div class="card ov-stat">
+              <div class="ov-label">免费成员</div>
+              <div class="ov-value"><span id="ov-free-count">0</span><span class="ov-unit">人</span></div>
+            </div>
+            <div class="card ov-stat ov-stat--seat">
+              <div class="ov-label">剩余授权</div>
+              <div class="ov-value ov-value--seat"><span id="ov-seat-count">5</span><span class="ov-unit">个</span></div>
+              <button class="btn ov-stat-action" data-variant="default" type="button" id="ov-increase-btn" data-dialog-trigger="buy-dialog"><i data-lucide="plus"></i>增加授权数量</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 团队成员批量授权 -->
+        <section class="card table-card" aria-label="团队成员批量授权">
+          <div class="card-content">
+            <div class="toolbar">
+              <div class="list-filters">
+                <input class="input" id="q-phone" placeholder="请输入手机号" autocomplete="off">
+                <input class="input" id="q-note" placeholder="请输入备注名称" autocomplete="off">
+                <button class="btn" data-variant="outline" type="button" id="search-btn"><i data-lucide="search"></i>搜索</button>
+              </div>
+              <div class="list-actions">
+                <span class="badge" data-variant="secondary">已选 <b id="batch-selected-count">0</b> 人</span>
+                <button class="btn" data-variant="outline" type="button" id="batch-auth-btn" disabled><i data-lucide="user-check"></i>批量授权</button>
+              </div>
+            </div>
+          </div>
+          <div class="table-scroll">
+            <div class="table-container">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th class="table-head" style="width:44px"><input type="checkbox" class="checkbox" id="check-all" title="全选" aria-label="全选"></th>
+                    <th class="table-head" style="width:52px">序号</th>
+                    <th class="table-head">备注</th>
+                    <th class="table-head">账户名</th>
+                    <th class="table-head">会员级别</th>
+                    <th class="table-head">子账户会员有效期至</th>
+                    <th class="table-head">加入时间</th>
+                    <th class="table-head" style="text-align:right">操作</th>
+                  </tr>
+                </thead>
+                <tbody id="member-body"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer table-footer">
+            <span class="footer-total">总共查询到 <b id="member-count">0</b> 条相关信息</span>
+            <span class="pager" id="pager" aria-label="分页">
+              <button class="btn" data-variant="outline" data-size="sm" type="button" disabled>首页</button>
+              <button class="btn" data-variant="outline" data-size="sm" type="button" disabled>上一页</button>
+              <button class="btn" data-variant="default" data-size="sm" type="button">1</button>
+              <button class="btn" data-variant="outline" data-size="sm" type="button" disabled>下一页</button>
+            </span>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 批量授权弹窗 ===== -->
+<dialog id="batch-dialog" class="dialog" data-size="lg" role="dialog" aria-modal="true" aria-labelledby="batch-title">
+  <div class="dialog-content">
+    <div class="dialog-header">
+      <h2 class="dialog-title" id="batch-title">批量开通子账户会员</h2>
+      <p class="dialog-description" id="batch-desc">为 0 位成员开通，预计消耗 0 个可用名额。</p>
+    </div>
+    <div class="dialog-body">
+      <div class="section-label">分配方式</div>
+      <div class="mode-row">
+        <div class="radio-item"><input class="radio" type="radio" id="assign-auto" name="assign-mode" value="auto" checked><label for="assign-auto">自动 · 按最近到期优先</label></div>
+        <div class="radio-item"><input class="radio" type="radio" id="assign-manual" name="assign-mode" value="manual"><label for="assign-manual">手动 · 逐人指定卡片</label></div>
+      </div>
+
+      <div class="section-label">本次开通的成员</div>
+      <div class="member-assign-list" id="batch-member-list"></div>
+
+      <div class="section-label" id="manual-label" hidden>为每位成员选择一张可用卡</div>
+      <div class="member-assign-list" id="manual-assign-list" style="margin-top:8px" hidden></div>
+
+      <div class="tip-line" id="batch-tip"><i data-lucide="info"></i><span>自动分配将按到期时间从近到远依次消耗可用名额；成员已有有效卡时会追加一张（重叠并存）。</span></div>
+    </div>
+    <div class="dialog-footer">
+      <button class="btn" data-variant="outline" type="button" data-dialog-close>取消</button>
+      <button class="btn" data-variant="default" type="button" id="confirm-batch">确认开通</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- ===== 开通新的子账户会员弹窗 ===== -->
+<dialog id="buy-dialog" class="dialog" data-size="sm" role="dialog" aria-modal="true" aria-labelledby="buy-title">
+  <div class="dialog-content">
+    <div class="dialog-header">
+      <h2 class="dialog-title" id="buy-title">开通新的子账户会员</h2>
+      <p class="dialog-description">主账户续费或购买「子账户会员包」获得可授权名额，每个名额含独立到期时间。</p>
+    </div>
+    <div class="dialog-body">
+      <div class="tip-line"><i data-lucide="alert-triangle"></i><span>提前续费会使新旧名额有效期重叠，销售侧下单时会收到强提示；重叠的名额均可正常授权使用。</span></div>
+    </div>
+    <div class="dialog-footer">
+      <button class="btn" data-variant="outline" type="button" data-dialog-close>取消</button>
+      <button class="btn" data-variant="default" type="button" id="go-buy" data-dialog-close>去开通名额</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- ===== 邀请公司成员弹窗 ===== -->
+<dialog id="invite-dialog" class="dialog" data-size="sm" role="dialog" aria-modal="true" aria-labelledby="invite-title">
+  <div class="dialog-content">
+    <div class="dialog-header">
+      <h2 class="dialog-title" id="invite-title">邀请公司成员</h2>
+      <p class="dialog-description">输入成员手机号发出邀请，成员接受后自动加入企业团队并可使用子账户授权。</p>
+    </div>
+    <div class="dialog-body">
+      <div class="dialog-field"><label class="label" for="invite-phone">手机号</label><input class="input" id="invite-phone" placeholder="请输入成员手机号"></div>
+      <div class="dialog-field"><label class="label" for="invite-note">备注</label><input class="input" id="invite-note" placeholder="选填，如：市场部-刘洋"></div>
+      <div class="tip-line"><i data-lucide="info"></i><span>被邀请成员未开通子账户时显示「免费会员」，由管理员为其授权名额后开通。</span></div>
+    </div>
+    <div class="dialog-footer">
+      <button class="btn" data-variant="outline" type="button" data-dialog-close>取消</button>
+      <button class="btn" data-variant="default" type="button" id="confirm-invite">发送邀请</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- ===== 组件 JS（官方普通脚本，file:// 可直接运行）===== -->
+<script>
+/* ---- shadcn-lib components/tabs/tabs.js ---- */
+// -- Tabs -----------------------------------------------------
+// ARIA-compliant keyboard navigation for [role="tablist"] elements.
+
+const activateTab = (tab, triggers) => {
+  triggers.forEach((t) => {
+    t.setAttribute('aria-selected', 'false');
+    t.setAttribute('tabindex', '-1');
+    const panel = document.getElementById(t.getAttribute('aria-controls'));
+    if (panel) panel.hidden = true;
+  });
+  tab.setAttribute('aria-selected', 'true');
+  tab.removeAttribute('tabindex');
+  const panel = document.getElementById(tab.getAttribute('aria-controls'));
+  if (panel) panel.hidden = false;
+};
+
+function init() {
+document.querySelectorAll('[role="tablist"]:not([data-init])').forEach((tablist) => {
+    tablist.dataset.init = '';
+    if (!tablist.querySelector('.tab-trigger')) return;
+    const triggers = Array.from(tablist.querySelectorAll('[role="tab"]'));
+    const orientation = tablist.getAttribute('aria-orientation') || 'horizontal';
+
+    triggers.forEach((trigger) => {
+      trigger.addEventListener('click', () => { activateTab(trigger, triggers); });
+      trigger.addEventListener('keydown', (e) => {
+        const current = triggers.indexOf(trigger);
+        let next;
+        const forward = orientation === 'horizontal' ? 'ArrowRight' : 'ArrowDown';
+        const backward = orientation === 'horizontal' ? 'ArrowLeft' : 'ArrowUp';
+        switch (e.key) {
+          case forward:
+            e.preventDefault();
+            for (let i = 1; i <= triggers.length; i++) {
+              const c = triggers[(current + i) % triggers.length];
+              if (!c.disabled) { next = c; break; }
+            }
+            break;
+          case backward:
+            e.preventDefault();
+            for (let i = 1; i <= triggers.length; i++) {
+              const c = triggers[(current - i + triggers.length) % triggers.length];
+              if (!c.disabled) { next = c; break; }
+            }
+            break;
+          case 'Home':
+            e.preventDefault();
+            next = triggers.find((t) => !t.disabled);
+            break;
+          case 'End':
+            e.preventDefault();
+            next = triggers.slice().reverse().find((t) => !t.disabled);
+            break;
+        }
+        if (next && !next.disabled) {
+          activateTab(next, triggers);
+          next.focus();
+        }
+      });
+    });
+});}
+
+init();
+new MutationObserver(init).observe(document, { childList: true, subtree: true });
+/* ---- shadcn-lib components/dialog/dialog.js ---- */
+// -- Dialog ---------------------------------------------------
+// Wires [data-dialog-trigger] buttons to <dialog> elements.
+// 注：本页 4 个组件脚本（tabs/dialog/avatar/sidebar）曾共用同名全局 init()，
+// 后定义者覆盖前者，导致本段绑定逻辑从未执行；此处改名 initDialog 以避免覆盖。
+
+function initDialog() {
+document.querySelectorAll('[data-dialog-trigger]:not([data-init])').forEach((trigger) => {
+  trigger.dataset.init = '';
+  const dialog = document.getElementById(trigger.dataset.dialogTrigger);
+  if (!dialog) return;
+  trigger.addEventListener('click', () => {
+    dialog._trigger = trigger;
+    dialog.showModal();
+  });
+});
+document.querySelectorAll('dialog:not(.alert-dialog):not(.sheet):not([data-init])').forEach((dialog) => {
+  dialog.dataset.init = '';
+  dialog.addEventListener('click', (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+  dialog.querySelectorAll('[data-dialog-close]').forEach((btn) => {
+    btn.addEventListener('click', () => { dialog.close(); });
+  });
+  dialog.addEventListener('close', () => {
+    if (dialog._trigger) dialog._trigger.focus();
+  });
+});
+}
+
+initDialog();
+new MutationObserver(initDialog).observe(document, { childList: true, subtree: true });
+
+/* ---- shadcn-lib components/toast/toast.js ---- */
+// -- Toast -----------------------------------------------------
+// Programmatic toast notification API.
+// Exposes window.toast with show/success/warning/info/error/dismiss.
+
+const DURATION = 4000;
+const MAX_VISIBLE = 3;
+
+let toastContainer = document.getElementById('toast-container');
+if (!toastContainer) {
+  toastContainer = document.createElement('div');
+  toastContainer.id = 'toast-container';
+  toastContainer.className = 'toast-container';
+  toastContainer.setAttribute('aria-label', 'Notifications');
+  toastContainer.setAttribute('data-position', 'bottom-right');
+  document.body.appendChild(toastContainer);
+}
+
+const toastDismiss = (el, callback) => {
+  if (!el || !el.parentNode) return;
+  el.animate(
+    [{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(0.5rem)' }],
+    { duration: 200, easing: 'ease', fill: 'forwards' }
+  ).finished.then(() => { try { el.hidePopover(); } catch(e) {} el.remove(); if (callback) callback(); });
+};
+
+const toastCreate = (options) => {
+  const o = typeof options === 'string' ? { title: options } : options;
+  const { title, description, variant, action, onDismiss } = o;
+  const duration = o.duration != null ? o.duration : DURATION;
+  const el = document.createElement('div'); el.className = 'toast';
+  el.setAttribute('role', variant === 'destructive' ? 'alert' : 'status');
+  el.setAttribute('aria-live', variant === 'destructive' ? 'assertive' : 'polite');
+  el.setAttribute('aria-atomic', 'true'); el.setAttribute('popover', 'manual');
+  if (variant) el.setAttribute('data-variant', variant);
+  const icons = {
+    success: '<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>',
+    warning: '<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>',
+    info: '<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>',
+    destructive: '<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>'
+  };
+  // Build toast DOM safely (no innerHTML with user content)
+  const contentEl = document.createElement('div');
+  contentEl.className = 'toast-content';
+  if (variant && icons[variant]) {
+    const tmpl = document.createElement('template');
+    tmpl.innerHTML = icons[variant];
+    contentEl.appendChild(tmpl.content);
+  }
+  const textDiv = document.createElement('div');
+  textDiv.className = 'toast-text';
+  if (title) { const p = document.createElement('p'); p.className = 'toast-title'; p.textContent = title; textDiv.appendChild(p); }
+  if (description) { const p = document.createElement('p'); p.className = 'toast-description'; p.textContent = description; textDiv.appendChild(p); }
+  contentEl.appendChild(textDiv);
+  const closeBtn = document.createElement('button');
+  closeBtn.className = 'toast-close'; closeBtn.setAttribute('aria-label', 'Dismiss'); closeBtn.dataset.toastClose = '';
+  closeBtn.innerHTML = '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+  contentEl.appendChild(closeBtn);
+  el.appendChild(contentEl);
+  if (action) {
+    const actionsDiv = document.createElement('div'); actionsDiv.className = 'toast-actions';
+    const actionBtn = document.createElement('button'); actionBtn.className = 'btn';
+    actionBtn.setAttribute('data-variant', 'outline'); actionBtn.setAttribute('data-size', 'sm'); actionBtn.dataset.toastAction = '';
+    actionBtn.textContent = action.label;
+    actionsDiv.appendChild(actionBtn); el.appendChild(actionsDiv);
+  }
+  toastContainer.appendChild(el); el.showPopover();
+  closeBtn.addEventListener('click', () => { toastDismiss(el, onDismiss); });
+  if (action) { el.querySelector('[data-toast-action]').addEventListener('click', () => { if (action.onClick) action.onClick(); toastDismiss(el); }); }
+  if (duration !== Infinity) setTimeout(() => { toastDismiss(el, onDismiss); }, duration);
+  const toasts = toastContainer.querySelectorAll('.toast');
+  if (toasts.length > MAX_VISIBLE) toastDismiss(toasts[0]);
+  return el;
+};
+
+window.toast = {
+  show: toastCreate,
+  success: (o) => toastCreate(Object.assign(typeof o === 'string' ? { title: o } : o, { variant: 'success' })),
+  warning: (o) => toastCreate(Object.assign(typeof o === 'string' ? { title: o } : o, { variant: 'warning' })),
+  info: (o) => toastCreate(Object.assign(typeof o === 'string' ? { title: o } : o, { variant: 'info' })),
+  error: (o) => toastCreate(Object.assign(typeof o === 'string' ? { title: o } : o, { variant: 'destructive' })),
+  dismiss: () => { toastContainer.querySelectorAll('.toast').forEach((el) => { toastDismiss(el); }); }
+};
+
+/* ---- shadcn-lib components/avatar/avatar.js ---- */
+// -- Avatar ---------------------------------------------------
+// Hides broken avatar images and shows the fallback.
+
+function init() {
+  document.querySelectorAll('.avatar-image:not([data-init])').forEach((img) => {
+  img.dataset.init = '';
+  img.addEventListener('error', () => {
+    img.setAttribute('data-error', '');
+    img.style.display = 'none';
+  });
+});
+}
+
+init();
+new MutationObserver(init).observe(document, { childList: true, subtree: true });
+
+/* ---- shadcn-lib components/sidebar/sidebar.js ---- */
+// -- Sidebar --------------------------------------------------
+// Toggle collapse, keyboard shortcut (Cmd+B), and mobile dialog.
+
+function init() {
+document.querySelectorAll('.app-sidebar:not([data-init])').forEach((sidebar) => {
+  sidebar.dataset.init = '';
+
+  // -- Toggle button → collapse/expand -----------------------
+  const triggerId = sidebar.id ? `[data-sidebar-trigger="${sidebar.id}"]` : '.sidebar-trigger';
+  document.querySelectorAll(triggerId).forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      const state = sidebar.dataset.state === 'collapsed' ? 'expanded' : 'collapsed';
+      sidebar.dataset.state = state;
+    });
+  });
+});
+
+// -- Mobile dialog triggers ----------------------------------
+document.querySelectorAll('[data-sidebar-mobile]:not([data-init])').forEach((trigger) => {
+  trigger.dataset.init = '';
+  const dialog = document.getElementById(trigger.dataset.sidebarMobile);
+  if (!dialog) return;
+
+  trigger.addEventListener('click', () => {
+    dialog.showModal();
+  });
+
+  // Close button inside the dialog
+  dialog.querySelectorAll('.sidebar-mobile-close').forEach((btn) => {
+    btn.addEventListener('click', () => { dialog.close(); });
+  });
+});
+}
+
+init();
+new MutationObserver(init).observe(document, { childList: true, subtree: true });
+
+// -- Keyboard shortcut: Cmd+B / Ctrl+B ----------------------
+if (!document.__sidebarKbInit) {
+  document.__sidebarKbInit = true;
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'b') {
+      e.preventDefault();
+      // Toggle the first sidebar found on the page
+      const sidebar = document.querySelector('.app-sidebar');
+      if (sidebar) {
+        sidebar.dataset.state = sidebar.dataset.state === 'collapsed' ? 'expanded' : 'collapsed';
+      }
+    }
+  });
+}
+</script>
+
+<!-- ===== lucide 图标 + 明暗主题切换 ===== -->
+<script src="https://unpkg.com/lucide@1.8.0"></script>
+<script>
+  // 图标应用：lucide v1.8.0 的 createIcons 需显式传入 icons 对象（图标以 PascalCase 键注册）
+  (function () {
+    var ph = function () {
+      var s = document.createElement('span');
+      s.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8h.01M12 12v4"></path></svg>';
+      return s.firstChild;
+    };
+    window.mvCreateIcons = function () {
+      try {
+        if (window.lucide && typeof lucide.createIcons === 'function' && lucide.icons) {
+          lucide.createIcons({ icons: lucide.icons });
+        }
+      } catch (e) { /* 交由下方占位兜底 */ }
+      // 未能渲染的图标统一替换为占位 SVG，避免裸露 <i> 元素
+      document.querySelectorAll('i[data-lucide]').forEach(function (el) { el.replaceWith(ph()); });
+    };
+    if (typeof lucide === 'undefined' || !lucide.createIcons) {
+      window.lucide = { createIcons: function () {} };
+    }
+    window.mvCreateIcons();
+  })();
+  // 明暗主题切换：给 <html> 加/去 class="dark"
+  var toggleBtn = document.getElementById('theme-toggle');
+  if (toggleBtn) toggleBtn.addEventListener('click', function () {
+    document.documentElement.classList.toggle('dark');
+  });
+</script>
+
+<!-- ===== 业务 JS（DOM id 与交互逻辑原样保留）===== -->
+<script>
+(function () {
+  'use strict';
+
+  // ===== 数据 =====
+  // 名额池：每笔订单可含多个名额；gid 为订单号，start/exp 为该订单生效期
+  var cards = [
+    { id: 'c-2026-001-1', gid: 'M-2026-001', start: '2025-09-04', exp: '2026-09-03' },
+    { id: 'c-2026-001-2', gid: 'M-2026-001', start: '2025-09-04', exp: '2026-09-03' },
+    { id: 'c-2026-002-1', gid: 'M-2026-002', start: '2026-03-15', exp: '2027-03-14' },
+    { id: 'c-2026-002-2', gid: 'M-2026-002', start: '2026-03-15', exp: '2027-03-14' },
+    { id: 'c-2026-003-1', gid: 'M-2026-003', start: '2026-09-01', exp: '2027-08-31' }
+  ];
+
+  var members = [
+    { name: '西瓜霜含片busch', account: '15650132296', join: '--', admin: true, status: 'vip', exp: null, extra: [], tone: 1 },
+    { name: '张伟', account: '13812003456', join: '2022/03/15', status: 'active', exp: '2027-08-12', extra: [], tone: 1 },
+    { name: '王芳', account: '13913004567', join: '2023/06/20', status: 'active', exp: '2027-09-01', extra: ['2026-11-30'], tone: 2 },
+    { name: '李娜', account: '15014005678', join: '2021/11/02', status: 'expired', exp: '2026-06-15', extra: [], tone: 3 },
+    { name: '陈晨', account: '15115006789', join: '2024/05/18', status: 'none', exp: null, extra: [], tone: 1 },
+    { name: '赵磊', account: '15216007890', join: '2025/01/09', status: 'none', exp: null, extra: [], tone: 2 }
+  ];
+
+  var selected = {}; // name -> true
+  var now = new Date();
+
+  function byDate(a, b) { return a.exp < b.exp ? -1 : a.exp > b.exp ? 1 : 0; }
+  function sortedCards() { return cards.slice().sort(byDate); }
+
+  // 按订单号聚合可用名额（每笔订单一行），按最近到期排序
+  function groupOrders() {
+    var map = {};
+    sortedCards().forEach(function (c) {
+      if (!map[c.gid]) map[c.gid] = { gid: c.gid, start: c.start, exp: c.exp, qty: 0, ids: [] };
+      map[c.gid].qty += 1;
+      map[c.gid].ids.push(c.id);
+    });
+    return Object.keys(map).map(function (k) { return map[k]; });
+  }
+  function todayISO() {
+    var d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+  function isExpired(exp) { return exp && exp < todayISO(); }
+
+  // ===== 渲染 =====
+  function levelBadge(m) {
+    if (m.admin) return '<span class="badge" data-variant="secondary">VIP会员</span>';
+    if (m.status === 'active') return '<span class="badge" data-variant="outline-primary">子账户会员</span>';
+    return '<span class="badge" data-variant="outline">免费会员</span>';
+  }
+
+  function expCell(m) {
+    if (!m.admin && m.status === 'active' && m.exp) {
+      return '<span class="mono">' + m.exp + '</span>';
+    }
+    return '<span class="td-admin">--</span>';
+  }
+
+  function adminRow() {
+    var adm = members.filter(function (m) { return m.admin; })[0];
+    if (!adm) return '';
+    return '<tr class="table-row" data-name="' + adm.name + '">' +
+      '<td class="table-cell"></td>' +
+      '<td class="table-cell">1</td>' +
+      '<td class="table-cell"><div class="member-cell"><span class="avatar-sm">' + adm.name.charAt(0).toUpperCase() + '</span><div><div class="name-line">' + adm.name + '<span class="admin-tag">管理员</span></div></div></div></td>' +
+      '<td class="table-cell mono">' + adm.account + '</td>' +
+      '<td class="table-cell">' + levelBadge(adm) + '</td>' +
+      '<td class="table-cell">' + expCell(adm) + '</td>' +
+      '<td class="table-cell">' + adm.join + '</td>' +
+      '<td class="table-cell" style="text-align:right">--</td>' +
+      '</tr>';
+  }
+
+  function rowHtml(m, idx, showCheckbox) {
+    var checkbox = showCheckbox ?
+      '<td class="table-cell"><input type="checkbox" class="checkbox" name="member-select" data-name="' + m.name + '" ' + (selected[m.name] ? 'checked' : '') + '></td>' :
+      '';
+    var ops = m.admin ? '--' :
+      '<span class="row-ops">' +
+      '<button type="button" class="row-op-btn" data-action="logs" data-name="' + m.name + '">操作记录</button>' +
+      '<span class="row-op-sep">|</span>' +
+      '<button type="button" class="row-op-btn" data-action="edit" data-name="' + m.name + '">编辑/授权</button>' +
+      '<span class="row-op-sep">|</span>' +
+      '<button type="button" class="row-op-btn danger" data-action="remove" data-name="' + m.name + '">移出企业</button>' +
+      '</span>';
+    return '<tr class="table-row" data-name="' + m.name + '">' +
+      checkbox +
+      '<td class="table-cell">' + idx + '</td>' +
+      '<td class="table-cell"><div class="member-cell"><span class="avatar-sm">' + m.name.charAt(0).toUpperCase() + '</span><div><div class="name-line">' + m.name + '</div></div></div></td>' +
+      '<td class="table-cell mono">' + m.account + '</td>' +
+      '<td class="table-cell">' + levelBadge(m) + '</td>' +
+      '<td class="table-cell">' + expCell(m) + '</td>' +
+      '<td class="table-cell">' + m.join + '</td>' +
+      '<td class="table-cell" style="text-align:right">' + ops + '</td>' +
+      '</tr>';
+  }
+
+  function memberList() {
+    return members.filter(function (m) { return !m.admin; });
+  }
+
+  function renderMembers() {
+    // 团队概览统计（基于全量成员，不含主账户个人信息）
+    var list = memberList();
+    var activeCnt = list.filter(function (m) { return m.status === 'active'; }).length;
+    var freeCnt = list.length - activeCnt;
+    document.getElementById('ov-member-count').textContent = list.length;
+    document.getElementById('ov-active-count').textContent = activeCnt;
+    document.getElementById('ov-free-count').textContent = freeCnt;
+    document.getElementById('ov-seat-count').textContent = cards.length;
+
+    // 多选状态初始化
+    selected = {};
+
+    var phone = (document.getElementById('q-phone').value || '').trim().toLowerCase();
+    var note = (document.getElementById('q-note').value || '').trim().toLowerCase();
+    var filtered = list.filter(function (m) {
+      if (phone && String(m.account).indexOf(phone) === -1) return false;
+      if (note && m.name.toLowerCase().indexOf(note) === -1) return false;
+      return true;
+    });
+    // 为非管理员成员渲染复选框
+    var html = adminRow() + filtered.map(function (m, i) { return rowHtml(m, i + 2, true); }).join('');
+    document.getElementById('member-body').innerHTML = html;
+    
+    // 绑定成员行复选框点击事件
+    document.querySelectorAll('#member-body .checkbox').forEach(function(cb) {
+      cb.addEventListener('change', function() {
+        selected[this.dataset.name] = this.checked;
+        updateBatchBar();
+      });
+    });
+    updateBatchBar();
+
+    document.getElementById('member-count').textContent = 1 + filtered.length;
+    if (window.mvCreateIcons) window.mvCreateIcons();
+  }
+
+  // ===== toast =====
+  function toast(text) {
+    // 重建：切换到官方 toast 组件（toast.js 暴露 window.toast）
+    if (window.toast && window.toast.success) { window.toast.success({ title: text }); }
+    else if (window.alert) { window.alert(text); }
+  }
+
+  // ===== 批量弹窗逻辑 =====
+  function curChecked() {
+    return members.filter(function (m) { return !!selected[m.name]; });
+  }
+
+  function renderBatchDialog() {
+    var list = curChecked();
+    var desc = '为 ' + list.length + ' 位成员开通，预计消耗 ' + list.length + ' 个可用名额。';
+    if (list.length > cards.length) {
+      desc += ' 可用名额不足，请先开通新的子账户会员。';
+    }
+    document.getElementById('batch-desc').textContent = desc;
+
+    var ml = document.getElementById('batch-member-list');
+    ml.innerHTML = list.map(function (m) {
+      var st = m.status === 'active' ? '<span class="assign-state">已有有效卡，将追加</span>'
+        : m.status === 'expired' ? '<span class="assign-state assign-state--danger">原卡已过期，重新开通</span>'
+        : '<span class="assign-state">首次开通</span>';
+      return '<div class="assign-row"><div class="assign-info"><span class="avatar-sm">' + m.name.charAt(0) + '</span><div><div class="assign-name">' + m.name + '</div>' + st + '</div></div></div>';
+    }).join('');
+
+    // 手动分配：每行一个 select
+    var ma = document.getElementById('manual-assign-list');
+    ma.innerHTML = '';
+    var enough = cards.length >= list.length;
+    var mode = document.querySelector('input[name="assign-mode"]:checked').value;
+    var manualWrap = document.getElementById('manual-label');
+    ma.hidden = manualWrap.hidden = mode !== 'manual';
+
+    if (mode === 'manual' && enough) {
+      ma.innerHTML = list.map(function (m, idx) {
+        var opts = groupOrders().map(function (g, gi) {
+          var tag = gi === 0 ? '（最近到期）' : '';
+          return '<option value="' + g.gid + '">' + g.gid + ' · ' + g.exp + ' 到期' + tag + '</option>';
+        }).join('');
+        return '<div class="assign-row"><div class="assign-info"><span class="avatar-sm">' + m.name.charAt(0) + '</span><div><div class="assign-name">' + m.name + '</div>' + st + '</div></div><div class="assign-select"><select class="select" data-name="' + m.name + '">' + opts + '</select></div></div>';
+      }).join('');
+    }
+  }
+
+  function syncManualMode() {
+    var mode = document.querySelector('input[name="assign-mode"]:checked').value;
+    var ma = document.getElementById('manual-assign-list');
+    var manualWrap = document.getElementById('manual-label');
+    ma.hidden = manualWrap.hidden = mode !== 'manual';
+    if (mode === 'manual') renderBatchDialog();
+  }
+
+  function confirmBatch() {
+    // 使用renderMembers中维护的selected对象确定已选成员
+    var selectedList = [];
+    for (var name in selected) {
+      if (selected[name]) {
+        var m = members.filter(function (x) { return x.name === name; })[0];
+        if (m) selectedList.push(m);
+      }
+    }
+    if (!selectedList.length) return;
+    if (cards.length < selectedList.length) { toast('可用名额不足'); return; }
+    var mode = document.querySelector('input[name="assign-mode"]:checked').value;
+    var used = [];
+    selectedList.forEach(function (m) {
+      var pick;
+      if (mode === 'manual') {
+        var sel = document.querySelector('#manual-assign-list select[data-name="' + m.name + '"]');
+        pick = sel ? sel.value : null;
+      }
+      var card = null;
+      if (mode === 'manual' && pick) {
+        card = cards.filter(function (c) { return c.gid === pick; })[0] || null;
+      }
+      if (!card) card = sortedCards()[0];
+      if (!card) return;
+      cards = cards.filter(function (c) { return c.id !== card.id; });
+      used.push({ m: m, card: card });
+
+      if (m.status === 'active' && m.exp && !isExpired(m.exp)) {
+        m.extra.push(m.exp);
+        m.exp = card.exp;
+      } else {
+        m.exp = card.exp;
+      }
+      m.extra = m.extra.filter(function (e) { return e && !isExpired(e); });
+      m.status = 'active';
+    });
+    refresh();
+    document.getElementById('batch-dialog').close();
+    if (used.length) toast('已为 ' + used.length + ' 位成员开通子账户会员');
+  }
+
+  // ===== 绑定 =====
+  var batchDialog = document.getElementById('batch-dialog');
+  function doSearch() { renderMembers(); }
+  function refresh() { renderMembers(); }
+
+  // 多选联动：更新已选人数 / 批量授权按钮启停 / 表头全选框状态
+  function updateBatchBar() {
+    var n = 0;
+    for (var k in selected) { if (selected[k]) n += 1; }
+    var cnt = document.getElementById('batch-selected-count');
+    var btn = document.getElementById('batch-auth-btn');
+    if (cnt) cnt.textContent = n;
+    if (btn) btn.disabled = n === 0;
+    var all = document.getElementById('check-all');
+    if (all) {
+      var cbs = document.querySelectorAll('#member-body .checkbox');
+      var total = cbs.length;
+      var checked = 0;
+      cbs.forEach(function (cb) { if (cb.checked) checked += 1; });
+      all.checked = total > 0 && checked === total;
+      all.indeterminate = checked > 0 && checked < total;
+    }
+  }
+
+  // 表头全选
+  var checkAll = document.getElementById('check-all');
+  if (checkAll) {
+    checkAll.addEventListener('change', function () {
+      var on = checkAll.checked;
+      selected = {};
+      document.querySelectorAll('#member-body .checkbox').forEach(function (cb) {
+        cb.checked = on;
+        if (on) selected[cb.getAttribute('data-name')] = true;
+      });
+      updateBatchBar();
+    });
+  }
+
+  // 批量授权：勾选成员后打开批量开通弹窗
+  var batchAuthBtn = document.getElementById('batch-auth-btn');
+  if (batchAuthBtn) {
+    batchAuthBtn.addEventListener('click', function () {
+      if (Object.keys(selected).filter(function (k) { return selected[k]; }).length === 0) {
+        toast('请先勾选需要授权的成员');
+        return;
+      }
+      renderBatchDialog();
+      if (batchDialog.showModal) batchDialog.showModal();
+    });
+  }
+
+  document.getElementById('search-btn').addEventListener('click', doSearch);
+  ['q-phone', 'q-note'].forEach(function (id) {
+    document.getElementById(id).addEventListener('keydown', function (e) { if (e.key === 'Enter') doSearch(); });
+  });
+  document.getElementById('member-body').addEventListener('click', function (e) {
+    var b = e.target.closest('.row-op-btn');
+    if (!b) return;
+    var nm = b.getAttribute('data-name');
+    var m = members.filter(function (x) { return x.name === nm; })[0];
+    if (!m) return;
+    var act = b.getAttribute('data-action');
+    if (act === 'edit') {
+      selected = {};
+      selected[m.name] = true;
+      renderBatchDialog();
+      if (batchDialog.showModal) batchDialog.showModal();
+    } else if (act === 'logs') {
+      toast('查看 ' + m.name + ' 的操作记录（演示）');
+    } else if (act === 'remove') {
+      toast('移出企业为演示功能，未真实执行');
+    }
+  });
+  document.querySelectorAll('input[name="assign-mode"]').forEach(function (r) {
+    r.addEventListener('change', syncManualMode);
+  });
+  document.getElementById('confirm-batch').addEventListener('click', confirmBatch);
+  document.getElementById('go-buy').addEventListener('click', function () {
+    setTimeout(function () { toast('已进入子账户会员包购买流程（演示）'); }, 60);
+  });
+
+  // ===== 邀请公司成员 =====
+  var inviteDialog = document.getElementById('invite-dialog');
+  document.getElementById('confirm-invite').addEventListener('click', function () {
+    var phone = document.getElementById('invite-phone').value.trim();
+    if (!phone) { document.getElementById('invite-phone').focus(); return; }
+    inviteDialog.close();
+    document.getElementById('invite-phone').value = '';
+    document.getElementById('invite-note').value = '';
+    setTimeout(function () { toast('邀请已发送（演示）'); }, 60);
+  });
+
+  refresh();
+})();
+</script>
+
+</body>
+</html>

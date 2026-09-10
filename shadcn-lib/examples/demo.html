@@ -142,10 +142,24 @@
 <script src="../components/tabs/tabs.js"></script>
 <script src="../components/dialog/dialog.js"></script>
 
-<!-- ===== 5. lucide 图标（本地 UMD，替换 <i data-lucide>）===== -->
-<script src="../vendor/lucide.min.js"></script>
+<!-- ===== 5. lucide 图标（在线 CDN；加载失败时自动降级为占位图标）===== -->
+<script src="https://unpkg.com/lucide@1.8.0"></script>
 <script>
-  lucide.createIcons();
+  // 图标应用：lucide 可用则替换 <i data-lucide>，否则用占位 SVG 兜底
+  (function () {
+    var loaded = (typeof lucide !== 'undefined' && lucide.createIcons);
+    if (loaded) {
+      lucide.createIcons();
+      return;
+    }
+    // CDN 不可用（离线 / 被墙）→ 统一占位图标
+    var ph = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8h.01M12 12v4"></path></svg>';
+    document.querySelectorAll('i[data-lucide]').forEach(function (el) {
+      var span = document.createElement('span');
+      span.innerHTML = ph;
+      el.replaceWith(span);
+    });
+  })();
 
   // 明暗主题切换：给 <html> 加/去 class="dark"
   var toggleBtn = document.getElementById('theme-toggle');

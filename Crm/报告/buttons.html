@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>按钮动画演示</title>
+  <style>
+    /* 重置样式 */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+    }
+
+    h1 {
+      margin-bottom: 2rem;
+      font-size: 2rem;
+    }
+
+    /* ===================== 按钮 1：圆形按钮 + 闪烁数字角标 ===================== */
+    .circle-button-container {
+      position: relative;
+      margin-bottom: 3rem;
+    }
+
+    .circle-button {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: white;
+      color: #667eea;
+      font-size: 1.5rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .circle-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    /* 数字角标容器 */
+    .badge-container {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+    }
+
+    /* 数字角标 - 闪烁效果 */
+    .badge {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #ff523b;
+      color: white;
+      font-size: 0.8rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* 闪烁动画 */
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    /* 闪烁动画关键帧 */
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.15);
+        opacity: 0.8;
+      }
+    }
+
+    /* ===================== 按钮 2：超大圆角按钮 ===================== */
+    .large-button {
+      padding: 1.5rem 3rem;
+      border-radius: 50px;
+      background: white;
+      color: #667eea;
+      font-size: 1.2rem;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .large-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    /* 点击时的缩小效果 */
+    .large-button:active {
+      transform: scale(0.95);
+      transition: transform 0.1s ease;
+    }
+
+    /* 文字缩放悬停效果 */
+    .large-button span {
+      transition: transform 0.3s ease;
+    }
+
+    .large-button:hover span {
+      transform: scale(1.1);
+    }
+
+    /* ===================== 响应式 ===================== */
+    @media (max-width: 600px) {
+      .circle-button {
+        width: 80px;
+        height: 80px;
+        font-size: 1rem;
+      }
+
+      .badge {
+        width: 18px;
+        height: 18px;
+        font-size: 0.6rem;
+      }
+
+      .large-button {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>按钮演示</h1>
+
+  <!-- 按钮 1：圆形按钮 + 数字角标（带闪烁效果） -->
+  <div class="circle-button-container">
+    <a href="#" class="circle-button">
+      关注我们
+      <div class="badge-container">
+        <span class="badge">3</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- 按钮 2：超大圆角按钮 -->
+  <button class="large-button">
+    <span>立即开始</span>
+  </button>
+
+</body>
+</html>
