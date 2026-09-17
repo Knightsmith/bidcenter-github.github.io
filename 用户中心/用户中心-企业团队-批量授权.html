@@ -2068,9 +2068,15 @@ h1, h2, h3, h4, p { margin: 0; }
 .ov-value .ov-unit { font-size: 0.8125rem; font-weight: 500; color: var(--muted-foreground); margin-left: 0.125rem; }
 .ov-value--seat { color: var(--primary); margin-bottom: 0.75rem; }
 .ov-value--seat .ov-unit { color: var(--primary); }
-/* 剩余授权卡内操作按钮：使用官方 .btn[data-variant="default"] 实心 primary，
-   占满卡片内容宽度（左右与其它统计卡同为卡片 padding 1rem）+ 吸底对齐，避免撑破卡片或四卡高度不齐 */
-.ov-stat-action { width: 100%; margin-top: auto; }
+/* 剩余授权卡：数值行 = 左侧数值（视觉主角）+ 右侧次级操作按钮。
+   按钮行内放置，取消整宽实心块，卡高与其它三张统计卡完全一致（同一条 label/value 基线）；
+   窄视口（767px 以上仍为四列）空间不足时按钮整枚换行，避免溢出 */
+.ov-seat-row { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem 0.75rem; flex-wrap: wrap; margin-top: 0.375rem; }
+.ov-seat-row .ov-value--seat { margin-top: 0; margin-bottom: 0; }
+/* 操作按钮使用官方 .btn[data-variant="outline"][data-size="sm"]（2rem 高 / 13px / radius-md / shadow-xs / 150ms 过渡），
+   仅把图标与文字点成 primary，hover 以主色 9% 浅底 + 45% 描边加深，保持醒目但不生硬的次级观感 */
+.ov-stat-action { color: var(--primary); gap: 0.375rem; padding: 0 0.625rem; max-width: 100%; white-space: normal; }
+.ov-stat-action:hover { background-color: color-mix(in oklch, var(--primary) 9%, transparent); border-color: color-mix(in oklch, var(--primary) 45%, transparent); color: var(--primary); }
 
 /* -- 成员表工具栏 -- */
 /* 水平内边距与表格内容区（.table-scroll 的 1.5rem）对齐；垂直留 0.75rem 卡片留白，避免控件贴卡片边框 */
@@ -2345,8 +2351,10 @@ h1, h2, h3, h4, p { margin: 0; }
             </div>
             <div class="card ov-stat ov-stat--seat">
               <div class="ov-label">剩余授权</div>
-              <div class="ov-value ov-value--seat"><span id="ov-seat-count">5</span><span class="ov-unit">个</span></div>
-              <button class="btn ov-stat-action" data-variant="default" type="button" id="ov-increase-btn" data-dialog-trigger="buy-dialog"><i data-lucide="plus"></i>增加授权数量</button>
+              <div class="ov-seat-row">
+                <div class="ov-value ov-value--seat"><span id="ov-seat-count">5</span><span class="ov-unit">个</span></div>
+                <button class="btn ov-stat-action" data-variant="outline" data-size="sm" type="button" id="ov-increase-btn" data-dialog-trigger="buy-dialog"><i data-lucide="plus"></i>增加授权数量</button>
+              </div>
             </div>
           </div>
         </section>

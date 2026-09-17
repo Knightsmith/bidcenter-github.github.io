@@ -1,0 +1,2027 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>任务处理报表 - 招投标客户任务中心</title>
+<style>
+/**
+ * shadcn-html — Token Layer
+ * Semantic CSS custom properties matching the tweakcn.com export format.
+ * OKLCH color space. Full surface/foreground pair model.
+ *
+ * Export a theme from tweakcn.com, replace the :root and .dark blocks,
+ * and every component rethemes instantly.
+ */
+
+:root {
+  color-scheme: light;
+
+  /* -- Surface / Foreground pairs ------------------------------ */
+  --background:              oklch(1 0 0);
+  --foreground:              oklch(0.1450 0 0);
+
+  --card:                    oklch(1 0 0);
+  --card-foreground:         oklch(0.1450 0 0);
+
+  --popover:                 oklch(1 0 0);
+  --popover-foreground:      oklch(0.1450 0 0);
+
+  --primary:                 oklch(0.2050 0 0);
+  --primary-foreground:      oklch(0.9850 0 0);
+
+  --secondary:               oklch(0.9700 0 0);
+  --secondary-foreground:    oklch(0.2050 0 0);
+
+  --muted:                   oklch(0.9700 0 0);
+  --muted-foreground:        oklch(0.5560 0 0);
+
+  --accent:                  oklch(0.9700 0 0);
+  --accent-foreground:       oklch(0.2050 0 0);
+
+  --destructive:             oklch(0.5770 0.2450 27.3250);
+  --destructive-foreground:  oklch(1 0 0);
+
+  /* -- Utility tokens ------------------------------------------- */
+  --border:                  oklch(0.9220 0 0);
+  --input:                   oklch(0.9220 0 0);
+  --ring:                    oklch(0.7080 0 0);
+
+  /* -- Sidebar tokens ------------------------------------------- */
+  --sidebar:                 oklch(0.9850 0 0);
+  --sidebar-foreground:      oklch(0.1450 0 0);
+  --sidebar-primary:         oklch(0.2050 0 0);
+  --sidebar-primary-foreground: oklch(0.9850 0 0);
+  --sidebar-accent:          oklch(0.9700 0 0);
+  --sidebar-accent-foreground: oklch(0.2050 0 0);
+  --sidebar-border:          oklch(0.9220 0 0);
+  --sidebar-ring:            oklch(0.7080 0 0);
+
+
+  /* -- Chart tokens --------------------------------------------- */
+  --chart-1:                 oklch(0.8100 0.1000 252);
+  --chart-2:                 oklch(0.6200 0.1900 260);
+  --chart-3:                 oklch(0.5500 0.2200 263);
+  --chart-4:                 oklch(0.4900 0.2200 264);
+  --chart-5:                 oklch(0.4200 0.1800 266);
+
+  /* -- Typography tokens ---------------------------------------- */
+  --font-sans:  ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-mono:  ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* -- Radius --------------------------------------------------- */
+  --radius:                  0.625rem;
+  /* Derived — matches tweakcn/shadcn scale */
+  --radius-sm:               calc(var(--radius) - 4px);
+  --radius-md:               calc(var(--radius) - 2px);
+  --radius-lg:               var(--radius);
+  --radius-xl:               calc(var(--radius) + 4px);
+
+  /* -- Spacing -------------------------------------------------- */
+  --spacing:                 0.25rem;
+
+  /* -- Tracking ------------------------------------------------- */
+  --tracking-normal:         0em;
+
+  /* -- Shadow scale --------------------------------------------- */
+  --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+  --shadow-xs:  0 1px 3px 0px hsl(0 0% 0% / 0.05);
+  --shadow-sm:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+  --shadow:     0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+  --shadow-md:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
+  --shadow-lg:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
+  --shadow-xl:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
+  --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+}
+
+/* -- Dark mode -------------------------------------------------- */
+.dark {
+  color-scheme: dark;
+
+  --background:              oklch(0.1450 0 0);
+  --foreground:              oklch(0.9850 0 0);
+
+  --card:                    oklch(0.2050 0 0);
+  --card-foreground:         oklch(0.9850 0 0);
+
+  --popover:                 oklch(0.2690 0 0);
+  --popover-foreground:      oklch(0.9850 0 0);
+
+  --primary:                 oklch(0.9220 0 0);
+  --primary-foreground:      oklch(0.2050 0 0);
+
+  --secondary:               oklch(0.2690 0 0);
+  --secondary-foreground:    oklch(0.9850 0 0);
+
+  --muted:                   oklch(0.2690 0 0);
+  --muted-foreground:        oklch(0.7080 0 0);
+
+  --accent:                  oklch(0.3710 0 0);
+  --accent-foreground:       oklch(0.9850 0 0);
+
+  --destructive:             oklch(0.7040 0.1910 22.2160);
+  --destructive-foreground:  oklch(0.9850 0 0);
+
+  --border:                  oklch(0.2750 0 0);
+  --input:                   oklch(0.3250 0 0);
+  --ring:                    oklch(0.5560 0 0);
+
+  --sidebar:                 oklch(0.2050 0 0);
+  --sidebar-foreground:      oklch(0.9850 0 0);
+  --sidebar-primary:         oklch(0.4880 0.2430 264.3760);
+  --sidebar-primary-foreground: oklch(0.9850 0 0);
+  --sidebar-accent:          oklch(0.2690 0 0);
+  --sidebar-accent-foreground: oklch(0.9850 0 0);
+  --sidebar-border:          oklch(0.2750 0 0);
+  --sidebar-ring:            oklch(0.4390 0 0);
+
+  --chart-1:                 oklch(0.8100 0.1000 252);
+  --chart-2:                 oklch(0.6200 0.1900 260);
+  --chart-3:                 oklch(0.5500 0.2200 263);
+  --chart-4:                 oklch(0.4900 0.2200 264);
+  --chart-5:                 oklch(0.4200 0.1800 266);
+}
+
+/* -- Typography component --------------------------------------- */
+
+/* -- Base text ---------------------------------------------- */
+/* Sets the default font size for the entire page.            */
+/* All typography classes are sized relative to this baseline. */
+@layer base {
+  body {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+}
+
+@layer components {
+  /* -- Headings ---------------------------------------------- */
+  .h1 {
+    scroll-margin-top: 5rem;
+    font-size: 2.25rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    text-wrap: balance;
+    color: var(--foreground);
+  }
+
+  .h2 {
+    scroll-margin-top: 5rem;
+    font-size: 1.875rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    text-wrap: balance;
+    color: var(--foreground);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
+
+    &:first-child { margin-top: 0; }
+  }
+
+  .h3 {
+    scroll-margin-top: 5rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+    text-wrap: balance;
+    color: var(--foreground);
+  }
+
+  .h4 {
+    scroll-margin-top: 5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-wrap: balance;
+    color: var(--foreground);
+  }
+
+  /* -- Paragraph --------------------------------------------- */
+  .p {
+    font-size: 0.875rem;
+    line-height: 1.75;
+    text-wrap: pretty;
+    color: var(--foreground);
+
+    &:not(:first-child) { margin-top: 1.5rem; }
+  }
+
+  /* -- Lead --------------------------------------------------- */
+  .lead {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: var(--muted-foreground);
+    text-wrap: pretty;
+  }
+
+  /* -- Large -------------------------------------------------- */
+  .large {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--foreground);
+  }
+
+  /* -- Small -------------------------------------------------- */
+  .small {
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--foreground);
+  }
+
+  /* -- Muted -------------------------------------------------- */
+  .muted {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+  }
+
+  /* -- Blockquote --------------------------------------------- */
+  .blockquote {
+    margin-top: 1.5rem;
+    border-inline-start: 2px solid var(--border);
+    padding-inline-start: 1.5rem;
+    font-style: italic;
+    hanging-punctuation: first last;
+    color: var(--foreground);
+
+    & p { margin: 0; }
+  }
+
+  /* -- Inline code -------------------------------------------- */
+  .code {
+    position: relative;
+    border-radius: var(--radius-sm);
+    background: var(--muted);
+    padding: 0.2rem 0.3rem;
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    font-weight: 600;
+    color: var(--foreground);
+  }
+
+  /* -- Accessibility ------------------------------------------ */
+
+  @media (prefers-contrast: more) {
+    .h1, .h2, .h3, .h4 {
+      letter-spacing: 0;
+    }
+
+    .blockquote {
+      border-inline-start-width: 3px;
+    }
+
+    .code {
+      outline: 1px solid var(--border);
+    }
+
+    .muted {
+      color: var(--foreground);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .blockquote {
+      border-inline-start-color: CanvasText;
+    }
+
+    .code {
+      background: Canvas;
+      outline: 1px solid CanvasText;
+      color: CanvasText;
+    }
+  }
+}
+
+/* -- Button component ------------------------------------------ */
+
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--font-sans);
+    line-height: 1;
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 150ms ease;
+    outline: none;
+    flex-shrink: 0;
+    height: 2.25rem;
+    padding: 0 1rem;
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+
+    & svg {
+      pointer-events: none;
+      flex-shrink: 0;
+
+      &:not([class*="size-"]) { width: 1rem; height: 1rem; }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &:disabled, &[aria-disabled="true"] {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    /* -- Variants -------------------------------------------- */
+    &[data-variant="default"] {
+      background-color: var(--primary);
+      color: var(--primary-foreground);
+
+      &:hover { opacity: 0.9; }
+    }
+
+    &[data-variant="secondary"] {
+      background-color: var(--secondary);
+      color: var(--secondary-foreground);
+
+      &:hover { opacity: 0.8; }
+    }
+
+    &[data-variant="outline"] {
+      background-color: var(--background);
+      color: var(--foreground);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-xs);
+
+      &:hover {
+        background-color: var(--accent);
+        color: var(--accent-foreground);
+      }
+    }
+
+    &[data-variant="ghost"] {
+      background-color: transparent;
+      color: var(--foreground);
+      border-color: transparent;
+
+      &:hover {
+        background-color: var(--accent);
+        color: var(--accent-foreground);
+      }
+    }
+
+    &[data-variant="destructive"] {
+      background-color: var(--destructive);
+      color: var(--destructive-foreground);
+
+      &:hover { opacity: 0.9; }
+    }
+
+    &[data-variant="link"] {
+      background-color: transparent;
+      color: var(--primary);
+      height: auto;
+      padding: 0;
+      text-underline-offset: 4px;
+
+      &:hover { text-decoration: underline; }
+    }
+
+    /* -- Sizes ----------------------------------------------- */
+    &[data-size="xs"]      { height: 1.75rem; padding: 0 0.5rem;  font-size: 0.75rem; border-radius: var(--radius-sm); }
+    &[data-size="sm"]      { height: 2rem;    padding: 0 0.75rem; font-size: 0.8125rem; }
+    &[data-size="lg"]      { height: 2.75rem; padding: 0 2rem;    font-size: 1rem; }
+    &[data-size="icon"]    { height: 2.25rem; width: 2.25rem;  padding: 0; }
+    &[data-size="icon-xs"] { height: 1.75rem; width: 1.75rem;  padding: 0; border-radius: var(--radius-sm); }
+    &[data-size="icon-sm"] { height: 2rem;    width: 2rem;     padding: 0; }
+    &[data-size="icon-lg"] { height: 2.75rem; width: 2.75rem;  padding: 0; }
+  }
+
+  /* -- Accessibility ------------------------------------------ */
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn { transition: none; }
+  }
+
+  @media (prefers-contrast: more) {
+    .btn {
+      border: 2px solid transparent;
+
+      &[data-variant="default"],
+      &[data-variant="secondary"],
+      &[data-variant="destructive"] {
+        border-color: currentColor;
+      }
+
+      &[data-variant="outline"],
+      &[data-variant="ghost"] {
+        border-color: var(--foreground);
+      }
+    }
+  }
+
+  @media (forced-colors: active) {
+    .btn {
+      border: 1px solid ButtonText;
+
+      &:disabled, &[aria-disabled="true"] {
+        border-color: GrayText;
+        color: GrayText;
+      }
+    }
+  }
+}
+
+/* -- Badge component ------------------------------------------- */
+
+@layer components {
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+    padding: 0.125rem 0.625rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    line-height: 1.5rem;
+
+    &[data-variant="outline"] {
+      border: 1px solid var(--border);
+      color: var(--muted-foreground);
+    }
+
+    &[data-variant="secondary"] {
+      background: var(--secondary);
+      color: var(--secondary-foreground);
+    }
+
+    &[data-variant="default"] {
+      background: var(--primary);
+      color: var(--primary-foreground);
+    }
+  }
+}
+
+/* -- Card component -------------------------------------------- */
+
+@layer components {
+  .card {
+    background-color: var(--card);
+    color: var(--card-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    container-type: inline-size;
+  }
+
+  .card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1.5rem;
+    padding-bottom: 0;
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+
+  .card-description {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .card-content {
+    padding: 1.5rem;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    padding-top: 0;
+  }
+
+  /* -- Container query: compact card in narrow containers -- */
+  @container (max-width: 280px) {
+    .card-header { padding: 1rem; padding-bottom: 0; }
+    .card-content { padding: 1rem; }
+    .card-footer { padding: 1rem; padding-top: 0; }
+    .card-title { font-size: 1rem; }
+  }
+}
+
+/* -- Input component ------------------------------------------- */
+
+@layer components {
+  .input {
+    height: 2.5rem;
+    width: 100%;
+    border: 1px solid var(--input);
+    border-radius: var(--radius-md);
+    background: var(--background);
+    padding: 0 0.75rem;
+    font-size: 0.875rem;
+    font-family: var(--font-sans);
+    color: var(--foreground);
+    outline: none;
+    box-shadow: var(--shadow-xs);
+    transition: border-color 150ms, box-shadow 150ms;
+
+    &:focus {
+      border-color: var(--ring);
+      box-shadow: 0 0 0 2px oklch(from var(--ring) l c h / 0.2);
+    }
+
+    &::placeholder { color: var(--muted-foreground); }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* -- Readonly state -------------------------------------- */
+    &:read-only:not([type="file"]) {
+      background: var(--muted);
+      cursor: default;
+      opacity: 0.7;
+
+      &:focus {
+        border-color: var(--input);
+        box-shadow: var(--shadow-xs);
+      }
+    }
+
+    /* -- Invalid state --------------------------------------- */
+    &:is([aria-invalid="true"], :user-invalid) {
+      border-color: var(--destructive);
+
+      &:focus {
+        border-color: var(--destructive);
+        box-shadow: 0 0 0 2px oklch(from var(--destructive) l c h / 0.2);
+      }
+    }
+
+    /* -- File input ------------------------------------------ */
+    &[type="file"] {
+      padding: 0;
+      font-size: 0.875rem;
+
+      &::file-selector-button {
+        height: 100%;
+        border: none;
+        border-right: 1px solid var(--input);
+        background: var(--muted);
+        color: var(--foreground);
+        font-size: 0.875rem;
+        font-weight: 500;
+        font-family: var(--font-sans);
+        padding: 0 0.75rem;
+        margin-right: 0.75rem;
+        cursor: pointer;
+        transition: background 150ms;
+
+        &:hover { background: var(--accent); }
+      }
+    }
+
+    /* -- Sizes ----------------------------------------------- */
+    &[data-size="sm"] { height: 2rem;    padding: 0 0.625rem; font-size: 0.8125rem; }
+    &[data-size="lg"] { height: 2.75rem; padding: 0 1rem;     font-size: 1rem; }
+  }
+
+  /* -- Auto-growing textarea --------------------------------- */
+  textarea.input {
+    field-sizing: content;
+    min-height: 5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  /* -- Field description ------------------------------------- */
+  .field-description {
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    margin: 0.375rem 0 0;
+  }
+
+  /* -- Field error ------------------------------------------- */
+  .field-error {
+    font-size: 0.8125rem;
+    color: var(--destructive);
+    margin: 0.375rem 0 0;
+  }
+
+  /* -- Accessibility ---------------------------------------- */
+  @media (prefers-reduced-motion: reduce) {
+    .input {
+      transition: none;
+    }
+
+    .input[type="file"]::file-selector-button {
+      transition: none;
+    }
+  }
+
+  @media (prefers-contrast: more) {
+    .input {
+      border-width: 2px;
+    }
+
+    .input:disabled {
+      opacity: 0.7;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .input {
+      border-color: ButtonBorder;
+      color: ButtonText;
+      background: Field;
+    }
+
+    .input:focus {
+      outline: 2px solid Highlight;
+      outline-offset: 1px;
+    }
+
+    .input:disabled {
+      opacity: 1;
+      color: GrayText;
+      border-color: GrayText;
+    }
+
+    .input:is([aria-invalid="true"], :user-invalid) {
+      border-color: LinkText;
+    }
+
+    .field-error {
+      color: LinkText;
+    }
+  }
+}
+
+/* -- Label component -------------------------------------------- */
+
+@layer components {
+  .label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--font-sans);
+    line-height: 1;
+    color: var(--foreground);
+    display: block;
+    margin-bottom: 0.375rem;
+    cursor: default;
+
+    /* Disabled — explicit attribute */
+    &[data-disabled] {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    /* Disabled — auto-detect via adjacent disabled control */
+    &:has(+ :disabled),
+    &:has(+ [data-disabled]) {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+  }
+
+  /* -- Hint text (optional, required indicators) ----------- */
+  .label-hint {
+    font-weight: 400;
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+  }
+
+  /* -- Accessibility ---------------------------------------- */
+  @media (prefers-contrast: more) {
+    .label[data-disabled],
+    .label:has(+ :disabled),
+    .label:has(+ [data-disabled]) {
+      opacity: 0.85;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .label {
+      color: LinkText;
+    }
+
+    .label[data-disabled],
+    .label:has(+ :disabled),
+    .label:has(+ [data-disabled]) {
+      opacity: 1;
+      color: GrayText;
+    }
+  }
+}
+
+/* -- Select component ------------------------------------------- */
+
+@layer components {
+  .select {
+    appearance: none;
+    height: 2.5rem;
+    width: 100%;
+    border: 1px solid var(--input);
+    border-radius: var(--radius-md);
+    background: var(--background);
+    padding: 0 2rem 0 0.75rem;
+    font-size: 0.875rem;
+    font-family: var(--font-sans);
+    color: var(--foreground);
+    outline: none;
+    box-shadow: var(--shadow-xs);
+    cursor: pointer;
+    transition: border-color 150ms, box-shadow 150ms;
+
+    /* Custom chevron */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1rem;
+
+    &:focus {
+      border-color: var(--ring);
+      box-shadow: 0 0 0 2px oklch(from var(--ring) l c h / 0.2);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &:is([aria-invalid="true"], :user-invalid) {
+      border-color: var(--destructive);
+
+      &:focus {
+        border-color: var(--destructive);
+        box-shadow: 0 0 0 2px oklch(from var(--destructive) l c h / 0.2);
+      }
+    }
+
+    /* -- Sizes ----------------------------------------------- */
+    &[data-size="sm"] { height: 2rem;    padding-left: 0.625rem; font-size: 0.8125rem; }
+    &[data-size="lg"] { height: 2.75rem; padding-left: 1rem;     font-size: 1rem; }
+  }
+}
+
+/* -- Separator component ---------------------------------------- */
+
+@layer components {
+  .separator {
+    border: none;
+    margin: 0;
+    flex-shrink: 0;
+    background: var(--border);
+
+    /* Horizontal (default) */
+    height: 1px;
+    width: 100%;
+
+    /* Vertical */
+    &[data-orientation="vertical"] {
+      height: auto;
+      width: 1px;
+      align-self: stretch;
+    }
+
+    /* Decorative — hidden from assistive technology */
+    &[aria-hidden="true"],
+    &[role="none"] {
+      /* No visual change — purely semantic */
+    }
+  }
+
+  /* -- Labeled separator ------------------------------------- */
+  .separator-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    & .separator { flex: 1; }
+
+    & span {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--muted-foreground);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+  }
+
+  /* -- Accessibility ----------------------------------------- */
+  @media (forced-colors: active) {
+    .separator {
+      background: CanvasText;
+    }
+  }
+
+  @media (prefers-contrast: more) {
+    .separator {
+      background: var(--foreground);
+      height: 2px;
+
+      &[data-orientation="vertical"] {
+        width: 2px;
+        height: auto;
+      }
+    }
+  }
+}
+
+@layer components {
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    container-type: inline-size;
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    text-align: left;
+    caption-side: bottom;
+  }
+
+  .table-caption {
+    padding: 0.75rem 1rem;
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    text-align: center;
+  }
+
+  .table-head {
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    color: var(--muted-foreground);
+    background-color: var(--muted);
+    white-space: nowrap;
+    border-bottom: 1px solid var(--border);
+
+    &:first-child {
+      border-top-left-radius: var(--radius-lg);
+    }
+
+    &:last-child {
+      border-top-right-radius: var(--radius-lg);
+    }
+  }
+
+  .table-row {
+    border-bottom: 1px solid var(--border);
+    transition: background-color 150ms ease;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    tbody &:hover {
+      background-color: var(--muted);
+    }
+  }
+
+  .table-cell {
+    padding: 0.75rem 1rem;
+    vertical-align: middle;
+    color: var(--foreground);
+  }
+
+  tfoot .table-row {
+    background-color: var(--muted);
+    border-top: 1px solid var(--border);
+    font-weight: 500;
+  }
+
+  tfoot .table-cell:first-child {
+    border-bottom-left-radius: var(--radius-lg);
+  }
+
+  tfoot .table-cell:last-child {
+    border-bottom-right-radius: var(--radius-lg);
+  }
+
+  /* -- Container query: compact table in narrow containers -- */
+  @container (max-width: 480px) {
+    .table-head,
+    .table-cell { padding: 0.5rem 0.75rem; font-size: 0.8125rem; }
+  }
+}
+
+/* -- Tabs component -------------------------------------------- */
+
+@layer components {
+  /* -- Default (pill) variant ----------------------------------- */
+  .tab-list {
+    display: inline-flex;
+    align-items: center;
+    background: var(--muted);
+    border-radius: var(--radius-lg);
+    padding: 0.25rem;
+    gap: 0.125rem;
+
+    /* -- Line variant --------------------------------------------- */
+    &[data-variant="line"] {
+      background: transparent;
+      border-radius: 0;
+      padding: 0;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+
+      & .tab-trigger {
+        border-radius: 0;
+        padding: 0.5rem 1rem;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -1px;
+
+        &[aria-selected="true"] {
+          background: transparent;
+          color: var(--foreground);
+          border-bottom-color: var(--primary);
+          box-shadow: none;
+        }
+      }
+    }
+
+    /* -- Vertical orientation ------------------------------------ */
+    &[aria-orientation="vertical"] {
+      flex-direction: column;
+      width: auto;
+
+      & .tab-trigger {
+        justify-content: flex-start;
+        width: 100%;
+      }
+    }
+  }
+
+  .tab-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: calc(var(--radius) * 0.6);
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: none;
+    background: transparent;
+    color: var(--muted-foreground);
+    cursor: pointer;
+    transition: all 150ms ease;
+    white-space: nowrap;
+    outline: none;
+
+    &[aria-selected="true"] {
+      background: var(--background);
+      color: var(--foreground);
+      box-shadow: 0 1px 3px oklch(0 0 0 / 0.08), 0 0 0 1px var(--border);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+  }
+
+  /* -- Vertical layout container ----------------------------- */
+  .tabs:has(.tab-list[aria-orientation="vertical"]) {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+
+    & > .tab-content {
+      margin-top: 0;
+      flex: 1;
+    }
+  }
+
+  /* -- Panel ---------------------------------------------------- */
+  .tab-content {
+    margin-top: 0.75rem;
+
+    &:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &[hidden] { display: none; }
+  }
+
+  /* -- Accessibility ------------------------------------------ */
+
+  @media (prefers-reduced-motion: reduce) {
+    .tab-trigger { transition: none; }
+  }
+
+  @media (forced-colors: active) {
+    .tab-trigger[aria-selected="true"] {
+      border: 2px solid Highlight;
+      box-shadow: none;
+    }
+
+    .tab-list[data-variant="line"] .tab-trigger[aria-selected="true"] {
+      border: none;
+      border-bottom: 2px solid Highlight;
+    }
+  }
+}
+
+/* -- Dialog component ------------------------------------------ */
+
+@layer components {
+  dialog.dialog {
+    border: none;
+    border-radius: var(--radius-xl);
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+    padding: 0;
+    margin: auto;
+    position: fixed;
+    inset: 0;
+    max-width: 28rem;
+    width: calc(100vw - 2rem);
+    max-height: calc(100vh - 2rem);
+    box-shadow: 0 25px 80px oklch(0 0 0 / 0.25), 0 0 0 1px var(--border);
+    opacity: 0;
+    transform: translateY(-0.5rem) scale(0.98);
+    transition: opacity 200ms ease, transform 200ms ease, display 200ms allow-discrete;
+
+    &[open] {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* -- Sizes ------------------------------------------------ */
+    &[data-size="sm"]   { max-width: 24rem; }
+    &[data-size="lg"]   { max-width: 32rem; }
+    &[data-size="xl"]   { max-width: 40rem; }
+    &[data-size="full"] { max-width: calc(100vw - 2rem); }
+
+    /* -- Backdrop --------------------------------------------- */
+    &::backdrop {
+      background: oklch(0 0 0 / 0);
+      backdrop-filter: blur(0px);
+      transition: all 200ms ease, display 200ms allow-discrete;
+    }
+
+    &[open]::backdrop {
+      background: oklch(0 0 0 / 0.45);
+      backdrop-filter: blur(3px);
+    }
+  }
+
+  @starting-style {
+    dialog.dialog[open] {
+      opacity: 0;
+      transform: translateY(-0.5rem) scale(0.98);
+    }
+
+    dialog.dialog[open]::backdrop {
+      background: oklch(0 0 0 / 0);
+      backdrop-filter: blur(0px);
+    }
+  }
+
+  /* -- Content sections ------------------------------------- */
+  .dialog-content { padding: 1.5rem; }
+  .dialog-header  { margin-bottom: 1rem; }
+  .dialog-title   { font-size: 1.0625rem; font-weight: 600; margin: 0 0 0.375rem; letter-spacing: -0.01em; }
+  .dialog-description { font-size: 0.875rem; color: var(--muted-foreground); margin: 0; line-height: 1.6; }
+  .dialog-body    { margin-top: 1rem; }
+  .dialog-footer  { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.5rem; }
+}
+
+@layer components {
+  .statistic {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .statistic-title {
+    margin: 0;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--muted-foreground);
+    letter-spacing: 0.01em;
+  }
+
+  .statistic-value {
+    margin: 0;
+    font-size: 1.875rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+    color: var(--foreground);
+  }
+
+  .statistic-description {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .statistic-trend {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.125rem;
+    font-weight: 500;
+
+    & svg {
+      width: 0.75rem;
+      height: 0.75rem;
+    }
+
+    &[data-trend="up"] {
+      color: #16a34a;
+    }
+
+    &[data-trend="down"] {
+      color: #dc2626;
+    }
+  }
+}
+
+@layer components {
+  .progress {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 100%;
+    height: 0.5rem;
+    border: none;
+    border-radius: 9999px;
+    overflow: hidden;
+    background-color: var(--secondary);
+  }
+
+  /* WebKit (Chrome, Safari, Edge) */
+  .progress::-webkit-progress-bar {
+    background-color: var(--secondary);
+    border-radius: 9999px;
+  }
+
+  .progress::-webkit-progress-value {
+    background-color: var(--primary);
+    border-radius: 9999px;
+    transition: width 300ms ease;
+  }
+
+  /* Firefox */
+  .progress::-moz-progress-bar {
+    background-color: var(--primary);
+    border-radius: 9999px;
+  }
+
+  /* Indeterminate state */
+  .progress:indeterminate {
+    background: linear-gradient(
+      90deg,
+      var(--secondary) 0%,
+      var(--primary) 50%,
+      var(--secondary) 100%
+    );
+    background-size: 200% 100%;
+    animation: progress-indeterminate 1.5s linear infinite;
+  }
+
+  .progress:indeterminate::-webkit-progress-bar {
+    background-color: transparent;
+  }
+
+  .progress:indeterminate::-moz-progress-bar {
+    background-color: transparent;
+  }
+
+  @keyframes progress-indeterminate {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+}
+
+/* ================================================================
+   共享扩展层：追加在 shadcn-lib 原生内容之后，未包裹 @layer，
+   因此优先级天然高于库内 @layer 规则。仅做三件事：
+   ① 基础重置 ② Crm 品牌色 token 覆盖 ③ 仅补库内未提供的少量
+   业务语义徽标变体与页面骨架（导航 / 容器 / 提示条）。
+   ================================================================ */
+
+/* ===== 1. 基础重置 ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+  color: var(--foreground);
+  background: var(--background);
+}
+a { text-decoration: none; color: inherit; }
+ul, ol { list-style: none; }
+button, input, select, dialog { font-family: inherit; }
+/* 通用隐藏工具类（页面脚本统一通过 classList.toggle('hidden') 控制显隐） */
+.hidden { display: none !important; }
+
+/* ===== 2. 主题 token 覆盖（沿用 Crm 现有页面品牌色） ===== */
+:root {
+  --primary: #6F9BC4;
+  --primary-dark: #5a87b0;
+  --primary-light: #E2EBF6;
+  --primary-foreground: #fff;
+
+  --background: #f5f6f8;
+  --foreground: #555;
+  --card: #fff;
+  --card-foreground: #2A2A2A;
+  --popover: #fff;
+  --popover-foreground: #2A2A2A;
+
+  --secondary: #E2EBF6;
+  --secondary-foreground: #6F9BC4;
+  --accent: #E2EBF6;
+  --accent-foreground: #2A2A2A;
+
+  --destructive: #FF5454;
+  --destructive-foreground: #fff;
+  --success: #00BFBF;
+  --orange: #FF8F22;
+
+  --border: #E8E8E8;
+  --border-dark: #D7D7D7;
+  --muted: #F4F4F4;
+  --muted-foreground: #999;
+  --input: #D7D7D7;
+  --ring: #6F9BC4;
+
+  --radius: 6px;
+  --radius-sm: 4px;
+}
+
+/* ===== 3. 徽标语义变体扩展（库内 badge 仅 default/secondary/outline，
+   此处沿用库 token 扩展业务语义：高优先级→destructive、中优先级→warning，
+   状态：待处理→primary、待跟进→warning、已处理→success、已逾期→destructive） ===== */
+.badge[data-variant="destructive"] {
+  background: var(--destructive);
+  color: var(--destructive-foreground);
+}
+.badge[data-variant="warning"] {
+  background: #FFF3E6;
+  color: var(--orange);
+  border: 1px solid #FFDCB8;
+}
+.badge[data-variant="success"] {
+  background: #E0F7F7;
+  color: var(--success);
+  border: 1px solid #B3EBEB;
+}
+.badge[data-variant="primary"] {
+  background: var(--primary-light);
+  color: var(--primary);
+  border: 1px solid #CBDFF2;
+}
+.badge[data-variant="muted"] {
+  background: var(--muted);
+  color: var(--muted-foreground);
+  border: 1px solid var(--border);
+}
+
+/* ===== 4. 页面骨架：容器与顶部导航条（4 个页面共用） ===== */
+.container { max-width: 1240px; margin: 0 auto; padding: 0 20px; }
+
+.app-nav {
+  background: var(--primary);
+  height: 52px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+.app-nav .container { display: flex; align-items: center; height: 100%; }
+.app-brand {
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin-right: 20px;
+  white-space: nowrap;
+}
+.app-nav .nav-link {
+  color: #EAF2FA;
+  font-size: 14px;
+  height: 52px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 18px;
+  white-space: nowrap;
+  transition: background 150ms ease;
+}
+.app-nav .nav-link:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+.app-nav .nav-link.active { background: rgba(255, 255, 255, 0.2); color: #fff; font-weight: 500; }
+.app-nav .nav-right { margin-left: auto; color: #EAF2FA; font-size: 12px; white-space: nowrap; }
+
+/* ===== 5. 操作结果提示条 ===== */
+.flash {
+  position: fixed;
+  left: 50%;
+  bottom: 36px;
+  transform: translateX(-50%);
+  display: none;
+  align-items: center;
+  gap: 8px;
+  background: var(--card);
+  border: 1px solid var(--success);
+  border-left: 4px solid var(--success);
+  border-radius: var(--radius-lg);
+  padding: 12px 20px;
+  font-size: 14px;
+  color: var(--card-foreground);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 200;
+}
+.flash.show { display: flex; }
+.flash-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
+
+/* ================================================================
+   第 4 页页面级样式（在 shadcn-lib 原生内容与共享扩展层之后追加，未包裹 @layer）
+   ================================================================ */
+
+/* ===== 5. 页面通用块 ===== */
+.page-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.page-title { font-size: 20px; font-weight: 600; color: var(--card-foreground); letter-spacing: -0.01em; }
+.page-sub { font-size: 13px; color: var(--muted-foreground); margin-top: 4px; }
+.rule-note { font-size: 12px; color: var(--muted-foreground); margin-top: 6px; line-height: 1.6; }
+.rule-note b { color: var(--primary); font-weight: 500; }
+
+.panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.panel-tight { padding: 12px 16px; }
+
+.filter-row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; }
+.filter-item { display: flex; flex-direction: column; gap: 6px; min-width: 168px; }
+.filter-item.grow { flex: 1; min-width: 240px; }
+.filter-label { font-size: 12px; color: var(--muted-foreground); }
+.filter-actions { display: flex; align-items: center; gap: 8px; padding-bottom: 1px; }
+
+.toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.muted-note { font-size: 12px; color: var(--muted-foreground); }
+
+.stat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 16px; }
+.stat-grid.cols-6 { grid-template-columns: repeat(6, 1fr); }
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+}
+.stat-card.accent-warning { border-color: #FFDCB8; }
+.stat-card.accent-destructive { border-color: #FFC9C9; }
+.stat-card.accent-success { border-color: #B3EBEB; }
+.stat-card.accent-primary { border-color: #CBDFF2; }
+.stat-card .statistic-value { font-size: 26px; }
+
+.card-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px 16px; }
+.card-row-item { display: flex; flex-direction: column; gap: 2px; }
+.card-row-label { font-size: 12px; color: var(--muted-foreground); }
+.card-row-value { font-size: 15px; font-weight: 600; color: var(--card-foreground); }
+
+.overview-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.overview-item { border-right: 1px solid var(--border); padding-right: 16px; }
+.overview-item:last-child { border-right: none; }
+
+.empty { padding: 36px 16px; text-align: center; color: var(--muted-foreground); font-size: 13px; }
+
+/* ===== 6. 表格内元素 ===== */
+.type-cell { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.type-name { width: 100%; font-size: 12px; color: var(--foreground); }
+.customer-cell { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.customer-name { color: var(--primary); cursor: pointer; }
+.customer-name:hover { text-decoration: underline; }
+.multi-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  color: var(--orange);
+  background: #FFF3E6;
+  border: 1px solid #FFDCB8;
+  border-radius: 9999px;
+  padding: 0 6px;
+  white-space: nowrap;
+}
+.cell-note { display: block; font-size: 11px; color: var(--muted-foreground); margin-top: 2px; }
+.op-cell { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.status-cell { display: flex; align-items: center; gap: 6px; }
+.row-disabled .table-cell { color: var(--muted-foreground); }
+.row-highlight { background: #FFFDF3 !important; }
+.progress-cell { display: flex; align-items: center; gap: 8px; min-width: 130px; }
+.progress-cell .progress { flex: 1; }
+.progress-text { font-size: 12px; color: var(--muted-foreground); white-space: nowrap; width: 38px; text-align: right; }
+.sortable { cursor: pointer; user-select: none; white-space: nowrap; }
+.sortable:hover { color: var(--primary); }
+.sortable .arrow { font-size: 10px; margin-left: 2px; color: var(--muted-foreground); }
+.sortable.active { color: var(--primary); }
+.sortable.active .arrow { color: var(--primary); }
+
+.tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  margin-left: 4px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 500;
+  background: rgba(0, 0, 0, 0.07);
+  color: var(--muted-foreground);
+}
+.tab-trigger[aria-selected="true"] .tab-count { background: var(--secondary); color: var(--primary); }
+.tabs { margin-bottom: 16px; }
+
+/* ===== 7. 弹窗内元素 ===== */
+.task-brief {
+  background: var(--muted);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 16px;
+  font-size: 13px;
+}
+.brief-item { display: flex; gap: 6px; }
+.brief-item.full { grid-column: 1 / -1; }
+.brief-k { color: var(--muted-foreground); flex-shrink: 0; }
+.brief-v { color: var(--card-foreground); }
+.field-block { margin-top: 16px; }
+.field-block.hidden { display: none; }
+.field-error.hidden { display: none; }
+
+/* ===== 8. 操作提示条 ===== */
+.flash {
+  position: fixed;
+  left: 50%;
+  bottom: 36px;
+  transform: translateX(-50%);
+  display: none;
+  align-items: center;
+  gap: 8px;
+  background: var(--card);
+  border: 1px solid var(--success);
+  border-left: 4px solid var(--success);
+  border-radius: var(--radius-lg);
+  padding: 12px 20px;
+  font-size: 14px;
+  color: var(--card-foreground);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 200;
+}
+.flash.show { display: flex; }
+.flash-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
+
+/* ===== 9. 响应式 ===== */
+@media (max-width: 1100px) {
+  .stat-grid, .stat-grid.cols-6 { grid-template-columns: repeat(3, 1fr); }
+  .overview-grid { grid-template-columns: repeat(2, 1fr); }
+  .overview-item { border-right: none; }
+}
+@media (max-width: 720px) {
+  .stat-grid, .stat-grid.cols-6 { grid-template-columns: repeat(2, 1fr); }
+  .card-row { grid-template-columns: repeat(2, 1fr); }
+  .app-brand { font-size: 13px; margin-right: 8px; }
+  .app-nav .nav-link { padding: 0 10px; font-size: 13px; }
+  .task-brief { grid-template-columns: 1fr; }
+}
+
+/* ===== 10. 负责人单元格（库内无对应组件，沿用库 token 扩展） ===== */
+.person-cell { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.avatar-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+/* ===== 11. 页面外层 ===== */
+.page { padding: 20px 0 56px; }
+
+/* ===== 12. 报表页专用 ===== */
+.report-actions { display: flex; align-items: flex-end; gap: 8px; }
+.date-input { width: 156px; }
+.panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.panel-title { font-size: 14px; font-weight: 600; color: var(--card-foreground); }
+
+/* 指标卡数值语义色 */
+.stat-card .statistic-value.tone-primary { color: var(--primary); }
+.stat-card .statistic-value.tone-success { color: var(--success); }
+.stat-card .statistic-value.tone-warning { color: var(--orange); }
+.stat-card .statistic-value.tone-destructive { color: var(--destructive); }
+
+/* 表格数值语义色 */
+.success-text { color: var(--success); font-weight: 500; }
+.warning-text { color: var(--orange); font-weight: 500; }
+.destructive-text { color: var(--destructive); font-weight: 500; }
+.cell-strong { font-weight: 600; color: var(--card-foreground); }
+.zero { color: var(--muted-foreground); }
+
+/* 处理率进度条语义色（覆盖库内 .progress 默认 primary 配色） */
+.rate-cell.tone-success .progress::-webkit-progress-value { background-color: var(--success); }
+.rate-cell.tone-success .progress::-moz-progress-bar { background-color: var(--success); }
+.rate-cell.tone-success .progress-text { color: var(--success); font-weight: 500; }
+.rate-cell.tone-muted .progress-text { color: var(--muted-foreground); }
+.rate-cell.tone-primary .progress-text { color: var(--primary); font-weight: 500; }
+.progress-text { width: 42px; }
+
+/* 合计行 */
+tfoot .table-cell { font-weight: 600; color: var(--card-foreground); background: var(--muted); }
+tfoot .table-row:last-child .table-cell { border-bottom: none; }
+
+</style>
+</head>
+<body>
+<div class="app-nav"><div class="container"><span class="app-brand">招投标客户任务中心</span><a class="nav-link" href="任务列表.html">任务列表</a><a class="nav-link" href="任务聚合处理.html">任务聚合处理</a><a class="nav-link" href="领导任务.html">领导任务视图</a><a class="nav-link active" href="任务报表.html">任务处理报表</a><span class="nav-right">当前使用者：张明（客户经理）</span></div></div>
+<div class="page">
+  <div class="container">
+
+    <div class="page-head">
+      <div>
+        <h1 class="page-title">任务处理报表</h1>
+        <p class="page-sub">统计每人当天任务的各状态数量与处理情况</p>
+      </div>
+      <div class="report-actions">
+        <div class="filter-item">
+          <label class="filter-label" for="reportDate">统计日期</label>
+          <input class="input date-input" type="date" id="reportDate" data-size="sm" value="2026-09-16" onchange="onDateChange()">
+        </div>
+        <button class="btn" data-variant="outline" data-size="sm" onclick="exportReport()">导出</button>
+      </div>
+    </div>
+
+    <div class="stat-grid cols-6" id="statGrid"></div>
+
+    <div class="toolbar">
+      <span class="muted-note" id="reportSummary">—</span>
+      <span class="muted-note">统计口径：当天任务总数 = 所选日期内提醒的任务；处理率 = 已处理 / 当天任务总数</span>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-title">按人统计</span>
+        <span class="muted-note">点击表头可切换排序方向（降序 / 升序）；处理率 ≥50% 标 success 色，存在逾期标 destructive 色</span>
+      </div>
+      <div class="table-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="table-head">当前响应负责人</th>
+              <th class="table-head sortable" id="th-p-total" onclick="sortBy('person', 'total')">今日任务数<span class="arrow"></span></th>
+              <th class="table-head sortable" id="th-p-done" onclick="sortBy('person', 'done')">已处理<span class="arrow"></span></th>
+              <th class="table-head sortable" id="th-p-pending" onclick="sortBy('person', 'pending')">待处理<span class="arrow"></span></th>
+              <th class="table-head sortable" id="th-p-follow" onclick="sortBy('person', 'follow')">待跟进<span class="arrow"></span></th>
+              <th class="table-head sortable" id="th-p-overdue" onclick="sortBy('person', 'overdue')">已逾期<span class="arrow"></span></th>
+              <th class="table-head sortable" id="th-p-rate" onclick="sortBy('person', 'rate')">处理率<span class="arrow"></span></th>
+            </tr>
+          </thead>
+          <tbody id="personBody"></tbody>
+          <tfoot id="personFoot"></tfoot>
+        </table>
+      </div>
+      <div class="rule-note">逾期判定：<b>18:00 前</b>发起的任务当天 24:00 截止，超时未处理计为「已逾期」；18:00 后发起的任务计入当天任务，但不纳入次日逾期。</div>
+      <div class="rule-note" id="overdueNote"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-title">按任务类型统计</span>
+        <span class="muted-note">处理率 = 已处理 / 任务数（所选日期）</span>
+      </div>
+      <div class="table-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="table-head">任务类型</th>
+              <th class="table-head sortable" id="th-t-count" onclick="sortBy('type', 'count')">任务数<span class="arrow"></span></th>
+              <th class="table-head sortable" id="th-t-done" onclick="sortBy('type', 'done')">已处理<span class="arrow"></span></th>
+              <th class="table-head sortable" id="th-t-overdue" onclick="sortBy('type', 'overdue')">逾期数<span class="arrow"></span></th>
+              <th class="table-head sortable" id="th-t-rate" onclick="sortBy('type', 'rate')">处理率<span class="arrow"></span></th>
+            </tr>
+          </thead>
+          <tbody id="typeBody"></tbody>
+        </table>
+      </div>
+      <div class="empty hidden" id="typeEmpty">所选日期暂无任务</div>
+    </div>
+
+    <div class="empty hidden" id="emptyTip">所选日期暂无任务，请切换统计日期</div>
+
+  </div>
+</div>
+<div class="flash" id="flash"><span class="flash-dot"></span><span id="flashText"></span></div>
+<script>
+/* =========================================================
+   演示数据与领域规则（招投标行业场景）—— 4 个页面共用
+   ========================================================= */
+var TODAY = '2026-09-16';                                   /* 演示基准日期 */
+var NOW = new Date('2026-09-16T19:30:00');                  /* 演示基准时间 */
+
+var CRM_PAGE = 'file:///D:/workspace/bidcenter-github.github.io/Crm/客户详情页-重构.html';
+
+var CUSTOMERS = [
+  { id: 'C01', name: '华能电力工程有限公司', owner: '张明', region: '华东', contacts: ['李国强', '王海涛', '赵敏'] },
+  { id: 'C02', name: '中建八局第二建设有限公司', owner: '张明', region: '华北', contacts: ['刘建国', '孙倩'] },
+  { id: 'C03', name: '国网江苏电力设计院', owner: '李静', region: '华东', contacts: ['周文军', '陈晓东'] },
+  { id: 'C04', name: '三一重工供应链管理部', owner: '李静', region: '华中', contacts: ['黄伟'] },
+  { id: 'C05', name: '无锡蓝天环保科技有限公司', owner: '王超', region: '华东', contacts: ['徐丽华', '郑凯', '马晓峰'] },
+  { id: 'C06', name: '中铁十四局集团有限公司', owner: '王超', region: '西南', contacts: ['田志强', '何静'] },
+  { id: 'C07', name: '常州银河微电子股份有限公司', owner: '李静', region: '华东', contacts: ['吴敏'] }
+];
+
+var OWNERS = ['张明', '李静', '王超'];
+
+/* 任务分类 / 类型 / 优先级（领域规则） */
+var TYPE_META = {
+  '新发任务':       { category: '新发任务', priority: '中' },
+  '活动报名':       { category: '系统任务', priority: '高' },
+  '会员升级':       { category: '系统任务', priority: '高' },
+  '中标追踪':       { category: '系统任务', priority: '高' },
+  '项目追踪':       { category: '系统任务', priority: '中' },
+  '邮件关闭':       { category: '系统任务', priority: '中' },
+  '功能使用超限':   { category: '系统任务', priority: '中' },
+  '临时任务':       { category: '自建任务', priority: '中' },
+  '重复任务':       { category: '自建任务', priority: '中' },
+  '撞单任务':       { category: '自建任务', priority: '中' }
+};
+
+/* status 为库内实际状态：待处理 / 待跟进 / 已处理；已逾期由逾期规则实时推导 */
+var TASKS = [
+  { id: 'T01', remind: '2026-09-16 09:10', type: '中标追踪', customerId: 'C01', relatedContact: '李国强', actualContact: '', desc: '华能电力智慧运维平台项目已中标公示，需24小时内确认对接人并回填签约计划', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T02', remind: '2026-09-16 09:40', type: '项目追踪', customerId: 'C01', relatedContact: '王海涛', actualContact: '', desc: '智慧运维平台需求调研进度跟进，确认下周三技术交流会时间', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T03', remind: '2026-09-16 08:20', type: '新发任务', customerId: 'C01', relatedContact: '赵敏', actualContact: '李国强', desc: '客户新注册企业账号，需电话介绍会员权益并核实联系人身份', status: '待跟进', result: '下次联系', contactTime: '2026-09-18 10:00', closedAt: '' },
+  { id: 'T04', remind: '2026-09-16 10:05', type: '活动报名', customerId: 'C02', relatedContact: '刘建国', actualContact: '', desc: '邀请参加9月22日华北区招投标合规沙龙，确认参会人数与名单', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T05', remind: '2026-09-16 11:15', type: '会员升级', customerId: 'C02', relatedContact: '孙倩', actualContact: '', desc: '企业会员由标准版升级至专业版的报价方案已发送，等待客户反馈', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T06', remind: '2026-09-16 14:00', type: '邮件关闭', customerId: 'C04', relatedContact: '黄伟', actualContact: '黄伟', desc: '客户邮件咨询发票开具流程，已回复处理路径并关闭', status: '已处理', result: '已处理', contactTime: '', closedAt: '2026-09-16 15:20' },
+  { id: 'T07', remind: '2026-09-16 16:30', type: '功能使用超限', customerId: 'C03', relatedContact: '周文军', actualContact: '', desc: '企业账号本月招标文件下载次数已达上限，需协助申请临时扩容', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T08', remind: '2026-09-16 19:05', type: '临时任务', customerId: 'C05', relatedContact: '徐丽华', actualContact: '', desc: '客户临时要求补充近三年同行业中标案例清单（18:00后发起）', status: '待处理', result: '', contactTime: '', closedAt: '' },
+
+  { id: 'T09', remind: '2026-09-15 09:30', type: '撞单任务', customerId: 'C06', relatedContact: '田志强', actualContact: '', desc: '与华东二部撞单，需确认客户归属并回填归属说明', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T10', remind: '2026-09-15 10:20', type: '中标追踪', customerId: 'C05', relatedContact: '郑凯', actualContact: '', desc: '环保设备采购项目中标结果已出，需追踪客户签约进度', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T11', remind: '2026-09-15 15:40', type: '项目追踪', customerId: 'C01', relatedContact: '李国强', actualContact: '李国强', desc: '方案评审会时间未定，需再次确认并同步技术团队', status: '待跟进', result: '下次联系', contactTime: '2026-09-17 09:00', closedAt: '' },
+  { id: 'T12', remind: '2026-09-15 11:00', type: '新发任务', customerId: 'C04', relatedContact: '黄伟', actualContact: '黄伟', desc: '客户资料核实完成，已分配专属顾问并完成建联', status: '已处理', result: '已处理', contactTime: '', closedAt: '2026-09-15 14:10' },
+  { id: 'T13', remind: '2026-09-15 17:50', type: '活动报名', customerId: 'C03', relatedContact: '陈晓东', actualContact: '', desc: '邀请参加电力设计行业闭门交流会，需确认报名信息', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T14', remind: '2026-09-16 19:20', type: '邮件关闭', customerId: 'C05', relatedContact: '马晓峰', actualContact: '', desc: '客户邮件反馈网站会员权益页面打不开，需核查后回复（18:00后发起，不纳入次日逾期）', status: '待处理', result: '', contactTime: '', closedAt: '' },
+
+  { id: 'T15', remind: '2026-09-17 09:00', type: '会员升级', customerId: 'C06', relatedContact: '何静', actualContact: '', desc: '客户意向升级集团版，需准备多账号管理方案', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T16', remind: '2026-09-17 10:30', type: '新发任务', customerId: 'C03', relatedContact: '周文军', actualContact: '', desc: '新注册子账号待认证，需指导完成企业实名认证', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T17', remind: '2026-09-18 14:00', type: '项目追踪', customerId: 'C02', relatedContact: '刘建国', actualContact: '', desc: '华北区合规沙龙后续回访，确认客户培训需求', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T18', remind: '2026-09-18 09:30', type: '中标追踪', customerId: 'C04', relatedContact: '黄伟', actualContact: '', desc: '备件采购项目开标在即，需跟踪竞争对手报价动态', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T19', remind: '2026-09-19 15:00', type: '临时任务', customerId: 'C01', relatedContact: '王海涛', actualContact: '', desc: '按客户要求整理三季度项目台账并核对合同金额', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T20', remind: '2026-09-17 16:20', type: '功能使用超限', customerId: 'C05', relatedContact: '徐丽华', actualContact: '', desc: '子账号并发登录数超限，需协助调整权限配置', status: '待处理', result: '', contactTime: '', closedAt: '' },
+
+  { id: 'T21', remind: '2026-09-16 09:05', type: '新发任务', customerId: 'C03', relatedContact: '周文军', actualContact: '', desc: '设计院新账号注册待核验，需电话确认企业资质材料', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T22', remind: '2026-09-16 10:40', type: '中标追踪', customerId: 'C03', relatedContact: '陈晓东', actualContact: '陈晓东', desc: '输变电设计项目中标信息已推送，客户确认已收到', status: '已处理', result: '已处理', contactTime: '', closedAt: '2026-09-16 11:30' },
+  { id: 'T23', remind: '2026-09-16 11:30', type: '重复任务', customerId: 'C04', relatedContact: '黄伟', actualContact: '黄伟', desc: '与上周已建任务重复，已合并处理并关闭本条', status: '已处理', result: '已处理', contactTime: '', closedAt: '2026-09-16 12:05' },
+  { id: 'T24', remind: '2026-09-16 13:20', type: '活动报名', customerId: 'C05', relatedContact: '徐丽华', actualContact: '', desc: '邀请参加10月环保行业线上直播，需确认报名人员', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T25', remind: '2026-09-16 15:10', type: '会员升级', customerId: 'C05', relatedContact: '郑凯', actualContact: '郑凯', desc: '会员升级方案已发送，客户内部评估中', status: '待跟进', result: '下次联系', contactTime: '2026-09-17 10:30', closedAt: '' },
+  { id: 'T26', remind: '2026-09-16 16:50', type: '项目追踪', customerId: 'C06', relatedContact: '田志强', actualContact: '', desc: '西南片区项目跟踪表未回填，需提醒客户更新进度', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T27', remind: '2026-09-16 10:15', type: '项目追踪', customerId: 'C07', relatedContact: '吴敏', actualContact: '', desc: '客户新增项目录入跟踪，需确认项目预算区间与采购节点', status: '待处理', result: '', contactTime: '', closedAt: '' }
+];
+
+/* ===== 逾期规则 ===== */
+/* 当天 18:00 前发起 → 逾期截止为当天 24:00，超过未处理即计为已逾期；
+   18:00 后发起 → 当天计入今日任务，但不纳入次日逾期判定。 */
+function remindDate(t) { return t.remind.slice(0, 10); }
+function remindHour(t) { return parseInt(t.remind.slice(11, 13), 10); }
+function isAfter18(t) { return remindHour(t) >= 18; }
+function overdueDeadline(t) {
+  if (isAfter18(t)) return null;
+  var p = remindDate(t).split('-');
+  return new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10) + 1, 0, 0, 0);
+}
+function effStatus(t) {
+  /* 已处理 / 待跟进 由人工处理结果决定，不再参与逾期判定；
+     仅「待处理」且已过逾期截止时间(当天24:00)的任务实时推导为「已逾期」。 */
+  if (t.status !== '待处理') return t.status;
+  var dl = overdueDeadline(t);
+  if (dl && NOW.getTime() >= dl.getTime()) return '已逾期';
+  return '待处理';
+}
+function isUnfinished(t) { return effStatus(t) !== '已处理'; }
+
+/* ===== 通用工具 ===== */
+function customerById(id) { for (var i = 0; i < CUSTOMERS.length; i++) { if (CUSTOMERS[i].id === id) return CUSTOMERS[i]; } return null; }
+function tasksOfCustomer(id) { return TASKS.filter(function (t) { return t.customerId === id; }); }
+function unfinishedOfCustomer(id) { return tasksOfCustomer(id).filter(isUnfinished); }
+function ownerOfCustomer(id) { var c = customerById(id); return c ? c.owner : ''; }
+function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function pct(a, b) { return b > 0 ? Math.round(a / b * 100) : 0; }
+
+var STATUS_VARIANT = { '待处理': 'primary', '待跟进': 'warning', '已处理': 'success', '已逾期': 'destructive' };
+var PRIORITY_VARIANT = { '高': 'destructive', '中': 'warning' };
+
+function badgeHtml(text, variant) { return '<span class="badge" data-variant="' + variant + '">' + text + '</span>'; }
+function statusBadge(s) { return badgeHtml(s, STATUS_VARIANT[s]); }
+function priorityBadge(p) { return badgeHtml(p + '优先级', PRIORITY_VARIANT[p]); }
+function categoryBadge(c) { return badgeHtml(c, 'muted'); }
+function typeCell(t) {
+  var m = TYPE_META[t.type];
+  return '<div class="type-cell">' + categoryBadge(m.category) + priorityBadge(m.priority) +
+         '<span class="type-name">' + t.type + '</span></div>';
+}
+function customerCell(c) {
+  var n = unfinishedOfCustomer(c.id).length;
+  var html = '<div class="customer-cell"><span class="customer-name" onclick="openCustomer(\'' + c.id + '\')">' + c.name + '</span>';
+  if (n > 1) html += badgeHtml('该客户有 ' + n + ' 条未完成', 'warning');
+  html += '</div>';
+  return html;
+}
+function remindCell(t) {
+  var html = '<span>' + t.remind + '</span>';
+  if (isAfter18(t)) html += '<span class="cell-note">18:00后发起，不纳入逾期判定</span>';
+  return html;
+}
+function progressHtml(rate) {
+  return '<div class="progress-cell"><progress class="progress" max="100" value="' + rate + '"></progress>' +
+         '<span class="progress-text">' + rate + '%</span></div>';
+}
+function openCustomer(cid) {
+  /* 「查看客户」新窗口打开 Crm 客户详情页 */
+  var c = customerById(cid);
+  var url = encodeURI(CRM_PAGE) + '?customerId=' + encodeURIComponent(c.id) +
+            '&customer=' + encodeURIComponent(c.name) + '&from=任务列表';
+  window.open(url, '_blank');
+}
+function flash(msg) {
+  var el = document.getElementById('flash');
+  if (!el) return;
+  document.getElementById('flashText').textContent = msg;
+  el.classList.add('show');
+  window.clearTimeout(window.__flashTimer);
+  window.__flashTimer = window.setTimeout(function () { el.classList.remove('show'); }, 2800);
+}
+function query(name) {
+  var m = new RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+  return m ? decodeURIComponent(m[1]) : '';
+}
+
+
+/* ================= 任务处理报表逻辑 ================= */
+var reportDate = TODAY;
+var personSort = { key: 'total', dir: 'desc' };
+var typeSort = { key: 'count', dir: 'desc' };
+
+/* 统计范围：提醒时间落在所选日期的任务（默认今天） */
+function scopeTasks() {
+  return TASKS.filter(function (t) { return remindDate(t) === reportDate; });
+}
+function metricsOf(list) {
+  var m = { total: list.length, done: 0, pending: 0, follow: 0, overdue: 0, rate: 0 };
+  list.forEach(function (t) {
+    var s = effStatus(t);
+    if (s === '已处理') m.done++;
+    else if (s === '待跟进') m.follow++;
+    else if (s === '已逾期') m.overdue++;
+    else m.pending++;
+  });
+  m.rate = pct(m.done, m.total);
+  return m;
+}
+function dateLabel() {
+  return reportDate + (reportDate === TODAY ? '（今天）' : '');
+}
+/* 语义色：处理率 ≥50% → success；>0 → primary；=0 → muted */
+function rateTone(rate) { return rate >= 50 ? 'success' : (rate > 0 ? 'primary' : 'muted'); }
+function rateCell(rate) {
+  return '<div class="progress-cell rate-cell tone-' + rateTone(rate) + '">' +
+    '<progress class="progress" max="100" value="' + rate + '"></progress>' +
+    '<span class="progress-text">' + rate + '%</span></div>';
+}
+function numCell(v, tone) {
+  if (!v) return '<span class="zero">0</span>';
+  return '<span class="' + (tone || 'cell-strong') + '">' + v + '</span>';
+}
+
+/* ===== ① 指标卡行 ===== */
+/* 历史遗留：所选日期之前发起、至今仍未处理且已逾期的任务 */
+function backlogTasks() {
+  return TASKS.filter(function (t) { return remindDate(t) < reportDate && effStatus(t) === '已逾期'; });
+}
+function renderStats(m) {
+  var bl = backlogTasks();
+  var cards = [
+    { title: reportDate === TODAY ? '今日任务总数' : '当日任务总数', value: m.total, tone: 'primary',
+      cls: 'accent-primary', desc: '所选日期：' + dateLabel() },
+    { title: '已处理', value: m.done, tone: 'success', cls: 'accent-success',
+      desc: '任务已关闭，占当天任务 ' + m.rate + '%' },
+    { title: '待处理', value: m.pending, tone: '', cls: '',
+      desc: '尚未联系客户' },
+    { title: '待跟进', value: m.follow, tone: 'warning', cls: 'accent-warning',
+      desc: '已设置下次联系时间' },
+    { title: '已逾期', value: m.overdue, tone: 'destructive', cls: 'accent-destructive',
+      desc: '18:00 前发起且超 24:00 未处理' + (bl.length ? '，另有历史遗留 ' + bl.length + ' 条' : '') },
+    { title: '当日处理率', value: m.rate + '%', tone: rateTone(m.rate), cls: 'accent-primary',
+      desc: '已处理 ' + m.done + ' / 当天任务总数 ' + m.total }
+  ];
+  var html = '';
+  cards.forEach(function (c) {
+    html += '<div class="stat-card ' + c.cls + '"><div class="statistic">' +
+      '<div class="statistic-title">' + c.title + '</div>' +
+      '<div class="statistic-value' + (c.tone ? ' tone-' + c.tone : '') + '">' + c.value + '</div>' +
+      '<div class="statistic-description">' + c.desc + '</div>' +
+    '</div></div>';
+  });
+  document.getElementById('statGrid').innerHTML = html;
+}
+
+/* ===== ② 按人统计表 ===== */
+function personRows() {
+  var rows = OWNERS.map(function (o) {
+    var m = metricsOf(scopeTasks().filter(function (t) { return ownerOfCustomer(t.customerId) === o; }));
+    m.owner = o;
+    return m;
+  });
+  rows.sort(function (a, b) { return dirCmp(a[personSort.key], b[personSort.key], personSort.dir); });
+  return rows;
+}
+function renderPerson(all) {
+  var rows = personRows();
+  var html = '';
+  rows.forEach(function (r) {
+    html += '<tr class="table-row">' +
+      '<td class="table-cell"><div class="person-cell"><span class="avatar-dot">' + r.owner.slice(0, 1) + '</span>' + r.owner + '</div></td>' +
+      '<td class="table-cell">' + numCell(r.total) + '</td>' +
+      '<td class="table-cell">' + numCell(r.done, 'success-text') + '</td>' +
+      '<td class="table-cell">' + numCell(r.pending) + '</td>' +
+      '<td class="table-cell">' + numCell(r.follow, 'warning-text') + '</td>' +
+      '<td class="table-cell">' + numCell(r.overdue, 'destructive-text') + '</td>' +
+      '<td class="table-cell">' + rateCell(r.rate) + '</td>' +
+    '</tr>';
+  });
+  document.getElementById('personBody').innerHTML = html;
+  document.getElementById('personFoot').innerHTML = '<tr class="table-row">' +
+    '<td class="table-cell">合计（' + rows.length + ' 位负责人）</td>' +
+    '<td class="table-cell">' + numCell(all.total) + '</td>' +
+    '<td class="table-cell">' + numCell(all.done, 'success-text') + '</td>' +
+    '<td class="table-cell">' + numCell(all.pending) + '</td>' +
+    '<td class="table-cell">' + numCell(all.follow, 'warning-text') + '</td>' +
+    '<td class="table-cell">' + numCell(all.overdue, 'destructive-text') + '</td>' +
+    '<td class="table-cell">' + rateCell(all.rate) + '</td>' +
+  '</tr>';
+}
+
+/* ===== ③ 按任务类型统计表 ===== */
+function typeRows() {
+  var map = {};
+  scopeTasks().forEach(function (t) {
+    if (!map[t.type]) map[t.type] = { type: t.type, count: 0, done: 0, overdue: 0, rate: 0 };
+    var m = map[t.type];
+    m.count++;
+    var s = effStatus(t);
+    if (s === '已处理') m.done++;
+    if (s === '已逾期') m.overdue++;
+  });
+  var rows = Object.keys(map).map(function (k) {
+    map[k].rate = pct(map[k].done, map[k].count);
+    return map[k];
+  });
+  rows.sort(function (a, b) { return dirCmp(a[typeSort.key], b[typeSort.key], typeSort.dir); });
+  return rows;
+}
+function renderType() {
+  var rows = typeRows();
+  var html = '';
+  rows.forEach(function (r) {
+    var meta = TYPE_META[r.type] || { category: '' };
+    html += '<tr class="table-row">' +
+      '<td class="table-cell"><div class="type-cell">' + categoryBadge(meta.category) +
+        '<span class="type-name">' + r.type + '</span></div></td>' +
+      '<td class="table-cell">' + numCell(r.count) + '</td>' +
+      '<td class="table-cell">' + numCell(r.done, 'success-text') + '</td>' +
+      '<td class="table-cell">' + numCell(r.overdue, 'destructive-text') + '</td>' +
+      '<td class="table-cell">' + rateCell(r.rate) + '</td>' +
+    '</tr>';
+  });
+  document.getElementById('typeBody').innerHTML = html;
+  document.getElementById('typeEmpty').classList.toggle('hidden', rows.length > 0);
+}
+
+/* ===== 排序（点击表头升降序切换） ===== */
+function dirCmp(a, b, dir) {
+  var d = (a || 0) - (b || 0);
+  return dir === 'desc' ? -d : d;
+}
+function sortBy(group, key) {
+  var st = group === 'person' ? personSort : typeSort;
+  if (st.key === key) st.dir = (st.dir === 'desc' ? 'asc' : 'desc');
+  else { st.key = key; st.dir = 'desc'; }
+  render();
+}
+function updateArrows() {
+  [['p', personSort], ['t', typeSort]].forEach(function (pair) {
+    var prefix = pair[0], st = pair[1];
+    ['total', 'done', 'pending', 'follow', 'overdue', 'rate', 'count'].forEach(function (k) {
+      var th = document.getElementById('th-' + prefix + '-' + k);
+      if (!th) return;
+      var on = st.key === k;
+      th.className = 'table-head sortable' + (on ? ' active' : '');
+      th.innerHTML = th.innerHTML.replace(/<span class="arrow">.*<\/span>/,
+        '<span class="arrow">' + (on ? (st.dir === 'desc' ? '▼' : '▲') : '') + '</span>');
+    });
+  });
+}
+
+/* ===== 交互 ===== */
+function onDateChange() {
+  var v = document.getElementById('reportDate').value;
+  reportDate = v || TODAY;
+  render();
+  flash('统计日期已切换为 ' + dateLabel());
+}
+function exportReport() {
+  flash('导出为原型占位：正式版将按当前统计口径导出报表文件');
+}
+
+function renderOverdueNote() {
+  var bl = backlogTasks();
+  var el = document.getElementById('overdueNote');
+  if (!el) return;
+  if (!bl.length) {
+    el.innerHTML = '逾期关注：所选日期之前无遗留未处理的逾期任务。';
+    return;
+  }
+  var byOwner = {};
+  bl.forEach(function (t) {
+    var o = ownerOfCustomer(t.customerId);
+    byOwner[o] = (byOwner[o] || 0) + 1;
+  });
+  var detail = Object.keys(byOwner).map(function (o) { return o + ' ' + byOwner[o] + ' 条'; }).join('、');
+  el.innerHTML = '逾期关注：另有 <span class="destructive-text">' + bl.length + '</span> 条所选日期之前发起、仍未处理的历史任务处于「已逾期」状态（' +
+    detail + '），可在上方日期选择中切换到更早日期查看对应统计。';
+}
+function render() {
+  var all = metricsOf(scopeTasks());
+  renderStats(all);
+  renderPerson(all);
+  renderType();
+  renderOverdueNote();
+  updateArrows();
+  document.getElementById('reportSummary').textContent =
+    '统计日期：' + dateLabel() + ' · ' + OWNERS.length + ' 位负责人 / ' + all.total + ' 条任务 · 已处理 ' + all.done +
+    ' · 待处理 ' + all.pending + ' · 待跟进 ' + all.follow + ' · 已逾期 ' + all.overdue + ' · 处理率 ' + all.rate + '%';
+  document.getElementById('emptyTip').classList.toggle('hidden', all.total > 0);
+  var tables = document.querySelectorAll('.panel .table-container');
+  for (var i = 0; i < tables.length; i++) tables[i].style.display = all.total > 0 ? '' : 'none';
+}
+
+function init() {
+  var dEl = document.getElementById('reportDate');
+  if (!dEl.value) dEl.value = TODAY;
+  reportDate = dEl.value;
+  render();
+}
+init();
+</script>
+</body>
+</html>

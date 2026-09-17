@@ -1,0 +1,2304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>任务列表 · 任务系统原型（shadcn-lib 默认主题）</title>
+<style>
+/* ==== SRC[01]: theme/default-semantic-tokens.css ==== */
+/**
+ * shadcn-html — Token Layer
+ * Semantic CSS custom properties matching the tweakcn.com export format.
+ * OKLCH color space. Full surface/foreground pair model.
+ *
+ * Export a theme from tweakcn.com, replace the :root and .dark blocks,
+ * and every component rethemes instantly.
+ */
+
+:root {
+  color-scheme: light;
+
+  /* -- Surface / Foreground pairs ------------------------------ */
+  --background:              oklch(1 0 0);
+  --foreground:              oklch(0.1450 0 0);
+
+  --card:                    oklch(1 0 0);
+  --card-foreground:         oklch(0.1450 0 0);
+
+  --popover:                 oklch(1 0 0);
+  --popover-foreground:      oklch(0.1450 0 0);
+
+  --primary:                 oklch(0.2050 0 0);
+  --primary-foreground:      oklch(0.9850 0 0);
+
+  --secondary:               oklch(0.9700 0 0);
+  --secondary-foreground:    oklch(0.2050 0 0);
+
+  --muted:                   oklch(0.9700 0 0);
+  --muted-foreground:        oklch(0.5560 0 0);
+
+  --accent:                  oklch(0.9700 0 0);
+  --accent-foreground:       oklch(0.2050 0 0);
+
+  --destructive:             oklch(0.5770 0.2450 27.3250);
+  --destructive-foreground:  oklch(1 0 0);
+
+  /* -- Utility tokens ------------------------------------------- */
+  --border:                  oklch(0.9220 0 0);
+  --input:                   oklch(0.9220 0 0);
+  --ring:                    oklch(0.7080 0 0);
+
+  /* -- Sidebar tokens ------------------------------------------- */
+  --sidebar:                 oklch(0.9850 0 0);
+  --sidebar-foreground:      oklch(0.1450 0 0);
+  --sidebar-primary:         oklch(0.2050 0 0);
+  --sidebar-primary-foreground: oklch(0.9850 0 0);
+  --sidebar-accent:          oklch(0.9700 0 0);
+  --sidebar-accent-foreground: oklch(0.2050 0 0);
+  --sidebar-border:          oklch(0.9220 0 0);
+  --sidebar-ring:            oklch(0.7080 0 0);
+
+
+  /* -- Chart tokens --------------------------------------------- */
+  --chart-1:                 oklch(0.8100 0.1000 252);
+  --chart-2:                 oklch(0.6200 0.1900 260);
+  --chart-3:                 oklch(0.5500 0.2200 263);
+  --chart-4:                 oklch(0.4900 0.2200 264);
+  --chart-5:                 oklch(0.4200 0.1800 266);
+
+  /* -- Typography tokens ---------------------------------------- */
+  --font-sans:  ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-mono:  ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* -- Radius --------------------------------------------------- */
+  --radius:                  0.625rem;
+  /* Derived — matches tweakcn/shadcn scale */
+  --radius-sm:               calc(var(--radius) - 4px);
+  --radius-md:               calc(var(--radius) - 2px);
+  --radius-lg:               var(--radius);
+  --radius-xl:               calc(var(--radius) + 4px);
+
+  /* -- Spacing -------------------------------------------------- */
+  --spacing:                 0.25rem;
+
+  /* -- Tracking ------------------------------------------------- */
+  --tracking-normal:         0em;
+
+  /* -- Shadow scale --------------------------------------------- */
+  --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+  --shadow-xs:  0 1px 3px 0px hsl(0 0% 0% / 0.05);
+  --shadow-sm:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+  --shadow:     0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+  --shadow-md:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
+  --shadow-lg:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
+  --shadow-xl:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
+  --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+}
+
+/* -- Dark mode -------------------------------------------------- */
+.dark {
+  color-scheme: dark;
+
+  --background:              oklch(0.1450 0 0);
+  --foreground:              oklch(0.9850 0 0);
+
+  --card:                    oklch(0.2050 0 0);
+  --card-foreground:         oklch(0.9850 0 0);
+
+  --popover:                 oklch(0.2690 0 0);
+  --popover-foreground:      oklch(0.9850 0 0);
+
+  --primary:                 oklch(0.9220 0 0);
+  --primary-foreground:      oklch(0.2050 0 0);
+
+  --secondary:               oklch(0.2690 0 0);
+  --secondary-foreground:    oklch(0.9850 0 0);
+
+  --muted:                   oklch(0.2690 0 0);
+  --muted-foreground:        oklch(0.7080 0 0);
+
+  --accent:                  oklch(0.3710 0 0);
+  --accent-foreground:       oklch(0.9850 0 0);
+
+  --destructive:             oklch(0.7040 0.1910 22.2160);
+  --destructive-foreground:  oklch(0.9850 0 0);
+
+  --border:                  oklch(0.2750 0 0);
+  --input:                   oklch(0.3250 0 0);
+  --ring:                    oklch(0.5560 0 0);
+
+  --sidebar:                 oklch(0.2050 0 0);
+  --sidebar-foreground:      oklch(0.9850 0 0);
+  --sidebar-primary:         oklch(0.4880 0.2430 264.3760);
+  --sidebar-primary-foreground: oklch(0.9850 0 0);
+  --sidebar-accent:          oklch(0.2690 0 0);
+  --sidebar-accent-foreground: oklch(0.9850 0 0);
+  --sidebar-border:          oklch(0.2750 0 0);
+  --sidebar-ring:            oklch(0.4390 0 0);
+
+  --chart-1:                 oklch(0.8100 0.1000 252);
+  --chart-2:                 oklch(0.6200 0.1900 260);
+  --chart-3:                 oklch(0.5500 0.2200 263);
+  --chart-4:                 oklch(0.4900 0.2200 264);
+  --chart-5:                 oklch(0.4200 0.1800 266);
+}
+/* ==== SRC[02]: components/typography/typography.css ==== */
+/* -- Typography component --------------------------------------- */
+
+/* -- Base text ---------------------------------------------- */
+/* Sets the default font size for the entire page.            */
+/* All typography classes are sized relative to this baseline. */
+@layer base {
+  body {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+}
+
+@layer components {
+  /* -- Headings ---------------------------------------------- */
+  .h1 {
+    scroll-margin-top: 5rem;
+    font-size: 2.25rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    text-wrap: balance;
+    color: var(--foreground);
+  }
+
+  .h2 {
+    scroll-margin-top: 5rem;
+    font-size: 1.875rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    text-wrap: balance;
+    color: var(--foreground);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
+
+    &:first-child { margin-top: 0; }
+  }
+
+  .h3 {
+    scroll-margin-top: 5rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+    text-wrap: balance;
+    color: var(--foreground);
+  }
+
+  .h4 {
+    scroll-margin-top: 5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-wrap: balance;
+    color: var(--foreground);
+  }
+
+  /* -- Paragraph --------------------------------------------- */
+  .p {
+    font-size: 0.875rem;
+    line-height: 1.75;
+    text-wrap: pretty;
+    color: var(--foreground);
+
+    &:not(:first-child) { margin-top: 1.5rem; }
+  }
+
+  /* -- Lead --------------------------------------------------- */
+  .lead {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: var(--muted-foreground);
+    text-wrap: pretty;
+  }
+
+  /* -- Large -------------------------------------------------- */
+  .large {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--foreground);
+  }
+
+  /* -- Small -------------------------------------------------- */
+  .small {
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--foreground);
+  }
+
+  /* -- Muted -------------------------------------------------- */
+  .muted {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+  }
+
+  /* -- Blockquote --------------------------------------------- */
+  .blockquote {
+    margin-top: 1.5rem;
+    border-inline-start: 2px solid var(--border);
+    padding-inline-start: 1.5rem;
+    font-style: italic;
+    hanging-punctuation: first last;
+    color: var(--foreground);
+
+    & p { margin: 0; }
+  }
+
+  /* -- Inline code -------------------------------------------- */
+  .code {
+    position: relative;
+    border-radius: var(--radius-sm);
+    background: var(--muted);
+    padding: 0.2rem 0.3rem;
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    font-weight: 600;
+    color: var(--foreground);
+  }
+
+  /* -- Accessibility ------------------------------------------ */
+
+  @media (prefers-contrast: more) {
+    .h1, .h2, .h3, .h4 {
+      letter-spacing: 0;
+    }
+
+    .blockquote {
+      border-inline-start-width: 3px;
+    }
+
+    .code {
+      outline: 1px solid var(--border);
+    }
+
+    .muted {
+      color: var(--foreground);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .blockquote {
+      border-inline-start-color: CanvasText;
+    }
+
+    .code {
+      background: Canvas;
+      outline: 1px solid CanvasText;
+      color: CanvasText;
+    }
+  }
+}
+/* ==== SRC[03]: components/button/button.css ==== */
+/* -- Button component ------------------------------------------ */
+
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--font-sans);
+    line-height: 1;
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 150ms ease;
+    outline: none;
+    flex-shrink: 0;
+    height: 2.25rem;
+    padding: 0 1rem;
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+
+    & svg {
+      pointer-events: none;
+      flex-shrink: 0;
+
+      &:not([class*="size-"]) { width: 1rem; height: 1rem; }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &:disabled, &[aria-disabled="true"] {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    /* -- Variants -------------------------------------------- */
+    &[data-variant="default"] {
+      background-color: var(--primary);
+      color: var(--primary-foreground);
+
+      &:hover { opacity: 0.9; }
+    }
+
+    &[data-variant="secondary"] {
+      background-color: var(--secondary);
+      color: var(--secondary-foreground);
+
+      &:hover { opacity: 0.8; }
+    }
+
+    &[data-variant="outline"] {
+      background-color: var(--background);
+      color: var(--foreground);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-xs);
+
+      &:hover {
+        background-color: var(--accent);
+        color: var(--accent-foreground);
+      }
+    }
+
+    &[data-variant="ghost"] {
+      background-color: transparent;
+      color: var(--foreground);
+      border-color: transparent;
+
+      &:hover {
+        background-color: var(--accent);
+        color: var(--accent-foreground);
+      }
+    }
+
+    &[data-variant="destructive"] {
+      background-color: var(--destructive);
+      color: var(--destructive-foreground);
+
+      &:hover { opacity: 0.9; }
+    }
+
+    &[data-variant="link"] {
+      background-color: transparent;
+      color: var(--primary);
+      height: auto;
+      padding: 0;
+      text-underline-offset: 4px;
+
+      &:hover { text-decoration: underline; }
+    }
+
+    /* -- Sizes ----------------------------------------------- */
+    &[data-size="xs"]      { height: 1.75rem; padding: 0 0.5rem;  font-size: 0.75rem; border-radius: var(--radius-sm); }
+    &[data-size="sm"]      { height: 2rem;    padding: 0 0.75rem; font-size: 0.8125rem; }
+    &[data-size="lg"]      { height: 2.75rem; padding: 0 2rem;    font-size: 1rem; }
+    &[data-size="icon"]    { height: 2.25rem; width: 2.25rem;  padding: 0; }
+    &[data-size="icon-xs"] { height: 1.75rem; width: 1.75rem;  padding: 0; border-radius: var(--radius-sm); }
+    &[data-size="icon-sm"] { height: 2rem;    width: 2rem;     padding: 0; }
+    &[data-size="icon-lg"] { height: 2.75rem; width: 2.75rem;  padding: 0; }
+  }
+
+  /* -- Accessibility ------------------------------------------ */
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn { transition: none; }
+  }
+
+  @media (prefers-contrast: more) {
+    .btn {
+      border: 2px solid transparent;
+
+      &[data-variant="default"],
+      &[data-variant="secondary"],
+      &[data-variant="destructive"] {
+        border-color: currentColor;
+      }
+
+      &[data-variant="outline"],
+      &[data-variant="ghost"] {
+        border-color: var(--foreground);
+      }
+    }
+  }
+
+  @media (forced-colors: active) {
+    .btn {
+      border: 1px solid ButtonText;
+
+      &:disabled, &[aria-disabled="true"] {
+        border-color: GrayText;
+        color: GrayText;
+      }
+    }
+  }
+}
+/* ==== SRC[04]: components/badge/badge.css ==== */
+/* -- Badge component ------------------------------------------- */
+
+@layer components {
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+    padding: 0.125rem 0.625rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    line-height: 1.5rem;
+
+    &[data-variant="outline"] {
+      border: 1px solid var(--border);
+      color: var(--muted-foreground);
+    }
+
+    &[data-variant="secondary"] {
+      background: var(--secondary);
+      color: var(--secondary-foreground);
+    }
+
+    &[data-variant="default"] {
+      background: var(--primary);
+      color: var(--primary-foreground);
+    }
+  }
+}
+/* ==== SRC[05]: components/card/card.css ==== */
+/* -- Card component -------------------------------------------- */
+
+@layer components {
+  .card {
+    background-color: var(--card);
+    color: var(--card-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    container-type: inline-size;
+  }
+
+  .card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1.5rem;
+    padding-bottom: 0;
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+
+  .card-description {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .card-content {
+    padding: 1.5rem;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    padding-top: 0;
+  }
+
+  /* -- Container query: compact card in narrow containers -- */
+  @container (max-width: 280px) {
+    .card-header { padding: 1rem; padding-bottom: 0; }
+    .card-content { padding: 1rem; }
+    .card-footer { padding: 1rem; padding-top: 0; }
+    .card-title { font-size: 1rem; }
+  }
+}
+/* ==== SRC[06]: components/input/input.css ==== */
+/* -- Input component ------------------------------------------- */
+
+@layer components {
+  .input {
+    height: 2.5rem;
+    width: 100%;
+    border: 1px solid var(--input);
+    border-radius: var(--radius-md);
+    background: var(--background);
+    padding: 0 0.75rem;
+    font-size: 0.875rem;
+    font-family: var(--font-sans);
+    color: var(--foreground);
+    outline: none;
+    box-shadow: var(--shadow-xs);
+    transition: border-color 150ms, box-shadow 150ms;
+
+    &:focus {
+      border-color: var(--ring);
+      box-shadow: 0 0 0 2px oklch(from var(--ring) l c h / 0.2);
+    }
+
+    &::placeholder { color: var(--muted-foreground); }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* -- Readonly state -------------------------------------- */
+    &:read-only:not([type="file"]) {
+      background: var(--muted);
+      cursor: default;
+      opacity: 0.7;
+
+      &:focus {
+        border-color: var(--input);
+        box-shadow: var(--shadow-xs);
+      }
+    }
+
+    /* -- Invalid state --------------------------------------- */
+    &:is([aria-invalid="true"], :user-invalid) {
+      border-color: var(--destructive);
+
+      &:focus {
+        border-color: var(--destructive);
+        box-shadow: 0 0 0 2px oklch(from var(--destructive) l c h / 0.2);
+      }
+    }
+
+    /* -- File input ------------------------------------------ */
+    &[type="file"] {
+      padding: 0;
+      font-size: 0.875rem;
+
+      &::file-selector-button {
+        height: 100%;
+        border: none;
+        border-right: 1px solid var(--input);
+        background: var(--muted);
+        color: var(--foreground);
+        font-size: 0.875rem;
+        font-weight: 500;
+        font-family: var(--font-sans);
+        padding: 0 0.75rem;
+        margin-right: 0.75rem;
+        cursor: pointer;
+        transition: background 150ms;
+
+        &:hover { background: var(--accent); }
+      }
+    }
+
+    /* -- Sizes ----------------------------------------------- */
+    &[data-size="sm"] { height: 2rem;    padding: 0 0.625rem; font-size: 0.8125rem; }
+    &[data-size="lg"] { height: 2.75rem; padding: 0 1rem;     font-size: 1rem; }
+  }
+
+  /* -- Auto-growing textarea --------------------------------- */
+  textarea.input {
+    field-sizing: content;
+    min-height: 5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  /* -- Field description ------------------------------------- */
+  .field-description {
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    margin: 0.375rem 0 0;
+  }
+
+  /* -- Field error ------------------------------------------- */
+  .field-error {
+    font-size: 0.8125rem;
+    color: var(--destructive);
+    margin: 0.375rem 0 0;
+  }
+
+  /* -- Accessibility ---------------------------------------- */
+  @media (prefers-reduced-motion: reduce) {
+    .input {
+      transition: none;
+    }
+
+    .input[type="file"]::file-selector-button {
+      transition: none;
+    }
+  }
+
+  @media (prefers-contrast: more) {
+    .input {
+      border-width: 2px;
+    }
+
+    .input:disabled {
+      opacity: 0.7;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .input {
+      border-color: ButtonBorder;
+      color: ButtonText;
+      background: Field;
+    }
+
+    .input:focus {
+      outline: 2px solid Highlight;
+      outline-offset: 1px;
+    }
+
+    .input:disabled {
+      opacity: 1;
+      color: GrayText;
+      border-color: GrayText;
+    }
+
+    .input:is([aria-invalid="true"], :user-invalid) {
+      border-color: LinkText;
+    }
+
+    .field-error {
+      color: LinkText;
+    }
+  }
+}
+/* ==== SRC[07]: components/label/label.css ==== */
+/* -- Label component -------------------------------------------- */
+
+@layer components {
+  .label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--font-sans);
+    line-height: 1;
+    color: var(--foreground);
+    display: block;
+    margin-bottom: 0.375rem;
+    cursor: default;
+
+    /* Disabled — explicit attribute */
+    &[data-disabled] {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    /* Disabled — auto-detect via adjacent disabled control */
+    &:has(+ :disabled),
+    &:has(+ [data-disabled]) {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+  }
+
+  /* -- Hint text (optional, required indicators) ----------- */
+  .label-hint {
+    font-weight: 400;
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+  }
+
+  /* -- Accessibility ---------------------------------------- */
+  @media (prefers-contrast: more) {
+    .label[data-disabled],
+    .label:has(+ :disabled),
+    .label:has(+ [data-disabled]) {
+      opacity: 0.85;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .label {
+      color: LinkText;
+    }
+
+    .label[data-disabled],
+    .label:has(+ :disabled),
+    .label:has(+ [data-disabled]) {
+      opacity: 1;
+      color: GrayText;
+    }
+  }
+}
+/* ==== SRC[08]: components/select/select.css ==== */
+/* -- Select component ------------------------------------------- */
+
+@layer components {
+  .select {
+    appearance: none;
+    height: 2.5rem;
+    width: 100%;
+    border: 1px solid var(--input);
+    border-radius: var(--radius-md);
+    background: var(--background);
+    padding: 0 2rem 0 0.75rem;
+    font-size: 0.875rem;
+    font-family: var(--font-sans);
+    color: var(--foreground);
+    outline: none;
+    box-shadow: var(--shadow-xs);
+    cursor: pointer;
+    transition: border-color 150ms, box-shadow 150ms;
+
+    /* Custom chevron */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1rem;
+
+    &:focus {
+      border-color: var(--ring);
+      box-shadow: 0 0 0 2px oklch(from var(--ring) l c h / 0.2);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &:is([aria-invalid="true"], :user-invalid) {
+      border-color: var(--destructive);
+
+      &:focus {
+        border-color: var(--destructive);
+        box-shadow: 0 0 0 2px oklch(from var(--destructive) l c h / 0.2);
+      }
+    }
+
+    /* -- Sizes ----------------------------------------------- */
+    &[data-size="sm"] { height: 2rem;    padding-left: 0.625rem; font-size: 0.8125rem; }
+    &[data-size="lg"] { height: 2.75rem; padding-left: 1rem;     font-size: 1rem; }
+  }
+}
+/* ==== SRC[09]: components/table/table.css ==== */
+@layer components {
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    container-type: inline-size;
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    text-align: left;
+    caption-side: bottom;
+  }
+
+  .table-caption {
+    padding: 0.75rem 1rem;
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    text-align: center;
+  }
+
+  .table-head {
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    color: var(--muted-foreground);
+    background-color: var(--muted);
+    white-space: nowrap;
+    border-bottom: 1px solid var(--border);
+
+    &:first-child {
+      border-top-left-radius: var(--radius-lg);
+    }
+
+    &:last-child {
+      border-top-right-radius: var(--radius-lg);
+    }
+  }
+
+  .table-row {
+    border-bottom: 1px solid var(--border);
+    transition: background-color 150ms ease;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    tbody &:hover {
+      background-color: var(--muted);
+    }
+  }
+
+  .table-cell {
+    padding: 0.75rem 1rem;
+    vertical-align: middle;
+    color: var(--foreground);
+  }
+
+  tfoot .table-row {
+    background-color: var(--muted);
+    border-top: 1px solid var(--border);
+    font-weight: 500;
+  }
+
+  tfoot .table-cell:first-child {
+    border-bottom-left-radius: var(--radius-lg);
+  }
+
+  tfoot .table-cell:last-child {
+    border-bottom-right-radius: var(--radius-lg);
+  }
+
+  /* -- Container query: compact table in narrow containers -- */
+  @container (max-width: 480px) {
+    .table-head,
+    .table-cell { padding: 0.5rem 0.75rem; font-size: 0.8125rem; }
+  }
+}
+/* ==== SRC[10]: components/tabs/tabs.css ==== */
+/* -- Tabs component -------------------------------------------- */
+
+@layer components {
+  /* -- Default (pill) variant ----------------------------------- */
+  .tab-list {
+    display: inline-flex;
+    align-items: center;
+    background: var(--muted);
+    border-radius: var(--radius-lg);
+    padding: 0.25rem;
+    gap: 0.125rem;
+
+    /* -- Line variant --------------------------------------------- */
+    &[data-variant="line"] {
+      background: transparent;
+      border-radius: 0;
+      padding: 0;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+
+      & .tab-trigger {
+        border-radius: 0;
+        padding: 0.5rem 1rem;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -1px;
+
+        &[aria-selected="true"] {
+          background: transparent;
+          color: var(--foreground);
+          border-bottom-color: var(--primary);
+          box-shadow: none;
+        }
+      }
+    }
+
+    /* -- Vertical orientation ------------------------------------ */
+    &[aria-orientation="vertical"] {
+      flex-direction: column;
+      width: auto;
+
+      & .tab-trigger {
+        justify-content: flex-start;
+        width: 100%;
+      }
+    }
+  }
+
+  .tab-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: calc(var(--radius) * 0.6);
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: none;
+    background: transparent;
+    color: var(--muted-foreground);
+    cursor: pointer;
+    transition: all 150ms ease;
+    white-space: nowrap;
+    outline: none;
+
+    &[aria-selected="true"] {
+      background: var(--background);
+      color: var(--foreground);
+      box-shadow: 0 1px 3px oklch(0 0 0 / 0.08), 0 0 0 1px var(--border);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+  }
+
+  /* -- Vertical layout container ----------------------------- */
+  .tabs:has(.tab-list[aria-orientation="vertical"]) {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+
+    & > .tab-content {
+      margin-top: 0;
+      flex: 1;
+    }
+  }
+
+  /* -- Panel ---------------------------------------------------- */
+  .tab-content {
+    margin-top: 0.75rem;
+
+    &:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &[hidden] { display: none; }
+  }
+
+  /* -- Accessibility ------------------------------------------ */
+
+  @media (prefers-reduced-motion: reduce) {
+    .tab-trigger { transition: none; }
+  }
+
+  @media (forced-colors: active) {
+    .tab-trigger[aria-selected="true"] {
+      border: 2px solid Highlight;
+      box-shadow: none;
+    }
+
+    .tab-list[data-variant="line"] .tab-trigger[aria-selected="true"] {
+      border: none;
+      border-bottom: 2px solid Highlight;
+    }
+  }
+}
+/* ==== SRC[11]: components/dialog/dialog.css ==== */
+/* -- Dialog component ------------------------------------------ */
+
+@layer components {
+  dialog.dialog {
+    border: none;
+    border-radius: var(--radius-xl);
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+    padding: 0;
+    margin: auto;
+    position: fixed;
+    inset: 0;
+    max-width: 28rem;
+    width: calc(100vw - 2rem);
+    max-height: calc(100vh - 2rem);
+    box-shadow: 0 25px 80px oklch(0 0 0 / 0.25), 0 0 0 1px var(--border);
+    opacity: 0;
+    transform: translateY(-0.5rem) scale(0.98);
+    transition: opacity 200ms ease, transform 200ms ease, display 200ms allow-discrete;
+
+    &[open] {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* -- Sizes ------------------------------------------------ */
+    &[data-size="sm"]   { max-width: 24rem; }
+    &[data-size="lg"]   { max-width: 32rem; }
+    &[data-size="xl"]   { max-width: 40rem; }
+    &[data-size="full"] { max-width: calc(100vw - 2rem); }
+
+    /* -- Backdrop --------------------------------------------- */
+    &::backdrop {
+      background: oklch(0 0 0 / 0);
+      backdrop-filter: blur(0px);
+      transition: all 200ms ease, display 200ms allow-discrete;
+    }
+
+    &[open]::backdrop {
+      background: oklch(0 0 0 / 0.45);
+      backdrop-filter: blur(3px);
+    }
+  }
+
+  @starting-style {
+    dialog.dialog[open] {
+      opacity: 0;
+      transform: translateY(-0.5rem) scale(0.98);
+    }
+
+    dialog.dialog[open]::backdrop {
+      background: oklch(0 0 0 / 0);
+      backdrop-filter: blur(0px);
+    }
+  }
+
+  /* -- Content sections ------------------------------------- */
+  .dialog-content { padding: 1.5rem; }
+  .dialog-header  { margin-bottom: 1rem; }
+  .dialog-title   { font-size: 1.0625rem; font-weight: 600; margin: 0 0 0.375rem; letter-spacing: -0.01em; }
+  .dialog-description { font-size: 0.875rem; color: var(--muted-foreground); margin: 0; line-height: 1.6; }
+  .dialog-body    { margin-top: 1rem; }
+  .dialog-footer  { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.5rem; }
+}
+/* ==== SRC[12]: components/radio/radio.css ==== */
+/* -- Radio Group component -------------------------------------- */
+
+@layer components {
+  .radio-group {
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    & > legend {
+      margin-bottom: 0.375rem;
+    }
+
+    /* Horizontal layout */
+    &[data-orientation="horizontal"] {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+  }
+
+  .radio-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    & > label {
+      font-size: 0.875rem;
+      font-weight: 400;
+      cursor: pointer;
+    }
+  }
+
+  /* -- With-description layout -------------------------------- */
+  .radio-item-block {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0 0.5rem;
+
+    & > .radio {
+      grid-row: 1 / 3;
+      margin-top: 0.125rem;
+    }
+
+    & > label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      line-height: 1.4;
+    }
+
+    & > .radio-description {
+      grid-column: 2;
+      font-size: 0.8125rem;
+      color: var(--muted-foreground);
+      line-height: 1.5;
+    }
+  }
+
+  /* -- Card variant ------------------------------------------- */
+  .radio-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: border-color 150ms, background 150ms;
+
+    &:hover {
+      background: var(--accent);
+    }
+
+    &:has(.radio:checked) {
+      border-color: var(--primary);
+    }
+
+    &:has(.radio:focus-visible) {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &:has(.radio:disabled) {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    & > .radio {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+    }
+
+    & > label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    & > .radio-description {
+      font-size: 0.8125rem;
+      color: var(--muted-foreground);
+      line-height: 1.5;
+    }
+  }
+
+  .radio {
+    appearance: none;
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--background);
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+    transition: border-color 150ms;
+
+    &:checked {
+      border-color: var(--primary);
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        background: var(--primary);
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+
+      & + label { opacity: 0.5; cursor: not-allowed; }
+    }
+
+    &[aria-invalid="true"] {
+      border-color: var(--destructive);
+
+      &:checked {
+        border-color: var(--destructive);
+
+        &::after {
+          background: var(--destructive);
+        }
+      }
+    }
+  }
+
+  /* Helper text for group-level descriptions */
+  .radio-group-description {
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    margin: -0.125rem 0 0.25rem;
+  }
+
+  /* -- Accessibility ------------------------------------------ */
+  @media (prefers-reduced-motion: reduce) {
+    .radio,
+    .radio-card {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .radio {
+      border-color: ButtonText;
+
+      &:checked {
+        border-color: Highlight;
+
+        &::after {
+          background: Highlight;
+        }
+      }
+
+      &:disabled {
+        border-color: GrayText;
+
+        &:checked::after {
+          background: GrayText;
+        }
+      }
+    }
+
+    .radio-card {
+      border-color: ButtonText;
+
+      &:has(.radio:checked) {
+        border-color: Highlight;
+      }
+    }
+  }
+}
+/* ==== SRC[13]: components/combobox/combobox.css ==== */
+/* -- Combobox component ---------------------------------------- */
+
+@layer components {
+  .combobox {
+    position: relative;
+  }
+
+  .combobox-trigger {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .combobox-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    text-align: left;
+    font-weight: 400;
+  }
+
+  .combobox-value[data-placeholder] {
+    color: var(--muted-foreground);
+  }
+
+  .combobox-chevron {
+    flex-shrink: 0;
+    color: var(--muted-foreground);
+    opacity: 0.5;
+  }
+
+  .combobox-content {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    padding: 0;
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+
+    /* -- Anchor positioning -- */
+    top: anchor(bottom);
+    left: anchor(left);
+    width: anchor-size(width);
+    margin-top: 4px;
+    position-try-fallbacks: flip-block;
+
+    /* -- Animation --------------------------------------------- */
+    opacity: 0;
+    transform: scale(0.96) translateY(-0.25rem);
+    transition: opacity 150ms ease, transform 150ms ease,
+                display 150ms allow-discrete;
+
+    &:popover-open {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @starting-style {
+    .combobox-content:popover-open {
+      opacity: 0;
+      transform: scale(0.96) translateY(-0.25rem);
+    }
+  }
+
+  .combobox-search {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .combobox-search-icon {
+    flex-shrink: 0;
+    color: var(--muted-foreground);
+  }
+
+  .combobox-search-input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-size: 0.875rem;
+    font-family: var(--font-sans);
+    color: var(--foreground);
+    outline: none;
+
+    &::placeholder { color: var(--muted-foreground); }
+  }
+
+  .combobox-listbox {
+    max-height: 16rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0.25rem;
+  }
+
+  .combobox-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.5rem;
+    border-radius: calc(var(--radius) * 0.6);
+    font-size: 0.875rem;
+    cursor: pointer;
+    outline: none;
+    transition: background 100ms;
+
+    &:hover, &[data-highlighted] {
+      background-color: var(--accent);
+      color: var(--accent-foreground);
+    }
+
+    &[aria-selected="true"]::before {
+      content: '';
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+      background-size: contain;
+      flex-shrink: 0;
+    }
+
+    &[aria-disabled="true"] {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+  }
+
+  .combobox-empty {
+    padding: 1.5rem 0.5rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+  }
+
+  .combobox-group-label {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--muted-foreground);
+  }
+
+  .combobox-separator {
+    height: 1px;
+    background: var(--border);
+    margin: 0.25rem -0.25rem;
+  }
+
+  /* -- Accessibility ------------------------------------------ */
+
+  @media (prefers-reduced-motion: reduce) {
+    .combobox-content {
+      transition: none;
+    }
+    .combobox-item {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .combobox-content {
+      border-color: ButtonText;
+    }
+    .combobox-item {
+      &:hover, &[data-highlighted] {
+        forced-color-adjust: none;
+        background: Highlight;
+        color: HighlightText;
+      }
+    }
+  }
+}
+/* ==== SRC[14]: components/toast/toast.css ==== */
+/* -- Toast component ------------------------------------------- */
+
+@layer components {
+  /* -- Container ------------------------------------------------ */
+  .toast-container {
+    position: fixed;
+    z-index: 100;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+    padding: 1rem;
+    max-height: 100vh;
+    pointer-events: none;
+
+    &[data-position="bottom-right"] { bottom: 0; right: 0; }
+    &[data-position="bottom-left"]  { bottom: 0; left: 0; }
+    &[data-position="top-right"]    { top: 0; right: 0; flex-direction: column; }
+    &[data-position="top-left"]     { top: 0; left: 0; flex-direction: column; }
+    &[data-position="top-center"]   { top: 0; left: 50%; transform: translateX(-50%); flex-direction: column; align-items: center; }
+    &[data-position="bottom-center"]{ bottom: 0; left: 50%; transform: translateX(-50%); align-items: center; }
+  }
+
+  /* -- Toast ---------------------------------------------------- */
+  .toast {
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    min-width: 20rem;
+    max-width: 26rem;
+    box-shadow: 0 4px 16px oklch(0 0 0 / 0.12);
+    pointer-events: auto;
+    opacity: 0;
+    transform: translateY(0.5rem);
+    transition: opacity 200ms ease, transform 200ms ease;
+
+    &:popover-open {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* -- Variants ------------------------------------------------- */
+    &[data-variant="destructive"] {
+      background-color: var(--destructive);
+      color: var(--destructive-foreground);
+      border-color: var(--destructive);
+
+      & .toast-description {
+        color: var(--destructive-foreground);
+        opacity: 0.85;
+      }
+    }
+
+    /* -- Semantic variants (border + icon color) ----------------- */
+    &[data-variant="success"] {
+      border-color: oklch(0.65 0.2 145);
+
+      & .toast-icon { color: oklch(0.65 0.2 145); }
+    }
+
+    &[data-variant="warning"] {
+      border-color: oklch(0.75 0.18 75);
+
+      & .toast-icon { color: oklch(0.75 0.18 75); }
+    }
+
+    &[data-variant="info"] {
+      border-color: oklch(0.6 0.15 250);
+
+      & .toast-icon { color: oklch(0.6 0.15 250); }
+    }
+  }
+
+  @starting-style {
+    .toast:popover-open {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+  }
+
+  /* -- Inner elements ------------------------------------------- */
+  .toast-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .toast-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .toast-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .toast-description {
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    margin: 0.125rem 0 0;
+    line-height: 1.5;
+  }
+
+  .toast-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: none;
+    background: transparent;
+    color: var(--muted-foreground);
+    cursor: pointer;
+    flex-shrink: 0;
+    border-radius: calc(var(--radius) * 0.5);
+    transition: color 150ms, background 150ms;
+
+    &:hover {
+      color: var(--foreground);
+      background: var(--accent);
+    }
+  }
+
+  .toast-icon {
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+  }
+
+  .toast-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+}
+/* ==== SRC[15]: documentation/css/docs-theme.css :: Minimal base reset 段 ==== */
+/* -- Minimal base reset ------------------------------------ */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+body {
+  font-family: var(--font-sans);
+  margin: 0;
+  line-height: 1.6;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+/* ==== SRC[16]: documentation/css/docs-utilities.css ==== */
+/* ----------------------------------------------------------------
+   docs-utilities.css
+   Hand-written utility classes used by documentation pages only.
+
+   These utilities only affect elements that explicitly opt in by
+   using the class name, so they cannot leak into component styles.
+---------------------------------------------------------------- */
+
+/* Flex / layout */
+.flex           { display: flex; }
+.flex-col       { flex-direction: column; }
+.flex-wrap      { flex-wrap: wrap; }
+.grid           { display: grid; }
+.items-center   { align-items: center; }
+.items-baseline { align-items: baseline; }
+.justify-between{ justify-content: space-between; }
+.ml-auto        { margin-left: auto; }
+
+/* Gap scale (1 = 0.25rem) */
+.gap-1 { gap: 0.25rem; }
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 0.75rem; }
+.gap-4 { gap: 1rem; }
+.gap-6 { gap: 1.5rem; }
+.gap-8 { gap: 2rem; }
+
+/* Margin bottom */
+.mb-1  { margin-bottom: 0.25rem; }
+.mb-2  { margin-bottom: 0.5rem; }
+.mb-3  { margin-bottom: 0.75rem; }
+.mb-4  { margin-bottom: 1rem; }
+.mb-5  { margin-bottom: 1.25rem; }
+.mb-6  { margin-bottom: 1.5rem; }
+.mb-8  { margin-bottom: 2rem; }
+.mb-10 { margin-bottom: 2.5rem; }
+.mb-12 { margin-bottom: 3rem; }
+
+/* Margin top */
+.mt-2 { margin-top: 0.5rem; }
+.mt-6 { margin-top: 1.5rem; }
+.mt-8 { margin-top: 2rem; }
+
+/* Typography */
+.text-sm               { font-size: 0.875rem; line-height: 1.25rem; }
+.text-xs               { font-size: 0.75rem;  line-height: 1rem; }
+.text-lg               { font-size: 1.125rem; line-height: 1.75rem; }
+.text-muted-foreground { color: var(--muted-foreground); }
+.text-destructive      { color: var(--destructive); }
+.font-medium           { font-weight: 500; }
+.leading-relaxed       { line-height: 1.625; }
+
+/* Accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+</style>
+</head>
+<body>
+
+<!-- 页面级容器：仅内联纯布局（宽 / 居中 / 内边距），不含任何颜色与视觉声明 -->
+<div style="max-width:88rem;margin:0 auto;padding:1.5rem 1.5rem 3rem 1.5rem;">
+
+  <!-- ===== 顶部导航：4 个入口，本页高亮（库 tabs 组件 line 变体） ===== -->
+  <div class="tab-list" data-variant="line" role="tablist" aria-label="任务系统导航">
+    <button class="tab-trigger" type="button" role="tab" aria-selected="true" onclick="goPage('list')">任务列表</button>
+    <button class="tab-trigger" type="button" role="tab" aria-selected="false" onclick="goPage('agg')">任务聚合处理</button>
+    <button class="tab-trigger" type="button" role="tab" aria-selected="false" onclick="goPage('lead')">领导任务</button>
+    <button class="tab-trigger" type="button" role="tab" aria-selected="false" onclick="goPage('report')">任务报表</button>
+  </div>
+
+  <!-- ===== 页头 ===== -->
+  <div class="flex items-center justify-between flex-wrap gap-4" style="margin:1.5rem 0 1rem 0;">
+    <div>
+      <h1 class="h3" style="margin:0;">任务列表</h1>
+      <p class="muted" style="margin:0.25rem 0 0 0;">按提醒时间汇总今日 / 过期 / 未来任务，支持客户、分类、状态三级筛选并处理任务流转。</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="muted">当前使用者：张明（客户经理）</span>
+      <button class="btn" data-variant="outline" data-size="sm" type="button" onclick="goPage('report')">查看任务报表</button>
+    </div>
+  </div>
+
+  <!-- ===== 一级 Tabs + 二级筛选（库 card 组件承载） ===== -->
+  <div class="tabs">
+    <div class="tab-list" id="tabList" role="tablist" aria-label="任务时间范围"></div>
+  </div>
+
+  <div class="card" style="margin:0.75rem 0 0 0;">
+    <div class="card-content">
+      <div class="flex flex-wrap items-center gap-4">
+
+        <!-- 客户：可搜索下拉（库 combobox 组件） -->
+        <div class="combobox" style="width:18rem;">
+          <label class="label" id="fCustomerLabel">客户</label>
+          <button class="btn combobox-trigger" id="fCustomerTrigger" type="button" data-variant="outline" data-size="lg"
+                  aria-haspopup="listbox" aria-expanded="false" aria-labelledby="fCustomerLabel"
+                  aria-controls="fCustomerPopover" popovertarget="fCustomerPopover">
+            <span class="combobox-value" id="fCustomerValue" data-placeholder="全部客户">全部客户</span>
+            <svg class="combobox-chevron" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+          </button>
+          <div id="fCustomerPopover" class="combobox-content" popover>
+            <div class="combobox-search">
+              <svg class="combobox-search-icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <input class="combobox-search-input" id="fCustomerSearch" type="text" role="combobox" autocomplete="off"
+                     aria-expanded="true" aria-controls="fCustomerListbox" aria-autocomplete="list" placeholder="搜索客户名称…">
+            </div>
+            <div id="fCustomerListbox" role="listbox" class="combobox-listbox" aria-label="客户列表"></div>
+          </div>
+        </div>
+
+        <div style="width:11rem;">
+          <label class="label" for="fCategory">任务分类</label>
+          <select class="select" id="fCategory" data-size="lg" onchange="onFilterChange()">
+            <option value="">全部分类</option>
+            <option value="新发任务">新发任务</option>
+            <option value="系统任务">系统任务</option>
+            <option value="自建任务">自建任务</option>
+          </select>
+        </div>
+
+        <div style="width:11rem;">
+          <label class="label" for="fStatus">任务状态</label>
+          <select class="select" id="fStatus" data-size="lg" onchange="onFilterChange()">
+            <option value="">全部状态</option>
+            <option value="待处理">待处理</option>
+            <option value="待跟进">待跟进</option>
+            <option value="已逾期">已逾期</option>
+            <option value="已处理">已处理</option>
+          </select>
+        </div>
+
+        <button class="btn" data-variant="outline" data-size="lg" type="button" onclick="resetFilters()">重置</button>
+      </div>
+
+      <p class="text-xs text-muted-foreground" style="margin:1rem 0 0 0;">
+        逾期规则：当天 <strong>18:00</strong> 前发起的任务，逾期截止为当天 <strong>24:00</strong>，超时未处理即计为「已逾期」；当天 <strong>18:00</strong> 后发起的任务计入今日任务，但不纳入次日逾期判定。
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== 任务列表（库 card + table 组件） ===== -->
+  <div class="card" style="margin:1rem 0 0 0;">
+    <div class="card-content">
+      <div class="flex items-center justify-between flex-wrap gap-2" style="margin:0 0 1rem 0;">
+        <span class="muted" id="listSummary"></span>
+        <span class="muted">同一客户未完成条数大于 1 时，「处理任务」将进入聚合处理页</span>
+      </div>
+
+      <div class="table-container">
+        <table class="table">
+          <colgroup>
+            <col style="width:11rem;">
+            <col style="width:12rem;">
+            <col style="width:14rem;">
+            <col style="width:7rem;">
+            <col style="width:20rem;">
+            <col style="width:11rem;">
+            <col style="width:11rem;">
+          </colgroup>
+          <thead>
+            <tr class="table-row">
+              <th class="table-head" scope="col">提醒时间</th>
+              <th class="table-head" scope="col">任务类型</th>
+              <th class="table-head" scope="col">客户名称</th>
+              <th class="table-head" scope="col">相关联系人</th>
+              <th class="table-head" scope="col">任务说明</th>
+              <th class="table-head" scope="col">任务状态</th>
+              <th class="table-head" scope="col">操作</th>
+            </tr>
+          </thead>
+          <tbody id="taskBody"></tbody>
+        </table>
+      </div>
+
+      <div class="muted" id="emptyTip" hidden style="padding:3rem 0;text-align:center;">当前筛选条件下暂无任务</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 处理任务对话框（库 dialog 组件） ===== -->
+<dialog class="dialog" id="dealDialog" data-size="lg" role="dialog" aria-modal="true" aria-labelledby="dlgTitle">
+  <div class="dialog-content">
+    <div class="dialog-header">
+      <h2 class="dialog-title" id="dlgTitle">处理任务</h2>
+      <p class="dialog-description">补全实际联系人并选择处理结果，提交后任务状态实时更新。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-content" id="dlgBrief"></div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:1rem;margin-top:1.25rem;">
+      <div>
+        <label class="label" for="dlgContact">实际联系人 <span class="label-hint">必填</span></label>
+        <select class="select" id="dlgContact"></select>
+        <p class="field-error" id="dlgContactErr" hidden>请选择本次实际联系的客户联系人</p>
+      </div>
+
+      <fieldset class="radio-group" id="dlgResultGroup">
+        <legend class="label">处理结果 <span class="label-hint">必选</span></legend>
+        <div class="radio-item">
+          <input class="radio" type="radio" id="dlgResultDone" name="dlgResult" value="已处理" onchange="onResultChange()">
+          <label for="dlgResultDone">已处理（任务关闭，不再进入逾期判定）</label>
+        </div>
+        <div class="radio-item">
+          <input class="radio" type="radio" id="dlgResultNext" name="dlgResult" value="下次联系" onchange="onResultChange()">
+          <label for="dlgResultNext">下次联系（任务转为待跟进，需填写联系时间）</label>
+        </div>
+      </fieldset>
+      <p class="field-error" id="dlgResultErr" hidden>请选择处理结果</p>
+
+      <div id="dlgTimeBlock" hidden>
+        <label class="label" for="dlgTime">下次联系时间 <span class="label-hint">必填</span></label>
+        <input class="input" id="dlgTime" type="datetime-local">
+        <p class="field-error" id="dlgTimeErr" hidden>请选择下次联系时间</p>
+      </div>
+    </div>
+
+    <div class="dialog-footer">
+      <button class="btn" data-variant="outline" type="button" onclick="closeDealDialog()">取消</button>
+      <button class="btn" data-variant="default" type="button" onclick="submitDeal()">提交处理结果</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- 库 toast 组件容器（安装说明中的官方结构） -->
+<div id="toastHost" class="toast-container" aria-label="Notifications" data-position="top-center"></div>
+<script>
+/* =========================================================
+   演示数据与领域规则（招投标行业场景）
+   「完全库默认」方案：所有视觉一律取自 shadcn-lib 组件类与官方变体，
+   本文件不产生任何自造样式，仅在必要处使用纯布局内联样式（宽/高/间距/flex/grid）。
+   ========================================================= */
+var TODAY = '2026-09-16';                                   /* 演示基准日期 */
+var NOW = new Date('2026-09-16T19:30:00');                  /* 演示基准时间 */
+
+var CRM_PAGE = 'file:///D:/workspace/bidcenter-github.github.io/Crm/客户详情页-重构.html';
+
+var CUSTOMERS = [
+  { id: 'C01', name: '华能电力工程有限公司', owner: '张明', region: '华东', contacts: ['李国强', '王海涛', '赵敏'] },
+  { id: 'C02', name: '中建八局第二建设有限公司', owner: '张明', region: '华北', contacts: ['刘建国', '孙倩'] },
+  { id: 'C03', name: '国网江苏电力设计院', owner: '李静', region: '华东', contacts: ['周文军', '陈晓东'] },
+  { id: 'C04', name: '三一重工供应链管理部', owner: '李静', region: '华中', contacts: ['黄伟'] },
+  { id: 'C05', name: '无锡蓝天环保科技有限公司', owner: '王超', region: '华东', contacts: ['徐丽华', '郑凯', '马晓峰'] },
+  { id: 'C06', name: '中铁十四局集团有限公司', owner: '王超', region: '西南', contacts: ['田志强', '何静'] },
+  { id: 'C07', name: '常州银河微电子股份有限公司', owner: '李静', region: '华东', contacts: ['吴敏'] }
+];
+
+var OWNERS = ['张明', '李静', '王超'];
+
+/* 任务分类 / 类型 / 优先级（领域规则） */
+var TYPE_META = {
+  '新发任务':       { category: '新发任务', priority: '中' },
+  '活动报名':       { category: '系统任务', priority: '高' },
+  '会员升级':       { category: '系统任务', priority: '高' },
+  '中标追踪':       { category: '系统任务', priority: '高' },
+  '项目追踪':       { category: '系统任务', priority: '中' },
+  '邮件关闭':       { category: '系统任务', priority: '中' },
+  '功能使用超限':   { category: '系统任务', priority: '中' },
+  '临时任务':       { category: '自建任务', priority: '中' },
+  '重复任务':       { category: '自建任务', priority: '中' },
+  '撞单任务':       { category: '自建任务', priority: '中' }
+};
+
+/* status 为库内实际状态：待处理 / 待跟进 / 已处理；已逾期由逾期规则实时推导 */
+var TASKS = [
+  { id: 'T01', remind: '2026-09-16 09:10', type: '中标追踪', customerId: 'C01', relatedContact: '李国强', actualContact: '', desc: '华能电力智慧运维平台项目已中标公示，需24小时内确认对接人并回填签约计划', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T02', remind: '2026-09-16 09:40', type: '项目追踪', customerId: 'C01', relatedContact: '王海涛', actualContact: '', desc: '智慧运维平台需求调研进度跟进，确认下周三技术交流会时间', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T03', remind: '2026-09-16 08:20', type: '新发任务', customerId: 'C01', relatedContact: '赵敏', actualContact: '李国强', desc: '客户新注册企业账号，需电话介绍会员权益并核实联系人身份', status: '待跟进', result: '下次联系', contactTime: '2026-09-18 10:00', closedAt: '' },
+  { id: 'T04', remind: '2026-09-16 10:05', type: '活动报名', customerId: 'C02', relatedContact: '刘建国', actualContact: '', desc: '邀请参加9月22日华北区招投标合规沙龙，确认参会人数与名单', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T05', remind: '2026-09-16 11:15', type: '会员升级', customerId: 'C02', relatedContact: '孙倩', actualContact: '', desc: '企业会员由标准版升级至专业版的报价方案已发送，等待客户反馈', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T06', remind: '2026-09-16 14:00', type: '邮件关闭', customerId: 'C04', relatedContact: '黄伟', actualContact: '黄伟', desc: '客户邮件咨询发票开具流程，已回复处理路径并关闭', status: '已处理', result: '已处理', contactTime: '', closedAt: '2026-09-16 15:20' },
+  { id: 'T07', remind: '2026-09-16 16:30', type: '功能使用超限', customerId: 'C03', relatedContact: '周文军', actualContact: '', desc: '企业账号本月招标文件下载次数已达上限，需协助申请临时扩容', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T08', remind: '2026-09-16 19:05', type: '临时任务', customerId: 'C05', relatedContact: '徐丽华', actualContact: '', desc: '客户临时要求补充近三年同行业中标案例清单（18:00后发起）', status: '待处理', result: '', contactTime: '', closedAt: '' },
+
+  { id: 'T09', remind: '2026-09-15 09:30', type: '撞单任务', customerId: 'C06', relatedContact: '田志强', actualContact: '', desc: '与华东二部撞单，需确认客户归属并回填归属说明', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T10', remind: '2026-09-15 10:20', type: '中标追踪', customerId: 'C05', relatedContact: '郑凯', actualContact: '', desc: '环保设备采购项目中标结果已出，需追踪客户签约进度', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T11', remind: '2026-09-15 15:40', type: '项目追踪', customerId: 'C01', relatedContact: '李国强', actualContact: '李国强', desc: '方案评审会时间未定，需再次确认并同步技术团队', status: '待跟进', result: '下次联系', contactTime: '2026-09-17 09:00', closedAt: '' },
+  { id: 'T12', remind: '2026-09-15 11:00', type: '新发任务', customerId: 'C04', relatedContact: '黄伟', actualContact: '黄伟', desc: '客户资料核实完成，已分配专属顾问并完成建联', status: '已处理', result: '已处理', contactTime: '', closedAt: '2026-09-15 14:10' },
+  { id: 'T13', remind: '2026-09-15 17:50', type: '活动报名', customerId: 'C03', relatedContact: '陈晓东', actualContact: '', desc: '邀请参加电力设计行业闭门交流会，需确认报名信息', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T14', remind: '2026-09-16 19:20', type: '邮件关闭', customerId: 'C05', relatedContact: '马晓峰', actualContact: '', desc: '客户邮件反馈网站会员权益页面打不开，需核查后回复（18:00后发起，不纳入次日逾期）', status: '待处理', result: '', contactTime: '', closedAt: '' },
+
+  { id: 'T15', remind: '2026-09-17 09:00', type: '会员升级', customerId: 'C06', relatedContact: '何静', actualContact: '', desc: '客户意向升级集团版，需准备多账号管理方案', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T16', remind: '2026-09-17 10:30', type: '新发任务', customerId: 'C03', relatedContact: '周文军', actualContact: '', desc: '新注册子账号待认证，需指导完成企业实名认证', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T17', remind: '2026-09-18 14:00', type: '项目追踪', customerId: 'C02', relatedContact: '刘建国', actualContact: '', desc: '华北区合规沙龙后续回访，确认客户培训需求', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T18', remind: '2026-09-18 09:30', type: '中标追踪', customerId: 'C04', relatedContact: '黄伟', actualContact: '', desc: '备件采购项目开标在即，需跟踪竞争对手报价动态', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T19', remind: '2026-09-19 15:00', type: '临时任务', customerId: 'C01', relatedContact: '王海涛', actualContact: '', desc: '按客户要求整理三季度项目台账并核对合同金额', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T20', remind: '2026-09-17 16:20', type: '功能使用超限', customerId: 'C05', relatedContact: '徐丽华', actualContact: '', desc: '子账号并发登录数超限，需协助调整权限配置', status: '待处理', result: '', contactTime: '', closedAt: '' },
+
+  { id: 'T21', remind: '2026-09-16 09:05', type: '新发任务', customerId: 'C03', relatedContact: '周文军', actualContact: '', desc: '设计院新账号注册待核验，需电话确认企业资质材料', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T22', remind: '2026-09-16 10:40', type: '中标追踪', customerId: 'C03', relatedContact: '陈晓东', actualContact: '陈晓东', desc: '输变电设计项目中标信息已推送，客户确认已收到', status: '已处理', result: '已处理', contactTime: '', closedAt: '2026-09-16 11:30' },
+  { id: 'T23', remind: '2026-09-16 11:30', type: '重复任务', customerId: 'C04', relatedContact: '黄伟', actualContact: '黄伟', desc: '与上周已建任务重复，已合并处理并关闭本条', status: '已处理', result: '已处理', contactTime: '', closedAt: '2026-09-16 12:05' },
+  { id: 'T24', remind: '2026-09-16 13:20', type: '活动报名', customerId: 'C05', relatedContact: '徐丽华', actualContact: '', desc: '邀请参加10月环保行业线上直播，需确认报名人员', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T25', remind: '2026-09-16 15:10', type: '会员升级', customerId: 'C05', relatedContact: '郑凯', actualContact: '郑凯', desc: '会员升级方案已发送，客户内部评估中', status: '待跟进', result: '下次联系', contactTime: '2026-09-17 10:30', closedAt: '' },
+  { id: 'T26', remind: '2026-09-16 16:50', type: '项目追踪', customerId: 'C06', relatedContact: '田志强', actualContact: '', desc: '西南片区项目跟踪表未回填，需提醒客户更新进度', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T27', remind: '2026-09-16 10:15', type: '项目追踪', customerId: 'C07', relatedContact: '吴敏', actualContact: '', desc: '客户新增项目录入跟踪，需确认项目预算区间与采购节点', status: '待处理', result: '', contactTime: '', closedAt: '' }
+];
+
+/* ===== 逾期规则 ===== */
+/* 当天 18:00 前发起 → 逾期截止为当天 24:00，超过未处理即计为已逾期；
+   18:00 后发起 → 当天计入今日任务，但不纳入次日逾期判定。 */
+function remindDate(t) { return t.remind.slice(0, 10); }
+function remindHour(t) { return parseInt(t.remind.slice(11, 13), 10); }
+function isAfter18(t) { return remindHour(t) >= 18; }
+function overdueDeadline(t) {
+  if (isAfter18(t)) return null;
+  var p = remindDate(t).split('-');
+  return new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10) + 1, 0, 0, 0);
+}
+function effStatus(t) {
+  /* 已处理 / 待跟进 由人工处理结果决定，不再参与逾期判定；
+     仅「待处理」且已过逾期截止时间(当天24:00)的任务实时推导为「已逾期」。 */
+  if (t.status !== '待处理') return t.status;
+  var dl = overdueDeadline(t);
+  if (dl && NOW.getTime() >= dl.getTime()) return '已逾期';
+  return '待处理';
+}
+function isUnfinished(t) { return effStatus(t) !== '已处理'; }
+
+/* ===== 通用工具 ===== */
+function customerById(id) { for (var i = 0; i < CUSTOMERS.length; i++) { if (CUSTOMERS[i].id === id) return CUSTOMERS[i]; } return null; }
+function tasksOfCustomer(id) { return TASKS.filter(function (t) { return t.customerId === id; }); }
+function unfinishedOfCustomer(id) { return tasksOfCustomer(id).filter(isUnfinished); }
+function ownerOfCustomer(id) { var c = customerById(id); return c ? c.owner : ''; }
+function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function pct(a, b) { return b > 0 ? Math.round(a / b * 100) : 0; }
+
+/* ===== 语义映射：只使用 badge.css 中官方存在的三个变体 =====
+   badge 官方变体（唯一来源 components/badge/badge.css）：default / secondary / outline
+   强调强度：default（实心最深） > secondary（浅灰实心） > outline（描边） */
+var BADGE_VARIANTS = { 'default': 1, 'secondary': 1, 'outline': 1 };
+var STATUS_VARIANT = { '待处理': 'secondary', '待跟进': 'outline', '已处理': 'outline', '已逾期': 'default' };
+var PRIORITY_VARIANT = { '高': 'default', '中': 'secondary', '低': 'outline' };
+var CATEGORY_VARIANT = { '新发任务': 'outline', '系统任务': 'outline', '自建任务': 'outline' };
+
+function badgeHtml(text, variant) {
+  var v = BADGE_VARIANTS[variant] ? variant : 'outline';   /* 库外变体一律回落 outline，避免出现无样式徽标 */
+  return '<span class="badge" data-variant="' + v + '">' + esc(text) + '</span>';
+}
+function statusBadge(s) { return badgeHtml(s, STATUS_VARIANT[s]); }
+function priorityBadge(p) { return badgeHtml(p + '优先级', PRIORITY_VARIANT[p]); }
+function categoryBadge(c) { return badgeHtml(c, CATEGORY_VARIANT[c]); }
+
+/* 单元格渲染：容器只用内联纯布局（flex / gap / 宽高），视觉全部来自库类 */
+function typeCell(t) {
+  var m = TYPE_META[t.type];
+  return '<div style="display:flex;flex-direction:column;align-items:flex-start;gap:0.375rem;">' +
+           '<span class="small">' + esc(t.type) + '</span>' +
+           '<div style="display:flex;flex-wrap:wrap;gap:0.25rem;">' + categoryBadge(m.category) + priorityBadge(m.priority) + '</div>' +
+         '</div>';
+}
+function customerCell(c) {
+  var n = unfinishedOfCustomer(c.id).length;
+  var html = '<div style="display:flex;flex-direction:column;align-items:flex-start;gap:0.25rem;">' +
+               '<button class="btn" data-variant="link" type="button" onclick="openCustomer(\'' + c.id + '\')">' + esc(c.name) + '</button>';
+  if (n > 1) html += badgeHtml('该客户有 ' + n + ' 条未完成', 'secondary');
+  return html + '</div>';
+}
+function remindCell(t) {
+  var html = '<div style="display:flex;flex-direction:column;align-items:flex-start;gap:0.25rem;">' +
+               '<span>' + esc(t.remind) + '</span>';
+  if (isAfter18(t)) html += '<span class="muted">18:00 后发起，不纳入次日逾期</span>';
+  return html + '</div>';
+}
+function openCustomer(cid) {
+  /* 「查看客户」新窗口打开 Crm 客户详情页 */
+  var c = customerById(cid);
+  var url = encodeURI(CRM_PAGE) + '?customerId=' + encodeURIComponent(c.id) +
+            '&customer=' + encodeURIComponent(c.name) + '&from=任务列表';
+  window.open(url, '_blank');
+}
+
+/* ===== 操作反馈：库 toast 组件（components/toast/toast.css，按文档站结构组织） ===== */
+var TOAST_MAX = 3;
+function toastDismiss(el) {
+  if (!el || !el.parentNode || el.getAttribute('data-closing')) return;
+  el.setAttribute('data-closing', '');
+  var anim = null;
+  try {
+    anim = el.animate(
+      [{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(0.5rem)' }],
+      { duration: 200, easing: 'ease', fill: 'forwards' }
+    );
+  } catch (e) { }
+  var finish = function () {
+    try { if (el.hidePopover) el.hidePopover(); } catch (e) { }
+    if (el.parentNode) el.parentNode.removeChild(el);
+  };
+  if (anim && anim.finished && anim.finished.then) { anim.finished.then(finish); } else { finish(); }
+}
+function showToast(title, description) {
+  var host = document.getElementById('toastHost');
+  if (!host) return;
+  var el = document.createElement('div');
+  el.className = 'toast';
+  el.setAttribute('role', 'status');
+  el.setAttribute('aria-live', 'polite');
+  el.setAttribute('aria-atomic', 'true');
+  el.setAttribute('popover', 'manual');
+  el.innerHTML =
+    '<div class="toast-content">' +
+      '<div class="toast-text">' +
+        '<p class="toast-title">' + esc(title) + '</p>' +
+        (description ? '<p class="toast-description">' + esc(description) + '</p>' : '') +
+      '</div>' +
+      '<button class="toast-close" type="button" aria-label="关闭" data-toast-close>' +
+        '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>' +
+      '</button>' +
+    '</div>';
+  host.appendChild(el);
+  try { el.showPopover(); } catch (e) { }
+  var btn = el.querySelector('[data-toast-close]');
+  if (btn) btn.addEventListener('click', function () { toastDismiss(el); });
+  window.setTimeout(function () { toastDismiss(el); }, 3200);
+  var live = host.querySelectorAll('.toast');
+  if (live.length > TOAST_MAX) toastDismiss(live[0]);
+}
+/* 兼容旧调用名（各页面统一改为 toast 反馈） */
+function flash(msg) { showToast(msg, ''); }
+
+function query(name) {
+  var m = new RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+  return m ? decodeURIComponent(m[1]) : '';
+}
+/* ================= 任务列表页逻辑（完全库默认方案） ================= */
+/* 本文件不产生任何自造样式：渲染出的容器一律使用内联纯布局（flex / grid / 宽高 / 间距），
+   视觉一律来自库组件类（btn / badge / card / table / tabs / select / input / combobox / radio / dialog / toast）。 */
+
+var TABS = [
+  { key: 'today',   label: '今日任务' },
+  { key: 'overdue', label: '过期任务' },
+  { key: 'future',  label: '未来任务' },
+  { key: 'all',     label: '全部任务' }
+];
+var PAGES = { list: '任务列表.html', agg: '任务聚合处理.html', lead: '领导任务.html', report: '任务报表.html' };
+var state = { tab: 'today', customer: '', category: '', status: '' };
+var currentTaskId = null;
+var highlightId = '';
+
+function goPage(k) { window.location.href = PAGES[k]; }
+
+function tasksByTab(key) {
+  if (key === 'today')   return TASKS.filter(function (t) { return remindDate(t) === TODAY; });
+  if (key === 'overdue') return TASKS.filter(function (t) { return effStatus(t) === '已逾期'; });
+  if (key === 'future')  return TASKS.filter(function (t) { return remindDate(t) > TODAY; });
+  return TASKS.slice();
+}
+function sortByRemind(list) {
+  return list.slice().sort(function (a, b) { return a.remind < b.remind ? -1 : (a.remind > b.remind ? 1 : 0); });
+}
+function tabLabel(key) {
+  var hit = TABS.filter(function (t) { return t.key === key; })[0];
+  return hit ? hit.label : '全部任务';
+}
+function unfinishText(cid) {
+  var n = unfinishedOfCustomer(cid).length;
+  return n > 0 ? n + ' 条未完成' : '暂无未完成任务';
+}
+function filteredList() {
+  return sortByRemind(tasksByTab(state.tab).filter(function (t) {
+    var c = customerById(t.customerId);
+    var m = TYPE_META[t.type];
+    if (state.customer && c.name !== state.customer) return false;
+    if (state.category && m.category !== state.category) return false;
+    if (state.status && effStatus(t) !== state.status) return false;
+    return true;
+  }));
+}
+
+/* ===== 一级 Tabs（库 tabs 组件，计数用库 badge outline 变体） ===== */
+function renderTabs() {
+  var html = '';
+  TABS.forEach(function (tb) {
+    html += '<button class="tab-trigger" type="button" role="tab" data-tab="' + tb.key + '" aria-selected="' +
+            (state.tab === tb.key) + '" onclick="switchTab(\'' + tb.key + '\')">' + tb.label +
+            badgeHtml(String(tasksByTab(tb.key).length), 'outline') + '</button>';
+  });
+  document.getElementById('tabList').innerHTML = html;
+}
+function switchTab(key) {
+  state.tab = key;
+  renderTabs();
+  renderTable();
+}
+
+/* ===== 表格 ===== */
+function statusCell(t) {
+  var html = '<div style="display:flex;flex-direction:column;align-items:flex-start;gap:0.25rem;">' + statusBadge(effStatus(t));
+  if (t.actualContact) html += '<span class="muted">实际联系人：' + esc(t.actualContact) + '</span>';
+  return html + '</div>';
+}
+function renderTable() {
+  var list = filteredList();
+  var rows = '';
+  list.forEach(function (t) {
+    var c = customerById(t.customerId);
+    var closed = effStatus(t) === '已处理';
+    rows += '<tr class="table-row" id="row-' + t.id + '">' +
+      '<td class="table-cell">' + remindCell(t) + '</td>' +
+      '<td class="table-cell">' + typeCell(t) + '</td>' +
+      '<td class="table-cell">' + customerCell(c) + '</td>' +
+      '<td class="table-cell">' + esc(t.relatedContact) + '</td>' +
+      '<td class="table-cell">' + esc(t.desc) + '</td>' +
+      '<td class="table-cell">' + statusCell(t) + '</td>' +
+      '<td class="table-cell"><div style="display:flex;flex-wrap:wrap;gap:0.5rem;">' +
+        '<button class="btn" data-variant="outline" data-size="xs" type="button" onclick="openCustomer(\'' + c.id + '\')">查看客户</button>' +
+        (closed
+          ? '<button class="btn" data-variant="ghost" data-size="xs" type="button" disabled>处理任务</button>'
+          : '<button class="btn" data-variant="default" data-size="xs" type="button" onclick="handleDeal(\'' + c.id + '\',\'' + t.id + '\')">处理任务</button>') +
+      '</div></td>' +
+    '</tr>';
+  });
+  document.getElementById('taskBody').innerHTML = rows;
+  document.getElementById('emptyTip').hidden = list.length > 0;
+  var unfinished = list.filter(isUnfinished).length;
+  document.getElementById('listSummary').textContent =
+    '当前「' + tabLabel(state.tab) + '」共 ' + list.length + ' 条，其中未完成 ' + unfinished + ' 条';
+}
+
+/* ===== 二级筛选 ===== */
+function onFilterChange() {
+  state.category = document.getElementById('fCategory').value;
+  state.status = document.getElementById('fStatus').value;
+  renderTable();
+}
+function resetFilters() {
+  document.getElementById('fCategory').value = '';
+  document.getElementById('fStatus').value = '';
+  state.category = ''; state.status = '';
+  pickCustomer('');
+}
+
+/* ===== 客户可搜索下拉（库 combobox 组件） ===== */
+function renderCustomerOptions(filterText, selectedName) {
+  var q = (filterText || '').trim();
+  var items = [{ value: '', label: '全部客户', note: '不限制客户范围' }];
+  CUSTOMERS.forEach(function (c) { items.push({ value: c.name, label: c.name, note: c.owner + ' · ' + unfinishText(c.id) }); });
+
+  var html = '<div class="combobox-empty" id="fCustomerEmpty" hidden>未找到匹配的客户</div>';
+  var hit = 0;
+  items.forEach(function (it) {
+    if (q && it.label.indexOf(q) < 0) return;
+    hit++;
+    html += '<div role="option" class="combobox-item" data-value="' + esc(it.value) + '" aria-selected="' +
+            (it.value === (selectedName || '') ? 'true' : 'false') +
+            '" onclick="pickCustomer(\'' + it.value.replace(/'/g, "\\'") + '\')">' + esc(it.label) +
+            '<span class="muted">' + esc(it.note) + '</span></div>';
+  });
+  document.getElementById('fCustomerListbox').innerHTML = html;
+  document.getElementById('fCustomerEmpty').hidden = hit > 0;
+}
+function pickCustomer(name) {
+  state.customer = name || '';
+  var val = document.getElementById('fCustomerValue');
+  if (state.customer) {
+    val.textContent = state.customer;
+    val.removeAttribute('data-placeholder');
+  } else {
+    val.textContent = '全部客户';
+    val.setAttribute('data-placeholder', '全部客户');
+  }
+  var pop = document.getElementById('fCustomerPopover');
+  if (pop && pop.hidePopover) { try { pop.hidePopover(); } catch (e) {} }
+  renderTable();
+}
+
+/* ================= 处理任务入口 ================= */
+function handleDeal(customerId, taskId) {
+  var un = unfinishedOfCustomer(customerId);
+  if (un.length > 1) {
+    window.location.href = '任务聚合处理.html?customer=' + customerId;
+    return;
+  }
+  openDealDialog(taskId);
+}
+function briefItem(k, v, full) {
+  return '<span class="muted">' + k + '</span><span' + (full ? ' style="grid-column:2;"' : '') + '>' + esc(v) + '</span>';
+}
+function showError(id, on) {
+  var el = document.getElementById(id);
+  if (el) el.hidden = !on;
+}
+function openDealDialog(id) {
+  var t = TASKS.filter(function (x) { return x.id === id; })[0];
+  if (!t) return;
+  currentTaskId = id;
+  var c = customerById(t.customerId);
+  var m = TYPE_META[t.type];
+
+  document.getElementById('dlgBrief').innerHTML =
+    '<div style="display:grid;grid-template-columns:6rem 1fr;gap:0.5rem 1rem;">' +
+      briefItem('客户名称', c.name) +
+      briefItem('任务类型', m.category + ' · ' + t.type) +
+      briefItem('提醒时间', t.remind) +
+      briefItem('响应负责人', c.owner) +
+      briefItem('相关联系人', t.relatedContact) +
+      briefItem('任务说明', t.desc, true) +
+    '</div>';
+
+  var opts = '<option value="">请选择实际联系人</option>';
+  c.contacts.forEach(function (p) { opts += '<option value="' + esc(p) + '">' + esc(p) + '（客户联系人）</option>'; });
+  opts += '<option value="' + esc(c.owner) + '">' + esc(c.owner) + '（当前响应负责人）</option>';
+  opts += '<option value="其他">其他人员（线下补充）</option>';
+  var sel = document.getElementById('dlgContact');
+  sel.innerHTML = opts;
+  sel.value = '';
+  sel.removeAttribute('aria-invalid');
+
+  Array.prototype.forEach.call(document.querySelectorAll('input[name="dlgResult"]'), function (r) {
+    r.checked = false;
+    r.removeAttribute('aria-invalid');
+  });
+  document.getElementById('dlgTimeBlock').hidden = true;
+  document.getElementById('dlgTime').value = '';
+  showError('dlgContactErr', false);
+  showError('dlgResultErr', false);
+  showError('dlgTimeErr', false);
+
+  var dlg = document.getElementById('dealDialog');
+  if (!dlg.open) dlg.showModal();
+}
+function closeDealDialog() { document.getElementById('dealDialog').close(); }
+
+function onResultChange() {
+  var picked = document.querySelector('input[name="dlgResult"]:checked');
+  var block = document.getElementById('dlgTimeBlock');
+  if (picked && picked.value === '下次联系') {
+    block.hidden = false;
+    showError('dlgResultErr', false);
+  } else {
+    block.hidden = true;
+    showError('dlgTimeErr', false);
+  }
+}
+
+function submitDeal() {
+  var t = TASKS.filter(function (x) { return x.id === currentTaskId; })[0];
+  if (!t) return;
+  var sel = document.getElementById('dlgContact');
+  var contact = sel.value;
+  var picked = document.querySelector('input[name="dlgResult"]:checked');
+  var time = document.getElementById('dlgTime').value;
+  var ok = true;
+
+  if (!contact) { showError('dlgContactErr', true); sel.setAttribute('aria-invalid', 'true'); ok = false; }
+  else { showError('dlgContactErr', false); sel.removeAttribute('aria-invalid'); }
+  if (!picked) { showError('dlgResultErr', true); ok = false; }
+  if (picked && picked.value === '下次联系' && !time) { showError('dlgTimeErr', true); ok = false; }
+  if (!ok) return;
+
+  t.actualContact = contact;
+  if (picked.value === '已处理') {
+    t.result = '已处理';
+    t.status = '已处理';
+    t.contactTime = '';
+    t.closedAt = '2026-09-16 19:35';
+    showToast('任务 ' + t.id + ' 已处理并关闭', '客户：' + customerById(t.customerId).name + ' · 实际联系人：' + contact);
+  } else {
+    t.result = '下次联系';
+    t.contactTime = time.replace('T', ' ');
+    t.status = '待跟进';
+    showToast('任务 ' + t.id + ' 已转为待跟进', '下次联系时间：' + t.contactTime);
+  }
+  closeDealDialog();
+  renderTabs();
+  renderTable();
+}
+
+/* ================= 初始化 ================= */
+function init() {
+  renderCustomerOptions('', '');
+  document.getElementById('fCustomerSearch').addEventListener('input', function () {
+    renderCustomerOptions(this.value, state.customer);
+  });
+  document.getElementById('fCustomerPopover').addEventListener('toggle', function () {
+    var open = this.matches(':popover-open');
+    document.getElementById('fCustomerTrigger').setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open) {
+      document.getElementById('fCustomerSearch').value = '';
+      renderCustomerOptions('', state.customer);
+      document.getElementById('fCustomerSearch').focus();
+    }
+  });
+
+  highlightId = query('task');
+  if (highlightId) state.tab = 'all';
+
+  renderTabs();
+  renderTable();
+
+  if (highlightId) {
+    var row = document.getElementById('row-' + highlightId);
+    if (row) row.scrollIntoView({ block: 'center' });
+  }
+  document.getElementById('dealDialog').addEventListener('click', function (e) {
+    if (e.target === this) this.close();
+  });
+}
+init();
+</script>
+</body>
+</html>
