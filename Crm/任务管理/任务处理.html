@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>任务聚合处理 - 招投标客户任务中心</title>
+<title>任务处理 · 任务系统原型（shadcn-lib 默认主题）</title>
 <style>
+/* ==== SRC[01]: theme/default-semantic-tokens.css ==== */
 /**
  * shadcn-html — Token Layer
  * Semantic CSS custom properties matching the tweakcn.com export format.
@@ -17,132 +18,75 @@
 :root {
   color-scheme: light;
 
-  /* -- Surface / Foreground pairs ------------------------------ */
-  --background:              oklch(1 0 0);
-  --foreground:              oklch(0.1450 0 0);
+  --background:              oklch(0.9946 0.0026 286.3519);
+  --foreground:              oklch(0.1615 0.0105 285.1663);
 
-  --card:                    oklch(1 0 0);
-  --card-foreground:         oklch(0.1450 0 0);
+  --card:                    oklch(1.0000 0 0);
+  --card-foreground:         oklch(0.1615 0.0105 285.1663);
 
-  --popover:                 oklch(1 0 0);
-  --popover-foreground:      oklch(0.1450 0 0);
+  --popover:                 oklch(1.0000 0 0);
+  --popover-foreground:      oklch(0.1615 0.0105 285.1663);
 
-  --primary:                 oklch(0.2050 0 0);
-  --primary-foreground:      oklch(0.9850 0 0);
+  --primary:                 oklch(0.5828 0.2188 258.8797);
+  --primary-foreground:      oklch(0.9670 0.0029 264.5419);
 
-  --secondary:               oklch(0.9700 0 0);
-  --secondary-foreground:    oklch(0.2050 0 0);
+  --secondary:               oklch(0.9518 0.0231 277.9569);
+  --secondary-foreground:    oklch(0.4446 0.0983 268.5283);
 
-  --muted:                   oklch(0.9700 0 0);
-  --muted-foreground:        oklch(0.5560 0 0);
+  --muted:                   oklch(0.9601 0.0093 286.2229);
+  --muted-foreground:        oklch(0.5052 0.0379 284.9640);
 
-  --accent:                  oklch(0.9700 0 0);
-  --accent-foreground:       oklch(0.2050 0 0);
+  --accent:                  oklch(0.9712 0.0136 258.3446);
+  --accent-foreground:       oklch(0.6081 0.2114 266.2130);
 
-  --destructive:             oklch(0.5770 0.2450 27.3250);
-  --destructive-foreground:  oklch(1 0 0);
+  --destructive:             oklch(0.6368 0.2078 25.3313);
+  --destructive-foreground:  oklch(0.9842 0.0034 247.8575);
 
-  /* -- Utility tokens ------------------------------------------- */
-  --border:                  oklch(0.9220 0 0);
-  --input:                   oklch(0.9220 0 0);
-  --ring:                    oklch(0.7080 0 0);
+  --border:                  oklch(0.9163 0.0162 286.0759);
+  --input:                   oklch(0.9163 0.0162 286.0759);
+  --ring:                    oklch(0.5565 0.2430 261.9529);
 
-  /* -- Sidebar tokens ------------------------------------------- */
-  --sidebar:                 oklch(0.9850 0 0);
-  --sidebar-foreground:      oklch(0.1450 0 0);
-  --sidebar-primary:         oklch(0.2050 0 0);
-  --sidebar-primary-foreground: oklch(0.9850 0 0);
-  --sidebar-accent:          oklch(0.9700 0 0);
-  --sidebar-accent-foreground: oklch(0.2050 0 0);
-  --sidebar-border:          oklch(0.9220 0 0);
-  --sidebar-ring:            oklch(0.7080 0 0);
+  --sidebar:                 oklch(0.9946 0.0026 286.3519);
+  --sidebar-foreground:      oklch(0.1615 0.0105 285.1663);
+  --sidebar-primary:         oklch(0.5828 0.2188 258.8797);
+  --sidebar-primary-foreground: oklch(1.0000 0 0);
+  --sidebar-accent:          oklch(0.9634 0.0175 279.0619);
+  --sidebar-accent-foreground: oklch(0.6256 0.2009 264.0684);
+  --sidebar-border:          oklch(0.9163 0.0162 286.0759);
+  --sidebar-ring:            oklch(0.5828 0.2188 258.8797);
 
+  --chart-1:                 oklch(0.5553 0.2554 283.4559);
+  --chart-2:                 oklch(0.6037 0.2141 267.5162);
+  --chart-3:                 oklch(0.7495 0.1297 210.9704);
+  --chart-4:                 oklch(0.8023 0.1492 175.5763);
+  --chart-5:                 oklch(0.6945 0.1422 167.0638);
 
-  /* -- Chart tokens --------------------------------------------- */
-  --chart-1:                 oklch(0.8100 0.1000 252);
-  --chart-2:                 oklch(0.6200 0.1900 260);
-  --chart-3:                 oklch(0.5500 0.2200 263);
-  --chart-4:                 oklch(0.4900 0.2200 264);
-  --chart-5:                 oklch(0.4200 0.1800 266);
+  --font-sans:               'Inter', sans-serif;
+  --font-serif:              'Merriweather', serif;
+  --font-mono:               'JetBrains Mono', monospace;
 
-  /* -- Typography tokens ---------------------------------------- */
-  --font-sans:  ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  --font-mono:  ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-
-  /* -- Radius --------------------------------------------------- */
-  --radius:                  0.625rem;
-  /* Derived — matches tweakcn/shadcn scale */
+  --radius:                  1.25rem;
   --radius-sm:               calc(var(--radius) - 4px);
   --radius-md:               calc(var(--radius) - 2px);
   --radius-lg:               var(--radius);
   --radius-xl:               calc(var(--radius) + 4px);
 
-  /* -- Spacing -------------------------------------------------- */
   --spacing:                 0.25rem;
 
-  /* -- Tracking ------------------------------------------------- */
-  --tracking-normal:         0em;
+  --tracking-normal:         -0.01em;
 
-  /* -- Shadow scale --------------------------------------------- */
-  --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
-  --shadow-xs:  0 1px 3px 0px hsl(0 0% 0% / 0.05);
-  --shadow-sm:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
-  --shadow:     0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
-  --shadow-md:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
-  --shadow-lg:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
-  --shadow-xl:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
-  --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+  --shadow-2xs: 0px 4px 15px 0px hsl(0 0% 0% / 0.07);
+  --shadow-xs:  0px 4px 15px 0px hsl(0 0% 0% / 0.07);
+  --shadow-sm:  0px 4px 15px 0px hsl(0 0% 0% / 0.15), 0px 1px 2px -1px hsl(0 0% 0% / 0.15);
+  --shadow:     0px 4px 15px 0px hsl(0 0% 0% / 0.15), 0px 1px 2px -1px hsl(0 0% 0% / 0.15);
+  --shadow-md:  0px 4px 15px 0px hsl(0 0% 0% / 0.15), 0px 2px 4px -1px hsl(0 0% 0% / 0.15);
+  --shadow-lg:  0px 4px 15px 0px hsl(0 0% 0% / 0.15), 0px 4px 6px -1px hsl(0 0% 0% / 0.15);
+  --shadow-xl:  0px 4px 15px 0px hsl(0 0% 0% / 0.15), 0px 8px 10px -1px hsl(0 0% 0% / 0.15);
+  --shadow-2xl: 0px 4px 15px 0px hsl(0 0% 0% / 0.38);
 }
 
-/* -- Dark mode -------------------------------------------------- */
-.dark {
-  color-scheme: dark;
 
-  --background:              oklch(0.1450 0 0);
-  --foreground:              oklch(0.9850 0 0);
-
-  --card:                    oklch(0.2050 0 0);
-  --card-foreground:         oklch(0.9850 0 0);
-
-  --popover:                 oklch(0.2690 0 0);
-  --popover-foreground:      oklch(0.9850 0 0);
-
-  --primary:                 oklch(0.9220 0 0);
-  --primary-foreground:      oklch(0.2050 0 0);
-
-  --secondary:               oklch(0.2690 0 0);
-  --secondary-foreground:    oklch(0.9850 0 0);
-
-  --muted:                   oklch(0.2690 0 0);
-  --muted-foreground:        oklch(0.7080 0 0);
-
-  --accent:                  oklch(0.3710 0 0);
-  --accent-foreground:       oklch(0.9850 0 0);
-
-  --destructive:             oklch(0.7040 0.1910 22.2160);
-  --destructive-foreground:  oklch(0.9850 0 0);
-
-  --border:                  oklch(0.2750 0 0);
-  --input:                   oklch(0.3250 0 0);
-  --ring:                    oklch(0.5560 0 0);
-
-  --sidebar:                 oklch(0.2050 0 0);
-  --sidebar-foreground:      oklch(0.9850 0 0);
-  --sidebar-primary:         oklch(0.4880 0.2430 264.3760);
-  --sidebar-primary-foreground: oklch(0.9850 0 0);
-  --sidebar-accent:          oklch(0.2690 0 0);
-  --sidebar-accent-foreground: oklch(0.9850 0 0);
-  --sidebar-border:          oklch(0.2750 0 0);
-  --sidebar-ring:            oklch(0.4390 0 0);
-
-  --chart-1:                 oklch(0.8100 0.1000 252);
-  --chart-2:                 oklch(0.6200 0.1900 260);
-  --chart-3:                 oklch(0.5500 0.2200 263);
-  --chart-4:                 oklch(0.4900 0.2200 264);
-  --chart-5:                 oklch(0.4200 0.1800 266);
-}
-
+/* ==== SRC[02]: components/typography/typography.css ==== */
 /* -- Typography component --------------------------------------- */
 
 /* -- Base text ---------------------------------------------- */
@@ -295,7 +239,7 @@
     }
   }
 }
-
+/* ==== SRC[03]: components/button/button.css ==== */
 /* -- Button component ------------------------------------------ */
 
 @layer components {
@@ -437,7 +381,7 @@
     }
   }
 }
-
+/* ==== SRC[04]: components/badge/badge.css ==== */
 /* -- Badge component ------------------------------------------- */
 
 @layer components {
@@ -465,9 +409,19 @@
       background: var(--primary);
       color: var(--primary-foreground);
     }
+
+    &[data-variant="primary"] {
+      background: var(--primary);
+      color: var(--primary-foreground);
+    }
+
+    &[data-variant="destructive"] {
+      background: var(--destructive);
+      color: var(--primary-foreground);
+    }
   }
 }
-
+/* ==== SRC[05]: components/card/card.css ==== */
 /* -- Card component -------------------------------------------- */
 
 @layer components {
@@ -523,7 +477,7 @@
     .card-title { font-size: 1rem; }
   }
 }
-
+/* ==== SRC[06]: components/input/input.css ==== */
 /* -- Input component ------------------------------------------- */
 
 @layer components {
@@ -673,7 +627,7 @@
     }
   }
 }
-
+/* ==== SRC[07]: components/label/label.css ==== */
 /* -- Label component -------------------------------------------- */
 
 @layer components {
@@ -730,7 +684,7 @@
     }
   }
 }
-
+/* ==== SRC[08]: components/select/select.css ==== */
 /* -- Select component ------------------------------------------- */
 
 @layer components {
@@ -780,73 +734,7 @@
     &[data-size="lg"] { height: 2.75rem; padding-left: 1rem;     font-size: 1rem; }
   }
 }
-
-/* -- Separator component ---------------------------------------- */
-
-@layer components {
-  .separator {
-    border: none;
-    margin: 0;
-    flex-shrink: 0;
-    background: var(--border);
-
-    /* Horizontal (default) */
-    height: 1px;
-    width: 100%;
-
-    /* Vertical */
-    &[data-orientation="vertical"] {
-      height: auto;
-      width: 1px;
-      align-self: stretch;
-    }
-
-    /* Decorative — hidden from assistive technology */
-    &[aria-hidden="true"],
-    &[role="none"] {
-      /* No visual change — purely semantic */
-    }
-  }
-
-  /* -- Labeled separator ------------------------------------- */
-  .separator-label {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-
-    & .separator { flex: 1; }
-
-    & span {
-      font-size: 0.75rem;
-      font-weight: 500;
-      color: var(--muted-foreground);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-  }
-
-  /* -- Accessibility ----------------------------------------- */
-  @media (forced-colors: active) {
-    .separator {
-      background: CanvasText;
-    }
-  }
-
-  @media (prefers-contrast: more) {
-    .separator {
-      background: var(--foreground);
-      height: 2px;
-
-      &[data-orientation="vertical"] {
-        width: 2px;
-        height: auto;
-      }
-    }
-  }
-}
-
+/* ==== SRC[09]: components/table/table.css ==== */
 @layer components {
   .table-container {
     width: 100%;
@@ -927,7 +815,7 @@
     .table-cell { padding: 0.5rem 0.75rem; font-size: 0.8125rem; }
   }
 }
-
+/* ==== SRC[10]: components/tabs/tabs.css ==== */
 /* -- Tabs component -------------------------------------------- */
 
 @layer components {
@@ -1051,7 +939,7 @@
     }
   }
 }
-
+/* ==== SRC[11]: components/dialog/dialog.css ==== */
 /* -- Dialog component ------------------------------------------ */
 
 @layer components {
@@ -1116,7 +1004,7 @@
   .dialog-body    { margin-top: 1rem; }
   .dialog-footer  { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.5rem; }
 }
-
+/* ==== SRC[12]: components/radio/radio.css ==== */
 /* -- Radio Group component -------------------------------------- */
 
 @layer components {
@@ -1326,555 +1214,595 @@
     }
   }
 }
-
-/* -- Checkbox component ----------------------------------------- */
+/* ==== SRC[13]: components/textarea/textarea.css ==== */
+/* -- Textarea component ----------------------------------------- */
 
 @layer components {
-  .checkbox {
-    appearance: none;
-    width: 1.125rem;
-    height: 1.125rem;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
+  .textarea {
+    width: 100%;
+    min-height: 5rem;
+    border: 1px solid var(--input);
+    border-radius: var(--radius-md);
     background: var(--background);
-    cursor: pointer;
-    flex-shrink: 0;
-    position: relative;
-    transition: background-color 150ms, border-color 150ms;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    font-family: var(--font-sans);
+    color: var(--foreground);
+    outline: none;
+    box-shadow: var(--shadow-xs);
+    transition: border-color 150ms, box-shadow 150ms;
+    resize: vertical;
+    field-sizing: content;
 
-    &:checked {
-      background-color: var(--primary);
-      border-color: var(--primary);
-
-      &::after {
-        content: '';
-        position: absolute;
-        left: 50%;
-        top: 45%;
-        width: 6px;
-        height: 10px;
-        border: solid var(--primary-foreground);
-        border-width: 0 2px 2px 0;
-        transform: translate(-50%, -50%) rotate(45deg);
-      }
+    &:focus {
+      border-color: var(--ring);
+      box-shadow: 0 0 0 2px oklch(from var(--ring) l c h / 0.2);
     }
 
-    &:indeterminate {
-      background-color: var(--primary);
-      border-color: var(--primary);
-
-      &::after {
-        content: '';
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        width: 10px;
-        height: 2px;
-        background: var(--primary-foreground);
-        transform: translate(-50%, -50%);
-      }
-    }
-
-    &:focus-visible {
-      outline: 2px solid var(--ring);
-      outline-offset: 2px;
-    }
+    &::placeholder { color: var(--muted-foreground); }
 
     &:disabled {
       opacity: 0.5;
       cursor: not-allowed;
+      resize: none;
     }
 
     &:is([aria-invalid="true"], :user-invalid) {
       border-color: var(--destructive);
+
+      &:focus {
+        border-color: var(--destructive);
+        box-shadow: 0 0 0 2px oklch(from var(--destructive) l c h / 0.2);
+      }
+    }
+  }
+}
+/* ==== SRC[14]: components/combobox/combobox.css ==== */
+/* -- Combobox component ---------------------------------------- */
+
+@layer components {
+  .combobox {
+    position: relative;
+  }
+
+  .combobox-trigger {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .combobox-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    text-align: left;
+    font-weight: 400;
+  }
+
+  .combobox-value[data-placeholder] {
+    color: var(--muted-foreground);
+  }
+
+  .combobox-chevron {
+    flex-shrink: 0;
+    color: var(--muted-foreground);
+    opacity: 0.5;
+  }
+
+  .combobox-content {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    padding: 0;
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+
+    /* -- Anchor positioning -- */
+    top: anchor(bottom);
+    left: anchor(left);
+    width: anchor-size(width);
+    margin-top: 4px;
+    position-try-fallbacks: flip-block;
+
+    /* -- Animation --------------------------------------------- */
+    opacity: 0;
+    transform: scale(0.96) translateY(-0.25rem);
+    transition: opacity 150ms ease, transform 150ms ease,
+                display 150ms allow-discrete;
+
+    &:popover-open {
+      opacity: 1;
+      transform: scale(1) translateY(0);
     }
   }
 
-  /* -- Checkbox item layout --------------------------------- */
-  .checkbox-item {
+  @starting-style {
+    .combobox-content:popover-open {
+      opacity: 0;
+      transform: scale(0.96) translateY(-0.25rem);
+    }
+  }
+
+  .combobox-search {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-
-    & > label {
-      font-size: 0.875rem;
-      cursor: pointer;
-    }
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border);
   }
 
-  .checkbox-item-block {
+  .combobox-search-icon {
+    flex-shrink: 0;
+    color: var(--muted-foreground);
+  }
+
+  .combobox-search-input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-size: 0.875rem;
+    font-family: var(--font-sans);
+    color: var(--foreground);
+    outline: none;
+
+    &::placeholder { color: var(--muted-foreground); }
+  }
+
+  .combobox-listbox {
+    max-height: 16rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0.25rem;
+  }
+
+  .combobox-item {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 0.5rem;
+    padding: 0.375rem 0.5rem;
+    border-radius: calc(var(--radius) * 0.6);
+    font-size: 0.875rem;
+    cursor: pointer;
+    outline: none;
+    transition: background 100ms;
 
-    & > label {
-      font-size: 0.875rem;
-      cursor: pointer;
+    &:hover, &[data-highlighted] {
+      background-color: var(--accent);
+      color: var(--accent-foreground);
     }
 
-    & > .checkbox {
-      margin-top: 0.125rem;
+    &[aria-selected="true"]::before {
+      content: '';
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+      background-size: contain;
+      flex-shrink: 0;
+    }
+
+    &[aria-disabled="true"] {
+      pointer-events: none;
+      opacity: 0.5;
     }
   }
 
-  /* Disabled auto-styling */
-  .checkbox-item:has(.checkbox:disabled),
-  .checkbox-item-block:has(.checkbox:disabled) {
-    opacity: 0.5;
-    cursor: not-allowed;
+  .combobox-empty {
+    padding: 1.5rem 0.5rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
   }
 
-  /* -- Accessibility ---------------------------------------- */
+  .combobox-group-label {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--muted-foreground);
+  }
+
+  .combobox-separator {
+    height: 1px;
+    background: var(--border);
+    margin: 0.25rem -0.25rem;
+  }
+
+  /* -- Accessibility ------------------------------------------ */
+
   @media (prefers-reduced-motion: reduce) {
-    .checkbox {
+    .combobox-content {
+      transition: none;
+    }
+    .combobox-item {
       transition: none;
     }
   }
 
-  @media (prefers-contrast: more) {
-    .checkbox {
-      border-width: 2px;
-    }
-
-    .checkbox:disabled {
-      opacity: 0.7;
-    }
-  }
-
   @media (forced-colors: active) {
-    .checkbox {
-      appearance: auto;
+    .combobox-content {
+      border-color: ButtonText;
+    }
+    .combobox-item {
+      &:hover, &[data-highlighted] {
+        forced-color-adjust: none;
+        background: Highlight;
+        color: HighlightText;
+      }
     }
   }
 }
+/* ==== SRC[14]: components/toast/toast.css ==== */
+/* -- Toast component ------------------------------------------- */
 
-/* ================================================================
-   共享扩展层：追加在 shadcn-lib 原生内容之后，未包裹 @layer，
-   因此优先级天然高于库内 @layer 规则。仅做三件事：
-   ① 基础重置 ② Crm 品牌色 token 覆盖 ③ 仅补库内未提供的少量
-   业务语义徽标变体与页面骨架（导航 / 容器 / 提示条）。
-   ================================================================ */
+@layer components {
+  /* -- Container ------------------------------------------------ */
+  .toast-container {
+    position: fixed;
+    z-index: 100;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+    padding: 1rem;
+    max-height: 100vh;
+    pointer-events: none;
 
-/* ===== 1. 基础重置 ===== */
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    &[data-position="bottom-right"] { bottom: 0; right: 0; }
+    &[data-position="bottom-left"]  { bottom: 0; left: 0; }
+    &[data-position="top-right"]    { top: 0; right: 0; flex-direction: column; }
+    &[data-position="top-left"]     { top: 0; left: 0; flex-direction: column; }
+    &[data-position="top-center"]   { top: 0; left: 50%; transform: translateX(-50%); flex-direction: column; align-items: center; }
+    &[data-position="bottom-center"]{ bottom: 0; left: 50%; transform: translateX(-50%); align-items: center; }
+  }
+
+  /* -- Toast ---------------------------------------------------- */
+  .toast {
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    min-width: 20rem;
+    max-width: 26rem;
+    box-shadow: 0 4px 16px oklch(0 0 0 / 0.12);
+    pointer-events: auto;
+    opacity: 0;
+    transform: translateY(0.5rem);
+    transition: opacity 200ms ease, transform 200ms ease;
+
+    &:popover-open {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* -- Variants ------------------------------------------------- */
+    &[data-variant="destructive"] {
+      background-color: var(--destructive);
+      color: var(--destructive-foreground);
+      border-color: var(--destructive);
+
+      & .toast-description {
+        color: var(--destructive-foreground);
+        opacity: 0.85;
+      }
+    }
+
+    /* -- Semantic variants (border + icon color) ----------------- */
+    &[data-variant="success"] {
+      border-color: oklch(0.65 0.2 145);
+
+      & .toast-icon { color: oklch(0.65 0.2 145); }
+    }
+
+    &[data-variant="warning"] {
+      border-color: oklch(0.75 0.18 75);
+
+      & .toast-icon { color: oklch(0.75 0.18 75); }
+    }
+
+    &[data-variant="info"] {
+      border-color: oklch(0.6 0.15 250);
+
+      & .toast-icon { color: oklch(0.6 0.15 250); }
+    }
+  }
+
+  @starting-style {
+    .toast:popover-open {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+  }
+
+  /* -- Inner elements ------------------------------------------- */
+  .toast-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .toast-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .toast-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .toast-description {
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    margin: 0.125rem 0 0;
+    line-height: 1.5;
+  }
+
+  .toast-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: none;
+    background: transparent;
+    color: var(--muted-foreground);
+    cursor: pointer;
+    flex-shrink: 0;
+    border-radius: calc(var(--radius) * 0.5);
+    transition: color 150ms, background 150ms;
+
+    &:hover {
+      color: var(--foreground);
+      background: var(--accent);
+    }
+  }
+
+  .toast-icon {
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+  }
+
+  .toast-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+}
+/* ==== SRC[15]: documentation/css/docs-theme.css :: Minimal base reset 段 ==== */
+/* -- Minimal base reset ------------------------------------ */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
 body {
-  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-family: var(--font-sans);
+  margin: 0;
+  line-height: 1.6;
+  background-color: var(--background);
   color: var(--foreground);
-  background: var(--background);
 }
-a { text-decoration: none; color: inherit; }
-ul, ol { list-style: none; }
-button, input, select, dialog { font-family: inherit; }
-/* 通用隐藏工具类（页面脚本统一通过 classList.toggle('hidden') 控制显隐） */
-.hidden { display: none !important; }
+/* ==== SRC[16]: documentation/css/docs-utilities.css ==== */
+/* ----------------------------------------------------------------
+   docs-utilities.css
+   Hand-written utility classes used by documentation pages only.
 
-/* ===== 2. 主题 token 覆盖（沿用 Crm 现有页面品牌色） ===== */
-:root {
-  --primary: #6F9BC4;
-  --primary-dark: #5a87b0;
-  --primary-light: #E2EBF6;
-  --primary-foreground: #fff;
+   These utilities only affect elements that explicitly opt in by
+   using the class name, so they cannot leak into component styles.
+---------------------------------------------------------------- */
 
-  --background: #f5f6f8;
-  --foreground: #555;
-  --card: #fff;
-  --card-foreground: #2A2A2A;
-  --popover: #fff;
-  --popover-foreground: #2A2A2A;
+/* Flex / layout */
+.flex           { display: flex; }
+.flex-col       { flex-direction: column; }
+.flex-wrap      { flex-wrap: wrap; }
+.grid           { display: grid; }
+.items-center   { align-items: center; }
+.items-baseline { align-items: baseline; }
+.justify-between{ justify-content: space-between; }
+.ml-auto        { margin-left: auto; }
 
-  --secondary: #E2EBF6;
-  --secondary-foreground: #6F9BC4;
-  --accent: #E2EBF6;
-  --accent-foreground: #2A2A2A;
+/* Gap scale (1 = 0.25rem) */
+.gap-1 { gap: 0.25rem; }
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 0.75rem; }
+.gap-4 { gap: 1rem; }
+.gap-6 { gap: 1.5rem; }
+.gap-8 { gap: 2rem; }
 
-  --destructive: #FF5454;
-  --destructive-foreground: #fff;
-  --success: #00BFBF;
-  --orange: #FF8F22;
+/* Margin bottom */
+.mb-1  { margin-bottom: 0.25rem; }
+.mb-2  { margin-bottom: 0.5rem; }
+.mb-3  { margin-bottom: 0.75rem; }
+.mb-4  { margin-bottom: 1rem; }
+.mb-5  { margin-bottom: 1.25rem; }
+.mb-6  { margin-bottom: 1.5rem; }
+.mb-8  { margin-bottom: 2rem; }
+.mb-10 { margin-bottom: 2.5rem; }
+.mb-12 { margin-bottom: 3rem; }
 
-  --border: #E8E8E8;
-  --border-dark: #D7D7D7;
-  --muted: #F4F4F4;
-  --muted-foreground: #999;
-  --input: #D7D7D7;
-  --ring: #6F9BC4;
+/* Margin top */
+.mt-2 { margin-top: 0.5rem; }
+.mt-6 { margin-top: 1.5rem; }
+.mt-8 { margin-top: 2rem; }
 
-  --radius: 6px;
-  --radius-sm: 4px;
-}
+/* Typography */
+.text-sm               { font-size: 0.875rem; line-height: 1.25rem; }
+.text-xs               { font-size: 0.75rem;  line-height: 1rem; }
+.text-lg               { font-size: 1.125rem; line-height: 1.75rem; }
+.text-muted-foreground { color: var(--muted-foreground); }
+.text-destructive      { color: var(--destructive); }
+.font-medium           { font-weight: 500; }
+.leading-relaxed       { line-height: 1.625; }
 
-/* ===== 3. 徽标语义变体扩展（库内 badge 仅 default/secondary/outline，
-   此处沿用库 token 扩展业务语义：高优先级→destructive、中优先级→warning，
-   状态：待处理→primary、待跟进→warning、已处理→success、已逾期→destructive） ===== */
-.badge[data-variant="destructive"] {
-  background: var(--destructive);
-  color: var(--destructive-foreground);
-}
-.badge[data-variant="warning"] {
-  background: #FFF3E6;
-  color: var(--orange);
-  border: 1px solid #FFDCB8;
-}
-.badge[data-variant="success"] {
-  background: #E0F7F7;
-  color: var(--success);
-  border: 1px solid #B3EBEB;
-}
-.badge[data-variant="primary"] {
-  background: var(--primary-light);
-  color: var(--primary);
-  border: 1px solid #CBDFF2;
-}
-.badge[data-variant="muted"] {
-  background: var(--muted);
-  color: var(--muted-foreground);
-  border: 1px solid var(--border);
-}
-
-/* ===== 4. 页面骨架：容器与顶部导航条（4 个页面共用） ===== */
-.container { max-width: 1240px; margin: 0 auto; padding: 0 20px; }
-
-.app-nav {
-  background: var(--primary);
-  height: 52px;
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-}
-.app-nav .container { display: flex; align-items: center; height: 100%; }
-.app-brand {
-  color: #fff;
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  margin-right: 20px;
+/* Accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
   white-space: nowrap;
+  border: 0;
 }
-.app-nav .nav-link {
-  color: #EAF2FA;
-  font-size: 14px;
-  height: 52px;
-  display: inline-flex;
-  align-items: center;
-  padding: 0 18px;
-  white-space: nowrap;
-  transition: background 150ms ease;
-}
-.app-nav .nav-link:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
-.app-nav .nav-link.active { background: rgba(255, 255, 255, 0.2); color: #fff; font-weight: 500; }
-.app-nav .nav-right { margin-left: auto; color: #EAF2FA; font-size: 12px; white-space: nowrap; }
-
-/* ===== 5. 操作结果提示条 ===== */
-.flash {
-  position: fixed;
-  left: 50%;
-  bottom: 36px;
-  transform: translateX(-50%);
-  display: none;
-  align-items: center;
-  gap: 8px;
-  background: var(--card);
-  border: 1px solid var(--success);
-  border-left: 4px solid var(--success);
-  border-radius: var(--radius-lg);
-  padding: 12px 20px;
-  font-size: 14px;
-  color: var(--card-foreground);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  z-index: 200;
-}
-.flash.show { display: flex; }
-.flash-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
-
-/* ================================================================
-   第 2 页页面级样式（在 shadcn-lib 原生内容与共享扩展层之后追加，未包裹 @layer）
-   ================================================================ */
-
-/* ===== 5. 页面通用块 ===== */
-.page-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 16px;
-}
-.page-title { font-size: 20px; font-weight: 600; color: var(--card-foreground); letter-spacing: -0.01em; }
-.page-sub { font-size: 13px; color: var(--muted-foreground); margin-top: 4px; }
-.rule-note { font-size: 12px; color: var(--muted-foreground); margin-top: 6px; line-height: 1.6; }
-.rule-note b { color: var(--primary); font-weight: 500; }
-
-.panel {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 16px;
-  margin-bottom: 16px;
-}
-.panel-tight { padding: 12px 16px; }
-
-.filter-row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; }
-.filter-item { display: flex; flex-direction: column; gap: 6px; min-width: 168px; }
-.filter-item.grow { flex: 1; min-width: 240px; }
-.filter-label { font-size: 12px; color: var(--muted-foreground); }
-.filter-actions { display: flex; align-items: center; gap: 8px; padding-bottom: 1px; }
-
-.toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
-.muted-note { font-size: 12px; color: var(--muted-foreground); }
-
-.stat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 16px; }
-.stat-grid.cols-6 { grid-template-columns: repeat(6, 1fr); }
-.stat-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 14px 16px;
-}
-.stat-card.accent-warning { border-color: #FFDCB8; }
-.stat-card.accent-destructive { border-color: #FFC9C9; }
-.stat-card.accent-success { border-color: #B3EBEB; }
-.stat-card.accent-primary { border-color: #CBDFF2; }
-.stat-card .statistic-value { font-size: 26px; }
-
-.card-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px 16px; }
-.card-row-item { display: flex; flex-direction: column; gap: 2px; }
-.card-row-label { font-size: 12px; color: var(--muted-foreground); }
-.card-row-value { font-size: 15px; font-weight: 600; color: var(--card-foreground); }
-
-.overview-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-.overview-item { border-right: 1px solid var(--border); padding-right: 16px; }
-.overview-item:last-child { border-right: none; }
-
-.empty { padding: 36px 16px; text-align: center; color: var(--muted-foreground); font-size: 13px; }
-
-/* ===== 6. 表格内元素 ===== */
-.type-cell { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
-.type-name { width: 100%; font-size: 12px; color: var(--foreground); }
-.customer-cell { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
-.customer-name { color: var(--primary); cursor: pointer; }
-.customer-name:hover { text-decoration: underline; }
-.multi-badge {
-  display: inline-flex;
-  align-items: center;
-  font-size: 11px;
-  color: var(--orange);
-  background: #FFF3E6;
-  border: 1px solid #FFDCB8;
-  border-radius: 9999px;
-  padding: 0 6px;
-  white-space: nowrap;
-}
-.cell-note { display: block; font-size: 11px; color: var(--muted-foreground); margin-top: 2px; }
-.op-cell { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
-.status-cell { display: flex; align-items: center; gap: 6px; }
-.row-disabled .table-cell { color: var(--muted-foreground); }
-.row-highlight { background: #FFFDF3 !important; }
-.progress-cell { display: flex; align-items: center; gap: 8px; min-width: 130px; }
-.progress-cell .progress { flex: 1; }
-.progress-text { font-size: 12px; color: var(--muted-foreground); white-space: nowrap; width: 38px; text-align: right; }
-.sortable { cursor: pointer; user-select: none; white-space: nowrap; }
-.sortable:hover { color: var(--primary); }
-.sortable .arrow { font-size: 10px; margin-left: 2px; color: var(--muted-foreground); }
-.sortable.active { color: var(--primary); }
-.sortable.active .arrow { color: var(--primary); }
-
-.tab-count {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 5px;
-  margin-left: 4px;
-  border-radius: 9999px;
-  font-size: 11px;
-  font-weight: 500;
-  background: rgba(0, 0, 0, 0.07);
-  color: var(--muted-foreground);
-}
-.tab-trigger[aria-selected="true"] .tab-count { background: var(--secondary); color: var(--primary); }
-.tabs { margin-bottom: 16px; }
-
-/* ===== 7. 弹窗内元素 ===== */
-.task-brief {
-  background: var(--muted);
-  border-radius: var(--radius-md);
-  padding: 12px 14px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px 16px;
-  font-size: 13px;
-}
-.brief-item { display: flex; gap: 6px; }
-.brief-item.full { grid-column: 1 / -1; }
-.brief-k { color: var(--muted-foreground); flex-shrink: 0; }
-.brief-v { color: var(--card-foreground); }
-.field-block { margin-top: 16px; }
-.field-block.hidden { display: none; }
-.field-error.hidden { display: none; }
-
-/* ===== 8. 操作提示条 ===== */
-.flash {
-  position: fixed;
-  left: 50%;
-  bottom: 36px;
-  transform: translateX(-50%);
-  display: none;
-  align-items: center;
-  gap: 8px;
-  background: var(--card);
-  border: 1px solid var(--success);
-  border-left: 4px solid var(--success);
-  border-radius: var(--radius-lg);
-  padding: 12px 20px;
-  font-size: 14px;
-  color: var(--card-foreground);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  z-index: 200;
-}
-.flash.show { display: flex; }
-.flash-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
-
-/* ===== 9. 响应式 ===== */
-@media (max-width: 1100px) {
-  .stat-grid, .stat-grid.cols-6 { grid-template-columns: repeat(3, 1fr); }
-  .overview-grid { grid-template-columns: repeat(2, 1fr); }
-  .overview-item { border-right: none; }
-}
-@media (max-width: 720px) {
-  .stat-grid, .stat-grid.cols-6 { grid-template-columns: repeat(2, 1fr); }
-  .card-row { grid-template-columns: repeat(2, 1fr); }
-  .app-brand { font-size: 13px; margin-right: 8px; }
-  .app-nav .nav-link { padding: 0 10px; font-size: 13px; }
-  .task-brief { grid-template-columns: 1fr; }
-}
-
-/* ===== 11. 页面外层 ===== */
-.page { padding: 20px 0 56px; }
-
 </style>
 </head>
 <body>
-<div class="app-nav"><div class="container"><span class="app-brand">招投标客户任务中心</span><a class="nav-link" href="任务列表.html">任务列表</a><a class="nav-link active" href="任务聚合处理.html">任务聚合处理</a><a class="nav-link" href="领导任务.html">领导任务视图</a><a class="nav-link" href="任务报表.html">任务处理报表</a><span class="nav-right">当前使用者：张明（客户经理）</span></div></div>
-<div class="page">
-  <div class="container">
 
-    <div class="page-head">
-      <div>
-        <h1 class="page-title">任务聚合处理</h1>
-        <p class="page-sub" id="aggSub">当前客户：—</p>
-      </div>
-      <div class="filter-actions">
-        <button class="btn" data-variant="outline" data-size="sm" onclick="location.href='任务列表.html'">返回任务列表</button>
-        <button class="btn" data-variant="outline" data-size="sm" onclick="openCustomerLink()">查看客户</button>
-      </div>
+<!-- 页面级容器：仅内联纯布局（宽 / 居中 / 内边距），不含任何颜色与视觉声明 -->
+<div style="max-width:88rem;margin:0 auto;padding:1.5rem 1.5rem 3rem 1.5rem;">
+
+  <!-- ===== 页头 ===== -->
+  <div class="flex items-center justify-between flex-wrap gap-4" style="margin:1.5rem 0 1rem 0;">
+    <div>
+      <h1 class="h3" style="margin:0;">任务处理</h1>
+      <p class="muted" style="margin:0.25rem 0 0 0;" id="pageSubtitle">同一联系人名下有多条未完成任务时，可在此页面批量勾选并统一设置处理结果。</p>
     </div>
-
-    <!-- ========== 客户概览卡 ========== -->
-    <div class="panel">
-      <div class="overview-grid">
-        <div class="overview-item">
-          <div class="card-row-label">客户名称</div>
-          <div class="card-row-value" id="ovName">—</div>
-        </div>
-        <div class="overview-item">
-          <div class="card-row-label">当前响应负责人</div>
-          <div class="card-row-value" id="ovOwner">—</div>
-        </div>
-        <div class="overview-item">
-          <div class="card-row-label">相关联系人数量</div>
-          <div class="card-row-value" id="ovContacts">—</div>
-        </div>
-        <div class="overview-item">
-          <div class="card-row-label">未完成任务数</div>
-          <div class="card-row-value" id="ovUnfinished">—</div>
-        </div>
-      </div>
+    <div class="flex items-center gap-3">
+      <span class="muted">当前使用者：张明（客户经理）</span>
+      <button class="btn" data-variant="outline" data-size="sm" type="button" onclick="goPage('list')">返回任务列表</button>
+      <button class="btn" data-variant="outline" data-size="sm" type="button" id="viewCustomerBtn" onclick="openCurrentCustomer()">查看客户</button>
     </div>
-
-    <!-- ========== 未完成任务列表 ========== -->
-    <div class="toolbar">
-      <span class="muted-note" id="selSummary">—</span>
-      <span class="muted-note">列表默认全选，取消勾选的任务不会被批量处理</span>
-    </div>
-
-    <div class="table-container">
-      <table class="table">
-        <thead>
-          <tr>
-            <th class="table-head" style="width:44px;">
-              <input class="checkbox" type="checkbox" id="checkAll" onchange="toggleAll(this.checked)" title="全选">
-            </th>
-            <th class="table-head">提醒时间</th>
-            <th class="table-head">任务类型</th>
-            <th class="table-head">优先级</th>
-            <th class="table-head" style="min-width:300px;">任务说明</th>
-            <th class="table-head">任务状态</th>
-            <th class="table-head">相关联系人</th>
-          </tr>
-        </thead>
-        <tbody id="aggBody"></tbody>
-      </table>
-    </div>
-    <div class="empty hidden" id="emptyTip">该客户当前没有未完成任务</div>
-
-    <!-- ========== 批量处理区 ========== -->
-    <div class="panel">
-      <div class="toolbar" style="margin-bottom:10px;">
-        <span class="card-row-value">批量处理</span>
-        <span class="muted-note">对已勾选任务统一设置实际联系人与处理结果，一次性提交</span>
-      </div>
-      <div class="filter-row">
-        <div class="filter-item grow">
-          <label class="filter-label" for="bContact">实际联系人 <span class="label-hint">必填</span></label>
-          <select class="select" id="bContact" onchange="hideError('bContactErr')"></select>
-          <p class="field-error hidden" id="bContactErr">请选择实际联系人</p>
-        </div>
-        <div class="filter-item grow">
-          <label class="filter-label">处理结果 <span class="label-hint">必填</span></label>
-          <div class="radio-group" data-orientation="horizontal">
-            <div class="radio-item">
-              <input class="radio" type="radio" name="bResult" id="bDone" value="已处理" onchange="onBatchResultChange()">
-              <label for="bDone">已处理（任务关闭）</label>
-            </div>
-            <div class="radio-item">
-              <input class="radio" type="radio" name="bResult" id="bNext" value="下次联系" onchange="onBatchResultChange()">
-              <label for="bNext">下次联系（转待跟进）</label>
-            </div>
-          </div>
-          <p class="field-error hidden" id="bResultErr">请选择处理结果</p>
-        </div>
-        <div class="filter-item hidden" id="bTimeWrap">
-          <label class="filter-label" for="bTime">联系时间 <span class="label-hint">必填</span></label>
-          <input class="input" type="datetime-local" id="bTime" value="2026-09-17T09:00" onchange="hideError('bTimeErr')">
-          <p class="field-error hidden" id="bTimeErr">选择「下次联系」时必须设置联系时间</p>
-        </div>
-        <div class="filter-actions">
-          <button class="btn" data-variant="default" data-size="sm" onclick="submitBatch()">提交批量处理</button>
-        </div>
-      </div>
-    </div>
-
   </div>
+
+  <!-- ===== 信息卡片（库 card 组件） ===== -->
+  <div class="card" style="margin:0 0 1rem 0;">
+    <div class="card-header">
+      <h2 class="card-title" style="font-size:1rem;">聚合概览</h2>
+    </div>
+    <div class="card-content" id="overviewContent">
+      <!-- 由 JS 动态渲染 -->
+    </div>
+  </div>
+
+  <!-- ===== 任务列表（库 card + table 组件） ===== -->
+  <div class="card" style="margin:0 0 1rem 0;">
+    <div class="card-header">
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <h2 class="card-title" style="font-size:1rem;">任务列表</h2>
+        <span class="muted" id="listSummary"></span>
+      </div>
+    </div>
+    <div class="card-content">
+      <div class="table-container">
+        <table class="table">
+          <colgroup>
+            <col style="width:3rem;">
+            <col style="width:11rem;">
+            <col style="width:12rem;">
+            <col style="width:auto;">
+            <col style="width:8rem;">
+          </colgroup>
+          <thead>
+            <tr class="table-row">
+              <th class="table-head" scope="col" style="text-align:center;">
+                <input type="checkbox" id="checkAll" aria-label="全选" onchange="onCheckAll()">
+              </th>
+              <th class="table-head" scope="col">提醒时间</th>
+              <th class="table-head" scope="col">任务类型</th>
+              <th class="table-head" scope="col">任务说明</th>
+              <th class="table-head" scope="col">任务状态</th>
+            </tr>
+          </thead>
+          <tbody id="taskBody">
+            <!-- 由 JS 动态渲染 -->
+          </tbody>
+        </table>
+      </div>
+      <div class="muted" id="emptyTip" hidden style="padding:3rem 0;text-align:center;">当前联系人暂无未完成任务</div>
+    </div>
+  </div>
+
+  <!-- ===== 批量处理区（库 card 组件） ===== -->
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title" style="font-size:1rem;">批量处理</h2>
+      <p class="card-description">为已勾选的任务统一设置处理结果，提交后状态实时更新。</p>
+    </div>
+    <div class="card-content">
+      <div style="display:flex;flex-direction:column;gap:1rem;max-width:32rem;">
+        <div>
+          <label class="label" for="batchContact">实际联系人 <span class="label-hint">必填</span></label>
+          <select class="select" id="batchContact"></select>
+          <p class="field-error" id="batchContactErr" hidden>请选择本次实际联系的客户联系人</p>
+        </div>
+
+        <fieldset class="radio-group" id="batchResultGroup">
+          <legend class="label">处理结果 <span class="label-hint">必选</span></legend>
+          <div class="radio-item">
+            <input class="radio" type="radio" id="batchResultDone" name="batchResult" value="已处理" onchange="onResultChange()">
+            <label for="batchResultDone">已处理（任务关闭，不再进入逾期判定）</label>
+          </div>
+          <div class="radio-item">
+            <input class="radio" type="radio" id="batchResultNext" name="batchResult" value="下次联系" onchange="onResultChange()">
+            <label for="batchResultNext">下次联系（任务转为待跟进，需填写联系时间）</label>
+          </div>
+        </fieldset>
+        <p class="field-error" id="batchResultErr" hidden>请选择处理结果</p>
+
+        <div id="batchTimeBlock" hidden>
+          <label class="label" for="batchTime">下次联系时间 <span class="label-hint">必填</span></label>
+          <input class="input" id="batchTime" type="datetime-local">
+          <p class="field-error" id="batchTimeErr" hidden>请选择下次联系时间</p>
+        </div>
+
+        <div>
+          <label class="label" for="batchRemark">备注</label>
+          <textarea class="textarea" id="batchRemark" rows="4" style="min-height:5rem;" placeholder="可填写处理备注信息（选填）"></textarea>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button class="btn" data-variant="default" type="button" onclick="submitBatch()">提交处理结果</button>
+          <span class="muted" id="selectedSummary"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
-<div class="flash" id="flash"><span class="flash-dot"></span><span id="flashText"></span></div>
+
+<!-- 库 toast 组件容器 -->
+<div id="toastHost" class="toast-container" aria-label="Notifications" data-position="top-center"></div>
+
 <script>
 /* =========================================================
-   演示数据与领域规则（招投标行业场景）—— 4 个页面共用
+   演示数据与领域规则（招投标行业场景）
+   「完全库默认」方案：所有视觉一律取自 shadcn-lib 组件类与官方变体，
+   本文件不产生任何自造样式，仅在必要处使用纯布局内联样式（宽/高/间距/flex/grid）。
    ========================================================= */
-var TODAY = '2026-09-16';                                   /* 演示基准日期 */
-var NOW = new Date('2026-09-16T19:30:00');                  /* 演示基准时间 */
+var TODAY = '2026-09-16';
+var NOW = new Date('2026-09-16T19:30:00');
 
 var CRM_PAGE = 'file:///D:/workspace/bidcenter-github.github.io/Crm/客户详情页-重构.html';
 
 var CUSTOMERS = [
-  { id: 'C01', name: '华能电力工程有限公司', owner: '张明', region: '华东', contacts: ['李国强', '王海涛', '赵敏'] },
-  { id: 'C02', name: '中建八局第二建设有限公司', owner: '张明', region: '华北', contacts: ['刘建国', '孙倩'] },
-  { id: 'C03', name: '国网江苏电力设计院', owner: '李静', region: '华东', contacts: ['周文军', '陈晓东'] },
-  { id: 'C04', name: '三一重工供应链管理部', owner: '李静', region: '华中', contacts: ['黄伟'] },
-  { id: 'C05', name: '无锡蓝天环保科技有限公司', owner: '王超', region: '华东', contacts: ['徐丽华', '郑凯', '马晓峰'] },
-  { id: 'C06', name: '中铁十四局集团有限公司', owner: '王超', region: '西南', contacts: ['田志强', '何静'] },
-  { id: 'C07', name: '常州银河微电子股份有限公司', owner: '李静', region: '华东', contacts: ['吴敏'] }
+  { id: 'C01', name: '华能电力工程有限公司', accountName: 'hn-huaneng-001', memberType: '高级会员', owner: '北京-客服部门-张明', region: '华东', contacts: [
+    { name: '李国强', phone: '138-0001-0001' }, { name: '王海涛', phone: '139-0002-0002' }, { name: '赵敏', phone: '137-0003-0003' }
+  ]},
+  { id: 'C02', name: '中建八局第二建设有限公司', accountName: 'cscec-802', memberType: '标准会员', owner: '北京-客服部门-张明', region: '华北', contacts: [
+    { name: '刘建国', phone: '136-0004-0004' }, { name: '孙倩', phone: '135-0005-0005' }
+  ]},
+  { id: 'C03', name: '国网江苏电力设计院', accountName: '13912345678', memberType: '高级会员', owner: '上海-大客户部-李静', region: '华东', contacts: [
+    { name: '周文军', phone: '134-0006-0006' }, { name: '陈晓东', phone: '133-0007-0007' }
+  ]},
+  { id: 'C04', name: '三一重工供应链管理部', accountName: 'sany-supply', memberType: '免费会员', owner: '上海-大客户部-李静', region: '华中', contacts: [
+    { name: '黄伟', phone: '132-0008-0008' }
+  ]},
+  { id: 'C05', name: '无锡蓝天环保科技有限公司', accountName: 'lt-huanbao', memberType: '标准会员', owner: '南京-商务部门-王超', region: '华东', contacts: [
+    { name: '徐丽华', phone: '131-0009-0009' }, { name: '郑凯', phone: '130-0010-0010' }, { name: '马晓峰', phone: '129-0011-0011' }
+  ]},
+  { id: 'C06', name: '中铁十四局集团有限公司', accountName: 'crcc-14j', memberType: '高级会员', owner: '南京-商务部门-王超', region: '西南', contacts: [
+    { name: '田志强', phone: '128-0012-0012' }, { name: '何静', phone: '127-0013-0013' }
+  ]},
+  { id: 'C07', name: '常州银河微电子股份有限公司', accountName: 'yh-micro', memberType: '免费会员', owner: '上海-大客户部-李静', region: '华东', contacts: [
+    { name: '吴敏', phone: '126-0014-0014' }
+  ]}
 ];
 
 var OWNERS = ['张明', '李静', '王超'];
@@ -1902,14 +1830,14 @@ var TASKS = [
   { id: 'T05', remind: '2026-09-16 11:15', type: '会员升级', customerId: 'C02', relatedContact: '孙倩', actualContact: '', desc: '企业会员由标准版升级至专业版的报价方案已发送，等待客户反馈', status: '待处理', result: '', contactTime: '', closedAt: '' },
   { id: 'T06', remind: '2026-09-16 14:00', type: '邮件关闭', customerId: 'C04', relatedContact: '黄伟', actualContact: '黄伟', desc: '客户邮件咨询发票开具流程，已回复处理路径并关闭', status: '已处理', result: '已处理', contactTime: '', closedAt: '2026-09-16 15:20' },
   { id: 'T07', remind: '2026-09-16 16:30', type: '功能使用超限', customerId: 'C03', relatedContact: '周文军', actualContact: '', desc: '企业账号本月招标文件下载次数已达上限，需协助申请临时扩容', status: '待处理', result: '', contactTime: '', closedAt: '' },
-  { id: 'T08', remind: '2026-09-16 19:05', type: '临时任务', customerId: 'C05', relatedContact: '徐丽华', actualContact: '', desc: '客户临时要求补充近三年同行业中标案例清单（18:00后发起）', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T08', remind: '2026-09-16 19:05', type: '临时任务', customerId: 'C05', relatedContact: '徐丽华', actualContact: '', desc: '客户临时要求补充近三年同行业中标案例清单', status: '待处理', result: '', contactTime: '', closedAt: '' },
 
   { id: 'T09', remind: '2026-09-15 09:30', type: '撞单任务', customerId: 'C06', relatedContact: '田志强', actualContact: '', desc: '与华东二部撞单，需确认客户归属并回填归属说明', status: '待处理', result: '', contactTime: '', closedAt: '' },
   { id: 'T10', remind: '2026-09-15 10:20', type: '中标追踪', customerId: 'C05', relatedContact: '郑凯', actualContact: '', desc: '环保设备采购项目中标结果已出，需追踪客户签约进度', status: '待处理', result: '', contactTime: '', closedAt: '' },
   { id: 'T11', remind: '2026-09-15 15:40', type: '项目追踪', customerId: 'C01', relatedContact: '李国强', actualContact: '李国强', desc: '方案评审会时间未定，需再次确认并同步技术团队', status: '待跟进', result: '下次联系', contactTime: '2026-09-17 09:00', closedAt: '' },
   { id: 'T12', remind: '2026-09-15 11:00', type: '新发任务', customerId: 'C04', relatedContact: '黄伟', actualContact: '黄伟', desc: '客户资料核实完成，已分配专属顾问并完成建联', status: '已处理', result: '已处理', contactTime: '', closedAt: '2026-09-15 14:10' },
   { id: 'T13', remind: '2026-09-15 17:50', type: '活动报名', customerId: 'C03', relatedContact: '陈晓东', actualContact: '', desc: '邀请参加电力设计行业闭门交流会，需确认报名信息', status: '待处理', result: '', contactTime: '', closedAt: '' },
-  { id: 'T14', remind: '2026-09-16 19:20', type: '邮件关闭', customerId: 'C05', relatedContact: '马晓峰', actualContact: '', desc: '客户邮件反馈网站会员权益页面打不开，需核查后回复（18:00后发起，不纳入次日逾期）', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T14', remind: '2026-09-16 19:20', type: '邮件关闭', customerId: 'C05', relatedContact: '马晓峰', actualContact: '', desc: '客户邮件反馈网站会员权益页面打不开，需核查后回复', status: '待处理', result: '', contactTime: '', closedAt: '' },
 
   { id: 'T15', remind: '2026-09-17 09:00', type: '会员升级', customerId: 'C06', relatedContact: '何静', actualContact: '', desc: '客户意向升级集团版，需准备多账号管理方案', status: '待处理', result: '', contactTime: '', closedAt: '' },
   { id: 'T16', remind: '2026-09-17 10:30', type: '新发任务', customerId: 'C03', relatedContact: '周文军', actualContact: '', desc: '新注册子账号待认证，需指导完成企业实名认证', status: '待处理', result: '', contactTime: '', closedAt: '' },
@@ -1928,8 +1856,6 @@ var TASKS = [
 ];
 
 /* ===== 逾期规则 ===== */
-/* 当天 18:00 前发起 → 逾期截止为当天 24:00，超过未处理即计为已逾期；
-   18:00 后发起 → 当天计入今日任务，但不纳入次日逾期判定。 */
 function remindDate(t) { return t.remind.slice(0, 10); }
 function remindHour(t) { return parseInt(t.remind.slice(11, 13), 10); }
 function isAfter18(t) { return remindHour(t) >= 18; }
@@ -1939,8 +1865,6 @@ function overdueDeadline(t) {
   return new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10) + 1, 0, 0, 0);
 }
 function effStatus(t) {
-  /* 已处理 / 待跟进 由人工处理结果决定，不再参与逾期判定；
-     仅「待处理」且已过逾期截止时间(当天24:00)的任务实时推导为「已逾期」。 */
   if (t.status !== '待处理') return t.status;
   var dl = overdueDeadline(t);
   if (dl && NOW.getTime() >= dl.getTime()) return '已逾期';
@@ -1952,176 +1876,281 @@ function isUnfinished(t) { return effStatus(t) !== '已处理'; }
 function customerById(id) { for (var i = 0; i < CUSTOMERS.length; i++) { if (CUSTOMERS[i].id === id) return CUSTOMERS[i]; } return null; }
 function tasksOfCustomer(id) { return TASKS.filter(function (t) { return t.customerId === id; }); }
 function unfinishedOfCustomer(id) { return tasksOfCustomer(id).filter(isUnfinished); }
+/* 按客户+联系人筛选未完成任务（聚合触发条件：同一联系人≥2条未完成） */
+function unfinishedOfCustomerAndContact(customerId, contactName) {
+  return TASKS.filter(function (t) {
+    return t.customerId === customerId && t.relatedContact === contactName && isUnfinished(t);
+  });
+}
 function ownerOfCustomer(id) { var c = customerById(id); return c ? c.owner : ''; }
 function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 function pct(a, b) { return b > 0 ? Math.round(a / b * 100) : 0; }
 
-var STATUS_VARIANT = { '待处理': 'primary', '待跟进': 'warning', '已处理': 'success', '已逾期': 'destructive' };
-var PRIORITY_VARIANT = { '高': 'destructive', '中': 'warning' };
+/* ===== 语义映射：只使用 badge.css 中官方存在的三个变体 ===== */
+var BADGE_VARIANTS = { 'default': 1, 'secondary': 1, 'outline': 1, 'primary': 1, 'destructive': 1 };
+var STATUS_VARIANT = { '待处理': 'secondary', '待跟进': 'outline', '已处理': 'outline', '已逾期': 'default' };
+var PRIORITY_VARIANT = { '高': 'destructive', '中': 'primary', '低': 'outline' };
+var CATEGORY_VARIANT = { '新发任务': 'outline', '系统任务': 'outline', '自建任务': 'outline' };
 
-function badgeHtml(text, variant) { return '<span class="badge" data-variant="' + variant + '">' + text + '</span>'; }
+function badgeHtml(text, variant) {
+  var v = BADGE_VARIANTS[variant] ? variant : 'outline';
+  return '<span class="badge" data-variant="' + v + '">' + esc(text) + '</span>';
+}
 function statusBadge(s) { return badgeHtml(s, STATUS_VARIANT[s]); }
-function priorityBadge(p) { return badgeHtml(p + '优先级', PRIORITY_VARIANT[p]); }
-function categoryBadge(c) { return badgeHtml(c, 'muted'); }
-function typeCell(t) {
-  var m = TYPE_META[t.type];
-  return '<div class="type-cell">' + categoryBadge(m.category) + priorityBadge(m.priority) +
-         '<span class="type-name">' + t.type + '</span></div>';
+function priorityBadge(p) { return badgeHtml('', PRIORITY_VARIANT[p]); }
+function categoryBadge(c) { return badgeHtml(c, CATEGORY_VARIANT[c]); }
+
+/* ===== 操作反馈：库 toast 组件 ===== */
+var TOAST_MAX = 3;
+function toastDismiss(el) {
+  if (!el || !el.parentNode || el.getAttribute('data-closing')) return;
+  el.setAttribute('data-closing', '');
+  var anim = null;
+  try {
+    anim = el.animate(
+      [{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(0.5rem)' }],
+      { duration: 200, easing: 'ease', fill: 'forwards' }
+    );
+  } catch (e) { }
+  var finish = function () {
+    try { if (el.hidePopover) el.hidePopover(); } catch (e) { }
+    if (el.parentNode) el.parentNode.removeChild(el);
+  };
+  if (anim && anim.finished && anim.finished.then) { anim.finished.then(finish); } else { finish(); }
 }
-function customerCell(c) {
-  var n = unfinishedOfCustomer(c.id).length;
-  var html = '<div class="customer-cell"><span class="customer-name" onclick="openCustomer(\'' + c.id + '\')">' + c.name + '</span>';
-  if (n > 1) html += badgeHtml('该客户有 ' + n + ' 条未完成', 'warning');
-  html += '</div>';
-  return html;
+function showToast(title, description) {
+  var host = document.getElementById('toastHost');
+  if (!host) return;
+  var el = document.createElement('div');
+  el.className = 'toast';
+  el.setAttribute('role', 'status');
+  el.setAttribute('aria-live', 'polite');
+  el.setAttribute('aria-atomic', 'true');
+  el.setAttribute('popover', 'manual');
+  el.innerHTML =
+    '<div class="toast-content">' +
+      '<div class="toast-text">' +
+        '<p class="toast-title">' + esc(title) + '</p>' +
+        (description ? '<p class="toast-description">' + esc(description) + '</p>' : '') +
+      '</div>' +
+      '<button class="toast-close" type="button" aria-label="关闭" data-toast-close>' +
+        '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>' +
+      '</button>' +
+    '</div>';
+  host.appendChild(el);
+  try { el.showPopover(); } catch (e) { }
+  var btn = el.querySelector('[data-toast-close]');
+  if (btn) btn.addEventListener('click', function () { toastDismiss(el); });
+  window.setTimeout(function () { toastDismiss(el); }, 3200);
+  var live = host.querySelectorAll('.toast');
+  if (live.length > TOAST_MAX) toastDismiss(live[0]);
 }
-function remindCell(t) {
-  var html = '<span>' + t.remind + '</span>';
-  if (isAfter18(t)) html += '<span class="cell-note">18:00后发起，不纳入逾期判定</span>';
-  return html;
-}
-function progressHtml(rate) {
-  return '<div class="progress-cell"><progress class="progress" max="100" value="' + rate + '"></progress>' +
-         '<span class="progress-text">' + rate + '%</span></div>';
-}
-function openCustomer(cid) {
-  /* 「查看客户」新窗口打开 Crm 客户详情页 */
-  var c = customerById(cid);
-  var url = encodeURI(CRM_PAGE) + '?customerId=' + encodeURIComponent(c.id) +
-            '&customer=' + encodeURIComponent(c.name) + '&from=任务列表';
-  window.open(url, '_blank');
-}
-function flash(msg) {
-  var el = document.getElementById('flash');
-  if (!el) return;
-  document.getElementById('flashText').textContent = msg;
-  el.classList.add('show');
-  window.clearTimeout(window.__flashTimer);
-  window.__flashTimer = window.setTimeout(function () { el.classList.remove('show'); }, 2800);
-}
+function flash(msg) { showToast(msg, ''); }
+
 function query(name) {
   var m = new RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
   return m ? decodeURIComponent(m[1]) : '';
 }
 
+/* ================= 任务处理页逻辑 ================= */
+/* 从 URL 获取 customer 和 contact 两个参数，展示该联系人名下的所有未完成任务，
+   用户可勾选任务，统一设置处理结果，批量提交。 */
 
-/* ================= 任务聚合处理页逻辑 ================= */
-var aggCustomerId = '';
-var selected = {};
+var aggContactName = '';
+var currentCustomer = null;
+var selectedTasks = {};
+var initTaskId = '';
 
+var PAGES = { list: '任务列表.html', agg: '任务处理.html', lead: '领导任务.html', report: '任务报表.html' };
+function goPage(k) { window.location.href = PAGES[k]; }
+
+/* ===== 解析 URL 参数 ===== */
 function resolveCustomer() {
-  var cid = query('customer');
-  if (cid && customerById(cid)) return cid;
-  for (var i = 0; i < CUSTOMERS.length; i++) {
-    if (unfinishedOfCustomer(CUSTOMERS[i].id).length > 1) return CUSTOMERS[i].id;
+  var customerId = query('customer');
+  aggContactName = query('contact');
+  initTaskId = query('task');
+  if (!customerId || !aggContactName) {
+    goPage('list');
+    return null;
   }
-  for (var j = 0; j < CUSTOMERS.length; j++) {
-    if (unfinishedOfCustomer(CUSTOMERS[j].id).length > 0) return CUSTOMERS[j].id;
-  }
-  return CUSTOMERS[0].id;
+  var c = customerById(customerId);
+  if (!c) { goPage('list'); return null; }
+  return c;
 }
 
-function openCustomerLink() { openCustomer(aggCustomerId); }
-function hideError(id) { document.getElementById(id).classList.add('hidden'); }
+/* ===== 查看客户 ===== */
+function openCurrentCustomer() {
+  if (!currentCustomer) return;
+  var url = encodeURI(CRM_PAGE) + '?customerId=' + encodeURIComponent(currentCustomer.id) +
+            '&customer=' + encodeURIComponent(currentCustomer.name) + '&from=任务处理';
+  window.open(url, '_blank');
+}
 
+/* ===== 渲染聚合概览卡片 ===== */
 function renderOverview() {
-  var c = customerById(aggCustomerId);
-  document.getElementById('ovName').textContent = c.name;
-  document.getElementById('ovOwner').textContent = c.owner + '（' + c.region + '）';
-  document.getElementById('ovContacts').textContent = c.contacts.length + ' 人：' + c.contacts.join('、');
-  document.getElementById('ovUnfinished').textContent = unfinishedOfCustomer(aggCustomerId).length + ' 条';
-  document.getElementById('aggSub').textContent = '当前客户：' + c.name + '　·　全部未完成任务合并处理';
+  if (!currentCustomer) return;
+  var tasks = unfinishedOfCustomerAndContact(currentCustomer.id, aggContactName);
+  /* 查找当前联系人电话 */
+  var phone = '';
+  if (currentCustomer.contacts) {
+    for (var i = 0; i < currentCustomer.contacts.length; i++) {
+      if (currentCustomer.contacts[i].name === aggContactName) { phone = currentCustomer.contacts[i].phone; break; }
+    }
+  }
+  var phoneHtml = phone ? '<span class="muted" style="margin-left:0.5rem;">' + esc(phone) + '</span>' : '';
+  /* 会员类型badge */
+  var memberBadge = '';
+  if (currentCustomer.memberType === '高级会员') memberBadge = badgeHtml('高级', 'subtle');
+  else if (currentCustomer.memberType === '标准会员') memberBadge = badgeHtml('标准', 'subtle-secondary');
+  else memberBadge = badgeHtml('免费', 'subtle-outline');
+  document.getElementById('overviewContent').innerHTML =
+    '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));gap:1rem;">' +
+      '<div><span class="muted">未完成任务</span><p style="margin:0.25rem 0 0 0;font-weight:600;">' + tasks.length + ' 条</p></div>' +
+      '<div><span class="muted">公司名称</span><p style="margin:0.25rem 0 0 0;font-weight:600;">' + esc(currentCustomer.name) + '</p></div>' +
+      '<div><span class="muted">账号名称</span><p style="margin:0.25rem 0 0 0;font-weight:600;">' + esc(currentCustomer.accountName || '-') + '</p></div>' +
+      '<div><span class="muted">会员类型</span><p style="margin:0.25rem 0 0 0;">' + memberBadge + '</p></div>' +
+      '<div><span class="muted">当前联系人</span><p style="margin:0.25rem 0 0 0;font-weight:600;">' + esc(aggContactName) + phoneHtml + '</p></div>' +
+      '<div><span class="muted">响应负责人</span><p style="margin:0.25rem 0 0 0;">' + esc(currentCustomer.owner) + '</p></div>' +
+    '</div>';
+}
+
+/* ===== 渲染任务列表 ===== */
+function remindCell(t) {
+  var html = '<div style="display:flex;flex-direction:column;align-items:flex-start;gap:0.25rem;">' +
+               '<span>' + esc(t.remind) + '</span>';
+  if (isAfter18(t)) html += '<span class="muted">18:00后发起</span>';
+  return html + '</div>';
+}
+var PRIORITY_VARIANT = { '高': 'destructive', '中': 'primary', '低': 'secondary' };
+function typeCell(t) {
+  var m = TYPE_META[t.type];
+  return badgeHtml(t.type, PRIORITY_VARIANT[m.priority]);
 }
 
 function renderList() {
-  var list = unfinishedOfCustomer(aggCustomerId).slice().sort(function (a, b) {
-    return a.remind < b.remind ? -1 : 1;
-  });
+  var tasks = unfinishedOfCustomerAndContact(currentCustomer.id, aggContactName);
   var rows = '';
-  list.forEach(function (t) {
-    var m = TYPE_META[t.type];
-    rows += '<tr class="table-row">' +
-      '<td class="table-cell"><input class="checkbox" type="checkbox" data-id="' + t.id + '" ' +
-        (selected[t.id] ? 'checked' : '') + ' onchange="toggleRow(this)"></td>' +
+  tasks.forEach(function (t) {
+    rows += '<tr class="table-row" id="row-' + t.id + '">' +
+      '<td class="table-cell" style="text-align:center;">' +
+        '<input type="checkbox" data-task-id="' + t.id + '" aria-label="选择任务 ' + t.id + '" onchange="onRowCheck()" checked>' +
+      '</td>' +
       '<td class="table-cell">' + remindCell(t) + '</td>' +
-      '<td class="table-cell">' + m.category + ' · ' + t.type + '</td>' +
-      '<td class="table-cell">' + priorityBadge(m.priority) + '</td>' +
+      '<td class="table-cell">' + typeCell(t) + '</td>' +
       '<td class="table-cell">' + esc(t.desc) + '</td>' +
       '<td class="table-cell">' + statusBadge(effStatus(t)) + '</td>' +
-      '<td class="table-cell">' + t.relatedContact + '</td>' +
     '</tr>';
   });
-  document.getElementById('aggBody').innerHTML = rows;
-  document.getElementById('emptyTip').classList.toggle('hidden', list.length > 0);
-  syncCheckAll(list);
-  updateSummary();
-}
-
-function checkboxes() {
-  return Array.prototype.slice.call(document.querySelectorAll('#aggBody .checkbox'));
-}
-function syncCheckAll(list) {
-  if (!list) list = unfinishedOfCustomer(aggCustomerId);
-  var all = document.getElementById('checkAll');
-  var checked = checkboxes().filter(function (b) { return b.checked; }).length;
-  all.checked = list.length > 0 && checked === list.length;
-  all.indeterminate = checked > 0 && checked < list.length;
-}
-function updateSummary() {
-  var ids = Object.keys(selected).filter(function (k) { return selected[k]; });
-  document.getElementById('selSummary').textContent =
-    '已勾选 ' + ids.length + ' 条任务，其中已逾期 ' + ids.filter(function (id) {
-      return effStatus(TASKS.filter(function (t) { return t.id === id; })[0]) === '已逾期';
-    }).length + ' 条';
-}
-function toggleRow(box) {
-  selected[box.getAttribute('data-id')] = box.checked;
-  syncCheckAll();
-  updateSummary();
-}
-function toggleAll(checked) {
-  checkboxes().forEach(function (b) {
-    b.checked = checked;
-    selected[b.getAttribute('data-id')] = checked;
-  });
-  document.getElementById('checkAll').indeterminate = false;
-  updateSummary();
-}
-
-function onBatchResultChange() {
-  var picked = document.querySelector('input[name="bResult"]:checked');
-  var wrap = document.getElementById('bTimeWrap');
-  if (picked && picked.value === '下次联系') {
-    wrap.classList.remove('hidden');
-    hideError('bResultErr');
+  document.getElementById('taskBody').innerHTML = rows;
+  document.getElementById('emptyTip').hidden = tasks.length > 0;
+  document.getElementById('listSummary').textContent = aggContactName + ' 名下共 ' + tasks.length + ' 条未完成任务';
+  /* 默认选中：如果有指定task参数则只选中该任务，否则全选 */
+  selectedTasks = {};
+  if (initTaskId) {
+    tasks.forEach(function (t) { selectedTasks[t.id] = (t.id === initTaskId); });
   } else {
-    wrap.classList.add('hidden');
-    hideError('bTimeErr');
+    tasks.forEach(function (t) { selectedTasks[t.id] = true; });
+  }
+  syncCheckboxes();
+  syncCheckAll();
+  updateSelectedSummary();
+}
+
+/* ===== 全选 / 单选同步 ===== */
+function syncCheckboxes() {
+  var cbs = document.querySelectorAll('input[data-task-id]');
+  for (var i = 0; i < cbs.length; i++) {
+    cbs[i].checked = !!selectedTasks[cbs[i].getAttribute('data-task-id')];
+  }
+}
+function syncCheckAll() {
+  var tasks = unfinishedOfCustomerAndContact(currentCustomer.id, aggContactName);
+  var allChecked = tasks.length > 0 && tasks.every(function (t) { return selectedTasks[t.id]; });
+  document.getElementById('checkAll').checked = allChecked;
+}
+function onCheckAll() {
+  var checked = document.getElementById('checkAll').checked;
+  var tasks = unfinishedOfCustomerAndContact(currentCustomer.id, aggContactName);
+  tasks.forEach(function (t) { selectedTasks[t.id] = checked; });
+  var cbs = document.querySelectorAll('input[data-task-id]');
+  for (var i = 0; i < cbs.length; i++) { cbs[i].checked = checked; }
+  updateSelectedSummary();
+}
+function onRowCheck() {
+  var cbs = document.querySelectorAll('input[data-task-id]');
+  for (var i = 0; i < cbs.length; i++) {
+    selectedTasks[cbs[i].getAttribute('data-task-id')] = cbs[i].checked;
+  }
+  syncCheckAll();
+  updateSelectedSummary();
+}
+function updateSelectedSummary() {
+  var tasks = unfinishedOfCustomerAndContact(currentCustomer.id, aggContactName);
+  var count = 0;
+  tasks.forEach(function (t) { if (selectedTasks[t.id]) count++; });
+  document.getElementById('selectedSummary').textContent = '已选 ' + count + ' / ' + tasks.length + ' 条';
+}
+
+/* ===== 实际联系人下拉（只展示当前联系人 + 响应负责人 + 其他） ===== */
+function renderContactSelect() {
+  var sel = document.getElementById('batchContact');
+  sel.innerHTML =
+    '<option value="' + esc(aggContactName) + '">' + esc(aggContactName) + '（当前联系人）</option>' +
+    '<option value="' + esc(currentCustomer.owner) + '">' + esc(currentCustomer.owner) + '（响应负责人）</option>' +
+    '<option value="其他">其他人员（线下补充）</option>';
+}
+
+/* ===== 批量处理：处理结果切换 ===== */
+function onResultChange() {
+  var picked = document.querySelector('input[name="batchResult"]:checked');
+  var block = document.getElementById('batchTimeBlock');
+  if (picked && picked.value === '下次联系') {
+    block.hidden = false;
+    showError('batchResultErr', false);
+  } else {
+    block.hidden = true;
+    document.getElementById('batchTime').value = '';
+    showError('batchTimeErr', false);
   }
 }
 
+function showError(id, on) {
+  var el = document.getElementById(id);
+  if (el) el.hidden = !on;
+}
+
+/* ===== 批量提交 ===== */
 function submitBatch() {
-  var ids = Object.keys(selected).filter(function (k) { return selected[k]; });
-  var contact = document.getElementById('bContact').value;
-  var picked = document.querySelector('input[name="bResult"]:checked');
-  var time = document.getElementById('bTime').value;
+  var sel = document.getElementById('batchContact');
+  var contact = sel.value;
+  var picked = document.querySelector('input[name="batchResult"]:checked');
+  var time = document.getElementById('batchTime').value;
+  var remark = document.getElementById('batchRemark').value.trim();
   var ok = true;
 
-  if (ids.length === 0) { flash('请至少勾选一条任务'); return; }
-  if (!contact) { document.getElementById('bContactErr').classList.remove('hidden'); ok = false; }
-  if (!picked) { document.getElementById('bResultErr').classList.remove('hidden'); ok = false; }
-  if (picked && picked.value === '下次联系' && !time) { document.getElementById('bTimeErr').classList.remove('hidden'); ok = false; }
+  if (!contact) { showError('batchContactErr', true); sel.setAttribute('aria-invalid', 'true'); ok = false; }
+  else { showError('batchContactErr', false); sel.removeAttribute('aria-invalid'); }
+  if (!picked) { showError('batchResultErr', true); ok = false; }
+  if (picked && picked.value === '下次联系' && !time) { showError('batchTimeErr', true); ok = false; }
   if (!ok) return;
 
-  ids.forEach(function (id) {
+  var taskIds = Object.keys(selectedTasks).filter(function (id) { return selectedTasks[id]; });
+  if (taskIds.length === 0) {
+    showToast('请至少选择一条任务', '');
+    return;
+  }
+
+  var now = '2026-09-16 19:35';
+  taskIds.forEach(function (id) {
     var t = TASKS.filter(function (x) { return x.id === id; })[0];
     if (!t) return;
     t.actualContact = contact;
+    t.remark = remark;
     if (picked.value === '已处理') {
       t.result = '已处理';
       t.status = '已处理';
       t.contactTime = '';
-      t.closedAt = '2026-09-16 19:35';
+      t.closedAt = now;
     } else {
       t.result = '下次联系';
       t.contactTime = time.replace('T', ' ');
@@ -2129,27 +2158,30 @@ function submitBatch() {
     }
   });
 
-  var msg = picked.value === '已处理'
-    ? '已批量提交 ' + ids.length + ' 条任务：实际联系人 ' + contact + '，处理结果「已处理」，任务已关闭'
-    : '已批量提交 ' + ids.length + ' 条任务：实际联系人 ' + contact + '，处理结果「下次联系」，联系时间 ' + time.replace('T', ' ');
-  selected = {};
+  var msg = '实际联系人：' + contact + ' · 处理结果：' + picked.value;
+  if (remark) msg += ' · 备注：' + remark;
+  showToast('已批量处理 ' + taskIds.length + ' 条任务', msg);
+
+  /* 重置表单 */
+  var radios = document.querySelectorAll('input[name="batchResult"]');
+  for (var i = 0; i < radios.length; i++) { radios[i].checked = false; }
+  document.getElementById('batchTimeBlock').hidden = true;
+  document.getElementById('batchTime').value = '';
+  document.getElementById('batchRemark').value = '';
+  showError('batchContactErr', false);
+  showError('batchResultErr', false);
+  showError('batchTimeErr', false);
+
   renderOverview();
   renderList();
-  flash(msg);
 }
 
+/* ================= 初始化 ================= */
 function init() {
-  aggCustomerId = resolveCustomer();
-  var c = customerById(aggCustomerId);
-  var opts = '<option value="">请选择实际联系人</option>';
-  c.contacts.forEach(function (p) { opts += '<option value="' + p + '">' + p + '（客户联系人）</option>'; });
-  opts += '<option value="' + c.owner + '">' + c.owner + '（当前响应负责人）</option>';
-  opts += '<option value="其他">其他人员（线下补充）</option>';
-  document.getElementById('bContact').innerHTML = opts;
-
-  unfinishedOfCustomer(aggCustomerId).forEach(function (t) { selected[t.id] = true; });
-
+  currentCustomer = resolveCustomer();
+  if (!currentCustomer) return;
   renderOverview();
+  renderContactSelect();
   renderList();
 }
 init();

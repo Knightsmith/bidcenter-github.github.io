@@ -18,131 +18,74 @@
 :root {
   color-scheme: light;
 
-  /* -- Surface / Foreground pairs ------------------------------ */
-  --background:              oklch(1 0 0);
-  --foreground:              oklch(0.1450 0 0);
+  --background:              oklch(0.9946 0.0026 286.3519);
+  --foreground:              oklch(0.1615 0.0105 285.1663);
 
-  --card:                    oklch(1 0 0);
-  --card-foreground:         oklch(0.1450 0 0);
+  --card:                    oklch(1.0000 0 0);
+  --card-foreground:         oklch(0.1615 0.0105 285.1663);
 
-  --popover:                 oklch(1 0 0);
-  --popover-foreground:      oklch(0.1450 0 0);
+  --popover:                 oklch(1.0000 0 0);
+  --popover-foreground:      oklch(0.1615 0.0105 285.1663);
 
-  --primary:                 oklch(0.2050 0 0);
-  --primary-foreground:      oklch(0.9850 0 0);
+  --primary:                 oklch(0.5828 0.2188 258.8797);
+  --primary-foreground:      oklch(0.9670 0.0029 264.5419);
 
-  --secondary:               oklch(0.9700 0 0);
-  --secondary-foreground:    oklch(0.2050 0 0);
+  --secondary:               oklch(0.9518 0.0231 277.9569);
+  --secondary-foreground:    oklch(0.4446 0.0983 268.5283);
 
-  --muted:                   oklch(0.9700 0 0);
-  --muted-foreground:        oklch(0.5560 0 0);
+  --muted:                   oklch(0.9601 0.0093 286.2229);
+  --muted-foreground:        oklch(0.5052 0.0379 284.9640);
 
-  --accent:                  oklch(0.9700 0 0);
-  --accent-foreground:       oklch(0.2050 0 0);
+  --accent:                  oklch(0.9712 0.0136 258.3446);
+  --accent-foreground:       oklch(0.6081 0.2114 266.2130);
 
-  --destructive:             oklch(0.5770 0.2450 27.3250);
-  --destructive-foreground:  oklch(1 0 0);
+  --destructive:             oklch(0.6368 0.2078 25.3313);
+  --destructive-foreground:  oklch(0.9842 0.0034 247.8575);
 
-  /* -- Utility tokens ------------------------------------------- */
-  --border:                  oklch(0.9220 0 0);
-  --input:                   oklch(0.9220 0 0);
-  --ring:                    oklch(0.7080 0 0);
+  --border:                  oklch(0.9163 0.0162 286.0759);
+  --input:                   oklch(0.9163 0.0162 286.0759);
+  --ring:                    oklch(0.5565 0.2430 261.9529);
 
-  /* -- Sidebar tokens ------------------------------------------- */
-  --sidebar:                 oklch(0.9850 0 0);
-  --sidebar-foreground:      oklch(0.1450 0 0);
-  --sidebar-primary:         oklch(0.2050 0 0);
-  --sidebar-primary-foreground: oklch(0.9850 0 0);
-  --sidebar-accent:          oklch(0.9700 0 0);
-  --sidebar-accent-foreground: oklch(0.2050 0 0);
-  --sidebar-border:          oklch(0.9220 0 0);
-  --sidebar-ring:            oklch(0.7080 0 0);
+  --sidebar:                 oklch(0.9946 0.0026 286.3519);
+  --sidebar-foreground:      oklch(0.1615 0.0105 285.1663);
+  --sidebar-primary:         oklch(0.5828 0.2188 258.8797);
+  --sidebar-primary-foreground: oklch(1.0000 0 0);
+  --sidebar-accent:          oklch(0.9634 0.0175 279.0619);
+  --sidebar-accent-foreground: oklch(0.6256 0.2009 264.0684);
+  --sidebar-border:          oklch(0.9163 0.0162 286.0759);
+  --sidebar-ring:            oklch(0.5828 0.2188 258.8797);
 
+  --chart-1:                 oklch(0.5553 0.2554 283.4559);
+  --chart-2:                 oklch(0.6037 0.2141 267.5162);
+  --chart-3:                 oklch(0.7495 0.1297 210.9704);
+  --chart-4:                 oklch(0.8023 0.1492 175.5763);
+  --chart-5:                 oklch(0.6945 0.1422 167.0638);
 
-  /* -- Chart tokens --------------------------------------------- */
-  --chart-1:                 oklch(0.8100 0.1000 252);
-  --chart-2:                 oklch(0.6200 0.1900 260);
-  --chart-3:                 oklch(0.5500 0.2200 263);
-  --chart-4:                 oklch(0.4900 0.2200 264);
-  --chart-5:                 oklch(0.4200 0.1800 266);
+  --font-sans:               'Inter', sans-serif;
+  --font-serif:              'Merriweather', serif;
+  --font-mono:               'JetBrains Mono', monospace;
 
-  /* -- Typography tokens ---------------------------------------- */
-  --font-sans:  ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  --font-mono:  ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-
-  /* -- Radius --------------------------------------------------- */
-  --radius:                  0.625rem;
-  /* Derived — matches tweakcn/shadcn scale */
+  --radius:                  1.25rem;
   --radius-sm:               calc(var(--radius) - 4px);
   --radius-md:               calc(var(--radius) - 2px);
   --radius-lg:               var(--radius);
   --radius-xl:               calc(var(--radius) + 4px);
 
-  /* -- Spacing -------------------------------------------------- */
   --spacing:                 0.25rem;
 
-  /* -- Tracking ------------------------------------------------- */
-  --tracking-normal:         0em;
+  --tracking-normal:         -0.01em;
 
-  /* -- Shadow scale --------------------------------------------- */
-  --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
-  --shadow-xs:  0 1px 3px 0px hsl(0 0% 0% / 0.05);
-  --shadow-sm:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
-  --shadow:     0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
-  --shadow-md:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
-  --shadow-lg:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
-  --shadow-xl:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
-  --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+  --shadow-2xs: 0px 4px 15px 0px hsl(0 0% 0% / 0.07);
+  --shadow-xs:  0px 4px 15px 0px hsl(0 0% 0% / 0.07);
+  --shadow-sm:  0px 4px 15px 0px hsl(0 0% 0% / 0.15), 0px 1px 2px -1px hsl(0 0% 0% / 0.15);
+  --shadow:     0px 4px 15px 0px hsl(0 0% 0% / 0.15), 0px 1px 2px -1px hsl(0 0% 0% / 0.15);
+  --shadow-md:  0px 4px 15px 0px hsl(0 0% 0% / 0.15), 0px 2px 4px -1px hsl(0 0% 0% / 0.15);
+  --shadow-lg:  0px 4px 15px 0px hsl(0 0% 0% / 0.15), 0px 4px 6px -1px hsl(0 0% 0% / 0.15);
+  --shadow-xl:  0px 4px 15px 0px hsl(0 0% 0% / 0.15), 0px 8px 10px -1px hsl(0 0% 0% / 0.15);
+  --shadow-2xl: 0px 4px 15px 0px hsl(0 0% 0% / 0.38);
 }
 
-/* -- Dark mode -------------------------------------------------- */
-.dark {
-  color-scheme: dark;
 
-  --background:              oklch(0.1450 0 0);
-  --foreground:              oklch(0.9850 0 0);
-
-  --card:                    oklch(0.2050 0 0);
-  --card-foreground:         oklch(0.9850 0 0);
-
-  --popover:                 oklch(0.2690 0 0);
-  --popover-foreground:      oklch(0.9850 0 0);
-
-  --primary:                 oklch(0.9220 0 0);
-  --primary-foreground:      oklch(0.2050 0 0);
-
-  --secondary:               oklch(0.2690 0 0);
-  --secondary-foreground:    oklch(0.9850 0 0);
-
-  --muted:                   oklch(0.2690 0 0);
-  --muted-foreground:        oklch(0.7080 0 0);
-
-  --accent:                  oklch(0.3710 0 0);
-  --accent-foreground:       oklch(0.9850 0 0);
-
-  --destructive:             oklch(0.7040 0.1910 22.2160);
-  --destructive-foreground:  oklch(0.9850 0 0);
-
-  --border:                  oklch(0.2750 0 0);
-  --input:                   oklch(0.3250 0 0);
-  --ring:                    oklch(0.5560 0 0);
-
-  --sidebar:                 oklch(0.2050 0 0);
-  --sidebar-foreground:      oklch(0.9850 0 0);
-  --sidebar-primary:         oklch(0.4880 0.2430 264.3760);
-  --sidebar-primary-foreground: oklch(0.9850 0 0);
-  --sidebar-accent:          oklch(0.2690 0 0);
-  --sidebar-accent-foreground: oklch(0.9850 0 0);
-  --sidebar-border:          oklch(0.2750 0 0);
-  --sidebar-ring:            oklch(0.4390 0 0);
-
-  --chart-1:                 oklch(0.8100 0.1000 252);
-  --chart-2:                 oklch(0.6200 0.1900 260);
-  --chart-3:                 oklch(0.5500 0.2200 263);
-  --chart-4:                 oklch(0.4900 0.2200 264);
-  --chart-5:                 oklch(0.4200 0.1800 266);
-}
 /* ==== SRC[02]: components/typography/typography.css ==== */
 /* -- Typography component --------------------------------------- */
 
@@ -465,6 +408,31 @@
     &[data-variant="default"] {
       background: var(--primary);
       color: var(--primary-foreground);
+    }
+
+    &[data-variant="primary"] {
+      background: var(--primary);
+      color: var(--primary-foreground);
+    }
+
+    &[data-variant="destructive"] {
+      background: var(--destructive);
+      color: var(--primary-foreground);
+    }
+
+    &[data-variant="subtle"] {
+      background: color-mix(in oklch, var(--primary) 15%, transparent);
+      color: var(--primary);
+    }
+
+    &[data-variant="subtle-secondary"] {
+      background: color-mix(in oklch, var(--secondary) 12%, transparent);
+      color: var(--secondary-foreground);
+    }
+
+    &[data-variant="subtle-outline"] {
+      background: color-mix(in oklch, var(--foreground) 6%, transparent);
+      color: var(--muted-foreground);
     }
   }
 }
@@ -1662,14 +1630,6 @@ body {
 <!-- 页面级容器：仅内联纯布局（宽 / 居中 / 内边距），不含任何颜色与视觉声明 -->
 <div style="max-width:88rem;margin:0 auto;padding:1.5rem 1.5rem 3rem 1.5rem;">
 
-  <!-- ===== 顶部导航：4 个入口，本页高亮（库 tabs 组件 line 变体） ===== -->
-  <div class="tab-list" data-variant="line" role="tablist" aria-label="任务系统导航">
-    <button class="tab-trigger" type="button" role="tab" aria-selected="true" onclick="goPage('list')">任务列表</button>
-    <button class="tab-trigger" type="button" role="tab" aria-selected="false" onclick="goPage('agg')">任务聚合处理</button>
-    <button class="tab-trigger" type="button" role="tab" aria-selected="false" onclick="goPage('lead')">领导任务</button>
-    <button class="tab-trigger" type="button" role="tab" aria-selected="false" onclick="goPage('report')">任务报表</button>
-  </div>
-
   <!-- ===== 页头 ===== -->
   <div class="flex items-center justify-between flex-wrap gap-4" style="margin:1.5rem 0 1rem 0;">
     <div>
@@ -1689,25 +1649,12 @@ body {
 
   <div class="card" style="margin:0.75rem 0 0 0;">
     <div class="card-content">
-      <div class="flex flex-wrap items-center gap-4">
+      <div style="display:flex;flex-wrap:wrap;align-items:flex-end;gap:1rem;">
 
-        <!-- 客户：可搜索下拉（库 combobox 组件） -->
-        <div class="combobox" style="width:18rem;">
-          <label class="label" id="fCustomerLabel">客户</label>
-          <button class="btn combobox-trigger" id="fCustomerTrigger" type="button" data-variant="outline" data-size="lg"
-                  aria-haspopup="listbox" aria-expanded="false" aria-labelledby="fCustomerLabel"
-                  aria-controls="fCustomerPopover" popovertarget="fCustomerPopover">
-            <span class="combobox-value" id="fCustomerValue" data-placeholder="全部客户">全部客户</span>
-            <svg class="combobox-chevron" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
-          </button>
-          <div id="fCustomerPopover" class="combobox-content" popover>
-            <div class="combobox-search">
-              <svg class="combobox-search-icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-              <input class="combobox-search-input" id="fCustomerSearch" type="text" role="combobox" autocomplete="off"
-                     aria-expanded="true" aria-controls="fCustomerListbox" aria-autocomplete="list" placeholder="搜索客户名称…">
-            </div>
-            <div id="fCustomerListbox" role="listbox" class="combobox-listbox" aria-label="客户列表"></div>
-          </div>
+        <!-- 客户：名称搜索（库 input 组件） -->
+        <div style="width:18rem;">
+          <label class="label" for="fCustomer">客户</label>
+          <input class="input" id="fCustomer" type="text" data-size="lg" placeholder="输入客户名称搜索…" oninput="onFilterChange()">
         </div>
 
         <div style="width:11rem;">
@@ -1731,7 +1678,10 @@ body {
           </select>
         </div>
 
-        <button class="btn" data-variant="outline" data-size="lg" type="button" onclick="resetFilters()">重置</button>
+        <div style="display:flex;flex-direction:column;">
+          <label class="label" style="visibility:hidden;">占位</label>
+          <button class="btn" data-variant="outline" data-size="lg" type="button" onclick="resetFilters()">重置</button>
+        </div>
       </div>
 
       <p class="text-xs text-muted-foreground" style="margin:1rem 0 0 0;">
@@ -1751,20 +1701,20 @@ body {
       <div class="table-container">
         <table class="table">
           <colgroup>
-            <col style="width:11rem;">
-            <col style="width:12rem;">
-            <col style="width:14rem;">
             <col style="width:7rem;">
-            <col style="width:20rem;">
-            <col style="width:11rem;">
+            <col style="width:10rem;">
+            <col style="width:14rem;">
+            <col style="width:12rem;">
+            <col style="width:auto;">
+            <col style="width:7rem;">
             <col style="width:11rem;">
           </colgroup>
           <thead>
             <tr class="table-row">
               <th class="table-head" scope="col">提醒时间</th>
               <th class="table-head" scope="col">任务类型</th>
-              <th class="table-head" scope="col">客户名称</th>
-              <th class="table-head" scope="col">相关联系人</th>
+              <th class="table-head" scope="col">公司名称</th>
+              <th class="table-head" scope="col">联系人</th>
               <th class="table-head" scope="col">任务说明</th>
               <th class="table-head" scope="col">任务状态</th>
               <th class="table-head" scope="col">操作</th>
@@ -1775,6 +1725,7 @@ body {
       </div>
 
       <div class="muted" id="emptyTip" hidden style="padding:3rem 0;text-align:center;">当前筛选条件下暂无任务</div>
+      <div id="pagination" class="flex items-center justify-center gap-1" style="margin-top:1rem;"></div>
     </div>
   </div>
 </div>
@@ -1827,6 +1778,19 @@ body {
 
 <!-- 库 toast 组件容器（安装说明中的官方结构） -->
 <div id="toastHost" class="toast-container" aria-label="Notifications" data-position="top-center"></div>
+
+<!-- 查看任务详情对话框 -->
+<dialog id="taskDetailDialog" class="dialog" data-size="lg">
+  <div class="dialog-content">
+    <div class="dialog-header">
+      <p class="dialog-title">任务详情</p>
+    </div>
+    <div class="dialog-body" id="taskDetailContent"></div>
+    <div class="dialog-footer">
+      <button class="btn" data-variant="outline" type="button" onclick="document.getElementById('taskDetailDialog').close()">关闭</button>
+    </div>
+  </div>
+</dialog>
 <script>
 /* =========================================================
    演示数据与领域规则（招投标行业场景）
@@ -1839,13 +1803,27 @@ var NOW = new Date('2026-09-16T19:30:00');                  /* 演示基准时�
 var CRM_PAGE = 'file:///D:/workspace/bidcenter-github.github.io/Crm/客户详情页-重构.html';
 
 var CUSTOMERS = [
-  { id: 'C01', name: '华能电力工程有限公司', owner: '张明', region: '华东', contacts: ['李国强', '王海涛', '赵敏'] },
-  { id: 'C02', name: '中建八局第二建设有限公司', owner: '张明', region: '华北', contacts: ['刘建国', '孙倩'] },
-  { id: 'C03', name: '国网江苏电力设计院', owner: '李静', region: '华东', contacts: ['周文军', '陈晓东'] },
-  { id: 'C04', name: '三一重工供应链管理部', owner: '李静', region: '华中', contacts: ['黄伟'] },
-  { id: 'C05', name: '无锡蓝天环保科技有限公司', owner: '王超', region: '华东', contacts: ['徐丽华', '郑凯', '马晓峰'] },
-  { id: 'C06', name: '中铁十四局集团有限公司', owner: '王超', region: '西南', contacts: ['田志强', '何静'] },
-  { id: 'C07', name: '常州银河微电子股份有限公司', owner: '李静', region: '华东', contacts: ['吴敏'] }
+  { id: 'C01', name: '华能电力工程有限公司', accountName: 'hn-huaneng-001', memberType: '高级会员', owner: '北京-客服部门-张明', region: '华东', contacts: [
+    { name: '李国强', phone: '138-0001-0001' }, { name: '王海涛', phone: '139-0002-0002' }, { name: '赵敏', phone: '137-0003-0003' }
+  ]},
+  { id: 'C02', name: '中建八局第二建设有限公司', accountName: 'cscec-802', memberType: '标准会员', owner: '北京-客服部门-张明', region: '华北', contacts: [
+    { name: '刘建国', phone: '136-0004-0004' }, { name: '孙倩', phone: '135-0005-0005' }
+  ]},
+  { id: 'C03', name: '国网江苏电力设计院', accountName: '13912345678', memberType: '高级会员', owner: '上海-大客户部-李静', region: '华东', contacts: [
+    { name: '周文军', phone: '134-0006-0006' }, { name: '陈晓东', phone: '133-0007-0007' }
+  ]},
+  { id: 'C04', name: '三一重工供应链管理部', accountName: 'sany-supply', memberType: '免费会员', owner: '上海-大客户部-李静', region: '华中', contacts: [
+    { name: '黄伟', phone: '132-0008-0008' }
+  ]},
+  { id: 'C05', name: '无锡蓝天环保科技有限公司', accountName: 'lt-huanbao', memberType: '标准会员', owner: '南京-商务部门-王超', region: '华东', contacts: [
+    { name: '徐丽华', phone: '131-0009-0009' }, { name: '郑凯', phone: '130-0010-0010' }, { name: '马晓峰', phone: '129-0011-0011' }
+  ]},
+  { id: 'C06', name: '中铁十四局集团有限公司', accountName: 'crcc-14j', memberType: '高级会员', owner: '南京-商务部门-王超', region: '西南', contacts: [
+    { name: '田志强', phone: '128-0012-0012' }, { name: '何静', phone: '127-0013-0013' }
+  ]},
+  { id: 'C07', name: '常州银河微电子股份有限公司', accountName: 'yh-micro', memberType: '免费会员', owner: '上海-大客户部-李静', region: '华东', contacts: [
+    { name: '吴敏', phone: '126-0014-0014' }
+  ]}
 ];
 
 var OWNERS = ['张明', '李静', '王超'];
@@ -1873,14 +1851,14 @@ var TASKS = [
   { id: 'T05', remind: '2026-09-16 11:15', type: '会员升级', customerId: 'C02', relatedContact: '孙倩', actualContact: '', desc: '企业会员由标准版升级至专业版的报价方案已发送，等待客户反馈', status: '待处理', result: '', contactTime: '', closedAt: '' },
   { id: 'T06', remind: '2026-09-16 14:00', type: '邮件关闭', customerId: 'C04', relatedContact: '黄伟', actualContact: '黄伟', desc: '客户邮件咨询发票开具流程，已回复处理路径并关闭', status: '已处理', result: '已处理', contactTime: '', closedAt: '2026-09-16 15:20' },
   { id: 'T07', remind: '2026-09-16 16:30', type: '功能使用超限', customerId: 'C03', relatedContact: '周文军', actualContact: '', desc: '企业账号本月招标文件下载次数已达上限，需协助申请临时扩容', status: '待处理', result: '', contactTime: '', closedAt: '' },
-  { id: 'T08', remind: '2026-09-16 19:05', type: '临时任务', customerId: 'C05', relatedContact: '徐丽华', actualContact: '', desc: '客户临时要求补充近三年同行业中标案例清单（18:00后发起）', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T08', remind: '2026-09-16 19:05', type: '临时任务', customerId: 'C05', relatedContact: '徐丽华', actualContact: '', desc: '客户临时要求补充近三年同行业中标案例清单', status: '待处理', result: '', contactTime: '', closedAt: '' },
 
   { id: 'T09', remind: '2026-09-15 09:30', type: '撞单任务', customerId: 'C06', relatedContact: '田志强', actualContact: '', desc: '与华东二部撞单，需确认客户归属并回填归属说明', status: '待处理', result: '', contactTime: '', closedAt: '' },
   { id: 'T10', remind: '2026-09-15 10:20', type: '中标追踪', customerId: 'C05', relatedContact: '郑凯', actualContact: '', desc: '环保设备采购项目中标结果已出，需追踪客户签约进度', status: '待处理', result: '', contactTime: '', closedAt: '' },
   { id: 'T11', remind: '2026-09-15 15:40', type: '项目追踪', customerId: 'C01', relatedContact: '李国强', actualContact: '李国强', desc: '方案评审会时间未定，需再次确认并同步技术团队', status: '待跟进', result: '下次联系', contactTime: '2026-09-17 09:00', closedAt: '' },
   { id: 'T12', remind: '2026-09-15 11:00', type: '新发任务', customerId: 'C04', relatedContact: '黄伟', actualContact: '黄伟', desc: '客户资料核实完成，已分配专属顾问并完成建联', status: '已处理', result: '已处理', contactTime: '', closedAt: '2026-09-15 14:10' },
   { id: 'T13', remind: '2026-09-15 17:50', type: '活动报名', customerId: 'C03', relatedContact: '陈晓东', actualContact: '', desc: '邀请参加电力设计行业闭门交流会，需确认报名信息', status: '待处理', result: '', contactTime: '', closedAt: '' },
-  { id: 'T14', remind: '2026-09-16 19:20', type: '邮件关闭', customerId: 'C05', relatedContact: '马晓峰', actualContact: '', desc: '客户邮件反馈网站会员权益页面打不开，需核查后回复（18:00后发起，不纳入次日逾期）', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T14', remind: '2026-09-16 19:20', type: '邮件关闭', customerId: 'C05', relatedContact: '马晓峰', actualContact: '', desc: '客户邮件反馈网站会员权益页面打不开，需核查后回复', status: '待处理', result: '', contactTime: '', closedAt: '' },
 
   { id: 'T15', remind: '2026-09-17 09:00', type: '会员升级', customerId: 'C06', relatedContact: '何静', actualContact: '', desc: '客户意向升级集团版，需准备多账号管理方案', status: '待处理', result: '', contactTime: '', closedAt: '' },
   { id: 'T16', remind: '2026-09-17 10:30', type: '新发任务', customerId: 'C03', relatedContact: '周文军', actualContact: '', desc: '新注册子账号待认证，需指导完成企业实名认证', status: '待处理', result: '', contactTime: '', closedAt: '' },
@@ -1895,7 +1873,26 @@ var TASKS = [
   { id: 'T24', remind: '2026-09-16 13:20', type: '活动报名', customerId: 'C05', relatedContact: '徐丽华', actualContact: '', desc: '邀请参加10月环保行业线上直播，需确认报名人员', status: '待处理', result: '', contactTime: '', closedAt: '' },
   { id: 'T25', remind: '2026-09-16 15:10', type: '会员升级', customerId: 'C05', relatedContact: '郑凯', actualContact: '郑凯', desc: '会员升级方案已发送，客户内部评估中', status: '待跟进', result: '下次联系', contactTime: '2026-09-17 10:30', closedAt: '' },
   { id: 'T26', remind: '2026-09-16 16:50', type: '项目追踪', customerId: 'C06', relatedContact: '田志强', actualContact: '', desc: '西南片区项目跟踪表未回填，需提醒客户更新进度', status: '待处理', result: '', contactTime: '', closedAt: '' },
-  { id: 'T27', remind: '2026-09-16 10:15', type: '项目追踪', customerId: 'C07', relatedContact: '吴敏', actualContact: '', desc: '客户新增项目录入跟踪，需确认项目预算区间与采购节点', status: '待处理', result: '', contactTime: '', closedAt: '' }
+  { id: 'T27', remind: '2026-09-16 10:15', type: '项目追踪', customerId: 'C07', relatedContact: '吴敏', actualContact: '', desc: '客户新增项目录入跟踪，需确认项目预算区间与采购节点', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T28', remind: '2026-09-16 14:30', type: '会员升级', customerId: 'C01', relatedContact: '赵敏', actualContact: '赵敏', desc: '客户咨询会员升级流程，已电话沟通并发送报价单', status: '已处理', result: '已处理', contactTime: '', closedAt: '2026-09-16 15:00' },
+  { id: 'T29', remind: '2026-09-16 16:00', type: '新发任务', customerId: 'C02', relatedContact: '孙倩', actualContact: '孙倩', desc: '新客户注册引导完成，已协助绑定企业营业执照并开通会员', status: '已处理', result: '已处理', contactTime: '', closedAt: '2026-09-16 16:45' },
+
+  { id: 'T30', remind: '2026-09-16 09:00', type: '中标追踪', customerId: 'C05', relatedContact: '马晓峰', actualContact: '', desc: '华东区设备采购项目中标公告已发布，需确认客户签约意向', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T31', remind: '2026-09-16 09:30', type: '项目追踪', customerId: 'C05', relatedContact: '徐丽华', actualContact: '', desc: '客户环保设备升级改造方案需二次确认技术参数', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T32', remind: '2026-09-16 10:00', type: '活动报名', customerId: 'C03', relatedContact: '陈晓东', actualContact: '', desc: '邀请参加10月电力行业技术交流会，需确认参会名单', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T33', remind: '2026-09-16 10:30', type: '新发任务', customerId: 'C06', relatedContact: '田志强', actualContact: '', desc: '新客户首次登录需回访确认使用体验并收集反馈', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T34', remind: '2026-09-16 11:00', type: '会员升级', customerId: 'C06', relatedContact: '何静', actualContact: '', desc: '客户咨询集团版多账号管理功能，需准备方案说明', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T35', remind: '2026-09-16 11:30', type: '功能使用超限', customerId: 'C07', relatedContact: '吴敏', actualContact: '', desc: '企业账号本月API调用次数超限，需协助申请扩容', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T36', remind: '2026-09-16 13:00', type: '中标追踪', customerId: 'C07', relatedContact: '吴敏', actualContact: '', desc: '新能源项目招标结果公示，需第一时间联系客户确认', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T37', remind: '2026-09-16 13:30', type: '项目追踪', customerId: 'C03', relatedContact: '周文军', actualContact: '', desc: '设计院资质审核材料已提交，需跟进审批进度', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T38', remind: '2026-09-16 14:00', type: '邮件关闭', customerId: 'C06', relatedContact: '何静', actualContact: '', desc: '客户邮件咨询合同续签流程，已回复并关闭工单', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T39', remind: '2026-09-16 14:30', type: '新发任务', customerId: 'C05', relatedContact: '郑凯', actualContact: '', desc: '客户需要批量导入历史项目数据，需协助操作指引', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T40', remind: '2026-09-16 15:00', type: '活动报名', customerId: 'C04', relatedContact: '黄伟', actualContact: '', desc: '邀请参加11月行业年度峰会，需确认报名信息', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T41', remind: '2026-09-16 15:30', type: '项目追踪', customerId: 'C01', relatedContact: '李国强', actualContact: '', desc: '智慧运维平台二期需求文档已提交评审，需跟进反馈', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T42', remind: '2026-09-16 16:00', type: '会员升级', customerId: 'C03', relatedContact: '陈晓东', actualContact: '', desc: '标准会员升级专业版报价已发送，等待客户确认', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T43', remind: '2026-09-16 16:30', type: '中标追踪', customerId: 'C04', relatedContact: '黄伟', actualContact: '', desc: '备件采购项目二次招标公告已发布，需确认客户参与意向', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T44', remind: '2026-09-16 08:50', type: '新发任务', customerId: 'C04', relatedContact: '黄伟', actualContact: '', desc: '客户账号安全审计报告已生成，需发送并确认', status: '待处理', result: '', contactTime: '', closedAt: '' },
+  { id: 'T45', remind: '2026-09-16 09:15', type: '项目追踪', customerId: 'C02', relatedContact: '刘建国', actualContact: '', desc: '华北区合规沙龙参会名单需二次确认并上报', status: '待处理', result: '', contactTime: '', closedAt: '' }
 ];
 
 /* ===== 逾期规则 ===== */
@@ -1923,6 +1920,12 @@ function isUnfinished(t) { return effStatus(t) !== '已处理'; }
 function customerById(id) { for (var i = 0; i < CUSTOMERS.length; i++) { if (CUSTOMERS[i].id === id) return CUSTOMERS[i]; } return null; }
 function tasksOfCustomer(id) { return TASKS.filter(function (t) { return t.customerId === id; }); }
 function unfinishedOfCustomer(id) { return tasksOfCustomer(id).filter(isUnfinished); }
+/* 按客户+联系人筛选未完成任务（聚合触发条件：同一联系人≥2条未完成） */
+function unfinishedOfCustomerAndContact(customerId, contactName) {
+  return TASKS.filter(function (t) {
+    return t.customerId === customerId && t.relatedContact === contactName && isUnfinished(t);
+  });
+}
 function ownerOfCustomer(id) { var c = customerById(id); return c ? c.owner : ''; }
 function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 function pct(a, b) { return b > 0 ? Math.round(a / b * 100) : 0; }
@@ -1930,9 +1933,9 @@ function pct(a, b) { return b > 0 ? Math.round(a / b * 100) : 0; }
 /* ===== 语义映射：只使用 badge.css 中官方存在的三个变体 =====
    badge 官方变体（唯一来源 components/badge/badge.css）：default / secondary / outline
    强调强度：default（实心最深） > secondary（浅灰实心） > outline（描边） */
-var BADGE_VARIANTS = { 'default': 1, 'secondary': 1, 'outline': 1 };
+var BADGE_VARIANTS = { 'default': 1, 'secondary': 1, 'outline': 1, 'primary': 1, 'destructive': 1 };
 var STATUS_VARIANT = { '待处理': 'secondary', '待跟进': 'outline', '已处理': 'outline', '已逾期': 'default' };
-var PRIORITY_VARIANT = { '高': 'default', '中': 'secondary', '低': 'outline' };
+var PRIORITY_VARIANT = { '高': 'destructive', '中': 'primary', '低': 'outline' };
 var CATEGORY_VARIANT = { '新发任务': 'outline', '系统任务': 'outline', '自建任务': 'outline' };
 
 function badgeHtml(text, variant) {
@@ -1940,28 +1943,19 @@ function badgeHtml(text, variant) {
   return '<span class="badge" data-variant="' + v + '">' + esc(text) + '</span>';
 }
 function statusBadge(s) { return badgeHtml(s, STATUS_VARIANT[s]); }
-function priorityBadge(p) { return badgeHtml(p + '优先级', PRIORITY_VARIANT[p]); }
-function categoryBadge(c) { return badgeHtml(c, CATEGORY_VARIANT[c]); }
+function priorityBadge(p) { return badgeHtml('', PRIORITY_VARIANT[p]); }
 
-/* 单元格渲染：容器只用内联纯布局（flex / gap / 宽高），视觉全部来自库类 */
+/* 单元格渲染：任务类型用badge展示，颜色随优先级 */
+var PRIORITY_VARIANT = { '高': 'destructive', '中': 'primary', '低': 'secondary' };
 function typeCell(t) {
   var m = TYPE_META[t.type];
-  return '<div style="display:flex;flex-direction:column;align-items:flex-start;gap:0.375rem;">' +
-           '<span class="small">' + esc(t.type) + '</span>' +
-           '<div style="display:flex;flex-wrap:wrap;gap:0.25rem;">' + categoryBadge(m.category) + priorityBadge(m.priority) + '</div>' +
-         '</div>';
+  return badgeHtml(t.type, PRIORITY_VARIANT[m.priority]);
 }
-function customerCell(c) {
-  var n = unfinishedOfCustomer(c.id).length;
-  var html = '<div style="display:flex;flex-direction:column;align-items:flex-start;gap:0.25rem;">' +
-               '<button class="btn" data-variant="link" type="button" onclick="openCustomer(\'' + c.id + '\')">' + esc(c.name) + '</button>';
-  if (n > 1) html += badgeHtml('该客户有 ' + n + ' 条未完成', 'secondary');
-  return html + '</div>';
-}
+
 function remindCell(t) {
   var html = '<div style="display:flex;flex-direction:column;align-items:flex-start;gap:0.25rem;">' +
                '<span>' + esc(t.remind) + '</span>';
-  if (isAfter18(t)) html += '<span class="muted">18:00 后发起，不纳入次日逾期</span>';
+  if (isAfter18(t)) html += '<span class="muted">18:00后发起</span>';
   return html + '</div>';
 }
 function openCustomer(cid) {
@@ -2031,21 +2025,23 @@ function query(name) {
 var TABS = [
   { key: 'today',   label: '今日任务' },
   { key: 'overdue', label: '过期任务' },
-  { key: 'future',  label: '未来任务' },
+  { key: 'future',  label: '计划任务' },
   { key: 'all',     label: '全部任务' }
 ];
-var PAGES = { list: '任务列表.html', agg: '任务聚合处理.html', lead: '领导任务.html', report: '任务报表.html' };
-var state = { tab: 'today', customer: '', category: '', status: '' };
+var PAGES = { list: '任务列表.html', agg: '任务处理.html', lead: '领导任务.html', report: '任务报表.html' };
+var state = { tab: 'today', customer: '', category: '', status: '', page: 1 };
+var PAGE_SIZE = 20;
 var currentTaskId = null;
 var highlightId = '';
 
 function goPage(k) { window.location.href = PAGES[k]; }
 
 function tasksByTab(key) {
-  if (key === 'today')   return TASKS.filter(function (t) { return remindDate(t) === TODAY; });
-  if (key === 'overdue') return TASKS.filter(function (t) { return effStatus(t) === '已逾期'; });
-  if (key === 'future')  return TASKS.filter(function (t) { return remindDate(t) > TODAY; });
-  return TASKS.slice();
+  var all = TASKS.filter(function (t) { return effStatus(t) !== '已处理'; }); /* 已处理任务不显示 */
+  if (key === 'today')   return all.filter(function (t) { return remindDate(t) === TODAY && !isAfter18(t); });
+  if (key === 'overdue') return all.filter(function (t) { return effStatus(t) === '已逾期'; });
+  if (key === 'future')  return all.filter(function (t) { return remindDate(t) > TODAY; });
+  return all;
 }
 function sortByRemind(list) {
   return list.slice().sort(function (a, b) { return a.remind < b.remind ? -1 : (a.remind > b.remind ? 1 : 0); });
@@ -2059,10 +2055,23 @@ function unfinishText(cid) {
   return n > 0 ? n + ' 条未完成' : '暂无未完成任务';
 }
 function filteredList() {
-  return sortByRemind(tasksByTab(state.tab).filter(function (t) {
+  var searchActive = state.customer || state.category || state.status;
+  var base;
+  if (searchActive) {
+    /* 有搜索条件时，包含已处理任务（方便查看历史） */
+    base = TASKS.filter(function (t) {
+      if (state.tab === 'today' && (remindDate(t) !== TODAY || isAfter18(t))) return false;
+      if (state.tab === 'overdue' && effStatus(t) !== '已逾期') return false;
+      if (state.tab === 'future' && remindDate(t) <= TODAY) return false;
+      return true;
+    });
+  } else {
+    base = tasksByTab(state.tab);
+  }
+  return sortByRemind(base.filter(function (t) {
     var c = customerById(t.customerId);
     var m = TYPE_META[t.type];
-    if (state.customer && c.name !== state.customer) return false;
+    if (state.customer && c.name.indexOf(state.customer) < 0) return false;
     if (state.category && m.category !== state.category) return false;
     if (state.status && effStatus(t) !== state.status) return false;
     return true;
@@ -2081,102 +2090,155 @@ function renderTabs() {
 }
 function switchTab(key) {
   state.tab = key;
+  state.page = 1;
   renderTabs();
   renderTable();
 }
 
-/* ===== 表格 ===== */
+/* ===== 表格（按客户+联系人分组，显示电话，支持批量勾选） ===== */
+function contactPhone(customerId, contactName) {
+  var c = customerById(customerId);
+  if (!c || !c.contacts) return '';
+  for (var i = 0; i < c.contacts.length; i++) {
+    if (c.contacts[i].name === contactName) return c.contacts[i].phone;
+  }
+  return '';
+}
+function showTaskDetail(taskId) {
+  var t = TASKS.filter(function (x) { return x.id === taskId; })[0];
+  if (!t) return;
+  var c = customerById(t.customerId);
+  var m = TYPE_META[t.type];
+  var phone = contactPhone(t.customerId, t.relatedContact);
+  var contactDisplay = t.relatedContact + (phone ? ' ' + phone : '');
+  var actualPhone = t.actualContact ? contactPhone(t.customerId, t.actualContact) : '';
+  var actualDisplay = t.actualContact ? t.actualContact + (actualPhone ? ' ' + actualPhone : '') : '-';
+  var memberBadge = '';
+  if (c.memberType === '高级会员') memberBadge = ' ' + badgeHtml('高级', 'subtle');
+  else if (c.memberType === '标准会员') memberBadge = ' ' + badgeHtml('标准', 'subtle-secondary');
+  else memberBadge = ' ' + badgeHtml('免费', 'subtle-outline');
+  var html = '<div style="display:grid;grid-template-columns:6rem 1fr;gap:0.5rem 1rem;">' +
+    briefItem('客户名称', c.name) +
+    briefItem('账号名称', (c.accountName || '-') + memberBadge, false, true) +
+    briefItem('任务类型', m.category + ' · ' + t.type) +
+    briefItem('提醒时间', t.remind) +
+    briefItem('相关联系人', contactDisplay) +
+    briefItem('实际联系人', actualDisplay) +
+    briefItem('任务状态', effStatus(t)) +
+    briefItem('处理结果', t.result || '-') +
+    briefItem('下次联系', t.contactTime || '-') +
+    briefItem('关闭时间', t.closedAt || '-') +
+    briefItem('备注', t.remark || '-') +
+    briefItem('任务说明', t.desc, true) +
+  '</div>';
+  document.getElementById('taskDetailContent').innerHTML = html;
+  document.getElementById('taskDetailDialog').showModal();
+}
 function statusCell(t) {
   var html = '<div style="display:flex;flex-direction:column;align-items:flex-start;gap:0.25rem;">' + statusBadge(effStatus(t));
-  if (t.actualContact) html += '<span class="muted">实际联系人：' + esc(t.actualContact) + '</span>';
+  if (effStatus(t) === '已处理' && t.actualContact) html += '<span class="muted">实际联系人：' + esc(t.actualContact) + '</span>';
   return html + '</div>';
+}
+function shortCompanyName(name) {
+  return name.replace(/(有限公司|股份有限公司|有限责任公司|集团有限公司|工程有限公司|科技有限公司|环保科技|供应链管理部|设计院)/g, '').trim();
 }
 function renderTable() {
   var list = filteredList();
+  var total = list.length;
+  var totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  if (state.page > totalPages) state.page = totalPages;
+  var start = (state.page - 1) * PAGE_SIZE;
+  var pageList = list.slice(start, start + PAGE_SIZE);
   var rows = '';
-  list.forEach(function (t) {
+  pageList.forEach(function (t) {
     var c = customerById(t.customerId);
-    var closed = effStatus(t) === '已处理';
+    var phone = contactPhone(t.customerId, t.relatedContact);
+    var memberBadge = '';
+    if (c.memberType === '高级会员') memberBadge = badgeHtml('高级', 'subtle');
+    else if (c.memberType === '标准会员') memberBadge = badgeHtml('标准', 'subtle-secondary');
+    else memberBadge = badgeHtml('免费', 'subtle-outline');
+    var companyInfo = esc(shortCompanyName(c.name));
+    var accountInfo = esc(c.accountName || '');
+    var contactInfo = esc(t.relatedContact) + (phone ? ' ' + esc(phone) : '');
+    var isDone = effStatus(t) === '已处理';
+    var actionBtn = isDone
+      ? '<button class="btn" data-variant="ghost" data-size="xs" type="button" style="color:var(--primary);text-decoration:underline;text-underline-offset:3px;" onclick="event.stopPropagation();showTaskDetail(\'' + t.id + '\')">查看</button>'
+      : '<button class="btn" data-variant="default" data-size="xs" type="button" onclick="event.stopPropagation();handleDeal(\'' + c.id + '\',\'' + t.id + '\')">处理任务</button>';
     rows += '<tr class="table-row" id="row-' + t.id + '">' +
       '<td class="table-cell">' + remindCell(t) + '</td>' +
       '<td class="table-cell">' + typeCell(t) + '</td>' +
-      '<td class="table-cell">' + customerCell(c) + '</td>' +
-      '<td class="table-cell">' + esc(t.relatedContact) + '</td>' +
+      '<td class="table-cell"><div style="display:flex;flex-direction:column;gap:0.125rem;">' +
+        '<div style="display:flex;align-items:center;gap:0.375rem;">' +
+          '<span style="font-weight:500;">' + companyInfo + '</span>' + memberBadge +
+        '</div>' +
+        (accountInfo ? '<span class="muted" style="font-size:0.75rem;">' + accountInfo + '</span>' : '') +
+      '</div></td>' +
+      '<td class="table-cell">' + contactInfo + '</td>' +
       '<td class="table-cell">' + esc(t.desc) + '</td>' +
       '<td class="table-cell">' + statusCell(t) + '</td>' +
       '<td class="table-cell"><div style="display:flex;flex-wrap:wrap;gap:0.5rem;">' +
-        '<button class="btn" data-variant="outline" data-size="xs" type="button" onclick="openCustomer(\'' + c.id + '\')">查看客户</button>' +
-        (closed
-          ? '<button class="btn" data-variant="ghost" data-size="xs" type="button" disabled>处理任务</button>'
-          : '<button class="btn" data-variant="default" data-size="xs" type="button" onclick="handleDeal(\'' + c.id + '\',\'' + t.id + '\')">处理任务</button>') +
+        '<button class="btn" data-variant="outline" data-size="xs" type="button" onclick="event.stopPropagation();openCustomer(\'' + c.id + '\')">查看客户</button>' +
+        actionBtn +
       '</div></td>' +
     '</tr>';
   });
   document.getElementById('taskBody').innerHTML = rows;
-  document.getElementById('emptyTip').hidden = list.length > 0;
+  document.getElementById('emptyTip').hidden = total > 0;
   var unfinished = list.filter(isUnfinished).length;
   document.getElementById('listSummary').textContent =
-    '当前「' + tabLabel(state.tab) + '」共 ' + list.length + ' 条，其中未完成 ' + unfinished + ' 条';
+    '当前「' + tabLabel(state.tab) + '」共 ' + total + ' 条，其中未完成 ' + unfinished + ' 条';
+  renderPagination(total, totalPages);
+}
+function renderPagination(total, totalPages) {
+  var el = document.getElementById('pagination');
+  if (totalPages <= 1) { el.innerHTML = ''; return; }
+  var html = '';
+  html += '<button class="btn" data-variant="outline" data-size="xs" type="button"' + (state.page <= 1 ? ' disabled' : '') + ' onclick="goToPage(' + (state.page - 1) + ')">上一页</button>';
+  var startP = Math.max(1, state.page - 2);
+  var endP = Math.min(totalPages, state.page + 2);
+  if (startP > 1) html += '<button class="btn" data-variant="outline" data-size="xs" type="button" onclick="goToPage(1)">1</button>';
+  if (startP > 2) html += '<span class="muted" style="padding:0 0.25rem;">...</span>';
+  for (var i = startP; i <= endP; i++) {
+    var active = i === state.page;
+    html += '<button class="btn" data-variant="' + (active ? 'default' : 'outline') + '" data-size="xs" type="button" onclick="goToPage(' + i + ')">' + i + '</button>';
+  }
+  if (endP < totalPages - 1) html += '<span class="muted" style="padding:0 0.25rem;">...</span>';
+  if (endP < totalPages) html += '<button class="btn" data-variant="outline" data-size="xs" type="button" onclick="goToPage(' + totalPages + ')">' + totalPages + '</button>';
+  html += '<button class="btn" data-variant="outline" data-size="xs" type="button"' + (state.page >= totalPages ? ' disabled' : '') + ' onclick="goToPage(' + (state.page + 1) + ')">下一页</button>';
+  html += '<span class="muted" style="margin-left:0.5rem;font-size:0.75rem;">第 ' + state.page + ' / ' + totalPages + ' 页，共 ' + total + ' 条</span>';
+  el.innerHTML = html;
+}
+function goToPage(p) {
+  state.page = p;
+  renderTable();
+  document.querySelector('.table-container').scrollTop = 0;
 }
 
 /* ===== 二级筛选 ===== */
 function onFilterChange() {
+  state.customer = document.getElementById('fCustomer').value.trim();
   state.category = document.getElementById('fCategory').value;
   state.status = document.getElementById('fStatus').value;
+  state.page = 1;
   renderTable();
 }
 function resetFilters() {
+  document.getElementById('fCustomer').value = '';
   document.getElementById('fCategory').value = '';
   document.getElementById('fStatus').value = '';
-  state.category = ''; state.status = '';
-  pickCustomer('');
-}
-
-/* ===== 客户可搜索下拉（库 combobox 组件） ===== */
-function renderCustomerOptions(filterText, selectedName) {
-  var q = (filterText || '').trim();
-  var items = [{ value: '', label: '全部客户', note: '不限制客户范围' }];
-  CUSTOMERS.forEach(function (c) { items.push({ value: c.name, label: c.name, note: c.owner + ' · ' + unfinishText(c.id) }); });
-
-  var html = '<div class="combobox-empty" id="fCustomerEmpty" hidden>未找到匹配的客户</div>';
-  var hit = 0;
-  items.forEach(function (it) {
-    if (q && it.label.indexOf(q) < 0) return;
-    hit++;
-    html += '<div role="option" class="combobox-item" data-value="' + esc(it.value) + '" aria-selected="' +
-            (it.value === (selectedName || '') ? 'true' : 'false') +
-            '" onclick="pickCustomer(\'' + it.value.replace(/'/g, "\\'") + '\')">' + esc(it.label) +
-            '<span class="muted">' + esc(it.note) + '</span></div>';
-  });
-  document.getElementById('fCustomerListbox').innerHTML = html;
-  document.getElementById('fCustomerEmpty').hidden = hit > 0;
-}
-function pickCustomer(name) {
-  state.customer = name || '';
-  var val = document.getElementById('fCustomerValue');
-  if (state.customer) {
-    val.textContent = state.customer;
-    val.removeAttribute('data-placeholder');
-  } else {
-    val.textContent = '全部客户';
-    val.setAttribute('data-placeholder', '全部客户');
-  }
-  var pop = document.getElementById('fCustomerPopover');
-  if (pop && pop.hidePopover) { try { pop.hidePopover(); } catch (e) {} }
+  state.customer = ''; state.category = ''; state.status = ''; state.page = 1;
   renderTable();
 }
 
 /* ================= 处理任务入口 ================= */
 function handleDeal(customerId, taskId) {
-  var un = unfinishedOfCustomer(customerId);
-  if (un.length > 1) {
-    window.location.href = '任务聚合处理.html?customer=' + customerId;
-    return;
-  }
-  openDealDialog(taskId);
+  var task = TASKS.filter(function (x) { return x.id === taskId; })[0];
+  if (!task) return;
+  var contactName = task.relatedContact;
+  window.location.href = '任务处理.html?customer=' + customerId + '&contact=' + encodeURIComponent(contactName) + '&task=' + taskId;
 }
-function briefItem(k, v, full) {
-  return '<span class="muted">' + k + '</span><span' + (full ? ' style="grid-column:2;"' : '') + '>' + esc(v) + '</span>';
+function briefItem(k, v, full, raw) {
+  return '<span class="muted">' + k + '</span><span' + (full ? ' style="grid-column:2;"' : '') + '>' + (raw ? v : esc(v)) + '</span>';
 }
 function showError(id, on) {
   var el = document.getElementById(id);
@@ -2270,20 +2332,6 @@ function submitDeal() {
 
 /* ================= 初始化 ================= */
 function init() {
-  renderCustomerOptions('', '');
-  document.getElementById('fCustomerSearch').addEventListener('input', function () {
-    renderCustomerOptions(this.value, state.customer);
-  });
-  document.getElementById('fCustomerPopover').addEventListener('toggle', function () {
-    var open = this.matches(':popover-open');
-    document.getElementById('fCustomerTrigger').setAttribute('aria-expanded', open ? 'true' : 'false');
-    if (open) {
-      document.getElementById('fCustomerSearch').value = '';
-      renderCustomerOptions('', state.customer);
-      document.getElementById('fCustomerSearch').focus();
-    }
-  });
-
   highlightId = query('task');
   if (highlightId) state.tab = 'all';
 
