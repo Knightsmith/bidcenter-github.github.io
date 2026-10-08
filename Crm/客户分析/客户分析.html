@@ -1,0 +1,3193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>客户分析 - 单客户经营质量与逼单状态</title>
+<style>
+/* ==== SRC[01]: theme/default-semantic-tokens.css ==== */
+/**
+ * shadcn-html — Token Layer
+ * Semantic CSS custom properties matching the tweakcn.com export format.
+ * OKLCH color space. Full surface/foreground pair model.
+ *
+ * Export a theme from tweakcn.com, replace the :root and .dark blocks,
+ * and every component rethemes instantly.
+ */
+
+:root {
+  color-scheme: light;
+
+  --background:              oklch(0.9946 0.0026 286.3519);
+  --foreground:              oklch(0.1615 0.0105 285.1663);
+
+  --card:                    oklch(1.0000 0 0);
+  --card-foreground:         oklch(0.1615 0.0105 285.1663);
+
+  --popover:                 oklch(1.0000 0 0);
+  --popover-foreground:      oklch(0.1615 0.0105 285.1663);
+
+  --primary:                 oklch(0.5828 0.2188 258.8797);
+  --primary-foreground:      oklch(0.9670 0.0029 264.5419);
+
+  --secondary:               oklch(0.9518 0.0231 277.9569);
+  --secondary-foreground:    oklch(0.4446 0.0983 268.5283);
+
+  --muted:                   oklch(0.9601 0.0093 286.2229);
+  --muted-foreground:        oklch(0.5052 0.0379 284.9640);
+
+  --accent:                  oklch(0.9712 0.0136 258.3446);
+  --accent-foreground:       oklch(0.6081 0.2114 266.2130);
+
+  --destructive:             oklch(0.6368 0.2078 25.3313);
+  --destructive-foreground:  oklch(0.9842 0.0034 247.8575);
+
+  --border:                  oklch(0.9163 0.0162 286.0759);
+  --input:                   oklch(0.9163 0.0162 286.0759);
+  --ring:                    oklch(0.5565 0.2430 261.9529);
+
+  --sidebar:                 oklch(0.9946 0.0026 286.3519);
+  --sidebar-foreground:      oklch(0.1615 0.0105 285.1663);
+  --sidebar-primary:         oklch(0.5828 0.2188 258.8797);
+  --sidebar-primary-foreground: oklch(1.0000 0 0);
+  --sidebar-accent:          oklch(0.9634 0.0175 279.0619);
+  --sidebar-accent-foreground: oklch(0.6256 0.2009 264.0684);
+  --sidebar-border:          oklch(0.9163 0.0162 286.0759);
+  --sidebar-ring:            oklch(0.5828 0.2188 258.8797);
+
+  --chart-1:                 oklch(0.5553 0.2554 283.4559);
+  --chart-2:                 oklch(0.6037 0.2141 267.5162);
+  --chart-3:                 oklch(0.7495 0.1297 210.9704);
+  --chart-4:                 oklch(0.8023 0.1492 175.5763);
+  --chart-5:                 oklch(0.6945 0.1422 167.0638);
+
+  --font-sans:               'Inter', sans-serif;
+  --font-serif:              'Merriweather', serif;
+  --font-mono:               'JetBrains Mono', monospace;
+
+  --radius:                  1.25rem;
+  --radius-sm:               calc(var(--radius) - 4px);
+  --radius-md:               calc(var(--radius) - 2px);
+  --radius-lg:               var(--radius);
+  --radius-xl:               calc(var(--radius) + 4px);
+
+  --spacing:                 0.25rem;
+
+  --tracking-normal:         -0.01em;
+
+  --shadow-2xs: 0px 4px 15px 0px hsl(0 0% 0% / 0.07);
+  --shadow-xs:  0px 4px 15px 0px hsl(0 0% 0% / 0.07);
+  --shadow-sm:  0px 4px 15px 0px hsl(0 0% 0% / 0.15), 0px 1px 2px -1px hsl(0 0% 0% / 0.15);
+  --shadow:     0px 4px 15px 0px hsl(0 0% 0% / 0.15), 0px 1px 2px -1px hsl(0 0% 0% / 0.15);
+  --shadow-md:  0px 4px 15px 0px hsl(0 0% 0% / 0.15), 0px 2px 4px -1px hsl(0 0% 0% / 0.15);
+  --shadow-lg:  0px 4px 15px 0px hsl(0 0% 0% / 0.15), 0px 4px 6px -1px hsl(0 0% 0% / 0.15);
+  --shadow-xl:  0px 4px 15px 0px hsl(0 0% 0% / 0.15), 0px 8px 10px -1px hsl(0 0% 0% / 0.15);
+  --shadow-2xl: 0px 4px 15px 0px hsl(0 0% 0% / 0.38);
+}
+
+
+/* ==== SRC[02]: components/typography/typography.css ==== */
+/* -- Typography component --------------------------------------- */
+
+/* -- Base text ---------------------------------------------- */
+/* Sets the default font size for the entire page.            */
+/* All typography classes are sized relative to this baseline. */
+@layer base {
+  body {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+}
+
+@layer components {
+  /* -- Headings ---------------------------------------------- */
+  .h1 {
+    scroll-margin-top: 5rem;
+    font-size: 2.25rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    text-wrap: balance;
+    color: var(--foreground);
+  }
+
+  .h2 {
+    scroll-margin-top: 5rem;
+    font-size: 1.875rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    text-wrap: balance;
+    color: var(--foreground);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
+
+    &:first-child { margin-top: 0; }
+  }
+
+  .h3 {
+    scroll-margin-top: 5rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+    text-wrap: balance;
+    color: var(--foreground);
+  }
+
+  .h4 {
+    scroll-margin-top: 5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-wrap: balance;
+    color: var(--foreground);
+  }
+
+  /* -- Paragraph --------------------------------------------- */
+  .p {
+    font-size: 0.875rem;
+    line-height: 1.75;
+    text-wrap: pretty;
+    color: var(--foreground);
+
+    &:not(:first-child) { margin-top: 1.5rem; }
+  }
+
+  /* -- Lead --------------------------------------------------- */
+  .lead {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: var(--muted-foreground);
+    text-wrap: pretty;
+  }
+
+  /* -- Large -------------------------------------------------- */
+  .large {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--foreground);
+  }
+
+  /* -- Small -------------------------------------------------- */
+  .small {
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--foreground);
+  }
+
+  /* -- Muted -------------------------------------------------- */
+  .muted {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+  }
+
+  /* -- Blockquote --------------------------------------------- */
+  .blockquote {
+    margin-top: 1.5rem;
+    border-inline-start: 2px solid var(--border);
+    padding-inline-start: 1.5rem;
+    font-style: italic;
+    hanging-punctuation: first last;
+    color: var(--foreground);
+
+    & p { margin: 0; }
+  }
+
+  /* -- Inline code -------------------------------------------- */
+  .code {
+    position: relative;
+    border-radius: var(--radius-sm);
+    background: var(--muted);
+    padding: 0.2rem 0.3rem;
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    font-weight: 600;
+    color: var(--foreground);
+  }
+
+  /* -- Accessibility ------------------------------------------ */
+
+  @media (prefers-contrast: more) {
+    .h1, .h2, .h3, .h4 {
+      letter-spacing: 0;
+    }
+
+    .blockquote {
+      border-inline-start-width: 3px;
+    }
+
+    .code {
+      outline: 1px solid var(--border);
+    }
+
+    .muted {
+      color: var(--foreground);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .blockquote {
+      border-inline-start-color: CanvasText;
+    }
+
+    .code {
+      background: Canvas;
+      outline: 1px solid CanvasText;
+      color: CanvasText;
+    }
+  }
+}
+/* ==== SRC[03]: components/button/button.css ==== */
+/* -- Button component ------------------------------------------ */
+
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--font-sans);
+    line-height: 1;
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 150ms ease;
+    outline: none;
+    flex-shrink: 0;
+    height: 2.25rem;
+    padding: 0 1rem;
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+
+    & svg {
+      pointer-events: none;
+      flex-shrink: 0;
+
+      &:not([class*="size-"]) { width: 1rem; height: 1rem; }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &:disabled, &[aria-disabled="true"] {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    /* -- Variants -------------------------------------------- */
+    &[data-variant="default"] {
+      background-color: var(--primary);
+      color: var(--primary-foreground);
+
+      &:hover { opacity: 0.9; }
+    }
+
+    &[data-variant="secondary"] {
+      background-color: var(--secondary);
+      color: var(--secondary-foreground);
+
+      &:hover { opacity: 0.8; }
+    }
+
+    &[data-variant="outline"] {
+      background-color: var(--background);
+      color: var(--foreground);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-xs);
+
+      &:hover {
+        background-color: var(--accent);
+        color: var(--accent-foreground);
+      }
+    }
+
+    &[data-variant="ghost"] {
+      background-color: transparent;
+      color: var(--foreground);
+      border-color: transparent;
+
+      &:hover {
+        background-color: var(--accent);
+        color: var(--accent-foreground);
+      }
+    }
+
+    &[data-variant="destructive"] {
+      background-color: var(--destructive);
+      color: var(--destructive-foreground);
+
+      &:hover { opacity: 0.9; }
+    }
+
+    &[data-variant="link"] {
+      background-color: transparent;
+      color: var(--primary);
+      height: auto;
+      padding: 0;
+      text-underline-offset: 4px;
+
+      &:hover { text-decoration: underline; }
+    }
+
+    /* -- Sizes ----------------------------------------------- */
+    &[data-size="xs"]      { height: 1.75rem; padding: 0 0.5rem;  font-size: 0.75rem; border-radius: var(--radius-sm); }
+    &[data-size="sm"]      { height: 2rem;    padding: 0 0.75rem; font-size: 0.8125rem; }
+    &[data-size="lg"]      { height: 2.75rem; padding: 0 2rem;    font-size: 1rem; }
+    &[data-size="icon"]    { height: 2.25rem; width: 2.25rem;  padding: 0; }
+    &[data-size="icon-xs"] { height: 1.75rem; width: 1.75rem;  padding: 0; border-radius: var(--radius-sm); }
+    &[data-size="icon-sm"] { height: 2rem;    width: 2rem;     padding: 0; }
+    &[data-size="icon-lg"] { height: 2.75rem; width: 2.75rem;  padding: 0; }
+  }
+
+  /* -- Accessibility ------------------------------------------ */
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn { transition: none; }
+  }
+
+  @media (prefers-contrast: more) {
+    .btn {
+      border: 2px solid transparent;
+
+      &[data-variant="default"],
+      &[data-variant="secondary"],
+      &[data-variant="destructive"] {
+        border-color: currentColor;
+      }
+
+      &[data-variant="outline"],
+      &[data-variant="ghost"] {
+        border-color: var(--foreground);
+      }
+    }
+  }
+
+  @media (forced-colors: active) {
+    .btn {
+      border: 1px solid ButtonText;
+
+      &:disabled, &[aria-disabled="true"] {
+        border-color: GrayText;
+        color: GrayText;
+      }
+    }
+  }
+}
+/* ==== SRC[04]: components/badge/badge.css ==== */
+/* -- Badge component ------------------------------------------- */
+
+@layer components {
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+    padding: 0.125rem 0.625rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    line-height: 1.5rem;
+
+    &[data-variant="outline"] {
+      border: 1px solid var(--border);
+      color: var(--muted-foreground);
+    }
+
+    &[data-variant="secondary"] {
+      background: var(--secondary);
+      color: var(--secondary-foreground);
+    }
+
+    &[data-variant="default"] {
+      background: var(--primary);
+      color: var(--primary-foreground);
+    }
+
+    &[data-variant="primary"] {
+      background: var(--primary);
+      color: var(--primary-foreground);
+    }
+
+    &[data-variant="destructive"] {
+      background: var(--destructive);
+      color: var(--primary-foreground);
+    }
+
+    &[data-variant="subtle"] {
+      background: color-mix(in oklch, var(--primary) 15%, transparent);
+      color: var(--primary);
+    }
+
+    &[data-variant="subtle-secondary"] {
+      background: color-mix(in oklch, var(--secondary) 12%, transparent);
+      color: var(--secondary-foreground);
+    }
+
+    &[data-variant="subtle-outline"] {
+      background: color-mix(in oklch, var(--foreground) 6%, transparent);
+      color: var(--muted-foreground);
+    }
+  }
+}
+/* ==== SRC[05]: components/card/card.css ==== */
+/* -- Card component -------------------------------------------- */
+
+@layer components {
+  .card {
+    background-color: var(--card);
+    color: var(--card-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    container-type: inline-size;
+  }
+
+  .card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1.5rem;
+    padding-bottom: 0;
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+
+  .card-description {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .card-content {
+    padding: 1.5rem;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    padding-top: 0;
+  }
+
+  /* -- Container query: compact card in narrow containers -- */
+  @container (max-width: 280px) {
+    .card-header { padding: 1rem; padding-bottom: 0; }
+    .card-content { padding: 1rem; }
+    .card-footer { padding: 1rem; padding-top: 0; }
+    .card-title { font-size: 1rem; }
+  }
+}
+/* ==== SRC[06]: components/input/input.css ==== */
+/* -- Input component ------------------------------------------- */
+
+@layer components {
+  .input {
+    height: 2.5rem;
+    width: 100%;
+    border: 1px solid var(--input);
+    border-radius: var(--radius-md);
+    background: var(--background);
+    padding: 0 0.75rem;
+    font-size: 0.875rem;
+    font-family: var(--font-sans);
+    color: var(--foreground);
+    outline: none;
+    box-shadow: var(--shadow-xs);
+    transition: border-color 150ms, box-shadow 150ms;
+
+    &:focus {
+      border-color: var(--ring);
+      box-shadow: 0 0 0 2px oklch(from var(--ring) l c h / 0.2);
+    }
+
+    &::placeholder { color: var(--muted-foreground); }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* -- Readonly state -------------------------------------- */
+    &:read-only:not([type="file"]) {
+      background: var(--muted);
+      cursor: default;
+      opacity: 0.7;
+
+      &:focus {
+        border-color: var(--input);
+        box-shadow: var(--shadow-xs);
+      }
+    }
+
+    /* -- Invalid state --------------------------------------- */
+    &:is([aria-invalid="true"], :user-invalid) {
+      border-color: var(--destructive);
+
+      &:focus {
+        border-color: var(--destructive);
+        box-shadow: 0 0 0 2px oklch(from var(--destructive) l c h / 0.2);
+      }
+    }
+
+    /* -- File input ------------------------------------------ */
+    &[type="file"] {
+      padding: 0;
+      font-size: 0.875rem;
+
+      &::file-selector-button {
+        height: 100%;
+        border: none;
+        border-right: 1px solid var(--input);
+        background: var(--muted);
+        color: var(--foreground);
+        font-size: 0.875rem;
+        font-weight: 500;
+        font-family: var(--font-sans);
+        padding: 0 0.75rem;
+        margin-right: 0.75rem;
+        cursor: pointer;
+        transition: background 150ms;
+
+        &:hover { background: var(--accent); }
+      }
+    }
+
+    /* -- Sizes ----------------------------------------------- */
+    &[data-size="sm"] { height: 2rem;    padding: 0 0.625rem; font-size: 0.8125rem; }
+    &[data-size="lg"] { height: 2.75rem; padding: 0 1rem;     font-size: 1rem; }
+  }
+
+  /* -- Auto-growing textarea --------------------------------- */
+  textarea.input {
+    field-sizing: content;
+    min-height: 5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  /* -- Field description ------------------------------------- */
+  .field-description {
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    margin: 0.375rem 0 0;
+  }
+
+  /* -- Field error ------------------------------------------- */
+  .field-error {
+    font-size: 0.8125rem;
+    color: var(--destructive);
+    margin: 0.375rem 0 0;
+  }
+
+  /* -- Accessibility ---------------------------------------- */
+  @media (prefers-reduced-motion: reduce) {
+    .input {
+      transition: none;
+    }
+
+    .input[type="file"]::file-selector-button {
+      transition: none;
+    }
+  }
+
+  @media (prefers-contrast: more) {
+    .input {
+      border-width: 2px;
+    }
+
+    .input:disabled {
+      opacity: 0.7;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .input {
+      border-color: ButtonBorder;
+      color: ButtonText;
+      background: Field;
+    }
+
+    .input:focus {
+      outline: 2px solid Highlight;
+      outline-offset: 1px;
+    }
+
+    .input:disabled {
+      opacity: 1;
+      color: GrayText;
+      border-color: GrayText;
+    }
+
+    .input:is([aria-invalid="true"], :user-invalid) {
+      border-color: LinkText;
+    }
+
+    .field-error {
+      color: LinkText;
+    }
+  }
+}
+/* ==== SRC[07]: components/label/label.css ==== */
+/* -- Label component -------------------------------------------- */
+
+@layer components {
+  .label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--font-sans);
+    line-height: 1;
+    color: var(--foreground);
+    display: block;
+    margin-bottom: 0.375rem;
+    cursor: default;
+
+    /* Disabled — explicit attribute */
+    &[data-disabled] {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    /* Disabled — auto-detect via adjacent disabled control */
+    &:has(+ :disabled),
+    &:has(+ [data-disabled]) {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+  }
+
+  /* -- Hint text (optional, required indicators) ----------- */
+  .label-hint {
+    font-weight: 400;
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+  }
+
+  /* -- Accessibility ---------------------------------------- */
+  @media (prefers-contrast: more) {
+    .label[data-disabled],
+    .label:has(+ :disabled),
+    .label:has(+ [data-disabled]) {
+      opacity: 0.85;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .label {
+      color: LinkText;
+    }
+
+    .label[data-disabled],
+    .label:has(+ :disabled),
+    .label:has(+ [data-disabled]) {
+      opacity: 1;
+      color: GrayText;
+    }
+  }
+}
+/* ==== SRC[08]: components/select/select.css ==== */
+/* -- Select component ------------------------------------------- */
+
+@layer components {
+  .select {
+    appearance: none;
+    height: 2.5rem;
+    width: 100%;
+    border: 1px solid var(--input);
+    border-radius: var(--radius-md);
+    background: var(--background);
+    padding: 0 2rem 0 0.75rem;
+    font-size: 0.875rem;
+    font-family: var(--font-sans);
+    color: var(--foreground);
+    outline: none;
+    box-shadow: var(--shadow-xs);
+    cursor: pointer;
+    transition: border-color 150ms, box-shadow 150ms;
+
+    /* Custom chevron */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1rem;
+
+    &:focus {
+      border-color: var(--ring);
+      box-shadow: 0 0 0 2px oklch(from var(--ring) l c h / 0.2);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &:is([aria-invalid="true"], :user-invalid) {
+      border-color: var(--destructive);
+
+      &:focus {
+        border-color: var(--destructive);
+        box-shadow: 0 0 0 2px oklch(from var(--destructive) l c h / 0.2);
+      }
+    }
+
+    /* -- Sizes ----------------------------------------------- */
+    &[data-size="sm"] { height: 2rem;    padding-left: 0.625rem; font-size: 0.8125rem; }
+    &[data-size="lg"] { height: 2.75rem; padding-left: 1rem;     font-size: 1rem; }
+  }
+}
+/* ==== SRC[09]: components/table/table.css ==== */
+@layer components {
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    container-type: inline-size;
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    text-align: left;
+    caption-side: bottom;
+  }
+
+  .table-caption {
+    padding: 0.75rem 1rem;
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    text-align: center;
+  }
+
+  .table-head {
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    color: var(--muted-foreground);
+    background-color: var(--muted);
+    white-space: nowrap;
+    border-bottom: 1px solid var(--border);
+
+    &:first-child {
+      border-top-left-radius: var(--radius-lg);
+    }
+
+    &:last-child {
+      border-top-right-radius: var(--radius-lg);
+    }
+  }
+
+  .table-row {
+    border-bottom: 1px solid var(--border);
+    transition: background-color 150ms ease;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    tbody &:hover {
+      background-color: var(--muted);
+    }
+  }
+
+  .table-cell {
+    padding: 0.75rem 1rem;
+    vertical-align: middle;
+    color: var(--foreground);
+  }
+
+  tfoot .table-row {
+    background-color: var(--muted);
+    border-top: 1px solid var(--border);
+    font-weight: 500;
+  }
+
+  tfoot .table-cell:first-child {
+    border-bottom-left-radius: var(--radius-lg);
+  }
+
+  tfoot .table-cell:last-child {
+    border-bottom-right-radius: var(--radius-lg);
+  }
+
+  /* -- Container query: compact table in narrow containers -- */
+  @container (max-width: 480px) {
+    .table-head,
+    .table-cell { padding: 0.5rem 0.75rem; font-size: 0.8125rem; }
+  }
+}
+/* ==== SRC[10]: components/tabs/tabs.css ==== */
+/* -- Tabs component -------------------------------------------- */
+
+@layer components {
+  /* -- Default (pill) variant ----------------------------------- */
+  .tab-list {
+    display: inline-flex;
+    align-items: center;
+    background: var(--muted);
+    border-radius: var(--radius-lg);
+    padding: 0.25rem;
+    gap: 0.125rem;
+
+    /* -- Line variant --------------------------------------------- */
+    &[data-variant="line"] {
+      background: transparent;
+      border-radius: 0;
+      padding: 0;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+
+      & .tab-trigger {
+        border-radius: 0;
+        padding: 0.5rem 1rem;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -1px;
+
+        &[aria-selected="true"] {
+          background: transparent;
+          color: var(--foreground);
+          border-bottom-color: var(--primary);
+          box-shadow: none;
+        }
+      }
+    }
+
+    /* -- Vertical orientation ------------------------------------ */
+    &[aria-orientation="vertical"] {
+      flex-direction: column;
+      width: auto;
+
+      & .tab-trigger {
+        justify-content: flex-start;
+        width: 100%;
+      }
+    }
+  }
+
+  .tab-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: calc(var(--radius) * 0.6);
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: none;
+    background: transparent;
+    color: var(--muted-foreground);
+    cursor: pointer;
+    transition: all 150ms ease;
+    white-space: nowrap;
+    outline: none;
+
+    &[aria-selected="true"] {
+      background: var(--background);
+      color: var(--foreground);
+      box-shadow: 0 1px 3px oklch(0 0 0 / 0.08), 0 0 0 1px var(--border);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+  }
+
+  /* -- Vertical layout container ----------------------------- */
+  .tabs:has(.tab-list[aria-orientation="vertical"]) {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+
+    & > .tab-content {
+      margin-top: 0;
+      flex: 1;
+    }
+  }
+
+  /* -- Panel ---------------------------------------------------- */
+  .tab-content {
+    margin-top: 0.75rem;
+
+    &:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &[hidden] { display: none; }
+  }
+
+  /* -- Accessibility ------------------------------------------ */
+
+  @media (prefers-reduced-motion: reduce) {
+    .tab-trigger { transition: none; }
+  }
+
+  @media (forced-colors: active) {
+    .tab-trigger[aria-selected="true"] {
+      border: 2px solid Highlight;
+      box-shadow: none;
+    }
+
+    .tab-list[data-variant="line"] .tab-trigger[aria-selected="true"] {
+      border: none;
+      border-bottom: 2px solid Highlight;
+    }
+  }
+}
+/* ==== SRC[11]: components/dialog/dialog.css ==== */
+/* -- Dialog component ------------------------------------------ */
+
+@layer components {
+  dialog.dialog {
+    border: none;
+    border-radius: var(--radius-xl);
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+    padding: 0;
+    margin: auto;
+    position: fixed;
+    inset: 0;
+    max-width: 28rem;
+    width: calc(100vw - 2rem);
+    max-height: calc(100vh - 2rem);
+    box-shadow: 0 25px 80px oklch(0 0 0 / 0.25), 0 0 0 1px var(--border);
+    opacity: 0;
+    transform: translateY(-0.5rem) scale(0.98);
+    transition: opacity 200ms ease, transform 200ms ease, display 200ms allow-discrete;
+
+    &[open] {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* -- Sizes ------------------------------------------------ */
+    &[data-size="sm"]   { max-width: 24rem; }
+    &[data-size="lg"]   { max-width: 32rem; }
+    &[data-size="xl"]   { max-width: 40rem; }
+    &[data-size="full"] { max-width: calc(100vw - 2rem); }
+
+    /* -- Backdrop --------------------------------------------- */
+    &::backdrop {
+      background: oklch(0 0 0 / 0);
+      backdrop-filter: blur(0px);
+      transition: all 200ms ease, display 200ms allow-discrete;
+    }
+
+    &[open]::backdrop {
+      background: oklch(0 0 0 / 0.45);
+      backdrop-filter: blur(3px);
+    }
+  }
+
+  @starting-style {
+    dialog.dialog[open] {
+      opacity: 0;
+      transform: translateY(-0.5rem) scale(0.98);
+    }
+
+    dialog.dialog[open]::backdrop {
+      background: oklch(0 0 0 / 0);
+      backdrop-filter: blur(0px);
+    }
+  }
+
+  /* -- Content sections ------------------------------------- */
+  .dialog-content { padding: 1.5rem; }
+  .dialog-header  { margin-bottom: 1rem; }
+  .dialog-title   { font-size: 1.0625rem; font-weight: 600; margin: 0 0 0.375rem; letter-spacing: -0.01em; }
+  .dialog-description { font-size: 0.875rem; color: var(--muted-foreground); margin: 0; line-height: 1.6; }
+  .dialog-body    { margin-top: 1rem; }
+  .dialog-footer  { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.5rem; }
+}
+/* ==== SRC[12]: components/radio/radio.css ==== */
+/* -- Radio Group component -------------------------------------- */
+
+@layer components {
+  .radio-group {
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    & > legend {
+      margin-bottom: 0.375rem;
+    }
+
+    /* Horizontal layout */
+    &[data-orientation="horizontal"] {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+  }
+
+  .radio-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    & > label {
+      font-size: 0.875rem;
+      font-weight: 400;
+      cursor: pointer;
+    }
+  }
+
+  /* -- With-description layout -------------------------------- */
+  .radio-item-block {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0 0.5rem;
+
+    & > .radio {
+      grid-row: 1 / 3;
+      margin-top: 0.125rem;
+    }
+
+    & > label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      line-height: 1.4;
+    }
+
+    & > .radio-description {
+      grid-column: 2;
+      font-size: 0.8125rem;
+      color: var(--muted-foreground);
+      line-height: 1.5;
+    }
+  }
+
+  /* -- Card variant ------------------------------------------- */
+  .radio-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: border-color 150ms, background 150ms;
+
+    &:hover {
+      background: var(--accent);
+    }
+
+    &:has(.radio:checked) {
+      border-color: var(--primary);
+    }
+
+    &:has(.radio:focus-visible) {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &:has(.radio:disabled) {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    & > .radio {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+    }
+
+    & > label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    & > .radio-description {
+      font-size: 0.8125rem;
+      color: var(--muted-foreground);
+      line-height: 1.5;
+    }
+  }
+
+  .radio {
+    appearance: none;
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--background);
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+    transition: border-color 150ms;
+
+    &:checked {
+      border-color: var(--primary);
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        background: var(--primary);
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+
+      & + label { opacity: 0.5; cursor: not-allowed; }
+    }
+
+    &[aria-invalid="true"] {
+      border-color: var(--destructive);
+
+      &:checked {
+        border-color: var(--destructive);
+
+        &::after {
+          background: var(--destructive);
+        }
+      }
+    }
+  }
+
+  /* Helper text for group-level descriptions */
+  .radio-group-description {
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    margin: -0.125rem 0 0.25rem;
+  }
+
+  /* -- Accessibility ------------------------------------------ */
+  @media (prefers-reduced-motion: reduce) {
+    .radio,
+    .radio-card {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .radio {
+      border-color: ButtonText;
+
+      &:checked {
+        border-color: Highlight;
+
+        &::after {
+          background: Highlight;
+        }
+      }
+
+      &:disabled {
+        border-color: GrayText;
+
+        &:checked::after {
+          background: GrayText;
+        }
+      }
+    }
+
+    .radio-card {
+      border-color: ButtonText;
+
+      &:has(.radio:checked) {
+        border-color: Highlight;
+      }
+    }
+  }
+}
+/* ==== SRC[13]: components/combobox/combobox.css ==== */
+/* -- Combobox component ---------------------------------------- */
+
+@layer components {
+  .combobox {
+    position: relative;
+  }
+
+  .combobox-trigger {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .combobox-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    text-align: left;
+    font-weight: 400;
+  }
+
+  .combobox-value[data-placeholder] {
+    color: var(--muted-foreground);
+  }
+
+  .combobox-chevron {
+    flex-shrink: 0;
+    color: var(--muted-foreground);
+    opacity: 0.5;
+  }
+
+  .combobox-content {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    padding: 0;
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+
+    /* -- Anchor positioning -- */
+    top: anchor(bottom);
+    left: anchor(left);
+    width: anchor-size(width);
+    margin-top: 4px;
+    position-try-fallbacks: flip-block;
+
+    /* -- Animation --------------------------------------------- */
+    opacity: 0;
+    transform: scale(0.96) translateY(-0.25rem);
+    transition: opacity 150ms ease, transform 150ms ease,
+                display 150ms allow-discrete;
+
+    &:popover-open {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @starting-style {
+    .combobox-content:popover-open {
+      opacity: 0;
+      transform: scale(0.96) translateY(-0.25rem);
+    }
+  }
+
+  .combobox-search {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .combobox-search-icon {
+    flex-shrink: 0;
+    color: var(--muted-foreground);
+  }
+
+  .combobox-search-input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-size: 0.875rem;
+    font-family: var(--font-sans);
+    color: var(--foreground);
+    outline: none;
+
+    &::placeholder { color: var(--muted-foreground); }
+  }
+
+  .combobox-listbox {
+    max-height: 16rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0.25rem;
+  }
+
+  .combobox-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.5rem;
+    border-radius: calc(var(--radius) * 0.6);
+    font-size: 0.875rem;
+    cursor: pointer;
+    outline: none;
+    transition: background 100ms;
+
+    &:hover, &[data-highlighted] {
+      background-color: var(--accent);
+      color: var(--accent-foreground);
+    }
+
+    &[aria-selected="true"]::before {
+      content: '';
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+      background-size: contain;
+      flex-shrink: 0;
+    }
+
+    &[aria-disabled="true"] {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+  }
+
+  .combobox-empty {
+    padding: 1.5rem 0.5rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+  }
+
+  .combobox-group-label {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--muted-foreground);
+  }
+
+  .combobox-separator {
+    height: 1px;
+    background: var(--border);
+    margin: 0.25rem -0.25rem;
+  }
+
+  /* -- Accessibility ------------------------------------------ */
+
+  @media (prefers-reduced-motion: reduce) {
+    .combobox-content {
+      transition: none;
+    }
+    .combobox-item {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .combobox-content {
+      border-color: ButtonText;
+    }
+    .combobox-item {
+      &:hover, &[data-highlighted] {
+        forced-color-adjust: none;
+        background: Highlight;
+        color: HighlightText;
+      }
+    }
+  }
+}
+/* ==== SRC[14]: components/toast/toast.css ==== */
+/* -- Toast component ------------------------------------------- */
+
+@layer components {
+  /* -- Container ------------------------------------------------ */
+  .toast-container {
+    position: fixed;
+    z-index: 100;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+    padding: 1rem;
+    max-height: 100vh;
+    pointer-events: none;
+
+    &[data-position="bottom-right"] { bottom: 0; right: 0; }
+    &[data-position="bottom-left"]  { bottom: 0; left: 0; }
+    &[data-position="top-right"]    { top: 0; right: 0; flex-direction: column; }
+    &[data-position="top-left"]     { top: 0; left: 0; flex-direction: column; }
+    &[data-position="top-center"]   { top: 0; left: 50%; transform: translateX(-50%); flex-direction: column; align-items: center; }
+    &[data-position="bottom-center"]{ bottom: 0; left: 50%; transform: translateX(-50%); align-items: center; }
+  }
+
+  /* -- Toast ---------------------------------------------------- */
+  .toast {
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    min-width: 20rem;
+    max-width: 26rem;
+    box-shadow: 0 4px 16px oklch(0 0 0 / 0.12);
+    pointer-events: auto;
+    opacity: 0;
+    transform: translateY(0.5rem);
+    transition: opacity 200ms ease, transform 200ms ease;
+
+    &:popover-open {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* -- Variants ------------------------------------------------- */
+    &[data-variant="destructive"] {
+      background-color: var(--destructive);
+      color: var(--destructive-foreground);
+      border-color: var(--destructive);
+
+      & .toast-description {
+        color: var(--destructive-foreground);
+        opacity: 0.85;
+      }
+    }
+
+    /* -- Semantic variants (border + icon color) ----------------- */
+    &[data-variant="success"] {
+      border-color: oklch(0.65 0.2 145);
+
+      & .toast-icon { color: oklch(0.65 0.2 145); }
+    }
+
+    &[data-variant="warning"] {
+      border-color: oklch(0.75 0.18 75);
+
+      & .toast-icon { color: oklch(0.75 0.18 75); }
+    }
+
+    &[data-variant="info"] {
+      border-color: oklch(0.6 0.15 250);
+
+      & .toast-icon { color: oklch(0.6 0.15 250); }
+    }
+  }
+
+  @starting-style {
+    .toast:popover-open {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+  }
+
+  /* -- Inner elements ------------------------------------------- */
+  .toast-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .toast-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .toast-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .toast-description {
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    margin: 0.125rem 0 0;
+    line-height: 1.5;
+  }
+
+  .toast-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: none;
+    background: transparent;
+    color: var(--muted-foreground);
+    cursor: pointer;
+    flex-shrink: 0;
+    border-radius: calc(var(--radius) * 0.5);
+    transition: color 150ms, background 150ms;
+
+    &:hover {
+      color: var(--foreground);
+      background: var(--accent);
+    }
+  }
+
+  .toast-icon {
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+  }
+
+  .toast-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+}
+/* ==== SRC[15]: documentation/css/docs-theme.css :: Minimal base reset 段 ==== */
+/* -- Minimal base reset ------------------------------------ */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+body {
+  font-family: var(--font-sans);
+  margin: 0;
+  line-height: 1.6;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+/* ==== SRC[16]: documentation/css/docs-utilities.css ==== */
+/* ----------------------------------------------------------------
+   docs-utilities.css
+   Hand-written utility classes used by documentation pages only.
+
+   These utilities only affect elements that explicitly opt in by
+   using the class name, so they cannot leak into component styles.
+---------------------------------------------------------------- */
+
+/* Flex / layout */
+.flex           { display: flex; }
+.flex-col       { flex-direction: column; }
+.flex-wrap      { flex-wrap: wrap; }
+.grid           { display: grid; }
+.items-center   { align-items: center; }
+.items-baseline { align-items: baseline; }
+.justify-between{ justify-content: space-between; }
+.ml-auto        { margin-left: auto; }
+
+/* Gap scale (1 = 0.25rem) */
+.gap-1 { gap: 0.25rem; }
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 0.75rem; }
+.gap-4 { gap: 1rem; }
+.gap-6 { gap: 1.5rem; }
+.gap-8 { gap: 2rem; }
+
+/* Margin bottom */
+.mb-1  { margin-bottom: 0.25rem; }
+.mb-2  { margin-bottom: 0.5rem; }
+.mb-3  { margin-bottom: 0.75rem; }
+.mb-4  { margin-bottom: 1rem; }
+.mb-5  { margin-bottom: 1.25rem; }
+.mb-6  { margin-bottom: 1.5rem; }
+.mb-8  { margin-bottom: 2rem; }
+.mb-10 { margin-bottom: 2.5rem; }
+.mb-12 { margin-bottom: 3rem; }
+
+/* Margin top */
+.mt-2 { margin-top: 0.5rem; }
+.mt-6 { margin-top: 1.5rem; }
+.mt-8 { margin-top: 2rem; }
+
+/* Typography */
+.text-sm               { font-size: 0.875rem; line-height: 1.25rem; }
+.text-xs               { font-size: 0.75rem;  line-height: 1rem; }
+.text-lg               { font-size: 1.125rem; line-height: 1.75rem; }
+.text-muted-foreground { color: var(--muted-foreground); }
+.text-destructive      { color: var(--destructive); }
+.font-medium           { font-weight: 500; }
+.leading-relaxed       { line-height: 1.625; }
+
+/* Accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ==== SRC[17]: components/statistic/statistic.css ==== */
+@layer components {
+  .statistic {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .statistic-title {
+    margin: 0;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--muted-foreground);
+    letter-spacing: 0.01em;
+  }
+
+  .statistic-value {
+    margin: 0;
+    font-size: 1.875rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+    color: var(--foreground);
+  }
+
+  .statistic-description {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .statistic-trend {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.125rem;
+    font-weight: 500;
+
+    & svg {
+      width: 0.75rem;
+      height: 0.75rem;
+    }
+
+    &[data-trend="up"] {
+      color: #16a34a;
+    }
+
+    &[data-trend="down"] {
+      color: #dc2626;
+    }
+  }
+}
+
+/* ==== SRC[18]: components/progress/progress.css ==== */
+@layer components {
+  .progress {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 100%;
+    height: 0.5rem;
+    border: none;
+    border-radius: 9999px;
+    overflow: hidden;
+    background-color: var(--secondary);
+  }
+
+  /* WebKit (Chrome, Safari, Edge) */
+  .progress::-webkit-progress-bar {
+    background-color: var(--secondary);
+    border-radius: 9999px;
+  }
+
+  .progress::-webkit-progress-value {
+    background-color: var(--primary);
+    border-radius: 9999px;
+    transition: width 300ms ease;
+  }
+
+  /* Firefox */
+  .progress::-moz-progress-bar {
+    background-color: var(--primary);
+    border-radius: 9999px;
+  }
+
+  /* Indeterminate state */
+  .progress:indeterminate {
+    background: linear-gradient(
+      90deg,
+      var(--secondary) 0%,
+      var(--primary) 50%,
+      var(--secondary) 100%
+    );
+    background-size: 200% 100%;
+    animation: progress-indeterminate 1.5s linear infinite;
+  }
+
+  .progress:indeterminate::-webkit-progress-bar {
+    background-color: transparent;
+  }
+
+  .progress:indeterminate::-moz-progress-bar {
+    background-color: transparent;
+  }
+
+  @keyframes progress-indeterminate {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+}
+
+/* ==== SRC[19]: components/timeline/timeline.css ==== */
+@layer components {
+  .timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+  }
+
+  .timeline-item {
+    display: flex;
+    gap: 1rem;
+    padding-bottom: 1.5rem;
+    position: relative;
+
+    /* Connector line */
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0.3125rem;
+      top: 1rem;
+      bottom: 0;
+      width: 1px;
+      background-color: var(--border);
+    }
+
+    &:last-child::before {
+      display: none;
+    }
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+
+  .timeline-dot {
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 9999px;
+    background-color: var(--border);
+    flex-shrink: 0;
+    margin-top: 0.375rem;
+    position: relative;
+    z-index: 1;
+
+    &[data-variant="active"] {
+      background-color: var(--primary);
+    }
+  }
+
+  .timeline-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .timeline-title {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--foreground);
+    line-height: 1.4;
+  }
+
+  .timeline-description {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    line-height: 1.5;
+  }
+
+  .timeline-time {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    margin-top: 0.125rem;
+  }
+}
+
+/* ==== SRC[20]: components/separator/separator.css ==== */
+/* -- Separator component ---------------------------------------- */
+
+@layer components {
+  .separator {
+    border: none;
+    margin: 0;
+    flex-shrink: 0;
+    background: var(--border);
+
+    /* Horizontal (default) */
+    height: 1px;
+    width: 100%;
+
+    /* Vertical */
+    &[data-orientation="vertical"] {
+      height: auto;
+      width: 1px;
+      align-self: stretch;
+    }
+
+    /* Decorative — hidden from assistive technology */
+    &[aria-hidden="true"],
+    &[role="none"] {
+      /* No visual change — purely semantic */
+    }
+  }
+
+  /* -- Labeled separator ------------------------------------- */
+  .separator-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    & .separator { flex: 1; }
+
+    & span {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--muted-foreground);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+  }
+
+  /* -- Accessibility ----------------------------------------- */
+  @media (forced-colors: active) {
+    .separator {
+      background: CanvasText;
+    }
+  }
+
+  @media (prefers-contrast: more) {
+    .separator {
+      background: var(--foreground);
+      height: 2px;
+
+      &[data-orientation="vertical"] {
+        width: 2px;
+        height: auto;
+      }
+    }
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- 页面级容器：仅内联纯布局，不含任何颜色与视觉声明 -->
+<div style="max-width:88rem;margin:0 auto;padding:1.5rem 1.5rem 3rem 1.5rem;">
+
+  <!-- ===== 页头 ===== -->
+  <div class="flex items-center justify-between flex-wrap gap-4" style="margin:0 0 1rem 0;">
+    <div>
+      <h1 class="h3" style="margin:0;">客户分析</h1>
+      <p class="muted" style="margin:0.25rem 0 0 0;">先看客户要什么、用了什么，再决定这一通电话说什么。首单转化场景优先。</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="muted">当前使用者：张明（客户经理）</span>
+      <button class="btn" data-variant="outline" data-size="sm" type="button" onclick="openCustomer()">返回客户详情</button>
+      <button class="btn" data-variant="default" data-size="sm" type="button" onclick="openTaskDialog('')">创建跟进任务</button>
+    </div>
+  </div>
+
+  <!-- ===== 客户切换（首单转化客户排第一） ===== -->
+  <div class="tabs">
+    <div class="tab-list" id="customerTabs" role="tablist" aria-label="切换客户"></div>
+  </div>
+
+  <!-- ===== ① 经营诊断条 ===== -->
+  <div class="card" style="margin:0.75rem 0 0 0;">
+    <div class="card-content">
+      <div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:2rem;">
+
+        <!-- 综合得分 -->
+        <div style="width:11rem;flex-shrink:0;">
+          <p class="text-xs text-muted-foreground" style="margin:0 0 0.25rem 0;">综合得分</p>
+          <div class="flex items-baseline gap-2" style="margin:0;">
+            <span id="ovScore" style="font-size:2.5rem;font-weight:700;line-height:1;">--</span>
+            <span class="text-sm text-muted-foreground">/ 100</span>
+          </div>
+          <p class="text-xs text-muted-foreground" id="ovScoreNote" style="margin:0.375rem 0 0 0;"></p>
+          <span class="badge" data-variant="secondary" id="ovBand" style="margin-top:0.5rem;">--</span>
+        </div>
+
+        <!-- 结论 -->
+        <div style="flex:1;min-width:18rem;">
+          <div class="flex items-center flex-wrap gap-2" style="margin:0 0 0.5rem 0;">
+            <span class="badge" data-variant="outline" id="ovPaid">--</span>
+            <span class="muted text-xs" id="ovMeta"></span>
+          </div>
+          <p class="p" id="ovConclusion" style="margin:0;"></p>
+        </div>
+
+        <!-- 关键数据 -->
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(6.5rem,1fr));gap:0.75rem 1.25rem;flex-shrink:0;">
+          <div class="statistic"><p class="statistic-title">到期剩余</p><p class="statistic-value" style="font-size:1.125rem;" id="k1">--</p><p class="statistic-description" id="k1d">--</p></div>
+          <div class="statistic"><p class="statistic-title">最近登录</p><p class="statistic-value" style="font-size:1.125rem;" id="k2">--</p><p class="statistic-description" id="k2d">--</p></div>
+          <div class="statistic"><p class="statistic-title">历史中标</p><p class="statistic-value" style="font-size:1.125rem;" id="k3">--</p><p class="statistic-description" id="k3d">--</p></div>
+          <div class="statistic"><p class="statistic-title">邮件定制</p><p class="statistic-value" style="font-size:1.125rem;" id="k4">--</p><p class="statistic-description" id="k4d">--</p></div>
+          <div class="statistic"><p class="statistic-title">未付款订单</p><p class="statistic-value" style="font-size:1.125rem;" id="k5">--</p><p class="statistic-description" id="k5d">--</p></div>
+          <div class="statistic"><p class="statistic-title">近30日跟进</p><p class="statistic-value" style="font-size:1.125rem;" id="k6">--</p><p class="statistic-description" id="k6d">--</p></div>
+        </div>
+
+      </div>
+
+      <!-- 打分：压成一行 6 格 -->
+      <div class="separator" style="margin:1rem 0 0.75rem 0;"></div>
+      <div class="flex items-center justify-between flex-wrap gap-2" style="margin:0 0 0.5rem 0;">
+        <span class="text-xs text-muted-foreground">六维得分（正向 <span id="ovPos">--</span> · 风险 <span id="ovRisk" class="text-destructive">--</span>）</span>
+        <button class="btn" data-variant="ghost" data-size="sm" type="button" onclick="openScoreDialog()">打分明细</button>
+      </div>
+      <div id="scoreStrip" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(8.5rem,1fr));gap:0.75rem;"></div>
+    </div>
+  </div>
+
+  <!-- ===== ② 客户画像 ===== -->
+  <div class="card" style="margin:1rem 0 0 0;">
+    <div class="card-content">
+      <div class="flex items-center justify-between flex-wrap gap-2" style="margin:0 0 1rem 0;">
+        <span class="h3" style="font-size:1.125rem;">客户画像</span>
+        <span class="muted text-xs" id="profileStat">--</span>
+      </div>
+
+      <!-- 2.1 个人画像：当前联系的这个人（单个账号的画像，他只负责公司的一部分业务） -->
+      <div style="border:1px solid var(--border);border-radius:var(--radius-xl);padding:1rem;margin:0 0 1rem 0;">
+        <div class="flex items-center justify-between flex-wrap gap-2" style="margin:0 0 0.75rem 0;padding:0 0 0.625rem 0;border-bottom:1px solid var(--border);">
+          <span class="font-medium">个人画像</span>
+          <div class="flex items-center" style="gap:0.5rem;">
+            <span class="text-xs text-muted-foreground" id="peopleStat">--</span>
+            <button class="btn" data-variant="outline" data-size="sm" type="button" onclick="nextPerson()">换人</button>
+          </div>
+        </div>
+        <div id="peopleBody"></div>
+      </div>
+
+      <!-- 2.2 公司画像：这家企业要什么、用什么 -->
+      <div style="border:1px solid var(--border);border-radius:var(--radius-xl);padding:1rem;">
+        <div class="flex items-center justify-between flex-wrap gap-2" style="margin:0 0 0.75rem 0;padding:0 0 0.625rem 0;border-bottom:1px solid var(--border);">
+          <span class="font-medium">公司画像</span>
+          <span class="text-xs text-muted-foreground" id="companyStat">--</span>
+        </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(19rem,1fr));gap:1rem;">
+
+        <!-- A. 关键词与订阅 -->
+        <div style="background:var(--muted);border-radius:var(--radius-lg);padding:0.875rem;">
+          <div class="flex items-center justify-between" style="margin:0 0 0.5rem 0;">
+            <span class="font-medium text-sm">关键词与订阅</span>
+            <span class="text-xs text-muted-foreground" id="kwStat">--</span>
+          </div>
+
+          <p class="text-xs text-muted-foreground" style="margin:0 0 0.375rem 0;">实际搜索关键词（按搜索量）</p>
+          <div id="kwSearch" class="flex items-center flex-wrap" style="gap:0.375rem;margin:0 0 0.75rem 0;"></div>
+
+          <p class="text-xs text-muted-foreground" style="margin:0 0 0.375rem 0;">已开启订阅</p>
+          <div id="kwSubs" style="display:flex;flex-direction:column;gap:0.5rem;"></div>
+        </div>
+
+        <!-- B. 功能使用 -->
+        <div style="background:var(--muted);border-radius:var(--radius-lg);padding:0.875rem;">
+          <div class="flex items-center justify-between" style="margin:0 0 0.5rem 0;">
+            <span class="font-medium text-sm">功能使用</span>
+            <span class="text-xs text-muted-foreground" id="funcStat">--</span>
+          </div>
+          <div id="funcMatrix" style="display:flex;flex-direction:column;gap:0.375rem;"></div>
+
+          <p class="text-xs text-muted-foreground" style="margin:0.75rem 0 0.375rem 0;">已绑定服务</p>
+          <div id="bindRow" class="flex items-center flex-wrap" style="gap:0.375rem;"></div>
+        </div>
+
+        <!-- C. 兴趣偏好与竞品 -->
+        <div style="background:var(--muted);border-radius:var(--radius-lg);padding:0.875rem;">
+          <div class="flex items-center justify-between" style="margin:0 0 0.5rem 0;">
+            <span class="font-medium text-sm">兴趣偏好与竞品</span>
+            <span class="text-xs text-muted-foreground" id="intStat">--</span>
+          </div>
+          <div id="interest" style="display:flex;flex-direction:column;gap:0.625rem;"></div>
+
+          <p class="text-xs text-muted-foreground" style="margin:0.75rem 0 0.375rem 0;">在用的同行竞品站</p>
+          <div id="compRow" class="flex items-center flex-wrap" style="gap:0.375rem;"></div>
+        </div>
+
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ③ 分析报告：关键参数 ===== -->
+  <div class="card" style="margin:1rem 0 0 0;">
+    <div class="card-content">
+      <div class="flex items-center justify-between flex-wrap gap-2" style="margin:0 0 1rem 0;">
+        <span class="h3" style="font-size:1.125rem;">分析报告</span>
+        <span class="muted text-xs" id="repStat">--</span>
+      </div>
+      <div id="repGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(11.5rem,1fr));gap:1.25rem;"></div>
+    </div>
+  </div>
+
+  <!-- ===== ④ 建议行动 ===== -->
+  <div class="card" style="margin:1rem 0 0 0;">
+    <div class="card-content">
+      <div class="flex items-center justify-between flex-wrap gap-2" style="margin:0 0 1rem 0;">
+        <span class="h3" style="font-size:1.125rem;">建议行动</span>
+        <span class="muted text-xs">按优先级排好，直接照做</span>
+      </div>
+      <div id="actionList" style="display:flex;flex-direction:column;gap:0.75rem;"></div>
+    </div>
+  </div>
+
+  <!-- ===== ⑤ 逼单话术 ===== -->
+  <div class="card" style="margin:1rem 0 0 0;">
+    <div class="card-content">
+      <div class="flex items-center justify-between flex-wrap gap-2" style="margin:0 0 1rem 0;">
+        <span class="h3" style="font-size:1.125rem;">本次沟通话术</span>
+        <span class="muted text-xs" id="scriptHint"></span>
+      </div>
+      <div id="scriptGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));gap:1rem;"></div>
+    </div>
+  </div>
+
+  <!-- ===== ⑥ 跟进记录时间线 ===== -->
+  <div class="card" style="margin:1rem 0 0 0;">
+    <div class="card-content">
+      <div class="flex items-center justify-between flex-wrap gap-2" style="margin:0 0 1rem 0;">
+        <span class="h3" style="font-size:1.125rem;">最近跟进记录</span>
+        <span class="muted text-xs">最近 5 条，按时间倒序</span>
+      </div>
+      <ol class="timeline" id="tlList"></ol>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== 打分明细弹窗 ===== -->
+<dialog class="dialog" id="scoreDialog" data-size="lg" role="dialog" aria-modal="true" aria-labelledby="scoreDlgTitle">
+  <div class="dialog-content">
+    <div class="dialog-header">
+      <p class="dialog-title" id="scoreDlgTitle">打分明细</p>
+      <p class="dialog-description">每一分都能追溯到原始字段，不用记忆，看一眼就知道差在哪。</p>
+    </div>
+    <div class="dialog-body">
+      <div id="scoreDlgBody" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(17rem,1fr));gap:1rem;"></div>
+    </div>
+    <div class="dialog-footer">
+      <button class="btn" data-variant="outline" data-size="sm" type="button" onclick="document.getElementById('scoreDialog').close()">关闭</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- ===== 创建跟进任务弹窗 ===== -->
+<dialog class="dialog" id="taskDialog" data-size="lg" role="dialog" aria-modal="true" aria-labelledby="taskDlgTitle">
+  <div class="dialog-content">
+    <div class="dialog-header">
+      <p class="dialog-title" id="taskDlgTitle">创建跟进任务</p>
+      <p class="dialog-description">按当前客户分析结论预填联系原因，提交后按联系时间归入任务列表。</p>
+    </div>
+    <div class="dialog-body">
+      <div style="display:flex;flex-direction:column;gap:1rem;">
+        <div>
+          <label class="label" for="tkContact">联系人 <span class="label-hint">必填</span></label>
+          <select class="select" id="tkContact" data-size="lg" style="width:100%;"></select>
+          <p class="field-error" id="tkContactErr" hidden>请选择本次跟进的客户联系人</p>
+        </div>
+
+        <fieldset class="radio-group">
+          <legend class="label">任务类型 <span class="label-hint">必选</span></legend>
+          <div class="radio-item-block">
+            <input class="radio" type="radio" id="tkOnce" name="tkType" value="单次拜访" checked>
+            <label for="tkOnce">单次拜访</label>
+            <p class="radio-description">只需联系一次，完成后任务关闭</p>
+          </div>
+          <div class="radio-item-block">
+            <input class="radio" type="radio" id="tkPeriod" name="tkType" value="周期回访">
+            <label for="tkPeriod">周期回访</label>
+            <p class="radio-description">按固定周期重复触达，任务带「周期」标记</p>
+          </div>
+          <div class="radio-item-block">
+            <input class="radio" type="radio" id="tkClash" name="tkType" value="撞单任务">
+            <label for="tkClash">撞单任务</label>
+            <p class="radio-description">与竞争对手撞单，临近到期时确认是否更换平台</p>
+          </div>
+        </fieldset>
+
+        <div>
+          <label class="label" for="tkReason">联系原因 <span class="label-hint">必填</span></label>
+          <textarea class="input" id="tkReason" rows="4" style="width:100%;" placeholder="已按当前分析结论预填，可直接修改"></textarea>
+          <p class="field-error" id="tkReasonErr" hidden>请填写联系原因</p>
+        </div>
+
+        <div>
+          <label class="label" for="tkTime">联系时间 <span class="label-hint">必填 · 精确到分钟</span></label>
+          <input class="input" id="tkTime" type="datetime-local" style="width:100%;">
+          <p class="field-error" id="tkTimeErr" hidden>请选择联系时间</p>
+        </div>
+      </div>
+    </div>
+    <div class="dialog-footer">
+      <button class="btn" data-variant="outline" data-size="sm" type="button" onclick="closeTaskDialog()">取消</button>
+      <button class="btn" data-variant="default" data-size="sm" type="button" onclick="submitTask()">创建任务</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- ===== toast 容器 ===== -->
+<div id="toastHost" class="toast-container" aria-label="Notifications" data-position="top-center"></div>
+
+<script>
+/* =========================================================
+   客户分析 · 静态演示原型
+   打分模型：六维正向得分 + 风险负向扣分，正向满分 80，风险封顶 -20
+   状态分流：五条规则按优先级命中，命中即定状态（R1 首单转化最高优先）
+   ========================================================= */
+var TODAY = '2026-07-15';
+
+function esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function daysBetween(from, to) {
+  var a = new Date(from + 'T00:00:00');
+  var b = new Date((to || TODAY) + 'T00:00:00');
+  return Math.round((b - a) / 86400000);
+}
+
+/* ===== 演示客户：首单转化客户排第一位 ===== */
+var CUSTOMERS = [
+  {
+    key: 'hy', id: '6298455', name: '恒远建设集团', industry: '建筑工程 / 市政',
+    paid: false, level: '免费用户', expire: null, lastPay: null,
+    lastLogin: '2026-07-15', login30: 27, activeDays30: 21, prevLogin30: 25,
+    emailCustom: 0, subs: 5, subsPaused: 1,
+    win3d: 0, winTotal: 0, trackActive: 0, behavior7d: 23,
+    contacts: 3, binds: 4,
+    lastFollow: '2026-07-12', follow30: 1, rating: 'A',
+    unpaidOrders: 1, productsOwned: 0, productsTotal: 6, ordersTotal: 1,
+
+    /* --- 客户在搜什么（按近30日搜索量） --- */
+    keywords: [
+      { t: '医院建设', n: 126 }, { t: '市政道路', n: 98 }, { t: '桥梁工程', n: 76 },
+      { t: '道路桥梁', n: 61 }, { t: '学校工程', n: 44 }, { t: '混凝土', n: 32 },
+      { t: '钢材', n: 28 }, { t: '塔吊', n: 19 }
+    ],
+
+    /* --- 已开启的订阅（关键词 / 地区 / 类别 / 阶段 / 状态） --- */
+    subsList: [
+      { ch: 'PC招标订阅（邮件）', kw: '建筑工程', region: '全国', cat: '中标结果', stage: '施工', state: '正常', send: '每天12:00发送' },
+      { ch: 'PC工程订阅', kw: '市政工程', region: '北京市', cat: '变更公告', stage: '设计', state: '正常', send: '每天18:00发送' },
+      { ch: 'APP招标订阅', kw: '医院建设', region: '全国', cat: '中标结果', stage: '施工', state: '正常', send: 'APP推送' },
+      { ch: 'APP工程订阅', kw: '学校工程', region: '北京市', cat: '采购公告', stage: '施工', state: '正常', send: 'APP推送' },
+      { ch: '标讯助手招标订阅', kw: '道路桥梁', region: '全国', cat: '中标结果', stage: '施工', state: '暂停', send: '短信+APP' }
+    ],
+
+    /* --- 功能模块：blocked=true 表示系统记录到点击但被拦（免费用户转化信号） --- */
+    features: [
+      { name: '在线开通', used: true, level: '已下单', note: '1 笔数据导出订单待支付，收款码已过期' },
+      { name: '数据导出', used: false, blocked: true, n: 14, level: '点过 14 次', note: '系统记录最近一次 07-14，每次都被充值拦截' },
+      { name: '查看详情', used: false, blocked: true, n: 9, level: '点过 9 次', note: '系统记录最近一次 07-13，免费账号无权查看' },
+      { name: '订阅管理', used: true, level: '高频', note: '5 个订阅，其中 1 个已暂停' },
+      { name: '结构化数据包', used: false, level: '从未点过', note: '无点击记录，暂无感知' },
+      { name: '采招大数据', used: false, level: '从未点过', note: '无点击记录，同行业分析能力未接触' }
+    ],
+    bindings: [
+      { name: '邮件定制', on: true }, { name: '标讯助手', on: true },
+      { name: '微信小程序', on: true }, { name: '手机APP', on: true },
+      { name: '采招网会员服务', on: false }, { name: '发票开具', on: false }
+    ],
+
+    /* --- 兴趣偏好（权重越大越感兴趣） --- */
+    interest: {
+      industry: [{ t: '建筑工程', w: 3 }, { t: '市政工程', w: 3 }, { t: '医院建设', w: 2 }, { t: '学校工程', w: 1 }],
+      region: [{ t: '全国', w: 3 }, { t: '北京市', w: 3 }, { t: '江苏省', w: 1 }],
+      cat: [{ t: '中标结果', w: 3 }, { t: '采购公告', w: 1 }, { t: '变更公告', w: 1 }],
+      stage: [{ t: '施工', w: 3 }, { t: '设计', w: 2 }]
+    },
+    competitors: ['千里马', '乙方宝'],
+
+    /* --- 分析报告：参数卡（自动生成机会/风险参数 + 手写切入动作） --- */
+    report: {
+      entry: [
+        { v: '报点击记录', d: '「您点了 14 次导出没导成」，比讲功能管用' },
+        { v: '按频次报价', d: '直接对标数据导出（全国）套餐，别报太细' },
+        { v: '重发收款码', d: '锁定 48 小时内付款，过期就得重新下单' }
+      ]
+    },
+
+    contactList: [
+      { name: '李建国', phone: '13800138001', title: '采购总监', role: '决策人', kw: ['医院建设', '市政道路', '桥梁工程'], level: 'VIP会员（总站）', follow: '跟进 1/2 次 · 已触达', lastActive: '2026-07-14', biz: '医院·市政·桥梁项目的招标对接与合同采购', feats: [{ n: '数据导出', v: 11 }, { n: '查看详情', v: 6 }, { n: '订阅管理', v: 8 }] },
+      { name: '王婷', phone: '13800138002', title: '招标专员', role: '使用人', kw: ['道路桥梁', '学校工程'], level: '免费用户', follow: '跟进 0/2 次 · 未触达', lastActive: '2026-07-12', biz: '标书编制、项目信息收集与投标报名', feats: [{ n: '查看详情', v: 3 }, { n: '订阅管理', v: 2 }] },
+      { name: '赵敏', phone: '13800138003', title: '信息部主管', role: '把关人', kw: ['混凝土', '钢材', '塔吊'], level: '未注册', follow: '跟进 0/2 次 · 未触达', lastActive: null, biz: '系统账号开通、权限分配与安全审核', feats: [] }
+    ],
+    timeline: [
+      { time: '2026-07-14 10:30', title: '行为记录 · 点击导出', desc: '点击「数据导出」被拦截，提示需开通服务', active: true },
+      { time: '2026-07-13 16:05', title: '行为记录 · 点击详情', desc: '点击项目「查看详情」被拦截，免费账号无权查看', active: false },
+      { time: '2026-07-12 14:20', title: '正常回访 · 评级 A', desc: '客户已明确办理意向，关注数据导出权限，待报价', active: true },
+      { time: '2026-07-09 11:00', title: '下单未支付', desc: '创建数据导出订单（全国），收款码 48 小时内未支付', active: false },
+      { time: '2026-07-05 09:15', title: '首次注册', desc: '服务号绑定注册入库，尚未开通任何付费服务', active: false }
+    ]
+  },
+  {
+    key: 'dtd', id: '6296201', name: '大土豆有限责任公司', industry: '医疗 / 食品加工',
+    paid: true, level: 'VIP会员（总站）', expire: '2030-09-30', lastPay: null,
+    lastLogin: '2026-07-14', login30: 12, activeDays30: 9, prevLogin30: 14,
+    emailCustom: 120, subs: 19, subsPaused: 2,
+    win3d: 0, winTotal: 0, trackActive: 3, behavior7d: 0,
+    contacts: 5, binds: 6,
+    lastFollow: '2026-07-15', follow30: 2, rating: 'AA',
+    unpaidOrders: 4, productsOwned: 1, productsTotal: 6, ordersTotal: 173,
+
+    keywords: [
+      { t: '医院', n: 184 }, { t: '食品', n: 142 }, { t: '绩效', n: 96 },
+      { t: '猪肉', n: 71 }, { t: '水果', n: 55 }, { t: '结构化数据', n: 38 },
+      { t: '医院信息化', n: 33 }, { t: '智慧教室', n: 21 }
+    ],
+
+    subsList: [
+      { ch: 'PC招标订阅（邮件）', kw: '食品加工, 冷链物流', region: '江苏省', cat: '中标结果', stage: '采购', state: '正常', send: '每天12:00发送' },
+      { ch: 'PC招标订阅（邮件）', kw: '市政道路, 桥梁工程', region: '广东省', cat: '变更公告', stage: '施工', state: '暂停', send: '每天18:00发送' },
+      { ch: 'APP招标订阅', kw: '医院信息化, HIS系统', region: '全国', cat: '中标结果', stage: '采购', state: '正常', send: 'APP推送' },
+      { ch: 'APP工程订阅', kw: '校园安防, 智慧教室', region: '北京市', cat: '采购公告', stage: '设计', state: '正常', send: 'APP推送' },
+      { ch: '标讯助手工程订阅', kw: '道路桥梁', region: '全国', cat: '中标结果', stage: '施工', state: '暂停', send: '标讯助手推送' }
+    ],
+
+    features: [
+      { name: '在线开通', used: true, level: '高频', note: '累计 173 笔订单，其中 4 笔未完成付款' },
+      { name: '订阅管理', used: true, level: '高频', note: '19 个订阅，2 个暂停，邮件定制 120 个' },
+      { name: '结构化数据包', used: false, level: '未使用', note: '关键词里主动搜过「结构化数据」，需求已暴露' },
+      { name: '数据服务', used: false, level: '未使用', note: '已搜到该词却未开通，最值得推的增购项' },
+      { name: '采招大数据', used: false, level: '未使用', note: '同行业数据比对能力未接触' },
+      { name: '追踪信息', used: true, level: '中频', note: '3 个项目在追踪，但历史中标 0 次' }
+    ],
+    bindings: [
+      { name: '邮件定制', on: true }, { name: '标讯助手', on: true },
+      { name: '采招网会员服务', on: true }, { name: '微信小程序', on: true },
+      { name: '发票开具', on: true }, { name: '手机APP', on: true }
+    ],
+
+    interest: {
+      industry: [{ t: '食品加工', w: 3 }, { t: '冷链物流', w: 2 }, { t: '医院信息化', w: 2 }, { t: '智慧教室', w: 1 }],
+      region: [{ t: '全国', w: 3 }, { t: '江苏省', w: 3 }, { t: '北京市', w: 2 }, { t: '广东省', w: 1 }],
+      cat: [{ t: '中标结果', w: 3 }, { t: '采购公告', w: 2 }, { t: '变更公告', w: 1 }],
+      stage: [{ t: '采购', w: 3 }, { t: '施工', w: 2 }, { t: '设计', w: 1 }]
+    },
+    competitors: ['比地招标网', '千里马', '导航网', '乙方宝', '剑鱼', '招标网'],
+
+    report: {
+      entry: [
+        { v: '处理未付款单', d: '不谈续费（2030 年才到期），只谈 4 笔未付款订单卡在哪' },
+        { v: '拿搜索词开场', d: '「结构化数据」这个搜索词他搜过，直接接话' },
+        { v: '合并订单成单', d: '把最合适的两笔订单合并成一笔新单，今天定今天开通' }
+      ]
+    },
+
+    contactList: [
+      { name: '[待核实]同事（禁止联系）', phone: '15650132296', title: '主账号', role: '决策人', kw: ['医院', '食品', '绩效', '猪肉'], level: 'VIP会员（总站）', follow: '跟进 0/2 次 · 决策人禁止联系', lastActive: '2026-07-11', biz: '全公司账号总控、采购入口与权限分配', feats: [{ n: '在线开通', v: 48 }, { n: '订阅管理', v: 31 }] },
+      { name: '张明', phone: '13912345678', title: '采购经理', role: '使用人', kw: ['钢材', '混凝土', '塔吊'], level: '免费用户', follow: '跟进 0/2 次 · 未触达', lastActive: '2026-07-10', biz: '钢材·混凝土等大宗建材询价与下单', feats: [{ n: '在线开通', v: 12 }, { n: '订阅管理', v: 9 }] },
+      { name: '李芳', phone: '13698765432', title: '财务总监', role: '财务', kw: ['财务系统', 'ERP', '发票'], level: '高级会员', follow: '跟进 1/2 次 · 已触达', lastActive: '2026-07-09', biz: '订单付款、发票开具与预算审批', feats: [{ n: '在线开通', v: 6 }] },
+      { name: '王磊', phone: '15011513872', title: '项目经理', role: '使用人', kw: [], level: '未注册', follow: '跟进 0/2 次 · 未注册无记录', lastActive: null, biz: '工程项目现场进度与需求提报', feats: [] },
+      { name: '陈婷', phone: '18945671234', title: '招标专员', role: '使用人', kw: ['医院信息化', 'HIS系统'], level: '免费用户', follow: '跟进 0/2 次 · 未触达', lastActive: '2026-07-13', biz: '医院信息化项目的招标信息收集与报名', feats: [{ n: '订阅管理', v: 5 }, { n: '追踪信息', v: 3 }] }
+    ],
+    timeline: [
+      { time: '2026-07-15 10:30', title: '正常回访 · 评级 AA', desc: '客户表示近期有招标计划，已发送产品资料，跟进中', active: true },
+      { time: '2026-07-07 11:45', title: '补发邮件', desc: '补发关键词邮箱组 2 组，客户邮箱收件正常', active: false },
+      { time: '2026-07-03 09:50', title: '正常回访 · 评级 E', desc: '客户表示暂时不需要，已记录意向，后续跟进', active: false },
+      { time: '2026-06-29 14:18', title: '补发邮件', desc: '补发关键词邮箱组 3 组', active: false },
+      { time: '2026-06-20 14:00', title: '正常回访 · 评级 C', desc: '电话沟通，客户对 VIP 会员服务感兴趣，需进一步介绍套餐详情', active: false }
+    ]
+  },
+  {
+    key: 'zq', id: '6295130', name: '中启医疗器械有限公司', industry: '医疗器械 / 医院设备',
+    paid: true, level: 'VIP会员（总站）', expire: '2026-08-11', lastPay: '2025-08-11',
+    lastLogin: '2026-06-20', login30: 3, activeDays30: 3, prevLogin30: 18,
+    emailCustom: 6, subs: 4, subsPaused: 3,
+    win3d: 0, winTotal: 2, trackActive: 1, behavior7d: 0,
+    contacts: 4, binds: 3,
+    lastFollow: '2026-06-28', follow30: 0, rating: 'C',
+    unpaidOrders: 0, productsOwned: 2, productsTotal: 6, ordersTotal: 12,
+
+    keywords: [
+      { t: '彩超', n: 88 }, { t: '医疗器械', n: 74 }, { t: 'CT', n: 52 },
+      { t: 'DR', n: 41 }, { t: '医院设备', n: 36 }, { t: '耗材', n: 24 },
+      { t: '监护仪', n: 12 }
+    ],
+
+    subsList: [
+      { ch: 'APP招标订阅', kw: '医疗设备', region: '全国', cat: '中标结果', stage: '采购', state: '正常', send: 'APP推送' },
+      { ch: 'APP招标订阅', kw: '彩超采购', region: '江苏省', cat: '采购公告', stage: '采购', state: '正常', send: 'APP推送' },
+      { ch: 'PC招标订阅（邮件）', kw: 'CT, DR', region: '广东省', cat: '中标结果', stage: '采购', state: '暂停', send: '每天12:00发送' },
+      { ch: '标讯助手招标订阅', kw: '医院设备', region: '全国', cat: '变更公告', stage: '安装', state: '暂停', send: '短信+APP' }
+    ],
+
+    features: [
+      { name: '在线开通', used: true, level: '低频', note: '累计 12 笔订单，近 90 天无新增' },
+      { name: '订阅管理', used: true, level: '下滑', note: '4 个订阅中 3 个已暂停，主动收缩使用' },
+      { name: '结构化数据包', used: false, level: '未使用', note: '历史有中标能力，未尝试数据加工' },
+      { name: '数据服务', used: false, level: '未使用', note: '未接触，续费谈判可用的增值筹码' },
+      { name: '采招大数据', used: false, level: '未使用', note: '行业分析能力未启用' },
+      { name: '追踪信息', used: true, level: '低频', note: '仅 1 个项目在追踪' }
+    ],
+    bindings: [
+      { name: '邮件定制', on: true }, { name: '标讯助手', on: true },
+      { name: '手机APP', on: true }, { name: '微信小程序', on: false },
+      { name: '采招网会员服务', on: false }, { name: '发票开具', on: false }
+    ],
+
+    interest: {
+      industry: [{ t: '医疗设备', w: 3 }, { t: '彩超', w: 3 }, { t: 'CT', w: 2 }, { t: 'DR', w: 1 }],
+      region: [{ t: '全国', w: 3 }, { t: '江苏省', w: 3 }, { t: '广东省', w: 2 }],
+      cat: [{ t: '中标结果', w: 3 }, { t: '采购公告', w: 2 }, { t: '变更公告', w: 1 }],
+      stage: [{ t: '采购', w: 3 }, { t: '安装', w: 1 }]
+    },
+    competitors: ['剑鱼', '招标网'],
+
+    report: {
+      entry: [
+        { v: '以暂停订阅回访', d: '先不聊续费，用「3 个订阅被暂停」回访，探明真实原因' },
+        { v: '免费恢复订阅', d: '制造一次必须登录的理由，把人拉回来' },
+        { v: '确认流失原因', d: '是换人、换项目还是竞品替代，再决定续费话术' }
+      ]
+    },
+
+    contactList: [
+      { name: '孙浩', phone: '13700137001', title: '设备科长', role: '决策人', kw: ['彩超', '医疗设备'], level: 'VIP会员（总站）', follow: '跟进 0/2 次 · 未触达', lastActive: '2026-06-20', biz: '彩超等医疗设备的选型与采购决策', feats: [{ n: '在线开通', v: 4 }, { n: '订阅管理', v: 7 }] },
+      { name: '刘洋', phone: '13700137002', title: '采购专员', role: '使用人', kw: ['CT', 'DR', '耗材'], level: '免费用户', follow: '跟进 0/2 次 · 未触达', lastActive: '2026-06-24', biz: 'CT·DR设备询价、参数比对与耗材采购', feats: [{ n: '追踪信息', v: 3 }, { n: '订阅管理', v: 2 }] },
+      { name: '陈静', phone: '13700137003', title: '财务负责人', role: '财务', kw: ['医院设备'], level: '高级会员', follow: '跟进 0/1 次 · 未触达', lastActive: '2026-07-02', biz: '设备款支付、发票与年度预算编制', feats: [{ n: '在线开通', v: 2 }] },
+      { name: '何斌', phone: '13700137004', title: '副院长', role: '决策人', kw: [], level: '未注册', follow: '跟进 0/2 次 · 关键人未注册', lastActive: null, biz: '分管副院长，大额采购最终审批', feats: [] }
+    ],
+    timeline: [
+      { time: '2026-06-28 15:10', title: '正常回访 · 评级 C', desc: '客户反馈近期项目减少，暂缓考虑增值服务', active: false },
+      { time: '2026-06-20 09:40', title: '登录记录', desc: 'PC 端登录成功，为近 30 日最后一次登录', active: false },
+      { time: '2026-06-16 16:25', title: '订阅变更', desc: '「医院信息化」订阅由开启改为暂停', active: false },
+      { time: '2026-06-10 10:05', title: '中标记录', desc: '客户近 6 个月累计中标 2 次', active: false },
+      { time: '2026-05-30 14:00', title: '正常回访 · 评级 B', desc: '提醒会员将于 8 月到期，客户表示到时再看', active: false }
+    ]
+  }
+];
+
+/* =========================================================
+   打分模型：每个维度返回 { key, name, max, score, items[] }
+   items 的 d > 0 加分、d < 0 扣分、d === 0 未得分
+   ========================================================= */
+function dimValue(c) {                      /* 付费价值 · 25 */
+  var s = 0, items = [];
+  if (c.paid) { s += 15; items.push({ t: '已开通付费会员 · ' + c.level, d: 15 }); }
+  else { items.push({ t: '尚未开通任何付费服务', d: 0 }); }
+  if (c.paid && c.level.indexOf('VIP') === 0) { s += 10; items.push({ t: '会员级别为 VIP（总站）', d: 10 }); }
+  else if (c.paid) { items.push({ t: '会员级别非 VIP（总站）', d: 0 }); }
+  return { key: 'value', name: '付费价值', max: 25, score: s, items: items };
+}
+
+function dimActivity(c) {                   /* 使用活跃 · 25 */
+  var s = 0, items = [];
+  var gap = daysBetween(c.lastLogin);
+  var g = gap <= 3 ? 10 : gap <= 7 ? 7 : gap <= 15 ? 4 : gap <= 30 ? 2 : 0;
+  s += g; items.push({ t: '最近登录 ' + gap + ' 天前（' + c.lastLogin + '）', d: g });
+
+  var f = c.login30 >= 15 ? 9 : c.login30 >= 8 ? 7 : c.login30 >= 3 ? 4 : c.login30 >= 1 ? 2 : 0;
+  s += f; items.push({ t: '近 30 日登录 ' + c.login30 + ' 次', d: f });
+
+  var a = c.activeDays30 >= 15 ? 6 : c.activeDays30 >= 8 ? 4 : c.activeDays30 >= 3 ? 2 : c.activeDays30 >= 1 ? 1 : 0;
+  s += a; items.push({ t: '近 30 日活跃 ' + c.activeDays30 + ' 天', d: a });
+
+  return { key: 'activity', name: '使用活跃', max: 25, score: s, items: items };
+}
+
+function dimHeat(c) {                       /* 商机热度 · 20 */
+  var s = 0, items = [];
+  var scale = c.emailCustom + c.subs;
+  var h = scale >= 50 ? 8 : scale >= 10 ? 6 : scale >= 1 ? 4 : 0;
+  s += h; items.push({ t: '邮件定制 ' + c.emailCustom + ' 个 + 订阅 ' + c.subs + ' 个', d: h });
+
+  var b = c.behavior7d >= 100 ? 7 : c.behavior7d >= 10 ? 5 : c.behavior7d >= 1 ? 3 : 0;
+  s += b; items.push({ t: '近 7 日关键行为（导出/详情/下单）' + c.behavior7d + ' 次', d: b });
+
+  var w = 0, wt = '';
+  if (c.win3d >= 1) { w = 5; wt = '近 3 日中标 ' + c.win3d + ' 个'; }
+  else if (c.trackActive >= 3) { w = 4; wt = '追踪中项目 ' + c.trackActive + ' 个'; }
+  else if (c.winTotal >= 1) { w = 3; wt = '历史中标 ' + c.winTotal + ' 次'; }
+  else if (c.trackActive >= 1) { w = 2; wt = '追踪中项目 ' + c.trackActive + ' 个'; }
+  else { wt = '无中标记录且无追踪中项目'; }
+  s += w; items.push({ t: wt, d: w });
+
+  return { key: 'heat', name: '商机热度', max: 20, score: s, items: items };
+}
+
+function dimFollow(c) {                     /* 跟进健康 · 15 */
+  var s = 0, items = [];
+  var gap = daysBetween(c.lastFollow);
+  var g = gap <= 3 ? 6 : gap <= 7 ? 4 : gap <= 14 ? 2 : gap <= 30 ? 1 : 0;
+  s += g; items.push({ t: '上次跟进 ' + gap + ' 天前（' + c.lastFollow + '）', d: g });
+
+  var f = c.follow30 >= 5 ? 5 : c.follow30 >= 3 ? 4 : c.follow30 >= 1 ? 2 : 0;
+  s += f; items.push({ t: '近 30 日跟进 ' + c.follow30 + ' 次', d: f });
+
+  var map = { 'AA': 4, 'A': 3, 'B': 2, 'C': 1, 'D': 0, 'E': 0 };
+  var r = map[c.rating] != null ? map[c.rating] : 0;
+  s += r; items.push({ t: '最新客户评级 ' + c.rating + ' 级', d: r });
+
+  return { key: 'follow', name: '跟进健康', max: 15, score: s, items: items };
+}
+
+function dimRelation(c) {                   /* 关系覆盖 · 10 */
+  var s = 0, items = [];
+  var p = c.contacts >= 5 ? 5 : c.contacts >= 3 ? 4 : c.contacts >= 2 ? 3 : c.contacts >= 1 ? 2 : 0;
+  s += p; items.push({ t: '在册联系人 ' + c.contacts + ' 人', d: p });
+
+  var b = c.binds >= 5 ? 5 : c.binds >= 3 ? 4 : c.binds >= 2 ? 3 : c.binds >= 1 ? 2 : 0;
+  s += b; items.push({ t: '绑定服务 ' + c.binds + ' 项', d: b });
+
+  return { key: 'relation', name: '关系覆盖', max: 10, score: s, items: items };
+}
+
+function dimRisk(c) {                       /* 风险信号 · 0 ~ -20 */
+  var s = 0, items = [];
+  var gap = daysBetween(c.lastLogin);
+  var fgap = daysBetween(c.lastFollow);
+
+  if (c.subsPaused >= 3) { s -= 5; items.push({ t: '暂停订阅 ' + c.subsPaused + ' 个，使用意愿下降', d: -5 }); }
+  if (gap > 21) { s -= 5; items.push({ t: '已 ' + gap + ' 天未登录，超过 21 天沉默阈值', d: -5 }); }
+  if (c.paid && !c.lastPay) { s -= 5; items.push({ t: '无缴费记录，续费来源不明确', d: -5 }); }
+  if (c.paid && c.unpaidOrders >= 1) { s -= 5; items.push({ t: c.unpaidOrders + ' 笔订单未完成付款', d: -5 }); }
+  if (fgap > 14) { s -= 5; items.push({ t: '跟进断档 ' + fgap + ' 天，超过 14 天阈值', d: -5 }); }
+  if (c.paid && c.expire && daysBetween(TODAY, c.expire) <= 60) {
+    s -= 5; items.push({ t: '会员 ' + daysBetween(TODAY, c.expire) + ' 天后到期（≤60 天）', d: -5 });
+  }
+  if (!items.length) items.push({ t: '未命中任何风险规则', d: 0 });
+
+  return { key: 'risk', name: '风险信号', max: 20, score: s, items: items };
+}
+
+function calcScore(c) {
+  var dims = [dimValue(c), dimActivity(c), dimHeat(c), dimFollow(c), dimRelation(c), dimRisk(c)];
+  var pos = 0, neg = 0;
+  dims.forEach(function (d) { if (d.key === 'risk') neg = d.score; else pos += d.score; });
+  return { dims: dims, pos: pos, neg: neg, total: pos + neg, max: 80 };
+}
+
+/* 分档：用库 chart 蓝阶表达分值高低，仅 <40 用 destructive 表达负向 */
+function bandOf(total) {
+  if (total >= 80) return { label: '优质客户 · 重点经营', variant: 'default', color: 'var(--chart-5)' };
+  if (total >= 60) return { label: '良好 · 正常推进', variant: 'default', color: 'var(--chart-4)' };
+  if (total >= 40) return { label: '待开发 · 重点攻坚', variant: 'secondary', color: 'var(--chart-3)' };
+  return { label: '高风险 · 挽回挽留', variant: 'outline', color: 'var(--destructive)' };
+}
+
+/* =========================================================
+   状态分流：五条规则按优先级命中，只采纳最高优先级的一条
+   R1 首单转化优先级最高
+   ========================================================= */
+function declineRate(c) {
+  if (!c.prevLogin30) return 0;
+  var drop = (c.prevLogin30 - c.login30) / c.prevLogin30;
+  return drop > 0 ? drop : 0;
+}
+
+var STATUS_RULES = [
+  { id: 'R1', name: '首单转化',
+    test: function (c) { return !c.paid && dimActivity(c).score >= 15; },
+    why: function (c) { return '未付费，且使用活跃得 ' + dimActivity(c).score + ' / 25 分（≥15）'; } },
+  { id: 'R2', name: '续费挽回',
+    test: function (c) { return c.paid && !!c.expire && daysBetween(TODAY, c.expire) <= 60; },
+    why: function (c) { return '会员剩余 ' + daysBetween(TODAY, c.expire) + ' 天到期（≤60 天）'; } },
+  { id: 'R3', name: '沉默唤醒',
+    test: function (c) { return c.paid && declineRate(c) >= 0.4; },
+    why: function (c) { return '近 30 日登录环比下跌 ' + Math.round(declineRate(c) * 100) + '%（≥40%）'; } },
+  { id: 'R4', name: '升级增购',
+    test: function (c) { return c.paid && dimActivity(c).score >= 18 && (c.productsOwned / c.productsTotal) <= 0.5; },
+    why: function (c) { return '已付费、活跃 ' + dimActivity(c).score + ' / 25 分（≥18），增值产品仅购 ' + c.productsOwned + ' / ' + c.productsTotal + '（≤50%）'; } },
+  { id: 'R5', name: '常规维护',
+    test: function () { return true; },
+    why: function () { return '以上规则均未命中，维持常规维护节奏'; } }
+];
+
+function judgeStatus(c) {
+  var matched = STATUS_RULES.map(function (r) {
+    var hit = false;
+    try { hit = r.test(c); } catch (e) { hit = false; }
+    return { rule: r, hit: hit, why: r.why(c) };
+  });
+  var winner = null;
+  for (var i = 0; i < matched.length; i++) { if (matched[i].hit) { winner = matched[i]; break; } }
+  if (!winner) winner = matched[matched.length - 1];
+  return { status: winner.rule.name, hit: winner, matched: matched };
+}
+
+/* =========================================================
+   每种状态对应：诊断结论 + 3 条行动 + 4 段话术
+   ========================================================= */
+var PLAYBOOK = {
+  '首单转化': {
+    conclusion: function (c) {
+      return '尚未付费，但近 30 日登录 ' + c.login30 + ' 次、活跃 ' + c.activeDays30 +
+        ' 天，系统记录近 7 日点击受限功能 ' + c.behavior7d + ' 次，每次都被拦——需求已经真实发生，只差充值这一步，这是首单的黄金窗口。';
+    },
+    actions: function (c) { return [
+      { title: '回收 ' + c.unpaidOrders + ' 笔未支付订单', why: '存在 ' + c.unpaidOrders + ' 笔待支付数据导出订单，收款码已过期，需重新下单', type: '单次拜访' },
+      { title: '按点击记录推数据导出套餐', why: '系统记录近 7 日点击受限功能 ' + c.behavior7d + ' 次，需求已明确，直接对标数据导出（全国）套餐', type: '单次拜访' },
+      { title: '3 日内完成第二次触达', why: '评级 ' + c.rating + ' 但近 30 日仅跟进 ' + c.follow30 + ' 次，需在热度期内锁定意向', type: '周期回访' }
+    ]; },
+    script: [
+      { h: '开场切入', b: '我看到您这周在站上点了十几次「数据导出」，都没导成——是需要把数据拿出去用吧？' },
+      { h: '价值锚点', b: '免费账号看不了详情也导不出数据，开通之后就能直接导 Excel，历史项目也都能回溯查。' },
+      { h: '异议应对', b: '客户说「先免费用着」：免费账号确实能搜，但详情页和导出都进不去，您这一周点了十几次都没进去——用着其实是卡的。' },
+      { h: '促单收口', b: '今天下单我按您现在的用量配额度，48 小时内付款就行，新收款码我这就发您？' }
+    ]
+  },
+  '续费挽回': {
+    conclusion: function (c) {
+      return '会员 ' + daysBetween(TODAY, c.expire) + ' 天后到期，同时已 ' + daysBetween(c.lastLogin) +
+        ' 天未登录、近 30 日登录环比下跌 ' + Math.round(declineRate(c) * 100) +
+        '%，3 个订阅被暂停——两条规则同时命中，按优先级判为续费挽回：先解决到期，再解决活跃。';
+    },
+    actions: function (c) { return [
+      { title: '到期前完成首轮续费沟通', why: '会员剩余 ' + daysBetween(TODAY, c.expire) + ' 天，已进入续费窗口期', type: '单次拜访' },
+      { title: '重新激活 ' + c.subsPaused + ' 个暂停订阅', why: c.subs + ' 个订阅中 ' + c.subsPaused + ' 个已暂停，是活跃下跌的直接原因', type: '单次拜访' },
+      { title: '拉齐关键联系人，避免单点失联', why: '在册 ' + c.contacts + ' 人，但近 30 日跟进 ' + c.follow30 + ' 次，存在单点依赖风险', type: '周期回访' }
+    ]; },
+    script: [
+      { h: '开场切入', b: '您的会员马上到期，我提前跟您对一下——是到期自动续，还是今年这块预算有调整？' },
+      { h: '价值锚点', b: '您过去在这儿中过标，历史中标和订阅记录都还在，续上一条线接着用；中途断了，推送和追踪都得重新配。' },
+      { h: '异议应对', b: '客户说「最近项目少、先不续」：项目少的时候更需要提前盯，您那几个暂停的订阅我可以先给您免费重开，看到项目再说。' },
+      { h: '促单收口', b: '这样，我先把暂停的订阅给您恢复，您这周用一次；到期前我再给您去个电话，您看周三还是周五方便？' }
+    ]
+  },
+  '沉默唤醒': {
+    conclusion: function (c) {
+      return '已 ' + daysBetween(c.lastLogin) + ' 天未登录，近 30 日登录环比下跌 ' +
+        Math.round(declineRate(c) * 100) + '%，且跟进断档 ' + daysBetween(c.lastFollow) +
+        ' 天——客户正在离开，先诊断原因再谈转化。';
+    },
+    actions: function (c) { return [
+      { title: '48 小时内完成一次回访', why: '跟进已断档 ' + daysBetween(c.lastFollow) + ' 天，超过 14 天阈值', type: '单次拜访' },
+      { title: '定位活跃下跌的根因', why: '登录环比下跌 ' + Math.round(declineRate(c) * 100) + '%，需确认是换人、换项目还是竞品替代', type: '单次拜访' },
+      { title: '建立双人联系机制', why: '在册 ' + c.contacts + ' 人，避免单点联系人变动导致客户流失', type: '周期回访' }
+    ]; },
+    script: [
+      { h: '开场切入', b: '有个事想跟您确认——我这边看您账号快一个月没登录了，是换了同事在用，还是近期项目节奏变了？' },
+      { h: '价值锚点', b: '不着急谈续费，我先把您那几个订阅重新打开，您看一眼近期标的，觉得没用我再关，成本是零。' },
+      { h: '异议应对', b: '客户说「不用了」：先别下结论，我把您历史中标相关的后续标讯推给您，您看完再决定。' },
+      { h: '促单收口', b: '今天我先把订阅恢复，您这两天登录看一眼，有问题随时打我这个号，我周五再跟您确认一次。' }
+    ]
+  },
+  '升级增购': {
+    conclusion: function (c) {
+      return '会员到 ' + c.expire + ' 才到期、无续费压力，使用活跃 ' + dimActivity(c).score +
+        ' / 25 分，但增值产品只购 ' + c.productsOwned + '/' + c.productsTotal +
+        '，另有 ' + c.unpaidOrders + ' 笔订单卡在未付款——客户有购买力也有意向，该做的是增购，不是逼续费。';
+    },
+    actions: function (c) { return [
+      { title: '回收 ' + c.unpaidOrders + ' 笔未完成付款的增值订单', why: c.unpaidOrders + ' 笔订单处于待支付状态，意向已表达，卡点在付款', type: '单次拜访' },
+      { title: '按已购缺口推 2 项增值服务', why: '增值产品仅购 ' + c.productsOwned + '/' + c.productsTotal + '，数据服务与结构化数据包为首选', type: '单次拜访' },
+      { title: '把「无缴费记录」补录成正式合同', why: '当前无缴费记录，续费来源不明确，存在账务与归属风险', type: '单次拜访' }
+    ]; },
+    script: [
+      { h: '开场切入', b: '您这边会员用得挺久，我今天不是来催续费的——是看您有几笔订单还挂着没付款，先帮您把这几笔理一下。' },
+      { h: '价值锚点', b: '您现在只开了会员和中标通，数据服务、结构化数据包都没开；像您这种邮件定制上百个的用量，数据服务的性价比更高。' },
+      { h: '异议应对', b: '客户说「先挂着不急」：这几笔不付款不影响使用，但优惠价只保 48 小时，过了就得按现价走。' },
+      { h: '促单收口', b: '我把这几笔里最合适的两笔合成一个新订单，金额算好发您，今天定下来我这边直接开通。' }
+    ]
+  },
+  '常规维护': {
+    conclusion: function () {
+      return '未命中任何促成交规则，当前按常规节奏维护即可，重点保持跟进频率，等待状态变化。';
+    },
+    actions: function (c) { return [
+      { title: '维持既定回访节奏', why: '未触发任何状态规则，保持当前跟进频率', type: '周期回访' },
+      { title: '补充关键联系人信息', why: '完善决策链可提升后续状态判定准确度，当前在册 ' + c.contacts + ' 人', type: '单次拜访' },
+      { title: '关注订阅与登录变化', why: '活跃与订阅是状态分流的首要输入，当前订阅 ' + c.subs + ' 个', type: '周期回访' }
+    ]; },
+    script: [
+      { h: '开场切入', b: '例行跟您对一下近期有没有在跟的项目，顺便看看订阅条件要不要调。' },
+      { h: '价值锚点', b: '把当前服务的实际使用情况过一遍，确认哪几项还在用、哪几项可以调整。' },
+      { h: '异议应对', b: '客户说「暂时不用联系」：好的，我把回访周期拉长，有需要您随时招呼。' },
+      { h: '促单收口', b: '那我按正常节奏跟您保持联系，下次到点我再打给您。' }
+    ]
+  }
+};
+
+/* =========================================================
+   渲染
+   ========================================================= */
+var state = { key: CUSTOMERS[0].key, personIdx: null };
+
+function currentCustomer() {
+  for (var i = 0; i < CUSTOMERS.length; i++) {
+    if (CUSTOMERS[i].key === state.key) return CUSTOMERS[i];
+  }
+  return CUSTOMERS[0];
+}
+
+function renderTabs() {
+  var html = '';
+  CUSTOMERS.forEach(function (c) {
+    var sel = c.key === state.key;
+    html += '<button class="tab-trigger" type="button" role="tab" data-tab="' + esc(c.key) + '"' +
+      ' aria-selected="' + (sel ? 'true' : 'false') + '" onclick="switchCustomer(\'' + esc(c.key) + '\')">' +
+      esc(c.name) + '</button>';
+  });
+  document.getElementById('customerTabs').innerHTML = html;
+}
+
+function switchCustomer(key) { state.key = key; state.personIdx = null; renderAll(); }
+
+/* --- ① 经营诊断条 --- */
+function renderOverview(c, sc, st) {
+  var band = bandOf(sc.total);
+  var scoreEl = document.getElementById('ovScore');
+  scoreEl.textContent = sc.total;
+  scoreEl.setAttribute('style', 'font-size:2.5rem;font-weight:700;line-height:1;margin:0;color:' + band.color);
+
+  document.getElementById('ovScoreNote').textContent = '正向 ' + sc.pos + '/80 · 风险 ' + sc.neg;
+  document.getElementById('ovBand').textContent = band.label;
+  document.getElementById('ovPaid').textContent = c.paid ? c.level : '未付费';
+  document.getElementById('ovMeta').textContent = 'ID ' + c.id + ' · ' + c.industry + ' · 最新评级 ' + c.rating;
+
+  var pb = PLAYBOOK[st.status] || PLAYBOOK['常规维护'];
+  document.getElementById('ovConclusion').textContent = pb.conclusion(c);
+  document.getElementById('ovPos').textContent = sc.pos;
+  document.getElementById('ovRisk').textContent = sc.neg;
+
+  /* 关键数据 6 项 */
+  var ed = c.expire ? daysBetween(TODAY, c.expire) : null;
+  var lg = daysBetween(c.lastLogin);
+  var fg = daysBetween(c.lastFollow);
+  var k = [
+    ['k1', ed == null ? '未开通' : ed + ' 天', 'k1d', c.expire || '无会员服务'],
+    ['k2', lg + ' 天前', 'k2d', c.lastLogin + ' 登录'],
+    ['k3', c.winTotal + ' 次', 'k3d', '追踪中 ' + c.trackActive + ' 个'],
+    ['k4', c.emailCustom + ' 个', 'k4d', '订阅 ' + c.subs + ' 个（停 ' + c.subsPaused + '）'],
+    ['k5', c.unpaidOrders + ' 笔', 'k5d', '在线开通 ' + c.ordersTotal + ' 笔'],
+    ['k6', c.follow30 + ' 次', 'k6d', '距上次 ' + fg + ' 天']
+  ];
+  k.forEach(function (x) {
+    document.getElementById(x[0]).textContent = x[1];
+    document.getElementById(x[2]).textContent = x[3];
+  });
+}
+
+/* --- 打分压成一行 6 格 --- */
+function renderScoreStrip(sc) {
+  var html = '';
+  sc.dims.forEach(function (d) {
+    var isRisk = d.key === 'risk';
+    var ratio = isRisk ? 1 : (d.max ? d.score / d.max : 0);
+    var variant = isRisk
+      ? (d.score === 0 ? 'secondary' : 'outline')
+      : (ratio >= 0.7 ? 'default' : ratio >= 0.4 ? 'secondary' : 'outline');
+    var shown = isRisk ? d.score : d.score;
+    html += '<div>' +
+      '<div class="flex items-center justify-between gap-1" style="margin:0 0 0.25rem 0;">' +
+        '<span class="text-xs text-muted-foreground">' + esc(d.name) + '</span>' +
+        '<span class="text-xs">' + shown + '<span class="text-muted-foreground">/' + d.max + '</span></span>' +
+      '</div>' +
+      '<progress class="progress" value="' + (isRisk ? 0 : d.score) + '" max="' + d.max + '"></progress>' +
+      '<div class="flex items-center gap-1" style="margin:0.25rem 0 0 0;">' +
+        '<span class="badge" data-variant="' + variant + '" style="height:1.125rem;font-size:0.6875rem;">' +
+          (isRisk ? (d.score === 0 ? '无风险' : '风险 ' + Math.abs(d.score)) : (ratio >= 0.7 ? '强' : ratio >= 0.4 ? '中' : '弱')) +
+        '</span>' +
+        (isRisk && d.score === 0 ? '' : '<span class="text-xs text-muted-foreground">' + esc(d.items[0] ? d.items[0].t.slice(0, 8) : '') + '</span>') +
+      '</div>' +
+      '</div>';
+  });
+  document.getElementById('scoreStrip').innerHTML = html;
+}
+
+/* --- 打分明细弹窗（归因全展开） --- */
+function renderScoreDialog(sc) {
+  var html = '';
+  sc.dims.forEach(function (d) {
+    var isRisk = d.key === 'risk';
+    var ratio = isRisk ? 1 : (d.max ? d.score / d.max : 0);
+    var variant = isRisk
+      ? (d.score === 0 ? 'secondary' : 'outline')
+      : (ratio >= 0.7 ? 'default' : ratio >= 0.4 ? 'secondary' : 'outline');
+    html += '<div class="card"><div class="card-content" style="padding:1rem;">' +
+      '<div class="flex items-center justify-between gap-2" style="margin:0 0 0.5rem 0;">' +
+        '<span class="font-medium text-sm">' + esc(d.name) + '</span>' +
+        '<span class="badge" data-variant="' + variant + '">' + d.score + ' / ' + d.max + '</span>' +
+      '</div><progress class="progress" value="' + (isRisk ? 0 : d.score) + '" max="' + d.max + '"></progress>' +
+      '<div style="margin:0.75rem 0 0 0;">';
+    d.items.forEach(function (it) {
+      var cls = it.d > 0 ? '' : (it.d < 0 ? 'text-destructive' : 'text-muted-foreground');
+      var mark = it.d > 0 ? '+' : (it.d < 0 ? '' : '· ');
+      html += '<div class="flex items-center justify-between gap-2" style="padding:0.1875rem 0;">' +
+        '<span class="text-xs ' + cls + '">' + esc(it.t) + '</span>' +
+        '<span class="text-xs ' + cls + '" style="flex-shrink:0;">' + mark + it.d + '</span></div>';
+    });
+    html += '</div></div></div>';
+  });
+  document.getElementById('scoreDlgBody').innerHTML = html;
+}
+
+function openScoreDialog() {
+  var sc = calcScore(currentCustomer());
+  renderScoreDialog(sc);
+  var dlg = document.getElementById('scoreDialog');
+  if (!dlg.open) dlg.showModal();
+}
+
+/* --- ② 个人画像：当前联系的这个人的单账号画像 --- */
+/* 默认定位到「最近跟进过的人」；都没有跟进记录时，取最近活跃的那个 */
+function defaultPersonIndex(c) {
+  var list = c.contactList || [];
+  if (!list.length) return 0;
+  var pool = list.filter(function (p) { return p.follow && p.follow.indexOf('已触达') > -1; });
+  if (!pool.length) pool = list;
+  var best = -1, bestDate = '';
+  pool.forEach(function (p) {
+    var d = p.lastActive || '';
+    if (d > bestDate) { bestDate = d; best = list.indexOf(p); }
+  });
+  return best < 0 ? 0 : best;
+}
+
+function nextPerson() {
+  var c = currentCustomer();
+  var n = (c.contactList || []).length;
+  if (!n) return;
+  state.personIdx = ((state.personIdx == null ? 0 : state.personIdx) + 1) % n;
+  renderPeople(c);
+}
+
+function renderPeople(c) {
+  var list = c.contactList || [];
+  if (!list.length) return;
+  if (state.personIdx == null || state.personIdx >= list.length) state.personIdx = defaultPersonIndex(c);
+  var i = state.personIdx, p = list[i];
+
+  var touched = list.filter(function (x) { return x.follow && x.follow.indexOf('已触达') > -1; }).length;
+  var decision = list.filter(function (x) { return x.role === '决策人'; }).length;
+  document.getElementById('peopleStat').textContent =
+    (i + 1) + ' / ' + list.length + ' 人 · 决策人 ' + decision + ' · 已触达 ' + touched;
+  document.getElementById('companyStat').textContent = c.industry + ' · ' + (c.paid ? c.level : '未付费');
+  document.getElementById('profileStat').textContent = c.name + ' · ' + c.id;
+
+  var roleVariant = p.role === '决策人' ? 'default' : (p.role === '未注册' ? 'outline' : 'secondary');
+  var out = p.follow && /未触达|未注册|禁止联系/.test(p.follow);
+
+  /* 最近活跃 */
+  var actV, actD;
+  if (!p.lastActive) { actV = '未注册'; actD = '无登录记录，需求未暴露'; }
+  else {
+    var d = daysBetween(p.lastActive);
+    actV = d <= 0 ? '今天' : d + ' 天前';
+    actD = p.lastActive + ' 登录';
+  }
+
+  /* 跟进进度 */
+  var fm = (p.follow || '').match(/(\d+)\s*\/\s*(\d+)/);
+  var folV = fm ? fm[1] + ' / ' + fm[2] + ' 次' : '--';
+  var touchedTxt = (p.follow || '').split('·').pop().trim();
+  var folD = out ? touchedTxt : (fm ? '本阶段目标跟进 ' + fm[2] + ' 次' : '暂无跟进计划');
+
+  /* 个人功能点击（他自己账号点的，不是全公司汇总） */
+  var feats = p.feats || [];
+  var fTotal = feats.reduce(function (a, f) { return a + f.v; }, 0);
+  var feaV = fTotal + ' 次';
+  var feaD = feats.length ? feats.map(function (f) { return f.n + ' ' + f.v; }).join(' · ')
+    : (p.level === '未注册' ? '未注册账号，无操作记录' : '本账号无操作记录');
+
+  var stats = '';
+  function addStat(t, v, desc, bad) {
+    stats += '<div class="statistic">' +
+      '<p class="statistic-title">' + esc(t) + '</p>' +
+      '<p class="statistic-value' + (bad ? ' text-destructive' : '') + '" style="font-size:1.375rem;">' + esc(v) + '</p>' +
+      '<p class="statistic-description">' + esc(desc) + '</p></div>';
+  }
+  addStat('最近活跃', actV, actD, !p.lastActive);
+  addStat('跟进进度', folV, folD, !!out);
+  addStat('个人功能点击', feaV, feaD, false);
+
+  var kws = (p.kw || []).slice(0, 6).map(function (t) {
+    return '<span class="badge" data-variant="outline" style="height:1.5rem;">' + esc(t) + '</span>';
+  }).join('');
+  if (!kws) kws = '<span class="text-xs text-muted-foreground">无搜索记录，需求未暴露</span>';
+
+  var html =
+    '<div style="margin:0 0 0.875rem 0;">' +
+      '<div class="flex items-center flex-wrap" style="gap:0.5rem;">' +
+        '<span style="font-size:1.125rem;font-weight:600;">' + esc(p.name) + '</span>' +
+        '<span class="badge" data-variant="' + roleVariant + '">' + esc(p.role || p.title) + '</span>' +
+        '<span class="text-xs text-muted-foreground">' + esc(p.title) + ' · ' + esc(p.phone) + ' · ' + esc(p.level || '未注册') + '</span>' +
+      '</div>' +
+      '<p class="text-xs" style="margin:0.375rem 0 0 0;">' +
+        '<span class="' + (out ? 'text-destructive' : 'text-muted-foreground') + '">' + esc(p.follow || '--') + '</span></p>' +
+    '</div>' +
+
+    '<div style="border:1px solid var(--border);border-radius:var(--radius-lg);padding:0.625rem 0.75rem;margin:0 0 0.875rem 0;">' +
+      '<p class="text-xs text-muted-foreground" style="margin:0 0 0.25rem 0;">他负责的业务（只覆盖公司的一部分）</p>' +
+      '<p class="text-sm" style="margin:0;">' + esc(p.biz || '--') + '</p>' +
+    '</div>' +
+
+    '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(11.5rem,1fr));gap:1.25rem;">' + stats + '</div>' +
+
+    '<div style="margin:0.875rem 0 0 0;padding-top:0.75rem;border-top:1px solid var(--border);">' +
+      '<p class="text-xs text-muted-foreground" style="margin:0 0 0.5rem 0;">他这个账号搜过什么（只代表他负责的业务，不能代表全公司）</p>' +
+      '<div class="flex items-center flex-wrap" style="gap:0.375rem;">' + kws + '</div>' +
+    '</div>';
+
+  document.getElementById('peopleBody').innerHTML = html;
+}
+
+/* --- ③ 分析报告：关键参数卡 --- */
+function renderReport(c) {
+  var list = [];
+
+  /* 受限功能：点过但被拦 */
+  var blocked = c.features.filter(function (f) { return f.blocked; });
+  if (blocked.length) {
+    var bn = blocked.reduce(function (a, f) { return a + (f.n || 0); }, 0);
+    list.push({
+      t: '点击受限', v: bn + ' 次',
+      d: blocked.map(function (f) { return f.name + ' ' + f.n + ' 次'; }).join(' · ') + '，全被拦',
+      tone: 'bad'
+    });
+  }
+
+  /* 功能空白：从未点过 */
+  var blank = c.features.filter(function (f) { return !f.used && !f.blocked; });
+  list.push({
+    t: '功能空白', v: blank.length + ' / ' + c.features.length,
+    d: blank.length ? '从未点过：' + blank.map(function (f) { return f.name; }).join('、') : '每个功能都有过使用',
+    tone: blank.length >= 3 ? 'bad' : ''
+  });
+
+  /* 订阅暂停 */
+  var paused = c.subsList.filter(function (s) { return s.state === '暂停'; });
+  list.push({
+    t: '订阅暂停', v: paused.length + ' / ' + c.subsList.length,
+    d: paused.length ? '已停：' + paused.map(function (s) { return s.kw; }).join('、') : '订阅全部正常推送',
+    tone: paused.length ? 'bad' : ''
+  });
+
+  /* 竞品在用 */
+  list.push({
+    t: '竞品在用', v: c.competitors.length + ' 个',
+    d: c.competitors.length ? c.competitors.join('、') : '未记录在用竞品',
+    tone: c.competitors.length ? 'bad' : ''
+  });
+
+  /* 增值已购 */
+  list.push({
+    t: '增值已购', v: c.productsOwned + ' / ' + c.productsTotal,
+    d: c.productsOwned ? '已购 ' + c.productsOwned + ' 项，剩 ' + (c.productsTotal - c.productsOwned) + ' 个增购位' : '无任何增值服务，全是增购位',
+    tone: ''
+  });
+
+  /* 登录环比（付费客户） */
+  if (c.paid && c.prevLogin30 > 0) {
+    var drop = Math.round(declineRate(c) * 100);
+    if (drop > 0) {
+      list.push({ t: '登录环比', v: '-' + drop + '%', d: '近 30 日 ' + c.prevLogin30 + ' → ' + c.login30 + ' 次', tone: 'bad' });
+    }
+  }
+
+  /* 切入动作 */
+  (c.report.entry || []).forEach(function (e, i) {
+    list.push({ t: '切入 · ' + (i + 1), v: e.v, d: e.d, tone: 'action' });
+  });
+
+  var html = '';
+  list.forEach(function (p) {
+    var toneClass = p.tone === 'bad' ? ' text-destructive' : (p.tone === 'action' ? ' text-muted-foreground' : '');
+    html += '<div class="statistic">' +
+      '<p class="statistic-title">' + esc(p.t) + '</p>' +
+      '<p class="statistic-value' + toneClass + '" style="font-size:1.375rem;">' + esc(p.v) + '</p>' +
+      '<p class="statistic-description">' + esc(p.d) + '</p>' +
+      '</div>';
+  });
+  document.getElementById('repGrid').innerHTML = html;
+
+  var bad = list.filter(function (p) { return p.tone === 'bad'; }).length;
+  document.getElementById('repStat').textContent = list.length + ' 项 · ' + bad + ' 项需处理';
+}
+
+/* --- ③ 仪表盘：关键词与订阅墙 --- */
+function renderKwWall(c) {
+  var top = c.keywords.slice(0, 8);
+  var total = top.reduce(function (a, b) { return a + b.n; }, 0);
+  document.getElementById('kwStat').textContent = 'TOP ' + top.length + ' · 累计 ' + total + ' 次搜索';
+
+  var kw = '';
+  top.forEach(function (k) {
+    var v = k.n >= 80 ? 'default' : (k.n >= 40 ? 'secondary' : 'outline');
+    kw += '<span class="badge" data-variant="' + v + '" style="height:1.5rem;">' + esc(k.t) +
+      '<span class="text-muted-foreground" style="margin-left:0.25rem;">' + k.n + '</span></span>';
+  });
+  document.getElementById('kwSearch').innerHTML = kw;
+
+  var subs = '';
+  c.subsList.forEach(function (s) {
+    var on = s.state === '正常';
+    subs += '<div style="border:1px solid var(--border);border-radius:var(--radius-lg);padding:0.5rem 0.625rem;">' +
+      '<div class="flex items-center justify-between gap-2" style="margin:0 0 0.25rem 0;">' +
+        '<span class="text-sm font-medium">' + esc(s.kw) + '</span>' +
+        '<span class="badge" data-variant="' + (on ? 'default' : 'outline') + '"' +
+          (on ? '' : ' style="color:var(--destructive);"') + '>' + esc(s.state) + '</span>' +
+      '</div>' +
+      '<p class="text-xs text-muted-foreground" style="margin:0;">' +
+        esc(s.ch) + ' · ' + esc(s.region) + ' · ' + esc(s.cat) + ' · ' + esc(s.stage) + '期</p>' +
+      '</div>';
+  });
+  document.getElementById('kwSubs').innerHTML = subs;
+}
+
+/* --- 仪表盘：功能使用矩阵（blocked = 点过但被拦，是免费用户转化信号） --- */
+function renderFuncMatrix(c) {
+  var used = c.features.filter(function (f) { return f.used; }).length;
+  var blocked = c.features.filter(function (f) { return f.blocked; }).length;
+  document.getElementById('funcStat').textContent = used + ' / ' + c.features.length + ' 已使用' +
+    (blocked ? ' · ' + blocked + ' 个点过被拦' : '');
+
+  var html = '';
+  c.features.forEach(function (f) {
+    var v = f.used ? 'default' : (f.blocked ? 'outline' : 'outline');
+    var st = f.blocked ? ' style="flex-shrink:0;color:var(--destructive);border-color:var(--destructive);"' : ' style="flex-shrink:0;"';
+    html += '<div class="flex gap-2" style="align-items:flex-start;padding:0.375rem 0;border-bottom:1px solid var(--border);">' +
+      '<span class="badge" data-variant="' + v + '"' + st + '>' + esc(f.level) + '</span>' +
+      '<div style="flex:1;min-width:0;">' +
+        '<p class="text-sm" style="margin:0;">' + esc(f.name) + '</p>' +
+        '<p class="text-xs text-muted-foreground" style="margin:0.125rem 0 0 0;">' + esc(f.note) + '</p>' +
+      '</div></div>';
+  });
+  document.getElementById('funcMatrix').innerHTML = html;
+
+  var b = '';
+  c.bindings.forEach(function (x) {
+    b += '<span class="badge" data-variant="' + (x.on ? 'secondary' : 'outline') + '"' +
+      (x.on ? '' : ' style="opacity:0.6;"') + '>' + esc(x.name) + (x.on ? '' : ' · 未绑定') + '</span>';
+  });
+  document.getElementById('bindRow').innerHTML = b;
+}
+
+/* --- 仪表盘：兴趣偏好画像 --- */
+function renderInterest(c) {
+  var i = c.interest;
+  var groups = [
+    ['关注行业', i.industry], ['关注地区', i.region],
+    ['标讯类别', i.cat], ['项目阶段', i.stage]
+  ];
+  var maxW = 1;
+  groups.forEach(function (g) { g[1].forEach(function (x) { if (x.w > maxW) maxW = x.w; }); });
+
+  var html = '';
+  groups.forEach(function (g) {
+    var items = '';
+    g[1].slice(0, 5).forEach(function (x) {
+      var v = x.w >= 3 ? 'default' : (x.w >= 2 ? 'secondary' : 'outline');
+      var dots = '';
+      for (var d = 1; d <= x.w; d++) dots += '●';
+      items += '<span class="badge" data-variant="' + v + '" style="height:1.5rem;">' + esc(x.t) +
+        '<span class="text-muted-foreground" style="margin-left:0.25rem;letter-spacing:-0.1em;">' + dots + '</span></span>';
+    });
+    html += '<div>' +
+      '<p class="text-xs text-muted-foreground" style="margin:0 0 0.25rem 0;">' + esc(g[0]) + '</p>' +
+      '<div class="flex items-center flex-wrap" style="gap:0.375rem;">' + items + '</div></div>';
+  });
+  document.getElementById('interest').innerHTML = html;
+  document.getElementById('intStat').textContent = groups.length + ' 维 · 共 ' +
+    groups.reduce(function (a, g) { return a + g[1].length; }, 0) + ' 个标签';
+
+  var comp = '';
+  c.competitors.forEach(function (n) { comp += '<span class="badge" data-variant="outline">' + esc(n) + '</span>'; });
+  comp += '<span class="text-xs text-muted-foreground">在用 ' + c.competitors.length + ' 个竞品站，存在比价分流风险</span>';
+  document.getElementById('compRow').innerHTML = comp;
+}
+
+/* --- ④ 建议行动 --- */
+function renderActions(c, st) {
+  var pb = PLAYBOOK[st.status] || PLAYBOOK['常规维护'];
+  var acts = typeof pb.actions === 'function' ? pb.actions(c) : (pb.actions || []);
+  var html = '';
+  acts.forEach(function (a, i) {
+    var reason = a.title + '。依据：' + a.why;
+    html += '<div class="flex gap-3" style="align-items:flex-start;padding:0.75rem;background:var(--muted);border-radius:var(--radius-xl);">' +
+      '<span class="badge" data-variant="default" style="flex-shrink:0;">' + (i + 1) + '</span>' +
+      '<div style="flex:1;min-width:0;">' +
+        '<p class="text-sm font-medium" style="margin:0;">' + esc(a.title) + '</p>' +
+        '<p class="text-xs text-muted-foreground" style="margin:0.25rem 0 0 0;">依据：' + esc(a.why) + '</p>' +
+      '</div>' +
+      '<button class="btn" data-variant="outline" data-size="sm" type="button" style="flex-shrink:0;" ' +
+        'data-reason="' + esc(reason) + '" data-type="' + esc(a.type) + '" onclick="openTaskDialog(this.getAttribute(\'data-reason\'),this.getAttribute(\'data-type\'))">建任务</button>' +
+      '</div>';
+  });
+  document.getElementById('actionList').innerHTML = html;
+}
+
+/* --- ⑤ 话术 --- */
+function renderScript(st) {
+  var pb = PLAYBOOK[st.status] || PLAYBOOK['常规维护'];
+  document.getElementById('scriptHint').innerHTML =
+    '<span class="badge" data-variant="secondary">' + esc(st.status) + '</span>';
+  var html = '';
+  pb.script.forEach(function (s) {
+    html += '<div class="card"><div class="card-content" style="padding:1rem;">' +
+      '<p class="text-xs text-muted-foreground" style="margin:0 0 0.375rem 0;letter-spacing:0.05em;">' + esc(s.h) + '</p>' +
+      '<p class="text-sm" style="margin:0;line-height:1.7;">' + esc(s.b) + '</p>' +
+      '</div></div>';
+  });
+  document.getElementById('scriptGrid').innerHTML = html;
+}
+
+/* --- ⑥ 时间线 --- */
+function renderTimeline(c) {
+  var html = '';
+  c.timeline.forEach(function (t) {
+    html += '<li class="timeline-item">' +
+      '<div class="timeline-dot"' + (t.active ? ' data-variant="active"' : '') + '></div>' +
+      '<div class="timeline-content">' +
+        '<p class="timeline-title">' + esc(t.title) + '</p>' +
+        '<p class="timeline-description">' + esc(t.desc) + '</p>' +
+        '<time class="timeline-time">' + esc(t.time) + '</time>' +
+      '</div></li>';
+  });
+  document.getElementById('tlList').innerHTML = html;
+}
+
+/* --- 总渲染 --- */
+function renderAll() {
+  var c = currentCustomer();
+  var sc = calcScore(c);
+  var st = judgeStatus(c);
+  renderTabs();
+  renderOverview(c, sc, st);
+  renderScoreStrip(sc);
+  renderPeople(c);
+  renderReport(c);
+  renderKwWall(c);
+  renderFuncMatrix(c);
+  renderInterest(c);
+  renderActions(c, st);
+  renderScript(st);
+  renderTimeline(c);
+}
+
+function openCustomer() {
+  var c = currentCustomer();
+  var url = '../任务管理/客户详情页-重构.html?customerId=' + encodeURIComponent(c.id) +
+    '&customer=' + encodeURIComponent(c.name) + '&from=' + encodeURIComponent('客户分析');
+  window.open(encodeURI(url), '_blank');
+}
+
+/* =========================================================
+   创建跟进任务弹窗
+   ========================================================= */
+function fillContacts() {
+  var c = currentCustomer();
+  var sel = document.getElementById('tkContact');
+  var html = '<option value="">请选择联系人</option>';
+  c.contactList.forEach(function (p, i) {
+    html += '<option value="' + i + '">' + esc(p.name) + ' ' + esc(p.phone) + '（' + esc(p.title) + '）</option>';
+  });
+  sel.innerHTML = html;
+  sel.value = '';
+}
+
+function openTaskDialog(reason, type) {
+  fillContacts();
+  document.getElementById('tkReason').value = reason || '';
+  document.getElementById('tkTime').value = '';
+  document.getElementById('tkOnce').checked = true;
+  if (type === '周期回访') document.getElementById('tkPeriod').checked = true;
+  else if (type === '撞单任务') document.getElementById('tkClash').checked = true;
+  ['tkContactErr', 'tkReasonErr', 'tkTimeErr'].forEach(function (id) {
+    document.getElementById(id).hidden = true;
+  });
+  var dlg = document.getElementById('taskDialog');
+  if (!dlg.open) dlg.showModal();
+}
+
+function closeTaskDialog() { document.getElementById('taskDialog').close(); }
+function fieldError(errId, on) { document.getElementById(errId).hidden = !on; }
+
+function submitTask() {
+  var sel = document.getElementById('tkContact');
+  var reason = document.getElementById('tkReason').value.trim();
+  var time = document.getElementById('tkTime').value;
+  var ok = true;
+
+  if (sel.value === '') { fieldError('tkContactErr', true); ok = false; } else { fieldError('tkContactErr', false); }
+  if (!reason) { fieldError('tkReasonErr', true); ok = false; } else { fieldError('tkReasonErr', false); }
+  if (!time) { fieldError('tkTimeErr', true); ok = false; } else { fieldError('tkTimeErr', false); }
+  if (!ok) return;
+
+  var c = currentCustomer();
+  var p = c.contactList[parseInt(sel.value, 10)];
+  var type = (document.querySelector('input[name="tkType"]:checked') || {}).value || '单次拜访';
+  var when = time.slice(0, 16).replace('T', ' ');
+
+  closeTaskDialog();
+  showToast('任务已创建', type + ' · ' + p.name + ' · ' + when);
+}
+
+/* =========================================================
+   toast（复用样板实现：popover API + 自动消失）
+   ========================================================= */
+var TOAST_MAX = 3;
+function toastDismiss(el) {
+  if (!el) return;
+  try { if (el.hidePopover) el.hidePopover(); } catch (e) {}
+  el.classList.remove('force-show');
+  setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 250);
+}
+
+function showToast(title, description) {
+  var host = document.getElementById('toastHost');
+  if (!host) return;
+  while (host.children.length >= TOAST_MAX) toastDismiss(host.firstElementChild);
+
+  var el = document.createElement('div');
+  el.className = 'toast';
+  el.setAttribute('popover', 'manual');
+  el.innerHTML = '<div class="toast-content">' +
+    '<div class="toast-text">' +
+      '<p class="toast-title">' + esc(title) + '</p>' +
+      '<p class="toast-description">' + esc(description) + '</p>' +
+    '</div>' +
+    '<button class="toast-close" type="button" aria-label="关闭">✕</button></div>';
+  el.querySelector('.toast-close').addEventListener('click', function () { toastDismiss(el); });
+  host.appendChild(el);
+
+  var shown = false;
+  try { if (el.showPopover) { el.showPopover(); shown = true; } } catch (e) {}
+  if (!shown) el.classList.add('force-show');
+  setTimeout(function () { toastDismiss(el); }, 3200);
+}
+
+/* ===== 初始化：支持 ?customerId= 从客户详情页跳入 ===== */
+(function () {
+  try {
+    var cid = new URLSearchParams(window.location.search).get('customerId');
+    if (!cid) return;
+    for (var i = 0; i < CUSTOMERS.length; i++) {
+      if (CUSTOMERS[i].id === cid) { state.key = CUSTOMERS[i].key; return; }
+    }
+  } catch (e) {}
+})();
+
+renderAll();
+
+document.getElementById('taskDialog').addEventListener('click', function (e) {
+  if (e.target === this) this.close();
+});
+document.getElementById('scoreDialog').addEventListener('click', function (e) {
+  if (e.target === this) this.close();
+});
+</script>
+
+</body>
+</html>
