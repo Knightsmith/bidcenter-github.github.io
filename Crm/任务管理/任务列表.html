@@ -1708,9 +1708,9 @@ body {
         <table class="table">
           <colgroup>
             <col style="width:7rem;">
-            <col style="width:10rem;">
+            <col style="width:8rem;">
             <col style="width:14rem;">
-            <col style="width:12rem;">
+            <col style="width:16rem;">
             <col style="width:auto;">
             <col style="width:7rem;">
             <col style="width:11rem;">
@@ -2145,7 +2145,7 @@ function renderTable() {
     var companyInfo = esc(shortCompanyName(c.name));
     var accountInfo = esc(c.accountName || '');
     var actualPhone = t.actualContact ? contactPhone(t.customerId, t.actualContact) : '';
-    var contactInfo = '<div style="display:flex;flex-direction:column;gap:0.125rem;">' +
+    var contactInfo = '<div style="display:flex;flex-direction:column;gap:0.125rem;white-space:nowrap;">' +
       '<span>应联系：' + esc(t.relatedContact) + (phone ? ' ' + esc(phone) : '') + '</span>' +
       (t.actualContact ? '<span>实际联系：' + esc(t.actualContact) + (actualPhone ? ' ' + esc(actualPhone) : '') + '</span>' : '') +
     '</div>';

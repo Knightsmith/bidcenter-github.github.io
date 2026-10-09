@@ -1825,7 +1825,15 @@ body {
           </select>
         </div>
 
-        <!-- 当前处理人（选项由数据去重生成） -->
+        <!-- 部门（大区-部门，由数据去重生成；与「当前处理人」联动） -->
+        <div style="width:13rem;">
+          <label class="label" for="fDept">部门</label>
+          <select class="select" id="fDept" data-size="lg" onchange="onDeptChange()">
+            <option value="">全部部门</option>
+          </select>
+        </div>
+
+        <!-- 当前处理人（选项由数据去重生成，选部门后仅剩该部门人员） -->
         <div style="width:14rem;">
           <label class="label" for="fAssignee">当前处理人</label>
           <select class="select" id="fAssignee" data-size="lg" onchange="onFilterChange()">
@@ -2086,7 +2094,7 @@ function openCustomer(cid) {
 }
 
 /* ===== 状态管理与筛选 ===== */
-var state = { company: '', status: '', assignee: '', page: 1 };
+var state = { company: '', status: '', dept: '', assignee: '', page: 1 };
 var PAGE_SIZE = 20;
 
 /* 状态重要度：已逾期 > 未处理 > 已处理（异常置顶，配合逾期行警示底色） */
@@ -2097,6 +2105,7 @@ function getFilteredTasks() {
     var c = customerById(t.customerId);
     if (state.company && (!c || c.name.indexOf(state.company) < 0)) return false;
     if (state.status && effStatus(t) !== state.status) return false;
+    if (state.dept && splitOwner(assigneeOf(t)).dept !== state.dept) return false;
     if (state.assignee && assigneeOf(t) !== state.assignee) return false;
     return true;
   });
@@ -2119,21 +2128,49 @@ function onFilterChange() {
 function resetFilters() {
   document.getElementById('fCompany').value = '';
   document.getElementById('fStatus').value = '';
+  document.getElementById('fDept').value = '';
   document.getElementById('fAssignee').value = '';
-  state.company = ''; state.status = ''; state.assignee = ''; state.page = 1;
+  state.company = ''; state.status = ''; state.dept = ''; state.assignee = ''; state.page = 1;
+  initAssigneeOptions(); /* 部门已清空，处理人下拉恢复全量 */
   renderTable();
 }
-function initAssigneeOptions() {
+/* ===== 部门下拉（大区-部门去重） ===== */
+function initDeptOptions() {
+  var seen = {}, keys = [];
+  TASKS.forEach(function (t) {
+    var d = splitOwner(assigneeOf(t)).dept;
+    if (d && !seen[d]) { seen[d] = 1; keys.push(d); }
+  });
+  keys.sort();
+  var opts = '';
+  keys.forEach(function (d) { opts += '<option value="' + esc(d) + '">' + esc(d) + '</option>'; });
+  document.getElementById('fDept').innerHTML = '<option value="">全部部门</option>' + opts;
+}
+/* 部门 → 处理人联动：重建处理人选项；已选处理人不属于该部门时自动回「全部处理人」 */
+function refreshAssigneeOptions() {
+  var cur = document.getElementById('fAssignee').value;
   var seen = {}, keys = [];
   TASKS.forEach(function (t) {
     var a = assigneeOf(t);
-    if (a && !seen[a]) { seen[a] = 1; keys.push(a); }
+    if (!a) return;
+    if (state.dept && splitOwner(a).dept !== state.dept) return;
+    if (!seen[a]) { seen[a] = 1; keys.push(a); }
   });
   keys.sort();
   var opts = '';
   keys.forEach(function (a) { opts += '<option value="' + esc(a) + '">' + esc(a) + '</option>'; });
-  document.getElementById('fAssignee').innerHTML = '<option value="">全部处理人</option>' + opts;
+  var sel = document.getElementById('fAssignee');
+  sel.innerHTML = '<option value="">全部处理人</option>' + opts;
+  if (cur && keys.indexOf(cur) < 0) sel.value = '';
 }
+function onDeptChange() {
+  state.dept = document.getElementById('fDept').value;
+  refreshAssigneeOptions();
+  state.assignee = document.getElementById('fAssignee').value;
+  state.page = 1;
+  renderTable();
+}
+function initAssigneeOptions() { refreshAssigneeOptions(); }
 
 /* ===== 顶部统计（库 card + statistic 组件，随筛选联动） ===== */
 function renderStats(list) {
@@ -2359,6 +2396,7 @@ function closeTaskDetail() { document.getElementById('taskDetailDialog').close()
 
 /* ===== 初始化 ===== */
 function init() {
+  initDeptOptions();
   initAssigneeOptions();
   renderTable();
   document.getElementById('taskDetailDialog').addEventListener('click', function (e) {
