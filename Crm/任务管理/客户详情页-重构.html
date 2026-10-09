@@ -1616,10 +1616,10 @@ function toggleContactDetail(row) {
 var TASK_COMPANY = '大土豆有限责任公司';
 var TASK_ASSIGNEE = '北京-客服2部-张明';
 var TASK_STATUS_BADGE = { '未处理': 'badge-secondary', '已逾期': 'badge-danger', '已处理': 'badge-success' };
-/* 类型徽标按类型分组着色：红=注册新分/系统新分/会员升级/客户咨询/活动报名；橙=自建（单次拜访/周期回访/撞单任务）；其他=蓝 */
+/* 类型徽标按类型分组着色：红=注册新分/系统新分/会员升级/客户咨询/活动报名/企业缺失；橙=自建（单次拜访/周期回访/撞单任务）/额度不足；其他（功能咨询/中标提醒/项目提醒等）=蓝 */
 var TASK_TYPE_BADGE = {
-  '注册新分': 'badge-danger', '系统新分': 'badge-danger', '会员升级': 'badge-danger', '客户咨询': 'badge-danger', '活动报名': 'badge-danger',
-  '单次拜访': 'badge-warning', '周期回访': 'badge-warning', '撞单任务': 'badge-warning'
+  '注册新分': 'badge-danger', '系统新分': 'badge-danger', '会员升级': 'badge-danger', '客户咨询': 'badge-danger', '活动报名': 'badge-danger', '企业缺失': 'badge-danger',
+  '单次拜访': 'badge-warning', '周期回访': 'badge-warning', '撞单任务': 'badge-warning', '额度不足': 'badge-warning'
 };
 
 var TASK_ROWS = {
@@ -1673,7 +1673,7 @@ var TASK_ROWS = {
         { time: '2026-09-16 16:40', title: '创建任务', desc: '任务创建并进入未处理队列', active: false },
         { time: '2026-09-16 16:55', title: '流转至 张明', desc: '任务当前由其响应处理', active: true }
       ] },
-    { id: 'T66', remind: '2026-09-18 09:30', after18: false, type: '中标追踪', contact: '李芳', phone: '13698765432',
+    { id: 'T66', remind: '2026-09-18 09:30', after18: false, type: '中标提醒', contact: '李芳', phone: '13698765432',
       desc: '备件采购项目开标在即，需跟踪竞争对手报价动态', status: '未处理',
       createdAt: '2026-09-16 11:20', closedAt: '', remark: '',
       history: [
@@ -1708,6 +1708,13 @@ var TASK_ROWS = {
       history: [
         { time: '2026-09-16 11:40', title: '创建任务', desc: '任务创建并进入未处理队列', active: false },
         { time: '2026-09-16 12:00', title: '流转至 张明', desc: '任务当前由其响应处理', active: true }
+      ] },
+    { id: 'T71', remind: '2026-09-17 15:00', after18: false, type: '功能咨询', contact: '王磊', phone: '15011513872',
+      desc: '客户咨询商机挖掘功能，请结合会员权益介绍会员与产品', status: '未处理',
+      createdAt: '2026-09-16 14:30', closedAt: '', remark: '',
+      history: [
+        { time: '2026-09-16 14:30', title: '创建任务', desc: '任务创建并进入未处理队列', active: false },
+        { time: '2026-09-16 14:45', title: '流转至 张明', desc: '任务当前由其响应处理', active: true }
       ] }
   ]
 };

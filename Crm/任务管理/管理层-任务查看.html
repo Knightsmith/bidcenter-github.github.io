@@ -1795,7 +1795,6 @@ body {
     </div>
     <div class="flex items-center gap-3">
       <span class="muted">当前使用者：李总（管理层）</span>
-      <button class="btn" data-variant="outline" data-size="sm" type="button" onclick="goPage('list')">返回任务列表</button>
       <button class="btn" data-variant="outline" data-size="sm" type="button" onclick="goPage('report')">查看任务报表</button>
     </div>
   </div>
@@ -1917,7 +1916,7 @@ var NOW = new Date('2026-09-16T19:30:00');                  /* 演示基准时�
 var CRM_PAGE = 'file:///D:/workspace/bidcenter-github.github.io/Crm/客户详情页-重构.html';
 
 var CUSTOMERS = [
-  { id: 'C01', name: '华能电力工程有限公司', accountName: 'hn-huaneng-001', memberType: '高级会员', owner: '北京-客服2部-张明', region: '华东', contacts: [
+  { id: 'C01', name: '华能电力工程有限公司', accountName: 'hn-huaneng-001', memberType: 'VIP会员', owner: '北京-客服2部-张明', region: '华东', contacts: [
     { name: '李国强', phone: '138-0001-0001' }, { name: '王海涛', phone: '139-0002-0002' }, { name: '赵敏', phone: '137-0003-0003' }
   ]},
   { id: 'C02', name: '中建八局第二建设有限公司', accountName: 'cscec-802', memberType: '标准会员', owner: '北京-客服2部-张明', region: '华北', contacts: [
@@ -1942,56 +1941,59 @@ var CUSTOMERS = [
 
 /* 任务数据：与任务列表同源，扩展 createdAt（创建时间）、assignee（当前处理人，缺省取客户 owner）、remark（完成备注） */
 var TASKS = [
-  { id: 'T01', createdAt: '2026-09-16 08:40', remind: '2026-09-16 09:10', type: '中标追踪', customerId: 'C01', relatedContact: '李国强', actualContact: '', desc: '华能电力智慧运维平台项目已中标公示，需24小时内确认对接人并回填签约计划', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
-  { id: 'T02', createdAt: '2026-09-16 09:20', remind: '2026-09-16 09:40', type: '项目追踪', customerId: 'C01', relatedContact: '王海涛', actualContact: '', desc: '智慧运维平台需求调研进度跟进，确认下周三技术交流会时间', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
+  { id: 'T01', createdAt: '2026-09-16 08:40', remind: '2026-09-16 09:10', type: '中标提醒', customerId: 'C01', relatedContact: '李国强', actualContact: '', desc: '华能电力智慧运维平台项目已中标公示，需24小时内确认对接人并回填签约计划', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
+  { id: 'T02', createdAt: '2026-09-16 09:20', remind: '2026-09-16 09:40', type: '项目提醒', customerId: 'C01', relatedContact: '王海涛', actualContact: '', desc: '智慧运维平台需求调研进度跟进，确认下周三技术交流会时间', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
   { id: 'T03', createdAt: '2026-09-16 08:00', remind: '2026-09-16 08:20', type: '注册新分', customerId: 'C01', relatedContact: '赵敏', actualContact: '李国强', desc: '客户新注册企业账号，需电话介绍会员权益并核实联系人身份', status: '未处理', result: '下次联系', contactTime: '2026-09-18 10:00', closedAt: '', remark: '' },
   { id: 'T04', createdAt: '2026-09-16 09:45', remind: '2026-09-16 10:05', type: '活动报名', customerId: 'C02', relatedContact: '刘建国', actualContact: '', desc: '邀请参加9月22日华北区招投标合规沙龙，确认参会人数与名单', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
-  { id: 'T05', createdAt: '2026-09-16 10:50', remind: '2026-09-16 11:15', type: '会员升级', customerId: 'C02', relatedContact: '孙倩', actualContact: '', desc: '企业会员由标准版升级至专业版的报价方案已发送，等待客户反馈', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '', assignee: '北京-大数据1部-李静' },
+  { id: 'T05', createdAt: '2026-09-16 10:50', remind: '2026-09-16 11:15', type: '会员升级', customerId: 'C02', relatedContact: '孙倩', actualContact: '', desc: '企业会员由标准版升级至VIP会员的报价方案已发送，等待客户反馈', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '', assignee: '北京-大数据1部-李静' },
   { id: 'T06', createdAt: '2026-09-16 13:30', remind: '2026-09-16 14:00', type: '邮件关闭', customerId: 'C04', relatedContact: '黄伟', actualContact: '黄伟', desc: '客户邮件咨询发票开具流程，已回复处理路径并关闭', status: '已处理', result: '已处理', contactTime: '', closedAt: '2026-09-16 15:20', remark: '已电话回复发票开具流程，客户确认无异议，邮件工单关闭' },
   { id: 'T07', createdAt: '2026-09-16 16:00', remind: '2026-09-16 16:30', type: '功能使用超限', customerId: 'C03', relatedContact: '周文军', actualContact: '', desc: '企业账号本月招标文件下载次数已达上限，需协助申请临时扩容', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
   { id: 'T08', createdAt: '2026-09-16 18:50', remind: '2026-09-16 19:05', type: '临时任务', customerId: 'C05', relatedContact: '徐丽华', actualContact: '', desc: '客户临时要求补充近三年同行业中标案例清单', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
 
   { id: 'T09', createdAt: '2026-09-15 09:00', remind: '2026-09-15 09:30', type: '撞单任务', customerId: 'C06', relatedContact: '田志强', actualContact: '', desc: '与华东二部撞单，需确认客户归属并回填归属说明', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
-  { id: 'T10', createdAt: '2026-09-15 09:50', remind: '2026-09-15 10:20', type: '中标追踪', customerId: 'C05', relatedContact: '郑凯', actualContact: '', desc: '环保设备采购项目中标结果已出，需追踪客户签约进度', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
-  { id: 'T11', createdAt: '2026-09-15 15:10', remind: '2026-09-15 15:40', type: '项目追踪', customerId: 'C01', relatedContact: '李国强', actualContact: '李国强', desc: '方案评审会时间未定，需再次确认并同步技术团队', status: '未处理', result: '下次联系', contactTime: '2026-09-17 09:00', closedAt: '', remark: '' },
+  { id: 'T10', createdAt: '2026-09-15 09:50', remind: '2026-09-15 10:20', type: '中标提醒', customerId: 'C05', relatedContact: '郑凯', actualContact: '', desc: '环保设备采购项目中标结果已出，需追踪客户签约进度', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
+  { id: 'T11', createdAt: '2026-09-15 15:10', remind: '2026-09-15 15:40', type: '项目提醒', customerId: 'C01', relatedContact: '李国强', actualContact: '李国强', desc: '方案评审会时间未定，需再次确认并同步技术团队', status: '未处理', result: '下次联系', contactTime: '2026-09-17 09:00', closedAt: '', remark: '' },
   { id: 'T12', createdAt: '2026-09-15 10:30', remind: '2026-09-15 11:00', type: '系统新分', customerId: 'C04', relatedContact: '黄伟', actualContact: '黄伟', desc: '客户资料核实完成，已分配专属顾问并完成建联', status: '已处理', result: '已处理', contactTime: '', closedAt: '2026-09-15 14:10', remark: '资料核实无误，已分配专属顾问并完成首次建联' },
   { id: 'T13', createdAt: '2026-09-15 17:20', remind: '2026-09-15 17:50', type: '活动报名', customerId: 'C03', relatedContact: '陈晓东', actualContact: '', desc: '邀请参加电力设计行业闭门交流会，需确认报名信息', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '', assignee: '北京-客服2部-张明' },
   { id: 'T14', createdAt: '2026-09-16 18:40', remind: '2026-09-16 19:20', type: '邮件关闭', customerId: 'C05', relatedContact: '马晓峰', actualContact: '', desc: '客户邮件反馈网站会员权益页面打不开，需核查后回复', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
 
   { id: 'T15', createdAt: '2026-09-16 17:30', remind: '2026-09-17 09:00', type: '会员升级', customerId: 'C06', relatedContact: '何静', actualContact: '', desc: '客户意向升级集团版，需准备多账号管理方案', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
   { id: 'T16', createdAt: '2026-09-16 17:40', remind: '2026-09-17 10:30', type: '注册新分', customerId: 'C03', relatedContact: '周文军', actualContact: '', desc: '新注册子账号待认证，需指导完成企业实名认证', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
-  { id: 'T17', createdAt: '2026-09-16 11:20', remind: '2026-09-18 14:00', type: '项目追踪', customerId: 'C02', relatedContact: '刘建国', actualContact: '', desc: '华北区合规沙龙后续回访，确认客户培训需求', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
-  { id: 'T18', createdAt: '2026-09-16 15:40', remind: '2026-09-18 09:30', type: '中标追踪', customerId: 'C04', relatedContact: '黄伟', actualContact: '', desc: '备件采购项目开标在即，需跟踪竞争对手报价动态', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
+  { id: 'T17', createdAt: '2026-09-16 11:20', remind: '2026-09-18 14:00', type: '项目提醒', customerId: 'C02', relatedContact: '刘建国', actualContact: '', desc: '华北区合规沙龙后续回访，确认客户培训需求', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
+  { id: 'T18', createdAt: '2026-09-16 15:40', remind: '2026-09-18 09:30', type: '中标提醒', customerId: 'C04', relatedContact: '黄伟', actualContact: '', desc: '备件采购项目开标在即，需跟踪竞争对手报价动态', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
   { id: 'T19', createdAt: '2026-09-16 16:10', remind: '2026-09-19 15:00', type: '临时任务', customerId: 'C01', relatedContact: '王海涛', actualContact: '', desc: '按客户要求整理三季度项目台账并核对合同金额', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
   { id: 'T20', createdAt: '2026-09-16 18:10', remind: '2026-09-17 16:20', type: '功能使用超限', customerId: 'C05', relatedContact: '徐丽华', actualContact: '', desc: '子账号并发登录数超限，需协助调整权限配置', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
 
   { id: 'T21', createdAt: '2026-09-16 08:30', remind: '2026-09-16 09:05', type: '注册新分', customerId: 'C03', relatedContact: '周文军', actualContact: '', desc: '设计院新账号注册待核验，需电话确认企业资质材料', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
-  { id: 'T22', createdAt: '2026-09-16 10:10', remind: '2026-09-16 10:40', type: '中标追踪', customerId: 'C03', relatedContact: '陈晓东', actualContact: '陈晓东', desc: '输变电设计项目中标信息已推送，客户确认已收到', status: '已处理', result: '已处理', contactTime: '', closedAt: '2026-09-16 11:30', remark: '已推送中标信息，客户回复确认收到' },
-  { id: 'T23', createdAt: '2026-09-16 11:05', remind: '2026-09-16 11:30', type: '重复任务', customerId: 'C04', relatedContact: '黄伟', actualContact: '黄伟', desc: '与上周已建任务重复，已合并处理并关闭本条', status: '已处理', result: '已处理', contactTime: '', closedAt: '2026-09-16 12:05', remark: '与重复任务合并处理，本条已关闭' },
+  { id: 'T22', createdAt: '2026-09-16 10:10', remind: '2026-09-16 10:40', type: '中标提醒', customerId: 'C03', relatedContact: '陈晓东', actualContact: '陈晓东', desc: '输变电设计项目中标信息已推送，客户确认已收到', status: '已处理', result: '已处理', contactTime: '', closedAt: '2026-09-16 11:30', remark: '已推送中标信息，客户回复确认收到' },
+  { id: 'T23', createdAt: '2026-09-16 11:05', remind: '2026-09-16 11:30', type: '临时任务', customerId: 'C04', relatedContact: '黄伟', actualContact: '黄伟', desc: '与上周已建任务重复，已合并处理并关闭本条', status: '已处理', result: '已处理', contactTime: '', closedAt: '2026-09-16 12:05', remark: '与重复任务合并处理，本条已关闭' },
   { id: 'T24', createdAt: '2026-09-16 12:50', remind: '2026-09-16 13:20', type: '活动报名', customerId: 'C05', relatedContact: '徐丽华', actualContact: '', desc: '邀请参加10月环保行业线上直播，需确认报名人员', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
   { id: 'T25', createdAt: '2026-09-16 14:40', remind: '2026-09-16 15:10', type: '会员升级', customerId: 'C05', relatedContact: '郑凯', actualContact: '郑凯', desc: '会员升级方案已发送，客户内部评估中', status: '未处理', result: '下次联系', contactTime: '2026-09-17 10:30', closedAt: '', remark: '' },
-  { id: 'T26', createdAt: '2026-09-16 16:20', remind: '2026-09-16 16:50', type: '项目追踪', customerId: 'C06', relatedContact: '田志强', actualContact: '', desc: '西南片区项目跟踪表未回填，需提醒客户更新进度', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
-  { id: 'T27', createdAt: '2026-09-16 09:55', remind: '2026-09-16 10:15', type: '项目追踪', customerId: 'C07', relatedContact: '吴敏', actualContact: '', desc: '客户新增项目录入跟踪，需确认项目预算区间与采购节点', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
+  { id: 'T26', createdAt: '2026-09-16 16:20', remind: '2026-09-16 16:50', type: '项目提醒', customerId: 'C06', relatedContact: '田志强', actualContact: '', desc: '西南片区项目跟踪表未回填，需提醒客户更新进度', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
+  { id: 'T27', createdAt: '2026-09-16 09:55', remind: '2026-09-16 10:15', type: '项目提醒', customerId: 'C07', relatedContact: '吴敏', actualContact: '', desc: '客户新增项目录入跟踪，需确认项目预算区间与采购节点', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
   { id: 'T28', createdAt: '2026-09-16 14:00', remind: '2026-09-16 14:30', type: '会员升级', customerId: 'C01', relatedContact: '赵敏', actualContact: '赵敏', desc: '客户咨询会员升级流程，已电话沟通并发送报价单', status: '已处理', result: '已处理', contactTime: '', closedAt: '2026-09-16 15:00', remark: '电话沟通升级流程并发送报价单，客户确认收到' },
   { id: 'T29', createdAt: '2026-09-16 15:30', remind: '2026-09-16 16:00', type: '注册新分', customerId: 'C02', relatedContact: '孙倩', actualContact: '孙倩', desc: '新客户注册引导完成，已协助绑定企业营业执照并开通会员', status: '已处理', result: '已处理', contactTime: '', closedAt: '2026-09-16 16:45', remark: '协助绑定营业执照并开通会员，客户确认开通成功' },
 
-  { id: 'T30', createdAt: '2026-09-16 08:20', remind: '2026-09-16 09:00', type: '中标追踪', customerId: 'C05', relatedContact: '马晓峰', actualContact: '', desc: '华东区设备采购项目中标公告已发布，需确认客户签约意向', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
-  { id: 'T31', createdAt: '2026-09-16 09:00', remind: '2026-09-16 09:30', type: '项目追踪', customerId: 'C05', relatedContact: '徐丽华', actualContact: '', desc: '客户环保设备升级改造方案需二次确认技术参数', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
+  { id: 'T30', createdAt: '2026-09-16 08:20', remind: '2026-09-16 09:00', type: '中标提醒', customerId: 'C05', relatedContact: '马晓峰', actualContact: '', desc: '华东区设备采购项目中标公告已发布，需确认客户签约意向', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
+  { id: 'T31', createdAt: '2026-09-16 09:00', remind: '2026-09-16 09:30', type: '项目提醒', customerId: 'C05', relatedContact: '徐丽华', actualContact: '', desc: '客户环保设备升级改造方案需二次确认技术参数', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
   { id: 'T32', createdAt: '2026-09-16 09:30', remind: '2026-09-16 10:00', type: '活动报名', customerId: 'C03', relatedContact: '陈晓东', actualContact: '', desc: '邀请参加10月电力行业技术交流会，需确认参会名单', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
   { id: 'T33', createdAt: '2026-09-16 10:00', remind: '2026-09-16 10:30', type: '注册新分', customerId: 'C06', relatedContact: '田志强', actualContact: '', desc: '新客户首次登录需回访确认使用体验并收集反馈', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
   { id: 'T34', createdAt: '2026-09-16 10:30', remind: '2026-09-16 11:00', type: '会员升级', customerId: 'C06', relatedContact: '何静', actualContact: '', desc: '客户咨询集团版多账号管理功能，需准备方案说明', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
   { id: 'T35', createdAt: '2026-09-16 11:00', remind: '2026-09-16 11:30', type: '功能使用超限', customerId: 'C07', relatedContact: '吴敏', actualContact: '', desc: '企业账号本月API调用次数超限，需协助申请扩容', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
-  { id: 'T36', createdAt: '2026-09-16 12:30', remind: '2026-09-16 13:00', type: '中标追踪', customerId: 'C07', relatedContact: '吴敏', actualContact: '', desc: '新能源项目招标结果公示，需第一时间联系客户确认', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
-  { id: 'T37', createdAt: '2026-09-16 13:00', remind: '2026-09-16 13:30', type: '项目追踪', customerId: 'C03', relatedContact: '周文军', actualContact: '', desc: '设计院资质审核材料已提交，需跟进审批进度', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '', assignee: '安徽-销售2部-王超' },
+  { id: 'T36', createdAt: '2026-09-16 12:30', remind: '2026-09-16 13:00', type: '中标提醒', customerId: 'C07', relatedContact: '吴敏', actualContact: '', desc: '新能源项目招标结果公示，需第一时间联系客户确认', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
+  { id: 'T37', createdAt: '2026-09-16 13:00', remind: '2026-09-16 13:30', type: '项目提醒', customerId: 'C03', relatedContact: '周文军', actualContact: '', desc: '设计院资质审核材料已提交，需跟进审批进度', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '', assignee: '安徽-销售2部-王超' },
   { id: 'T38', createdAt: '2026-09-16 13:40', remind: '2026-09-16 14:00', type: '邮件关闭', customerId: 'C06', relatedContact: '何静', actualContact: '', desc: '客户邮件咨询合同续签流程，已回复并关闭工单', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
   { id: 'T39', createdAt: '2026-09-16 14:10', remind: '2026-09-16 14:30', type: '新发任务', customerId: 'C05', relatedContact: '郑凯', actualContact: '', desc: '客户需要批量导入历史项目数据，需协助操作指引', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
   { id: 'T40', createdAt: '2026-09-16 14:40', remind: '2026-09-16 15:00', type: '活动报名', customerId: 'C04', relatedContact: '黄伟', actualContact: '', desc: '邀请参加11月行业年度峰会，需确认报名信息', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
-  { id: 'T41', createdAt: '2026-09-16 15:00', remind: '2026-09-16 15:30', type: '项目追踪', customerId: 'C01', relatedContact: '李国强', actualContact: '', desc: '智慧运维平台二期需求文档已提交评审，需跟进反馈', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
-  { id: 'T42', createdAt: '2026-09-16 15:40', remind: '2026-09-16 16:00', type: '会员升级', customerId: 'C03', relatedContact: '陈晓东', actualContact: '', desc: '标准会员升级专业版报价已发送，等待客户确认', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
-  { id: 'T43', createdAt: '2026-09-16 16:10', remind: '2026-09-16 16:30', type: '中标追踪', customerId: 'C04', relatedContact: '黄伟', actualContact: '', desc: '备件采购项目二次招标公告已发布，需确认客户参与意向', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '', assignee: '北京-客服2部-张明' },
+  { id: 'T41', createdAt: '2026-09-16 15:00', remind: '2026-09-16 15:30', type: '项目提醒', customerId: 'C01', relatedContact: '李国强', actualContact: '', desc: '智慧运维平台二期需求文档已提交评审，需跟进反馈', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
+  { id: 'T42', createdAt: '2026-09-16 15:40', remind: '2026-09-16 16:00', type: '会员升级', customerId: 'C03', relatedContact: '陈晓东', actualContact: '', desc: '标准会员升级高级会员报价已发送，等待客户确认', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
+  { id: 'T43', createdAt: '2026-09-16 16:10', remind: '2026-09-16 16:30', type: '中标提醒', customerId: 'C04', relatedContact: '黄伟', actualContact: '', desc: '备件采购项目二次招标公告已发布，需确认客户参与意向', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '', assignee: '北京-客服2部-张明' },
   { id: 'T44', createdAt: '2026-09-16 08:20', remind: '2026-09-16 08:50', type: '新发任务', customerId: 'C04', relatedContact: '黄伟', actualContact: '', desc: '客户账号安全审计报告已生成，需发送并确认', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
-  { id: 'T45', createdAt: '2026-09-16 08:55', remind: '2026-09-16 09:15', type: '项目追踪', customerId: 'C02', relatedContact: '刘建国', actualContact: '', desc: '华北区合规沙龙参会名单需二次确认并上报', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
-  { id: 'T46', createdAt: '2026-09-16 17:00', remind: '2026-09-16 17:30', type: '客户咨询', customerId: 'C01', relatedContact: '赵敏', actualContact: '', desc: '客户咨询批量导出与报表定制需求，需整理功能清单后回复', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' }
+  { id: 'T45', createdAt: '2026-09-16 08:55', remind: '2026-09-16 09:15', type: '项目提醒', customerId: 'C02', relatedContact: '刘建国', actualContact: '', desc: '华北区合规沙龙参会名单需二次确认并上报', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
+  { id: 'T46', createdAt: '2026-09-16 17:00', remind: '2026-09-16 17:30', type: '客户咨询', customerId: 'C01', relatedContact: '赵敏', actualContact: '', desc: '客户咨询批量导出与报表定制需求，需整理功能清单后回复', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
+  { id: 'T51', createdAt: '2026-09-16 14:40', remind: '2026-09-16 15:00', type: '功能咨询', customerId: 'C07', relatedContact: '吴敏', actualContact: '', desc: '客户咨询企情分析功能，请结合会员权益介绍会员与产品', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
+  { id: 'T52', createdAt: '2026-09-16 16:45', remind: '2026-09-16 17:00', type: '额度不足', customerId: 'C02', relatedContact: '孙倩', actualContact: '', desc: '客户查看信息额度已用尽，了解扩容方案后，向客户咨询扩容', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' },
+  { id: 'T53', createdAt: '2026-09-16 15:40', remind: '2026-09-16 16:00', type: '企业缺失', customerId: 'C04', relatedContact: '黄伟', actualContact: '', desc: '公司名称不在企业信息库中，请找部门领导增加企业工商信息', status: '未处理', result: '', contactTime: '', closedAt: '', remark: '' }
 ];
 
 /* ===== 逾期规则（与任务列表一致） =====
@@ -2042,8 +2044,8 @@ function addMinutes(s, n) {
 /* ===== Badge 语义映射（变体均来自内联库 badge.css 既有定义） ===== */
 var BADGE_VARIANTS = { 'default': 1, 'secondary': 1, 'outline': 1, 'primary': 1, 'destructive': 1, 'warning': 1, 'danger-outline': 1, 'subtle': 1, 'subtle-secondary': 1, 'subtle-outline': 1 };
 var STATUS_VARIANT = { '未处理': 'secondary', '已处理': 'outline', '已逾期': 'default' };
-/* R3 会员徽标：付费会员（高级/标准）=蓝色实心，免费会员=红色描边 */
-var MEMBER_VARIANT = { '高级会员': 'primary', '标准会员': 'primary', '免费会员': 'danger-outline' };
+/* R3 会员徽标：VIP=琥珀实心，付费会员（高级/标准）=蓝色实心，免费会员=红色描边 */
+var MEMBER_VARIANT = { 'VIP会员': 'warning', '高级会员': 'primary', '标准会员': 'primary', '免费会员': 'danger-outline' };
 
 function badgeHtml(text, variant) {
   var v = BADGE_VARIANTS[variant] ? variant : 'outline';
@@ -2060,16 +2062,20 @@ var TYPE_META = {
   '客户咨询':       { category: '系统任务', priority: '高' },
   '活动报名':       { category: '系统任务', priority: '高' },
   '会员升级':       { category: '系统任务', priority: '高' },
-  '中标追踪':       { category: '系统任务', priority: '高' },
-  '项目追踪':       { category: '系统任务', priority: '中' },
+  '中标提醒':       { category: '系统任务', priority: '高' },
+  '项目提醒':       { category: '系统任务', priority: '中' },
+  '功能咨询':       { category: '系统任务', priority: '高' },
+  '额度不足':       { category: '系统任务', priority: '高' },
+  '企业缺失':       { category: '系统任务', priority: '中' },
   '邮件关闭':       { category: '系统任务', priority: '中' },
   '功能使用超限':   { category: '系统任务', priority: '中' },
   '临时任务':       { category: '自建任务', priority: '中' },
-  '重复任务':       { category: '自建任务', priority: '中' },
+  '单次拜访':       { category: '自建任务', priority: '中' },
+  '周期回访':       { category: '自建任务', priority: '中' },
   '撞单任务':       { category: '自建任务', priority: '中' }
 };
 /* 红=注册新分/系统新分/会员升级/客户咨询/活动报名；橙=自建（单次拜访/周期回访/撞单任务）；其他=蓝 */
-var TASK_TYPE_VARIANT = { '注册新分': 'destructive', '系统新分': 'destructive', '会员升级': 'destructive', '客户咨询': 'destructive', '活动报名': 'destructive', '单次拜访': 'warning', '周期回访': 'warning', '撞单任务': 'warning' };
+var TASK_TYPE_VARIANT = { '注册新分': 'destructive', '系统新分': 'destructive', '会员升级': 'destructive', '客户咨询': 'destructive', '活动报名': 'destructive', '单次拜访': 'warning', '周期回访': 'warning', '撞单任务': 'warning', '企业缺失': 'destructive', '额度不足': 'warning' };
 function typeCell(t) {
   return badgeHtml(t.type, TASK_TYPE_VARIANT[t.type] || 'primary');
 }
