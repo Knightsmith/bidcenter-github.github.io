@@ -810,6 +810,12 @@
     }
   }
 
+  /* 部门树层级底色分层（data-level：0=大部门、1=小部门；负责人行保持白底） */
+  tbody .table-row[data-level="0"] { background-color: #E2E2EA; }
+  tbody .table-row[data-level="0"]:hover { background-color: #D8D8E2; }
+  tbody .table-row[data-level="1"] { background-color: #F4F4F7; }
+  tbody .table-row[data-level="1"]:hover { background-color: #EBEBF0; }
+
   .table-cell {
     padding: 0.75rem 1rem;
     vertical-align: middle;
@@ -1919,8 +1925,8 @@ function numCell(v) {
 }
 
 function deptRowHtml(name, level, open, m, key, noOwner) {
-  var pad = level === 0 ? '1rem' : '2.25rem';
-  return '<tr class="table-row">' +
+  var pad = level === 0 ? '1rem' : '2.75rem';
+  return '<tr class="table-row" data-level="' + level + '">' +
     '<td class="table-cell" style="padding-left:' + pad + ';' + (level === 0 ? 'font-weight:700;' : 'font-weight:600;') + '">' +
       '<button class="btn" data-variant="ghost" data-size="xs" type="button" onclick="toggleDept(\'' + key + '\')" aria-expanded="' + open + '" style="margin-right:4px;padding:0 4px;">' + (open ? '▾' : '▸') + '</button>' +
       esc(name) + (noOwner ? ' <span class="text-xs text-muted-foreground">（暂无负责人）</span>' : '') +
@@ -1934,7 +1940,7 @@ function deptRowHtml(name, level, open, m, key, noOwner) {
 }
 function ownerRowHtml(o, m) {
   return '<tr class="table-row">' +
-    '<td class="table-cell" style="padding-left:3.5rem;">' + esc(o) + '</td>' +
+    '<td class="table-cell" style="padding-left:4.5rem;">' + esc(o) + '</td>' +
     '<td class="table-cell">' + numCell(m.total) + '</td>' +
     '<td class="table-cell">' + numCell(m.done) + '</td>' +
     '<td class="table-cell">' + numCell(m.pending) + '</td>' +
