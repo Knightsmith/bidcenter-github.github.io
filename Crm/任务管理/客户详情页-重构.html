@@ -531,6 +531,22 @@ dialog.dialog[open]::backdrop { background: oklch(0 0 0 / 0.45); backdrop-filter
 .toast-close { display: flex; align-items: center; justify-content: center; width: 1.25rem; height: 1.25rem; border: none; background: transparent; color: var(--muted-foreground); cursor: pointer; flex-shrink: 0; border-radius: calc(var(--radius) * 0.5); transition: color 150ms, background 150ms; }
 .toast-close:hover { color: var(--foreground); background: var(--accent); }
 .toast.force-show { opacity: 1; transform: translateY(0); }   /* 无 popover API 的兜底显示 */
+/* ===== 新增任务：可搜索联系人组合框 ===== */
+.contact-picker { position: relative; }
+.contact-picker-menu {
+  position: absolute; z-index: 60; left: 0; right: 0; top: calc(100% + 4px);
+  max-height: 240px; overflow: auto; padding: 4px;
+  background: #fff; border: 1px solid #E5E7EB; border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+}
+.contact-picker-item {
+  display: flex; justify-content: space-between; align-items: center; gap: 8px;
+  padding: 8px 10px; border-radius: 6px; cursor: pointer; font-size: 13px;
+}
+.contact-picker-item:hover { background: #F3F4F6; }
+.contact-picker-item .cpi-name { font-weight: 600; color: #111827; white-space: nowrap; }
+.contact-picker-item .cpi-meta { color: #6B7280; white-space: nowrap; }
+.contact-picker-empty { padding: 10px; font-size: 13px; color: #6B7280; }
 </style>
 </head>
 <body>
@@ -810,8 +826,8 @@ dialog.dialog[open]::backdrop { background: oklch(0 0 0 / 0.45); backdrop-filter
       </ul>
       <div class="section-actions">
         <span class="btn btn-sm btn-default" onclick="openNewTaskDialog()">+ 新增</span>
-        <span class="btn btn-sm btn-outline" onclick="alert('全部任务')">全部任务</span>
-        <span class="btn btn-sm btn-ghost" onclick="alert('展开更多')">更多<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="margin-left:4px;"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></span>
+        <span class="btn btn-sm btn-outline" onclick="goTaskSearch()">全部任务</span>
+        <span class="btn btn-sm btn-ghost" onclick="goTaskSearch()">更多<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="margin-left:4px;"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></span>
       </div>
     </div>
     <div class="table-wrap mt-2">
@@ -1348,6 +1364,7 @@ dialog.dialog[open]::backdrop { background: oklch(0 0 0 / 0.45); backdrop-filter
         <table class="records-table">
           <thead><tr><th>相关账户</th><th>客户姓名</th><th>记录创建时间</th><th>下次联系时间</th><th>客户评级</th><th>销售人员</th><th>联系/系统记录</th><th>操作记录</th></tr></thead>
           <tbody>
+            <tr><td>15650132296（测试测试）</td><td><span class="log-zname">[待核实]&lt;同事，禁止联系&gt;</span></td><td>2026-09-16 19:32:10</td><td>2026-09-18 10:00</td><td><span class="text-destructive">AA</span></td><td>张明(客服2部)</td><td class="log-content truncate">【任务批量处理 · 联系记录】合并处理 3 条任务（注册新分 T47 · 客户咨询 T50 · 会员升级 T48）：实际联系人 李芳 13698765432 · 处理结果 下次联系 · 约定时间 2026-09-18 10:00 · 备注 已介绍会员权益与集团版多账号方案，约定二次沟通</td><td>任务批量处理</td></tr>
             <tr><td>15650132296（测试测试）</td><td><span class="log-zname">[待核实]&lt;同事，禁止联系&gt;</span></td><td>2026-07-15 10:30:00</td><td>2026-07-22</td><td><span class="text-destructive">AA</span></td><td>牟敬茹(售后部)</td><td class="log-content truncate">客户表示近期有招标计划，已发送产品资料，跟进中</td><td>正常回访</td></tr>
             <tr><td>15650132296（测试测试）</td><td><span class="log-zname">[待核实]&lt;同事，禁止联系&gt;</span></td><td>2026-07-07 11:45:33</td><td>--</td><td>--</td><td>售后部(牟敬茹)</td><td class="log-content truncate">【邮件补发】客户：大土豆有限责任公司（6296201）| 信息时间：2026-07-07 | 补发关键词邮箱组：2组</td><td>补发邮件</td></tr>
             <tr><td>15650132296（测试测试）</td><td><span class="log-zname">[待核实]&lt;同事，禁止联系&gt;</span></td><td>2026-07-03 09:50:10</td><td>2026-07-06</td><td>E</td><td>营销部经理(周海贵)</td><td class="log-content truncate">客户表示暂时不需要，已记录意向，后续跟进</td><td>正常回访</td></tr>
@@ -1477,8 +1494,14 @@ dialog.dialog[open]::backdrop { background: oklch(0 0 0 / 0.45); backdrop-filter
     <div class="dialog-body">
       <div style="display:flex;flex-direction:column;gap:1rem;">
         <div>
-          <label class="label" for="ntContact">联系人 <span class="label-hint">必填</span></label>
-          <select class="select" id="ntContact" style="width:100%;"></select>
+          <label class="label" for="ntContact">联系人 <span class="label-hint">必填 · 支持搜索</span></label>
+          <div class="contact-picker">
+            <input class="input" id="ntContact" type="text" autocomplete="off" style="width:100%;" placeholder="输入姓名 / 电话 / 会员级别 / 职务搜索…"
+                   oninput="ntFilterContacts()" onfocus="ntFilterContacts()"
+                   onblur="setTimeout(function () { var m = document.getElementById('ntContactMenu'); if (m) m.hidden = true; }, 160);">
+            <input type="hidden" id="ntContactIdx" value="">
+            <div class="contact-picker-menu" id="ntContactMenu" hidden></div>
+          </div>
           <p class="field-error" id="ntContactErr" hidden>请选择本次拜访的客户联系人</p>
         </div>
         <fieldset class="radio-group" id="ntTypeGroup">
@@ -1505,9 +1528,14 @@ dialog.dialog[open]::backdrop { background: oklch(0 0 0 / 0.45); backdrop-filter
           <p class="field-error" id="ntReasonErr" hidden>请填写联系原因</p>
         </div>
         <div>
-          <label class="label" for="ntTime">联系时间 <span class="label-hint">必填 · 精确到分钟</span></label>
-          <input class="input" id="ntTime" type="datetime-local" style="width:100%;">
+          <label class="label" for="ntTime">联系时间 <span class="label-hint">必填 · 精确到分钟 · 须晚于当前时间</span></label>
+          <input class="input" id="ntTime" type="datetime-local" style="width:100%;" min="2026-09-16T19:30">
           <p class="field-error" id="ntTimeErr" hidden>请选择联系时间</p>
+        </div>
+        <div>
+          <label class="label" for="ntRemark">备注 <span class="label-hint">必填</span></label>
+          <textarea class="input" id="ntRemark" rows="3" style="width:100%;" placeholder="请填写备注信息（必填，将写入该任务的备注字段）"></textarea>
+          <p class="field-error" id="ntRemarkErr" hidden>请填写备注</p>
         </div>
       </div>
     </div>
@@ -1581,36 +1609,40 @@ function toggleContactDetail(row) {
 /* =========================================================
    任务区域死数据（Tab 各自一套假数据，切换 Tab 即切换对应行）
    列结构与「任务列表」页对齐：提醒时间｜任务类型｜联系人｜任务说明｜任务状态｜操作
-   状态/类型徽标语义对齐「任务列表」：实心=强调（已逾期/高），浅实心=次级（待处理/中），
-   描边=弱化（待跟进/低），绿色实心=完成（已处理）
+   状态徽标语义对齐「任务列表」：实心=强调（已逾期），浅实心=次级（未处理），
+   描边=弱化（已逾期），绿色实心=完成（已处理）；
+   类型徽标按类型分组着色（红=注册新分/系统新分/会员升级/客户咨询，橙=自建，其他=蓝）
    ========================================================= */
 var TASK_COMPANY = '大土豆有限责任公司';
 var TASK_ASSIGNEE = '北京-客服2部-张明';
-var TASK_STATUS_BADGE = { '待处理': 'badge-secondary', '待跟进': 'badge-outline', '已逾期': 'badge-danger', '已处理': 'badge-success' };
-var TASK_TYPE_PRIORITY = { '活动报名': '高', '会员升级': '高', '中标追踪': '高', '新发任务': '中', '项目追踪': '中', '邮件关闭': '中', '功能使用超限': '中', '临时任务': '中', '重复任务': '中', '撞单任务': '中', '单次拜访': '中', '周期回访': '中' };
-var TASK_PRIORITY_BADGE = { '高': 'badge-danger', '中': 'badge-default', '低': 'badge-secondary' };
+var TASK_STATUS_BADGE = { '未处理': 'badge-secondary', '已逾期': 'badge-danger', '已处理': 'badge-success' };
+/* 类型徽标按类型分组着色：红=注册新分/系统新分/会员升级/客户咨询/活动报名；橙=自建（单次拜访/周期回访/撞单任务）；其他=蓝 */
+var TASK_TYPE_BADGE = {
+  '注册新分': 'badge-danger', '系统新分': 'badge-danger', '会员升级': 'badge-danger', '客户咨询': 'badge-danger', '活动报名': 'badge-danger',
+  '单次拜访': 'badge-warning', '周期回访': 'badge-warning', '撞单任务': 'badge-warning'
+};
 
 var TASK_ROWS = {
   today: [
     { id: 'T60', remind: '2026-09-16 09:30', after18: false, type: '活动报名', contact: '张明', phone: '13912345678',
-      desc: '邀请参加9月22日招投标合规沙龙，确认参会人数与名单', status: '待处理',
+      desc: '邀请参加9月22日招投标合规沙龙，确认参会人数与名单', status: '未处理',
       createdAt: '2026-09-16 09:10', closedAt: '', remark: '',
       history: [
-        { time: '2026-09-16 09:10', title: '创建任务', desc: '任务创建并进入待处理队列', active: false },
+        { time: '2026-09-16 09:10', title: '创建任务', desc: '任务创建并进入未处理队列', active: false },
         { time: '2026-09-16 09:25', title: '流转至 张明', desc: '任务当前由其响应处理', active: true }
       ] },
     { id: 'T61', remind: '2026-09-16 19:20', after18: true, type: '邮件关闭', contact: '李芳', phone: '13698765432',
-      desc: '客户邮件反馈会员权益页面打不开，需核查后回复', status: '待处理',
+      desc: '客户邮件反馈会员权益页面打不开，需核查后回复', status: '未处理',
       createdAt: '2026-09-16 19:15', closedAt: '', remark: '',
       history: [
-        { time: '2026-09-16 19:15', title: '创建任务', desc: '任务创建并进入待处理队列', active: false },
+        { time: '2026-09-16 19:15', title: '创建任务', desc: '任务创建并进入未处理队列', active: false },
         { time: '2026-09-16 19:30', title: '流转至 张明', desc: '任务当前由其响应处理', active: true }
       ] },
     { id: 'T62', remind: '2026-09-16 14:00', after18: false, type: '会员升级', contact: '陈婷', phone: '18945671234',
       desc: '企业会员升级咨询已电话回访确认，任务完成', status: '已处理',
       createdAt: '2026-09-16 13:45', closedAt: '2026-09-16 15:20', remark: '已电话回访，客户确认升级意向，转商机跟进',
       history: [
-        { time: '2026-09-16 13:45', title: '创建任务', desc: '任务创建并进入待处理队列', active: false },
+        { time: '2026-09-16 13:45', title: '创建任务', desc: '任务创建并进入未处理队列', active: false },
         { time: '2026-09-16 14:00', title: '流转至 张明', desc: '任务当前由其响应处理', active: true },
         { time: '2026-09-16 15:20', title: '完成处理', desc: '已电话回访，客户确认升级意向，转商机跟进', active: true }
       ] }
@@ -1620,7 +1652,7 @@ var TASK_ROWS = {
       desc: '邀请参加电力设计行业闭门交流会，需确认报名信息', status: '已逾期',
       createdAt: '2026-09-15 17:45', closedAt: '', remark: '',
       history: [
-        { time: '2026-09-15 17:45', title: '创建任务', desc: '任务创建并进入待处理队列', active: false },
+        { time: '2026-09-15 17:45', title: '创建任务', desc: '任务创建并进入未处理队列', active: false },
         { time: '2026-09-15 18:00', title: '流转至 张明', desc: '任务当前由其响应处理', active: true },
         { time: '2026-09-16 00:00', title: '任务已逾期', desc: '超过截止时间（当天 24:00）仍未处理', active: true }
       ] },
@@ -1628,33 +1660,54 @@ var TASK_ROWS = {
       desc: '与华东二部撞单，需确认客户归属并回填归属说明', status: '已逾期',
       createdAt: '2026-09-15 10:50', closedAt: '', remark: '',
       history: [
-        { time: '2026-09-15 10:50', title: '创建任务', desc: '任务创建并进入待处理队列', active: false },
+        { time: '2026-09-15 10:50', title: '创建任务', desc: '任务创建并进入未处理队列', active: false },
         { time: '2026-09-15 11:05', title: '流转至 张明', desc: '任务当前由其响应处理', active: true },
         { time: '2026-09-16 00:00', title: '任务已逾期', desc: '超过截止时间（当天 24:00）仍未处理', active: true }
       ] }
   ],
   plan: [
-    { id: 'T65', remind: '2026-09-17 10:30', after18: false, type: '新发任务', contact: '王磊', phone: '15011513872',
-      desc: '新注册子账号待认证，需指导完成企业实名认证', status: '待处理',
+    { id: 'T65', remind: '2026-09-17 10:30', after18: false, type: '注册新分', contact: '王磊', phone: '15011513872',
+      desc: '新注册子账号待认证，需指导完成企业实名认证', status: '未处理',
       createdAt: '2026-09-16 16:40', closedAt: '', remark: '',
       history: [
-        { time: '2026-09-16 16:40', title: '创建任务', desc: '任务创建并进入待处理队列', active: false },
+        { time: '2026-09-16 16:40', title: '创建任务', desc: '任务创建并进入未处理队列', active: false },
         { time: '2026-09-16 16:55', title: '流转至 张明', desc: '任务当前由其响应处理', active: true }
       ] },
     { id: 'T66', remind: '2026-09-18 09:30', after18: false, type: '中标追踪', contact: '李芳', phone: '13698765432',
-      desc: '备件采购项目开标在即，需跟踪竞争对手报价动态', status: '待处理',
+      desc: '备件采购项目开标在即，需跟踪竞争对手报价动态', status: '未处理',
       createdAt: '2026-09-16 11:20', closedAt: '', remark: '',
       history: [
-        { time: '2026-09-16 11:20', title: '创建任务', desc: '任务创建并进入待处理队列', active: false },
+        { time: '2026-09-16 11:20', title: '创建任务', desc: '任务创建并进入未处理队列', active: false },
         { time: '2026-09-16 11:35', title: '流转至 张明', desc: '任务当前由其响应处理', active: true }
       ] },
     { id: 'T67', remind: '2026-09-19 15:00', after18: false, type: '临时任务', contact: '张明', phone: '13912345678',
-      desc: '按客户要求整理三季度项目台账并核对合同金额', status: '待跟进',
+      desc: '按客户要求整理三季度项目台账并核对合同金额', status: '未处理',
       createdAt: '2026-09-16 10:00', closedAt: '', remark: '',
       history: [
-        { time: '2026-09-16 10:00', title: '创建任务', desc: '任务创建并进入待处理队列', active: false },
+        { time: '2026-09-16 10:00', title: '创建任务', desc: '任务创建并进入未处理队列', active: false },
         { time: '2026-09-16 10:15', title: '流转至 张明', desc: '任务当前由其响应处理', active: true },
         { time: '2026-09-16 11:00', title: '首次联系客户', desc: '处理结果为「下次联系」，约定时间 2026-09-19 15:00', active: true }
+      ] },
+    { id: 'T68', remind: '2026-09-20 10:00', after18: false, type: '客户咨询', contact: '李芳', phone: '13698765432',
+      desc: '客户咨询集团版多账号管理功能，需准备方案说明', status: '未处理',
+      createdAt: '2026-09-16 09:40', closedAt: '', remark: '',
+      history: [
+        { time: '2026-09-16 09:40', title: '创建任务', desc: '任务创建并进入未处理队列', active: false },
+        { time: '2026-09-16 10:05', title: '流转至 张明', desc: '任务当前由其响应处理', active: true }
+      ] },
+    { id: 'T69', remind: '2026-09-21 15:00', after18: false, type: '系统新分', contact: '王磊', phone: '15011513872',
+      desc: '系统分配新注册企业客户，需完成首次建联并核实身份', status: '未处理',
+      createdAt: '2026-09-16 11:10', closedAt: '', remark: '',
+      history: [
+        { time: '2026-09-16 11:10', title: '创建任务', desc: '系统自动分配并进入未处理队列', active: false },
+        { time: '2026-09-16 11:25', title: '流转至 张明', desc: '任务当前由其响应处理', active: true }
+      ] },
+    { id: 'T70', remind: '2026-09-18 14:00', after18: false, type: '单次拜访', contact: '李芳', phone: '13698765432',
+      desc: '季度例行上门拜访，回访系统使用情况并收集改进建议', status: '未处理',
+      createdAt: '2026-09-16 11:40', closedAt: '', remark: '',
+      history: [
+        { time: '2026-09-16 11:40', title: '创建任务', desc: '任务创建并进入未处理队列', active: false },
+        { time: '2026-09-16 12:00', title: '流转至 张明', desc: '任务当前由其响应处理', active: true }
       ] }
   ]
 };
@@ -1676,7 +1729,7 @@ function renderTaskRows(key) {
   }
   var html = '';
   rows.forEach(function (t) {
-    var typeCls = TASK_PRIORITY_BADGE[TASK_TYPE_PRIORITY[t.type]] || 'badge-outline';
+    var typeCls = TASK_TYPE_BADGE[t.type] || 'badge-default';
     var statusCls = TASK_STATUS_BADGE[t.status] || 'badge-outline';
     var typeCell = '<span class="badge badge-sm ' + typeCls + '">' + escTask(t.type) + '</span>';
     if (t.periodic) typeCell += ' <span class="badge badge-sm badge-outline">周期</span>';
@@ -1743,8 +1796,8 @@ function showTaskDetail(taskId) {
       briefItemTask('任务状态', t.status) +
       briefItemTask('完成时间', t.closedAt || '-') +
       briefItemTask('当前处理人', TASK_ASSIGNEE) +
-      briefItemTask('完成备注', t.remark || '-', true) +
       briefItemTask('任务说明', t.desc, true) +
+      briefItemTask('完成备注', t.remark || '-', true) +
     '</div>' +
     '<div style="margin-top:1.25rem;">' +
       '<p style="margin:0 0 0.75rem 0;font-weight:600;">流转记录</p>' +
@@ -1760,23 +1813,48 @@ function closeTaskDetail() { document.getElementById('taskDetailDialog').close()
 var NT_TODAY = '2026-09-16';          /* 页面死数据日期基准（与任务列表页 TODAY 一致） */
 var NT_NOW = '2026-09-16 19:30';      /* 演示“当前时间” */
 var NT_CONTACTS = [
-  { name: '张明', phone: '13912345678', title: '采购经理' },
-  { name: '李芳', phone: '13698765432', title: '财务总监' },
-  { name: '王磊', phone: '15011513872', title: '项目经理' },
-  { name: '陈婷', phone: '18945671234', title: '招标专员' },
-  { name: '[待核实]<同事，禁止联系>', phone: '15650132296', title: '主账号' }
+  { name: '张明', phone: '13912345678', title: '采购经理', level: '高级会员' },
+  { name: '李芳', phone: '13698765432', title: '财务总监', level: '高级会员' },
+  { name: '王磊', phone: '15011513872', title: '项目经理', level: '标准会员' },
+  { name: '陈婷', phone: '18945671234', title: '招标专员', level: '免费会员' },
+  { name: '[待核实]<同事，禁止联系>', phone: '15650132296', title: '主账号', level: '高级会员' }
 ];
 var NT_SEQ = 1;
 
-function fillNtContacts() {
-  /* option 的 value 存联系人下标，避免特殊字符（如 [待核实]<…>）进 value */
-  var sel = document.getElementById('ntContact');
-  var html = '<option value="">请选择联系人</option>';
+/* 「全部任务 / 更多」→ 跳任务列表页并按公司名称检索（需求 2.5） */
+function goTaskSearch() {
+  window.location.href = '任务列表.html?customer=' + encodeURIComponent(TASK_COMPANY);
+}
+
+/* ===== 可搜索联系人组合框（输入过滤姓名/电话/会员级别/职务，选中写入隐藏下标） ===== */
+function ntFilterContacts() {
+  var input = document.getElementById('ntContact');
+  var q = input.value.trim().toLowerCase();
+  var menu = document.getElementById('ntContactMenu');
+  var html = '';
   NT_CONTACTS.forEach(function (c, i) {
-    html += '<option value="' + i + '">' + escTask(c.name) + ' ' + escTask(c.phone) + '（' + escTask(c.title) + '）</option>';
+    var hay = (c.name + ' ' + c.phone + ' ' + c.level + ' ' + c.title).toLowerCase();
+    if (q && hay.indexOf(q) < 0) return;
+    html += '<div class="contact-picker-item" data-idx="' + i + '" onmousedown="ntPickContact(' + i + ')">' +
+      '<span class="cpi-name">' + escTask(c.name) + '</span>' +
+      '<span class="cpi-meta">' + escTask(c.phone) + ' · ' + escTask(c.level) + '</span>' +
+      '</div>';
   });
-  sel.innerHTML = html;
-  sel.value = '';
+  menu.innerHTML = html || '<div class="contact-picker-empty">无匹配联系人</div>';
+  menu.hidden = false;
+}
+function ntPickContact(i) {
+  var c = NT_CONTACTS[i];
+  document.getElementById('ntContact').value = c.name + ' ' + c.phone + '（' + c.level + '）';
+  document.getElementById('ntContactIdx').value = i;
+  document.getElementById('ntContactMenu').hidden = true;
+  ntShowError('ntContactErr', false, 'ntContact');
+}
+function fillNtContacts() {
+  /* 打开弹窗时清空组合框选择状态 */
+  document.getElementById('ntContact').value = '';
+  document.getElementById('ntContactIdx').value = '';
+  document.getElementById('ntContactMenu').hidden = true;
 }
 
 function openNewTaskDialog() {
@@ -1784,8 +1862,10 @@ function openNewTaskDialog() {
   document.getElementById('ntTypeOnce').checked = true;   /* 默认单次拜访 */
   document.getElementById('ntReason').value = '';
   document.getElementById('ntTime').value = '';
-  ['ntContactErr', 'ntReasonErr', 'ntTimeErr'].forEach(function (id) { document.getElementById(id).hidden = true; });
-  ['ntContact', 'ntReason', 'ntTime'].forEach(function (id) { document.getElementById(id).removeAttribute('aria-invalid'); });
+  document.getElementById('ntRemark').value = '';
+  document.getElementById('ntTimeErr').textContent = '请选择联系时间';
+  ['ntContactErr', 'ntReasonErr', 'ntTimeErr', 'ntRemarkErr'].forEach(function (id) { document.getElementById(id).hidden = true; });
+  ['ntContact', 'ntReason', 'ntTime', 'ntRemark'].forEach(function (id) { document.getElementById(id).removeAttribute('aria-invalid'); });
   var dlg = document.getElementById('newTaskDialog');
   if (!dlg.open) dlg.showModal();
 }
@@ -1798,25 +1878,32 @@ function ntShowError(errId, on, fieldId) {
 }
 
 function submitNewTask() {
-  var sel = document.getElementById('ntContact');
+  var contactIdx = document.getElementById('ntContactIdx').value;   /* 组合框选中的联系人下标 */
   var reason = document.getElementById('ntReason').value.trim();
+  var remark = document.getElementById('ntRemark').value.trim();
   var time = document.getElementById('ntTime').value;   /* 2026-09-17T10:30（精确到分钟） */
   var typeEl = document.querySelector('input[name="ntType"]:checked');
   var ok = true;
-  if (sel.value === '') { ntShowError('ntContactErr', true, 'ntContact'); ok = false; } else { ntShowError('ntContactErr', false, 'ntContact'); }
+  var timeErr = document.getElementById('ntTimeErr');
+  if (contactIdx === '') { ntShowError('ntContactErr', true, 'ntContact'); ok = false; } else { ntShowError('ntContactErr', false, 'ntContact'); }
   if (!reason) { ntShowError('ntReasonErr', true, 'ntReason'); ok = false; } else { ntShowError('ntReasonErr', false, 'ntReason'); }
-  if (!time) { ntShowError('ntTimeErr', true, 'ntTime'); ok = false; } else { ntShowError('ntTimeErr', false, 'ntTime'); }
+  if (!remark) { ntShowError('ntRemarkErr', true, 'ntRemark'); ok = false; } else { ntShowError('ntRemarkErr', false, 'ntRemark'); }
+  if (!time) { timeErr.textContent = '请选择联系时间'; ntShowError('ntTimeErr', true, 'ntTime'); ok = false; }
+  else if (time.replace('T', ' ') <= NT_NOW) {   /* 需求 1.4：联系时间必须晚于当前时间 */
+    timeErr.textContent = '联系时间必须晚于当前时间（演示当前时间 ' + NT_NOW + '）';
+    ntShowError('ntTimeErr', true, 'ntTime'); ok = false;
+  } else { timeErr.textContent = '请选择联系时间'; ntShowError('ntTimeErr', false, 'ntTime'); }
   if (!ok) return;
 
   var type = typeEl ? typeEl.value : '单次拜访';
-  var c = NT_CONTACTS[parseInt(sel.value, 10)];
+  var c = NT_CONTACTS[parseInt(contactIdx, 10)];
   var remind = time.slice(0, 16).replace('T', ' ');     /* 统一为 YYYY-MM-DD HH:mm */
   var date = remind.slice(0, 10);
   var hour = parseInt(remind.slice(11, 13), 10);
   var key, status;
   if (date < NT_TODAY) { key = 'overdue'; status = '已逾期'; }
-  else if (date === NT_TODAY) { key = 'today'; status = '待处理'; }
-  else { key = 'plan'; status = '待处理'; }
+  else if (date === NT_TODAY) { key = 'today'; status = '未处理'; }
+  else { key = 'plan'; status = '未处理'; }
   var row = {
     id: 'NT' + (NT_SEQ++),
     remind: remind,
@@ -1829,9 +1916,9 @@ function submitNewTask() {
     periodic: type === '周期回访',                        /* 数据标记：周期性任务 */
     createdAt: NT_NOW,
     closedAt: '',
-    remark: '',
+    remark: remark,
     history: [
-      { time: NT_NOW, title: '创建任务', desc: '任务创建并进入待处理队列', active: false },
+      { time: NT_NOW, title: '创建任务', desc: '任务创建并进入未处理队列', active: false },
       { time: NT_NOW, title: '流转至 张明', desc: '任务当前由其响应处理', active: true }
     ]
   };
