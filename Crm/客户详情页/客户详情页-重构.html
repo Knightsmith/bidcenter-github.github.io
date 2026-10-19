@@ -403,6 +403,59 @@ textarea.input { height: auto; padding: 8px 12px; resize: none; line-height: 1.5
   .account-card .card-header { flex-wrap: wrap; gap: 4px; }
   .card-contact-row .contact-item { margin-right: 12px; font-size: 12px; }
 }
+
+/* ==== 客户回访日程（同首页"库中联系人回访日程"效果） ==== */
+.lv-sched-card { background: #fff; border: 1px solid #edf1f6; border-radius: 8px; box-shadow: 0 2px 8px rgba(31,56,88,.06); padding: 14px 20px 16px; margin-top: 14px; }
+.lv-sched-tit { display: flex; align-items: center; font-size: 16px; font-weight: bold; color: #222; line-height: 1.3; padding-left: 10px; border-left: 4px solid #3497da; margin-bottom: 12px; }
+.lv-sched-tit .sub_tit { font-size: 12px; font-weight: normal; color: #999; margin-left: 10px; }
+.lv-sched-tit a.lv-sched-btn { margin-left: auto; display: inline-block; background: #3497da; color: #fff; font-size: 13px; font-weight: normal; text-decoration: none; padding: 4px 16px; border-radius: 4px; line-height: 1.6; transition: background .2s ease; }
+.lv-sched-tit a.lv-sched-btn:hover { background: #2284c4; }
+/* 每日回访数量横条（9天占位数据，含周六日） */
+.lv-sched-bar { display: flex; align-items: center; flex-wrap: wrap; border: 1px solid #e3e8ef; border-radius: 4px; background: #f8fafc; padding: 7px 10px; margin-bottom: 12px; font-size: 12px; }
+.lv-sched-bar .bar-label { font-weight: bold; color: #333; padding-right: 12px; border-right: 1px solid #e3e8ef; margin-right: 4px; }
+.lv-sched-bar .bar-item { color: #555; padding: 0 10px; border-right: 1px solid #edf1f6; }
+.lv-sched-bar .bar-item b { color: #3497da; font-weight: bold; margin-left: 2px; }
+.lv-sched-bar .bar-item.is-rest b { color: #1fa35a; }
+.lv-sched-bar .bar-item.is-hot b { color: #e8443a; }
+.lv-sched-bar .bar-tip { color: #e8443a; padding-left: 10px; }
+.lv_table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.lv_table th, .lv_table td { font-size: 13px; text-align: center; padding: 8px 4px; border-bottom: 1px solid #f0f3f7; color: #444; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; box-sizing: border-box; }
+.lv_table thead th { font-size: 12px; font-weight: bold; color: #6b7a90; background: #f7f9fc; border-bottom: none; letter-spacing: 0.5px; }
+.lv_table tbody tr:last-child td { border-bottom: none; }
+.lv_table tbody tr:hover td { background: #f0f7ff; }
+.lv_table .lv_date { text-align: left; padding-left: 6px; }
+.lv_table .lv_date b { display: block; font-size: 13px; color: #333; font-weight: bold; line-height: 1.3; }
+.lv_table .lv_date i { font-style: normal; font-size: 12px; color: #6b7a90; }
+.lv_table .lv_date em { font-style: normal; display: inline-block; font-size: 10px; background: #3497da; color: #fff; padding: 0 5px; border-radius: 3px; margin-left: 4px; line-height: 15px; vertical-align: 1px; }
+.lv_table .lv_date em.em-gray { background: #b6bfca; }
+.lv_table tr.is-today .lv_date b { color: #3497da; font-weight: bold; }
+.lv_table thead th:first-child { color: #333; font-weight: bold; background: #e9edf3; }
+.lv_table tr.is-weekend td { background: #f1faf4; }
+.lv_table tr.is-weekend:hover td { background: #e3f5ea; }
+.lv_table tr.is-weekend .lv_date b { color: #1fa35a; font-weight: bold; }
+.lv_table tr.is-weekend .lv_date i { color: #1fa35a; font-weight: bold; }
+.lv_table td.lv_total { font-weight: bold; color: #333; }
+.lv_table th.lv-AA,
+.lv_table th.lv-A,
+.lv_table th.lv-B,
+.lv_table th.lv-C,
+.lv_table th.lv-D,
+.lv_table th.lv-E { color: #8d96a5; background: #f4f6f9; }
+.lv_table td.lv-AA,
+.lv_table td.lv-A,
+.lv_table td.lv-B,
+.lv_table td.lv-C,
+.lv_table td.lv-D,
+.lv_table td.lv-E { color: #333; font-weight: normal; }
+/* 当前所选级别列强化（随下拉联动） */
+.lv_table th.lv-col-active { background: #3497da; color: #fff; }
+.lv_table td.lv-col-active { background: #eaf5fd; color: #1f6fb2; font-weight: bold; }
+.lv_table td.is-zero { color: #98a2b3; font-weight: normal; }
+/* 当天合计超过40标红 */
+.lv_table td.lv_total.is-hot { color: #e8443a; }
+/* 近14日：第8~14行默认隐藏，点击右侧按钮展开 */
+.lv_table tr.lv-extra { display: none; }
+.lv_table tr.lv-extra.lv-show { display: table-row; }
 </style>
 </head>
 <body>
@@ -1174,12 +1227,196 @@ textarea.input { height: auto; padding: 8px 12px; resize: none; line-height: 1.5
         <textarea class="input" placeholder="填写通话记录" style="height:60px; width:100%;"></textarea>
       </div>
       <div class="flex items-center gap-2 flex-wrap mt-2">
-        <select class="select" style="width:160px;"><option value="">选择客户评级</option><option>AA级（待打款）</option><option>A级（已明确办理）</option><option>B级（计划合作）</option><option>C级（有考虑需挖掘）</option><option>D级（意向不明确）</option><option>E级（明确不合作）</option></select>
+        <select class="select" id="lv_level_sel" style="width:160px;"><option value="">选择客户评级</option><option value="AA">AA级（待打款）</option><option value="A">A级（已明确办理）</option><option value="B">B级（计划合作）</option><option value="C">C级（有考虑需挖掘）</option><option value="D">D级（意向不明确）</option><option value="E">E级（明确不合作）</option></select>
         <select class="select" style="width:160px;"><option value="">选择服务类型</option><option>正常回访</option><option>招标信息查询</option><option>招标信息关注</option><option>特约项目查询</option><option>招标数据导出</option></select>
         <input type="text" class="input" placeholder="回访时间" onclick="alert('选择日期')" readonly style="width:140px;">
         <span class="btn btn-sm btn-pink" onclick="alert('提交成功')">提交</span>
         <span class="btn btn-sm btn-outline" onclick="alert('取消')">取消</span>
       </div>
+    </div>
+
+    <!-- 客户回访日程：默认近7天，右侧按钮展开近14日（同首页效果） -->
+    <div class="lv-sched-card">
+      <div class="lv-sched-tit">客户回访日程：<span class="sub_tit">按客户等级分类日内</span><a href="javascript:void(0);" id="lv_sched_btn" class="lv-sched-btn">展开近9天</a></div>
+      <!-- 每日联系人数量横条：假数据占位，9天含周六日（周末绿色，与红色"过多"区分），标红演示"过多" -->
+      <div class="lv-sched-bar">
+        <span class="bar-label">客户回访日程</span>
+        <span class="bar-item is-hot">今天: <b>42</b></span>
+        <span class="bar-item">1天后: <b>38</b></span>
+        <span class="bar-item">2天后: <b>37</b></span>
+        <span class="bar-item">3天后: <b>41</b></span>
+        <span class="bar-item">4天后: <b>30</b></span>
+        <span class="bar-item is-rest">5天后: <b>12</b></span>
+        <span class="bar-item is-rest">6天后: <b>6</b></span>
+        <span class="bar-item">7天后: <b>36</b></span>
+        <span class="bar-item">8天后: <b>34</b></span>
+        <span class="bar-tip">*红色为当天回访数量过多</span>
+      </div>
+      <table class="lv_table" id="lv_sched_table"><colgroup>
+          <col style="width: 22%;">
+          <col style="width: 10%;">
+          <col style="width: 10%;">
+          <col style="width: 10%;">
+          <col style="width: 10%;">
+          <col style="width: 10%;">
+          <col style="width: 10%;">
+          <col style="width: 18%;">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>日期</th>
+            <th class="lv-AA">AA级</th>
+            <th class="lv-A">A级</th>
+            <th class="lv-B">B级</th>
+            <th class="lv-C">C级</th>
+            <th class="lv-D">D级</th>
+            <th class="lv-E">E级</th>
+            <th>合计</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="is-today">
+            <td class="lv_date"><b>10-19</b><i>周一</i><em>今天</em></td>
+            <td class="lv-AA">2</td>
+            <td class="lv-A">5</td>
+            <td class="lv-B">8</td>
+            <td class="lv-C">12</td>
+            <td class="lv-D">9</td>
+            <td class="lv-E">6</td>
+            <td class="lv_total is-hot">42</td>
+          </tr>
+          <tr>
+            <td class="lv_date"><b>10-20</b><i>周二</i><em class="em-gray">明天</em></td>
+            <td class="lv-AA">1</td>
+            <td class="lv-A">4</td>
+            <td class="lv-B">9</td>
+            <td class="lv-C">11</td>
+            <td class="lv-D">8</td>
+            <td class="lv-E">5</td>
+            <td class="lv_total">38</td>
+          </tr>
+          <tr>
+            <td class="lv_date"><b>10-21</b><i>周三</i></td>
+            <td class="lv-AA">3</td>
+            <td class="lv-A">6</td>
+            <td class="lv-B">7</td>
+            <td class="lv-C">10</td>
+            <td class="lv-D">7</td>
+            <td class="lv-E">4</td>
+            <td class="lv_total">37</td>
+          </tr>
+          <tr>
+            <td class="lv_date"><b>10-22</b><i>周四</i></td>
+            <td class="lv-AA">2</td>
+            <td class="lv-A">3</td>
+            <td class="lv-B">8</td>
+            <td class="lv-C">13</td>
+            <td class="lv-D">10</td>
+            <td class="lv-E">5</td>
+            <td class="lv_total is-hot">41</td>
+          </tr>
+          <tr>
+            <td class="lv_date"><b>10-23</b><i>周五</i></td>
+            <td class="lv-AA">1</td>
+            <td class="lv-A">5</td>
+            <td class="lv-B">6</td>
+            <td class="lv-C">9</td>
+            <td class="lv-D">6</td>
+            <td class="lv-E">3</td>
+            <td class="lv_total">30</td>
+          </tr>
+          <tr class="is-weekend">
+            <td class="lv_date"><b>10-24</b><i>周六</i></td>
+            <td class="lv-AA is-zero">0</td>
+            <td class="lv-A">1</td>
+            <td class="lv-B">2</td>
+            <td class="lv-C">4</td>
+            <td class="lv-D">3</td>
+            <td class="lv-E">2</td>
+            <td class="lv_total">12</td>
+          </tr>
+          <tr class="is-weekend">
+            <td class="lv_date"><b>10-25</b><i>周日</i></td>
+            <td class="lv-AA is-zero">0</td>
+            <td class="lv-A is-zero">0</td>
+            <td class="lv-B">1</td>
+            <td class="lv-C">2</td>
+            <td class="lv-D">2</td>
+            <td class="lv-E">1</td>
+            <td class="lv_total">6</td>
+          </tr>
+          <tr class="lv-extra">
+            <td class="lv_date"><b>10-26</b><i>周一</i></td>
+            <td class="lv-AA">2</td>
+            <td class="lv-A">4</td>
+            <td class="lv-B">7</td>
+            <td class="lv-C">10</td>
+            <td class="lv-D">8</td>
+            <td class="lv-E">5</td>
+            <td class="lv_total">36</td>
+          </tr>
+          <tr class="lv-extra">
+            <td class="lv_date"><b>10-27</b><i>周二</i></td>
+            <td class="lv-AA">1</td>
+            <td class="lv-A">5</td>
+            <td class="lv-B">8</td>
+            <td class="lv-C">9</td>
+            <td class="lv-D">7</td>
+            <td class="lv-E">4</td>
+            <td class="lv_total">34</td>
+          </tr>
+          <tr class="lv-extra">
+            <td class="lv_date"><b>10-28</b><i>周三</i></td>
+            <td class="lv-AA">3</td>
+            <td class="lv-A">4</td>
+            <td class="lv-B">6</td>
+            <td class="lv-C">11</td>
+            <td class="lv-D">6</td>
+            <td class="lv-E">3</td>
+            <td class="lv_total">33</td>
+          </tr>
+          <tr class="lv-extra">
+            <td class="lv_date"><b>10-29</b><i>周四</i></td>
+            <td class="lv-AA">2</td>
+            <td class="lv-A">6</td>
+            <td class="lv-B">9</td>
+            <td class="lv-C">12</td>
+            <td class="lv-D">9</td>
+            <td class="lv-E">5</td>
+            <td class="lv_total is-hot">43</td>
+          </tr>
+          <tr class="lv-extra">
+            <td class="lv_date"><b>10-30</b><i>周五</i></td>
+            <td class="lv-AA">1</td>
+            <td class="lv-A">3</td>
+            <td class="lv-B">5</td>
+            <td class="lv-C">8</td>
+            <td class="lv-D">5</td>
+            <td class="lv-E">2</td>
+            <td class="lv_total">24</td>
+          </tr>
+          <tr class="lv-extra is-weekend">
+            <td class="lv_date"><b>10-31</b><i>周六</i></td>
+            <td class="lv-AA is-zero">0</td>
+            <td class="lv-A">1</td>
+            <td class="lv-B">2</td>
+            <td class="lv-C">3</td>
+            <td class="lv-D">2</td>
+            <td class="lv-E">1</td>
+            <td class="lv_total">9</td>
+          </tr>
+          <tr class="lv-extra is-weekend">
+            <td class="lv_date"><b>11-01</b><i>周日</i></td>
+            <td class="lv-AA is-zero">0</td>
+            <td class="lv-A is-zero">0</td>
+            <td class="lv-B">1</td>
+            <td class="lv-C">2</td>
+            <td class="lv-D">1</td>
+            <td class="lv-E">1</td>
+            <td class="lv_total">5</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
     <!-- 记录 Tab -->
@@ -1365,6 +1602,71 @@ function toggleContactDetail(row) {
     }
   }
 }
+
+// ===== 客户回访日程：展开＝近9天（含周六日）；收起＝按所选评级工作日天数，未选级别全部收起 =====
+// 口径：展开按自然日计数（9行含周六日）；收起按工作日计数（跳过周六日定位截止行）
+(function () {
+  var lvBtn = document.getElementById('lv_sched_btn');
+  var lvTbl = document.getElementById('lv_sched_table');
+  var lvSel = document.getElementById('lv_level_sel');
+  if (!lvBtn || !lvTbl || !lvSel) { return; }
+  // 评级 → 工作日天数
+  var LV_DAYS = { 'AA': 1, 'A': 2, 'B': 3, 'C': 5, 'D': 7, 'E': 7 };
+  var lvOpened = false;
+  function renderSched() {
+    var rows = lvTbl.tBodies[0].rows;
+    var lv = lvSel.value;
+    var days;
+    if (lvOpened) {
+      days = 9; // 展开：近9天（含周六日，即共9行）
+    } else if (LV_DAYS.hasOwnProperty(lv)) {
+      days = LV_DAYS[lv]; // 收起且已选级别：按级别工作日天数
+    } else {
+      days = 0; // 收起且未选级别：全部收起
+    }
+    // 定位截止行：展开按自然日数满9行（含周六日）；收起跳过周六日只数工作日
+    var countWorkdayOnly = !lvOpened;
+    var endIdx = -1;
+    var count = 0;
+    for (var i = 0; i < rows.length; i++) {
+      var isWeekend = (' ' + rows[i].className + ' ').indexOf(' is-weekend ') > -1;
+      if (countWorkdayOnly && isWeekend) { continue; }
+      count++;
+      if (count > days) { break; }
+      endIdx = i;
+    }
+    for (var j = 0; j < rows.length; j++) {
+      rows[j].style.display = j <= endIdx ? 'table-row' : 'none';
+    }
+  }
+  lvBtn.onclick = function () {
+    lvOpened = !lvOpened;
+    lvBtn.textContent = lvOpened ? '收起' : '展开近9天';
+    renderSched();
+    return false;
+  };
+  // 当前所选级别列强化：高亮 lv-AA / lv-A ... 对应的整列
+  function applyColActive(lv) {
+    var all = lvTbl.querySelectorAll('th, td');
+    for (var i = 0; i < all.length; i++) {
+      var cls = ' ' + all[i].className + ' ';
+      var on = lv && cls.indexOf(' lv-' + lv + ' ') > -1;
+      if (on) {
+        if (cls.indexOf(' lv-col-active ') < 0) { all[i].className += ' lv-col-active'; }
+      } else {
+        all[i].className = cls.replace(/ lv-col-active /g, ' ').replace(/^\s+|\s+$/g, '');
+      }
+    }
+  }
+  lvSel.onchange = function () {
+    lvOpened = false; // 切级别即回收起态，按级别天数展示
+    lvBtn.textContent = '展开近9天';
+    renderSched();
+    applyColActive(lvSel.value);
+  };
+  renderSched(); // 初始：未选级别 → 全部收起
+  applyColActive(lvSel.value); // 初始：未选级别 → 无列强化
+})();
 </script>
 
 </body>
