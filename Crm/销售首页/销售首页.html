@@ -40,6 +40,43 @@ a { text-decoration: none; }
 .sales_nav .sales_navL li .nav_news { margin-left: 3px; }
 .sales_nav .sales_navL li .sales_current { background: #fff; border-radius: 10px; color: #333; padding: 0 5px; }
 .sales_nav .sales_navR li { float: left; margin: 0 13px; }
+/* 右上角业绩速览条：白底圆角条嵌在蓝导航上，标签+数值横排一行；差/领先值用彩色文字区分语义 */
+.sales_nav .sales_navR .nav_yeji {
+    display: flex; align-items: center; height: 40px; margin-top: 15px;
+    padding: 0 6px;
+    background: #fff;
+    border: 1px solid #e8edf3;
+    border-radius: 20px;
+    box-shadow: 0 4px 14px rgba(2, 44, 84, 0.18);
+}
+.sales_nav .sales_navR .ny_cell {
+    position: relative;
+    flex: 0 0 auto;
+    height: 100%;
+    display: flex; flex-direction: row; align-items: center;
+    gap: 6px;
+    padding: 0 10px;
+}
+.sales_nav .sales_navR .ny_cell + .ny_cell::before {
+    content: ''; position: absolute; left: 0; top: 12px; bottom: 12px;
+    width: 1px; background: #edf1f6;
+}
+.sales_nav .sales_navR .ny_label {
+    font-size: 12px; color: #8a97a8; line-height: 1.2; white-space: nowrap;
+}
+.sales_nav .sales_navR .ny_cell b {
+    font-size: 17px; font-weight: bold; line-height: 1.2; color: #333; white-space: nowrap;
+}
+.sales_nav .sales_navR .ny_money b { color: #ff6600; }
+.sales_nav .sales_navR .ny_rank b { color: #157fcc; }
+.sales_nav .sales_navR .ny_cell b.is-red { color: #e8443a; }
+.sales_nav .sales_navR .ny_cell b.is-green { color: #1fa35a; }
+.sales_nav .sales_navR .ny_cell b.is-gray { color: #b0b8c4; }
+@media (max-width: 1360px) {
+    .sales_nav .sales_navR .ny_cell { padding: 0 8px; gap: 5px; }
+    .sales_nav .sales_navR .ny_money b,
+    .sales_nav .sales_navR .ny_rank b { font-size: 16px; }
+}
 
 /*内容部分*/
 .sales_content { padding: 20px 18px; }
@@ -240,8 +277,8 @@ a { text-decoration: none; }
 .sales_topL ul li ul li a{display: block; color: #333; line-height: 25px;}
 .sales_topL ul li ul li:hover{background-color: #fff;}
 
-/*1200px以上的样式*/
-@media screen and (min-width:1200px) {
+/* 大屏版式恒真：任何窗口宽度都保持同一版式（.sales_center 定宽 1200，窄窗口只出横向滚动条，内容不移动） */
+@media screen and (min-width: 0px) {
 	.sales_center { width: 1200px; }
 	.sales_content { padding: 20px 0; }
 	.sales_content > .sales_part2,
@@ -556,8 +593,21 @@ $(function () {
                     </div>
                 </div>
                 <div class="sales_navR fr">
-                    <ul>
-                    </ul>
+                    <!-- 业绩速览卡：默认展示后续名次（第50名追赶态）；前五（含第1名）显示距下一名，第6名及以后显示距上一名 -->
+                    <div class="nav_yeji" id="nav_yeji">
+                        <div class="ny_cell ny_money">
+                            <span class="ny_label">当前业绩</span>
+                            <b id="ny_money">8,200</b>
+                        </div>
+                        <div class="ny_cell ny_rank">
+                            <span class="ny_label">我的排名</span>
+                            <b id="ny_rank">第50名</b>
+                        </div>
+                        <div class="ny_cell ny_gap">
+                            <span class="ny_label" id="ny_gap_label">距上一名 · 第49名</span>
+                            <b id="ny_gap" class="is-red">差 300</b>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1969,14 +2019,14 @@ $(function () {
                 <div class="fr">
                     <div class="sales_grade">
                         <div class="sales_part_tit">
-                            我的业绩排名：<span id="user_pm1">1</span>
+                            我的业绩排名：<span id="user_pm1">50</span>
                         </div>
                         <div class="sales_part3">
                             <div class="sales_part3_top" title="时间周期为：2026-09-26至今业绩">
                                 <span>本月工资结算业绩：<b class="yellow" id="user_yj">35,300</b></span> <span>销售团队最高业绩：<b class="yellow" id="team_yj">35,300</b></span>
                             </div>
-                            <div class="rank_podium" id="podium_top5">
-                                <div class="podium_item p1 is-me">
+                            <div class="rank_podium" id="podium_top5" style="display: none;">
+                                <div class="podium_item p1">
                                     <b class="podium_money">35,300</b>
                                     <span class="podium_bar" style="height: 70px;"></span>
                                     <span class="podium_rank">第1名</span>
@@ -2002,7 +2052,7 @@ $(function () {
                                     <span class="podium_rank">第5名</span>
                                 </div>
                             </div>
-                            <div class="rank_podium" id="podium_top3" style="display: none;">
+                            <div class="rank_podium" id="podium_top3">
                                 <div class="podium_item p1">
                                     <b class="podium_money">35,300</b>
                                     <span class="podium_bar" style="height: 70px;"></span>
@@ -2021,11 +2071,11 @@ $(function () {
                             </div>
                             <div class="rank_me">
                                 <span class="rank_me_badge">我的排名</span>
-                                <b class="rank_me_num" id="user_pm2">第1名</b>
-                                <span class="rank_me_my">实际业绩 <b id="user_my_yj">35,300</b></span>
-                                <span class="rank_me_gap" id="rank_gap_text">领先第2名 13,120</span>
+                                <b class="rank_me_num" id="user_pm2">第50名</b>
+                                <span class="rank_me_my">实际业绩 <b id="user_my_yj">8,200</b></span>
+                                <span class="rank_me_gap" id="rank_gap_text">距上一名（第49名）还差 300</span>
                             </div>
-                            <div class="rank_chase" id="rank_chase" style="display: none;">
+                            <div class="rank_chase" id="rank_chase">
                                 <div class="chase_top">
                                     <span>追赶目标：第49名 <b>8,500</b></span>
                                     <span>还差 <b class="yellow">300</b></span>
@@ -2039,7 +2089,7 @@ $(function () {
                                 </div>
                             </div>
                             <div class="sales_part3_sort">
-                                <a href="javascript:void(0);" id="rank_demo_toggle" class="rank_demo">演示第50名视角</a>
+                                <a href="javascript:void(0);" id="rank_demo_toggle" class="rank_demo">演示前五视角</a>
                                 <a href="http://crm.caizhaowang.com:8086/bid/user/YejiMonths.aspx" target="_blank">查看月度排名</a>
                             </div>
                         </div>
@@ -2716,10 +2766,11 @@ $(function () {
         function GetRankMore() { alert("演示页面，查看更多记录不跳转"); }
         // 月度排名视角演示：前五态（显示前五实际业绩）↔ 追赶态（第50名，追赶上一名）
         // 真实场景由后端数据驱动：在前五 -> podium_top5 + 实际业绩；不在前五 -> podium_top3 + 追赶进度
+        // 右上角业绩卡差距规则：前五（含第1名）显示「距下一名」；第6名及以后显示「距上一名」
         (function () {
             var $btn = $('#rank_demo_toggle');
             if (!$btn.length) { return; }
-            var chasing = false;
+            var chasing = true; // 默认停在第50名（后续名次）视角，点击切回前五
             $btn.click(function () {
                 chasing = !chasing;
                 if (chasing) {
@@ -2728,8 +2779,14 @@ $(function () {
                     $('#podium_top3').show();
                     $('#podium_top5 .podium_item').removeClass('is-me');
                     $('#user_pm2').text('第50名');
+                    $('#user_pm1').text('50');
                     $('#user_my_yj').text('8,200');
                     $('#rank_gap_text').text('距上一名（第49名）还差 300');
+                    // 右上角卡：非前五 → 距上一名（红色=还差多少）
+                    $('#ny_money').text('8,200');
+                    $('#ny_rank').text('第50名');
+                    $('#ny_gap_label').text('距上一名 · 第49名');
+                    $('#ny_gap').text('差 300').removeClass('is-green is-gray').addClass('is-red');
                     $('#chase_fill').css('width', '96.5%');
                     $('#rank_chase').show();
                     $btn.text('演示前五视角');
@@ -2739,8 +2796,14 @@ $(function () {
                     $('#podium_top5').show();
                     $('#podium_top5 .podium_item.p1').addClass('is-me');
                     $('#user_pm2').text('第1名');
+                    $('#user_pm1').text('1');
                     $('#user_my_yj').text('35,300');
                     $('#rank_gap_text').text('领先第2名 13,120');
+                    // 右上角卡：前五（第1名无上一名）→ 距下一名（绿色=领先多少）
+                    $('#ny_money').text('35,300');
+                    $('#ny_rank').text('第1名');
+                    $('#ny_gap_label').text('距下一名 · 第2名');
+                    $('#ny_gap').text('领先 13,120').removeClass('is-red is-gray').addClass('is-green');
                     $('#rank_chase').hide();
                     $btn.text('演示第50名视角');
                 }

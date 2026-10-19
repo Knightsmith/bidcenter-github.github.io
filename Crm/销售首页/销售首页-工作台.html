@@ -1,0 +1,2487 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>销售工作台 · 销售CRM</title>
+<style>
+/* ==== SRC[01]: theme/default-semantic-tokens.css ==== */
+/**
+ * shadcn-html — Token Layer
+ * Semantic CSS custom properties matching the tweakcn.com export format.
+ * OKLCH color space. Full surface/foreground pair model.
+ *
+ * Export a theme from tweakcn.com, replace the :root and .dark blocks,
+ * and every component rethemes instantly.
+ */
+
+:root {
+  color-scheme: light;
+
+  --background:              oklch(0.9946 0.0026 286.3519);
+  --foreground:              oklch(0.1615 0.0105 285.1663);
+
+  --card:                    oklch(1.0000 0 0);
+  --card-foreground:         oklch(0.1615 0.0105 285.1663);
+
+  --popover:                 oklch(1.0000 0 0);
+  --popover-foreground:      oklch(0.1615 0.0105 285.1663);
+
+  --primary:                 oklch(0.5828 0.2188 258.8797);
+  --primary-foreground:      oklch(0.9670 0.0029 264.5419);
+
+  --secondary:               oklch(0.9518 0.0231 277.9569);
+  --secondary-foreground:    oklch(0.4446 0.0983 268.5283);
+
+  --muted:                   oklch(0.9601 0.0093 286.2229);
+  --muted-foreground:        oklch(0.5052 0.0379 284.9640);
+
+  --accent:                  oklch(0.9712 0.0136 258.3446);
+  --accent-foreground:       oklch(0.6081 0.2114 266.2130);
+
+  --destructive:             oklch(0.6368 0.2078 25.3313);
+  --destructive-foreground:  oklch(0.9842 0.0034 247.8575);
+
+  --border:                  oklch(0.9163 0.0162 286.0759);
+  --input:                   oklch(0.9163 0.0162 286.0759);
+  --ring:                    oklch(0.5565 0.2430 261.9529);
+
+  --sidebar:                 oklch(0.9946 0.0026 286.3519);
+  --sidebar-foreground:      oklch(0.1615 0.0105 285.1663);
+  --sidebar-primary:         oklch(0.5828 0.2188 258.8797);
+  --sidebar-primary-foreground: oklch(1.0000 0 0);
+  --sidebar-accent:          oklch(0.9634 0.0175 279.0619);
+  --sidebar-accent-foreground: oklch(0.6256 0.2009 264.0684);
+  --sidebar-border:          oklch(0.9163 0.0162 286.0759);
+  --sidebar-ring:            oklch(0.5828 0.2188 258.8797);
+
+  --chart-1:                 oklch(0.5553 0.2554 283.4559);
+  --chart-2:                 oklch(0.6037 0.2141 267.5162);
+  --chart-3:                 oklch(0.7495 0.1297 210.9704);
+  --chart-4:                 oklch(0.8023 0.1492 175.5763);
+  --chart-5:                 oklch(0.6945 0.1422 167.0638);
+
+  --font-sans:               'Inter', sans-serif;
+  --font-serif:              'Merriweather', serif;
+  --font-mono:               'JetBrains Mono', monospace;
+
+  --radius:                  1.25rem;
+  --radius-sm:               calc(var(--radius) - 4px);
+  --radius-md:               calc(var(--radius) - 2px);
+  --radius-lg:               var(--radius);
+  --radius-xl:               calc(var(--radius) + 4px);
+
+  --spacing:                 0.25rem;
+
+  --tracking-normal:         -0.01em;
+
+  --shadow-2xs: 0px 4px 15px 0px hsl(0 0% 0% / 0.07);
+  --shadow-xs:  0px 4px 15px 0px hsl(0 0% 0% / 0.07);
+  --shadow-sm:  0px 4px 15px 0px hsl(0 0% 0% / 0.15), 0px 1px 2px -1px hsl(0 0% 0% / 0.15);
+  --shadow:     0px 4px 15px 0px hsl(0 0% 0% / 0.15), 0px 1px 2px -1px hsl(0 0% 0% / 0.15);
+  --shadow-md:  0px 4px 15px 0px hsl(0 0% 0% / 0.15), 0px 2px 4px -1px hsl(0 0% 0% / 0.15);
+  --shadow-lg:  0px 4px 15px 0px hsl(0 0% 0% / 0.15), 0px 4px 6px -1px hsl(0 0% 0% / 0.15);
+  --shadow-xl:  0px 4px 15px 0px hsl(0 0% 0% / 0.15), 0px 8px 10px -1px hsl(0 0% 0% / 0.15);
+  --shadow-2xl: 0px 4px 15px 0px hsl(0 0% 0% / 0.38);
+}
+
+/* ==== SRC[02]: components/typography/typography.css ==== */
+/* -- Typography component --------------------------------------- */
+
+/* -- Base text ---------------------------------------------- */
+/* Sets the default font size for the entire page.            */
+/* All typography classes are sized relative to this baseline. */
+@layer base {
+  body {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+}
+
+@layer components {
+  /* -- Headings ---------------------------------------------- */
+  .h1 {
+    scroll-margin-top: 5rem;
+    font-size: 2.25rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    text-wrap: balance;
+    color: var(--foreground);
+  }
+
+  .h2 {
+    scroll-margin-top: 5rem;
+    font-size: 1.875rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    text-wrap: balance;
+    color: var(--foreground);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
+
+    &:first-child { margin-top: 0; }
+  }
+
+  .h3 {
+    scroll-margin-top: 5rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+    text-wrap: balance;
+    color: var(--foreground);
+  }
+
+  .h4 {
+    scroll-margin-top: 5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-wrap: balance;
+    color: var(--foreground);
+  }
+
+  /* -- Paragraph --------------------------------------------- */
+  .p {
+    font-size: 0.875rem;
+    line-height: 1.75;
+    text-wrap: pretty;
+    color: var(--foreground);
+
+    &:not(:first-child) { margin-top: 1.5rem; }
+  }
+
+  /* -- Lead --------------------------------------------------- */
+  .lead {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: var(--muted-foreground);
+    text-wrap: pretty;
+  }
+
+  /* -- Large -------------------------------------------------- */
+  .large {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--foreground);
+  }
+
+  /* -- Small -------------------------------------------------- */
+  .small {
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--foreground);
+  }
+
+  /* -- Muted -------------------------------------------------- */
+  .muted {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+  }
+
+  /* -- Blockquote --------------------------------------------- */
+  .blockquote {
+    margin-top: 1.5rem;
+    border-inline-start: 2px solid var(--border);
+    padding-inline-start: 1.5rem;
+    font-style: italic;
+    hanging-punctuation: first last;
+    color: var(--foreground);
+
+    & p { margin: 0; }
+  }
+
+  /* -- Inline code -------------------------------------------- */
+  .code {
+    position: relative;
+    border-radius: var(--radius-sm);
+    background: var(--muted);
+    padding: 0.2rem 0.3rem;
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    font-weight: 600;
+    color: var(--foreground);
+  }
+
+  /* -- Accessibility ------------------------------------------ */
+
+  @media (prefers-contrast: more) {
+    .h1, .h2, .h3, .h4 {
+      letter-spacing: 0;
+    }
+
+    .blockquote {
+      border-inline-start-width: 3px;
+    }
+
+    .code {
+      outline: 1px solid var(--border);
+    }
+
+    .muted {
+      color: var(--foreground);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .blockquote {
+      border-inline-start-color: CanvasText;
+    }
+
+    .code {
+      background: Canvas;
+      outline: 1px solid CanvasText;
+      color: CanvasText;
+    }
+  }
+}
+
+/* ==== SRC[03]: components/button/button.css ==== */
+/* -- Button component ------------------------------------------ */
+
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--font-sans);
+    line-height: 1;
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 150ms ease;
+    outline: none;
+    flex-shrink: 0;
+    height: 2.25rem;
+    padding: 0 1rem;
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+
+    & svg {
+      pointer-events: none;
+      flex-shrink: 0;
+
+      &:not([class*="size-"]) { width: 1rem; height: 1rem; }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &:disabled, &[aria-disabled="true"] {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    /* -- Variants -------------------------------------------- */
+    &[data-variant="default"] {
+      background-color: var(--primary);
+      color: var(--primary-foreground);
+
+      &:hover { opacity: 0.9; }
+    }
+
+    &[data-variant="secondary"] {
+      background-color: var(--secondary);
+      color: var(--secondary-foreground);
+
+      &:hover { opacity: 0.8; }
+    }
+
+    &[data-variant="outline"] {
+      background-color: var(--background);
+      color: var(--foreground);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-xs);
+
+      &:hover {
+        background-color: var(--accent);
+        color: var(--accent-foreground);
+      }
+    }
+
+    &[data-variant="ghost"] {
+      background-color: transparent;
+      color: var(--foreground);
+      border-color: transparent;
+
+      &:hover {
+        background-color: var(--accent);
+        color: var(--accent-foreground);
+      }
+    }
+
+    &[data-variant="destructive"] {
+      background-color: var(--destructive);
+      color: var(--destructive-foreground);
+
+      &:hover { opacity: 0.9; }
+    }
+
+    &[data-variant="link"] {
+      background-color: transparent;
+      color: var(--primary);
+      height: auto;
+      padding: 0;
+      text-underline-offset: 4px;
+
+      &:hover { text-decoration: underline; }
+    }
+
+    /* -- Sizes ----------------------------------------------- */
+    &[data-size="xs"]      { height: 1.75rem; padding: 0 0.5rem;  font-size: 0.75rem; border-radius: var(--radius-sm); }
+    &[data-size="sm"]      { height: 2rem;    padding: 0 0.75rem; font-size: 0.8125rem; }
+    &[data-size="lg"]      { height: 2.75rem; padding: 0 2rem;    font-size: 1rem; }
+    &[data-size="icon"]    { height: 2.25rem; width: 2.25rem;  padding: 0; }
+    &[data-size="icon-xs"] { height: 1.75rem; width: 1.75rem;  padding: 0; border-radius: var(--radius-sm); }
+    &[data-size="icon-sm"] { height: 2rem;    width: 2rem;     padding: 0; }
+    &[data-size="icon-lg"] { height: 2.75rem; width: 2.75rem;  padding: 0; }
+  }
+
+  /* -- Accessibility ------------------------------------------ */
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn { transition: none; }
+  }
+
+  @media (prefers-contrast: more) {
+    .btn {
+      border: 2px solid transparent;
+
+      &[data-variant="default"],
+      &[data-variant="secondary"],
+      &[data-variant="destructive"] {
+        border-color: currentColor;
+      }
+
+      &[data-variant="outline"],
+      &[data-variant="ghost"] {
+        border-color: var(--foreground);
+      }
+    }
+  }
+
+  @media (forced-colors: active) {
+    .btn {
+      border: 1px solid ButtonText;
+
+      &:disabled, &[aria-disabled="true"] {
+        border-color: GrayText;
+        color: GrayText;
+      }
+    }
+  }
+}
+
+/* ==== SRC[04]: components/badge/badge.css ==== */
+/* -- Badge component ------------------------------------------- */
+
+@layer components {
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+    padding: 0.125rem 0.625rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    line-height: 1.5rem;
+
+    &[data-variant="outline"] {
+      border: 1px solid var(--border);
+      color: var(--muted-foreground);
+    }
+
+    &[data-variant="secondary"] {
+      background: var(--secondary);
+      color: var(--secondary-foreground);
+    }
+
+    &[data-variant="default"] {
+      background: var(--primary);
+      color: var(--primary-foreground);
+    }
+
+    &[data-variant="primary"] {
+      background: var(--primary);
+      color: var(--primary-foreground);
+    }
+
+    &[data-variant="destructive"] {
+      background: var(--destructive);
+      color: var(--primary-foreground);
+    }
+
+    &[data-variant="warning"] {
+      background: #F59E0B;
+      color: #fff;
+    }
+
+    /* R3：免费会员红色描边（inset 阴影模拟描边，不撑大徽标盒尺寸） */
+    &[data-variant="danger-outline"] {
+      background: #fff;
+      color: var(--destructive);
+      box-shadow: inset 0 0 0 1px var(--destructive);
+    }
+
+    &[data-variant="subtle"] {
+      background: color-mix(in oklch, var(--primary) 15%, transparent);
+      color: var(--primary);
+    }
+
+    &[data-variant="subtle-secondary"] {
+      background: color-mix(in oklch, var(--secondary) 12%, transparent);
+      color: var(--secondary-foreground);
+    }
+
+    &[data-variant="subtle-outline"] {
+      background: color-mix(in oklch, var(--foreground) 6%, transparent);
+      color: var(--muted-foreground);
+    }
+  }
+}
+
+/* ==== SRC[05]: components/card/card.css ==== */
+/* -- Card component -------------------------------------------- */
+
+@layer components {
+  .card {
+    background-color: var(--card);
+    color: var(--card-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    container-type: inline-size;
+  }
+
+  .card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1.5rem;
+    padding-bottom: 0;
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+
+  .card-description {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .card-content {
+    padding: 1.5rem;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    padding-top: 0;
+  }
+
+  /* -- Container query: compact card in narrow containers -- */
+  @container (max-width: 280px) {
+    .card-header { padding: 1rem; padding-bottom: 0; }
+    .card-content { padding: 1rem; }
+    .card-footer { padding: 1rem; padding-top: 0; }
+    .card-title { font-size: 1rem; }
+  }
+}
+
+/* ==== SRC[06]: components/statistic/statistic.css ==== */
+@layer components {
+  .statistic {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .statistic-title {
+    margin: 0;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--muted-foreground);
+    letter-spacing: 0.01em;
+  }
+
+  .statistic-value {
+    margin: 0;
+    font-size: 1.875rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+    color: var(--foreground);
+  }
+
+  .statistic-description {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .statistic-trend {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.125rem;
+    font-weight: 500;
+
+    & svg {
+      width: 0.75rem;
+      height: 0.75rem;
+    }
+
+    &[data-trend="up"] {
+      color: #16a34a;
+    }
+
+    &[data-trend="down"] {
+      color: #dc2626;
+    }
+  }
+}
+
+/* ==== SRC[07]: components/table/table.css ==== */
+@layer components {
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    container-type: inline-size;
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    text-align: left;
+    caption-side: bottom;
+  }
+
+  .table-caption {
+    padding: 0.75rem 1rem;
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    text-align: center;
+  }
+
+  .table-head {
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    color: var(--muted-foreground);
+    background-color: var(--muted);
+    white-space: nowrap;
+    border-bottom: 1px solid var(--border);
+
+    &:first-child {
+      border-top-left-radius: var(--radius-lg);
+    }
+
+    &:last-child {
+      border-top-right-radius: var(--radius-lg);
+    }
+  }
+
+  .table-row {
+    border-bottom: 1px solid var(--border);
+    transition: background-color 150ms ease;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    tbody &:hover {
+      background-color: var(--muted);
+    }
+  }
+
+  .table-cell {
+    padding: 0.75rem 1rem;
+    vertical-align: middle;
+    color: var(--foreground);
+  }
+
+  tfoot .table-row {
+    background-color: var(--muted);
+    border-top: 1px solid var(--border);
+    font-weight: 500;
+  }
+
+  tfoot .table-cell:first-child {
+    border-bottom-left-radius: var(--radius-lg);
+  }
+
+  tfoot .table-cell:last-child {
+    border-bottom-right-radius: var(--radius-lg);
+  }
+
+  /* -- Container query: compact table in narrow containers -- */
+  @container (max-width: 480px) {
+    .table-head,
+    .table-cell { padding: 0.5rem 0.75rem; font-size: 0.8125rem; }
+  }
+}
+
+/* ==== SRC[08]: components/tabs/tabs.css ==== */
+/* -- Tabs component -------------------------------------------- */
+
+@layer components {
+  /* -- Default (pill) variant ----------------------------------- */
+  .tab-list {
+    display: inline-flex;
+    align-items: center;
+    background: var(--muted);
+    border-radius: var(--radius-lg);
+    padding: 0.25rem;
+    gap: 0.125rem;
+
+    /* -- Line variant --------------------------------------------- */
+    &[data-variant="line"] {
+      background: transparent;
+      border-radius: 0;
+      padding: 0;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+
+      & .tab-trigger {
+        border-radius: 0;
+        padding: 0.5rem 1rem;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -1px;
+
+        &[aria-selected="true"] {
+          background: transparent;
+          color: var(--foreground);
+          border-bottom-color: var(--primary);
+          box-shadow: none;
+        }
+      }
+    }
+
+    /* -- Vertical orientation ------------------------------------ */
+    &[aria-orientation="vertical"] {
+      flex-direction: column;
+      width: auto;
+
+      & .tab-trigger {
+        justify-content: flex-start;
+        width: 100%;
+      }
+    }
+  }
+
+  .tab-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: calc(var(--radius) * 0.6);
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: none;
+    background: transparent;
+    color: var(--muted-foreground);
+    cursor: pointer;
+    transition: all 150ms ease;
+    white-space: nowrap;
+    outline: none;
+
+    &[aria-selected="true"] {
+      background: var(--background);
+      color: var(--foreground);
+      box-shadow: 0 1px 3px oklch(0 0 0 / 0.08), 0 0 0 1px var(--border);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+  }
+
+  /* -- Vertical layout container ----------------------------- */
+  .tabs:has(.tab-list[aria-orientation="vertical"]) {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+
+    & > .tab-content {
+      margin-top: 0;
+      flex: 1;
+    }
+  }
+
+  /* -- Panel ---------------------------------------------------- */
+  .tab-content {
+    margin-top: 0.75rem;
+
+    &:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &[hidden] { display: none; }
+  }
+
+  /* -- Accessibility ------------------------------------------ */
+
+  @media (prefers-reduced-motion: reduce) {
+    .tab-trigger { transition: none; }
+  }
+
+  @media (forced-colors: active) {
+    .tab-trigger[aria-selected="true"] {
+      border: 2px solid Highlight;
+      box-shadow: none;
+    }
+
+    .tab-list[data-variant="line"] .tab-trigger[aria-selected="true"] {
+      border: none;
+      border-bottom: 2px solid Highlight;
+    }
+  }
+}
+
+/* ==== SRC[09]: components/progress/progress.css ==== */
+@layer components {
+  .progress {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 100%;
+    height: 0.5rem;
+    border: none;
+    border-radius: 9999px;
+    overflow: hidden;
+    background-color: var(--secondary);
+  }
+
+  /* WebKit (Chrome, Safari, Edge) */
+  .progress::-webkit-progress-bar {
+    background-color: var(--secondary);
+    border-radius: 9999px;
+  }
+
+  .progress::-webkit-progress-value {
+    background-color: var(--primary);
+    border-radius: 9999px;
+    transition: width 300ms ease;
+  }
+
+  /* Firefox */
+  .progress::-moz-progress-bar {
+    background-color: var(--primary);
+    border-radius: 9999px;
+  }
+
+  /* Indeterminate state */
+  .progress:indeterminate {
+    background: linear-gradient(
+      90deg,
+      var(--secondary) 0%,
+      var(--primary) 50%,
+      var(--secondary) 100%
+    );
+    background-size: 200% 100%;
+    animation: progress-indeterminate 1.5s linear infinite;
+  }
+
+  .progress:indeterminate::-webkit-progress-bar {
+    background-color: transparent;
+  }
+
+  .progress:indeterminate::-moz-progress-bar {
+    background-color: transparent;
+  }
+
+  @keyframes progress-indeterminate {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+}
+
+/* ==== SRC[10]: components/separator/separator.css ==== */
+/* -- Separator component ---------------------------------------- */
+
+@layer components {
+  .separator {
+    border: none;
+    margin: 0;
+    flex-shrink: 0;
+    background: var(--border);
+
+    /* Horizontal (default) */
+    height: 1px;
+    width: 100%;
+
+    /* Vertical */
+    &[data-orientation="vertical"] {
+      height: auto;
+      width: 1px;
+      align-self: stretch;
+    }
+
+    /* Decorative — hidden from assistive technology */
+    &[aria-hidden="true"],
+    &[role="none"] {
+      /* No visual change — purely semantic */
+    }
+  }
+
+  /* -- Labeled separator ------------------------------------- */
+  .separator-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    & .separator { flex: 1; }
+
+    & span {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--muted-foreground);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+  }
+
+  /* -- Accessibility ----------------------------------------- */
+  @media (forced-colors: active) {
+    .separator {
+      background: CanvasText;
+    }
+  }
+
+  @media (prefers-contrast: more) {
+    .separator {
+      background: var(--foreground);
+      height: 2px;
+
+      &[data-orientation="vertical"] {
+        width: 2px;
+        height: auto;
+      }
+    }
+  }
+}
+
+/* ==== SRC[11]: components/avatar/avatar.css ==== */
+@layer components {
+  .avatar {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background-color: var(--muted);
+
+    &[data-size="sm"] {
+      width: 2rem;
+      height: 2rem;
+      font-size: 0.6875rem;
+    }
+
+    &[data-size="lg"] {
+      width: 3rem;
+      height: 3rem;
+      font-size: 0.875rem;
+    }
+  }
+
+  .avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+  }
+
+  .avatar-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--muted-foreground);
+    background-color: var(--muted);
+    position: absolute;
+    inset: 0;
+  }
+
+  /* Hide fallback when image is loaded */
+  .avatar:has(.avatar-image:not([data-error])) .avatar-fallback {
+    display: none;
+  }
+
+  .avatar-badge {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 9999px;
+    background-color: #16a34a;
+    border: 2px solid var(--background);
+  }
+
+  /* Avatar group */
+  .avatar-group {
+    display: flex;
+    align-items: center;
+
+    & .avatar {
+      border: 2px solid var(--background);
+      margin-left: -0.5rem;
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+  }
+
+  .avatar-group-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    background-color: var(--muted);
+    color: var(--muted-foreground);
+    font-size: 0.75rem;
+    font-weight: 500;
+    border: 2px solid var(--background);
+    margin-left: -0.5rem;
+  }
+}
+
+/* ==== SRC[12]: components/dialog/dialog.css ==== */
+/* -- Dialog component ------------------------------------------ */
+
+@layer components {
+  dialog.dialog {
+    border: none;
+    border-radius: var(--radius-xl);
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+    padding: 0;
+    margin: auto;
+    position: fixed;
+    inset: 0;
+    max-width: 28rem;
+    width: calc(100vw - 2rem);
+    max-height: calc(100vh - 2rem);
+    box-shadow: 0 25px 80px oklch(0 0 0 / 0.25), 0 0 0 1px var(--border);
+    opacity: 0;
+    transform: translateY(-0.5rem) scale(0.98);
+    transition: opacity 200ms ease, transform 200ms ease, display 200ms allow-discrete;
+
+    &[open] {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* -- Sizes ------------------------------------------------ */
+    &[data-size="sm"]   { max-width: 24rem; }
+    &[data-size="lg"]   { max-width: 32rem; }
+    &[data-size="xl"]   { max-width: 40rem; }
+    &[data-size="full"] { max-width: calc(100vw - 2rem); }
+
+    /* -- Backdrop --------------------------------------------- */
+    &::backdrop {
+      background: oklch(0 0 0 / 0);
+      backdrop-filter: blur(0px);
+      transition: all 200ms ease, display 200ms allow-discrete;
+    }
+
+    &[open]::backdrop {
+      background: oklch(0 0 0 / 0.45);
+      backdrop-filter: blur(3px);
+    }
+  }
+
+  @starting-style {
+    dialog.dialog[open] {
+      opacity: 0;
+      transform: translateY(-0.5rem) scale(0.98);
+    }
+
+    dialog.dialog[open]::backdrop {
+      background: oklch(0 0 0 / 0);
+      backdrop-filter: blur(0px);
+    }
+  }
+
+  /* -- Content sections ------------------------------------- */
+  .dialog-content { padding: 1.5rem; }
+  .dialog-header  { margin-bottom: 1rem; }
+  .dialog-title   { font-size: 1.0625rem; font-weight: 600; margin: 0 0 0.375rem; letter-spacing: -0.01em; }
+  .dialog-description { font-size: 0.875rem; color: var(--muted-foreground); margin: 0; line-height: 1.6; }
+  .dialog-body    { margin-top: 1rem; }
+  .dialog-footer  { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.5rem; }
+}
+
+/* ==== SRC[13]: components/dropdown/dropdown.css ==== */
+/* -- Dropdown component ---------------------------------------- */
+
+@layer components {
+  .dropdown-content {
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 0.25rem;
+    min-width: 8rem;
+    box-shadow: 0 4px 16px oklch(0 0 0 / 0.12), 0 0 0 1px var(--border);
+
+    /* -- Anchor positioning ------------------------------------ */
+    position: fixed;
+    inset: auto;
+    top: anchor(bottom);
+    left: anchor(left);
+    margin: 0;
+    margin-top: 4px;
+    position-try-fallbacks: flip-block;
+
+    /* -- Animation --------------------------------------------- */
+    opacity: 0;
+    transform: scale(0.96) translateY(-0.25rem);
+    transition: opacity 150ms ease, transform 150ms ease,
+                display 150ms allow-discrete;
+
+    &:popover-open {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @starting-style {
+    .dropdown-content:popover-open {
+      opacity: 0;
+      transform: scale(0.96) translateY(-0.25rem);
+    }
+  }
+
+  .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.375rem 0.5rem;
+    border-radius: calc(var(--radius) * 0.6);
+    font-size: 0.875rem;
+    border: none;
+    background: transparent;
+    color: var(--foreground);
+    cursor: pointer;
+    outline: none;
+    text-align: left;
+
+    &:hover, &[data-highlighted] {
+      background-color: var(--accent);
+      color: var(--accent-foreground);
+    }
+
+    &[data-variant="destructive"] {
+      &:hover, &[data-highlighted] {
+        background-color: var(--destructive);
+        color: var(--destructive-foreground);
+      }
+    }
+
+    &:disabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+  }
+
+  /* -- Checkbox / Radio indicators ----------------------------- */
+  .dropdown-check,
+  .dropdown-radio {
+    padding-inline-start: 1.5rem;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset-inline-start: 0.375rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0.875rem;
+      height: 0.875rem;
+    }
+  }
+
+  .dropdown-check[aria-checked="true"]::before {
+    content: '';
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  .dropdown-radio[aria-checked="true"]::before {
+    content: '';
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='5'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  .dropdown-separator {
+    height: 1px;
+    background: var(--border);
+    margin: 0.25rem -0.25rem;
+  }
+
+  .dropdown-label {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--muted-foreground);
+  }
+
+  .dropdown-shortcut {
+    margin-inline-start: auto;
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    letter-spacing: 0.05em;
+  }
+
+  /* -- Accessibility ------------------------------------------ */
+
+  @media (prefers-reduced-motion: reduce) {
+    .dropdown-content {
+      transition: none;
+    }
+    .dropdown-item {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .dropdown-content {
+      border-color: ButtonText;
+    }
+    .dropdown-item {
+      &:hover, &[data-highlighted] {
+        forced-color-adjust: none;
+        background: Highlight;
+        color: HighlightText;
+      }
+    }
+  }
+}
+
+/* ==== SRC[14]: components/toast/toast.css ==== */
+/* -- Toast component ------------------------------------------- */
+
+@layer components {
+  /* -- Container ------------------------------------------------ */
+  .toast-container {
+    position: fixed;
+    z-index: 100;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+    padding: 1rem;
+    max-height: 100vh;
+    pointer-events: none;
+
+    &[data-position="bottom-right"] { bottom: 0; right: 0; }
+    &[data-position="bottom-left"]  { bottom: 0; left: 0; }
+    &[data-position="top-right"]    { top: 0; right: 0; flex-direction: column; }
+    &[data-position="top-left"]     { top: 0; left: 0; flex-direction: column; }
+    &[data-position="top-center"]   { top: 0; left: 50%; transform: translateX(-50%); flex-direction: column; align-items: center; }
+    &[data-position="bottom-center"]{ bottom: 0; left: 50%; transform: translateX(-50%); align-items: center; }
+  }
+
+  /* -- Toast ---------------------------------------------------- */
+  .toast {
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    min-width: 20rem;
+    max-width: 26rem;
+    box-shadow: 0 4px 16px oklch(0 0 0 / 0.12);
+    pointer-events: auto;
+    opacity: 0;
+    transform: translateY(0.5rem);
+    transition: opacity 200ms ease, transform 200ms ease;
+
+    &:popover-open {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* -- Variants ------------------------------------------------- */
+    &[data-variant="destructive"] {
+      background-color: var(--destructive);
+      color: var(--destructive-foreground);
+      border-color: var(--destructive);
+
+      & .toast-description {
+        color: var(--destructive-foreground);
+        opacity: 0.85;
+      }
+    }
+
+    /* -- Semantic variants (border + icon color) ----------------- */
+    &[data-variant="success"] {
+      border-color: oklch(0.65 0.2 145);
+
+      & .toast-icon { color: oklch(0.65 0.2 145); }
+    }
+
+    &[data-variant="warning"] {
+      border-color: oklch(0.75 0.18 75);
+
+      & .toast-icon { color: oklch(0.75 0.18 75); }
+    }
+
+    &[data-variant="info"] {
+      border-color: oklch(0.6 0.15 250);
+
+      & .toast-icon { color: oklch(0.6 0.15 250); }
+    }
+  }
+
+  @starting-style {
+    .toast:popover-open {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+  }
+
+  /* -- Inner elements ------------------------------------------- */
+  .toast-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .toast-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .toast-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .toast-description {
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    margin: 0.125rem 0 0;
+    line-height: 1.5;
+  }
+
+  .toast-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: none;
+    background: transparent;
+    color: var(--muted-foreground);
+    cursor: pointer;
+    flex-shrink: 0;
+    border-radius: calc(var(--radius) * 0.5);
+    transition: color 150ms, background 150ms;
+
+    &:hover {
+      color: var(--foreground);
+      background: var(--accent);
+    }
+  }
+
+  .toast-icon {
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+  }
+
+  .toast-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+}
+
+/* ==== SRC[15]: documentation/css/docs-theme.css :: Minimal base reset 段 ==== */
+/* -- Minimal base reset ------------------------------------ */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+body {
+  font-family: var(--font-sans);
+  margin: 0;
+  line-height: 1.6;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+/* ==== SRC[16]: documentation/css/docs-utilities.css ==== */
+/* ----------------------------------------------------------------
+   docs-utilities.css
+   Hand-written utility classes used by documentation pages only.
+
+   These utilities only affect elements that explicitly opt in by
+   using the class name, so they cannot leak into component styles.
+---------------------------------------------------------------- */
+
+/* Flex / layout */
+.flex           { display: flex; }
+.flex-col       { flex-direction: column; }
+.flex-wrap      { flex-wrap: wrap; }
+.grid           { display: grid; }
+.items-center   { align-items: center; }
+.items-baseline { align-items: baseline; }
+.justify-between{ justify-content: space-between; }
+.ml-auto        { margin-left: auto; }
+
+/* Gap scale (1 = 0.25rem) */
+.gap-1 { gap: 0.25rem; }
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 0.75rem; }
+.gap-4 { gap: 1rem; }
+.gap-6 { gap: 1.5rem; }
+.gap-8 { gap: 2rem; }
+
+/* Margin bottom */
+.mb-1  { margin-bottom: 0.25rem; }
+.mb-2  { margin-bottom: 0.5rem; }
+.mb-3  { margin-bottom: 0.75rem; }
+.mb-4  { margin-bottom: 1rem; }
+.mb-5  { margin-bottom: 1.25rem; }
+.mb-6  { margin-bottom: 1.5rem; }
+.mb-8  { margin-bottom: 2rem; }
+.mb-10 { margin-bottom: 2.5rem; }
+.mb-12 { margin-bottom: 3rem; }
+
+/* Margin top */
+.mt-2 { margin-top: 0.5rem; }
+.mt-6 { margin-top: 1.5rem; }
+.mt-8 { margin-top: 2rem; }
+
+/* Typography */
+.text-sm               { font-size: 0.875rem; line-height: 1.25rem; }
+.text-xs               { font-size: 0.75rem;  line-height: 1rem; }
+.text-lg               { font-size: 1.125rem; line-height: 1.75rem; }
+.text-muted-foreground { color: var(--muted-foreground); }
+.text-destructive      { color: var(--destructive); }
+.font-medium           { font-weight: 500; }
+.leading-relaxed       { line-height: 1.625; }
+
+/* Accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+</style>
+</head>
+<body>
+
+<!-- =========================================================
+     销售工作台（销售首页重构版）
+     定位：销售视角工作台首页 —— 作业台优先
+     内容来源：旧版《销售首页.html》（=需求清单，布局已重新设计）
+     基线日期：2026-10-19（周一）
+     「完全库默认」方案：所有视觉一律取自 shadcn-lib 组件类与官方变体，
+     本文件不产生任何自造样式，仅在必要处使用纯布局内联样式（宽/高/间距/flex/grid）。
+     ========================================================= -->
+
+<!-- 页面级容器：仅内联纯布局（宽 / 居中 / 内边距），不含任何颜色与视觉声明 -->
+<div style="max-width:88rem;margin:0 auto;padding:1.5rem 1.5rem 3rem 1.5rem;">
+
+  <!-- ===== 顶栏：品牌 / 快捷链接 / 用户菜单 + 主导航 ===== -->
+  <div class="card">
+    <div class="card-content" style="display:flex;flex-direction:column;gap:0.75rem;padding:0.875rem 1.25rem;">
+
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <div class="flex items-center gap-2">
+          <span class="h4" style="margin:0;">销售CRM</span>
+          <span class="badge" data-variant="secondary">销售工作台</span>
+        </div>
+
+        <div class="flex items-center gap-1">
+          <button class="btn text-muted-foreground" data-variant="ghost" data-size="xs" type="button" onclick="demoToast('登录外网')">登录外网</button>
+          <button class="btn text-muted-foreground" data-variant="ghost" data-size="xs" type="button" onclick="demoToast('结构化数据')">结构化数据</button>
+          <button class="btn text-muted-foreground" data-variant="ghost" data-size="xs" type="button" onclick="demoToast('内部通讯录')">内部通讯录</button>
+          <button class="btn text-muted-foreground" data-variant="ghost" data-size="xs" type="button" onclick="demoToast('问题反馈')">问题反馈</button>
+          <button class="btn text-muted-foreground" data-variant="ghost" data-size="xs" type="button" onclick="demoToast('返回旧版')">返回旧版</button>
+          <hr class="separator" data-orientation="vertical" style="margin:0 0.25rem;">
+          <button class="btn" data-variant="ghost" data-size="sm" type="button"
+                  aria-haspopup="menu" aria-expanded="false" aria-controls="userMenu"
+                  data-dropdown-trigger="userMenu">
+            <span class="avatar" data-size="sm"><span class="avatar-fallback" style="font-size:0.75rem;">罗</span></span>
+            罗屿
+            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <hr class="separator">
+
+      <div class="flex items-center flex-wrap gap-1">
+        <button class="btn" data-variant="ghost" data-size="sm" type="button" onclick="demoToast('我的客户库')">我的客户库</button>
+        <button class="btn" data-variant="ghost" data-size="sm" type="button" onclick="demoToast('公共库')">公共库<span class="badge" data-variant="warning">热</span></button>
+        <button class="btn" data-variant="ghost" data-size="sm" type="button" onclick="demoToast('验重')">验重</button>
+        <button class="btn" data-variant="ghost" data-size="sm" type="button" onclick="demoToast('捡新注册客户')">捡新注册客户</button>
+        <button class="btn" data-variant="ghost" data-size="sm" type="button" onclick="demoToast('库中中标企业')">库中中标企业</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== 业绩速览（statistic × 4，与月度排名演示视角联动） ===== -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:0.75rem;margin-top:0.75rem;">
+
+    <div class="card">
+      <div class="card-content" style="padding:1.25rem;">
+        <div class="statistic">
+          <p class="statistic-title">当前业绩（元）</p>
+          <p class="statistic-value">8,200</p>
+          <p class="statistic-description">本月累计 · 更新至 10-19</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-content" style="padding:1.25rem;">
+        <div class="statistic">
+          <p class="statistic-title">我的排名</p>
+          <p class="statistic-value" id="sumRank">第50名</p>
+          <p class="statistic-description">新签销售序列 · 本月</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-content" style="padding:1.25rem;">
+        <div class="statistic">
+          <p class="statistic-title" id="sumGapTitle">距上一名 · 第49名</p>
+          <p class="statistic-value" id="sumGapValue" style="font-size:1.5rem;">差 300</p>
+          <p class="statistic-description" id="sumGapDesc">第49名业绩 8,500 元 · 已完成 96.5%</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-content" style="padding:1.25rem;">
+        <div class="statistic">
+          <p class="statistic-title">本月工资结算业绩</p>
+          <p class="statistic-value">35,300</p>
+          <p class="statistic-description">销售团队最高业绩：35,300 元</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== 主区：回访日程（左）/ 今日作业 + 我的客户库（右） ===== -->
+  <div style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:0.75rem;">
+
+    <!-- 左：回访日程 -->
+    <div class="card" style="flex:2 1 40rem;min-width:0;">
+      <div class="card-header" style="padding-bottom:0;">
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <p class="card-title" style="font-size:1rem;">回访日程</p>
+          <div class="flex items-center flex-wrap gap-2">
+            <div class="tab-list" id="rvTabs" role="tablist" aria-label="回访日程分类"></div>
+            <div class="flex items-center gap-1" id="rvWeekNav">
+              <button class="btn" data-variant="outline" data-size="xs" type="button" id="rvPrev" onclick="rvWeek(-1)">上一周</button>
+              <span class="muted" id="rvWeekLabel">10-19 ~ 10-25</span>
+              <button class="btn" data-variant="outline" data-size="xs" type="button" id="rvNext" onclick="rvWeek(1)">下一周</button>
+            </div>
+          </div>
+        </div>
+        <p class="card-description" id="rvDesc">库中联系人 · 按客户等级统计日内回访安排（近两周）</p>
+      </div>
+      <div class="card-content">
+        <div class="table-container">
+          <table class="table">
+            <colgroup>
+              <col style="width:9rem;">
+              <col style="width:auto;">
+              <col style="width:auto;">
+              <col style="width:auto;">
+              <col style="width:auto;">
+              <col style="width:auto;">
+              <col style="width:auto;">
+              <col style="width:5rem;">
+            </colgroup>
+            <thead id="rvHead"></thead>
+            <tbody id="rvBody"></tbody>
+            <tfoot id="rvFoot"></tfoot>
+          </table>
+        </div>
+        <p class="muted" id="rvNote" style="margin:0.75rem 0 0 0;font-size:0.75rem;">今日（10-19 周一）需回访 42 位联系人 · 共 206 位（本周）</p>
+      </div>
+    </div>
+
+    <!-- 右：今日作业 + 我的客户库 -->
+    <div style="flex:1 1 22rem;min-width:0;display:flex;flex-direction:column;gap:0.75rem;">
+
+      <!-- 今日作业 -->
+      <div class="card">
+        <div class="card-header">
+          <p class="card-title" style="font-size:1rem;">今日作业</p>
+          <p class="card-description">2026-10-19 周一 · 今日需完成的客户联系</p>
+        </div>
+        <div class="card-content" style="padding-top:1.25rem;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem 0.75rem;">
+            <div class="statistic">
+              <p class="statistic-title">今日待联系</p>
+              <p class="statistic-value" style="font-size:1.5rem;">0</p>
+              <p class="statistic-description">B级以上客户</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">逾期未联系</p>
+              <p class="statistic-value" style="font-size:1.5rem;">0</p>
+              <p class="statistic-description">保持得很好</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">今日捡回</p>
+              <p class="statistic-value" style="font-size:1.5rem;">8</p>
+              <p class="statistic-description">已联系 8 / 8</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">今日分发</p>
+              <p class="statistic-value" style="font-size:1.5rem;">5</p>
+              <p class="statistic-description">已联系 5 / 5</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 我的客户库 -->
+      <div class="card">
+        <div class="card-header">
+          <div class="flex items-center justify-between gap-2">
+            <p class="card-title" style="font-size:1rem;">我的客户库</p>
+            <button class="btn" data-variant="outline" data-size="xs" type="button" onclick="demoToast('进入我的客户库')">进入客户库</button>
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="flex items-center gap-2" style="margin-bottom:1rem;">
+            <span class="avatar" data-size="lg"><span class="avatar-fallback" style="font-size:0.875rem;">罗</span></span>
+            <div>
+              <p class="font-medium" style="margin:0;">罗屿</p>
+              <p class="muted" style="margin:0;">北京-销售一部</p>
+            </div>
+          </div>
+
+          <div style="margin-bottom:1rem;">
+            <div class="flex items-center justify-between" style="margin-bottom:0.375rem;">
+              <span class="muted">客户库容量</span>
+              <span class="small">720 / 1,000 · 72%</span>
+            </div>
+            <progress class="progress" value="72" max="100"></progress>
+            <p class="text-xs text-muted-foreground" style="margin:0.375rem 0 0 0;">剩余可捡容量 280 家</p>
+          </div>
+
+          <p class="muted" style="margin:0 0 0.5rem 0;">客户分布（共 720 家）</p>
+          <div class="flex flex-wrap gap-1" id="gradeChips"></div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem 0.75rem;margin-top:1rem;">
+            <div class="statistic">
+              <p class="statistic-title">B级以上客户</p>
+              <p class="statistic-value" style="font-size:1.5rem;">1</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">本月总分发</p>
+              <p class="statistic-value" style="font-size:1.5rem;">51</p>
+              <p class="statistic-description">签单量 0</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">本月捡回</p>
+              <p class="statistic-value" style="font-size:1.5rem;">59</p>
+              <p class="statistic-description">签单量 0</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">系统删除</p>
+              <p class="statistic-value" style="font-size:1.5rem;">0</p>
+            </div>
+          </div>
+
+          <p class="text-xs text-muted-foreground" style="margin:1rem 0 0 0;">本月转化 C 级以上：0（已转化 0）</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== 业绩与榜单：我的业绩排名 / 销售TOP10 / 团队完成率TOP5 ===== -->
+  <div style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:0.75rem;">
+
+    <!-- 我的业绩排名（月度） -->
+    <div class="card" style="flex:1.1 1 30rem;min-width:0;">
+      <div class="card-header">
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <p class="card-title" style="font-size:1rem;">我的业绩排名</p>
+          <span class="badge" data-variant="outline">2026年10月</span>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="flex flex-wrap gap-2" id="podium" style="align-items:flex-end;"></div>
+
+        <hr class="separator" style="margin:1rem 0;">
+
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;">
+          <div class="statistic">
+            <p class="statistic-title">我的排名</p>
+            <p class="statistic-value" id="pmVal" style="font-size:1.5rem;">第50名</p>
+          </div>
+          <div class="statistic">
+            <p class="statistic-title">实际业绩</p>
+            <p class="statistic-value" id="pmMoney" style="font-size:1.5rem;">8,200</p>
+          </div>
+          <div class="statistic">
+            <p class="statistic-title" id="pmGoalTitle">追赶目标（第49名）</p>
+            <p class="statistic-value" id="pmGoalValue" style="font-size:1.5rem;">8,500</p>
+          </div>
+        </div>
+
+        <div id="chaseBox" style="margin-top:0.875rem;">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <span class="muted" id="chaseText">距上一名（第49名）还差 300</span>
+            <span class="small">已完成 96.5%</span>
+          </div>
+          <progress class="progress" value="96.5" max="100" style="margin-top:0.375rem;"></progress>
+        </div>
+
+        <p class="muted" id="rankLead" style="margin:0.875rem 0 0 0;display:none;">
+          已位列第1名，<span class="statistic-trend" data-trend="up">领先第2名 13,120</span>，继续保持！
+        </p>
+      </div>
+      <div class="card-footer">
+        <button class="btn" data-variant="outline" data-size="sm" type="button" id="rankToggle" onclick="toggleRankDemo()">演示前五视角</button>
+        <button class="btn" data-variant="default" data-size="sm" type="button" onclick="demoToast('查看月度排名')">查看月度排名</button>
+      </div>
+    </div>
+
+    <!-- 右列：销售TOP10 + 团队TOP5 -->
+    <div style="flex:1 1 20rem;min-width:0;display:flex;flex-direction:column;gap:0.75rem;">
+
+      <div class="card">
+        <div class="card-header">
+          <div class="flex items-center justify-between gap-2">
+            <p class="card-title" style="font-size:1rem;">新签销售业绩TOP10</p>
+            <span class="badge" data-variant="outline">本月</span>
+          </div>
+          <p class="card-description">自动滚动 · 悬停暂停</p>
+        </div>
+        <div class="card-content" style="padding-top:1.25rem;">
+          <div class="table-container" id="top10Box" style="height:18rem;overflow-y:hidden;">
+            <table class="table">
+              <colgroup>
+                <col style="width:4rem;">
+                <col style="width:auto;">
+                <col style="width:auto;">
+                <col style="width:auto;">
+                <col style="width:auto;">
+                <col style="width:auto;">
+              </colgroup>
+              <thead style="position:sticky;top:0;z-index:1;">
+                <tr class="table-row">
+                  <th class="table-head" scope="col">排名</th>
+                  <th class="table-head" scope="col">姓名</th>
+                  <th class="table-head" scope="col">部门</th>
+                  <th class="table-head" scope="col">经理</th>
+                  <th class="table-head" scope="col">归属</th>
+                  <th class="table-head" scope="col">当前业绩</th>
+                </tr>
+              </thead>
+              <tbody id="top10Body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="flex items-center justify-between gap-2">
+            <p class="card-title" style="font-size:1rem;">新签团队月目标完成率TOP5</p>
+            <span class="badge" data-variant="outline">本月</span>
+          </div>
+        </div>
+        <div class="card-content" style="padding-top:1rem;">
+          <div class="table-container">
+            <table class="table">
+              <colgroup>
+                <col style="width:4rem;">
+                <col style="width:auto;">
+                <col style="width:auto;">
+                <col style="width:auto;">
+                <col style="width:auto;">
+              <col style="width:10rem;">
+              </colgroup>
+              <thead>
+                <tr class="table-row">
+                  <th class="table-head" scope="col">排名</th>
+                  <th class="table-head" scope="col">部门</th>
+                  <th class="table-head" scope="col">经理</th>
+                  <th class="table-head" scope="col">月目标</th>
+                  <th class="table-head" scope="col">已完成</th>
+                  <th class="table-head" scope="col">完成率</th>
+                </tr>
+              </thead>
+              <tbody id="teamBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== 大额成单榜（全宽滚动） ===== -->
+  <div class="card" style="margin-top:0.75rem;">
+    <div class="card-header">
+      <div class="flex items-center justify-between gap-2">
+        <p class="card-title" style="font-size:1rem;">大额成单榜</p>
+        <button class="btn" data-variant="link" data-size="sm" type="button" onclick="demoToast('查看更多大额成单')">点击查看更多 ▾</button>
+      </div>
+      <p class="card-description">自动滚动 · 悬停暂停</p>
+    </div>
+    <div class="card-content" style="padding-top:1.25rem;">
+      <div class="table-container" id="ordersBox" style="height:14rem;overflow-y:hidden;">
+        <table class="table">
+          <colgroup>
+            <col style="width:24%;">
+            <col style="width:13%;">
+            <col style="width:11%;">
+            <col style="width:15%;">
+            <col style="width:23%;">
+            <col style="width:14%;">
+          </colgroup>
+          <thead style="position:sticky;top:0;z-index:1;">
+            <tr class="table-row">
+              <th class="table-head" scope="col">公司名称</th>
+              <th class="table-head" scope="col">会员级别</th>
+              <th class="table-head" scope="col">服务期限</th>
+              <th class="table-head" scope="col">签约金额</th>
+              <th class="table-head" scope="col">主营业务</th>
+              <th class="table-head" scope="col">签单日期</th>
+            </tr>
+          </thead>
+          <tbody id="ordersBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 辅助区：消息中心（左）/ 昨日电话 + 本月考勤（右） ===== -->
+  <div style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:0.75rem;">
+
+    <!-- 消息中心 -->
+    <div class="card" style="flex:2 1 40rem;min-width:0;">
+      <div class="card-header">
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <p class="card-title" style="font-size:1rem;">消息中心</p>
+          <div class="tab-list" id="msgTabs" role="tablist" aria-label="消息分类"></div>
+        </div>
+      </div>
+      <div class="card-content" style="padding-top:1.25rem;">
+        <div id="msgList" style="max-height:22rem;overflow-y:auto;"></div>
+        <div class="flex items-center justify-between flex-wrap gap-2" style="margin-top:0.75rem;">
+          <span class="muted" id="msgCount">「通知」共 10 条</span>
+          <button class="btn" data-variant="outline" data-size="xs" type="button" onclick="demoToast('查看更多记录')">查看更多记录</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右列：昨日电话 + 本月考勤 -->
+    <div style="flex:1 1 22rem;min-width:0;display:flex;flex-direction:column;gap:0.75rem;">
+
+      <div class="card">
+        <div class="card-header">
+          <div class="flex items-center justify-between gap-2">
+            <p class="card-title" style="font-size:1rem;">昨日电话时间</p>
+            <button class="btn" data-variant="link" data-size="sm" type="button" onclick="demoToast('查看通话记录')">查看详情</button>
+          </div>
+          <p class="card-description">2026年10月15日</p>
+        </div>
+        <div class="card-content" style="padding-top:1.25rem;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem 0.75rem;">
+            <div class="statistic">
+              <p class="statistic-title">通话次数</p>
+              <p class="statistic-value" style="font-size:1.5rem;">0</p>
+              <p class="statistic-description">超过一分钟 0 次</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">通话时长</p>
+              <p class="statistic-value" style="font-size:1.5rem;">0</p>
+              <p class="statistic-description">平均时长 0 分钟</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="flex items-center justify-between gap-2">
+            <p class="card-title" style="font-size:1rem;">本月考勤</p>
+            <button class="btn" data-variant="link" data-size="sm" type="button" onclick="demoToast('查看考勤详情')">查看详情</button>
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="statistic" style="margin-bottom:0.75rem;">
+            <p class="statistic-title">连续打卡第</p>
+            <p class="statistic-value">12 <span style="font-size:0.875rem;">天</span></p>
+          </div>
+          <div class="flex items-center justify-between" style="margin-bottom:0.375rem;">
+            <span class="muted">月度全勤奖进度</span>
+            <span class="small">12 / 22 天</span>
+          </div>
+          <progress class="progress" value="12" max="22"></progress>
+          <p class="text-xs text-muted-foreground" style="margin:0.375rem 0 0 0;">还差 10 天可获得月度全勤奖</p>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0.5rem;margin-top:1rem;">
+            <div class="statistic">
+              <p class="statistic-title">迟到</p>
+              <p class="statistic-value" style="font-size:1.25rem;">0</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">早退</p>
+              <p class="statistic-value" style="font-size:1.25rem;">0</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">请假</p>
+              <p class="statistic-value" style="font-size:1.25rem;">0</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">忘打卡</p>
+              <p class="statistic-value" style="font-size:1.25rem;">0</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== 页脚 ===== -->
+  <div class="flex items-center justify-between flex-wrap gap-2" style="margin-top:1.5rem;">
+    <p class="muted" style="margin:0;">演示数据基线：2026-10-19（周一）· 销售工作台原型</p>
+    <button class="btn" data-variant="link" data-size="sm" type="button" onclick="backToTop()">回到顶部</button>
+  </div>
+
+</div>
+
+<!-- ===== 悬浮回到顶部（滚动后出现） ===== -->
+<button id="backTop" class="btn" data-variant="outline" data-size="icon" type="button"
+        style="position:fixed;right:1.5rem;bottom:1.5rem;z-index:40;display:none;" aria-label="回到顶部" onclick="backToTop()">
+  <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
+</button>
+
+<!-- ===== 用户菜单（库 dropdown 组件，popover + anchor 定位） ===== -->
+<div id="userMenu" role="menu" class="dropdown-content" popover aria-label="用户菜单">
+  <div class="dropdown-label">北京-销售一部 · 罗屿</div>
+  <div class="dropdown-separator" role="separator"></div>
+  <button role="menuitem" class="dropdown-item" tabindex="-1" type="button" onclick="demoToast('切换演示账号')">切换演示账号</button>
+  <button role="menuitem" class="dropdown-item" data-variant="destructive" tabindex="-1" type="button" onclick="demoToast('退出登录')">退出登录</button>
+</div>
+
+<!-- ===== 五星销售提醒（库 dialog 组件） ===== -->
+<dialog id="starDialog" class="dialog" data-size="sm">
+  <div class="dialog-content">
+    <div class="dialog-header">
+      <p class="dialog-title">星级提醒 · 五星销售</p>
+      <p class="dialog-description">当前星级为「五星」。恭喜保星！您已完成保星任务，继续加油呦：）</p>
+    </div>
+    <div class="dialog-footer">
+      <button class="btn" data-variant="outline" type="button" onclick="starAction('继续努力')">继续努力</button>
+      <button class="btn" data-variant="default" type="button" onclick="starAction('我知道了不再提示')">我知道了，不再提示</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- ===== 库 toast 组件容器（安装说明中的官方结构） ===== -->
+<div id="toastHost" class="toast-container" aria-label="Notifications" data-position="top-center"></div>
+
+<script>
+/* =========================================================
+   销售工作台 · 演示数据与交互（原生 JS，无任何外部依赖）
+   数据来源：旧版《销售首页.html》演示数据（基线 2026-10-19 周一）
+   「完全库默认」方案：渲染出的 DOM 一律使用内联纯布局 + 库组件类与官方变体，
+   本文件不产生任何自造样式。
+   ========================================================= */
+
+var TODAY = '2026-10-19';   /* 演示基准日期（周一） */
+
+/* ===== 回访日程：库中联系人（近两周，双周翻页） ===== */
+var REVIEW_LIB = [
+  { week: '10-19 ~ 10-25', rows: [
+    { date: '10-19', wd: '周一', today: true, AA: 2, A: 5, B: 8,  C: 12, D: 9,  E: 6 },
+    { date: '10-20', wd: '周二', AA: 1, A: 4, B: 9,  C: 11, D: 8,  E: 5 },
+    { date: '10-21', wd: '周三', AA: 3, A: 6, B: 7,  C: 10, D: 7,  E: 4 },
+    { date: '10-22', wd: '周四', AA: 2, A: 3, B: 8,  C: 13, D: 10, E: 5 },
+    { date: '10-23', wd: '周五', AA: 1, A: 5, B: 6,  C: 9,  D: 6,  E: 3 },
+    { date: '10-24', wd: '周六', AA: 0, A: 1, B: 2,  C: 4,  D: 3,  E: 2 },
+    { date: '10-25', wd: '周日', AA: 0, A: 0, B: 1,  C: 2,  D: 2,  E: 1 }
+  ]},
+  { week: '10-26 ~ 11-01', rows: [
+    { date: '10-26', wd: '周一', AA: 2, A: 4, B: 7, C: 10, D: 8, E: 5 },
+    { date: '10-27', wd: '周二', AA: 1, A: 5, B: 8, C: 9,  D: 7, E: 4 },
+    { date: '10-28', wd: '周三', AA: 3, A: 4, B: 6, C: 11, D: 6, E: 3 },
+    { date: '10-29', wd: '周四', AA: 2, A: 6, B: 9, C: 12, D: 9, E: 5 },
+    { date: '10-30', wd: '周五', AA: 1, A: 3, B: 5, C: 8,  D: 5, E: 2 },
+    { date: '10-31', wd: '周六', AA: 0, A: 1, B: 2, C: 3,  D: 2, E: 1 },
+    { date: '11-01', wd: '周日', AA: 0, A: 0, B: 1, C: 2,  D: 1, E: 1 }
+  ]}
+];
+
+/* ===== 回访日程：提交B级客户（本周） ===== */
+var REVIEW_B = [
+  { date: '10-19', wd: '周一', today: true, AA: 2, A: 4, B: 6, C: 5, D: 3 },
+  { date: '10-20', wd: '周二', AA: 1, A: 3, B: 5, C: 4, D: 2 },
+  { date: '10-21', wd: '周三', AA: 3, A: 5, B: 7, C: 6, D: 4 },
+  { date: '10-22', wd: '周四', AA: 2, A: 4, B: 6, C: 5, D: 3 },
+  { date: '10-23', wd: '周五', AA: 1, A: 4, B: 5, C: 4, D: 2 },
+  { date: '10-24', wd: '周六', AA: 0, A: 2, B: 3, C: 3, D: 2 },
+  { date: '10-25', wd: '周日', AA: 0, A: 1, B: 2, C: 2, D: 1 }
+];
+
+/* ===== 我的客户库：等级分布（AX 级 → K 级，S/N 为特殊状态） ===== */
+var GRADES = [
+  { g: 'AA', n: 0 }, { g: 'A', n: 0 }, { g: 'B', n: 1 }, { g: 'C', n: 38 },
+  { g: 'D', n: 658 }, { g: 'E', n: 22 }, { g: 'S', n: 0 }, { g: 'N', n: 1 }, { g: 'K', n: 0 }
+];
+
+/* ===== 新签销售业绩TOP10 ===== */
+var TOP10 = [
+  { r: 1,  name: '陈何星',     dept: '北分四部',   mgr: '郝雪健', region: '北分', yj: 16199 },
+  { r: 2,  name: '张秀秀',     dept: '安徽八部',   mgr: '刘婷',   region: '安徽', yj: 13399 },
+  { r: 3,  name: '杨凯',       dept: '安徽八部',   mgr: '刘婷',   region: '安徽', yj: 13057 },
+  { r: 4,  name: '孟玉芳',     dept: '河北二部',   mgr: '韩婷',   region: '河北', yj: 12300 },
+  { r: 5,  name: '鲍雁',       dept: '安徽四部',   mgr: '朱冠海', region: '安徽', yj: 12105 },
+  { r: 6,  name: '韩月朝',     dept: '北分四部',   mgr: '郝雪健', region: '北分', yj: 10597 },
+  { r: 7,  name: '张红旗',     dept: '河北三部',   mgr: '朱伟华', region: '河北', yj: 9500 },
+  { r: 8,  name: '王美佳',     dept: '涿州五部',   mgr: '梁铁军', region: '涿州', yj: 9195 },
+  { r: 9,  name: '客服陈金龙', dept: '燕郊客服',   mgr: '陈金龙', region: '代理', yj: 9000 },
+  { r: 10, name: '杨津',       dept: '涿州五部',   mgr: '梁铁军', region: '涿州', yj: 8050 }
+];
+
+/* ===== 新签团队月目标完成率TOP5 ===== */
+var TEAM5 = [
+  { r: 1, dept: '安徽八部',   mgr: '刘婷',   target: 130000, done: 37956, pct: 29.20 },
+  { r: 2, dept: '河北二部',   mgr: '韩婷',   target: 75000,  done: 19829, pct: 26.44 },
+  { r: 3, dept: '北分四部',   mgr: '郝雪健', target: 220000, done: 51695, pct: 23.50 },
+  { r: 4, dept: '涿州五部',   mgr: '梁铁军', target: 155000, done: 34773, pct: 22.43 },
+  { r: 5, dept: '安徽培训部', mgr: '张炎',   target: 25000,  done: 5499,  pct: 22.00 }
+];
+
+/* ===== 大额成单榜（脱敏演示数据） ===== */
+var ORDERS = [
+  { name: '内蒙***************公司', lv: '标准会员', term: '1年', amount: '4500.00 元', biz: '防水,玻璃', date: '2026-05-16' },
+  { name: '陕西***************公司', lv: '高级会员', term: '1年', amount: '4000.00 元', biz: '福利,礼品', date: '2026-05-15' },
+  { name: '野村***************公司', lv: '标准会员', term: '1年', amount: '7460.00 元', biz: '软件开发,人才派遣', date: '2026-05-15' },
+  { name: '上海***************公司', lv: '高级会员', term: '1年', amount: '5670.00 元', biz: '机器人,自动化', date: '2026-05-14' },
+  { name: '中国***************公司', lv: '标准会员', term: '1年', amount: '4500.00 元', biz: '险', date: '2026-05-14' },
+  { name: '中科***************公司', lv: '标准会员', term: '1年', amount: '4000.00 元', biz: '--', date: '2026-05-14' },
+  { name: '上海***************公司', lv: '标准会员', term: '1年', amount: '4250.00 元', biz: '门户网站制作,门户网站开发', date: '2026-05-14' },
+  { name: '天津***************公司', lv: '标准会员', term: '1年', amount: '4500.00 元', biz: '节能风机', date: '2026-05-13' },
+  { name: '福建***************公司', lv: '标准会员', term: '1年', amount: '5900.00 元', biz: '监理,服务', date: '2026-05-13' },
+  { name: '青岛***************公司', lv: '标准会员', term: '1年', amount: '4000.00 元', biz: '尼龙砂带,砂带', date: '2026-05-13' },
+  { name: '河南***************公司', lv: '高级会员', term: '1年', amount: '6800.00 元', biz: '中车成都机车车辆有限公司+双梁起重机', date: '2026-05-13' },
+  { name: '桐乡***************公司', lv: '标准会员', term: '1年', amount: '4500.00 元', biz: '智能问数', date: '2026-05-13' },
+  { name: '浙江***************公司', lv: '标准会员', term: '1年', amount: '4800.00 元', biz: '废旧+光伏板回收,废旧太阳能光伏板', date: '2026-05-12' },
+  { name: '北京***************公司', lv: '标准会员', term: '1年', amount: '4000.00 元', biz: '在线英语,英语培训', date: '2026-05-11' },
+  { name: '山东***************公司', lv: '标准会员', term: '1年', amount: '3600.00 元', biz: '钢材,管材', date: '2026-05-11' },
+  { name: '南通***************公司', lv: '标准会员', term: '1年', amount: '4000.00 元', biz: 'EPP模具,EPS模具', date: '2026-05-11' },
+  { name: '广州***************公司', lv: '标准会员', term: '1年', amount: '5888.00 元', biz: '检定,校准', date: '2026-05-08' },
+  { name: '上海***************公司', lv: '标准会员', term: '1年', amount: '4000.00 元', biz: '浦东国际机场+便利店,虹桥国际机场+便利店', date: '2026-05-08' },
+  { name: '彩讯***************公司', lv: '标准会员', term: '1年', amount: '4000.00 元', biz: '信息化,软件', date: '2026-05-07' },
+  { name: '青海***************公司', lv: '标准会员', term: '1年', amount: '6000.00 元', biz: '广告制作,平面设计', date: '2025-07-31' }
+];
+
+/* ===== 月度排名（演示视角数据） ===== */
+var RANK_TOP5 = [
+  { r: 1, yj: 35300 }, { r: 2, yj: 22180 }, { r: 3, yj: 14400 }, { r: 4, yj: 13200 }, { r: 5, yj: 13000 }
+];
+
+/* ===== 消息中心（旧版数据：通知 / 留言 / 邀请招标 / 制度栏） ===== */
+var MSG_TABS = [
+  { key: 'tz', label: '通知' },
+  { key: 'ly', label: '留言' },
+  { key: 'zb', label: '邀请招标' },
+  { key: 'zd', label: '制度栏' }
+];
+var MSGS = {
+  tz: [
+    { t: '2026【国庆】放假及锁库时间安排', from: '刘卫娟', time: '2026/09/30_17:29:46', hit: 129 },
+    { t: '2026版网站广告刊例更新通知！', from: '营销部经理(周海贵)', time: '2026/06/16_18:30:11', hit: 260 },
+    { t: '新签序列采乐会签约规则说明【补充更新】', from: '营销部经理(周海贵)', time: '2026/06/15_10:24:30', hit: 156 },
+    { t: '关于在线支付订单业绩计入规则调整的通知！', from: '营销部经理(周海贵)', time: '2026/06/08_11:23:17', hit: 193 },
+    { t: '新签序列采乐会开通挂账操作！【请注意】', from: '营销部经理(周海贵)', time: '2026/06/08_09:49:37', hit: 138 },
+    { t: '2026【五一】放假及锁库时间安排', from: '营销部经理(周海贵)', time: '2026/04/30_17:10:45', hit: 218 },
+    { t: '关于客服一部编制撤销及人员调整的通知！-2026/4/1', from: '行政部(杨婷)', time: '2026/04/01_10:45:03', hit: 312 },
+    { t: '合同无法盖电子章问题解决方案！【销售必看】', from: '营销部经理(周海贵)', time: '2026/03/26_17:25:52', hit: 246 },
+    { t: '处罚通告48', from: '刘卫娟', time: '2026/03/09_14:45:02', hit: 512 },
+    { t: '员工违纪违规通报', from: '史景凤', time: '2026/02/28_14:14:18', hit: 510 }
+  ],
+  ly: [
+    { t: '销售死于报价？看十年销冠教你阶梯式报价！', from: '营销部经理(周海贵)', time: '2025/03/10_13:56:20', hit: 218 },
+    { t: '开发 | 找准KP开单快人一步，阿里铁军月入100万销售秘籍', from: '营销部经理(周海贵)', time: '2024/09/29_15:39:13', hit: 217 },
+    { t: '资质通事业部目前能够办理的相关资质目录（2024版）', from: '周海贵', time: '2024/05/16_13:52:47', hit: 292 },
+    { t: '2024年度（第一季）标讯话术PK赛优秀话术分享', from: '刘卫娟', time: '2024/03/25_16:21:21', hit: 461 },
+    { t: '2024年度（第一季）标讯话术PK赛【冠亚季军】话术分享', from: '刘卫娟', time: '2024/03/25_16:06:48', hit: 387 },
+    { t: '销售常用短信营销模板集合——2022年10月更新', from: '营销部经理(周海贵)', time: '2022/10/24_14:00:22', hit: 641 },
+    { t: '销售详情页添加客户「行为通知」', from: '窦驰坤', time: '2021/10/11_11:57:07', hit: 366 },
+    { t: '销售客户详情页「相关客户」功能调整为「客户相关权限」功能', from: '窦驰坤', time: '2021/09/24_13:49:32', hit: 289 },
+    { t: '不受信任证书(此网站的安全证书有问题)相关问题解决方案', from: '窦驰坤', time: '2021/08/24_17:37:07', hit: 323 },
+    { t: '移动端退费申请流程（新）', from: '窦驰坤', time: '2021/08/18_14:42:56', hit: 282 }
+  ],
+  zb: [],
+  zd: [
+    { t: '新签序列采乐会签约规则说明', from: '刘卫娟', time: '2026/06/04_13:58:07', hit: 49, bj: true },
+    { t: '员工手册', from: '行政部(杨婷)', time: '2025/08/27_10:18:51', hit: 530, bj: true },
+    { t: '【销售】关于候补优惠折扣业绩通知 -HCTS-XS-23-018', from: '刘卫娟', time: '2023/12/28_17:20:56', hit: 302, bj: true },
+    { t: '员工奖惩制度【202200019号】文件培训视频', from: '行政部', time: '2022/11/21_15:46:48', hit: 397, bj: true },
+    { t: '员工奖惩制度', from: '行政部', time: '2022/11/17_17:56:41', hit: 362, bj: true },
+    { t: '考勤管理制度', from: '行政部', time: '2022/11/17_17:55:35', hit: 769, bj: true },
+    { t: '疫情期间居家办公管理办法-HCTS-XZ--22-016', from: '行政部', time: '2022/05/10_15:59:55', hit: 458, bj: true },
+    { t: '2022版客户投诉退款/退费管理制度', from: '行政部', time: '2022/03/10_13:04:35', hit: 285, bj: true },
+    { t: '保密管理制度2022版', from: '行政部', time: '2022/02/16_12:59:18', hit: 138, bj: true },
+    { t: '【行政】公司物品管理制度-HCTS-XZ-21-009', from: '王红雪', time: '2022/01/06_14:25:10', hit: 257, bj: true }
+  ]
+};
+
+/* ================= 通用工具 ================= */
+function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function fmt(n) { n = Number(n); return isNaN(n) ? String(n) : String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+var BADGE_VARIANTS = { 'default': 1, 'secondary': 1, 'outline': 1, 'primary': 1, 'destructive': 1, 'warning': 1, 'danger-outline': 1, 'subtle': 1 };
+function badgeHtml(text, variant) {
+  var v = BADGE_VARIANTS[variant] ? variant : 'outline';
+  return '<span class="badge" data-variant="' + v + '">' + esc(text) + '</span>';
+}
+function backToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+/* ===== 操作反馈：库 toast 组件（components/toast/toast.css，按文档站结构组织） ===== */
+var TOAST_MAX = 3;
+function toastDismiss(el) {
+  if (!el || !el.parentNode || el.getAttribute('data-closing')) return;
+  el.setAttribute('data-closing', '');
+  var anim = null;
+  try {
+    anim = el.animate(
+      [{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(0.5rem)' }],
+      { duration: 200, easing: 'ease', fill: 'forwards' }
+    );
+  } catch (e) { }
+  var finish = function () {
+    try { if (el.hidePopover) el.hidePopover(); } catch (e) { }
+    if (el.parentNode) el.parentNode.removeChild(el);
+  };
+  if (anim && anim.finished && anim.finished.then) { anim.finished.then(finish); } else { finish(); }
+}
+function showToast(title, description) {
+  var host = document.getElementById('toastHost');
+  if (!host) return;
+  var el = document.createElement('div');
+  el.className = 'toast';
+  el.setAttribute('role', 'status');
+  el.setAttribute('aria-live', 'polite');
+  el.setAttribute('aria-atomic', 'true');
+  el.setAttribute('popover', 'manual');
+  el.innerHTML =
+    '<div class="toast-content">' +
+      '<div class="toast-text">' +
+        '<p class="toast-title">' + esc(title) + '</p>' +
+        (description ? '<p class="toast-description">' + esc(description) + '</p>' : '') +
+      '</div>' +
+      '<button class="toast-close" type="button" aria-label="关闭" data-toast-close>' +
+        '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>' +
+      '</button>' +
+    '</div>';
+  host.appendChild(el);
+  try { el.showPopover(); } catch (e) { }
+  var btn = el.querySelector('[data-toast-close]');
+  if (btn) btn.addEventListener('click', function () { toastDismiss(el); });
+  window.setTimeout(function () { toastDismiss(el); }, 3200);
+  var live = host.querySelectorAll('.toast');
+  if (live.length > TOAST_MAX) toastDismiss(live[0]);
+}
+function demoToast(what) {
+  showToast('演示页面', what + '：本原型为静态演示，该入口暂不跳转。');
+}
+
+/* ================= 我的客户库：等级分布 chips ================= */
+function renderGrades() {
+  var html = '';
+  for (var i = 0; i < GRADES.length; i++) {
+    var it = GRADES[i];
+    html += badgeHtml(it.g + '级 · ' + it.n, it.n > 0 ? 'secondary' : 'outline');
+  }
+  document.getElementById('gradeChips').innerHTML = html;
+}
+
+/* ================= 回访日程（双 Tab + 双周翻页） ================= */
+var rvTab = 'lib';   /* lib = 库中联系人 / b = 提交B级客户 */
+var rvWeekIdx = 0;
+
+function switchRvTab(key) { rvTab = key; renderRv(); }
+function rvWeek(delta) {
+  var n = rvWeekIdx + delta;
+  if (n < 0 || n >= REVIEW_LIB.length) return;
+  rvWeekIdx = n;
+  renderRv();
+}
+function rvDateCell(row) {
+  /* 日期 / 周几 / 今天徽章均禁止换行；空间不足时整体折行，避免文字被挤压断行 */
+  var h = '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:0.25rem 0.375rem;">' +
+    '<span style="white-space:nowrap;">' + row.date + '</span>' +
+    '<span class="muted" style="white-space:nowrap;">' + row.wd + '</span>';
+  if (row.today) h += '<span style="white-space:nowrap;">' + badgeHtml('今天', 'primary') + '</span>';
+  return h + '</div>';
+}
+function renderRv() {
+  var isLib = (rvTab === 'lib');
+
+  document.getElementById('rvTabs').innerHTML =
+    '<button class="tab-trigger" type="button" role="tab" aria-selected="' + isLib + '" onclick="switchRvTab(\'lib\')">库中联系人</button>' +
+    '<button class="tab-trigger" type="button" role="tab" aria-selected="' + (!isLib) + '" onclick="switchRvTab(\'b\')">提交B级客户</button>';
+  document.getElementById('rvWeekNav').style.display = isLib ? '' : 'none';   /* 用 display 控制：.flex 会覆盖 [hidden] */
+  document.getElementById('rvDesc').textContent = isLib
+    ? '库中联系人 · 按客户等级统计日内回访安排（近两周）'
+    : '我提交的B级及以上客户 · 七日内回访安排';
+
+  var grades = isLib ? ['AA', 'A', 'B', 'C', 'D', 'E'] : ['AA', 'A', 'B', 'C', 'D'];
+  var rows = isLib ? REVIEW_LIB[rvWeekIdx].rows : REVIEW_B;
+
+  /* 表头 */
+  var head = '<tr class="table-row"><th class="table-head" scope="col">日期</th>';
+  for (var i = 0; i < grades.length; i++) head += '<th class="table-head" scope="col">' + grades[i] + '级</th>';
+  head += '<th class="table-head" scope="col">合计</th></tr>';
+  document.getElementById('rvHead').innerHTML = head;
+
+  /* 数据行 */
+  var colSum = {};
+  for (var i2 = 0; i2 < grades.length; i2++) colSum[grades[i2]] = 0;
+  var body = '';
+  for (var r = 0; r < rows.length; r++) {
+    var row = rows[r];
+    var total = 0;
+    body += '<tr class="table-row"><td class="table-cell">' + rvDateCell(row) + '</td>';
+    for (var c = 0; c < grades.length; c++) {
+      var v = row[grades[c]] || 0;
+      total += v;
+      colSum[grades[c]] += v;
+      body += '<td class="table-cell">' + v + '</td>';
+    }
+    body += '<td class="table-cell"><span class="font-medium">' + total + '</span></td></tr>';
+  }
+  document.getElementById('rvBody').innerHTML = body;
+
+  /* 当周合计行（tfoot，库中表格自带合计行样式） */
+  var foot = '<tr class="table-row"><td class="table-cell">合计</td>';
+  var grand = 0;
+  for (var c2 = 0; c2 < grades.length; c2++) {
+    grand += colSum[grades[c2]];
+    foot += '<td class="table-cell">' + colSum[grades[c2]] + '</td>';
+  }
+  foot += '<td class="table-cell">' + grand + '</td></tr>';
+  document.getElementById('rvFoot').innerHTML = foot;
+
+  /* 今日备注 */
+  var todayTotal = 0;
+  for (var r2 = 0; r2 < rows.length; r2++) {
+    if (rows[r2].today) {
+      for (var c3 = 0; c3 < grades.length; c3++) todayTotal += (rows[r2][grades[c3]] || 0);
+    }
+  }
+  document.getElementById('rvNote').textContent = isLib
+    ? '今日（10-19 周一）需回访 ' + todayTotal + ' 位联系人 · 当周共 ' + grand + ' 位'
+    : '今日（10-19 周一）需回访 ' + todayTotal + ' 位客户 · 当周共 ' + grand + ' 位';
+
+  /* 周切换控件状态 */
+  document.getElementById('rvWeekLabel').textContent = REVIEW_LIB[rvWeekIdx].week;
+  document.getElementById('rvPrev').disabled = (rvWeekIdx <= 0);
+  document.getElementById('rvNext').disabled = (rvWeekIdx >= REVIEW_LIB.length - 1);
+}
+
+/* ================= 月度排名（演示视角联动：第50名 ⇄ 第1名） ================= */
+var rankDemoTop = false;   /* false = 追赶态（第50名） / true = 前五态（第1名） */
+
+function toggleRankDemo() {
+  rankDemoTop = !rankDemoTop;
+  renderRankZone();
+}
+function renderRankZone() {
+  var top = rankDemoTop;
+
+  /* 业绩速览：我的排名 / 追赶差距 */
+  document.getElementById('sumRank').textContent = top ? '第1名' : '第50名';
+  if (top) {
+    document.getElementById('sumGapTitle').textContent = '距下一名 · 第2名';
+    document.getElementById('sumGapValue').textContent = '领先 13,120';
+    document.getElementById('sumGapDesc').innerHTML = '<span class="statistic-trend" data-trend="up">第2名业绩 22,180 元 · 领跑中</span>';
+  } else {
+    document.getElementById('sumGapTitle').textContent = '距上一名 · 第49名';
+    document.getElementById('sumGapValue').textContent = '差 300';
+    document.getElementById('sumGapDesc').textContent = '第49名业绩 8,500 元 · 已完成 96.5%';
+  }
+
+  /* 领奖台：追赶态仅展示 TOP3 标杆；前五态展示 TOP5 并标记「我」 */
+  var list = top ? RANK_TOP5 : RANK_TOP5.slice(0, 3);
+  var pd = '';
+  for (var i = 0; i < list.length; i++) {
+    var it = list[i];
+    var v = it.r === 1 ? 'default' : (it.r === 2 ? 'secondary' : 'outline');
+    pd += '<div style="flex:1 1 5rem;min-width:4.5rem;display:flex;flex-direction:column;align-items:center;gap:0.375rem;">' +
+      '<div class="flex items-center gap-1">' + badgeHtml('第' + it.r + '名', v) + (top && it.r === 1 ? badgeHtml('我', 'subtle') : '') + '</div>' +
+      '<p class="statistic-value" style="font-size:1.5rem;">' + fmt(it.yj) + '</p>' +
+      '<span class="muted" style="font-size:0.75rem;">' + (it.r === 1 ? '团队标杆' : '') + '</span>' +
+    '</div>';
+  }
+  document.getElementById('podium').innerHTML = pd;
+
+  /* 我的排名区 */
+  document.getElementById('pmVal').textContent = top ? '第1名' : '第50名';
+  document.getElementById('pmMoney').textContent = top ? fmt(35300) : fmt(8200);
+  document.getElementById('pmGoalTitle').textContent = top ? '领先第2名' : '追赶目标（第49名）';
+  document.getElementById('pmGoalValue').textContent = top ? fmt(13120) : fmt(8500);
+  document.getElementById('chaseBox').style.display = top ? 'none' : '';
+  document.getElementById('rankLead').style.display = top ? '' : 'none';
+  document.getElementById('rankToggle').textContent = top ? '演示第50名视角' : '演示前五视角';
+}
+
+/* ================= 榜单渲染 ================= */
+function renderTop10() {
+  var html = '';
+  for (var i = 0; i < TOP10.length; i++) {
+    var t = TOP10[i];
+    html += '<tr class="table-row">' +
+      '<td class="table-cell">' + badgeHtml(String(t.r), t.r <= 5 ? 'primary' : 'outline') + '</td>' +
+      '<td class="table-cell">' + esc(t.name) + '</td>' +
+      '<td class="table-cell">' + esc(t.dept) + '</td>' +
+      '<td class="table-cell">' + esc(t.mgr) + '</td>' +
+      '<td class="table-cell">' + esc(t.region) + '</td>' +
+      '<td class="table-cell">' + fmt(t.yj) + '</td>' +
+    '</tr>';
+  }
+  document.getElementById('top10Body').innerHTML = html + html;   /* 两份，实现无缝循环滚动 */
+}
+function renderTeam() {
+  var html = '';
+  for (var i = 0; i < TEAM5.length; i++) {
+    var t = TEAM5[i];
+    html += '<tr class="table-row">' +
+      '<td class="table-cell">' + badgeHtml(String(t.r), 'outline') + '</td>' +
+      '<td class="table-cell" style="white-space:nowrap;">' + esc(t.dept) + '</td>' +
+      '<td class="table-cell" style="white-space:nowrap;">' + esc(t.mgr) + '</td>' +
+      '<td class="table-cell">' + fmt(t.target) + '</td>' +
+      '<td class="table-cell">' + fmt(t.done) + '</td>' +
+      '<td class="table-cell"><div style="display:flex;flex-direction:column;gap:0.375rem;min-width:6rem;">' +
+        '<span>' + t.pct.toFixed(2) + '%</span>' +
+        '<progress class="progress" value="' + t.pct + '" max="100"></progress>' +
+      '</div></td>' +
+    '</tr>';
+  }
+  document.getElementById('teamBody').innerHTML = html;
+}
+function renderOrders() {
+  var html = '';
+  for (var i = 0; i < ORDERS.length; i++) {
+    var o = ORDERS[i];
+    html += '<tr class="table-row">' +
+      '<td class="table-cell">' + esc(o.name) + '</td>' +
+      '<td class="table-cell">' + badgeHtml(o.lv, o.lv === '高级会员' ? 'primary' : 'secondary') + '</td>' +
+      '<td class="table-cell">' + esc(o.term) + '</td>' +
+      '<td class="table-cell">' + esc(o.amount) + '</td>' +
+      '<td class="table-cell">' + esc(o.biz) + '</td>' +
+      '<td class="table-cell muted">' + esc(o.date) + '</td>' +
+    '</tr>';
+  }
+  document.getElementById('ordersBody').innerHTML = html + html;   /* 两份，实现无缝循环滚动 */
+}
+
+/* ===== 无缝自动滚动（悬停暂停；内容不足一屏则不滚） ===== */
+function startMarquee(boxId, speed) {
+  var box = document.getElementById(boxId);
+  if (!box) return;
+  var tbody = box.querySelector('tbody');
+  var rows = tbody.children;
+  var half = Math.floor(rows.length / 2);
+  if (half <= 0) return;
+  var single = 0;
+  for (var i = 0; i < half; i++) single += rows[i].offsetHeight;
+  if (single <= box.clientHeight) return;   /* 行数不足，无需滚动 */
+
+  var st = 0, paused = false;
+  box.addEventListener('mouseenter', function () { paused = true; });
+  box.addEventListener('mouseleave', function () { paused = false; });
+  function step() {
+    if (!paused) {
+      st += speed;
+      if (st >= single) st -= single;
+      box.scrollTop = st;
+    }
+    window.requestAnimationFrame(step);
+  }
+  window.requestAnimationFrame(step);
+}
+
+/* ================= 消息中心（四 Tab 切换） ================= */
+var msgTab = 'tz';
+function switchMsgTab(key) { msgTab = key; renderMsg(); }
+function msgTabLabel(key) {
+  for (var i = 0; i < MSG_TABS.length; i++) { if (MSG_TABS[i].key === key) return MSG_TABS[i].label; }
+  return '';
+}
+function msgItem(m) {
+  return '<div style="padding:0.625rem 0.25rem;">' +
+    '<div class="flex items-center flex-wrap gap-2">' +
+      '<span class="font-medium" style="cursor:pointer;" onclick="demoToast(\'打开消息\')">' + esc(m.t) + '</span>' +
+      (m.bj ? badgeHtml('北京发布', 'danger-outline') : '') +
+    '</div>' +
+    '<div class="muted" style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.25rem;font-size:0.75rem;">' +
+      '<span>发布者：' + esc(m.from) + '</span><span>|</span>' +
+      '<span>时间：' + esc(m.time) + '</span><span>|</span>' +
+      '<span>点击量：' + m.hit + '</span>' +
+    '</div>' +
+  '</div>';
+}
+function renderMsg() {
+  var tabsHtml = '';
+  for (var i = 0; i < MSG_TABS.length; i++) {
+    var tb = MSG_TABS[i];
+    var n = MSGS[tb.key] ? MSGS[tb.key].length : 0;
+    tabsHtml += '<button class="tab-trigger" type="button" role="tab" aria-selected="' + (msgTab === tb.key) + '" onclick="switchMsgTab(\'' + tb.key + '\')">' +
+      tb.label + badgeHtml(String(n), 'outline') + '</button>';
+  }
+  document.getElementById('msgTabs').innerHTML = tabsHtml;
+
+  var list = MSGS[msgTab] || [];
+  var host = document.getElementById('msgList');
+  if (!list.length) {
+    host.innerHTML = '<div class="muted" style="padding:2.5rem 0;text-align:center;">暂无' + msgTabLabel(msgTab) + '记录</div>';
+  } else {
+    var parts = [];
+    for (var j = 0; j < list.length; j++) {
+      if (j > 0) parts.push('<hr class="separator">');
+      parts.push(msgItem(list[j]));
+    }
+    host.innerHTML = parts.join('');
+  }
+  document.getElementById('msgCount').textContent = '「' + msgTabLabel(msgTab) + '」共 ' + list.length + ' 条';
+}
+
+/* ================= 用户下拉菜单（库 dropdown 组件结构 + 轻量交互） ================= */
+function initDropdowns() {
+  var triggers = document.querySelectorAll('[data-dropdown-trigger]');
+  for (var i = 0; i < triggers.length; i++) {
+    (function () {
+      var trigger = triggers[i];
+      var menu = document.getElementById(trigger.getAttribute('data-dropdown-trigger'));
+      if (!menu) return;
+      var anchorId = '--dropdown-' + menu.id;
+      trigger.style.anchorName = anchorId;     /* CSS anchor 定位（与库 dropdown.js 同款做法） */
+      menu.style.positionAnchor = anchorId;
+      trigger.addEventListener('click', function () { menu.togglePopover(); });
+      menu.addEventListener('toggle', function (e) {
+        trigger.setAttribute('aria-expanded', e.newState === 'open');
+      });
+      var items = menu.querySelectorAll('.dropdown-item');
+      for (var j = 0; j < items.length; j++) {
+        items[j].addEventListener('click', function () {
+          try { menu.hidePopover(); } catch (err) { }
+        });
+      }
+    })();
+  }
+}
+
+/* ================= 五星销售提醒 ================= */
+function starAction(choice) {
+  var d = document.getElementById('starDialog');
+  if (d) d.close();
+  if (choice === '继续努力') {
+    showToast('五星销售', '继续保持五星状态，加油！');
+  } else {
+    showToast('五星销售', '已设置不再提示（演示）。');
+  }
+}
+
+/* ================= 回到顶部按钮显隐 ================= */
+function onScroll() {
+  var btn = document.getElementById('backTop');
+  if (!btn) return;
+  var show = (window.scrollY || document.documentElement.scrollTop || 0) >= 400;
+  btn.style.display = show ? '' : 'none';   /* 用 display 控制：.btn 会覆盖 [hidden] */
+}
+
+/* ================= 初始化 ================= */
+function init() {
+  renderGrades();
+  renderRv();
+  renderRankZone();
+  renderTop10();
+  renderTeam();
+  renderOrders();
+  renderMsg();
+  initDropdowns();
+
+  startMarquee('top10Box', 0.4);
+  startMarquee('ordersBox', 0.4);
+
+  window.addEventListener('scroll', onScroll);
+  onScroll();
+
+  /* 五星销售提醒：进入工作台后弹出（演示） */
+  window.setTimeout(function () {
+    var d = document.getElementById('starDialog');
+    if (d && d.showModal) d.showModal();
+  }, 1200);
+}
+init();
+</script>
+</body>
+</html>
