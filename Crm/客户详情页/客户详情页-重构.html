@@ -1235,9 +1235,9 @@ textarea.input { height: auto; padding: 8px 12px; resize: none; line-height: 1.5
       </div>
     </div>
 
-    <!-- 客户回访日程：默认近7天，右侧按钮展开近14日（同首页效果） -->
+    <!-- 客户回访日程：默认按所选级别收起（未选级别全部收起）；右侧按钮展开＝从明天起7个工作日，展示含今天，共10行 -->
     <div class="lv-sched-card">
-      <div class="lv-sched-tit">客户回访日程：<span class="sub_tit">按客户等级分类日内</span><a href="javascript:void(0);" id="lv_sched_btn" class="lv-sched-btn">展开近9天</a></div>
+      <div class="lv-sched-tit">客户回访日程：<span class="sub_tit">按客户等级分类日内</span><a href="javascript:void(0);" id="lv_sched_btn" class="lv-sched-btn">展开</a></div>
       <!-- 每日联系人数量横条：假数据占位，9天含周六日（周末绿色，与红色"过多"区分），标红演示"过多" -->
       <div class="lv-sched-bar">
         <span class="bar-label">客户回访日程</span>
@@ -1603,8 +1603,9 @@ function toggleContactDetail(row) {
   }
 }
 
-// ===== 客户回访日程：展开＝近9天（含周六日）；收起＝按所选评级工作日天数，未选级别全部收起 =====
-// 口径：展开按自然日计数（9行含周六日）；收起按工作日计数（跳过周六日定位截止行）
+// ===== 客户回访日程：展开＝从明天起7个工作日（共10行）；收起＝从明天起按所选评级工作日数；未选级别全部收起 =====
+// 口径：天数从明天起数工作日（跳过周六日、不含今天）；展示含今天行 → 展示＝今天 + 从明天起N个工作日
+//      （截止行之前的周六日行照常显示，如 C级5个工作日截止10-26，展示10-19~10-26 含24/25周末行）
 (function () {
   var lvBtn = document.getElementById('lv_sched_btn');
   var lvTbl = document.getElementById('lv_sched_table');
@@ -1618,30 +1619,30 @@ function toggleContactDetail(row) {
     var lv = lvSel.value;
     var days;
     if (lvOpened) {
-      days = 9; // 展开：近9天（含周六日，即共9行）
+      days = 7; // 展开：从明天起7个工作日（+今天及期间周末行，共10行）
     } else if (LV_DAYS.hasOwnProperty(lv)) {
-      days = LV_DAYS[lv]; // 收起且已选级别：按级别工作日天数
+      days = LV_DAYS[lv]; // 收起且已选级别：从明天起数该级别工作日数
     } else {
       days = 0; // 收起且未选级别：全部收起
     }
-    // 定位截止行：展开按自然日数满9行（含周六日）；收起跳过周六日只数工作日
-    var countWorkdayOnly = !lvOpened;
+    // 定位截止行：第1行(今天)固定计入展示，其余从明天(第2行)起数工作日，跳过周六日
     var endIdx = -1;
     var count = 0;
-    for (var i = 0; i < rows.length; i++) {
+    for (var i = 1; i < rows.length; i++) {
       var isWeekend = (' ' + rows[i].className + ' ').indexOf(' is-weekend ') > -1;
-      if (countWorkdayOnly && isWeekend) { continue; }
+      if (isWeekend) { continue; }
       count++;
       if (count > days) { break; }
       endIdx = i;
     }
+    if (days > 0 && endIdx < 0) { endIdx = 0; } // 展示含今天
     for (var j = 0; j < rows.length; j++) {
       rows[j].style.display = j <= endIdx ? 'table-row' : 'none';
     }
   }
   lvBtn.onclick = function () {
     lvOpened = !lvOpened;
-    lvBtn.textContent = lvOpened ? '收起' : '展开近9天';
+    lvBtn.textContent = lvOpened ? '收起' : '展开';
     renderSched();
     return false;
   };
@@ -1660,7 +1661,7 @@ function toggleContactDetail(row) {
   }
   lvSel.onchange = function () {
     lvOpened = false; // 切级别即回收起态，按级别天数展示
-    lvBtn.textContent = '展开近9天';
+    lvBtn.textContent = '展开';
     renderSched();
     applyColActive(lvSel.value);
   };
