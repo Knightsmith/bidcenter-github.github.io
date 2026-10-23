@@ -1,0 +1,72 @@
+.red{color: #f00;}
+.wkgl-content{width: 780px; margin: 30px auto 0; background-color: #fff; padding-bottom: 10px;}
+.wkgl-top{height: 56px; line-height: 56px; padding-left: 25px; background-color: rgb(102, 153, 255); font-weight: 700; font-size: 18px; color: #FFFFFF; position: relative;}
+.kecheng-box{margin: 20px 30px 0; border-bottom: 1px dashed rgb(228, 228, 228);}
+.kecheng-top{border-left: 4px solid rgb(102, 153, 255); margin-bottom: 20px;}
+.kecheng-top .jbxx-title{font-size: 16px; font-weight: 700; padding-left: 20px;}
+.kecheng-top .bitian{color: #999; font-size: 16px; margin-left: 5px;}
+.kecheng-cell{margin-bottom: 15px; margin-left: 25px;}
+.kecheng-cell .kecheng-cell-bd{width: 115px; height: 40px; line-height: 40px;}
+.kecheng-cell .kecheng-cell-hd{width: 580px;}
+.kecheng-cell .kecheng-cell-hd .kecheng-title{height: 40px; line-height: 40px; box-sizing: border-box; border: 1px solid rgb(228, 228, 228); width: 528px;}
+.kecheng-cell .kecheng-cell-hd .kechengjianjie{resize: none; padding: 10px; border: 1px solid rgb(228, 228, 228); width: 508px; height: 56px;}
+.kecheng-cell .kecheng-cell-hd .jiage-input{width: 130px;}
+.youhui-label {height: 40px; line-height: 40px; margin-right: 20px;}
+.youhui-label .youhui-radio{display: none; padding-left: 0;}
+.youhui-label .youhui-radio[type=radio]{height: 40px; display: inline-block; -webkit-appearance: none; float: left;}
+.youhui-label .youhui-radio[type=radio]:after{background: url(../img/u1873.png)0px 10px no-repeat; width: 20px; height: 40px; content: ''; display: inline-block; margin-right: 10px;}
+.youhui-label .youhui-radio[type=radio]:checked:after{background: url(../img/xuanzhong.png) -2px 8px no-repeat;}
+.youhui-sele{outline: none; float: left; padding-left: 10px; width: 148px; height: 40px; line-height: 40px; box-sizing: border-box; margin-right: 20px; background-color: rgb(243, 244, 249); border: 1px solid rgb(228, 228, 228);}
+.zhuanjia-sele{width: 200px;}
+.zhuanjia-btn{width: 96px; height: 40px; line-height: 40px; text-align: center; display: inline-block; box-sizing: border-box;
+    background-color: rgba(255, 72, 72, 0.1);   border: 1px solid rgb(255, 72, 72);  font-size: 14px; color: #FF0000;}
+.zhuanjia-btn:hover{background-color: rgb(255, 72, 72); color: #fff;}
+.fengmian{font-size: 12px; line-height: 35px;}
+.fengmian .updown-btn{width: 74px; height: 35px; line-height: 35px; margin-right: 10px; float: left;}
+.fengmian-img{margin-top: 15px;}
+.shipin-nr{width: 113px; height: 92px; border: 1px solid rgb(228,228,228); overflow: hidden; position: relative;}
+.shipin-nr .defalutfengmian{display: block; width: 41px; margin: 25px auto;}
+.fengmian .updown-btn2{width: 114px;}
+.fengmian .updown-btn3{background-color: #fff; border: 1px solid rgb(102, 153, 255); color: #6699FF; margin-left: 15px; margin-right: 10px;}
+.fengmian .updown-btn3:hover{background-color: rgb(102, 153, 255); color: #fff;}
+.shipin-nr .shanchu{width: 33px; text-align: center; height: 21px; line-height: 21px;font-size: 12px; color: #000000; display: block; background-color: rgba(153,153,153,0.1); position: absolute; right: 0; bottom: 0;}
+.shipin-xinxi{width: 440px;}
+.kecheng-cell .kecheng-cell-hd  .shipin-name{width: 330px;}
+.shipin-xinxi .shipin-cell .kecheng-cell-hd{width: 340px;}
+.shipin-xinxi .shipin-cell .kecheng-cell-bd{width: 85px;}
+.shipin-xinxi .shipin-cell{margin-left: 15px;}
+.shipin-zhang{border-bottom: 1px solid rgb(228, 228, 228); padding-bottom: 10px;}
+.kecheng-box:last-child{border-bottom: 0;}
+.updown-btn4{width: 144px; height: 35px; line-height: 35px; display: block; margin: 0 auto;}
+.querentianjia{display: block; margin:40px auto; width: 187px;  height: 56px; line-height: 56px; text-align: center;
+    background-color: rgb(102, 153, 255); border-radius: 5px;
+    -moz-box-shadow: 0px 5px 5px rgba(201, 201, 201, 0.3);
+    -webkit-box-shadow: 0px 5px 5px rgba(201, 201, 201, 0.3);
+    box-shadow: 0px 5px 5px rgba(201, 201, 201, 0.3);
+    font-size: 20px; color: #FFFFFF;}
+.querentianjia:hover{background-color: rgb(95, 144, 241);}
+.shipin-jie{margin-left: 0; border-bottom: 0px;}
+.jieshipin-cont{border: 1px solid rgb(102, 153, 255); padding: 20px 15px 0;}
+.shipin-jie .kecheng-cell-hd{width: 545px;}
+.xiaojieshipin{width: 400px;}
+.xiaojieshipin .shipin-cell .kecheng-cell-hd{width: 300px;}
+.xiaojieshipin .shipin-cell .kecheng-cell-hd .shipin-name{width: 300px;}
+.shipin-dele{color: #f00; font-size: 12px; float: right;}
+.tianjia-btn{margin-bottom: 20px;}
+.tianjia-btn .jixutianjia{margin-left: 75px; width: 114px;  height: 35px; line-height: 35px; text-align: center; display: inline-block; border: 1px solid rgb(102, 153, 255);  font-size: 14px; color: #6699FF;}
+.tianjia-btn .quxiaoshipin{background-color: rgb(102, 153, 255); color: #fff; margin-left: 10px;}
+.tianjia-btn .jixutianjia:hover{background-color: rgb(102, 153, 255); color: #fff;}
+.tianjia-btn .quxiaoshipin:hover{background-color: rgb(86, 135, 232);}
+
+
+
+.weikezhuanjia{position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5);}
+.weikezhuanjia-cont{width: 780px; margin: 0 auto;}
+.close-img{position: absolute; right: 10px; top: 10px;}
+.close-img img{width: 35px;}
+.wkzj-xinxi{background-color: #fff; padding-bottom: 20px;}
+.zhuanjia-group{padding-top: 30px; padding-left: 30px;}
+.touxiang-pic{width: 444px; border: 1px solid rgb(228, 228, 228); height: 35px; line-height: 35px; float: left; box-sizing: border-box;}
+.touxiang-pic .guanbi{float: right; margin-top: 8px; margin-right: 10px;}
+.touxiang-pic a{padding-left: 10px; color: #333;}
+.tupic-tip{color: #FF4848; font-size: 12px; margin-top: 5px;}

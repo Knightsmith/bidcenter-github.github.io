@@ -1,0 +1,21 @@
+@charset "utf-8";
+/* CSS Document */
+a{ text-decoration:none; color:#888888; }
+a{outline:none;blr:expression(this.onFocus=this.blur());}
+img{ border:0px;}
+ul li{ list-style:none;}
+input{ padding-left:10px; outline:none; color: #333;}
+*{ margin:0; padding:0; font-family: "微软雅黑";}
+body, span, p, ul, table, tr, td, li, h1, h2, h3, h4, h5, h6, i{ margin:0;padding:0; border:0; list-style:none; font-style:normal;}
+body{ font-family:"microsoft yahei"; font-size: 14px;}
+em,i{ font-style:normal; text-decoration:none;}
+.clear{ clear:both;}
+textarea{ outline:none}
+.f12{width: 1200px; margin: 0 auto;}
+.fl{float: left;}
+.fr{float: right;}
+
+:-moz-placeholder { color: #AEAEAE; /* Mozilla Firefox 4 to 18 */}
+::-moz-placeholder {color: #AEAEAE; /* Mozilla Firefox 19+ */}
+input:-ms-input-placeholder,textarea:-ms-input-placeholder {color: #AEAEAE;}
+input::-webkit-input-placeholder,textarea::-webkit-input-placeholder {color: #AEAEAE;}

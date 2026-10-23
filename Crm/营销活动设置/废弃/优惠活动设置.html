@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<!-- saved from url=(0059)http://crm.caizhaowang.com:8086/bid/huodong/Edit.aspx?id=28 -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>
+	优惠活动设置
+</title><link rel="stylesheet" type="text/css" href="./优惠活动设置_files/common.css"><link rel="stylesheet" type="text/css" href="./优惠活动设置_files/style.css">
+    <script src="./优惠活动设置_files/jquery-1.8.2.min.js.下载"></script>
+    <script src="./优惠活动设置_files/layer.js.下载"></script><link rel="stylesheet" href="./优惠活动设置_files/layer.css" id="layuicss-layer">
+    <script src="./优惠活动设置_files/laydate.js.下载"></script><link rel="stylesheet" href="./优惠活动设置_files/laydate.css" id="layuicss-laydate">
+    <style>
+        .wkgl-content { width: 90%; }
+        .area_handle { text-align: center; }
+        .btn_handle { display: inline-block; margin: 10px auto; width: 80px; height: 30px; line-height: 30px; text-align: center; border-radius: 3px; font-size: 12px; color: #FFFFFF; }
+        .btn_cacel { background-color: #f2f3f5; color: #6B7482; }
+        .btn_next { background-color: #6699ff; }
+        .switchType table { width: 80%; border-left: 1px solid #aaaaaa; border-top: 1px solid #aaaaaa; float: left; border-collapse: collapse; }
+        .switchType input[type=button] { margin-left: 10px; padding: 0; background-color: #6699ff; color: #fff; border: 0; border-radius: 3px; width: 50px; height: 30px; cursor: pointer; }
+        .switchType input[type=button].remove { width: 20px; height: 20px; line-height: 20px; border-radius: 10px; background-color: #ff5535; }
+        .switchType table tr th, .switchType table tr td { border-right: 1px solid #aaaaaa; border-bottom: 1px solid #aaaaaa; padding: 5px 10px; font-weight: initial; }
+        .switchType table tr th.button, .switchType table tr td.button { border-top: 1px solid #fff; border-right: 1px solid #fff; border-bottom: 1px solid #fff; text-align: center; }
+        .switchType table tr td .inp { height: 25px; line-height: 25px; border: 0; }
+        .switchType table tr td .inp[name=prizeProb] { width: 110px; }
+
+        .kecheng-cell .kecheng-cell-hd { width: 800px; }
+        .kecheng-cell .kecheng-cell-hd span.label { font-size: 12px; color: #333; margin-left: 10px; }
+        .youhui-sele { width: 200px; }
+    </style>
+</head>
+<body>
+    <form method="post" action="http://crm.caizhaowang.com:8086/bid/huodong/Edit.aspx?id=28" id="form1">
+<div class="aspNetHidden">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKMjExMjM2MDk3MGRkK02Rh3G9EvOvENPNdUtgaXtGxYcM8Fxa+WVu95PJ2gw=">
+</div>
+
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="7A9C7222">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdABKGmiDeyHeZ2GvOvOL1zG2j5ycfk6WD5KniA8y2S8QXkaoGYj/wqGsjRK4LqYV3AZHUx0MxrYjaDKgyQf+EEhEzxZKghk51iuLtkHlgKL30G24yLz9WmP/3UtYJ55uLWf2UyKLOCysDE/ydhuKGZTV5YHbU7Ob2yTiiOzM3TPJoRNL3ocVAnwW2EirAkj1KNtHJ2zYpxFqz1tSkVOW6pT+6vsrPwEFY8xS+fIKT2Xk87b8647ofMbQplZZo+OBjP88ljNdcW0LjGhu2WJX+71qPIlKgzkPHsQOkNaof+xXNP/4ichZ4DsVXx+UiGiv3whHN+DvxnwFeFeJ9MIBWR693OQonSWeqsJnikuHMzEGrFqudRkQTV8sCB88l4eKVMDh8CTjunXSJqYwGn4PGkgDfv7s1Jl3JT3rVzmfqqTtr5g==">
+</div>
+        <div class="wkgl-content">
+            <div class="wkgl-top">编辑活动</div>
+            <div class="kecheng-box">
+                <div class="kecheng-top">
+                    <b class="jbxx-title">活动基本信息</b><span class="bitian">(<i class="red">*</i>为必填)</span>
+                </div>
+                <div class="kecheng-form">
+                    <div class="kecheng-cell">
+                        <div class="kecheng-cell-bd fl"><i class="red">*</i> 活动名称：</div>
+                        <div class="kecheng-cell-hd fl">
+                            <input name="tam_name" type="text" id="tam_name" placeholder="请输入活动名称" maxlength="15" class="kecheng-title" style="width: 200px;" value="国庆支付" disabled="disabled">
+                            <span class="label">内部查看标记</span>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <div class="kecheng-form">
+                    <div class="kecheng-cell">
+                        <div class="kecheng-cell-bd fl"><i class="red">*</i> 活动标题：</div>
+                        <div class="kecheng-cell-hd fl">
+                            <input name="tam_title" type="text" id="tam_title" placeholder="请输入活动标题" maxlength="12" class="kecheng-title" style="width: 200px;" value="喜迎国庆庆双节">
+                            <span class="label">活动标题出现在信息弹窗顶部，不超过12个字</span>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <div class="kecheng-cell rulediqujine">
+                    <div class="kecheng-cell-bd fl"><i class="red">*</i> 活动时间：</div>
+                    <div class="kecheng-cell-hd fl">
+                        <input name="tam_stime" type="text" id="tam_stime" class="youhui-sele" style="width: 150px; margin: 0;" value="2026-09-29 00:00:00" lay-key="1">
+                        <span style="float: left; line-height: 40px; margin: 0 20px;">至</span>
+                        <input name="tam_etime" type="text" id="tam_etime" class="youhui-sele" style="width: 150px; margin: 0;" value="2026-10-11 00:00:00" lay-key="2">
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="kecheng-form">
+                    <div class="kecheng-cell">
+                        <div class="kecheng-cell-bd fl"><i class="red">*</i> 活动状态：</div>
+                        <div class="kecheng-cell-hd fl">
+                            <table id="tam_status" class="youhui-sele">
+	<tbody><tr>
+		<td><input id="tam_status_0" type="radio" name="tam_status" value="0" checked="checked"><label for="tam_status_0">开启</label></td><td><input id="tam_status_1" type="radio" name="tam_status" value="1"><label for="tam_status_1">关闭</label></td>
+	</tr>
+</tbody></table>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <div class="kecheng-cell">
+                    <div class="kecheng-cell-bd fl"><i class="red">*</i> 权重：</div>
+                    <div class="kecheng-cell-hd fl">
+                        <input name="tam_weight" type="text" id="tam_weight" placeholder="请输入权重" class="kecheng-title" style="width: 200px;" oninput="value=value.replace(/[^\d]/g,'')" value="10">
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="kecheng-form">
+                    <div class="kecheng-cell">
+                        <div class="kecheng-cell-bd fl"><i class="red">*</i> 活动类型：</div>
+                        <div class="kecheng-cell-hd fl">
+                            <table id="tam_type" class="youhui-sele">
+	<tbody><tr>
+		<td><input id="tam_type_0" type="radio" name="tam_type" value="1"><label for="tam_type_0">优惠券</label></td><td><input id="tam_type_1" type="radio" name="tam_type" value="2" checked="checked"><label for="tam_type_1">仅报名</label></td>
+	</tr>
+</tbody></table>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <div class="kecheng-form switchType swTp1" style="display: none;">
+                    <div class="kecheng-cell">
+                        <div class="kecheng-cell-bd fl">优惠券绑定：</div>
+                        <div class="kecheng-cell-hd fl">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>优惠券名称</th>
+                                        <th>金额、类型</th>
+                                        <th>使用期限</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                </tbody>
+                            </table>
+                            <input type="button" value="+" onclick="addYhq()">
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <div class="kecheng-form switchType swTp2" style="">
+                    <div class="kecheng-cell">
+                        <div class="kecheng-cell-bd fl">报名结果文案：</div>
+                        <div class="kecheng-cell-hd fl">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>文案</th>
+                                        <th>概率</th>
+                                        <th class="button">
+                                            <input type="button" value="+" onclick="addPrize()">
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                    <tr>
+                                        <td class="index">1</td>
+                                        <td>
+                                            <input type="text" class="inp" name="prizeName" placeholder="请填写奖品名称" value="恭喜获得国庆优惠">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="inp" name="prizeProb" placeholder="请填写奖品概率" value="100">%
+                                        </td>
+                                        <td class="button">
+                                            <input type="button" class="remove" value="-" onclick="removePrize(this);">
+                                        </td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <div class="kecheng-cell rulediqujine">
+                    <div class="kecheng-cell-bd fl">活动背景图：</div>
+                    <div class="kecheng-cell-hd fl">
+                        <img src="http://crm.caizhaowang.com:8086/bid/huodong/Edit.aspx?id=28" style="max-width: 1000px; max-height: 300px; display: none;" id="img_ad">
+                        <a href="http://cms.bidcenter.com.cn:1834/sys_createtxt/ImProject.aspx?code=CUZoawBfuckJmGmsWR1GbXzYewqc0J1oTy/Evi4ui7w=" id="upload_ad" target="_blank">本地上传</a>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="kecheng-form">
+                    <div class="kecheng-cell">
+                        <div class="kecheng-cell-bd fl">运行环境：</div>
+                        <div class="kecheng-cell-hd fl">
+                            <table id="tam_env" class="youhui-sele">
+	<tbody><tr>
+		<td><input id="tam_env_0" type="radio" name="tam_env" value="0"><label for="tam_env_0">开发环境</label></td><td><input id="tam_env_1" type="radio" name="tam_env" value="1" checked="checked"><label for="tam_env_1">生产环境</label></td>
+	</tr>
+</tbody></table>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="area_handle">
+                <a href="javascript:;" id="cacel" class="btn_handle btn_cacel" onclick="cacel();">取消</a>
+                <a href="javascript:;" id="next" class="btn_handle btn_next" onclick="next();">确认</a>
+            </div>
+            <div style="display: none;">
+                <input type="submit" name="Button1" value="下一步" id="Button1">
+                <input name="yhqData" type="hidden" id="yhqData">
+                <input name="prizeData" type="hidden" id="prizeData">
+            </div>
+        </div>
+    </form>
+    <script>
+        var id = parseInt('28'),
+            copyid = parseInt('0');
+        var tankArray = [null, null];//弹框数组
+        var tankIndex = 0;//当前弹框索引
+        var yhqArr = [], prizeArr = [];
+        function next() {
+            if ($("#tam_name").val().trim() == "") {
+                layer.msg('请输入活动名称');
+            } else if ($("input[name=tam_status]:checked").val() == "") {
+                layer.msg('请选择活动状态');
+            } else if ($("#tam_stime").val().trim() == "") {
+                layer.msg('请选择活动开始时间');
+            } else if ($("#tam_etime").val().trim() == "") {
+                layer.msg('请选择活动截止时间');
+            } else if ($("#tam_weight").val().trim() == "") {
+                layer.msg('请输入权重');
+            } else if (checkConType()) {
+                if (id > 0 && copyid <= 0) {
+                    layer.confirm("是否保存当前活动设置", function () {
+                        $("#Button1").click();
+                    });
+                }
+                else {
+                    $("#Button1").click();
+                }
+            }
+        }
+        function cacel() {
+            layer.confirm("退出后不保存已设置内容", function () {
+                window.close();
+            });
+        }
+        //验证活动类型
+        function checkConType() {
+            var obj = $("input[name='tam_type']:checked");
+            if (obj.val() == "1") {
+                if (yhqArr.length <= 0)
+                    layer.msg("请选择优惠券");
+                else {
+                    $("#yhqData").val(yhqArr.map(e=> { return JSON.parse(e).id; }).join(','));
+                    return true;
+                }
+            } else if (checkPrize())
+                return true;
+            return false;
+        }
+        //验证奖品信息是否有效
+        function checkPrize() {
+            prizeArr = [];
+            $(".swTp2 .table tbody tr").each(function (i, e) {
+                var nameObj = $(e).find("input[name='prizeName']"),
+                    probObj = $(e).find("input[name='prizeProb']");
+                prizeArr.push({ name: nameObj.val(), prob: probObj.val() == "" ? 0 : parseFloat(probObj.val()) });
+            });
+            if (prizeArr.length <= 0)
+                layer.msg("请填写奖品信息");
+            else if (prizeArr.filter(function (e) { return e.name == ""; }).length > 0)
+                layer.msg("奖品名称不可为空");
+            else if (prizeArr.filter(function (e) { return e.prob <= 0; }).length > 0)
+                layer.msg("奖品概率不可为空");
+            else if (sum(prizeArr, 'prob') != 100)
+                layer.msg("总概率必须为100%");
+            else {
+                $("#prizeData").val(JSON.stringify(prizeArr));
+                return true;
+            }
+            return false;
+        }
+        //对象数组内数值属性求和
+        function sum(array, propertyName) {
+            // 初始化总和为 0
+            let total = 0;
+            // 遍历数组
+            array.forEach(e => {
+                let value = $(e).data(propertyName) || e[propertyName];
+                if (typeof value === 'number' && !isNaN(value)) {
+                    total += value;
+                }
+            });
+            return parseFloat(total.toFixed(2));
+        }
+        //切换活动类型
+        function chgConType() {
+            var obj = $("input[name='tam_type']:checked");
+            $(".switchType").hide();
+            $(".swTp" + obj.val()).show();
+            getCmsCode(obj.val());
+        }
+        //获取cms广告code
+        function getCmsCode(type) {
+            $.ajax({
+                type: "POST",
+                url: "/JsonHandler/bid/huodong/GetCmsCodeHandler.aspx",
+                data: { adid: type == 1 ? 162 : 161 },
+                dataType: "json",
+                success: function (res) {
+                    if (res) {
+                        if (res.ret) {
+                            var data = res.result;
+                            if (data) {
+                                if (data.adUrl)
+                                    $("#img_ad").attr("src", data.adUrl).show();
+                                if (data.code)
+                                    $("#upload_ad").attr("href", "http://cms.bidcenter.com.cn:1834/sys_createtxt/ImProject.aspx?code=" + data.code).attr("target", "_blank");
+                            }
+                        } else {
+                            layer.msg(res.msg);
+                        }
+                    }
+                },
+                error: function (e) {
+                    console.log(e)
+                }
+            });
+        }
+        function addYhq() {
+            var prizeIdArr = [];
+            $(".swTp1 .table tbody tr").each(function (i, e) {
+                prizeIdArr.push($(e).find(".index").attr("yhqid"));
+            });
+            layer.open({
+                type: 2,
+                title: ['选择优惠券', 'background-color: #3497DA;color: #fff;font-weight: bold;font-size: 16px'],
+                closeBtn: 1,
+                shade: false,
+                area: ['850px', '400px'],
+                content: '/bid/tanchu/huodong/YhqSelector.aspx?ids=' + prizeIdArr.join(','),
+                end: function () {
+                    if (yhqArr.length > 0) {
+                        var html = [];
+                        $.each(yhqArr, function (i, e) {
+                            var obj = JSON.parse(e);
+                            html.push('<tr>');
+                            html.push(`<td class="index" yhqid="${obj.id}">${obj.id}</td>`);
+                            html.push(`<td>${obj.name}</td>`);
+                            html.push(`<td>${obj.limitDes}</td>`);
+                            html.push(`<td>${obj.indate}</td>`);
+                            html.push('</tr>');
+                        });
+                        $(".swTp1 .table tbody").html(html.join(''));
+                    }
+                }
+            });
+        }
+        //添加奖品
+        function addPrize() {
+            var html = [];
+            html.push('<tr>');
+            html.push(`<td class="index"></td>`);
+            html.push('<td><input type="text" class="inp" name="prizeName" placeholder="请填写奖品名称" /></td>');
+            html.push('<td><input type="number" class="inp" name="prizeProb" placeholder="请填写奖品概率" />%</td>');
+            html.push('<td class="button"><input type="button" class="remove" value="-" onclick="removePrize(this);" /></td>');
+            html.push('</tr>');
+            $(".swTp2 .table tbody").append(html.join(''));
+            loadPrizeIndex();
+        }
+        //移除奖品
+        function removePrize(obj) {
+            console.log(obj);
+            $(obj).parents("tr").remove();
+            loadPrizeIndex();
+        }
+        //加载奖品索引
+        function loadPrizeIndex() {
+            $(".swTp2 .table tbody tr").each(function (i, e) {
+                console.log(i, e);
+                $(e).find('.index').text(i + 1);
+            });
+        }
+        //打开弹框
+        function openTank(selecter, title, width, height, fn, callback) {
+            if (!width) width = 'auto';
+            if (!height) height = 'auto';
+            if (!title) title = false;
+            tankArray[tankIndex] = layer.open({
+                type: 1,
+                title: title,
+                closeBtn: 1,
+                shade: false,
+                area: [width, height],
+                content: $(selecter),
+                success: function () {
+                    if (fn) fn();
+                },
+                end: function () {
+                    if (callback) callback();
+                }
+            });
+            tankIndex++;
+        }
+        //关闭弹框
+        function closeTank() {
+            tankIndex--;
+            layer.close(tankArray[tankIndex]);
+        }
+        $(function () {
+            if (id <= 0 || copyid > 0)
+                $("#tam_name").removeAttr("disabled");
+            else
+                $("#tam_name").attr("disabled", true);
+            chgConType();
+            $("#tam_type").on('change', function () {
+                chgConType();
+            });
+            //时间插件初始化
+            laydate.render({
+                elem: '#tam_stime',
+                type: 'datetime',
+                trigger: 'click'
+            });
+            laydate.render({
+                elem: '#tam_etime',
+                type: 'datetime',
+                trigger: 'click'
+            });
+        })
+    </script>
+    <script></script>
+
+
+</body></html>
