@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<!-- saved from url=(0059)http://crm.caizhaowang.com:8086/bid/huodong/Edit.aspx?id=28 -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>
+	优惠活动设置
+</title><link rel="stylesheet" type="text/css" href="./优惠活动设置_files/common.css"><link rel="stylesheet" type="text/css" href="./优惠活动设置_files/style.css">
+    <script src="./优惠活动设置_files/jquery-1.8.2.min.js.下载"></script>
+    <script src="./优惠活动设置_files/layer.js.下载"></script><link rel="stylesheet" href="./优惠活动设置_files/layer.css" id="layuicss-layer">
+    <script src="./优惠活动设置_files/laydate.js.下载"></script><link rel="stylesheet" href="./优惠活动设置_files/laydate.css" id="layuicss-laydate">
+    <style>
+        .wkgl-content { width: 90%; }
+        .area_handle { text-align: center; }
+        .btn_handle { display: inline-block; margin: 10px auto; width: 80px; height: 30px; line-height: 30px; text-align: center; border-radius: 3px; font-size: 12px; color: #FFFFFF; }
+        .btn_cacel { background-color: #f2f3f5; color: #6B7482; }
+        .btn_next { background-color: #6699ff; }
+        .switchType table { width: 80%; border-left: 1px solid #aaaaaa; border-top: 1px solid #aaaaaa; float: left; border-collapse: collapse; }
+        .switchType input[type=button] { margin-left: 10px; padding: 0; background-color: #6699ff; color: #fff; border: 0; border-radius: 3px; width: 50px; height: 30px; cursor: pointer; }
+        .switchType input[type=button].remove { width: 20px; height: 20px; line-height: 20px; border-radius: 10px; background-color: #ff5535; }
+        .switchType table tr th, .switchType table tr td { border-right: 1px solid #aaaaaa; border-bottom: 1px solid #aaaaaa; padding: 5px 10px; font-weight: initial; }
+        .switchType table tr th.button, .switchType table tr td.button { border-top: 1px solid #fff; border-right: 1px solid #fff; border-bottom: 1px solid #fff; text-align: center; }
+        .switchType table tr td .inp { height: 25px; line-height: 25px; border: 0; }
+        .switchType table tr td .inp[name=prizeProb] { width: 110px; }
+
+        .kecheng-cell .kecheng-cell-hd { width: 800px; }
+        .kecheng-cell .kecheng-cell-hd span.label { font-size: 12px; color: #333; margin-left: 10px; }
+        .youhui-sele { width: 200px; }
+
+        /* ===== 活动人群分层配置 ===== */
+        .crowdTabs { display: block; margin-bottom: 4px; }
+        .crowdTab { display: inline-block; padding: 6px 14px; border: 1px solid #aaaaaa; background: #f2f3f5; color: #6B7482; font-size: 12px; cursor: pointer; margin-right: 2px; border-radius: 3px 3px 0 0; }
+        .crowdTab.active { background: #6699ff; border-color: #6699ff; color: #FFFFFF; }
+        .crowdTab:hover { background: #dde7ff; }
+        #crowdTable tr.crowd-disabled td { color: #BBBBBB; background-color: #F7F7F7; }
+        #crowdTable tr.crowd-disabled .crowdCheck { opacity: .5; cursor: not-allowed; }
+        .prizeTable { float: none !important; margin-top: 4px; }
+        .crowdTip { font-size: 12px; color: #999; line-height: 24px; }
+        .prizeCrowdTitle { font-size: 13px; color: #333; font-weight: bold; line-height: 26px; margin: 4px 0 2px; }
+        /* ===== 优惠券绑定人群分组 ===== */
+        .yhqTable { float: none !important; margin-top: 4px; }
+        .yhqAddBtn { margin-left: 10px; }
+        /* ===== 一屏紧凑布局（不破坏原风格，仅压缩间距/密度） ===== */
+        .wkgl-content { max-width: 1400px; }
+        .kecheng-cell { padding: 3px 0 !important; }
+        .kecheng-cell .kecheng-cell-bd { line-height: 26px; }
+        .kecheng-cell .kecheng-cell-hd span.label { line-height: 26px; }
+        .kecheng-cell.rulediqujine { padding: 3px 0 !important; }
+        .kecheng-cell.rulediqujine .kecheng-cell-hd { line-height: 26px; }
+        .kecheng-cell.rulediqujine .kecheng-cell-hd span { line-height: 26px; margin: 0 10px; }
+        .switchType { margin-top: 0 !important; }
+        .switchType table tr th, .switchType table tr td { padding: 4px 8px; }
+        .switchType table tr td .inp { height: 22px; line-height: 22px; }
+        .switchType input[type=button] { height: 24px; line-height: 24px; }
+        .crowdTabs { margin-bottom: 2px; }
+        .crowdTab { padding: 4px 12px; }
+        .crowdTip { line-height: 20px; }
+        .btn_handle { margin: 6px auto; }
+        #img_ad { max-height: 150px !important; }
+    </style>
+</head>
+<body>
+    <form method="post" action="http://crm.caizhaowang.com:8086/bid/huodong/Edit.aspx?id=28" id="form1">
+<div class="aspNetHidden">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKMjExMjM2MDk3MGRkK02Rh3G9EvOvENPNdUtgaXtGxYcM8Fxa+WVu95PJ2gw=">
+</div>
+
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="7A9C7222">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdABKGmiDeyHeZ2GvOvOL1zG2j5ycfk6WD5KniA8y2S8QXkaoGYj/wqGsjRK4LqYV3AZHUx0MxrYjaDKgyQf+EEhEzxZKghk51iuLtkHlgKL30G24yLz9WmP/3UtYJ55uLWf2UyKLOCysDE/ydhuKGZTV5YHbU7Ob2yTiiOzM3TPJoRNL3ocVAnwW2EirAkj1KNtHJ2zYpxFqz1tSkVOW6pT+6vsrPwEFY8xS+fIKT2Xk87b8647ofMbQplZZo+OBjP88ljNdcW0LjGhu2WJX+71qPIlKgzkPHsQOkNaof+xXNP/4ichZ4DsVXx+UiGiv3whHN+DvxnwFeFeJ9MIBWR693OQonSWeqsJnikuHMzEGrFqudRkQTV8sCB88l4eKVMDh8CTjunXSJqYwGn4PGkgDfv7s1Jl3JT3rVzmfqqTtr5g==">
+</div>
+        <div class="wkgl-content">
+            <div class="wkgl-top">编辑活动</div>
+            <div class="kecheng-box">
+                <div class="kecheng-top">
+                    <b class="jbxx-title">活动基本信息</b><span class="bitian">(<i class="red">*</i>为必填)</span>
+                </div>
+                <div class="kecheng-form">
+                    <div class="kecheng-cell">
+                        <div class="kecheng-cell-bd fl"><i class="red">*</i> 活动名称：</div>
+                        <div class="kecheng-cell-hd fl">
+                            <input name="tam_name" type="text" id="tam_name" placeholder="请输入活动名称" maxlength="15" class="kecheng-title" style="width: 200px;" value="国庆支付" disabled="disabled">
+                            <span class="label">内部查看标记</span>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <div class="kecheng-form">
+                    <div class="kecheng-cell">
+                        <div class="kecheng-cell-bd fl"><i class="red">*</i> 活动标题：</div>
+                        <div class="kecheng-cell-hd fl">
+                            <input name="tam_title" type="text" id="tam_title" placeholder="请输入活动标题" maxlength="12" class="kecheng-title" style="width: 200px;" value="喜迎国庆庆双节">
+                            <span class="label">活动标题出现在信息弹窗顶部，不超过12个字</span>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <div class="kecheng-cell rulediqujine">
+                    <div class="kecheng-cell-bd fl"><i class="red">*</i> 活动时间：</div>
+                    <div class="kecheng-cell-hd fl">
+                        <input name="tam_stime" type="text" id="tam_stime" class="youhui-sele" style="width: 150px; margin: 0;" value="2026-09-29 00:00:00" lay-key="1">
+                        <span style="float: left; line-height: 40px; margin: 0 20px;">至</span>
+                        <input name="tam_etime" type="text" id="tam_etime" class="youhui-sele" style="width: 150px; margin: 0;" value="2026-10-11 00:00:00" lay-key="2">
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="kecheng-form">
+                    <div class="kecheng-cell">
+                        <div class="kecheng-cell-bd fl"><i class="red">*</i> 活动状态：</div>
+                        <div class="kecheng-cell-hd fl">
+                            <table id="tam_status" class="youhui-sele">
+	<tbody><tr>
+		<td><input id="tam_status_0" type="radio" name="tam_status" value="0" checked="checked"><label for="tam_status_0">开启</label></td><td><input id="tam_status_1" type="radio" name="tam_status" value="1"><label for="tam_status_1">关闭</label></td>
+	</tr>
+</tbody></table>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <div class="kecheng-cell">
+                    <div class="kecheng-cell-bd fl"><i class="red">*</i> 权重：</div>
+                    <div class="kecheng-cell-hd fl">
+                        <input name="tam_weight" type="text" id="tam_weight" placeholder="请输入权重" class="kecheng-title" style="width: 200px;" oninput="value=value.replace(/[^\d]/g,'')" value="10">
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="kecheng-form">
+                    <div class="kecheng-cell">
+                        <div class="kecheng-cell-bd fl"><i class="red">*</i> 活动类型：</div>
+                        <div class="kecheng-cell-hd fl">
+                            <table id="tam_type" class="youhui-sele">
+	<tbody><tr>
+		<td><input id="tam_type_0" type="radio" name="tam_type" value="1"><label for="tam_type_0">优惠券</label></td><td><input id="tam_type_1" type="radio" name="tam_type" value="2" checked="checked"><label for="tam_type_1">仅报名</label></td>
+	</tr>
+</tbody></table>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <div class="kecheng-form switchType swTp1" style="display: none;">
+                    <div class="kecheng-cell">
+                        <div class="kecheng-cell-bd fl">优惠券绑定：</div>
+                        <div class="kecheng-cell-hd fl">
+                            <div class="crowdTabs" id="yhqCrowdTabs">
+                                <span class="crowdTab active" data-crowd="lq" onclick="switchYhqTab('lq');">临期客户</span>
+                                <span class="crowdTab" data-crowd="fk" onclick="switchYhqTab('fk');">付费客户</span>
+                                <span class="crowdTab" data-crowd="xk" onclick="switchYhqTab('xk');">新客户</span>
+                                <span class="crowdTab" data-crowd="mf" onclick="switchYhqTab('mf');">免费用户</span>
+                            </div>
+                            <table class="table yhqTable" data-crowd="lq">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>优惠券名称</th>
+                                        <th>金额、类型</th>
+                                        <th>使用期限</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                </tbody>
+                            </table>
+                            <input type="button" class="yhqAddBtn" data-crowd="lq" value="+" onclick="addYhq('lq')">
+                            <table class="table yhqTable" data-crowd="fk" style="display:none;">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>优惠券名称</th>
+                                        <th>金额、类型</th>
+                                        <th>使用期限</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                </tbody>
+                            </table>
+                            <input type="button" class="yhqAddBtn" data-crowd="fk" value="+" onclick="addYhq('fk')" style="display:none;">
+                            <table class="table yhqTable" data-crowd="xk" style="display:none;">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>优惠券名称</th>
+                                        <th>金额、类型</th>
+                                        <th>使用期限</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                </tbody>
+                            </table>
+                            <input type="button" class="yhqAddBtn" data-crowd="xk" value="+" onclick="addYhq('xk')" style="display:none;">
+                            <table class="table yhqTable" data-crowd="mf" style="display:none;">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>优惠券名称</th>
+                                        <th>金额、类型</th>
+                                        <th>使用期限</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                </tbody>
+                            </table>
+                            <input type="button" class="yhqAddBtn" data-crowd="mf" value="+" onclick="addYhq('mf')" style="display:none;">
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <div class="kecheng-form switchType swTp2" style="">
+                    <div class="kecheng-cell">
+                        <div class="kecheng-cell-bd fl">活动人群：</div>
+                        <div class="kecheng-cell-hd fl">
+                            <table class="table" id="crowdTable">
+                                <thead>
+                                    <tr>
+                                        <th>启用</th>
+                                        <th>人群名称</th>
+                                        <th>匹配规则说明</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-crowd="lq">
+                                        <td><input type="checkbox" class="crowdCheck" checked="checked" /></td>
+                                        <td>临期客户</td>
+                                        <td>会员/套餐即将到期</td>
+                                    </tr>
+                                    <tr data-crowd="fk">
+                                        <td><input type="checkbox" class="crowdCheck" checked="checked" /></td>
+                                        <td>付费客户</td>
+                                        <td>已产生付费</td>
+                                    </tr>
+                                    <tr data-crowd="xk">
+                                        <td><input type="checkbox" class="crowdCheck" checked="checked" /></td>
+                                        <td>新客户</td>
+                                        <td>注册 ≤ 7 天 且 未付费</td>
+                                    </tr>
+                                    <tr data-crowd="mf">
+                                        <td><input type="checkbox" class="crowdCheck" checked="checked" /></td>
+                                        <td>免费用户</td>
+                                        <td>注册 &gt; 7 天 且 未付费</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <span class="crowdTip">固定四类人群，可勾选启用/停用；未启用人群整行置灰且不发放奖品；至少启用 1 个人群才能保存。</span>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="kecheng-cell">
+                        <div class="kecheng-cell-bd fl">报名结果文案：</div>
+                        <div class="kecheng-cell-hd fl">
+                            <div class="crowdTabs" id="crowdTabs">
+                                <span class="crowdTab active" data-crowd="lq" onclick="switchCrowdTab('lq');">临期客户</span>
+                                <span class="crowdTab" data-crowd="fk" onclick="switchCrowdTab('fk');">付费客户</span>
+                                <span class="crowdTab" data-crowd="xk" onclick="switchCrowdTab('xk');">新客户</span>
+                                <span class="crowdTab" data-crowd="mf" onclick="switchCrowdTab('mf');">免费用户</span>
+                            </div>
+                            <div class="prizeCrowdTitle" id="prizeCrowdTitle">当前人群：临期客户</div>
+                            <table class="table prizeTable" data-crowd="lq">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>文案</th>
+                                        <th>概率</th>
+                                        <th class="button">
+                                            <input type="button" value="+" onclick="addPrize('lq')">
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="index">1</td>
+                                        <td>
+                                            <input type="text" class="inp" name="prizeName" placeholder="请填写奖品名称" value="续费折扣券">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="inp" name="prizeProb" placeholder="请填写奖品概率" value="100">%
+                                        </td>
+                                        <td class="button">
+                                            <input type="button" class="remove" value="-" onclick="removePrize(this);">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="table prizeTable" data-crowd="fk" style="display:none;">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>文案</th>
+                                        <th>概率</th>
+                                        <th class="button">
+                                            <input type="button" value="+" onclick="addPrize('fk')">
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="index">1</td>
+                                        <td>
+                                            <input type="text" class="inp" name="prizeName" placeholder="请填写奖品名称" value="大额券">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="inp" name="prizeProb" placeholder="请填写奖品概率" value="40">%
+                                        </td>
+                                        <td class="button">
+                                            <input type="button" class="remove" value="-" onclick="removePrize(this);">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="index">2</td>
+                                        <td>
+                                            <input type="text" class="inp" name="prizeName" placeholder="请填写奖品名称" value="会员天数">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="inp" name="prizeProb" placeholder="请填写奖品概率" value="30">%
+                                        </td>
+                                        <td class="button">
+                                            <input type="button" class="remove" value="-" onclick="removePrize(this);">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="index">3</td>
+                                        <td>
+                                            <input type="text" class="inp" name="prizeName" placeholder="请填写奖品名称" value="实物礼品">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="inp" name="prizeProb" placeholder="请填写奖品概率" value="30">%
+                                        </td>
+                                        <td class="button">
+                                            <input type="button" class="remove" value="-" onclick="removePrize(this);">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="table prizeTable" data-crowd="xk" style="display:none;">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>文案</th>
+                                        <th>概率</th>
+                                        <th class="button">
+                                            <input type="button" value="+" onclick="addPrize('xk')">
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="index">1</td>
+                                        <td>
+                                            <input type="text" class="inp" name="prizeName" placeholder="请填写奖品名称" value="新人优惠券">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="inp" name="prizeProb" placeholder="请填写奖品概率" value="50">%
+                                        </td>
+                                        <td class="button">
+                                            <input type="button" class="remove" value="-" onclick="removePrize(this);">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="index">2</td>
+                                        <td>
+                                            <input type="text" class="inp" name="prizeName" placeholder="请填写奖品名称" value="满减券">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="inp" name="prizeProb" placeholder="请填写奖品概率" value="30">%
+                                        </td>
+                                        <td class="button">
+                                            <input type="button" class="remove" value="-" onclick="removePrize(this);">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="index">3</td>
+                                        <td>
+                                            <input type="text" class="inp" name="prizeName" placeholder="请填写奖品名称" value="积分礼包">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="inp" name="prizeProb" placeholder="请填写奖品概率" value="20">%
+                                        </td>
+                                        <td class="button">
+                                            <input type="button" class="remove" value="-" onclick="removePrize(this);">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="table prizeTable" data-crowd="mf" style="display:none;">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>文案</th>
+                                        <th>概率</th>
+                                        <th class="button">
+                                            <input type="button" value="+" onclick="addPrize('mf')">
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="index">1</td>
+                                        <td>
+                                            <input type="text" class="inp" name="prizeName" placeholder="请填写奖品名称" value="体验券">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="inp" name="prizeProb" placeholder="请填写奖品概率" value="60">%
+                                        </td>
+                                        <td class="button">
+                                            <input type="button" class="remove" value="-" onclick="removePrize(this);">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="index">2</td>
+                                        <td>
+                                            <input type="text" class="inp" name="prizeName" placeholder="请填写奖品名称" value="积分礼包">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="inp" name="prizeProb" placeholder="请填写奖品概率" value="40">%
+                                        </td>
+                                        <td class="button">
+                                            <input type="button" class="remove" value="-" onclick="removePrize(this);">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <div class="kecheng-cell rulediqujine">
+                    <div class="kecheng-cell-bd fl">活动背景图：</div>
+                    <div class="kecheng-cell-hd fl">
+                        <img src="http://crm.caizhaowang.com:8086/bid/huodong/Edit.aspx?id=28" style="max-width: 1000px; max-height: 300px; display: none;" id="img_ad">
+                        <a href="http://cms.bidcenter.com.cn:1834/sys_createtxt/ImProject.aspx?code=CUZoawBfuckJmGmsWR1GbXzYewqc0J1oTy/Evi4ui7w=" id="upload_ad" target="_blank">本地上传</a>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="kecheng-form">
+                    <div class="kecheng-cell">
+                        <div class="kecheng-cell-bd fl">运行环境：</div>
+                        <div class="kecheng-cell-hd fl">
+                            <table id="tam_env" class="youhui-sele">
+	<tbody><tr>
+		<td><input id="tam_env_0" type="radio" name="tam_env" value="0"><label for="tam_env_0">开发环境</label></td><td><input id="tam_env_1" type="radio" name="tam_env" value="1" checked="checked"><label for="tam_env_1">生产环境</label></td>
+	</tr>
+</tbody></table>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="area_handle">
+                <a href="javascript:;" id="cacel" class="btn_handle btn_cacel" onclick="cacel();">取消</a>
+                <a href="javascript:;" id="next" class="btn_handle btn_next" onclick="next();">确认</a>
+            </div>
+            <div style="display: none;">
+                <input type="submit" name="Button1" value="下一步" id="Button1">
+                <input name="yhqData" type="hidden" id="yhqData">
+                <input name="prizeData" type="hidden" id="prizeData">
+            </div>
+        </div>
+    </form>
+    <script>
+        var id = parseInt('28'),
+            copyid = parseInt('0');
+        var tankArray = [null, null];//弹框数组
+        var tankIndex = 0;//当前弹框索引
+        var yhqArr = [], prizeArr = [];
+        //预置假优惠券数据（4个人群各2~3张，字段与 renderYhqTable 使用一致：id/name/limitDes/indate）
+        var yhqData = {
+            lq: [
+                '{"id":101,"name":"临期续费券","limitDes":"满1000减100元","indate":"2026-09-29至2026-10-11"}',
+                '{"id":102,"name":"临期折扣券","limitDes":"全场8折","indate":"2026-09-29至2026-10-11"}',
+                '{"id":103,"name":"临期加赠券","limitDes":"加赠7天会员","indate":"2026-09-29至2026-10-11"}'
+            ],
+            fk: [
+                '{"id":201,"name":"付费客户回馈券","limitDes":"满500减80元","indate":"2026-09-29至2026-10-11"}',
+                '{"id":202,"name":"付费客户折扣券","limitDes":"全场8.5折","indate":"2026-09-29至2026-10-11"}'
+            ],
+            xk: [
+                '{"id":301,"name":"新人首单券","limitDes":"满100减30元","indate":"2026-09-29至2026-10-11"}',
+                '{"id":302,"name":"新人无门槛券","limitDes":"无门槛减10元","indate":"2026-09-29至2026-10-11"}',
+                '{"id":303,"name":"新人体验券","limitDes":"免费体验7天","indate":"2026-09-29至2026-10-11"}'
+            ],
+            mf: [
+                '{"id":401,"name":"免费用户激活券","limitDes":"满50减15元","indate":"2026-09-29至2026-10-11"}',
+                '{"id":402,"name":"免费用户试用券","limitDes":"3天会员试用","indate":"2026-09-29至2026-10-11"}'
+            ]
+        };
+        //本地假优惠券候选池（各人群独立，弹窗勾选回填用）
+        var yhqPool = {
+            lq: [
+                {id: 101, name: '临期续费券', limitDes: '满1000减100元', indate: '2026-09-29至2026-10-11'},
+                {id: 102, name: '临期折扣券', limitDes: '全场8折', indate: '2026-09-29至2026-10-11'},
+                {id: 103, name: '临期加赠券', limitDes: '加赠7天会员', indate: '2026-09-29至2026-10-11'},
+                {id: 104, name: '临期关怀券', limitDes: '无门槛减50元', indate: '2026-09-29至2026-10-11'},
+                {id: 105, name: '临期拼团券', limitDes: '双人拼团9折', indate: '2026-09-29至2026-10-11'}
+            ],
+            fk: [
+                {id: 201, name: '付费客户回馈券', limitDes: '满500减80元', indate: '2026-09-29至2026-10-11'},
+                {id: 202, name: '付费客户折扣券', limitDes: '全场8.5折', indate: '2026-09-29至2026-10-11'},
+                {id: 203, name: '付费客户满赠券', limitDes: '满1000赠50元', indate: '2026-09-29至2026-10-11'},
+                {id: 204, name: '付费客户尊享券', limitDes: '满2000减300元', indate: '2026-09-29至2026-10-11'}
+            ],
+            xk: [
+                {id: 301, name: '新人首单券', limitDes: '满100减30元', indate: '2026-09-29至2026-10-11'},
+                {id: 302, name: '新人无门槛券', limitDes: '无门槛减10元', indate: '2026-09-29至2026-10-11'},
+                {id: 303, name: '新人体验券', limitDes: '免费体验7天', indate: '2026-09-29至2026-10-11'},
+                {id: 304, name: '新人邀新券', limitDes: '邀请好友各得20元', indate: '2026-09-29至2026-10-11'}
+            ],
+            mf: [
+                {id: 401, name: '免费用户激活券', limitDes: '满50减15元', indate: '2026-09-29至2026-10-11'},
+                {id: 402, name: '免费用户试用券', limitDes: '3天会员试用', indate: '2026-09-29至2026-10-11'},
+                {id: 403, name: '免费用户签到券', limitDes: '连续签到满7天减20元', indate: '2026-09-29至2026-10-11'}
+            ]
+        };
+        var currentYhqCrowd = 'lq';//当前正在配置优惠券的人群key
+        function next() {
+            if ($("#tam_name").val().trim() == "") {
+                layer.msg('请输入活动名称');
+            } else if ($("input[name=tam_status]:checked").val() == "") {
+                layer.msg('请选择活动状态');
+            } else if ($("#tam_stime").val().trim() == "") {
+                layer.msg('请选择活动开始时间');
+            } else if ($("#tam_etime").val().trim() == "") {
+                layer.msg('请选择活动截止时间');
+            } else if ($("#tam_weight").val().trim() == "") {
+                layer.msg('请输入权重');
+            } else if (checkConType()) {
+                if (id > 0 && copyid <= 0) {
+                    layer.confirm("是否保存当前活动设置", function () {
+                        $("#Button1").click();
+                    });
+                }
+                else {
+                    $("#Button1").click();
+                }
+            }
+        }
+        function cacel() {
+            layer.confirm("退出后不保存已设置内容", function () {
+                window.close();
+            });
+        }
+        //验证活动类型
+        function checkConType() {
+            var obj = $("input[name='tam_type']:checked");
+            if (obj.val() == "1") {
+                var enabled = getEnabledCrowds();
+                if (enabled.length <= 0) {
+                    layer.msg("请至少启用一个人群");
+                    return false;
+                }
+                var ids = [];
+                for (var i = 0; i < enabled.length; i++) {
+                    var key = enabled[i];
+                    var list = yhqData[key] || [];
+                    if (list.length <= 0) {
+                        layer.msg(getCrowdName(key) + "请选择优惠券");
+                        return false;
+                    }
+                    $.each(list, function (j, e) {
+                        ids.push(JSON.parse(e).id);
+                    });
+                }
+                $("#yhqData").val(ids.join(','));
+                return true;
+            } else if (checkCrowd() && checkPrize())
+                return true;
+            return false;
+        }
+        //获取已启用人群key列表
+        function getEnabledCrowds() {
+            var arr = [];
+            $(".crowdCheck:checked").each(function (i, e) {
+                arr.push($(e).closest("tr").attr("data-crowd"));
+            });
+            return arr;
+        }
+        //获取人群显示名称
+        function getCrowdName(key) {
+            var name = "";
+            $("#crowdTable tbody tr").each(function (i, e) {
+                if ($(e).attr("data-crowd") == key)
+                    name = $(e).find("td").eq(1).text();
+            });
+            return name;
+        }
+        //验证至少启用一个人群
+        function checkCrowd() {
+            if (getEnabledCrowds().length <= 0) {
+                layer.msg("请至少启用一个人群");
+                return false;
+            }
+            return true;
+        }
+        //验证各启用人群奖品信息是否有效（按人群独立校验概率合计100%）
+        function checkPrize() {
+            var enabled = getEnabledCrowds();
+            if (enabled.length <= 0) return checkCrowd();
+            var allArr = [];
+            for (var i = 0; i < enabled.length; i++) {
+                var key = enabled[i];
+                var crowdName = getCrowdName(key);
+                var rows = [];
+                $(".prizeTable[data-crowd='" + key + "']").find("tbody tr").each(function (idx, e) {
+                    var nameObj = $(e).find("input[name='prizeName']"),
+                        probObj = $(e).find("input[name='prizeProb']");
+                    rows.push({ name: nameObj.val(), prob: probObj.val() == "" ? 0 : parseFloat(probObj.val()) });
+                });
+                if (rows.length <= 0) {
+                    layer.msg(crowdName + "请填写奖品信息");
+                    return false;
+                } else if (rows.filter(function (e) { return e.name == ""; }).length > 0) {
+                    layer.msg(crowdName + "奖品名称不可为空");
+                    return false;
+                } else if (rows.filter(function (e) { return e.prob <= 0; }).length > 0) {
+                    layer.msg(crowdName + "奖品概率不可为空");
+                    return false;
+                } else if (sum(rows, 'prob') != 100) {
+                    layer.msg(crowdName + "人群奖品总概率必须为100%");
+                    return false;
+                }
+                $.each(rows, function (idx2, r) {
+                    allArr.push({ crowd: key, crowdName: crowdName, name: r.name, prob: r.prob });
+                });
+            }
+            prizeArr = allArr;
+            $("#prizeData").val(JSON.stringify(allArr));
+            return true;
+        }
+        //对象数组内数值属性求和
+        function sum(array, propertyName) {
+            // 初始化总和为 0
+            let total = 0;
+            // 遍历数组
+            array.forEach(e => {
+                let value = $(e).data(propertyName) || e[propertyName];
+                if (typeof value === 'number' && !isNaN(value)) {
+                    total += value;
+                }
+            });
+            return parseFloat(total.toFixed(2));
+        }
+        //切换活动类型
+        function chgConType() {
+            var obj = $("input[name='tam_type']:checked");
+            $(".switchType").hide();
+            $(".swTp" + obj.val()).show();
+            getCmsCode(obj.val());
+        }
+        //获取cms广告code
+        function getCmsCode(type) {
+            $.ajax({
+                type: "POST",
+                url: "/JsonHandler/bid/huodong/GetCmsCodeHandler.aspx",
+                data: { adid: type == 1 ? 162 : 161 },
+                dataType: "json",
+                success: function (res) {
+                    if (res) {
+                        if (res.ret) {
+                            var data = res.result;
+                            if (data) {
+                                if (data.adUrl)
+                                    $("#img_ad").attr("src", data.adUrl).show();
+                                if (data.code)
+                                    $("#upload_ad").attr("href", "http://cms.bidcenter.com.cn:1834/sys_createtxt/ImProject.aspx?code=" + data.code).attr("target", "_blank");
+                            }
+                        } else {
+                            layer.msg(res.msg);
+                        }
+                    }
+                },
+                error: function (e) {
+                    console.log(e)
+                }
+            });
+        }
+        //添加优惠券（按人群分组，crowdKey=人群key；改为页面内本地假券弹层，layer type=1）
+        function addYhq(crowdKey) {
+            currentYhqCrowd = crowdKey;
+            var crowdName = getCrowdName(crowdKey);
+            var list = yhqData[crowdKey] || [];
+            var selectedIds = {};
+            $.each(list, function (i, e) {
+                selectedIds[JSON.parse(e).id] = true;
+            });
+            var pool = yhqPool[crowdKey] || [];
+            var html = [];
+            //弹层顶部显示当前人群名称
+            html.push('<div style="padding:10px 15px;background:#f8f9fb;border-bottom:1px solid #eee;font-size:13px;color:#333;">当前人群：<b style="color:#6699ff;">' + crowdName + '</b><span style="color:#999;margin-left:8px;">勾选下方优惠券后点击确定回填</span></div>');
+            html.push('<div style="max-height:260px;overflow-y:auto;">');
+            $.each(pool, function (i, e) {
+                var checked = selectedIds[e.id] ? ' checked' : '';
+                var disabled = selectedIds[e.id] ? ' disabled' : '';
+                html.push('<label style="display:block;padding:7px 15px;border-bottom:1px solid #f0f0f0;cursor:pointer;font-size:12px;">');
+                html.push('<input type="checkbox" class="yhqSelItem" value="' + e.id + '"' + checked + disabled + ' />');
+                html.push('<span style="margin-left:6px;">' + e.name + '</span>');
+                html.push('<span style="margin-left:12px;color:#999;">' + e.limitDes + '</span>');
+                html.push('<span style="margin-left:12px;color:#999;">' + e.indate + '</span>');
+                html.push('</label>');
+            });
+            if (pool.length <= 0) {
+                html.push('<div style="padding:20px;text-align:center;color:#999;font-size:12px;">该人群暂无可选优惠券</div>');
+            }
+            html.push('</div>');
+            html.push('<div style="text-align:center;padding:10px 0;border-top:1px solid #eee;">');
+            html.push('<input type="button" value="确定" style="width:80px;height:30px;line-height:30px;background-color:#6699ff;color:#fff;border:0;border-radius:3px;cursor:pointer;margin-right:10px;" onclick="confirmYhqSelect();" />');
+            html.push('<input type="button" value="取消" style="width:80px;height:30px;line-height:30px;background-color:#f2f3f5;color:#6B7482;border:0;border-radius:3px;cursor:pointer;" onclick="layer.closeAll();" />');
+            html.push('</div>');
+            layer.open({
+                type: 1,
+                title: ['选择优惠券 - ' + crowdName, 'background-color: #3497DA;color: #fff;font-weight: bold;font-size: 16px'],
+                closeBtn: 1,
+                shade: false,
+                area: ['560px', '430px'],
+                content: html.join('')
+            });
+        }
+        //本地假券弹窗确定：勾选券回填当前人群 yhqData 并渲染绑定表
+        function confirmYhqSelect() {
+            var key = currentYhqCrowd;
+            var list = yhqData[key] || [];
+            var pool = yhqPool[key] || [];
+            $(".yhqSelItem:checked").each(function (i, e) {
+                var id = parseInt($(e).val());
+                var dup = false;
+                for (var j = 0; j < list.length; j++) {
+                    if (JSON.parse(list[j]).id == id) { dup = true; break; }
+                }
+                if (!dup) {
+                    for (var k = 0; k < pool.length; k++) {
+                        if (pool[k].id == id) {
+                            list.push(JSON.stringify(pool[k]));
+                            break;
+                        }
+                    }
+                }
+            });
+            yhqData[key] = list;
+            renderYhqTable(key);
+            layer.closeAll();
+        }
+        //渲染指定人群的优惠券绑定表
+        function renderYhqTable(key) {
+            var list = yhqData[key] || [];
+            var html = [];
+            $.each(list, function (i, e) {
+                var obj = JSON.parse(e);
+                html.push('<tr>');
+                html.push(`<td class="index" yhqid="${obj.id}">${obj.id}</td>`);
+                html.push(`<td>${obj.name}</td>`);
+                html.push(`<td>${obj.limitDes}</td>`);
+                html.push(`<td>${obj.indate}</td>`);
+                html.push('</tr>');
+            });
+            $(".yhqTable[data-crowd='" + key + "'] tbody").html(html.join(''));
+        }
+        //添加奖品（按人群奖品池，crowdKey=人群key）
+        function addPrize(crowdKey) {
+            var html = [];
+            html.push('<tr>');
+            html.push(`<td class="index"></td>`);
+            html.push('<td><input type="text" class="inp" name="prizeName" placeholder="请填写奖品名称" /></td>');
+            html.push('<td><input type="number" class="inp" name="prizeProb" placeholder="请填写奖品概率" />%</td>');
+            html.push('<td class="button"><input type="button" class="remove" value="-" onclick="removePrize(this);" /></td>');
+            html.push('</tr>');
+            $(".prizeTable[data-crowd='" + crowdKey + "']").find("tbody").append(html.join(''));
+            loadPrizeIndex();
+        }
+        //移除奖品
+        function removePrize(obj) {
+            $(obj).parents("tr").remove();
+            loadPrizeIndex();
+        }
+        //加载奖品索引（各人群池独立编号）
+        function loadPrizeIndex() {
+            $(".prizeTable").each(function () {
+                $(this).find("tbody tr").each(function (i, e) {
+                    $(e).find('.index').text(i + 1);
+                });
+            });
+        }
+        //切换人群Tab（报名结果文案奖品池：上方显示当前人群名称标题，下方显示对应奖池表）
+        function switchCrowdTab(key) {
+            $("#crowdTabs .crowdTab").removeClass("active");
+            $("#crowdTabs .crowdTab[data-crowd='" + key + "']").addClass("active");
+            $("#prizeCrowdTitle").text("当前人群：" + getCrowdName(key));
+            $(".prizeTable").hide();
+            $(".prizeTable[data-crowd='" + key + "']").show();
+        }
+        //切换人群Tab（优惠券绑定列表）
+        function switchYhqTab(key) {
+            $("#yhqCrowdTabs .crowdTab").removeClass("active");
+            $("#yhqCrowdTabs .crowdTab[data-crowd='" + key + "']").addClass("active");
+            $(".yhqTable").hide();
+            $(".yhqAddBtn").hide();
+            $(".yhqTable[data-crowd='" + key + "']").show();
+            $(".yhqAddBtn[data-crowd='" + key + "']").show();
+        }
+        //人群启用/停用联动：整行置灰、Tab/奖品池/优惠券表显隐
+        function refreshCrowdState() {
+            $("#crowdTable tbody tr").each(function () {
+                var $tr = $(this);
+                var key = $tr.attr("data-crowd");
+                var enabled = $tr.find(".crowdCheck").is(":checked");
+                $tr.toggleClass("crowd-disabled", !enabled);
+                $("#crowdTabs .crowdTab[data-crowd='" + key + "']").toggle(enabled);
+                $("#yhqCrowdTabs .crowdTab[data-crowd='" + key + "']").toggle(enabled);
+                $(".prizeTable[data-crowd='" + key + "']").toggle(enabled);
+                $(".yhqTable[data-crowd='" + key + "']").toggle(enabled);
+                $(".yhqAddBtn[data-crowd='" + key + "']").toggle(enabled);
+            });
+            fixActiveTab("#crowdTabs", "prize");
+            fixActiveTab("#yhqCrowdTabs", "yhq");
+        }
+        //修复Tab组：当前激活Tab不可见时自动切到本组第一个可见Tab
+        function fixActiveTab(scope, kind) {
+            var $active = $(scope + " .crowdTab.active");
+            if ($active.length == 0 || !$active.is(":visible")) {
+                var $first = $(scope + " .crowdTab:visible:first");
+                if ($first.length > 0) {
+                    if (kind == "prize") switchCrowdTab($first.attr("data-crowd"));
+                    else switchYhqTab($first.attr("data-crowd"));
+                } else {
+                    if (kind == "prize") $(".prizeTable").hide();
+                    else { $(".yhqTable").hide(); $(".yhqAddBtn").hide(); }
+                }
+            }
+        }
+        //打开弹框
+        function openTank(selecter, title, width, height, fn, callback) {
+            if (!width) width = 'auto';
+            if (!height) height = 'auto';
+            if (!title) title = false;
+            tankArray[tankIndex] = layer.open({
+                type: 1,
+                title: title,
+                closeBtn: 1,
+                shade: false,
+                area: [width, height],
+                content: $(selecter),
+                success: function () {
+                    if (fn) fn();
+                },
+                end: function () {
+                    if (callback) callback();
+                }
+            });
+            tankIndex++;
+        }
+        //关闭弹框
+        function closeTank() {
+            tankIndex--;
+            layer.close(tankArray[tankIndex]);
+        }
+        $(function () {
+            if (id <= 0 || copyid > 0)
+                $("#tam_name").removeAttr("disabled");
+            else
+                $("#tam_name").attr("disabled", true);
+            chgConType();
+            $("#tam_type").on('change', function () {
+                chgConType();
+            });
+            //时间插件初始化
+            laydate.render({
+                elem: '#tam_stime',
+                type: 'datetime',
+                trigger: 'click'
+            });
+            laydate.render({
+                elem: '#tam_etime',
+                type: 'datetime',
+                trigger: 'click'
+            });
+            //人群启用/停用切换联动
+            $(document).on('change', '.crowdCheck', function () {
+                refreshCrowdState();
+            });
+            //预置假优惠券数据渲染（4个人群绑定表）
+            renderYhqTable('lq');
+            renderYhqTable('fk');
+            renderYhqTable('xk');
+            renderYhqTable('mf');
+            refreshCrowdState();
+        })
+    </script>
+    <script></script>
+
+
+</body></html>

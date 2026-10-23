@@ -594,10 +594,10 @@ $(function () {
                             <span class="ny_label">我的排名</span>
                             <b id="ny_rank">第50名</b>
                         </div>
-                        <div class="ny_cell ny_gap">
-                            <span class="ny_label" id="ny_gap_label">距上一名 · 第49名</span>
-                            <b id="ny_gap" class="is-red">差 300</b>
-                        </div>
+                            <div class="ny_cell ny_gap">
+                                <span class="ny_label" id="ny_gap_label">距上一名</span>
+                                <b id="ny_gap" class="is-green">差 300 · 即将追上</b>
+                            </div>
                     </div>
                 </div>
                 <div class="sales_part_zl fl">
@@ -2749,7 +2749,7 @@ $(function () {
         function GetRankMore() { alert("演示页面，查看更多记录不跳转"); }
         // 月度排名视角演示：前五态（显示前五实际业绩）↔ 追赶态（第50名，追赶上一名）
         // 真实场景由后端数据驱动：在前五 -> podium_top5 + 实际业绩；不在前五 -> podium_top3 + 追赶进度
-        // 右上角业绩卡差距规则：前五（含第1名）显示「距下一名」；第6名及以后显示「距上一名」
+        // 业绩卡差距规则：第2名及以后显示「距上一名」+「差 X · 即将追上」（绿）；第1名显示「下一名」+「暂时领先 X」（绿）
         (function () {
             var $btn = $('#rank_demo_toggle');
             if (!$btn.length) { return; }
@@ -2765,11 +2765,11 @@ $(function () {
                     $('#user_pm1').text('50');
                     $('#user_my_yj').text('8,200');
                     $('#rank_gap_text').text('距上一名（第49名）还差 300');
-                    // 右上角卡：非前五 → 距上一名（红色=还差多少）
+                    // 业绩卡：第2名及以后 → 距上一名，绿色=正向追赶激励
                     $('#ny_money').text('8,200');
                     $('#ny_rank').text('第50名');
-                    $('#ny_gap_label').text('距上一名 · 第49名');
-                    $('#ny_gap').text('差 300').removeClass('is-green is-gray').addClass('is-red');
+                    $('#ny_gap_label').text('距上一名');
+                    $('#ny_gap').text('差 300 · 即将追上').removeClass('is-red is-gray').addClass('is-green');
                     $('#chase_fill').css('width', '96.5%');
                     $('#rank_chase').show();
                     $btn.text('演示前五视角');
@@ -2782,11 +2782,11 @@ $(function () {
                     $('#user_pm1').text('1');
                     $('#user_my_yj').text('35,300');
                     $('#rank_gap_text').text('领先第2名 13,120');
-                    // 右上角卡：前五（第1名无上一名）→ 距下一名（绿色=领先多少）
+                    // 业绩卡：第1名 → 下一名，绿色=领先
                     $('#ny_money').text('35,300');
                     $('#ny_rank').text('第1名');
-                    $('#ny_gap_label').text('距下一名 · 第2名');
-                    $('#ny_gap').text('领先 13,120').removeClass('is-red is-gray').addClass('is-green');
+                    $('#ny_gap_label').text('下一名');
+                    $('#ny_gap').text('暂时领先 13,120').removeClass('is-red is-gray').addClass('is-green');
                     $('#rank_chase').hide();
                     $btn.text('演示第50名视角');
                 }

@@ -1371,7 +1371,7 @@ body {
      ========================================================= -->
 
 <!-- 页面级容器：仅内联纯布局（宽 / 居中 / 内边距），不含任何颜色与视觉声明 -->
-<div style="max-width:88rem;margin:0 auto;padding:1.5rem 1.5rem 3rem 1.5rem;">
+<div style="max-width:118rem;margin:0 auto;padding:1.5rem 1.5rem 3rem 1.5rem;">
 
   <!-- ===== 顶栏：品牌 / 快捷链接 / 用户菜单 + 主导航 ===== -->
   <div class="card">
@@ -1413,188 +1413,177 @@ body {
     </div>
   </div>
 
-  <!-- ===== 主区：我的客户库（含业绩指标）+ 今日作业（左模块）/ 回访日程（右列） ===== -->
-  <div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:0.75rem;margin-top:0.75rem;">
+  <!-- ===== 主区：客户分布（独立区域） / 我的客户库（单块） / 库中联系人（独立卡） ===== -->
 
-    <!-- 左：我的客户库 + 今日作业（合并模块） -->
-    <div class="card" style="flex:1 1 30rem;min-width:0;">
+  <!-- 客户分布（独立区域） -->
+  <div style="display:flex;align-items:baseline;flex-wrap:wrap;gap:0.25rem 1rem;margin-top:0.75rem;">
+    <div style="display:flex;align-items:center;gap:0.5rem;">
+      <span style="width:0.25rem;height:1.125rem;background:var(--primary);"></span>
+      <p class="card-title" style="font-size:1rem;">客户分布</p>
+    </div>
+    <span class="muted" style="font-size:0.8125rem;white-space:nowrap;">共 720 家</span>
+    <div id="gradeDots" style="display:flex;flex-wrap:wrap;align-items:baseline;gap:0.25rem 0.875rem;"></div>
+  </div>
 
-      <!-- 我的客户库 -->
-      <div class="card-header">
-        <div class="flex items-center justify-between gap-2">
+  <!-- 客户库卡：指标 + 个人信息 + 库信息 + 统计（同一块） -->
+  <!-- 第一屏：客户库卡（左）+ 库中联系人卡（右），一屏同见 -->
+  <div style="display:flex;flex-wrap:wrap;align-items:stretch;gap:0.75rem;margin-top:0.75rem;">
+
+  <div class="card" style="flex:1.15 1 32rem;min-width:0;display:flex;flex-direction:column;">
+
+    <div class="card-header" style="padding:1rem 1.25rem 0;">
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <div style="display:flex;align-items:center;gap:0.5rem;">
+          <span style="width:0.25rem;height:1.125rem;background:var(--primary);"></span>
           <p class="card-title" style="font-size:1rem;">我的客户库</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+          <div style="display:flex;align-items:baseline;gap:0.25rem;white-space:nowrap;">
+            <span class="muted" style="font-size:0.8125rem;">当前业绩</span>
+            <span class="font-medium">8,200</span>
+          </div>
+          <span style="width:1px;height:1rem;background:var(--border);flex:0 0 auto;"></span>
+          <div style="display:flex;align-items:baseline;gap:0.25rem;white-space:nowrap;">
+            <span class="muted" style="font-size:0.8125rem;">我的排名</span>
+            <span class="font-medium" id="sumRank">第50名</span>
+          </div>
+          <span style="width:1px;height:1rem;background:var(--border);flex:0 0 auto;"></span>
+          <div style="display:flex;align-items:baseline;gap:0.25rem;white-space:nowrap;">
+            <span class="muted" style="font-size:0.8125rem;" id="sumGapTitle">距上一名</span>
+            <span class="font-medium" id="sumGapValue" style="color:var(--destructive);">差 300</span>
+          </div>
           <button class="btn" data-variant="outline" data-size="xs" type="button" onclick="demoToast('进入我的客户库')">进入客户库</button>
         </div>
       </div>
-      <div class="card-content">
-        <!-- 顶部左右结构：左侧基本资料 + 库信息；右侧关键业绩指标（一行横排） -->
-        <div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:1.25rem;margin-bottom:1rem;">
+    </div>
 
-          <!-- 左：照片 + 姓名 + 库容量（使用率环形图） -->
-          <div style="flex:1 1 17rem;min-width:0;">
+    <div class="card-content" style="padding:0.75rem 1.25rem 1rem;flex:1;display:flex;flex-direction:column;">
 
-            <div class="flex items-center gap-3">
-              <!-- 证件照占位（1 寸竖版 5:7） -->
-              <svg width="72" height="101" viewBox="0 0 72 101" role="img" aria-label="罗屿证件照">
-                <rect width="72" height="101" rx="2" fill="var(--muted)"></rect>
-                <circle cx="36" cy="38" r="15" fill="var(--muted-foreground)" opacity="0.45"></circle>
-                <path d="M8 101 Q36 60 64 101 Z" fill="var(--muted-foreground)" opacity="0.45"></path>
-              </svg>
-              <div>
-                <p class="font-medium" style="margin:0;">罗屿</p>
-                <p class="muted" style="margin:0;">北京-销售一部</p>
-              </div>
-            </div>
+      <!-- 资料带：个人信息列（左）+ 作业/外呼指标块（右，3×2） -->
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:1rem 1.5rem;">
 
-            <!-- 容量使用率环形图 + 库容量数据 -->
-            <div class="flex items-center gap-4" style="margin-top:1rem;">
-              <div style="flex:0 0 auto;">
-                <svg width="76" height="76" viewBox="0 0 76 76" role="img" aria-label="容量使用率 72%">
-                  <circle cx="38" cy="38" r="31" fill="none" stroke="var(--muted)" stroke-width="5"></circle>
-                  <circle cx="38" cy="38" r="31" fill="none" stroke="var(--primary)" stroke-width="5"
-                          stroke-dasharray="194.78" stroke-dashoffset="54.54" stroke-linecap="round"
-                          transform="rotate(-90 38 38)"></circle>
-                  <text x="38" y="39" text-anchor="middle" dominant-baseline="middle" font-size="15" font-weight="600" fill="var(--primary)">72%</text>
-                </svg>
-                <p class="text-xs text-muted-foreground" style="margin:0.25rem 0 0 0;text-align:center;">容量使用率</p>
-              </div>
-              <div style="flex:1 1 auto;min-width:0;">
-                <div class="flex items-center justify-between" style="margin-bottom:0.5rem;">
-                  <span class="muted">客户库总数</span>
-                  <span class="font-medium">720</span>
-                </div>
-                <div class="flex items-center justify-between" style="margin-bottom:0.5rem;">
-                  <span class="muted">总容量</span>
-                  <span class="font-medium">1,000</span>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span class="muted">剩余可捡</span>
-                  <span class="font-medium">280 家</span>
-                </div>
-              </div>
-            </div>
+        <!-- 个人信息列：小照片 + 姓名/部门 + 库容量微条 -->
+        <div style="flex:0 0 auto;width:9rem;">
+          <svg width="96" height="128" viewBox="0 0 96 128" role="img" aria-label="罗屿证件照" style="display:block;margin:0 auto;">
+            <rect width="96" height="128" rx="2" fill="var(--muted)"></rect>
+            <circle cx="48" cy="50" r="19" fill="var(--muted-foreground)" opacity="0.45"></circle>
+            <path d="M10 128 Q48 77 86 128 Z" fill="var(--muted-foreground)" opacity="0.45"></path>
+          </svg>
+          <p class="font-medium" style="margin:0.375rem 0 0 0;text-align:center;">罗屿</p>
+          <p class="text-xs text-muted-foreground" style="margin:0.125rem 0 0 0;text-align:center;">北京-销售一部</p>
+          <div class="flex items-baseline justify-between" style="margin-top:0.5rem;gap:0.25rem;">
+            <span class="text-xs text-muted-foreground" style="white-space:nowrap;">库容量 72%</span>
+            <span class="text-xs text-muted-foreground" style="white-space:nowrap;">280 家可捡</span>
           </div>
-
-          <!-- 右：关键业绩指标（当前业绩 / 我的排名 / 距上一名；标签在上、数值醒目、横排一行） -->
-          <div style="flex:1 1 16rem;min-width:0;">
-            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;">
-              <div class="statistic">
-                <p class="statistic-title">当前业绩</p>
-                <p class="statistic-value" style="font-size:1.5rem;">8,200</p>
-              </div>
-              <div class="statistic">
-                <p class="statistic-title">我的排名</p>
-                <p class="statistic-value" style="font-size:1.5rem;" id="sumRank">第50名</p>
-              </div>
-              <div class="statistic">
-                <p class="statistic-title" id="sumGapTitle">距上一名</p>
-                <p class="statistic-value" style="font-size:1.5rem;" id="sumGapValue">差 300</p>
-              </div>
-            </div>
-          </div>
-
+          <progress class="progress" value="72" max="100" style="margin-top:0.25rem;"></progress>
+          <p class="text-xs text-muted-foreground" style="margin:0.25rem 0 0 0;text-align:center;">720 / 1,000</p>
         </div>
 
-        <p class="muted" style="margin:0 0 0.5rem 0;">客户分布（共 720 家）</p>
-        <div class="flex flex-wrap gap-1" id="gradeChips"></div>
+        <!-- 作业与外呼指标（3 列 × 2 行） -->
+        <div style="flex:1 1 20rem;min-width:0;align-self:stretch;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0.5rem 1.5rem;align-content:space-evenly;">
+            <div class="statistic">
+              <p class="statistic-title">今日拣回</p>
+              <p class="statistic-value" style="font-size:1.375rem;">8</p>
+              <p class="statistic-description" style="color:var(--primary);">已联系 8</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">今日分发</p>
+              <p class="statistic-value" style="font-size:1.375rem;">5</p>
+              <p class="statistic-description" style="color:var(--primary);">已联系 5</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">转化C级以上</p>
+              <p class="statistic-value" style="font-size:1.375rem;">0</p>
+              <p class="statistic-description" style="color:var(--primary);">已转化 0</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">外呼次数</p>
+              <p class="statistic-value" style="font-size:1.375rem;">86</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">接通量</p>
+              <p class="statistic-value" style="font-size:1.375rem;">32</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">总时长</p>
+              <p class="statistic-value" style="font-size:1.375rem;">2时36分</p>
+            </div>
+        </div>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem 0.75rem;margin-top:1rem;">
+      </div>
+
+      <hr class="separator" style="margin:0.75rem 0;">
+
+      <!-- 今日与本月统计（3 列 × 2 行） -->
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0.5rem 1.5rem;flex:1;align-content:space-evenly;">
           <div class="statistic">
             <p class="statistic-title">B级以上客户</p>
-            <p class="statistic-value" style="font-size:1.5rem;">1</p>
+            <p class="statistic-value" style="font-size:1.375rem;">1</p>
           </div>
-          <div class="statistic">
-            <p class="statistic-title">本月总分发</p>
-            <p class="statistic-value" style="font-size:1.5rem;">51</p>
-            <p class="statistic-description">签单量 0</p>
-          </div>
-          <div class="statistic">
-            <p class="statistic-title">本月捡回</p>
-            <p class="statistic-value" style="font-size:1.5rem;">59</p>
-            <p class="statistic-description">签单量 0</p>
-          </div>
-          <div class="statistic">
-            <p class="statistic-title">系统删除</p>
-            <p class="statistic-value" style="font-size:1.5rem;">0</p>
-          </div>
-        </div>
-
-        <p class="text-xs text-muted-foreground" style="margin:1rem 0 0 0;">本月转化 C 级以上：0（已转化 0）</p>
-      </div>
-
-      <hr class="separator">
-
-      <!-- 今日作业 -->
-      <div class="card-header">
-        <p class="card-title" style="font-size:1rem;">今日作业</p>
-        <p class="card-description">2026-10-19 周一 · 今日需完成的客户联系</p>
-      </div>
-      <div class="card-content" style="padding-top:1.25rem;">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem 0.75rem;">
           <div class="statistic">
             <p class="statistic-title">今日待联系</p>
-            <p class="statistic-value" style="font-size:1.5rem;">0</p>
+            <p class="statistic-value" style="font-size:1.375rem;">0</p>
             <p class="statistic-description">B级以上客户</p>
           </div>
           <div class="statistic">
             <p class="statistic-title">逾期未联系</p>
-            <p class="statistic-value" style="font-size:1.5rem;">0</p>
+            <p class="statistic-value" style="font-size:1.375rem;">0</p>
             <p class="statistic-description">保持得很好</p>
           </div>
           <div class="statistic">
-            <p class="statistic-title">今日捡回</p>
-            <p class="statistic-value" style="font-size:1.5rem;">8</p>
-            <p class="statistic-description">已联系 8 / 8</p>
+            <p class="statistic-title">本月总分发</p>
+            <p class="statistic-value" style="font-size:1.375rem;">51</p>
+            <p class="statistic-description">签单量 0</p>
           </div>
           <div class="statistic">
-            <p class="statistic-title">今日分发</p>
-            <p class="statistic-value" style="font-size:1.5rem;">5</p>
-            <p class="statistic-description">已联系 5 / 5</p>
+            <p class="statistic-title">本月捡回</p>
+            <p class="statistic-value" style="font-size:1.375rem;">59</p>
+            <p class="statistic-description">签单量 0</p>
           </div>
-        </div>
+          <div class="statistic">
+            <p class="statistic-title">系统删除</p>
+            <p class="statistic-value" style="font-size:1.375rem;">0</p>
+          </div>
       </div>
 
     </div>
+  </div>
 
-    <!-- 右列：回访日程 -->
-    <div style="flex:1.15 1 34rem;min-width:0;display:flex;flex-direction:column;gap:0.75rem;">
-
-      <!-- 回访日程（切换在最左，周翻页在右） -->
-      <div class="card">
-        <div class="card-header" style="padding-bottom:0;">
-          <div class="flex items-center justify-between flex-wrap gap-2">
-            <div class="tab-list" id="rvTabs" role="tablist" aria-label="回访日程分类"></div>
-            <div class="flex items-center gap-1" id="rvWeekNav">
-              <button class="btn" data-variant="outline" data-size="xs" type="button" id="rvPrev" onclick="rvWeek(-1)">上一周</button>
-              <span class="muted" id="rvWeekLabel">10-19 ~ 10-25</span>
-              <button class="btn" data-variant="outline" data-size="xs" type="button" id="rvNext" onclick="rvWeek(1)">下一周</button>
-            </div>
-          </div>
-          <p class="card-description" id="rvDesc">回访日程 · 库中联系人 · 按客户等级统计日内回访安排（近两周）</p>
-        </div>
-        <div class="card-content">
-          <div class="table-container">
-            <table class="table">
-              <colgroup>
-                <col style="width:11rem;">
-                <col style="width:auto;">
-                <col style="width:auto;">
-                <col style="width:auto;">
-                <col style="width:auto;">
-                <col style="width:auto;">
-                <col style="width:auto;">
-                <col style="width:5rem;">
-              </colgroup>
-              <thead id="rvHead"></thead>
-              <tbody id="rvBody"></tbody>
-              <tfoot id="rvFoot"></tfoot>
-            </table>
-          </div>
-          <p class="muted" id="rvNote" style="margin:0.75rem 0 0 0;font-size:0.75rem;">今日（10-19 周一）需回访 42 位联系人 · 共 206 位（本周）</p>
+  <!-- 库中联系人（独立区域卡：切换在最左，周翻页在右） -->
+  <div class="card" style="flex:1 1 30rem;min-width:0;">
+    <div class="card-header" style="padding:1rem 1.25rem 0;">
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <div class="tab-list" id="rvTabs" role="tablist" aria-label="回访日程分类"></div>
+        <div class="flex items-center gap-1" id="rvWeekNav">
+          <button class="btn" data-variant="outline" data-size="xs" type="button" id="rvPrev" onclick="rvWeek(-1)">上一周</button>
+          <span class="muted" id="rvWeekLabel">10-19 ~ 10-25</span>
+          <button class="btn" data-variant="outline" data-size="xs" type="button" id="rvNext" onclick="rvWeek(1)">下一周</button>
         </div>
       </div>
-
+      <p class="card-description" id="rvDesc">回访日程 · 库中联系人 · 按客户等级统计日内回访安排（近两周）</p>
     </div>
+    <div class="card-content" style="padding:0.75rem 1.25rem 1rem;">
+      <div class="table-container">
+        <table class="table">
+          <colgroup>
+            <col style="width:8rem;">
+            <col style="width:auto;">
+            <col style="width:auto;">
+            <col style="width:auto;">
+            <col style="width:auto;">
+            <col style="width:auto;">
+            <col style="width:auto;">
+            <col style="width:4.5rem;">
+          </colgroup>
+          <thead id="rvHead"></thead>
+          <tbody id="rvBody"></tbody>
+          <tfoot id="rvFoot"></tfoot>
+        </table>
+      </div>
+      <p class="muted" id="rvNote" style="margin:0.75rem 0 0 0;font-size:0.75rem;">今日（10-19 周一）需回访 42 位联系人 · 共 206 位（本周）</p>
+    </div>
+  </div>
+
   </div>
 
   <!-- ===== 第二屏：我的业绩排名 + 昨日电话 + 本月考勤（左）/ 销售TOP10 + 团队TOP5（右） ===== -->
@@ -1697,19 +1686,19 @@ body {
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0.5rem;margin-top:1rem;">
             <div class="statistic">
               <p class="statistic-title">迟到</p>
-              <p class="statistic-value" style="font-size:1.25rem;">0</p>
+              <p class="statistic-value" style="font-size:1.125rem;">0</p>
             </div>
             <div class="statistic">
               <p class="statistic-title">早退</p>
-              <p class="statistic-value" style="font-size:1.25rem;">0</p>
+              <p class="statistic-value" style="font-size:1.125rem;">0</p>
             </div>
             <div class="statistic">
               <p class="statistic-title">请假</p>
-              <p class="statistic-value" style="font-size:1.25rem;">0</p>
+              <p class="statistic-value" style="font-size:1.125rem;">0</p>
             </div>
             <div class="statistic">
               <p class="statistic-title">忘打卡</p>
-              <p class="statistic-value" style="font-size:1.25rem;">0</p>
+              <p class="statistic-value" style="font-size:1.125rem;">0</p>
             </div>
           </div>
         </div>
@@ -2082,14 +2071,17 @@ function demoToast(what) {
   showToast('演示页面', what + '：本原型为静态演示，该入口暂不跳转。');
 }
 
-/* ================= 我的客户库：等级分布 chips ================= */
+/* ================= 我的客户库：客户分布（标题条行内样式） ================= */
 function renderGrades() {
   var html = '';
   for (var i = 0; i < GRADES.length; i++) {
     var it = GRADES[i];
-    html += badgeHtml(it.g + '级 · ' + it.n, it.n > 0 ? 'secondary' : 'outline');
+    html += '<span style="white-space:nowrap;">' +
+      '<span class="muted" style="font-size:0.8125rem;">' + it.g + ':</span>' +
+      '<span class="font-medium" style="font-size:0.8125rem;margin-left:0.25rem;color:var(--primary);">' + it.n + '</span>' +
+    '</span>';
   }
-  document.getElementById('gradeChips').innerHTML = html;
+  document.getElementById('gradeDots').innerHTML = html;
 }
 
 /* ================= 回访日程（双 Tab + 双周翻页） ================= */
@@ -2190,14 +2182,17 @@ function toggleRankDemo() {
 function renderRankZone() {
   var top = rankDemoTop;
 
-  /* 个人信息卡内业绩指标：我的排名 / 差距（简标签 + 醒目数值，与排名演示视角联动） */
+  /* 标题条业绩指标：当前业绩 / 我的排名 / 差距（红 = 追赶、绿 = 领先，与排名演示联动） */
   document.getElementById('sumRank').textContent = top ? '第1名' : '第50名';
+  var gv = document.getElementById('sumGapValue');
   if (top) {
     document.getElementById('sumGapTitle').textContent = '距下一名';
-    document.getElementById('sumGapValue').textContent = '领先 13,120';
+    gv.textContent = '领先 13,120';
+    gv.style.color = 'var(--chart-5)';
   } else {
     document.getElementById('sumGapTitle').textContent = '距上一名';
-    document.getElementById('sumGapValue').textContent = '差 300';
+    gv.textContent = '差 300';
+    gv.style.color = 'var(--destructive)';
   }
 
   /* 领奖台：追赶态仅展示 TOP3 标杆；前五态展示 TOP5 并标记「我」 */

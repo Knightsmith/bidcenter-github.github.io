@@ -1,0 +1,1785 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>优惠活动设置 - 人群分层配置</title>
+<style>
+/* ============================================================
+   shadcn-lib Token Layer（theme/default-semantic-tokens.css）
+   ============================================================ */
+:root {
+  color-scheme: light;
+
+  --background:              oklch(1 0 0);
+  --foreground:              oklch(0.1450 0 0);
+
+  --card:                    oklch(1 0 0);
+  --card-foreground:         oklch(0.1450 0 0);
+
+  --popover:                 oklch(1 0 0);
+  --popover-foreground:      oklch(0.1450 0 0);
+
+  --primary:                 oklch(0.2050 0 0);
+  --primary-foreground:      oklch(0.9850 0 0);
+
+  --secondary:               oklch(0.9700 0 0);
+  --secondary-foreground:    oklch(0.2050 0 0);
+
+  --muted:                   oklch(0.9700 0 0);
+  --muted-foreground:        oklch(0.5560 0 0);
+
+  --accent:                  oklch(0.9700 0 0);
+  --accent-foreground:       oklch(0.2050 0 0);
+
+  --destructive:             oklch(0.5770 0.2450 27.3250);
+  --destructive-foreground:  oklch(1 0 0);
+
+  --border:                  oklch(0.9220 0 0);
+  --input:                   oklch(0.9220 0 0);
+  --ring:                    oklch(0.7080 0 0);
+
+  --sidebar:                 oklch(0.9850 0 0);
+  --sidebar-foreground:      oklch(0.1450 0 0);
+  --sidebar-primary:         oklch(0.2050 0 0);
+  --sidebar-primary-foreground: oklch(0.9850 0 0);
+  --sidebar-accent:          oklch(0.9700 0 0);
+  --sidebar-accent-foreground: oklch(0.2050 0 0);
+  --sidebar-border:          oklch(0.9220 0 0);
+  --sidebar-ring:            oklch(0.7080 0 0);
+
+  --chart-1:                 oklch(0.8100 0.1000 252);
+  --chart-2:                 oklch(0.6200 0.1900 260);
+  --chart-3:                 oklch(0.5500 0.2200 263);
+  --chart-4:                 oklch(0.4900 0.2200 264);
+  --chart-5:                 oklch(0.4200 0.1800 266);
+
+  --font-sans:  ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-mono:  ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  --radius:                  0.625rem;
+  --radius-sm:               calc(var(--radius) - 4px);
+  --radius-md:               calc(var(--radius) - 2px);
+  --radius-lg:               var(--radius);
+  --radius-xl:               calc(var(--radius) + 4px);
+
+  --spacing:                 0.25rem;
+  --tracking-normal:         0em;
+
+  --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+  --shadow-xs:  0 1px 3px 0px hsl(0 0% 0% / 0.05);
+  --shadow-sm:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+  --shadow:     0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+  --shadow-md:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
+  --shadow-lg:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
+  --shadow-xl:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
+  --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+}
+
+.dark {
+  color-scheme: dark;
+  --background:              oklch(0.1450 0 0);
+  --foreground:              oklch(0.9850 0 0);
+  --card:                    oklch(0.2050 0 0);
+  --card-foreground:         oklch(0.9850 0 0);
+  --popover:                 oklch(0.2690 0 0);
+  --popover-foreground:      oklch(0.9850 0 0);
+  --primary:                 oklch(0.9220 0 0);
+  --primary-foreground:      oklch(0.2050 0 0);
+  --secondary:               oklch(0.2690 0 0);
+  --secondary-foreground:    oklch(0.9850 0 0);
+  --muted:                   oklch(0.2690 0 0);
+  --muted-foreground:        oklch(0.7080 0 0);
+  --accent:                  oklch(0.3710 0 0);
+  --accent-foreground:       oklch(0.9850 0 0);
+  --destructive:             oklch(0.7040 0.1910 22.2160);
+  --destructive-foreground:  oklch(0.9850 0 0);
+  --border:                  oklch(0.2750 0 0);
+  --input:                   oklch(0.3250 0 0);
+  --ring:                    oklch(0.5560 0 0);
+  --sidebar:                 oklch(0.2050 0 0);
+  --sidebar-foreground:      oklch(0.9850 0 0);
+  --sidebar-primary:         oklch(0.4880 0.2430 264.3760);
+  --sidebar-primary-foreground: oklch(0.9850 0 0);
+  --sidebar-accent:          oklch(0.2690 0 0);
+  --sidebar-accent-foreground: oklch(0.9850 0 0);
+  --sidebar-border:          oklch(0.2750 0 0);
+  --sidebar-ring:            oklch(0.4390 0 0);
+  --chart-1:                 oklch(0.8100 0.1000 252);
+  --chart-2:                 oklch(0.6200 0.1900 260);
+  --chart-3:                 oklch(0.5500 0.2200 263);
+  --chart-4:                 oklch(0.4900 0.2200 264);
+  --chart-5:                 oklch(0.4200 0.1800 266);
+}
+
+/* ============================================================
+   shadcn-lib Components Layer（各组件 .css 原样内联）
+   ============================================================ */
+@layer components {
+  /* -- Card（components/card/card.css）------------------------ */
+  .card {
+    background-color: var(--card);
+    color: var(--card-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    container-type: inline-size;
+  }
+  .card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1.5rem;
+    padding-bottom: 0;
+  }
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .card-description {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    margin: 0;
+    line-height: 1.6;
+  }
+  .card-content {
+    padding: 1.5rem;
+  }
+  .card-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    padding-top: 0;
+  }
+  @container (max-width: 280px) {
+    .card-header { padding: 1rem; padding-bottom: 0; }
+    .card-content { padding: 1rem; }
+    .card-footer { padding: 1rem; padding-top: 0; }
+    .card-title { font-size: 1rem; }
+  }
+
+  /* -- Button（components/button/button.css）------------------ */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--font-sans);
+    line-height: 1;
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 150ms ease;
+    outline: none;
+    flex-shrink: 0;
+    height: 2.25rem;
+    padding: 0 1rem;
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+  .btn svg {
+    pointer-events: none;
+    flex-shrink: 0;
+  }
+  .btn svg:not([class*="size-"]) { width: 1rem; height: 1rem; }
+  .btn:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  .btn:disabled, .btn[aria-disabled="true"] {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+  .btn[data-variant="default"] {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+  .btn[data-variant="default"]:hover { opacity: 0.9; }
+  .btn[data-variant="secondary"] {
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
+  }
+  .btn[data-variant="secondary"]:hover { opacity: 0.8; }
+  .btn[data-variant="outline"] {
+    background-color: var(--background);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-xs);
+  }
+  .btn[data-variant="outline"]:hover {
+    background-color: var(--accent);
+    color: var(--accent-foreground);
+  }
+  .btn[data-variant="ghost"] {
+    background-color: transparent;
+    color: var(--foreground);
+    border-color: transparent;
+  }
+  .btn[data-variant="ghost"]:hover {
+    background-color: var(--accent);
+    color: var(--accent-foreground);
+  }
+  .btn[data-variant="destructive"] {
+    background-color: var(--destructive);
+    color: var(--destructive-foreground);
+  }
+  .btn[data-variant="destructive"]:hover { opacity: 0.9; }
+  .btn[data-variant="link"] {
+    background-color: transparent;
+    color: var(--primary);
+    height: auto;
+    padding: 0;
+    text-underline-offset: 4px;
+  }
+  .btn[data-variant="link"]:hover { text-decoration: underline; }
+  .btn[data-size="xs"]      { height: 1.75rem; padding: 0 0.5rem;  font-size: 0.75rem; border-radius: var(--radius-sm); }
+  .btn[data-size="sm"]      { height: 2rem;    padding: 0 0.75rem; font-size: 0.8125rem; }
+  .btn[data-size="lg"]      { height: 2.75rem; padding: 0 2rem;    font-size: 1rem; }
+  .btn[data-size="icon"]    { height: 2.25rem; width: 2.25rem;  padding: 0; }
+  .btn[data-size="icon-xs"] { height: 1.75rem; width: 1.75rem;  padding: 0; border-radius: var(--radius-sm); }
+  .btn[data-size="icon-sm"] { height: 2rem;    width: 2rem;     padding: 0; }
+  .btn[data-size="icon-lg"] { height: 2.75rem; width: 2.75rem;  padding: 0; }
+  @media (prefers-reduced-motion: reduce) {
+    .btn { transition: none; }
+  }
+  @media (prefers-contrast: more) {
+    .btn { border: 2px solid transparent; }
+    .btn[data-variant="default"],
+    .btn[data-variant="secondary"],
+    .btn[data-variant="destructive"] { border-color: currentColor; }
+    .btn[data-variant="outline"],
+    .btn[data-variant="ghost"] { border-color: var(--foreground); }
+  }
+  @media (forced-colors: active) {
+    .btn { border: 1px solid ButtonText; }
+    .btn:disabled, .btn[aria-disabled="true"] {
+      border-color: GrayText;
+      color: GrayText;
+    }
+  }
+
+  /* -- Input（components/input/input.css）--------------------- */
+  .input {
+    height: 2.5rem;
+    width: 100%;
+    border: 1px solid var(--input);
+    border-radius: var(--radius-md);
+    background: var(--background);
+    padding: 0 0.75rem;
+    font-size: 0.875rem;
+    font-family: var(--font-sans);
+    color: var(--foreground);
+    outline: none;
+    box-shadow: var(--shadow-xs);
+    transition: border-color 150ms, box-shadow 150ms;
+  }
+  .input:focus {
+    border-color: var(--ring);
+    box-shadow: 0 0 0 2px oklch(from var(--ring) l c h / 0.2);
+  }
+  .input::placeholder { color: var(--muted-foreground); }
+  .input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .input:read-only:not([type="file"]) {
+    background: var(--muted);
+    cursor: default;
+    opacity: 0.7;
+  }
+  .input:read-only:not([type="file"]):focus {
+    border-color: var(--input);
+    box-shadow: var(--shadow-xs);
+  }
+  .input:is([aria-invalid="true"], :user-invalid) {
+    border-color: var(--destructive);
+  }
+  .input:is([aria-invalid="true"], :user-invalid):focus {
+    border-color: var(--destructive);
+    box-shadow: 0 0 0 2px oklch(from var(--destructive) l c h / 0.2);
+  }
+  .input[type="file"] {
+    padding: 0;
+    font-size: 0.875rem;
+  }
+  .input[type="file"]::file-selector-button {
+    height: 100%;
+    border: none;
+    border-right: 1px solid var(--input);
+    background: var(--muted);
+    color: var(--foreground);
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--font-sans);
+    padding: 0 0.75rem;
+    margin-right: 0.75rem;
+    cursor: pointer;
+    transition: background 150ms;
+  }
+  .input[type="file"]::file-selector-button:hover { background: var(--accent); }
+  .input[data-size="sm"] { height: 2rem;    padding: 0 0.625rem; font-size: 0.8125rem; }
+  .input[data-size="lg"] { height: 2.75rem; padding: 0 1rem;     font-size: 1rem; }
+  textarea.input {
+    field-sizing: content;
+    min-height: 5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  .field-description {
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    margin: 0.375rem 0 0;
+  }
+  .field-error {
+    font-size: 0.8125rem;
+    color: var(--destructive);
+    margin: 0.375rem 0 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .input { transition: none; }
+    .input[type="file"]::file-selector-button { transition: none; }
+  }
+  @media (prefers-contrast: more) {
+    .input { border-width: 2px; }
+    .input:disabled { opacity: 0.7; }
+  }
+  @media (forced-colors: active) {
+    .input { border-color: ButtonBorder; color: ButtonText; background: Field; }
+    .input:focus { outline: 2px solid Highlight; outline-offset: 1px; }
+    .input:disabled { opacity: 1; color: GrayText; border-color: GrayText; }
+    .input:is([aria-invalid="true"], :user-invalid) { border-color: LinkText; }
+    .field-error { color: LinkText; }
+  }
+
+  /* -- Label（components/label/label.css）--------------------- */
+  .label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--font-sans);
+    line-height: 1;
+    color: var(--foreground);
+    display: block;
+    margin-bottom: 0.375rem;
+    cursor: default;
+  }
+  .label[data-disabled] {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+  .label:has(+ :disabled),
+  .label:has(+ [data-disabled]) {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+  .label-hint {
+    font-weight: 400;
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+  }
+  @media (prefers-contrast: more) {
+    .label[data-disabled],
+    .label:has(+ :disabled),
+    .label:has(+ [data-disabled]) { opacity: 0.85; }
+  }
+  @media (forced-colors: active) {
+    .label { color: LinkText; }
+    .label[data-disabled],
+    .label:has(+ :disabled),
+    .label:has(+ [data-disabled]) { opacity: 1; color: GrayText; }
+  }
+
+  /* -- Radio Group（components/radio/radio.css）--------------- */
+  .radio-group {
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .radio-group > legend { margin-bottom: 0.375rem; }
+  .radio-group[data-orientation="horizontal"] {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .radio-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .radio-item > label {
+    font-size: 0.875rem;
+    font-weight: 400;
+    cursor: pointer;
+  }
+  .radio-item-block {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0 0.5rem;
+  }
+  .radio-item-block > .radio { grid-row: 1 / 3; margin-top: 0.125rem; }
+  .radio-item-block > label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    line-height: 1.4;
+  }
+  .radio-item-block > .radio-description {
+    grid-column: 2;
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    line-height: 1.5;
+  }
+  .radio-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: border-color 150ms, background 150ms;
+  }
+  .radio-card:hover { background: var(--accent); }
+  .radio-card:has(.radio:checked) { border-color: var(--primary); }
+  .radio-card:has(.radio:focus-visible) {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  .radio-card:has(.radio:disabled) {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  .radio-card > .radio { position: absolute; top: 1rem; right: 1rem; }
+  .radio-card > label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .radio-card > .radio-description {
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    line-height: 1.5;
+  }
+  .radio {
+    appearance: none;
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--background);
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+    transition: border-color 150ms;
+  }
+  .radio:checked { border-color: var(--primary); }
+  .radio:checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--primary);
+    transform: translate(-50%, -50%);
+  }
+  .radio:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  .radio:disabled { opacity: 0.5; cursor: not-allowed; }
+  .radio:disabled + label { opacity: 0.5; cursor: not-allowed; }
+  .radio[aria-invalid="true"] { border-color: var(--destructive); }
+  .radio[aria-invalid="true"]:checked { border-color: var(--destructive); }
+  .radio[aria-invalid="true"]:checked::after { background: var(--destructive); }
+  .radio-group-description {
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    margin: -0.125rem 0 0.25rem;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .radio, .radio-card { transition: none; }
+  }
+  @media (forced-colors: active) {
+    .radio { border-color: ButtonText; }
+    .radio:checked { border-color: Highlight; }
+    .radio:checked::after { background: Highlight; }
+    .radio:disabled { border-color: GrayText; }
+    .radio:disabled:checked::after { background: GrayText; }
+    .radio-card { border-color: ButtonText; }
+    .radio-card:has(.radio:checked) { border-color: Highlight; }
+  }
+
+  /* -- Checkbox（components/checkbox/checkbox.css）------------ */
+  .checkbox {
+    appearance: none;
+    width: 1.125rem;
+    height: 1.125rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--background);
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+    transition: background-color 150ms, border-color 150ms;
+  }
+  .checkbox:checked {
+    background-color: var(--primary);
+    border-color: var(--primary);
+  }
+  .checkbox:checked::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    width: 6px;
+    height: 10px;
+    border: solid var(--primary-foreground);
+    border-width: 0 2px 2px 0;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+  .checkbox:indeterminate {
+    background-color: var(--primary);
+    border-color: var(--primary);
+  }
+  .checkbox:indeterminate::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 10px;
+    height: 2px;
+    background: var(--primary-foreground);
+    transform: translate(-50%, -50%);
+  }
+  .checkbox:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  .checkbox:disabled { opacity: 0.5; cursor: not-allowed; }
+  .checkbox:is([aria-invalid="true"], :user-invalid) { border-color: var(--destructive); }
+  .checkbox-item { display: flex; align-items: center; gap: 0.5rem; }
+  .checkbox-item > label { font-size: 0.875rem; cursor: pointer; }
+  .checkbox-item-block { display: flex; align-items: flex-start; gap: 0.5rem; }
+  .checkbox-item-block > label { font-size: 0.875rem; cursor: pointer; }
+  .checkbox-item-block > .checkbox { margin-top: 0.125rem; }
+  .checkbox-item:has(.checkbox:disabled),
+  .checkbox-item-block:has(.checkbox:disabled) { opacity: 0.5; cursor: not-allowed; }
+  @media (prefers-reduced-motion: reduce) {
+    .checkbox { transition: none; }
+  }
+  @media (prefers-contrast: more) {
+    .checkbox { border-width: 2px; }
+    .checkbox:disabled { opacity: 0.7; }
+  }
+  @media (forced-colors: active) {
+    .checkbox { appearance: auto; }
+  }
+
+  /* -- Table（components/table/table.css）--------------------- */
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    container-type: inline-size;
+  }
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    text-align: left;
+    caption-side: bottom;
+  }
+  .table-caption {
+    padding: 0.75rem 1rem;
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    text-align: center;
+  }
+  .table-head {
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    color: var(--muted-foreground);
+    background-color: var(--muted);
+    white-space: nowrap;
+    border-bottom: 1px solid var(--border);
+  }
+  .table-head:first-child { border-top-left-radius: var(--radius-lg); }
+  .table-head:last-child { border-top-right-radius: var(--radius-lg); }
+  .table-row {
+    border-bottom: 1px solid var(--border);
+    transition: background-color 150ms ease;
+  }
+  .table-row:last-child { border-bottom: none; }
+  tbody .table-row:hover { background-color: var(--muted); }
+  .table-cell {
+    padding: 0.75rem 1rem;
+    vertical-align: middle;
+    color: var(--foreground);
+  }
+  tfoot .table-row {
+    background-color: var(--muted);
+    border-top: 1px solid var(--border);
+    font-weight: 500;
+  }
+  tfoot .table-cell:first-child { border-bottom-left-radius: var(--radius-lg); }
+  tfoot .table-cell:last-child { border-bottom-right-radius: var(--radius-lg); }
+  @container (max-width: 480px) {
+    .table-head, .table-cell { padding: 0.5rem 0.75rem; font-size: 0.8125rem; }
+  }
+
+  /* -- Tabs（components/tabs/tabs.css）------------------------ */
+  .tab-list {
+    display: inline-flex;
+    align-items: center;
+    background: var(--muted);
+    border-radius: var(--radius-lg);
+    padding: 0.25rem;
+    gap: 0.125rem;
+  }
+  .tab-list[data-variant="line"] {
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .tab-list[data-variant="line"] .tab-trigger {
+    border-radius: 0;
+    padding: 0.5rem 1rem;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+  }
+  .tab-list[data-variant="line"] .tab-trigger[aria-selected="true"] {
+    background: transparent;
+    color: var(--foreground);
+    border-bottom-color: var(--primary);
+    box-shadow: none;
+  }
+  .tab-list[aria-orientation="vertical"] { flex-direction: column; width: auto; }
+  .tab-list[aria-orientation="vertical"] .tab-trigger {
+    justify-content: flex-start;
+    width: 100%;
+  }
+  .tab-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: calc(var(--radius) * 0.6);
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: none;
+    background: transparent;
+    color: var(--muted-foreground);
+    cursor: pointer;
+    transition: all 150ms ease;
+    white-space: nowrap;
+    outline: none;
+  }
+  .tab-trigger[aria-selected="true"] {
+    background: var(--background);
+    color: var(--foreground);
+    box-shadow: 0 1px 3px oklch(0 0 0 / 0.08), 0 0 0 1px var(--border);
+  }
+  .tab-trigger:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  .tab-trigger:disabled { pointer-events: none; opacity: 0.5; }
+  .tabs:has(.tab-list[aria-orientation="vertical"]) {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  .tabs:has(.tab-list[aria-orientation="vertical"]) > .tab-content {
+    margin-top: 0;
+    flex: 1;
+  }
+  .tab-content { margin-top: 0.75rem; }
+  .tab-content:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  .tab-content[hidden] { display: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .tab-trigger { transition: none; }
+  }
+  @media (forced-colors: active) {
+    .tab-trigger[aria-selected="true"] {
+      border: 2px solid Highlight;
+      box-shadow: none;
+    }
+    .tab-list[data-variant="line"] .tab-trigger[aria-selected="true"] {
+      border: none;
+      border-bottom: 2px solid Highlight;
+    }
+  }
+
+  /* -- Dialog（components/dialog/dialog.css）------------------ */
+  dialog.dialog {
+    border: none;
+    border-radius: var(--radius-xl);
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+    padding: 0;
+    margin: auto;
+    position: fixed;
+    inset: 0;
+    max-width: 28rem;
+    width: calc(100vw - 2rem);
+    max-height: calc(100vh - 2rem);
+    box-shadow: 0 25px 80px oklch(0 0 0 / 0.25), 0 0 0 1px var(--border);
+    opacity: 0;
+    transform: translateY(-0.5rem) scale(0.98);
+    transition: opacity 200ms ease, transform 200ms ease, display 200ms allow-discrete;
+  }
+  dialog.dialog[open] {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  dialog.dialog[data-size="sm"]   { max-width: 24rem; }
+  dialog.dialog[data-size="lg"]   { max-width: 32rem; }
+  dialog.dialog[data-size="xl"]   { max-width: 40rem; }
+  dialog.dialog[data-size="full"] { max-width: calc(100vw - 2rem); }
+  dialog.dialog::backdrop {
+    background: oklch(0 0 0 / 0);
+    backdrop-filter: blur(0px);
+    transition: all 200ms ease, display 200ms allow-discrete;
+  }
+  dialog.dialog[open]::backdrop {
+    background: oklch(0 0 0 / 0.45);
+    backdrop-filter: blur(3px);
+  }
+  .dialog-content { padding: 1.5rem; }
+  .dialog-header  { margin-bottom: 1rem; }
+  .dialog-title   { font-size: 1.0625rem; font-weight: 600; margin: 0 0 0.375rem; letter-spacing: -0.01em; }
+  .dialog-description { font-size: 0.875rem; color: var(--muted-foreground); margin: 0; line-height: 1.6; }
+  .dialog-body    { margin-top: 1rem; }
+  .dialog-footer  { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.5rem; }
+
+  /* -- Badge（components/badge/badge.css）--------------------- */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+    padding: 0.125rem 0.625rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    line-height: 1.5rem;
+  }
+  .badge[data-variant="outline"] {
+    border: 1px solid var(--border);
+    color: var(--muted-foreground);
+  }
+  .badge[data-variant="secondary"] {
+    background: var(--secondary);
+    color: var(--secondary-foreground);
+  }
+  .badge[data-variant="default"] {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  /* -- Toast（components/toast/toast.css）--------------------- */
+  .toast-container {
+    position: fixed;
+    z-index: 100;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+    padding: 1rem;
+    max-height: 100vh;
+    pointer-events: none;
+  }
+  .toast-container[data-position="bottom-right"] { bottom: 0; right: 0; }
+  .toast-container[data-position="bottom-left"]  { bottom: 0; left: 0; }
+  .toast-container[data-position="top-right"]    { top: 0; right: 0; flex-direction: column; }
+  .toast-container[data-position="top-left"]     { top: 0; left: 0; flex-direction: column; }
+  .toast-container[data-position="top-center"]   { top: 0; left: 50%; transform: translateX(-50%); flex-direction: column; align-items: center; }
+  .toast-container[data-position="bottom-center"]{ bottom: 0; left: 50%; transform: translateX(-50%); align-items: center; }
+  .toast {
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    min-width: 20rem;
+    max-width: 26rem;
+    box-shadow: 0 4px 16px oklch(0 0 0 / 0.12);
+    pointer-events: auto;
+    opacity: 0;
+    transform: translateY(0.5rem);
+    transition: opacity 200ms ease, transform 200ms ease;
+  }
+  .toast:popover-open {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .toast[data-variant="destructive"] {
+    background-color: var(--destructive);
+    color: var(--destructive-foreground);
+    border-color: var(--destructive);
+  }
+  .toast[data-variant="destructive"] .toast-description {
+    color: var(--destructive-foreground);
+    opacity: 0.85;
+  }
+  .toast[data-variant="success"] { border-color: oklch(0.65 0.2 145); }
+  .toast[data-variant="success"] .toast-icon { color: oklch(0.65 0.2 145); }
+  .toast[data-variant="warning"] { border-color: oklch(0.75 0.18 75); }
+  .toast[data-variant="warning"] .toast-icon { color: oklch(0.75 0.18 75); }
+  .toast[data-variant="info"] { border-color: oklch(0.6 0.15 250); }
+  .toast[data-variant="info"] .toast-icon { color: oklch(0.6 0.15 250); }
+  .toast-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .toast-text { flex: 1; min-width: 0; }
+  .toast-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.4;
+  }
+  .toast-description {
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    margin: 0.125rem 0 0;
+    line-height: 1.5;
+  }
+  .toast-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: none;
+    background: transparent;
+    color: var(--muted-foreground);
+    cursor: pointer;
+    flex-shrink: 0;
+    border-radius: calc(var(--radius) * 0.5);
+    transition: color 150ms, background 150ms;
+  }
+  .toast-close:hover {
+    color: var(--foreground);
+    background: var(--accent);
+  }
+  .toast-icon { flex-shrink: 0; margin-top: 0.125rem; }
+  .toast-actions { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
+}
+
+/* -- Dialog / Toast 入场动画（@layer 外顶层 @starting-style）-- */
+@starting-style {
+  dialog.dialog[open] {
+    opacity: 0;
+    transform: translateY(-0.5rem) scale(0.98);
+  }
+  dialog.dialog[open]::backdrop {
+    background: oklch(0 0 0 / 0);
+    backdrop-filter: blur(0px);
+  }
+  .toast:popover-open {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
+
+/* ============================================================
+   页面布局（unlayered，按 shadcn-html 约定覆写组件层，一屏展示）
+   ============================================================ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 12px; }
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  min-width: 960px;
+}
+.page {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 12px 16px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+}
+.page-title { font-size: 1.0625rem; font-weight: 600; letter-spacing: -0.01em; }
+.page-sub { font-size: 0.8125rem; color: var(--muted-foreground); margin-top: 0.125rem; }
+.card-header { padding: 0.75rem 1rem; padding-bottom: 0.125rem; }
+.card-title { font-size: 0.9375rem; }
+.card-description { font-size: 0.8125rem; }
+.card-content { padding: 0.75rem 1rem 0.875rem; }
+.card-footer { padding: 0 1rem 0.875rem; padding-top: 0; }
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.625rem 1.5rem;
+}
+.f-item { display: flex; flex-direction: column; gap: 0.25rem; min-width: 0; }
+.f-item.full { grid-column: 1 / -1; }
+.f-item .label { margin-bottom: 0.125rem; }
+.req { color: var(--destructive); font-style: normal; }
+.hint { font-size: 0.8125rem; color: var(--muted-foreground); }
+.inline-group { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.input.w-fixed { width: 220px; }
+.input.w-time  { width: 168px; }
+.input.w-prob  { width: 72px; text-align: right; }
+.input.w-pct   { width: 100px; }
+.grid-side {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+}
+.tip { font-size: 0.8125rem; color: var(--muted-foreground); margin-top: 0.5rem; }
+.bg-block {
+  width: 300px;
+  height: 48px;
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--muted);
+  color: var(--muted-foreground);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8125rem;
+}
+.table-head, .table-cell { padding: 0.5rem 0.75rem; }
+tr.row-disabled td { opacity: 0.55; color: var(--muted-foreground); }
+.td-center { text-align: center; }
+.empty-cell { color: var(--muted-foreground); text-align: center; }
+.panel-actions { display: flex; align-items: center; gap: 0.75rem; margin-top: 0.625rem; }
+.dialog-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.dialog-title { margin: 0; }
+.dialog-body { max-height: 55vh; overflow: auto; margin-top: 0.875rem; }
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.875rem;
+  padding: 0.125rem 0 0.5rem;
+}
+.actions .btn { min-width: 7rem; }
+.toast-container { z-index: 1300; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- 页头 -->
+  <header class="card page-header">
+    <div>
+      <div class="page-title">编辑活动</div>
+      <div class="page-sub">优惠活动设置 · 人群分层配置（演示页，点击确认不真实提交）</div>
+    </div>
+    <span class="badge" data-variant="outline">shadcn-lib components · vanilla JS · 单文件</span>
+  </header>
+
+  <!-- 活动基本信息 -->
+  <section class="card">
+    <div class="card-header">
+      <h3 class="card-title">活动基本信息</h3>
+      <p class="card-description">活动基础配置与展示口径</p>
+    </div>
+    <div class="card-content">
+      <div class="form-grid">
+        <div class="f-item">
+          <label class="label" for="tam_name"><span class="req">*</span> 活动名称</label>
+          <div class="inline-group">
+            <input id="tam_name" class="input w-fixed" value="国庆支付" maxlength="15">
+            <span class="hint">内部查看标记</span>
+          </div>
+        </div>
+        <div class="f-item">
+          <label class="label" for="tam_title"><span class="req">*</span> 活动标题</label>
+          <div class="inline-group">
+            <input id="tam_title" class="input w-fixed" value="喜迎国庆庆双节" maxlength="12">
+            <span class="hint">信息弹窗顶部，不超过12个字</span>
+          </div>
+        </div>
+        <div class="f-item full">
+          <span class="label"><span class="req">*</span> 活动时间</span>
+          <div class="inline-group">
+            <input id="tam_stime" class="input w-time" value="2026-09-29 00:00:00">
+            <span style="color:var(--muted-foreground);">至</span>
+            <input id="tam_etime" class="input w-time" value="2026-10-11 00:00:00">
+          </div>
+        </div>
+        <div class="f-item">
+          <fieldset class="radio-group" data-orientation="horizontal">
+            <legend class="label"><span class="req">*</span> 活动状态</legend>
+            <div class="radio-item">
+              <input class="radio" type="radio" name="tam_status" id="st_on" value="0" checked>
+              <label for="st_on">开启</label>
+            </div>
+            <div class="radio-item">
+              <input class="radio" type="radio" name="tam_status" id="st_off" value="1">
+              <label for="st_off">关闭</label>
+            </div>
+          </fieldset>
+        </div>
+        <div class="f-item">
+          <label class="label" for="tam_weight"><span class="req">*</span> 权重</label>
+          <input id="tam_weight" class="input w-fixed" value="10" oninput="this.value=this.value.replace(/[^\d]/g,'')">
+        </div>
+        <div class="f-item full">
+          <fieldset class="radio-group" data-orientation="horizontal">
+            <legend class="label"><span class="req">*</span> 活动类型</legend>
+            <div class="radio-item">
+              <input class="radio" type="radio" name="tam_type" id="tp_yhq" value="1" onclick="chgType()">
+              <label for="tp_yhq">优惠券</label>
+            </div>
+            <div class="radio-item">
+              <input class="radio" type="radio" name="tam_type" id="tp_reg" value="2" checked onclick="chgType()">
+              <label for="tp_reg">仅报名</label>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 活动人群配置 + 展示设置（并排一屏） -->
+  <div class="grid-side">
+    <section class="card">
+      <div class="card-header">
+        <h3 class="card-title">活动人群配置</h3>
+        <p class="card-description">固定四类人群，可勾选启用/停用；未启用人群整行置灰且不发放奖品；至少启用 1 个人群才能保存。</p>
+      </div>
+      <div class="card-content">
+        <div class="table-container">
+          <table class="table" id="crowdTable">
+            <thead>
+              <tr>
+                <th class="table-head" style="width:64px;">启用</th>
+                <th class="table-head" style="width:110px;">人群名称</th>
+                <th class="table-head">匹配规则说明</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-row" data-crowd="lq">
+                <td class="table-cell"><input type="checkbox" class="checkbox crowdCheck" aria-label="启用临期客户" checked onchange="refreshCrowdState()"></td>
+                <td class="table-cell">临期客户</td>
+                <td class="table-cell">会员/套餐即将到期</td>
+              </tr>
+              <tr class="table-row" data-crowd="fk">
+                <td class="table-cell"><input type="checkbox" class="checkbox crowdCheck" aria-label="启用付费客户" checked onchange="refreshCrowdState()"></td>
+                <td class="table-cell">付费客户</td>
+                <td class="table-cell">已产生付费</td>
+              </tr>
+              <tr class="table-row" data-crowd="xk">
+                <td class="table-cell"><input type="checkbox" class="checkbox crowdCheck" aria-label="启用新客户" checked onchange="refreshCrowdState()"></td>
+                <td class="table-cell">新客户</td>
+                <td class="table-cell">注册 ≤ 7 天 且 未付费</td>
+              </tr>
+              <tr class="table-row" data-crowd="mf">
+                <td class="table-cell"><input type="checkbox" class="checkbox crowdCheck" aria-label="启用免费用户" checked onchange="refreshCrowdState()"></td>
+                <td class="table-cell">免费用户</td>
+                <td class="table-cell">注册 &gt; 7 天 且 未付费</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-header">
+        <h3 class="card-title">展示设置</h3>
+        <p class="card-description">背景图与运行环境</p>
+      </div>
+      <div class="card-content">
+        <div class="f-item">
+          <span class="label">活动背景图</span>
+          <div class="inline-group">
+            <div class="bg-block">背景图占位（演示）</div>
+          </div>
+          <div style="margin-top:0.375rem;">
+            <button type="button" class="btn" data-variant="outline" data-size="sm" onclick="toast('演示页：此处为背景图上传占位，不实际提交')">本地上传</button>
+          </div>
+        </div>
+        <div class="f-item" style="margin-top:0.875rem;">
+          <fieldset class="radio-group" data-orientation="horizontal">
+            <legend class="label">运行环境</legend>
+            <div class="radio-item">
+              <input class="radio" type="radio" name="tam_env" id="env_dev" value="0">
+              <label for="env_dev">开发环境</label>
+            </div>
+            <div class="radio-item">
+              <input class="radio" type="radio" name="tam_env" id="env_prod" value="1" checked>
+              <label for="env_prod">生产环境</label>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 优惠券类型：按人群分组绑定 -->
+  <section class="card" id="swTp1" style="display:none;">
+    <div class="card-header">
+      <h3 class="card-title">优惠券绑定（按人群分组）</h3>
+      <p class="card-description">从内置优惠券清单中选择添加，各人群独立配置；已绑定的券不可重复添加。</p>
+    </div>
+    <div class="card-content">
+      <div class="tab-list" id="yhqTabs" role="tablist" aria-label="按人群切换优惠券">
+        <button type="button" class="tab-trigger" role="tab" id="yhqTab-lq" aria-selected="true" aria-controls="yhqPanel-lq" data-crowd="lq">临期客户</button>
+        <button type="button" class="tab-trigger" role="tab" id="yhqTab-fk" aria-selected="false" aria-controls="yhqPanel-fk" data-crowd="fk">付费客户</button>
+        <button type="button" class="tab-trigger" role="tab" id="yhqTab-xk" aria-selected="false" aria-controls="yhqPanel-xk" data-crowd="xk">新客户</button>
+        <button type="button" class="tab-trigger" role="tab" id="yhqTab-mf" aria-selected="false" aria-controls="yhqPanel-mf" data-crowd="mf">免费用户</button>
+      </div>
+      <div class="tab-content" role="tabpanel" id="yhqPanel-lq" aria-labelledby="yhqTab-lq">
+        <div class="table-container">
+          <table class="table yhqTable" data-crowd="lq">
+            <thead>
+              <tr>
+                <th class="table-head" style="width:70px;">ID</th>
+                <th class="table-head">优惠券名称</th>
+                <th class="table-head" style="width:150px;">金额类型</th>
+                <th class="table-head" style="width:100px;">使用期限</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="panel-actions">
+          <button type="button" class="btn" data-variant="outline" data-size="sm" onclick="openYhqPicker('lq')">+ 添加优惠券</button>
+          <span class="hint">点击从内置优惠券清单中选择</span>
+        </div>
+      </div>
+      <div class="tab-content" role="tabpanel" id="yhqPanel-fk" aria-labelledby="yhqTab-fk" hidden>
+        <div class="table-container">
+          <table class="table yhqTable" data-crowd="fk">
+            <thead>
+              <tr>
+                <th class="table-head" style="width:70px;">ID</th>
+                <th class="table-head">优惠券名称</th>
+                <th class="table-head" style="width:150px;">金额类型</th>
+                <th class="table-head" style="width:100px;">使用期限</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="panel-actions">
+          <button type="button" class="btn" data-variant="outline" data-size="sm" onclick="openYhqPicker('fk')">+ 添加优惠券</button>
+          <span class="hint">点击从内置优惠券清单中选择</span>
+        </div>
+      </div>
+      <div class="tab-content" role="tabpanel" id="yhqPanel-xk" aria-labelledby="yhqTab-xk" hidden>
+        <div class="table-container">
+          <table class="table yhqTable" data-crowd="xk">
+            <thead>
+              <tr>
+                <th class="table-head" style="width:70px;">ID</th>
+                <th class="table-head">优惠券名称</th>
+                <th class="table-head" style="width:150px;">金额类型</th>
+                <th class="table-head" style="width:100px;">使用期限</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="panel-actions">
+          <button type="button" class="btn" data-variant="outline" data-size="sm" onclick="openYhqPicker('xk')">+ 添加优惠券</button>
+          <span class="hint">点击从内置优惠券清单中选择</span>
+        </div>
+      </div>
+      <div class="tab-content" role="tabpanel" id="yhqPanel-mf" aria-labelledby="yhqTab-mf" hidden>
+        <div class="table-container">
+          <table class="table yhqTable" data-crowd="mf">
+            <thead>
+              <tr>
+                <th class="table-head" style="width:70px;">ID</th>
+                <th class="table-head">优惠券名称</th>
+                <th class="table-head" style="width:150px;">金额类型</th>
+                <th class="table-head" style="width:100px;">使用期限</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="panel-actions">
+          <button type="button" class="btn" data-variant="outline" data-size="sm" onclick="openYhqPicker('mf')">+ 添加优惠券</button>
+          <span class="hint">点击从内置优惠券清单中选择</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 仅报名类型：按人群分组奖品池 -->
+  <section class="card" id="swTp2">
+    <div class="card-header">
+      <h3 class="card-title">报名结果文案（按人群分组奖品池）</h3>
+      <p class="card-description">保存时各启用人群奖品总概率必须为 100%。</p>
+    </div>
+    <div class="card-content">
+      <div class="tab-list" id="prizeTabs" role="tablist" aria-label="按人群切换奖品池">
+        <button type="button" class="tab-trigger" role="tab" id="prizeTab-lq" aria-selected="true" aria-controls="prizePanel-lq" data-crowd="lq">临期客户</button>
+        <button type="button" class="tab-trigger" role="tab" id="prizeTab-fk" aria-selected="false" aria-controls="prizePanel-fk" data-crowd="fk">付费客户</button>
+        <button type="button" class="tab-trigger" role="tab" id="prizeTab-xk" aria-selected="false" aria-controls="prizePanel-xk" data-crowd="xk">新客户</button>
+        <button type="button" class="tab-trigger" role="tab" id="prizeTab-mf" aria-selected="false" aria-controls="prizePanel-mf" data-crowd="mf">免费用户</button>
+      </div>
+      <div class="tab-content" role="tabpanel" id="prizePanel-lq" aria-labelledby="prizeTab-lq">
+        <div class="table-container">
+          <table class="table prizeTable" data-crowd="lq">
+            <thead>
+              <tr>
+                <th class="table-head" style="width:56px;">序号</th>
+                <th class="table-head">文案</th>
+                <th class="table-head" style="width:140px;">概率</th>
+                <th class="table-head td-center" style="width:56px;">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-row">
+                <td class="table-cell idx">1</td>
+                <td class="table-cell"><input class="input" name="prizeName" value="续费折扣券"></td>
+                <td class="table-cell"><span class="inline-group"><input class="input w-prob" name="prizeProb" value="100">%</span></td>
+                <td class="table-cell td-center">
+                  <button type="button" class="btn" data-variant="ghost" data-size="icon-sm" onclick="removePrize(this)" title="删除" aria-label="删除奖品">
+                    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="panel-actions">
+          <button type="button" class="btn" data-variant="outline" data-size="sm" onclick="addPrize('lq')">+ 添加奖品</button>
+          <span class="hint">保存时总概率必须为100%</span>
+        </div>
+      </div>
+      <div class="tab-content" role="tabpanel" id="prizePanel-fk" aria-labelledby="prizeTab-fk" hidden>
+        <div class="table-container">
+          <table class="table prizeTable" data-crowd="fk">
+            <thead>
+              <tr>
+                <th class="table-head" style="width:56px;">序号</th>
+                <th class="table-head">文案</th>
+                <th class="table-head" style="width:140px;">概率</th>
+                <th class="table-head td-center" style="width:56px;">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-row">
+                <td class="table-cell idx">1</td>
+                <td class="table-cell"><input class="input" name="prizeName" value="大额券"></td>
+                <td class="table-cell"><span class="inline-group"><input class="input w-prob" name="prizeProb" value="40">%</span></td>
+                <td class="table-cell td-center">
+                  <button type="button" class="btn" data-variant="ghost" data-size="icon-sm" onclick="removePrize(this)" title="删除" aria-label="删除奖品">
+                    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                  </button>
+                </td>
+              </tr>
+              <tr class="table-row">
+                <td class="table-cell idx">2</td>
+                <td class="table-cell"><input class="input" name="prizeName" value="会员天数"></td>
+                <td class="table-cell"><span class="inline-group"><input class="input w-prob" name="prizeProb" value="30">%</span></td>
+                <td class="table-cell td-center">
+                  <button type="button" class="btn" data-variant="ghost" data-size="icon-sm" onclick="removePrize(this)" title="删除" aria-label="删除奖品">
+                    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                  </button>
+                </td>
+              </tr>
+              <tr class="table-row">
+                <td class="table-cell idx">3</td>
+                <td class="table-cell"><input class="input" name="prizeName" value="实物礼品"></td>
+                <td class="table-cell"><span class="inline-group"><input class="input w-prob" name="prizeProb" value="30">%</span></td>
+                <td class="table-cell td-center">
+                  <button type="button" class="btn" data-variant="ghost" data-size="icon-sm" onclick="removePrize(this)" title="删除" aria-label="删除奖品">
+                    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="panel-actions">
+          <button type="button" class="btn" data-variant="outline" data-size="sm" onclick="addPrize('fk')">+ 添加奖品</button>
+          <span class="hint">保存时总概率必须为100%</span>
+        </div>
+      </div>
+      <div class="tab-content" role="tabpanel" id="prizePanel-xk" aria-labelledby="prizeTab-xk" hidden>
+        <div class="table-container">
+          <table class="table prizeTable" data-crowd="xk">
+            <thead>
+              <tr>
+                <th class="table-head" style="width:56px;">序号</th>
+                <th class="table-head">文案</th>
+                <th class="table-head" style="width:140px;">概率</th>
+                <th class="table-head td-center" style="width:56px;">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-row">
+                <td class="table-cell idx">1</td>
+                <td class="table-cell"><input class="input" name="prizeName" value="新人优惠券"></td>
+                <td class="table-cell"><span class="inline-group"><input class="input w-prob" name="prizeProb" value="50">%</span></td>
+                <td class="table-cell td-center">
+                  <button type="button" class="btn" data-variant="ghost" data-size="icon-sm" onclick="removePrize(this)" title="删除" aria-label="删除奖品">
+                    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                  </button>
+                </td>
+              </tr>
+              <tr class="table-row">
+                <td class="table-cell idx">2</td>
+                <td class="table-cell"><input class="input" name="prizeName" value="满减券"></td>
+                <td class="table-cell"><span class="inline-group"><input class="input w-prob" name="prizeProb" value="30">%</span></td>
+                <td class="table-cell td-center">
+                  <button type="button" class="btn" data-variant="ghost" data-size="icon-sm" onclick="removePrize(this)" title="删除" aria-label="删除奖品">
+                    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                  </button>
+                </td>
+              </tr>
+              <tr class="table-row">
+                <td class="table-cell idx">3</td>
+                <td class="table-cell"><input class="input" name="prizeName" value="积分礼包"></td>
+                <td class="table-cell"><span class="inline-group"><input class="input w-prob" name="prizeProb" value="20">%</span></td>
+                <td class="table-cell td-center">
+                  <button type="button" class="btn" data-variant="ghost" data-size="icon-sm" onclick="removePrize(this)" title="删除" aria-label="删除奖品">
+                    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="panel-actions">
+          <button type="button" class="btn" data-variant="outline" data-size="sm" onclick="addPrize('xk')">+ 添加奖品</button>
+          <span class="hint">保存时总概率必须为100%</span>
+        </div>
+      </div>
+      <div class="tab-content" role="tabpanel" id="prizePanel-mf" aria-labelledby="prizeTab-mf" hidden>
+        <div class="table-container">
+          <table class="table prizeTable" data-crowd="mf">
+            <thead>
+              <tr>
+                <th class="table-head" style="width:56px;">序号</th>
+                <th class="table-head">文案</th>
+                <th class="table-head" style="width:140px;">概率</th>
+                <th class="table-head td-center" style="width:56px;">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-row">
+                <td class="table-cell idx">1</td>
+                <td class="table-cell"><input class="input" name="prizeName" value="体验券"></td>
+                <td class="table-cell"><span class="inline-group"><input class="input w-prob" name="prizeProb" value="60">%</span></td>
+                <td class="table-cell td-center">
+                  <button type="button" class="btn" data-variant="ghost" data-size="icon-sm" onclick="removePrize(this)" title="删除" aria-label="删除奖品">
+                    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                  </button>
+                </td>
+              </tr>
+              <tr class="table-row">
+                <td class="table-cell idx">2</td>
+                <td class="table-cell"><input class="input" name="prizeName" value="积分礼包"></td>
+                <td class="table-cell"><span class="inline-group"><input class="input w-prob" name="prizeProb" value="40">%</span></td>
+                <td class="table-cell td-center">
+                  <button type="button" class="btn" data-variant="ghost" data-size="icon-sm" onclick="removePrize(this)" title="删除" aria-label="删除奖品">
+                    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="panel-actions">
+          <button type="button" class="btn" data-variant="outline" data-size="sm" onclick="addPrize('mf')">+ 添加奖品</button>
+          <span class="hint">保存时总概率必须为100%</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 操作 -->
+  <div class="actions">
+    <button type="button" class="btn" data-variant="outline" onclick="doCancel()">取消</button>
+    <button type="button" class="btn" data-variant="default" onclick="doConfirm()">确认</button>
+  </div>
+</div>
+
+<!-- 内置优惠券选择 Dialog -->
+<dialog id="yhqPicker" class="dialog" data-size="xl" aria-labelledby="yhqPickerTitle">
+  <div class="dialog-content">
+    <div class="dialog-header">
+      <div>
+        <h3 class="dialog-title" id="yhqPickerTitle">选择优惠券（内置演示清单）</h3>
+        <p class="dialog-description">勾选要添加的优惠券；已绑定的券自动置灰不可选。</p>
+      </div>
+      <button type="button" class="btn" data-variant="ghost" data-size="icon-sm" data-dialog-close onclick="closeYhqPicker()" aria-label="关闭">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="dialog-body">
+      <div class="table-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="table-head td-center" style="width:56px;">选择</th>
+              <th class="table-head" style="width:70px;">ID</th>
+              <th class="table-head">优惠券名称</th>
+              <th class="table-head" style="width:150px;">金额类型</th>
+              <th class="table-head" style="width:100px;">使用期限</th>
+            </tr>
+          </thead>
+          <tbody id="yhqPickerBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="dialog-footer">
+      <button type="button" class="btn" data-variant="outline" data-dialog-close onclick="closeYhqPicker()">取消</button>
+      <button type="button" class="btn" data-variant="default" onclick="confirmYhqPick()">确定</button>
+    </div>
+  </div>
+</dialog>
+<script>
+'use strict';
+/* ============================================================
+   shadcn-lib 轻量初始化（dialog/tabs/toast）
+   ============================================================ */
+
+/* ---- Dialog：原生 <dialog> 封装 ---- */
+function openDialog(dlg) {
+  if (!dlg.open) dlg.showModal();
+}
+function closeDialog(dlg) {
+  if (dlg.open) dlg.close();
+}
+
+/* ---- Tabs：role=tab 互斥切换（无残留） ---- */
+function initTabs() {
+  document.querySelectorAll('[role="tablist"]').forEach(function (list) {
+    var tabs = Array.prototype.slice.call(list.querySelectorAll('[role="tab"]'));
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        tabs.forEach(function (t) { t.setAttribute('aria-selected', String(t === tab)); });
+        var panels = list.parentElement.querySelectorAll('.tab-content');
+        panels.forEach(function (p) {
+          var on = p.id === tab.getAttribute('aria-controls');
+          p.hidden = !on;
+          if (on) p.removeAttribute('aria-hidden'); else p.setAttribute('aria-hidden', 'true');
+        });
+      });
+    });
+  });
+}
+
+/* ---- Toast：官方 toast.css 结构 ---- */
+var toastContainer = null;
+function ensureToastContainer() {
+  if (toastContainer) return toastContainer;
+  toastContainer = document.createElement('div');
+  toastContainer.className = 'toast-container';
+  toastContainer.setAttribute('data-position', 'top-center');
+  toastContainer.setAttribute('role', 'region');
+  toastContainer.setAttribute('aria-label', 'Notification');
+  document.body.appendChild(toastContainer);
+  return toastContainer;
+}
+function toast(msg, variant, title) {
+  var v = variant || 'info';
+  var t = title || '提示';
+  var container = ensureToastContainer();
+  var el = document.createElement('div');
+  el.className = 'toast';
+  el.setAttribute('data-variant', v);
+  el.innerHTML =
+    '<div class="toast-content">' +
+      '<span class="toast-icon" aria-hidden="true">' +
+        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>' +
+      '</span>' +
+      '<div class="toast-text">' +
+        '<p class="toast-title">' + t + '</p>' +
+        '<p class="toast-description">' + msg + '</p>' +
+      '</div>' +
+      '<button type="button" class="toast-close" aria-label="关闭">' +
+        '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>' +
+      '</button>' +
+    '</div>';
+  container.appendChild(el);
+  var closeBtn = el.querySelector('.toast-close');
+  function dismiss() {
+    el.style.transition = 'opacity 200ms ease, transform 200ms ease';
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(0.5rem)';
+    setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 220);
+  }
+  closeBtn.addEventListener('click', dismiss);
+  requestAnimationFrame(function () {
+    el.style.opacity = '1';
+    el.style.transform = 'translateY(0)';
+  });
+  setTimeout(dismiss, 3200);
+}
+
+/* ============================================================
+   业务逻辑（保留全部功能与假数据）
+   ============================================================ */
+
+/* ---- 内置优惠券清单（6 条假数据） ---- */
+var YHQ_LIST = [
+  { id: 1,  name: '5元无门槛券',       amountType: '固定金额',  period: '7天' },
+  { id: 2,  name: '10元满减券',        amountType: '满减券',    period: '30天' },
+  { id: 3,  name: '15元无门槛券',      amountType: '固定金额',  period: '15天' },
+  { id: 4,  name: '新人专属7折券',     amountType: '折扣券',    period: '7天' },
+  { id: 5,  name: '续费立减20元券',    amountType: '满减券',    period: '90天' },
+  { id: 6,  name: '积分翻倍体验券',    amountType: '特殊券',    period: '15天' }
+];
+
+/* ---- 人群启用状态（含展示设置联动） ---- */
+function isCrowdEnabled(code) {
+  var box = document.querySelector('#crowdTable input.crowdCheck[data-crowd="' + code + '"]');
+  return !!box && box.checked;
+}
+function refreshCrowdState() {
+  var codes = ['lq', 'fk', 'xk', 'mf'];
+  var enabledCount = 0;
+  codes.forEach(function (c) {
+    var box = document.querySelector('#crowdTable input.crowdCheck[data-crowd="' + c + '"]');
+    var tr = box ? box.closest('tr') : null;
+    if (box && box.checked) {
+      enabledCount++;
+      if (tr) tr.classList.remove('row-disabled');
+    } else if (tr) {
+      tr.classList.add('row-disabled');
+    }
+  });
+  var tabs = document.querySelectorAll('#yhqTabs .tab-trigger, #prizeTabs .tab-trigger');
+  tabs.forEach(function (tab) {
+    var c = tab.getAttribute('data-crowd');
+    var enabled = isCrowdEnabled(c);
+    tab.disabled = !enabled;
+    if (!enabled && tab.getAttribute('aria-selected') === 'true') {
+      var firstEnabled = null;
+      document.querySelectorAll('#yhqTabs .tab-trigger, #prizeTabs .tab-trigger').forEach(function (t) {
+        if (!firstEnabled && !t.disabled) firstEnabled = t;
+      });
+      if (firstEnabled) {
+        firstEnabled.click();
+        if (firstEnabled.parentElement.id === 'yhqTabs') {
+          var p = document.getElementById('yhqPanel-' + firstEnabled.getAttribute('data-crowd'));
+          document.querySelectorAll('#swTp1 .tab-content').forEach(function (x) { x.hidden = true; x.setAttribute('aria-hidden', 'true'); });
+          if (p) { p.hidden = false; p.removeAttribute('aria-hidden'); }
+        } else {
+          var p2 = document.getElementById('prizePanel-' + firstEnabled.getAttribute('data-crowd'));
+          document.querySelectorAll('#swTp2 .tab-content').forEach(function (x) { x.hidden = true; x.setAttribute('aria-hidden', 'true'); });
+          if (p2) { p2.hidden = false; p2.removeAttribute('aria-hidden'); }
+        }
+      }
+    }
+  });
+  return enabledCount;
+}
+
+/* ---- 活动类型切换：优惠券 / 仅报名 ---- */
+function chgType() {
+  var isCoupon = document.getElementById('tp_yhq').checked;
+  document.getElementById('swTp1').style.display = isCoupon ? '' : 'none';
+  document.getElementById('swTp2').style.display = isCoupon ? 'none' : '';
+}
+
+/* ---- 优惠券绑定：按人群分组渲染 ---- */
+var COUPON_MAP = {
+  lq: [{ id: 1, name: '5元无门槛券', amountType: '固定金额', period: '7天' }],
+  fk: [
+    { id: 2, name: '10元满减券', amountType: '满减券', period: '30天' },
+    { id: 5, name: '续费立减20元券', amountType: '满减券', period: '90天' }
+  ],
+  xk: [
+    { id: 4, name: '新人专属7折券', amountType: '折扣券', period: '7天' },
+    { id: 3, name: '15元无门槛券', amountType: '固定金额', period: '15天' }
+  ],
+  mf: [{ id: 6, name: '积分翻倍体验券', amountType: '特殊券', period: '15天' }]
+};
+
+function couponIds(crowd) {
+  return (COUPON_MAP[crowd] || []).map(function (c) { return c.id; });
+}
+
+function renderYhqTable(crowd) {
+  var tbody = document.querySelector('.yhqTable[data-crowd="' + crowd + '"] tbody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  var items = COUPON_MAP[crowd] || [];
+  if (!items.length) {
+    var tr = document.createElement('tr');
+    tr.className = 'table-row';
+    tr.innerHTML = '<td class="table-cell" colspan="4" style="text-align:center;color:var(--muted-foreground);">暂未绑定优惠券，点击下方按钮添加</td>';
+    tbody.appendChild(tr);
+    return;
+  }
+  items.forEach(function (c) {
+    var tr = document.createElement('tr');
+    tr.className = 'table-row';
+    tr.innerHTML =
+      '<td class="table-cell">' + c.id + '</td>' +
+      '<td class="table-cell">' + c.name + '</td>' +
+      '<td class="table-cell">' + c.amountType + '</td>' +
+      '<td class="table-cell">' + c.period + '</td>';
+    tbody.appendChild(tr);
+  });
+}
+
+/* ---- 优惠券选择 Dialog ---- */
+var pickingCrowd = '';
+function openYhqPicker(crowd) {
+  pickingCrowd = crowd;
+  var tbody = document.getElementById('yhqPickerBody');
+  tbody.innerHTML = '';
+  var bound = couponIds(crowd);
+  YHQ_LIST.forEach(function (c) {
+    var disabled = bound.indexOf(c.id) >= 0;
+    var tr = document.createElement('tr');
+    tr.className = 'table-row' + (disabled ? ' row-disabled' : '');
+    tr.innerHTML =
+      '<td class="table-cell td-center">' +
+        '<input type="checkbox" class="checkbox" value="' + c.id + '"' + (disabled ? ' disabled' : '') + ' aria-label="选择' + c.name + '">' +
+      '</td>' +
+      '<td class="table-cell">' + c.id + '</td>' +
+      '<td class="table-cell">' + c.name + '</td>' +
+      '<td class="table-cell">' + c.amountType + '</td>' +
+      '<td class="table-cell">' + c.period + '</td>';
+    tbody.appendChild(tr);
+  });
+  openDialog(document.getElementById('yhqPicker'));
+}
+function closeYhqPicker() {
+  closeDialog(document.getElementById('yhqPicker'));
+}
+function confirmYhqPick() {
+  var checked = document.querySelectorAll('#yhqPickerBody input.checkbox:checked');
+  if (!checked.length) { toast('请先勾选要添加的优惠券', 'warning', '未选择'); return; }
+  checked.forEach(function (box) {
+    var id = parseInt(box.value, 10);
+    var item = null;
+    YHQ_LIST.forEach(function (c) { if (c.id === id) item = c; });
+    if (item) {
+      var list = COUPON_MAP[pickingCrowd];
+      if (list.indexOf(item) < 0) list.push(item);
+    }
+  });
+  renderYhqTable(pickingCrowd);
+  closeYhqPicker();
+  toast('已为「' + crowdLabel(pickingCrowd) + '」添加 ' + checked.length + ' 张优惠券', 'success', '添加成功');
+}
+function crowdLabel(code) {
+  var map = { lq: '临期客户', fk: '付费客户', xk: '新客户', mf: '免费用户' };
+  return map[code] || code;
+}
+
+/* ---- 奖品池：独立添加/删除/序号重排/概率合计校验 ---- */
+function addPrize(crowd) {
+  var tbody = document.querySelector('.prizeTable[data-crowd="' + crowd + '"] tbody');
+  if (!tbody) return;
+  var tr = document.createElement('tr');
+  tr.className = 'table-row';
+  tr.innerHTML =
+    '<td class="table-cell idx"></td>' +
+    '<td class="table-cell"><input class="input" name="prizeName" value="新增奖品"></td>' +
+    '<td class="table-cell"><span class="inline-group"><input class="input w-prob" name="prizeProb" value="0">%</span></td>' +
+    '<td class="table-cell td-center">' +
+      '<button type="button" class="btn" data-variant="ghost" data-size="icon-sm" onclick="removePrize(this)" title="删除" aria-label="删除奖品">' +
+        '<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>' +
+      '</button>' +
+    '</td>';
+  tbody.appendChild(tr);
+  reorderPrize(crowd);
+}
+function removePrize(btn) {
+  var tr = btn.closest('tr');
+  var tbody = tr.parentNode;
+  tbody.removeChild(tr);
+  reorderPrize(tbody.getAttribute('data-crowd'));
+}
+function reorderPrize(crowd) {
+  var tbody = document.querySelector('.prizeTable[data-crowd="' + crowd + '"] tbody');
+  if (!tbody) return;
+  var rows = Array.prototype.slice.call(tbody.querySelectorAll('tr.table-row'));
+  rows.forEach(function (r, i) {
+    var idx = r.querySelector('.idx');
+    if (idx) idx.textContent = String(i + 1);
+  });
+}
+function sumPrize(crowd) {
+  var tbody = document.querySelector('.prizeTable[data-crowd="' + crowd + '"] tbody');
+  if (!tbody) return 0;
+  var sum = 0;
+  tbody.querySelectorAll('input[name="prizeProb"]').forEach(function (inp) {
+    var v = parseFloat(inp.value);
+    if (!isNaN(v)) sum += v;
+  });
+  return sum;
+}
+
+/* ---- 校验与提交 ---- */
+function doCancel() {
+  var r = confirm('确定取消编辑吗？未保存的修改将丢失。');
+  if (r) {
+    toast('已取消编辑', 'info', '已取消');
+  }
+}
+function doConfirm() {
+  var name = document.getElementById('tam_name').value.trim();
+  var title = document.getElementById('tam_title').value.trim();
+  var stime = document.getElementById('tam_stime').value.trim();
+  var etime = document.getElementById('tam_etime').value.trim();
+  var weight = document.getElementById('tam_weight').value.trim();
+  if (!name) { toast('请填写活动名称', 'warning', '校验失败'); return; }
+  if (!title) { toast('请填写活动标题', 'warning', '校验失败'); return; }
+  if (!stime || !etime) { toast('请填写活动时间', 'warning', '校验失败'); return; }
+  if (stime >= etime) { toast('活动结束时间必须晚于开始时间', 'warning', '校验失败'); return; }
+  if (!weight) { toast('请填写权重（数字）', 'warning', '校验失败'); return; }
+
+  var enabled = refreshCrowdState();
+  if (enabled < 1) { toast('至少需要启用 1 个人群才能保存', 'warning', '校验失败'); return; }
+
+  if (document.getElementById('tp_yhq').checked) {
+    var okC = true;
+    ['lq', 'fk', 'xk', 'mf'].forEach(function (c) {
+      if (isCrowdEnabled(c) && !COUPON_MAP[c].length) okC = false;
+    });
+    if (!okC) { toast('启用人群必须至少绑定 1 张优惠券', 'warning', '校验失败'); return; }
+  } else {
+    var err = '';
+    ['lq', 'fk', 'xk', 'mf'].forEach(function (c) {
+      if (isCrowdEnabled(c)) {
+        var sum = sumPrize(c);
+        if (Math.abs(sum - 100) > 0.0001) err += crowdLabel(c) + '：当前合计 ' + sum + '%；';
+      }
+    });
+    if (err) { toast('奖品概率合计必须为100%。' + err, 'warning', '校验失败'); return; }
+  }
+
+  toast('演示页：活动「' + name + '」确认成功，数据不真实提交', 'success', '提交成功');
+}
+</script>
+</body>
+</html>
