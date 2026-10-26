@@ -330,11 +330,13 @@ svg { display: block; }
 
 /* 头像 + 下拉 */
 .avatar {
+  position: relative; overflow: hidden;
   width: 2rem; height: 2rem; border-radius: 999px;
   background: var(--primary); color: var(--primary-foreground);
   display: flex; align-items: center; justify-content: center;
   font-size: .8125rem; font-weight: 600; flex-shrink: 0;
 }
+.avatar img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; }
 .avatar-menu-wrap { position: relative; }
 .dropdown {
   position: absolute; right: 0; top: calc(100% + .375rem); z-index: 60;
@@ -359,7 +361,7 @@ svg { display: block; }
 /* 双列 */
 .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: .75rem; align-items: start; }
 .col { display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
-.col-half { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; min-width: 0; }
+.col-half { display: grid; grid-template-columns: 1fr; gap: 1rem; min-width: 0; }
 .full { margin-top: 1rem; }
 @media (max-width: 1180px) { .cols, .col-half { grid-template-columns: 1fr; } }
 @media (max-width: 1120px) { .search { display: none; } .quick .btn:nth-child(n+4) { display: none; } }
@@ -407,36 +409,54 @@ svg { display: block; }
 }
 .divider-label::after { content: ""; flex: 1; height: 1px; background: var(--border); }
 
-/* —— 客户分布 chips —— */
-.chips { display: flex; flex-wrap: wrap; gap: .375rem; }
+/* —— 客户分布 chips（对齐客服页同款） —— */
+.chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .625rem; }
 .chip {
-  min-width: 3rem; padding: .3125rem .5rem;
-  background: var(--muted); border: 1px solid var(--border);
-  border-radius: var(--radius-md); text-align: center; line-height: 1.2;
+  display: inline-flex; align-items: baseline; gap: .35rem;
+  padding: .35rem .6rem; border: 1px solid var(--border);
+  border-radius: var(--radius-md); background: var(--card);
 }
-.chip b { display: block; font-size: .6875rem; font-weight: 600; color: var(--muted-foreground); }
-.chip i { display: block; font-style: normal; font-size: .9375rem; font-weight: 650; font-variant-numeric: tabular-nums; }
+.chip b { font-size: .875rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.chip span { font-size: .75rem; color: var(--muted-foreground); }
 
 /* —— 客户资料 + 库容量 —— */
 .cap-row { display: flex; align-items: center; gap: .75rem; }
 .profile { display: flex; align-items: center; gap: .875rem; min-width: 0; }
-.profile-photo {
-  width: 117px; height: 167px; flex-shrink: 0;
-  border: 1px solid var(--border); border-radius: var(--radius-md);
-  background: var(--muted); display: flex; align-items: center; justify-content: center;
-  color: var(--muted-foreground); font-size: .71875rem; text-align: center;
-}
+.profile .avatar { width: 117px; height: 167px; font-size: 2.5rem; border-radius: var(--radius-lg); }
 .profile-meta { min-width: 0; flex: 1; }
 .profile-name { font-size: .9375rem; font-weight: 650; }
 .profile-sub { font-size: .75rem; color: var(--muted-foreground); margin-top: 2px; }
 
-/* —— 最近跟进 feed —— */
-.feed-row { display: flex; flex-direction: column; gap: .25rem; padding: .625rem 0; border-bottom: 1px solid var(--border); min-width: 0; }
-.feed-row:last-child { border-bottom: none; }
-.feed-head { display: flex; align-items: center; gap: .5rem; min-width: 0; }
+/* —— 库容量行（大号数值 + 百分比） —— */
+.cap-label { font-size: .8125rem; color: var(--muted-foreground); }
+.cap-val { font-size: 1.75rem; font-weight: 700; letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1.15; margin-right: auto; }
+.cap-val small { font-size: .9375rem; font-weight: 600; color: var(--muted-foreground); }
+.cap-pct { font-size: 1.5rem; font-weight: 700; color: var(--primary); font-variant-numeric: tabular-nums; line-height: 1.15; }
+
+/* —— 2×2 指标块（今日数据卡） —— */
+.metrics { display: grid; grid-template-columns: repeat(2, 1fr); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
+.metric { padding: .6rem .75rem; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.metric:nth-child(2n) { border-right: none; }
+.metric:nth-child(n+3) { border-bottom: none; }
+.metric-top { display: flex; align-items: baseline; justify-content: space-between; gap: .5rem; }
+.metric-label { font-size: .8125rem; color: var(--muted-foreground); }
+.metric-value { font-size: 1.25rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; font-variant-numeric: tabular-nums; }
+.metric-value.is-muted { color: var(--muted-foreground); }
+.metric-sub { font-size: .75rem; color: var(--muted-foreground); margin-top: 2px; }
+
+/* —— statistic 数据块（外呼数据卡） —— */
+.statistic { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.statistic-title { font-size: .8125rem; color: var(--muted-foreground); }
+.statistic-value { font-size: 1.5rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; font-variant-numeric: tabular-nums; }
+.statistic-value small { font-size: .8125rem; font-weight: 500; color: var(--muted-foreground); margin-left: 2px; }
+.statistic-description { font-size: .75rem; color: var(--muted-foreground); }
+.statistic-trend { font-weight: 600; display: inline-flex; align-items: center; gap: 2px; }
+.statistic-trend[data-trend="up"] { color: color-mix(in oklab, var(--success) 85%, var(--foreground)); }
+.statistic-trend[data-trend="down"] { color: var(--destructive); }
+
+/* —— 动态流通用（消息中心复用：feed-title / feed-sub） —— */
 .feed-title { font-size: .8125rem; font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }
 .feed-title:hover { color: var(--primary); }
-.feed-time { margin-left: auto; font-size: .71875rem; color: var(--muted-foreground); flex-shrink: 0; }
 .feed-sub { font-size: .71875rem; color: var(--muted-foreground); }
 .feed-sub p { margin: .1875rem 0 0; color: var(--muted-foreground); }
 
@@ -450,6 +470,9 @@ svg { display: block; }
 .rank-bar .rb-fill { height: 100%; background: var(--chart-3); border-radius: 999px; }
 .rank-bar.is-mine .rb-fill { background: var(--primary); }
 .rank-bar .rb-money { font-size: .8125rem; font-weight: 600; font-variant-numeric: tabular-nums; width: 3.25rem; text-align: right; white-space: nowrap; }
+/* —— 我的业绩排名卡：橙色主视觉（与页面蓝色主调区分） —— */
+.card.is-rank { --primary: oklch(0.7000 0.1900 50); --primary-foreground: oklch(0.9850 0 0); }
+.card.is-rank .card-title { color: var(--primary); }
 
 /* —— 榜单滚动容器（悬停暂停无缝滚动）—— */
 .marquee { max-height: 19rem; overflow-y: hidden; }
@@ -475,7 +498,7 @@ tr.rv-weekend td { background: color-mix(in oklab, var(--success) 8%, var(--card
   .kpis.x3 .kpi:nth-child(2n) { border-right: none; }
   .kpis.x3 .kpi:nth-child(n+4) { border-bottom: 1px solid var(--border); }
   .kpis.x3 .kpi:nth-child(n+5) { border-bottom: none; }
-  .profile-photo { width: 84px; height: 120px; }
+  .profile .avatar { width: 84px; height: 120px; font-size: 1.5rem; }
 }
 </style>
 </head>
@@ -488,7 +511,11 @@ tr.rv-weekend td { background: color-mix(in oklab, var(--success) 8%, var(--card
     <span class="vsep"></span>
     <label class="search">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input type="search" placeholder="搜客户 / 联系人 / 公司" data-demo="全局搜索">
+      <input type="search" placeholder="验重搜索公司名称" data-demo="全局搜索">
+    </label>
+    <label class="search">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="search" placeholder="输入关键词或者信息标题" data-demo="信息搜索">
     </label>
     <span class="spacer"></span>
     <nav class="quick" aria-label="快捷入口">
@@ -532,61 +559,56 @@ tr.rv-weekend td { background: color-mix(in oklab, var(--success) 8%, var(--card
     <!-- ==================== 左列 ==================== -->
     <div class="col">
 
-      <!-- ---------- ① 我的客户库 ---------- -->
+      <!-- ---------- ① 客户库信息 ---------- -->
       <section class="card">
         <div class="card-header">
           <div>
-            <div class="card-title">我的客户库</div>
-            <div class="card-description">客户分布 · 资料完整度 · 今日动作</div>
+            <div class="card-title">客户库信息</div>
           </div>
-          <button class="btn" data-variant="outline" data-size="sm" data-demo="进入客户库">进入客户库</button>
         </div>
         <div class="card-content">
-          <!-- 分布 + 资料 + 库容量 -->
-          <div class="cap-row">
-            <div class="profile">
-              <div class="profile-photo">像素证件照<br>117×167</div>
-              <div class="profile-meta">
-                <div class="profile-name">罗屿</div>
-                <div class="profile-sub">北京 · 销售一部 · 销售顾问</div>
-                <div class="divider-label" style="margin:.625rem 0 .375rem;">客户分布 · 共 720 家</div>
-                <div class="chips" id="gradeChips"></div>
-              </div>
-            </div>
-            <div style="width:11rem;flex-shrink:0;">
-              <div class="stat-label">库容量</div>
-              <div class="stat-inline" style="margin:.125rem 0 .375rem;">
-                <span class="stat-value">720</span>
-                <span class="stat-sub">/ 800 家</span>
-              </div>
-              <progress class="progress" value="720" max="800" data-tone="warning"></progress>
-              <div class="stat-sub" style="margin-top:.3125rem;">还剩 80 个空位</div>
+          <div class="profile">
+            <span class="avatar"><span>罗</span><img src="https://api.dicebear.com/9.x/pixel-art/svg?seed=Milo&amp;backgroundColor=3b82f6" alt="罗屿头像" onerror="this.remove();"></span>
+            <div class="profile-meta">
+              <div class="profile-name">罗屿</div>
+              <div class="profile-sub">北京 · 销售一部 · 销售顾问</div>
+              <div class="divider-label" style="margin:.625rem 0 0;">客户分布 · 共 720 家</div>
+              <div id="gradeChips"></div>
             </div>
           </div>
-
-          <!-- 本月统计 6 数量 -->
-          <div class="divider-label">本月统计</div>
-          <div class="kpis x3">
-            <div class="kpi"><div class="kpi-label">B级以上客户</div><div class="kpi-value tnum">1</div></div>
-            <div class="kpi"><div class="kpi-label">今日待联系</div><div class="kpi-value tnum is-muted">0</div></div>
-            <div class="kpi"><div class="kpi-label">逾期未联系</div><div class="kpi-value tnum is-muted">0</div></div>
-            <div class="kpi"><div class="kpi-label">本月总分发</div><div class="kpi-value tnum">51</div></div>
-            <div class="kpi"><div class="kpi-label">本月捡回</div><div class="kpi-value tnum">59</div></div>
-            <div class="kpi"><div class="kpi-label">系统删除</div><div class="kpi-value tnum is-muted">0</div></div>
+          <div class="cap-row" style="margin-top:.9rem;">
+            <span class="cap-label">库容量</span>
+            <span class="cap-val">720 <small>/ 800</small></span>
+            <span class="cap-pct">90%</span>
           </div>
+          <progress class="progress" value="720" max="800" aria-label="库容量使用率">90%</progress>
+        </div>
+      </section>
 
-          <!-- 今日动作 + 外呼 -->
-          <div class="divider-label">今日动作</div>
-          <div class="kpis x3">
-            <div class="kpi"><div class="kpi-label">今日拣回</div><div class="kpi-value tnum">8</div><div class="kpi-sub">已联系 8</div></div>
-            <div class="kpi"><div class="kpi-label">今日分发</div><div class="kpi-value tnum">5</div><div class="kpi-sub">已联系 5</div></div>
-            <div class="kpi"><div class="kpi-label">转化 C级以上</div><div class="kpi-value tnum is-muted">0</div><div class="kpi-sub">已转化 0</div></div>
+      <!-- ---------- ② 外呼数据 ---------- -->
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">外呼数据</div>
           </div>
-          <div class="divider-label">外呼数据</div>
-          <div class="kpis x3">
-            <div class="kpi"><div class="kpi-label">外呼次数</div><div class="kpi-value tnum">86</div></div>
-            <div class="kpi"><div class="kpi-label">接通量</div><div class="kpi-value tnum">32</div><div class="kpi-sub">接通率 37.2%</div></div>
-            <div class="kpi"><div class="kpi-label">总时长</div><div class="kpi-value tnum">2时36分</div></div>
+        </div>
+        <div class="card-content">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;">
+            <div class="statistic">
+              <p class="statistic-title">外呼</p>
+              <p class="statistic-value">86<small>次</small></p>
+              <p class="statistic-description"><span class="statistic-trend" data-trend="up">▲ 今日累计</span></p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">接通</p>
+              <p class="statistic-value">32<small>次</small></p>
+              <p class="statistic-description"><span class="statistic-trend" data-trend="down">▼ 接通率 37.2%</span></p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">通话时长</p>
+              <p class="statistic-value">2<small>时</small>36<small>分</small></p>
+              <p class="statistic-description"><span class="statistic-trend" data-trend="up">▲ 今日累计</span></p>
+            </div>
           </div>
         </div>
       </section>
@@ -621,7 +643,126 @@ tr.rv-weekend td { background: color-mix(in oklab, var(--success) 8%, var(--card
           <button class="btn" data-variant="ghost" data-size="xs" data-demo="导出回访表">导出</button>
         </div>
       </section>
-      <!-- ---------- ③ TOP10 | TOP5 并排 ---------- -->
+
+      <!-- ---------- ④ 大额成单榜 ---------- -->
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">大额成单榜</div>
+            <div class="card-description">近期签约订单 · 金额降序演示数据</div>
+          </div>
+          <button class="btn" data-variant="ghost" data-size="xs" data-demo="查看更多订单">查看更多 →</button>
+        </div>
+        <div class="card-content" style="padding-top:.75rem;">
+          <div class="marquee tall" id="ordersBox">
+            <table class="table">
+              <thead><tr><th>公司名称</th><th>会员级别</th><th>期限</th><th class="num">签约金额</th><th>主营业务</th><th>签单日期</th></tr></thead>
+              <tbody id="ordersBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- ⑥ 本月考勤 ---------- -->
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">本月考勤</div>
+            <div class="card-description">2026年10月</div>
+          </div>
+          <span class="badge" data-variant="success">连续打卡 12 天</span>
+        </div>
+        <div class="card-content">
+          <div class="stat-inline" style="justify-content:space-between;margin-bottom:.375rem;">
+            <span class="stat-label">全勤奖进度 <b class="tnum" style="color:var(--foreground);font-weight:600;">12 / 22 天</b></span>
+            <span class="stat-label">还差 <b class="tnum" style="color:var(--foreground);font-weight:600;">10 天</b></span>
+          </div>
+          <progress class="progress" value="12" max="22" data-tone="warning"></progress>
+          <div class="kpis x3" style="margin-top:.875rem;">
+            <div class="kpi"><div class="kpi-label">迟到</div><div class="kpi-value tnum is-muted">0 次</div></div>
+            <div class="kpi"><div class="kpi-label">早退</div><div class="kpi-value tnum is-muted">0 次</div></div>
+            <div class="kpi"><div class="kpi-label">请假</div><div class="kpi-value tnum">0.5 天</div></div>
+            <div class="kpi"><div class="kpi-label">忘打卡</div><div class="kpi-value tnum is-muted">0 次</div></div>
+            <div class="kpi"><div class="kpi-label">外勤</div><div class="kpi-value tnum is-muted">0 次</div></div>
+            <div class="kpi"><div class="kpi-label">异常待补卡</div><div class="kpi-value tnum is-muted">0 次</div></div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span>统计至 10-19</span>
+          <button class="btn" data-variant="ghost" data-size="xs" data-demo="考勤明细">考勤明细 →</button>
+        </div>
+      </section>
+
+    </div><!-- /左列 -->
+
+    <!-- ==================== 右列 ==================== -->
+    <div class="col">
+
+      <!-- ---------- ① 今日数据 · 库中数据 ---------- -->
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">今日数据 · 库中数据</div>
+          </div>
+        </div>
+        <div class="card-content">
+          <!-- 三组数据卡 -->
+          <div class="kpis x3">
+            <div class="kpi"><div class="kpi-label">今日待联系</div><div class="kpi-value tnum is-muted">0</div><div class="kpi-sub">逾期未联系 <span class="tnum">0</span></div></div>
+            <div class="kpi"><div class="kpi-label">本月总分发</div><div class="kpi-value tnum">51</div><div class="kpi-sub">签单量 0</div></div>
+            <div class="kpi"><div class="kpi-label">本月捡回</div><div class="kpi-value tnum">59</div><div class="kpi-sub">签单量 0</div></div>
+          </div>
+          <!-- 2×2 指标块 -->
+          <div class="metrics" style="margin-top:.9rem;">
+            <div class="metric">
+              <div class="metric-top"><span class="metric-label">今日捡回</span><span class="metric-value tnum">8</span></div>
+              <p class="metric-sub">已联系 8</p>
+            </div>
+            <div class="metric">
+              <div class="metric-top"><span class="metric-label">今日分发</span><span class="metric-value tnum">5</span></div>
+              <p class="metric-sub">已联系 5</p>
+            </div>
+            <div class="metric">
+              <div class="metric-top"><span class="metric-label">转化C级以上客户</span><span class="metric-value tnum is-muted">0</span></div>
+              <p class="metric-sub">B级以上客户 1</p>
+            </div>
+            <div class="metric">
+              <div class="metric-top"><span class="metric-label">系统删除</span><span class="metric-value tnum is-muted">0</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- ② 我的业绩排名 ---------- -->
+      <section class="card is-rank">
+        <div class="card-header">
+          <div>
+            <div class="card-title">我的业绩排名</div>
+            <div class="card-description">2026年10月 · 新签序列</div>
+          </div>
+          <button class="btn" data-variant="ghost" data-size="xs" data-demo="完整排名">完整排名 →</button>
+        </div>
+        <div class="card-content">
+          <div class="kpis x3">
+            <div class="kpi"><div class="kpi-label">我的排名</div><div class="kpi-value tnum">第6名</div><div class="kpi-sub">共 128 人</div></div>
+            <div class="kpi"><div class="kpi-label">实际业绩</div><div class="kpi-value tnum">26,800</div></div>
+            <div class="kpi"><div class="kpi-label">距第5名差</div><div class="kpi-value tnum" style="color:var(--destructive);">700</div></div>
+          </div>
+
+          <div class="divider-label">标杆对比</div>
+          <div class="rank-bars" id="rankBars"></div>
+
+          <div class="divider-label">月度目标</div>
+          <div class="stat-inline" style="justify-content:space-between;margin-bottom:.375rem;">
+            <span class="stat-label">月度目标 <b class="tnum" style="color:var(--foreground);font-weight:600;">60,000</b></span>
+            <span class="stat-label">已完成 <b class="tnum" style="color:var(--foreground);font-weight:600;">44.67%</b></span>
+          </div>
+          <progress class="progress" value="44.67" max="100"></progress>
+          <div class="stat-sub" style="margin-top:.375rem;">距目标还差 33,200 · 剩余 10 个工作日</div>
+        </div>
+      </section>
+
+      <!-- ---------- ③ TOP10 | TOP5 上下堆叠（各占整行） ---------- -->
       <div class="col-half">
         <section class="card">
           <div class="card-header">
@@ -659,103 +800,6 @@ tr.rv-weekend td { background: color-mix(in oklab, var(--success) 8%, var(--card
           </div>
         </section>
       </div>
-
-    </div><!-- /左列 -->
-
-    <!-- ==================== 右列 ==================== -->
-    <div class="col">
-
-      <!-- ---------- ⑤ 我的业绩排名 ---------- -->
-      <section class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">我的业绩排名</div>
-            <div class="card-description">2026年10月 · 新签序列</div>
-          </div>
-          <button class="btn" data-variant="ghost" data-size="xs" data-demo="完整排名">完整排名 →</button>
-        </div>
-        <div class="card-content">
-          <div class="kpis x3">
-            <div class="kpi"><div class="kpi-label">我的排名</div><div class="kpi-value tnum">第6名</div><div class="kpi-sub">共 128 人</div></div>
-            <div class="kpi"><div class="kpi-label">实际业绩</div><div class="kpi-value tnum">26,800</div></div>
-            <div class="kpi"><div class="kpi-label">距第5名差</div><div class="kpi-value tnum" style="color:var(--destructive);">700</div></div>
-          </div>
-
-          <div class="divider-label">标杆对比</div>
-          <div class="rank-bars" id="rankBars"></div>
-
-          <div class="divider-label">月度目标</div>
-          <div class="stat-inline" style="justify-content:space-between;margin-bottom:.375rem;">
-            <span class="stat-label">月度目标 <b class="tnum" style="color:var(--foreground);font-weight:600;">60,000</b></span>
-            <span class="stat-label">已完成 <b class="tnum" style="color:var(--foreground);font-weight:600;">44.67%</b></span>
-          </div>
-          <progress class="progress" value="44.67" max="100"></progress>
-          <div class="stat-sub" style="margin-top:.375rem;">距目标还差 33,200 · 剩余 10 个工作日</div>
-        </div>
-      </section>
-
-      <!-- ---------- ⑥ 本月考勤 ---------- -->
-      <section class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">本月考勤</div>
-            <div class="card-description">2026年10月</div>
-          </div>
-          <span class="badge" data-variant="success">连续打卡 12 天</span>
-        </div>
-        <div class="card-content">
-          <div class="stat-inline" style="justify-content:space-between;margin-bottom:.375rem;">
-            <span class="stat-label">全勤奖进度 <b class="tnum" style="color:var(--foreground);font-weight:600;">12 / 22 天</b></span>
-            <span class="stat-label">还差 <b class="tnum" style="color:var(--foreground);font-weight:600;">10 天</b></span>
-          </div>
-          <progress class="progress" value="12" max="22" data-tone="warning"></progress>
-          <div class="kpis x3" style="margin-top:.875rem;">
-            <div class="kpi"><div class="kpi-label">迟到</div><div class="kpi-value tnum is-muted">0 次</div></div>
-            <div class="kpi"><div class="kpi-label">早退</div><div class="kpi-value tnum is-muted">0 次</div></div>
-            <div class="kpi"><div class="kpi-label">请假</div><div class="kpi-value tnum">0.5 天</div></div>
-            <div class="kpi"><div class="kpi-label">忘打卡</div><div class="kpi-value tnum is-muted">0 次</div></div>
-            <div class="kpi"><div class="kpi-label">外勤</div><div class="kpi-value tnum is-muted">0 次</div></div>
-            <div class="kpi"><div class="kpi-label">异常待补卡</div><div class="kpi-value tnum is-muted">0 次</div></div>
-          </div>
-        </div>
-        <div class="card-footer">
-          <span>统计至 10-19</span>
-          <button class="btn" data-variant="ghost" data-size="xs" data-demo="考勤明细">考勤明细 →</button>
-        </div>
-      </section>
-
-      <!-- ---------- ⑦ 最近跟进 ---------- -->
-      <section class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">最近跟进</div>
-            <div class="card-description">今日动态流</div>
-          </div>
-          <button class="btn" data-variant="ghost" data-size="xs" data-demo="全部跟进记录">全部 →</button>
-        </div>
-        <div class="card-content" style="padding-top:.5rem;">
-          <div id="followList"></div>
-        </div>
-      </section>
-
-      <!-- ---------- ④ 大额成单榜 ---------- -->
-      <section class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">大额成单榜</div>
-            <div class="card-description">近期签约订单 · 金额降序演示数据</div>
-          </div>
-          <button class="btn" data-variant="ghost" data-size="xs" data-demo="查看更多订单">查看更多 →</button>
-        </div>
-        <div class="card-content" style="padding-top:.75rem;">
-          <div class="marquee tall" id="ordersBox">
-            <table class="table">
-              <thead><tr><th>公司名称</th><th>会员级别</th><th>期限</th><th class="num">签约金额</th><th>主营业务</th><th>签单日期</th></tr></thead>
-              <tbody id="ordersBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
 
     </div><!-- /右列 -->
   </div><!-- /cols -->
@@ -888,15 +932,6 @@ var ORDERS = [
   { name: '青海***************公司', lv: '标准会员', term: '1年', amount: 6000, biz: '广告制作,平面设计', date: '2025-07-31' }
 ];
 
-/* ===== 最近跟进（今日动态流） ===== */
-var FOLLOWS = [
-  { type: '电话', variant: 'secondary', co: '内蒙***************公司', contact: '王经理', grade: 'C', result: '已接通，有招标会员意向，约定周三发资料', time: '11:24' },
-  { type: '微信', variant: 'outline',   co: '陕西***************公司', contact: '赵总',   grade: 'D', result: '已添加微信，发送会员介绍与案例',       time: '10:47' },
-  { type: '电话', variant: 'secondary', co: '上海***************公司', contact: '李主管', grade: 'C', result: '未接通，15:30 后再拨',                 time: '10:12' },
-  { type: '到店', variant: 'success',   co: '北京***************公司', contact: '张总',   grade: 'B', result: '到店面签标准会员 1 年，已走合同流程', time: '09:36' },
-  { type: '电话', variant: 'secondary', co: '天津***************公司', contact: '刘经理', grade: 'D', result: '告知来意后婉拒，转入公海观察',       time: '09:05' }
-];
-
 /* ===== 消息中心（通知 / 留言 / 制度栏，各 10 条） ===== */
 var MSG_TABS = [
   { key: 'tz', label: '通知' },
@@ -1026,11 +1061,13 @@ document.addEventListener('click', function (e) {
 
 /* ===== 客户分布 chips ===== */
 function renderGrades() {
-  var html = '';
+  var html = '<div class="chips">';
   for (var i = 0; i < GRADES.length; i++) {
     var it = GRADES[i];
-    html += '<span class="chip"><b>' + it.g + '</b><i class="tnum">' + it.n + '</i></span>';
+    if (i === 4) html += '</div><div class="chips">'; /* D 级起第二行 */
+    html += '<span class="chip"><span>' + it.g + ' 级</span><b>' + it.n + '</b></span>';
   }
+  html += '</div>';
   document.getElementById('gradeChips').innerHTML = html;
 }
 
@@ -1217,30 +1254,6 @@ function startMarquee(boxId, speed) {
   window.requestAnimationFrame(step);
 }
 
-/* ===== 最近跟进 ===== */
-function renderFollow() {
-  var host = document.getElementById('followList');
-  if (!host) return;
-  var parts = [];
-  for (var i = 0; i < FOLLOWS.length; i++) {
-    var f = FOLLOWS[i];
-    parts.push(
-      '<div class="feed-row">' +
-        '<div class="feed-head">' +
-          badgeHtml(f.type, f.variant) +
-          '<span class="feed-title" title="' + esc(f.co) + '" data-demo="打开客户详情">' + esc(f.co) + '</span>' +
-          '<span class="feed-time tnum">' + esc(f.time) + '</span>' +
-        '</div>' +
-        '<div class="feed-sub">' +
-          '<span>' + esc(f.contact) + '</span><span> · </span>' + badgeHtml(f.grade + '级', 'outline') +
-          '<p>' + esc(f.result) + '</p>' +
-        '</div>' +
-      '</div>'
-    );
-  }
-  host.innerHTML = parts.join('');
-}
-
 /* ===== 消息中心 ===== */
 var msgTab = 'tz';
 function switchMsgTab(key) { msgTab = key; renderMsg(); }
@@ -1298,7 +1311,6 @@ function init() {
   renderTop10();
   renderTeam();
   renderOrders();
-  renderFollow();
   renderMsg();
 
   startMarquee('top10Box', 0.35);

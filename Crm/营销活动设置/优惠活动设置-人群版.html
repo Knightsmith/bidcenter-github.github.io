@@ -444,16 +444,6 @@ input::-webkit-input-placeholder,textarea::-webkit-input-placeholder {color: #AE
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr data-crowd="lq">
-                                        <td><input type="checkbox" class="crowdCheck" checked="checked" /></td>
-                                        <td>临期客户</td>
-                                        <td>会员/套餐即将到期</td>
-                                    </tr>
-                                    <tr data-crowd="fk">
-                                        <td><input type="checkbox" class="crowdCheck" checked="checked" /></td>
-                                        <td>付费客户</td>
-                                        <td>已产生付费</td>
-                                    </tr>
                                     <tr data-crowd="xk">
                                         <td><input type="checkbox" class="crowdCheck" checked="checked" /></td>
                                         <td>新客户</td>
@@ -464,9 +454,29 @@ input::-webkit-input-placeholder,textarea::-webkit-input-placeholder {color: #AE
                                         <td>免费用户</td>
                                         <td>注册 &gt; 7 天 且 未付费</td>
                                     </tr>
+                                    <tr data-crowd="mfa">
+                                        <td><input type="checkbox" class="crowdCheck" checked="checked" /></td>
+                                        <td>全部免费会员</td>
+                                        <td>所有未付费会员，不限注册时长</td>
+                                    </tr>
+                                    <tr data-crowd="lq">
+                                        <td><input type="checkbox" class="crowdCheck" checked="checked" /></td>
+                                        <td>临期客户</td>
+                                        <td>会员/套餐即将到期</td>
+                                    </tr>
+                                    <tr data-crowd="dq">
+                                        <td><input type="checkbox" class="crowdCheck" checked="checked" /></td>
+                                        <td>地区会员</td>
+                                        <td>付费会员是地区会员</td>
+                                    </tr>
+                                    <tr data-crowd="fk">
+                                        <td><input type="checkbox" class="crowdCheck" checked="checked" /></td>
+                                        <td>付费客户</td>
+                                        <td>已产生付费</td>
+                                    </tr>
                                 </tbody>
                             </table>
-                            <span class="crowdTip">固定四类人群，可勾选启用/停用；未启用人群整行置灰且不发放奖品；至少启用 1 个人群才能保存。</span>
+                            <span class="crowdTip">固定人群，可勾选启用/停用；未启用人群整行置灰且不发放奖品；至少启用 1 个人群才能保存。人群排序靠上的优先级高于下方，匹配时优先命中上方人群。</span>
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -475,42 +485,6 @@ input::-webkit-input-placeholder,textarea::-webkit-input-placeholder {color: #AE
                     <div class="kecheng-cell">
                         <div class="kecheng-cell-bd fl">优惠券绑定：</div>
                         <div class="kecheng-cell-hd fl">
-                            <div class="yhqCrowdBlock" data-crowd="lq">
-                                <div class="yhqCrowdTitle">临期客户</div>
-                                <table class="table yhqTable" data-crowd="lq">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>优惠券名称</th>
-                                        <th>金额、类型</th>
-                                        <th>使用期限</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    
-                                </tbody>
-                            </table>
-                                
-                            <input type="button" class="yhqAddBtn" data-crowd="lq" value="+" onclick="addYhq('lq')">
-                            </div>
-                            <div class="yhqCrowdBlock" data-crowd="fk">
-                                <div class="yhqCrowdTitle">付费客户</div>
-                                <table class="table yhqTable" data-crowd="fk">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>优惠券名称</th>
-                                        <th>金额、类型</th>
-                                        <th>使用期限</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    
-                                </tbody>
-                            </table>
-                                
-                            <input type="button" class="yhqAddBtn" data-crowd="fk" value="+" onclick="addYhq('fk')">
-                            </div>
                             <div class="yhqCrowdBlock" data-crowd="xk">
                                 <div class="yhqCrowdTitle">新客户</div>
                                 <table class="table yhqTable" data-crowd="xk">
@@ -547,6 +521,78 @@ input::-webkit-input-placeholder,textarea::-webkit-input-placeholder {color: #AE
                                 
                             <input type="button" class="yhqAddBtn" data-crowd="mf" value="+" onclick="addYhq('mf')">
                             </div>
+                            <div class="yhqCrowdBlock" data-crowd="mfa">
+                                <div class="yhqCrowdTitle">全部免费会员</div>
+                                <table class="table yhqTable" data-crowd="mfa">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>优惠券名称</th>
+                                        <th>金额、类型</th>
+                                        <th>使用期限</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                </tbody>
+                            </table>
+                                
+                            <input type="button" class="yhqAddBtn" data-crowd="mfa" value="+" onclick="addYhq('mfa')">
+                            </div>
+                            <div class="yhqCrowdBlock" data-crowd="lq">
+                                <div class="yhqCrowdTitle">临期客户</div>
+                                <table class="table yhqTable" data-crowd="lq">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>优惠券名称</th>
+                                        <th>金额、类型</th>
+                                        <th>使用期限</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                </tbody>
+                            </table>
+                                
+                            <input type="button" class="yhqAddBtn" data-crowd="lq" value="+" onclick="addYhq('lq')">
+                            </div>
+                            <div class="yhqCrowdBlock" data-crowd="dq">
+                                <div class="yhqCrowdTitle">地区会员</div>
+                                <table class="table yhqTable" data-crowd="dq">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>优惠券名称</th>
+                                        <th>金额、类型</th>
+                                        <th>使用期限</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                </tbody>
+                            </table>
+                                
+                            <input type="button" class="yhqAddBtn" data-crowd="dq" value="+" onclick="addYhq('dq')">
+                            </div>
+                            <div class="yhqCrowdBlock" data-crowd="fk">
+                                <div class="yhqCrowdTitle">付费客户</div>
+                                <table class="table yhqTable" data-crowd="fk">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>优惠券名称</th>
+                                        <th>金额、类型</th>
+                                        <th>使用期限</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                </tbody>
+                            </table>
+                                
+                            <input type="button" class="yhqAddBtn" data-crowd="fk" value="+" onclick="addYhq('fk')">
+                            </div>
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -557,88 +603,6 @@ input::-webkit-input-placeholder,textarea::-webkit-input-placeholder {color: #AE
                         <div class="kecheng-cell-bd fl">报名结果文案：</div>
                         <div class="kecheng-cell-hd fl">
                             
-                            <div class="prizeCrowdBlock" data-crowd="lq">
-                                <div class="prizeCrowdTitle">临期客户</div>
-                                <table class="table prizeTable" data-crowd="lq">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>文案</th>
-                                        <th>概率</th>
-                                        <th class="button">
-                                            <input type="button" value="+" onclick="addPrize('lq')">
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="index">1</td>
-                                        <td>
-                                            <input type="text" class="inp" name="prizeName" placeholder="请填写奖品名称" value="续费折扣券">
-                                        </td>
-                                        <td>
-                                            <input type="number" class="inp" name="prizeProb" placeholder="请填写奖品概率" value="100">%
-                                        </td>
-                                        <td class="button">
-                                            <input type="button" class="remove" value="-" onclick="removePrize(this);">
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            </div>
-                            <div class="prizeCrowdBlock" data-crowd="fk">
-                                <div class="prizeCrowdTitle">付费客户</div>
-                                <table class="table prizeTable" data-crowd="fk">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>文案</th>
-                                        <th>概率</th>
-                                        <th class="button">
-                                            <input type="button" value="+" onclick="addPrize('fk')">
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="index">1</td>
-                                        <td>
-                                            <input type="text" class="inp" name="prizeName" placeholder="请填写奖品名称" value="大额券">
-                                        </td>
-                                        <td>
-                                            <input type="number" class="inp" name="prizeProb" placeholder="请填写奖品概率" value="40">%
-                                        </td>
-                                        <td class="button">
-                                            <input type="button" class="remove" value="-" onclick="removePrize(this);">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="index">2</td>
-                                        <td>
-                                            <input type="text" class="inp" name="prizeName" placeholder="请填写奖品名称" value="会员天数">
-                                        </td>
-                                        <td>
-                                            <input type="number" class="inp" name="prizeProb" placeholder="请填写奖品概率" value="30">%
-                                        </td>
-                                        <td class="button">
-                                            <input type="button" class="remove" value="-" onclick="removePrize(this);">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="index">3</td>
-                                        <td>
-                                            <input type="text" class="inp" name="prizeName" placeholder="请填写奖品名称" value="实物礼品">
-                                        </td>
-                                        <td>
-                                            <input type="number" class="inp" name="prizeProb" placeholder="请填写奖品概率" value="30">%
-                                        </td>
-                                        <td class="button">
-                                            <input type="button" class="remove" value="-" onclick="removePrize(this);">
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            </div>
                             <div class="prizeCrowdBlock" data-crowd="xk">
                                 <div class="prizeCrowdTitle">新客户</div>
                                 <table class="table prizeTable" data-crowd="xk">
@@ -733,6 +697,146 @@ input::-webkit-input-placeholder,textarea::-webkit-input-placeholder {color: #AE
                                 </tbody>
                             </table>
                             </div>
+                            <div class="prizeCrowdBlock" data-crowd="mfa">
+                                <div class="prizeCrowdTitle">全部免费会员</div>
+                                <table class="table prizeTable" data-crowd="mfa">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>文案</th>
+                                        <th>概率</th>
+                                        <th class="button">
+                                            <input type="button" value="+" onclick="addPrize('mfa')">
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="index">1</td>
+                                        <td>
+                                            <input type="text" class="inp" name="prizeName" placeholder="请填写奖品名称" value="全员免费专享券">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="inp" name="prizeProb" placeholder="请填写奖品概率" value="100">%
+                                        </td>
+                                        <td class="button">
+                                            <input type="button" class="remove" value="-" onclick="removePrize(this);">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                            <div class="prizeCrowdBlock" data-crowd="lq">
+                                <div class="prizeCrowdTitle">临期客户</div>
+                                <table class="table prizeTable" data-crowd="lq">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>文案</th>
+                                        <th>概率</th>
+                                        <th class="button">
+                                            <input type="button" value="+" onclick="addPrize('lq')">
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="index">1</td>
+                                        <td>
+                                            <input type="text" class="inp" name="prizeName" placeholder="请填写奖品名称" value="续费折扣券">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="inp" name="prizeProb" placeholder="请填写奖品概率" value="100">%
+                                        </td>
+                                        <td class="button">
+                                            <input type="button" class="remove" value="-" onclick="removePrize(this);">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                            <div class="prizeCrowdBlock" data-crowd="dq">
+                                <div class="prizeCrowdTitle">地区会员</div>
+                                <table class="table prizeTable" data-crowd="dq">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>文案</th>
+                                        <th>概率</th>
+                                        <th class="button">
+                                            <input type="button" value="+" onclick="addPrize('dq')">
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="index">1</td>
+                                        <td>
+                                            <input type="text" class="inp" name="prizeName" placeholder="请填写奖品名称" value="地区专属券">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="inp" name="prizeProb" placeholder="请填写奖品概率" value="100">%
+                                        </td>
+                                        <td class="button">
+                                            <input type="button" class="remove" value="-" onclick="removePrize(this);">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                            <div class="prizeCrowdBlock" data-crowd="fk">
+                                <div class="prizeCrowdTitle">付费客户</div>
+                                <table class="table prizeTable" data-crowd="fk">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>文案</th>
+                                        <th>概率</th>
+                                        <th class="button">
+                                            <input type="button" value="+" onclick="addPrize('fk')">
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="index">1</td>
+                                        <td>
+                                            <input type="text" class="inp" name="prizeName" placeholder="请填写奖品名称" value="大额券">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="inp" name="prizeProb" placeholder="请填写奖品概率" value="40">%
+                                        </td>
+                                        <td class="button">
+                                            <input type="button" class="remove" value="-" onclick="removePrize(this);">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="index">2</td>
+                                        <td>
+                                            <input type="text" class="inp" name="prizeName" placeholder="请填写奖品名称" value="会员天数">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="inp" name="prizeProb" placeholder="请填写奖品概率" value="30">%
+                                        </td>
+                                        <td class="button">
+                                            <input type="button" class="remove" value="-" onclick="removePrize(this);">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="index">3</td>
+                                        <td>
+                                            <input type="text" class="inp" name="prizeName" placeholder="请填写奖品名称" value="实物礼品">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="inp" name="prizeProb" placeholder="请填写奖品概率" value="30">%
+                                        </td>
+                                        <td class="button">
+                                            <input type="button" class="remove" value="-" onclick="removePrize(this);">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -795,7 +899,8 @@ input::-webkit-input-placeholder,textarea::-webkit-input-placeholder {color: #AE
             mf: [
                 '{"id":401,"name":"免费用户激活券","limitDes":"满50减15元","indate":"2026-09-29至2026-10-11"}',
                 '{"id":402,"name":"免费用户试用券","limitDes":"3天会员试用","indate":"2026-09-29至2026-10-11"}'
-            ]
+            ],
+            mfa: []
         };
         //本地假优惠券候选池（各人群独立，弹窗勾选回填用）
         var yhqPool = {
@@ -822,6 +927,18 @@ input::-webkit-input-placeholder,textarea::-webkit-input-placeholder {color: #AE
                 {id: 401, name: '免费用户激活券', limitDes: '满50减15元', indate: '2026-09-29至2026-10-11'},
                 {id: 402, name: '免费用户试用券', limitDes: '3天会员试用', indate: '2026-09-29至2026-10-11'},
                 {id: 403, name: '免费用户签到券', limitDes: '连续签到满7天减20元', indate: '2026-09-29至2026-10-11'}
+            ],
+            dq: [
+                {id: 501, name: '地区会员专享券', limitDes: '满200减50元', indate: '2026-09-29至2026-10-11'},
+                {id: 502, name: '地区会员折扣券', limitDes: '全场9折', indate: '2026-09-29至2026-10-11'},
+                {id: 503, name: '地区会员加赠券', limitDes: '加赠3天会员', indate: '2026-09-29至2026-10-11'},
+                {id: 504, name: '地区会员关怀券', limitDes: '无门槛减30元', indate: '2026-09-29至2026-10-11'}
+            ],
+            mfa: [
+                {id: 601, name: '全部免费会员专享券', limitDes: '满100减30元', indate: '2026-09-29至2026-10-11'},
+                {id: 602, name: '全部免费会员折扣券', limitDes: '全场9.5折', indate: '2026-09-29至2026-10-11'},
+                {id: 603, name: '全部免费会员加赠券', limitDes: '加赠5天会员', indate: '2026-09-29至2026-10-11'},
+                {id: 604, name: '全部免费会员关怀券', limitDes: '无门槛减20元', indate: '2026-09-29至2026-10-11'}
             ]
         };
         var currentYhqCrowd = 'lq';//当前正在配置优惠券的人群key

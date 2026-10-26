@@ -493,6 +493,22 @@ progress.progress[data-tone="muted"]::-moz-progress-bar { background: var(--mute
   .search { display: none; }
   .quick .btn[data-size="xs"]:nth-child(n+3) { display: none; }
 }
+/* —— 主导航条（同销售页） —— */
+.subnav {
+  display: flex; align-items: center; gap: .25rem;
+  margin-top: .75rem; padding: .375rem .5rem;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); box-shadow: var(--shadow-xs);
+  overflow-x: auto; scrollbar-width: none;
+}
+.subnav::-webkit-scrollbar { display: none; }
+.subnav .btn { color: var(--muted-foreground); white-space: nowrap; }
+.subnav .btn:hover { color: var(--foreground); }
+.subnav .btn[aria-current="page"] {
+  background: color-mix(in oklab, var(--primary) 10%, transparent);
+  color: var(--primary); font-weight: 600;
+}
+.subnav .hot { font-size: .625rem; color: var(--destructive); align-self: flex-start; margin-left: -2px; }
 </style>
 </head>
 <body>
@@ -536,56 +552,55 @@ progress.progress[data-tone="muted"]::-moz-progress-bar { background: var(--mute
     </div>
   </header>
 
+  <!-- ===== 主导航：我的客户库 / 公共库热 / 验重 / 捡新注册 / 库中中标（同销售页） ===== -->
+  <nav class="subnav" aria-label="主导航">
+    <button class="btn" data-variant="ghost" data-size="sm" aria-current="page" data-demo="我的客户库">我的客户库</button>
+    <button class="btn" data-variant="ghost" data-size="sm" data-demo="公共库热">公共库热<span class="hot">●</span></button>
+    <button class="btn" data-variant="ghost" data-size="sm" data-demo="验重">验重</button>
+    <button class="btn" data-variant="ghost" data-size="sm" data-demo="捡新注册客户">捡新注册客户</button>
+    <button class="btn" data-variant="ghost" data-size="sm" data-demo="库中中标企业">库中中标企业</button>
+  </nav>
+
   <div class="cols">
 
     <!-- ===== 左列 ===== -->
     <div class="col">
 
-      <!-- ① 今日动作 · 库中数据 -->
+      <!-- ⓪ 客服库信息（含原客户分布） -->
       <article class="card">
         <div class="card-header">
           <div>
-            <h3 class="card-title">今日数据 · 库中数据</h3>
+            <h3 class="card-title">客服库信息</h3>
           </div>
         </div>
         <div class="card-content">
-          <!-- 区域1（上）：三组数据卡 -->
-          <div class="kpis">
-            <div class="kpi">
-              <p class="kpi-label">今日待联系</p>
-              <p class="kpi-value">149</p>
-              <!-- 阈值：≤5 data-tone="danger" 红，>5 data-tone="warning" 橙 -->
-              <p class="kpi-sub">逾期未联系 <span class="tnum" data-tone="danger">5</span></p>
-            </div>
-            <div class="kpi">
-              <p class="kpi-label">本月总分发</p>
-              <p class="kpi-value">61</p>
-              <p class="kpi-sub">签单量 0</p>
-            </div>
-            <div class="kpi">
-              <p class="kpi-label">本月捡回</p>
-              <p class="kpi-value">272</p>
-              <p class="kpi-sub">签单量 0</p>
-            </div>
-          </div>
-          <!-- 区域2（下）：2×2 指标块 -->
-          <div class="metrics" style="margin-top:.9rem;">
-            <div class="metric">
-              <div class="metric-top"><span class="metric-label">今日捡回</span><span class="metric-value">1</span></div>
-              <p class="metric-sub">已联系 1</p>
-            </div>
-            <div class="metric">
-              <div class="metric-top"><span class="metric-label">今日分发</span><span class="metric-value">4</span></div>
-              <p class="metric-sub">已联系 4</p>
-            </div>
-            <div class="metric">
-              <div class="metric-top"><span class="metric-label">转化C级以上客户</span><span class="metric-value">1</span></div>
-              <p class="metric-sub">B级以上客户 61</p>
-            </div>
-            <div class="metric">
-              <div class="metric-top"><span class="metric-label">系统删除</span><span class="metric-value">61</span></div>
+          <div class="profile">
+            <span class="avatar"><span>罗</span><img src="https://api.dicebear.com/9.x/pixel-art/svg?seed=Milo&amp;backgroundColor=3b82f6" alt="罗屿头像" onerror="this.remove();"></span>
+            <div>
+              <p class="profile-name">罗屿</p>
+              <p class="profile-meta">北京总公司-客服一部</p>
+              <p class="divider-label">客户分布 · 共 720 家</p>
+              <div class="chips">
+                <span class="chip"><span>AA 级</span><b>0</b></span>
+                <span class="chip"><span>A 级</span><b>0</b></span>
+                <span class="chip"><span>B 级</span><b>1</b></span>
+                <span class="chip"><span>C 级</span><b>38</b></span>
+              </div>
+              <div class="chips">
+                <span class="chip"><span>D 级</span><b>658</b></span>
+                <span class="chip"><span>E 级</span><b>22</b></span>
+                <span class="chip"><span>S 级</span><b>0</b></span>
+                <span class="chip"><span>N 级</span><b>1</b></span>
+                <span class="chip"><span>K 级</span><b>0</b></span>
+              </div>
             </div>
           </div>
+          <div class="cap-row">
+            <span class="cap-label">库容量</span>
+            <span class="cap-val">720 <small>/ 1,000</small></span>
+            <span class="cap-pct">72%</span>
+          </div>
+          <progress class="progress" value="720" max="1000" aria-label="库容量使用率">72%</progress>
         </div>
       </article>
 
@@ -684,41 +699,51 @@ progress.progress[data-tone="muted"]::-moz-progress-bar { background: var(--mute
     <!-- ===== 右列 ===== -->
     <div class="col">
 
-      <!-- ⓪ 客服库信息（含原客户分布） -->
+      <!-- ① 今日动作 · 库中数据 -->
       <article class="card">
         <div class="card-header">
           <div>
-            <h3 class="card-title">客服库信息</h3>
+            <h3 class="card-title">今日数据 · 库中数据</h3>
           </div>
         </div>
         <div class="card-content">
-          <div class="profile">
-            <span class="avatar"><span>罗</span><img src="https://api.dicebear.com/9.x/pixel-art/svg?seed=Milo&amp;backgroundColor=3b82f6" alt="罗屿头像" onerror="this.remove();"></span>
-            <div>
-              <p class="profile-name">罗屿</p>
-              <p class="profile-meta">北京总公司-客服一部</p>
-              <p class="divider-label">客户分布 · 共 720 家</p>
-              <div class="chips">
-                <span class="chip"><span>AA 级</span><b>0</b></span>
-                <span class="chip"><span>A 级</span><b>0</b></span>
-                <span class="chip"><span>B 级</span><b>1</b></span>
-                <span class="chip"><span>C 级</span><b>38</b></span>
-              </div>
-              <div class="chips">
-                <span class="chip"><span>D 级</span><b>658</b></span>
-                <span class="chip"><span>E 级</span><b>22</b></span>
-                <span class="chip"><span>S 级</span><b>0</b></span>
-                <span class="chip"><span>N 级</span><b>1</b></span>
-                <span class="chip"><span>K 级</span><b>0</b></span>
-              </div>
+          <!-- 区域1（上）：三组数据卡 -->
+          <div class="kpis">
+            <div class="kpi">
+              <p class="kpi-label">今日待联系</p>
+              <p class="kpi-value">149</p>
+              <!-- 阈值：≤5 data-tone="danger" 红，>5 data-tone="warning" 橙 -->
+              <p class="kpi-sub">逾期未联系 <span class="tnum" data-tone="danger">5</span></p>
+            </div>
+            <div class="kpi">
+              <p class="kpi-label">本月总分发</p>
+              <p class="kpi-value">61</p>
+              <p class="kpi-sub">签单量 0</p>
+            </div>
+            <div class="kpi">
+              <p class="kpi-label">本月捡回</p>
+              <p class="kpi-value">272</p>
+              <p class="kpi-sub">签单量 0</p>
             </div>
           </div>
-          <div class="cap-row">
-            <span class="cap-label">库容量</span>
-            <span class="cap-val">720 <small>/ 1,000</small></span>
-            <span class="cap-pct">72%</span>
+          <!-- 区域2（下）：2×2 指标块 -->
+          <div class="metrics" style="margin-top:.9rem;">
+            <div class="metric">
+              <div class="metric-top"><span class="metric-label">今日捡回</span><span class="metric-value">1</span></div>
+              <p class="metric-sub">已联系 1</p>
+            </div>
+            <div class="metric">
+              <div class="metric-top"><span class="metric-label">今日分发</span><span class="metric-value">4</span></div>
+              <p class="metric-sub">已联系 4</p>
+            </div>
+            <div class="metric">
+              <div class="metric-top"><span class="metric-label">转化C级以上客户</span><span class="metric-value">1</span></div>
+              <p class="metric-sub">B级以上客户 61</p>
+            </div>
+            <div class="metric">
+              <div class="metric-top"><span class="metric-label">系统删除</span><span class="metric-value">61</span></div>
+            </div>
           </div>
-          <progress class="progress" value="720" max="1000" aria-label="库容量使用率">72%</progress>
         </div>
       </article>
 
