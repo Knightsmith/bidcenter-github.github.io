@@ -467,7 +467,8 @@ progress.progress[data-tone="muted"]::-moz-progress-bar { background: var(--mute
 .tier-top { display: flex; align-items: center; justify-content: space-between; gap: .35rem; }
 .tier-name { font-size: .75rem; font-weight: 600; color: var(--muted-foreground); }
 .tier-value { font-size: 1.0625rem; font-weight: 700; font-variant-numeric: tabular-nums; margin-top: 2px; }
-.tier-state { font-size: .6875rem; color: var(--muted-foreground); margin-top: 2px; }
+.tier-state { font-size: .6875rem; color: var(--muted-foreground); margin-top: 2px; display: flex; justify-content: space-between; gap: .5rem; }
+.tier-gap { font-size: 1.0625rem; font-weight: 700; font-variant-numeric: tabular-nums; margin-top: 2px; }
 .tier progress.progress { height: .375rem; margin-top: .5rem; }
 .tier.done { background: color-mix(in oklab, var(--success) 9%, var(--card)); border-color: color-mix(in oklab, var(--success) 38%, var(--border)); }
 .tier.done .tier-name, .tier.done .tier-state { color: color-mix(in oklab, var(--success) 75%, var(--foreground)); }
@@ -617,17 +618,14 @@ progress.progress[data-tone="muted"]::-moz-progress-bar { background: var(--mute
             <div class="statistic">
               <p class="statistic-title">外呼</p>
               <p class="statistic-value">86<small>次</small></p>
-              <p class="statistic-description"><span class="statistic-trend" data-trend="up">▲ 较昨日 +12</span></p>
             </div>
             <div class="statistic">
               <p class="statistic-title">接通</p>
               <p class="statistic-value">32<small>次</small></p>
-              <p class="statistic-description"><span class="statistic-trend" data-trend="down">▼ 接通率 37.2%</span></p>
             </div>
             <div class="statistic">
               <p class="statistic-title">通话时长</p>
               <p class="statistic-value">2<small>时</small>36<small>分</small></p>
-              <p class="statistic-description"><span class="statistic-trend" data-trend="up">▲ 人均 4.9 分</span></p>
             </div>
           </div>
         </div>
@@ -738,17 +736,17 @@ progress.progress[data-tone="muted"]::-moz-progress-bar { background: var(--mute
               <div class="tier-top">
                 <span class="tier-name">目标</span>
               </div>
-              <p class="tier-value">¥12,000</p>
+              <p class="tier-value" style="display:flex;align-items:baseline;justify-content:space-between;gap:.5rem;">¥12,000<span class="tier-gap">还差 ¥2,500</span></p>
               <progress class="progress" value="9500" max="12000" aria-label="目标完成度">79%</progress>
-              <p class="tier-state">79% · 还差 ¥2,500</p>
+              <p class="tier-state">79%</p>
             </div>
             <div class="tier">
               <div class="tier-top">
                 <span class="tier-name">进阶</span>
               </div>
-              <p class="tier-value">¥16,000</p>
+              <p class="tier-value" style="display:flex;align-items:baseline;justify-content:space-between;gap:.5rem;">¥16,000<span class="tier-gap">还差 ¥6,500</span></p>
               <progress class="progress" data-tone="muted" value="9500" max="16000" aria-label="进阶完成度">59%</progress>
-              <p class="tier-state">59% · 还差 ¥6,500</p>
+              <p class="tier-state">59%</p>
             </div>
           </div>
         </div>
@@ -767,7 +765,6 @@ progress.progress[data-tone="muted"]::-moz-progress-bar { background: var(--mute
             <div class="statistic">
               <p class="statistic-title">今日待联系</p>
               <p class="statistic-value">149</p>
-              <p class="statistic-description">逾期未联系 <span class="tnum" data-tone="danger">5</span></p>
             </div>
             <div class="statistic">
               <p class="statistic-title">今日捡回</p>
@@ -781,6 +778,19 @@ progress.progress[data-tone="muted"]::-moz-progress-bar { background: var(--mute
             </div>
           </div>
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-top:.9rem;">
+            <!-- 逾期未联系阈值配色：值>5 加 data-tone="warning" 橙 / 值>10 加 data-tone="danger" 红 -->
+            <div class="statistic">
+              <p class="statistic-title">逾期未联系</p>
+              <p class="statistic-value">5</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">转化C级以上客户</p>
+              <p class="statistic-value">1</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">B级以上客户</p>
+              <p class="statistic-value">61</p>
+            </div>
             <div class="statistic">
               <p class="statistic-title">本月总分发</p>
               <p class="statistic-value">61</p>
@@ -792,19 +802,8 @@ progress.progress[data-tone="muted"]::-moz-progress-bar { background: var(--mute
               <p class="statistic-description">签单量 0</p>
             </div>
             <div class="statistic">
-              <p class="statistic-title">转化C级以上客户</p>
-              <p class="statistic-value">1</p>
-              <p class="statistic-description">本月累计</p>
-            </div>
-            <div class="statistic">
-              <p class="statistic-title">B级以上客户</p>
-              <p class="statistic-value">61</p>
-              <p class="statistic-description">本月累计</p>
-            </div>
-            <div class="statistic">
               <p class="statistic-title">系统删除</p>
               <p class="statistic-value">61</p>
-              <p class="statistic-description">本月累计</p>
             </div>
           </div>
         </div>
