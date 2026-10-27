@@ -3,441 +3,429 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>业绩指标 · 线框稿</title>
+<title>业绩任务分配 · 线框稿</title>
+
 <style>
-/* ================================================================
-   Token Layer — shadcn-html · 用户指定主题（tailwind v4 令牌集）
-   纯 HTML+CSS 无构建：剥离 @custom-variant / @theme inline / @apply，
-   保留 :root / .dark 语义变量本体，取值与原主题逐字一致。
-   圆角：--radius: 0.5rem → sm 4 / md 6 / lg 8 / xl 12 px
-   ================================================================ */
+/**
+ * shadcn-html — Token Layer（本地 shadcn-lib theme/default-semantic-tokens.css 原样内联）
+ * OKLCH 中性灰语义令牌，含明暗两套。
+ */
 :root {
   color-scheme: light;
-  --background: oklch(0.9850 0 0);
-  --foreground: oklch(0.2050 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.2050 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.2050 0 0);
-  --primary: oklch(0.4600 0.2200 266);
-  --primary-foreground: oklch(0.9850 0 0);
-  --secondary: oklch(0.9400 0 0);
-  --secondary-foreground: oklch(0.2500 0 0);
-  --muted: oklch(0.9700 0 0);
-  --muted-foreground: oklch(0.4400 0 0);
-  --accent: oklch(0.9200 0.0400 272);
-  --accent-foreground: oklch(0.2100 0.0600 268);
-  --destructive: oklch(0.6300 0.1900 23.0300);
-  --destructive-foreground: oklch(0.9850 0 0);
-  --border: oklch(0.9200 0 0);
-  --input: oklch(0.9400 0 0);
-  --ring: oklch(0.4600 0.2200 266);
-  --chart-1: oklch(0.9200 0.0400 272);
-  --chart-2: oklch(0.7500 0.1300 269);
-  --chart-3: oklch(0.4600 0.2200 266);
-  --chart-4: oklch(0.4200 0.1500 266);
-  --chart-5: oklch(0.2100 0.0600 268);
-  --sidebar: oklch(0.9850 0 0);
-  --sidebar-foreground: oklch(0.2050 0 0);
-  --sidebar-primary: oklch(0.4600 0.2200 266);
+  --background:              oklch(1 0 0);
+  --foreground:              oklch(0.1450 0 0);
+  --card:                    oklch(1 0 0);
+  --card-foreground:         oklch(0.1450 0 0);
+  --popover:                 oklch(1 0 0);
+  --popover-foreground:      oklch(0.1450 0 0);
+  --primary:                 oklch(0.2050 0 0);
+  --primary-foreground:      oklch(0.9850 0 0);
+  --secondary:               oklch(0.9700 0 0);
+  --secondary-foreground:    oklch(0.2050 0 0);
+  --muted:                   oklch(0.9700 0 0);
+  --muted-foreground:        oklch(0.5560 0 0);
+  --accent:                  oklch(0.9700 0 0);
+  --accent-foreground:       oklch(0.2050 0 0);
+  --destructive:             oklch(0.5770 0.2450 27.3250);
+  --destructive-foreground:  oklch(1 0 0);
+  --border:                  oklch(0.9220 0 0);
+  --input:                   oklch(0.9220 0 0);
+  --ring:                    oklch(0.7080 0 0);
+  --sidebar:                 oklch(0.9850 0 0);
+  --sidebar-foreground:      oklch(0.1450 0 0);
+  --sidebar-primary:         oklch(0.2050 0 0);
   --sidebar-primary-foreground: oklch(0.9850 0 0);
-  --sidebar-accent: oklch(0.9200 0.0400 272);
-  --sidebar-accent-foreground: oklch(0.2100 0.0600 268);
-  --sidebar-border: oklch(0.9200 0 0);
-  --sidebar-ring: oklch(0.4600 0.2200 266);
-  --font-sans: Geist, sans-serif;
-  --font-serif: "Noto Serif Georgian", ui-serif, serif;
-  --font-mono: "Geist Mono", monospace;
-  --radius: 0.5rem;
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --shadow-x: 0.25px; --shadow-y: 1px; --shadow-blur: 3px;
-  --shadow-spread: 0px; --shadow-opacity: 0.15;
-  --shadow-color: oklch(0.2571 0.1161 272.24);
-  --shadow-2xs: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.07);
-  --shadow-xs: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.07);
-  --shadow-sm: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.15), 0.25px 1px 2px -1px hsl(236.5829 64.2250% 21.4383% / 0.15);
-  --shadow: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.15), 0.25px 1px 2px -1px hsl(236.5829 64.2250% 21.4383% / 0.15);
-  --shadow-md: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.15), 0.25px 2px 4px -1px hsl(236.5829 64.2250% 21.4383% / 0.15);
-  --shadow-lg: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.15), 0.25px 4px 6px -1px hsl(236.5829 64.2250% 21.4383% / 0.15);
-  --shadow-xl: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.15), 0.25px 8px 10px -1px hsl(236.5829 64.2250% 21.4383% / 0.15);
-  --shadow-2xl: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.38);
-  --tracking-normal: 0em;
-  --spacing: 0.25rem;
-  /* —— 扩展：主题未提供，按语义补齐 —— */
-  --success: oklch(0.6000 0.1500 150);
-  --warning: oklch(0.6800 0.1500 75);
+  --sidebar-accent:          oklch(0.9700 0 0);
+  --sidebar-accent-foreground: oklch(0.2050 0 0);
+  --sidebar-border:          oklch(0.9220 0 0);
+  --sidebar-ring:            oklch(0.7080 0 0);
+  --chart-1:                 oklch(0.8100 0.1000 252);
+  --chart-2:                 oklch(0.6200 0.1900 260);
+  --chart-3:                 oklch(0.5500 0.2200 263);
+  --chart-4:                 oklch(0.4900 0.2200 264);
+  --chart-5:                 oklch(0.4200 0.1800 266);
+  --font-sans:  ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-mono:  ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --radius:                  0.625rem;
+  --radius-sm:               calc(var(--radius) - 4px);
+  --radius-md:               calc(var(--radius) - 2px);
+  --radius-lg:               var(--radius);
+  --radius-xl:               calc(var(--radius) + 4px);
+  --spacing:                 0.25rem;
+  --tracking-normal:         0em;
+  --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+  --shadow-xs:  0 1px 3px 0px hsl(0 0% 0% / 0.05);
+  --shadow-sm:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+  --shadow:     0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+  --shadow-md:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
+  --shadow-lg:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
+  --shadow-xl:  0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
+  --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
 }
 .dark {
   color-scheme: dark;
-  --background: oklch(0 0 0);
-  --foreground: oklch(0.9460 0 0);
-  --card: oklch(0.1450 0 0);
-  --card-foreground: oklch(0.9460 0 0);
-  --popover: oklch(0.1450 0 0);
-  --popover-foreground: oklch(0.9460 0 0);
-  --primary: oklch(0.4600 0.2200 266);
-  --primary-foreground: oklch(0.9850 0 0);
-  --secondary: oklch(0.2500 0 0);
-  --secondary-foreground: oklch(0.9460 0 0);
-  --muted: oklch(0.2300 0 0);
-  --muted-foreground: oklch(0.7200 0 0);
-  --accent: oklch(0.3200 0 0);
-  --accent-foreground: oklch(0.9200 0.0400 272);
-  --destructive: oklch(0.6900 0.2000 23.9100);
-  --destructive-foreground: oklch(0.9850 0 0);
-  --border: oklch(0.2600 0 0);
-  --input: oklch(0.3200 0 0);
-  --ring: oklch(0.4600 0.2200 266);
-  --chart-1: oklch(0.2100 0.0600 268);
-  --chart-2: oklch(0.4200 0.1500 266);
-  --chart-3: oklch(0.4600 0.2200 266);
-  --chart-4: oklch(0.7500 0.1300 269);
-  --chart-5: oklch(0.9200 0.0400 272);
-  --sidebar: oklch(0 0 0);
-  --sidebar-foreground: oklch(0.9460 0 0);
-  --sidebar-primary: oklch(0.4600 0.2200 266);
+  --background:              oklch(0.1450 0 0);
+  --foreground:              oklch(0.9850 0 0);
+  --card:                    oklch(0.2050 0 0);
+  --card-foreground:         oklch(0.9850 0 0);
+  --popover:                 oklch(0.2690 0 0);
+  --popover-foreground:      oklch(0.9850 0 0);
+  --primary:                 oklch(0.9220 0 0);
+  --primary-foreground:      oklch(0.2050 0 0);
+  --secondary:               oklch(0.2690 0 0);
+  --secondary-foreground:    oklch(0.9850 0 0);
+  --muted:                   oklch(0.2690 0 0);
+  --muted-foreground:        oklch(0.7080 0 0);
+  --accent:                  oklch(0.3710 0 0);
+  --accent-foreground:       oklch(0.9850 0 0);
+  --destructive:             oklch(0.7040 0.1910 22.2160);
+  --destructive-foreground:  oklch(0.9850 0 0);
+  --border:                  oklch(0.2750 0 0);
+  --input:                   oklch(0.3250 0 0);
+  --ring:                    oklch(0.5560 0 0);
+  --sidebar:                 oklch(0.2050 0 0);
+  --sidebar-foreground:      oklch(0.9850 0 0);
+  --sidebar-primary:         oklch(0.4880 0.2430 264.3760);
   --sidebar-primary-foreground: oklch(0.9850 0 0);
-  --sidebar-accent: oklch(0.3200 0 0);
-  --sidebar-accent-foreground: oklch(0.9200 0.0400 272);
-  --sidebar-border: oklch(0.2600 0 0);
-  --sidebar-ring: oklch(0.4600 0.2200 266);
-  --font-sans: Geist, sans-serif;
-  --font-serif: "Noto Serif Georgian", ui-serif, serif;
-  --font-mono: "Geist Mono", monospace;
-  --radius: 0.5rem;
-  --shadow-2xs: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.07);
-  --shadow-xs: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.07);
-  --shadow-sm: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.15), 0.25px 1px 2px -1px hsl(236.5829 64.2250% 21.4383% / 0.15);
-  --shadow: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.15), 0.25px 1px 2px -1px hsl(236.5829 64.2250% 21.4383% / 0.15);
-  --shadow-md: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.15), 0.25px 2px 4px -1px hsl(236.5829 64.2250% 21.4383% / 0.15);
-  --shadow-lg: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.15), 0.25px 4px 6px -1px hsl(236.5829 64.2250% 21.4383% / 0.15);
-  --shadow-xl: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.15), 0.25px 8px 10px -1px hsl(236.5829 64.2250% 21.4383% / 0.15);
-  --shadow-2xl: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.38);
-  /* —— 扩展 —— */
-  --success: oklch(0.7000 0.1500 150);
-  --warning: oklch(0.7800 0.1500 85);
+  --sidebar-accent:          oklch(0.2690 0 0);
+  --sidebar-accent-foreground: oklch(0.9850 0 0);
+  --sidebar-border:          oklch(0.2750 0 0);
+  --sidebar-ring:            oklch(0.4390 0 0);
+  --chart-1:                 oklch(0.8100 0.1000 252);
+  --chart-2:                 oklch(0.6200 0.1900 260);
+  --chart-3:                 oklch(0.5500 0.2200 263);
+  --chart-4:                 oklch(0.4900 0.2200 264);
+  --chart-5:                 oklch(0.4200 0.1800 266);
 }
-/* @layer base 等价 */
-* { border-color: var(--border); outline-color: color-mix(in oklab, var(--ring) 50%, transparent); }
+</style>
 
-/* ============================ Base ============================ */
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { -webkit-text-size-adjust: 100%; }
+<style>
+/* ================================================================
+   组件 CSS — 本地 shadcn-lib components 原样合并（@layer components）
+   含 button / badge / card / input / label / table / tabs / select /
+   progress / statistic / separator / avatar / dropdown / toast
+   ================================================================ */
+@layer components {
+  /* -- Button ------------------------------------------------ */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    white-space: nowrap; font-size: 0.875rem; font-weight: 500;
+    font-family: var(--font-sans); line-height: 1; border-radius: var(--radius-md);
+    border: 1px solid transparent; cursor: pointer; text-decoration: none;
+    transition: all 150ms ease; outline: none; flex-shrink: 0;
+    height: 2.25rem; padding: 0 1rem;
+    background-color: var(--primary); color: var(--primary-foreground);
+    & svg { pointer-events: none; flex-shrink: 0; &:not([class*="size-"]) { width: 1rem; height: 1rem; } }
+    &:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+    &:disabled, &[aria-disabled="true"] { pointer-events: none; opacity: 0.5; }
+    &[data-variant="default"] { background-color: var(--primary); color: var(--primary-foreground); &:hover { opacity: 0.9; } }
+    &[data-variant="secondary"] { background-color: var(--secondary); color: var(--secondary-foreground); &:hover { opacity: 0.8; } }
+    &[data-variant="outline"] { background-color: var(--background); color: var(--foreground); border: 1px solid var(--border); box-shadow: var(--shadow-xs); &:hover { background-color: var(--accent); color: var(--accent-foreground); } }
+    &[data-variant="ghost"] { background-color: transparent; color: var(--foreground); border-color: transparent; &:hover { background-color: var(--accent); color: var(--accent-foreground); } }
+    &[data-variant="destructive"] { background-color: var(--destructive); color: var(--destructive-foreground); &:hover { opacity: 0.9; } }
+    &[data-variant="link"] { background-color: transparent; color: var(--primary); height: auto; padding: 0; text-underline-offset: 4px; &:hover { text-decoration: underline; } }
+    &[data-size="xs"]      { height: 1.75rem; padding: 0 0.5rem;  font-size: 0.75rem; border-radius: var(--radius-sm); }
+    &[data-size="sm"]      { height: 2rem;    padding: 0 0.75rem; font-size: 0.8125rem; }
+    &[data-size="lg"]      { height: 2.75rem; padding: 0 2rem;    font-size: 1rem; }
+    &[data-size="icon"]    { height: 2.25rem; width: 2.25rem;  padding: 0; }
+    &[data-size="icon-xs"] { height: 1.75rem; width: 1.75rem;  padding: 0; border-radius: var(--radius-sm); }
+    &[data-size="icon-sm"] { height: 2rem;    width: 2rem;     padding: 0; }
+    &[data-size="icon-lg"] { height: 2.75rem; width: 2.75rem;  padding: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
+  @media (prefers-contrast: more) {
+    .btn { border: 2px solid transparent;
+      &[data-variant="default"], &[data-variant="secondary"], &[data-variant="destructive"] { border-color: currentColor; }
+      &[data-variant="outline"], &[data-variant="ghost"] { border-color: var(--foreground); } }
+  }
+  @media (forced-colors: active) {
+    .btn { border: 1px solid ButtonText; &:disabled, &[aria-disabled="true"] { border-color: GrayText; color: GrayText; } }
+  }
+
+  /* -- Badge ------------------------------------------------ */
+  .badge {
+    display: inline-flex; align-items: center; border-radius: 9999px;
+    padding: 0.125rem 0.625rem; font-size: 0.6875rem; font-weight: 500;
+    letter-spacing: 0.01em; line-height: 1.5rem;
+    &[data-variant="outline"] { border: 1px solid var(--border); color: var(--muted-foreground); }
+    &[data-variant="secondary"] { background: var(--secondary); color: var(--secondary-foreground); }
+    &[data-variant="default"] { background: var(--primary); color: var(--primary-foreground); }
+    &[data-variant="destructive"] { background: var(--destructive); color: var(--destructive-foreground); }
+    /* 原型补充变体（库默认 token 无绿/橙，落地时需在 shadcn-lib 侧补 success/warning 徽标变体） */
+    &[data-variant="success"] { background: oklch(0.723 0.15 145); color: oklch(0.985 0 0); }
+    &[data-variant="warning"] { background: oklch(0.756 0.16 60); color: oklch(0.985 0 0); }
+  }
+
+  /* -- Card ------------------------------------------------- */
+  .card {
+    background-color: var(--card); color: var(--card-foreground);
+    border: 1px solid var(--border); border-radius: var(--radius-xl);
+    overflow: hidden; container-type: inline-size;
+  }
+  .card-header { display: flex; flex-direction: column; gap: 0.25rem; padding: 1.5rem; padding-bottom: 0; }
+  .card-title { font-size: 1.25rem; font-weight: 600; line-height: 1.25; letter-spacing: -0.01em; margin: 0; }
+  .card-description { font-size: 0.875rem; color: var(--muted-foreground); margin: 0; line-height: 1.6; }
+  .card-content { padding: 1.5rem; }
+  .card-footer { display: flex; align-items: center; gap: 0.5rem; padding: 1.5rem; padding-top: 0; }
+  @container (max-width: 280px) {
+    .card-header { padding: 1rem; padding-bottom: 0; }
+    .card-content { padding: 1rem; }
+    .card-footer { padding: 1rem; padding-top: 0; }
+    .card-title { font-size: 1rem; }
+  }
+
+  /* -- Input ------------------------------------------------ */
+  .input {
+    height: 2.5rem; width: 100%;
+    border: 1px solid var(--input); border-radius: var(--radius-md);
+    background: var(--background); padding: 0 0.75rem;
+    font-size: 0.875rem; font-family: var(--font-sans); color: var(--foreground);
+    outline: none; box-shadow: var(--shadow-xs);
+    transition: border-color 150ms, box-shadow 150ms;
+    &:focus { border-color: var(--ring); box-shadow: 0 0 0 2px oklch(from var(--ring) l c h / 0.2); }
+    &::placeholder { color: var(--muted-foreground); }
+    &:disabled { opacity: 0.5; cursor: not-allowed; }
+    &:read-only:not([type="file"]) { background: var(--muted); cursor: default; opacity: 0.7; &:focus { border-color: var(--input); box-shadow: var(--shadow-xs); } }
+    &:is([aria-invalid="true"], :user-invalid) { border-color: var(--destructive); &:focus { border-color: var(--destructive); box-shadow: 0 0 0 2px oklch(from var(--destructive) l c h / 0.2); } }
+    &[type="file"] { padding: 0; font-size: 0.875rem; &::file-selector-button { height: 100%; border: none; border-right: 1px solid var(--input); background: var(--muted); color: var(--foreground); font-size: 0.875rem; font-weight: 500; font-family: var(--font-sans); padding: 0 0.75rem; margin-right: 0.75rem; cursor: pointer; transition: background 150ms; &:hover { background: var(--accent); } } }
+    &[data-size="sm"] { height: 2rem;    padding: 0 0.625rem; font-size: 0.8125rem; }
+    &[data-size="lg"] { height: 2.75rem; padding: 0 1rem;     font-size: 1rem; }
+  }
+  .field-description { font-size: 0.8125rem; color: var(--muted-foreground); margin: 0.375rem 0 0; }
+  .field-error { font-size: 0.8125rem; color: var(--destructive); margin: 0.375rem 0 0; }
+  @media (prefers-reduced-motion: reduce) { .input { transition: none; } .input[type="file"]::file-selector-button { transition: none; } }
+  @media (prefers-contrast: more) { .input { border-width: 2px; } .input:disabled { opacity: 0.7; } }
+  @media (forced-colors: active) {
+    .input { border-color: ButtonBorder; color: ButtonText; background: Field; }
+    .input:focus { outline: 2px solid Highlight; outline-offset: 1px; }
+    .input:disabled { opacity: 1; color: GrayText; border-color: GrayText; }
+    .input:is([aria-invalid="true"], :user-invalid) { border-color: LinkText; }
+  }
+
+  /* -- Label ------------------------------------------------ */
+  .label {
+    font-size: 0.875rem; font-weight: 500; font-family: var(--font-sans);
+    line-height: 1; color: var(--foreground); display: block; margin-bottom: 0.375rem; cursor: default;
+    &[data-disabled] { opacity: 0.7; cursor: not-allowed; }
+    &:has(+ :disabled), &:has(+ [data-disabled]) { opacity: 0.7; cursor: not-allowed; }
+  }
+  .label-hint { font-weight: 400; font-size: 0.8125rem; color: var(--muted-foreground); }
+  @media (prefers-contrast: more) { .label[data-disabled], .label:has(+ :disabled), .label:has(+ [data-disabled]) { opacity: 0.85; } }
+  @media (forced-colors: active) { .label { color: LinkText; } .label[data-disabled], .label:has(+ :disabled), .label:has(+ [data-disabled]) { opacity: 1; color: GrayText; } }
+
+  /* -- Table ------------------------------------------------ */
+  .table-container { width: 100%; overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius-xl); container-type: inline-size; }
+  .table { width: 100%; border-collapse: collapse; font-size: 0.875rem; text-align: left; caption-side: bottom; }
+  .table-caption { padding: 0.75rem 1rem; font-size: 0.8125rem; color: var(--muted-foreground); text-align: center; }
+  .table-head { padding: 0.75rem 1rem; font-weight: 500; color: var(--muted-foreground); background-color: var(--muted); white-space: nowrap; border-bottom: 1px solid var(--border);
+    &:first-child { border-top-left-radius: var(--radius-lg); }
+    &:last-child { border-top-right-radius: var(--radius-lg); } }
+  .table-row { border-bottom: 1px solid var(--border); transition: background-color 150ms ease;
+    &:last-child { border-bottom: none; }
+    tbody &:hover { background-color: var(--muted); } }
+  .table-cell { padding: 0.75rem 1rem; vertical-align: middle; color: var(--foreground); }
+  tfoot .table-row { background-color: var(--muted); border-top: 1px solid var(--border); font-weight: 500; }
+  tfoot .table-cell:first-child { border-bottom-left-radius: var(--radius-lg); }
+  tfoot .table-cell:last-child { border-bottom-right-radius: var(--radius-lg); }
+  @container (max-width: 480px) { .table-head, .table-cell { padding: 0.5rem 0.75rem; font-size: 0.8125rem; } }
+
+  /* -- Tabs ------------------------------------------------- */
+  .tab-list {
+    display: inline-flex; align-items: center; background: var(--muted);
+    border-radius: var(--radius-lg); padding: 0.25rem; gap: 0.125rem;
+    &[data-variant="line"] {
+      background: transparent; border-radius: 0; padding: 0; gap: 0;
+      border-bottom: 1px solid var(--border);
+      & .tab-trigger { border-radius: 0; padding: 0.5rem 1rem; border-bottom: 2px solid transparent; margin-bottom: -1px;
+        &[aria-selected="true"] { background: transparent; color: var(--foreground); border-bottom-color: var(--primary); box-shadow: none; } } }
+    &[aria-orientation="vertical"] { flex-direction: column; width: auto;
+      & .tab-trigger { justify-content: flex-start; width: 100%; } }
+  }
+  .tab-trigger {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    padding: 0.375rem 0.75rem; border-radius: calc(var(--radius) * 0.6);
+    font-size: 0.875rem; font-weight: 500; border: none;
+    background: transparent; color: var(--muted-foreground);
+    cursor: pointer; transition: all 150ms ease; white-space: nowrap; outline: none;
+    &[aria-selected="true"] { background: var(--background); color: var(--foreground); box-shadow: 0 1px 3px oklch(0 0 0 / 0.08), 0 0 0 1px var(--border); }
+    &:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+    &:disabled { pointer-events: none; opacity: 0.5; }
+  }
+  .tab-content { margin-top: 0.75rem; &:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; } &[hidden] { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .tab-trigger { transition: none; } }
+  @media (forced-colors: active) {
+    .tab-trigger[aria-selected="true"] { border: 2px solid Highlight; box-shadow: none; }
+    .tab-list[data-variant="line"] .tab-trigger[aria-selected="true"] { border: none; border-bottom: 2px solid Highlight; }
+  }
+
+  /* -- Select ------------------------------------------------ */
+  .select {
+    appearance: none; height: 2.5rem; width: 100%;
+    border: 1px solid var(--input); border-radius: var(--radius-md);
+    background: var(--background); padding: 0 2rem 0 0.75rem;
+    font-size: 0.875rem; font-family: var(--font-sans); color: var(--foreground);
+    outline: none; box-shadow: var(--shadow-xs); cursor: pointer;
+    transition: border-color 150ms, box-shadow 150ms;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 0.5rem center; background-size: 1rem;
+    &:focus { border-color: var(--ring); box-shadow: 0 0 0 2px oklch(from var(--ring) l c h / 0.2); }
+    &:disabled { opacity: 0.5; cursor: not-allowed; }
+    &:is([aria-invalid="true"], :user-invalid) { border-color: var(--destructive); &:focus { border-color: var(--destructive); box-shadow: 0 0 0 2px oklch(from var(--destructive) l c h / 0.2); } }
+    &[data-size="sm"] { height: 2rem;    padding-left: 0.625rem; font-size: 0.8125rem; }
+    &[data-size="lg"] { height: 2.75rem; padding-left: 1rem;     font-size: 1rem; }
+  }
+
+  /* -- Progress ---------------------------------------------- */
+  .progress {
+    appearance: none; -webkit-appearance: none; -moz-appearance: none;
+    width: 100%; height: 0.5rem; border: none; border-radius: 9999px;
+    overflow: hidden; background-color: var(--secondary);
+  }
+  .progress::-webkit-progress-bar { background-color: var(--secondary); border-radius: 9999px; }
+  .progress::-webkit-progress-value { background-color: var(--primary); border-radius: 9999px; transition: width 300ms ease; }
+  .progress::-moz-progress-bar { background-color: var(--primary); border-radius: 9999px; }
+  .progress:indeterminate { background: linear-gradient(90deg, var(--secondary) 0%, var(--primary) 50%, var(--secondary) 100%); background-size: 200% 100%; animation: progress-indeterminate 1.5s linear infinite; }
+  .progress:indeterminate::-webkit-progress-bar { background-color: transparent; }
+  .progress:indeterminate::-moz-progress-bar { background-color: transparent; }
+  @keyframes progress-indeterminate { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+  /* -- Statistic --------------------------------------------- */
+  .statistic { display: flex; flex-direction: column; gap: 0.125rem; }
+  .statistic-title { margin: 0; font-size: 0.8125rem; font-weight: 500; color: var(--muted-foreground); letter-spacing: 0.01em; }
+  .statistic-value { margin: 0; font-size: 1.875rem; font-weight: 700; letter-spacing: -0.025em; line-height: 1.2; color: var(--foreground); }
+  .statistic-description { margin: 0; font-size: 0.75rem; color: var(--muted-foreground); display: flex; align-items: center; gap: 0.25rem; }
+  .statistic-trend { display: inline-flex; align-items: center; gap: 0.125rem; font-weight: 500; & svg { width: 0.75rem; height: 0.75rem; } &[data-trend="up"] { color: #16a34a; } &[data-trend="down"] { color: #dc2626; } }
+
+  /* -- Separator ---------------------------------------------- */
+  .separator { border: none; margin: 0; flex-shrink: 0; background: var(--border); height: 1px; width: 100%;
+    &[data-orientation="vertical"] { height: auto; width: 1px; align-self: stretch; } }
+  @media (forced-colors: active) { .separator { background: CanvasText; } }
+  @media (prefers-contrast: more) { .separator { background: var(--foreground); height: 2px; &[data-orientation="vertical"] { width: 2px; height: auto; } } }
+
+  /* -- Avatar ------------------------------------------------ */
+  .avatar { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; border-radius: 9999px; overflow: hidden; flex-shrink: 0; background-color: var(--muted);
+    &[data-size="sm"] { width: 2rem; height: 2rem; font-size: 0.6875rem; }
+    &[data-size="lg"] { width: 3rem; height: 3rem; font-size: 0.875rem; } }
+  .avatar-image { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+  .avatar-fallback { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-size: 0.75rem; font-weight: 500; color: var(--muted-foreground); background-color: var(--muted); position: absolute; inset: 0; }
+
+  /* -- Dropdown ------------------------------------------------ */
+  .dropdown-content {
+    background-color: var(--popover); color: var(--popover-foreground);
+    border: 1px solid var(--border); border-radius: var(--radius-lg);
+    padding: 0.25rem; min-width: 8rem;
+    box-shadow: 0 4px 16px oklch(0 0 0 / 0.12), 0 0 0 1px var(--border);
+    position: fixed; inset: auto; margin: 0; margin-top: 4px;
+    opacity: 0; transform: scale(0.96) translateY(-0.25rem);
+    transition: opacity 150ms ease, transform 150ms ease, display 150ms allow-discrete;
+    z-index: 90;
+    display: none;
+  }
+  .dropdown-item { display: flex; align-items: center; gap: 0.5rem; width: 100%; padding: 0.375rem 0.5rem; border-radius: calc(var(--radius) * 0.6); font-size: 0.875rem; border: none; background: transparent; color: var(--foreground); cursor: pointer; outline: none; text-align: left;
+    &:hover, &[data-highlighted] { background-color: var(--accent); color: var(--accent-foreground); }
+    &[data-variant="destructive"] { &:hover, &[data-highlighted] { background-color: var(--destructive); color: var(--destructive-foreground); } }
+    &:disabled { pointer-events: none; opacity: 0.5; } }
+  .dropdown-separator { height: 1px; background: var(--border); margin: 0.25rem -0.25rem; }
+  .dropdown-label { padding: 0.375rem 0.5rem; font-size: 0.75rem; font-weight: 600; color: var(--muted-foreground); }
+  @media (prefers-reduced-motion: reduce) { .dropdown-content { transition: none; } .dropdown-item { transition: none; } }
+
+  /* -- Toast -------------------------------------------------- */
+  .toast {
+    background-color: var(--popover); color: var(--popover-foreground);
+    border: 1px solid var(--border); border-radius: var(--radius-lg);
+    padding: 1rem; min-width: 20rem; max-width: 26rem;
+    box-shadow: 0 4px 16px oklch(0 0 0 / 0.12);
+    pointer-events: auto;
+    opacity: 0; transform: translateY(0.5rem);
+    transition: opacity 200ms ease, transform 200ms ease;
+    position: fixed; z-index: 100;
+  }
+  .toast-content { display: flex; align-items: flex-start; gap: 0.75rem; }
+  .toast-text { flex: 1; min-width: 0; }
+  .toast-title { font-size: 0.875rem; font-weight: 500; margin: 0; line-height: 1.4; }
+  .toast-description { font-size: 0.8125rem; color: var(--muted-foreground); margin: 0.125rem 0 0; line-height: 1.5; }
+  .toast-close { display: flex; align-items: center; justify-content: center; width: 1.25rem; height: 1.25rem; border: none; background: transparent; color: var(--muted-foreground); cursor: pointer; flex-shrink: 0; border-radius: calc(var(--radius) * 0.5); transition: color 150ms, background 150ms;
+    &:hover { color: var(--foreground); background: var(--accent); } }
+  .toast-icon { flex-shrink: 0; margin-top: 0.125rem; color: var(--primary); }
+}
+</style>
+
+<style>
+/* ================================================================
+   页面布局与业务样式（unlayered，仅用库令牌，不引入非库颜色）
+   ================================================================ */
+* { box-sizing: border-box; }
 body {
-  font-family: "Geist", "PingFang SC", "Microsoft YaHei", "Noto Sans SC",
-               system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size: 14px; line-height: 1.55;
-  background: var(--background); color: var(--foreground);
+  margin: 0; background: var(--background); color: var(--foreground);
+  font-family: var(--font-sans); line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
-button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
-table { border-collapse: collapse; width: 100%; }
-svg { display: block; }
+button { font: inherit; color: inherit; }
 .muted { color: var(--muted-foreground); }
 .tnum { font-variant-numeric: tabular-nums; }
 
-/* ================================================================
-   SRC: components/button/component-skill.md
-   .btn + data-variant / data-size
-   ================================================================ */
-.btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: .375rem;
-  height: 2.25rem; padding: 0 1rem;
-  border-radius: var(--radius-md); border: 1px solid transparent;
-  font-size: .875rem; font-weight: 500; white-space: nowrap;
-  transition: background .15s, opacity .15s, color .15s;
-}
-.btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
-.btn:disabled { opacity: .5; pointer-events: none; }
-.btn[data-variant="default"]    { background: var(--primary); color: var(--primary-foreground); }
-.btn[data-variant="default"]:hover    { opacity: .88; }
-.btn[data-variant="secondary"]  { background: var(--secondary); color: var(--secondary-foreground); }
-.btn[data-variant="secondary"]:hover  { opacity: .8; }
-.btn[data-variant="outline"]    { background: var(--background); border-color: var(--border); box-shadow: var(--shadow-xs); color: var(--foreground); }
-.btn[data-variant="outline"]:hover    { background: var(--accent); }
-.btn[data-variant="ghost"]      { background: transparent; color: var(--foreground); }
-.btn[data-variant="ghost"]:hover      { background: var(--accent); }
-.btn[data-variant="link"]       { height: auto; padding: 0; background: transparent; color: var(--primary); text-decoration: underline; text-underline-offset: 3px; }
-.btn[data-size="xs"]  { height: 1.75rem; padding: 0 .5rem;  font-size: .75rem;  border-radius: var(--radius-sm); }
-.btn[data-size="sm"]  { height: 2rem;    padding: 0 .75rem; font-size: .8125rem; border-radius: var(--radius-md); }
-.btn[data-size="icon"]    { height: 2.25rem; width: 2.25rem; padding: 0; }
-.btn[data-size="icon-sm"] { height: 2rem;    width: 2rem;    padding: 0; border-radius: var(--radius-md); }
-.btn[data-size="icon-xs"] { height: 1.75rem; width: 1.75rem; padding: 0; border-radius: var(--radius-sm); }
-@media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
-@media (prefers-contrast: more) { .btn[data-variant="ghost"] { border: 1px solid var(--border); } }
-
-/* ================================================================
-   SRC: components/badge/component-skill.md
-   .badge + data-variant（default/secondary/outline + 业务扩展 success/warning/destructive）
-   ================================================================ */
-.badge {
-  display: inline-flex; align-items: center; gap: .25rem;
-  height: 1.3125rem; padding: 0 .5rem;
-  border-radius: 999px; border: 1px solid transparent;
-  font-size: .71875rem; font-weight: 600; white-space: nowrap;
-}
-.badge[data-variant="default"]     { background: var(--primary); color: var(--primary-foreground); }
-.badge[data-variant="secondary"]   { background: var(--secondary); color: var(--secondary-foreground); }
-.badge[data-variant="outline"]     { background: var(--card); color: var(--foreground); border-color: var(--border); }
-.badge[data-variant="success"]     { background: color-mix(in oklab, var(--success) 14%, var(--card)); color: color-mix(in oklab, var(--success) 78%, var(--foreground)); }
-.badge[data-variant="warning"]     { background: color-mix(in oklab, var(--warning) 16%, var(--card)); color: color-mix(in oklab, var(--warning) 80%, var(--foreground)); }
-.badge[data-variant="destructive"] { background: color-mix(in oklab, var(--destructive) 14%, var(--card)); color: var(--destructive); }
-.badge[data-variant="danger-outline"] { background: var(--card); color: var(--destructive); box-shadow: inset 0 0 0 1px var(--destructive); }
-
-/* ================================================================
-   SRC: components/card/component-skill.md
-   .card / .card-header / .card-title / .card-description / .card-content / .card-footer
-   ================================================================ */
-.card {
-  background: var(--card); color: var(--card-foreground);
-  border: 1px solid var(--border); border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-xs);
-  display: flex; flex-direction: column; min-width: 0;
-}
-.card-header {
-  display: flex; align-items: flex-start; justify-content: space-between;
-  gap: .75rem; padding: 1.25rem 1.5rem 0;
-}
-.card-title { font-size: .9375rem; font-weight: 600; letter-spacing: .01em; }
-.card-description { font-size: .8125rem; color: var(--muted-foreground); margin-top: 2px; }
-.card-content { padding: 1rem 1.5rem; flex: 1; min-width: 0; }
-.card-footer {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: .75rem; padding: .75rem 1.5rem;
-  border-top: 1px solid var(--border);
-  font-size: .8125rem; color: var(--muted-foreground);
-}
-/* ================================================================
-   SRC: components/progress/component-skill.md
-   原生 <progress> + WebKit/Moz 伪元素
-   ================================================================ */
-progress.progress {
-  appearance: none; -webkit-appearance: none;
-  display: block; width: 100%; height: .5rem;
-  border: none; border-radius: 999px; overflow: hidden;
-}
-progress.progress::-webkit-progress-bar { background: var(--muted); border-radius: 999px; }
-progress.progress::-webkit-progress-value { background: var(--primary); border-radius: 999px; transition: width .5s ease; }
-progress.progress::-moz-progress-bar { background: var(--primary); border-radius: 999px; }
-progress.progress[data-tone="success"]::-webkit-progress-value { background: var(--success); }
-progress.progress[data-tone="success"]::-moz-progress-bar { background: var(--success); }
-progress.progress[data-tone="muted"]::-webkit-progress-value { background: var(--muted-foreground); }
-progress.progress[data-tone="muted"]::-moz-progress-bar { background: var(--muted-foreground); }
-
-/* ================================================================
-   SRC: components/statistic/component-skill.md
-   ================================================================ */
-.statistic { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.statistic-title { font-size: .8125rem; color: var(--muted-foreground); }
-.statistic-value { font-size: 1.5rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; font-variant-numeric: tabular-nums; }
-.statistic-value small { font-size: .8125rem; font-weight: 500; color: var(--muted-foreground); margin-left: 2px; }
-.statistic-description { font-size: .75rem; color: var(--muted-foreground); }
-.statistic-trend { font-weight: 600; display: inline-flex; align-items: center; gap: 2px; }
-.statistic-trend[data-trend="up"]   { color: color-mix(in oklab, var(--success) 85%, var(--foreground)); }
-.statistic-trend[data-trend="down"] { color: var(--destructive); }
-
-/* ================================================================
-   SRC: components/table/component-skill.md
-   ================================================================ */
-.table-container { width: 100%; overflow-x: auto; }
-.table { width: 100%; font-size: .8125rem; }
-.table-head {
-  text-align: left; font-size: .71875rem; font-weight: 600;
-  color: var(--muted-foreground); padding: .625rem .875rem;
-  border-bottom: 1px solid var(--border); white-space: nowrap;
-}
-.table-cell { padding: .625rem .875rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
-.table tbody tr:last-child .table-cell { border-bottom: none; }
-.table tbody tr:hover .table-cell { background: color-mix(in oklab, var(--accent) 45%, transparent); }
-.table .num { text-align: right; font-variant-numeric: tabular-nums; }
-
-/* ================================================================
-   SRC: components/dropdown/component-skill.md（Popover API）
-   ================================================================ */
-.dropdown-content {
-  position: fixed; inset: auto; margin: 0;
-  min-width: 11rem; padding: .375rem;
-  background: var(--popover); color: var(--popover-foreground);
-  border: 1px solid var(--border); border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg); z-index: 80;
-  opacity: 0; transform: scale(.96) translateY(-.25rem);
-  transition: opacity .15s ease, transform .15s ease, display .15s allow-discrete;
-}
-.dropdown-content:popover-open { opacity: 1; transform: scale(1) translateY(0); }
-@starting-style {
-  .dropdown-content:popover-open { opacity: 0; transform: scale(.96) translateY(-.25rem); }
-}
-.dropdown-item {
-  display: flex; align-items: center; gap: .5rem;
-  width: 100%; padding: .5rem .625rem;
-  border-radius: var(--radius-sm); font-size: .8125rem;
-  text-align: left; color: var(--foreground);
-}
-.dropdown-item:hover { background: var(--accent); }
-.dropdown-item[data-variant="destructive"] { color: var(--destructive); }
-.dropdown-separator { height: 1px; background: var(--border); margin: .25rem -.375rem; }
-.dropdown-label { padding: .375rem .625rem .25rem; font-size: .71875rem; color: var(--muted-foreground); }
-@media (prefers-reduced-motion: reduce) { .dropdown-content { transition: none; } }
-
-/* ================================================================
-   SRC: components/toast/component-skill.md
-   ================================================================ */
-.toast {
-  position: fixed; inset: auto; margin: 0;
-  min-width: 250px; max-width: 340px;
-  padding: .75rem .875rem;
-  background: var(--popover); color: var(--popover-foreground);
-  border: 1px solid var(--border); border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  display: flex; gap: .55rem; align-items: flex-start;
-  z-index: 100;
-  animation: toastIn .18s ease;
-}
-@keyframes toastIn { from { opacity: 0; transform: translateY(8px); } }
-.toast-icon { flex: none; margin-top: 2px; color: var(--primary); }
-.toast-title { font-size: .8125rem; font-weight: 600; }
-.toast-description { font-size: .75rem; color: var(--muted-foreground); }
-
-/* ================================================================
-   布局 — 顶栏 / 页面堆叠（无左侧导航，同客服工作台）
-   ================================================================ */
 .wrap { max-width: 1400px; margin: 0 auto; padding: 1.25rem 1.25rem 2.5rem; }
+
+/* -- 顶栏 ---------------------------------------------------- */
 .topbar {
-  position: sticky; top: .75rem; z-index: 40;
-  display: flex; align-items: center; gap: .75rem;
-  padding: .625rem .75rem .625rem 1.25rem;
-  background: color-mix(in oklab, var(--card) 92%, transparent);
-  backdrop-filter: blur(8px);
-  border: 1px solid var(--border); border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-xs);
+  position: sticky; top: 0.75rem; z-index: 40;
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.625rem 0.75rem 0.625rem 1.25rem;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); box-shadow: var(--shadow-xs);
 }
-.topbar .brand { display: flex; align-items: center; gap: .5rem; flex: 0 0 auto; }
-.topbar .brand b { font-size: 1rem; font-weight: 700; letter-spacing: -.01em; }
+.brand { display: flex; align-items: center; gap: 0.5rem; flex: 0 0 auto; }
+.brand b { font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; }
 .vsep { width: 1px; height: 1.25rem; background: var(--border); flex: none; }
 .spacer { flex: 1 1 auto; }
-.quick { display: flex; align-items: center; gap: .125rem; flex: 0 0 auto; }
+.quick { display: flex; align-items: center; gap: 0.125rem; flex: 0 0 auto; }
 .search {
-  display: flex; align-items: center; gap: .5rem;
+  display: flex; align-items: center; gap: 0.5rem;
   height: 2.25rem; width: min(320px, 26vw);
-  padding: 0 .75rem; flex: 0 1 auto;
+  padding: 0 0.75rem; flex: 0 1 auto;
   background: var(--muted); border: 1px solid transparent;
-  border-radius: var(--radius-md); color: var(--muted-foreground); font-size: .8125rem;
+  border-radius: var(--radius-md); color: var(--muted-foreground); font-size: 0.8125rem;
 }
 .search:focus-within { background: var(--card); border-color: var(--ring); }
 .search input { flex: 1; min-width: 0; border: none; outline: none; background: transparent; font: inherit; color: var(--foreground); }
-.search kbd {
-  font: .6875rem/1.4 inherit; color: var(--muted-foreground);
-  border: 1px solid var(--border); border-radius: 4px;
-  padding: 0 5px; background: var(--card); white-space: nowrap;
-}
-.avatar {
-  position: relative; width: 1.75rem; height: 1.75rem; flex: none;
-  border-radius: 999px; overflow: hidden;
-  display: grid; place-items: center;
-  background: var(--primary); color: var(--primary-foreground);
-  font-size: .75rem; font-weight: 700;
-}
-.avatar img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; }
+.search kbd { font: 0.6875rem/1.4 inherit; color: var(--muted-foreground); border: 1px solid var(--border); border-radius: 4px; padding: 0 5px; background: var(--card); white-space: nowrap; }
 
-/* Tabs（pill 变体，同销售/消息中心） */
-.tab-list {
-  display: inline-flex; align-items: center; flex-wrap: wrap;
-  background: var(--muted); border-radius: var(--radius-lg);
-  padding: .25rem; gap: .125rem;
-}
-.tab-trigger {
-  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
-  padding: .375rem .75rem; border-radius: calc(var(--radius) * .6);
-  font-size: .875rem; font-weight: 500; border: none;
-  background: transparent; color: var(--muted-foreground);
-  cursor: pointer; transition: all 150ms ease; white-space: nowrap; outline: none;
-}
-.tab-trigger[aria-selected="true"] {
-  background: var(--background); color: var(--foreground);
-  box-shadow: 0 1px 3px oklch(0 0 0 / 0.08), 0 0 0 1px var(--border);
-}
-.tab-trigger:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
-.separator { border: none; margin: 0; flex-shrink: 0; background: var(--border); height: 1px; width: 100%; }
-/* ================================================================
-   本页业务样式 — 业绩指标（基础 / 目标 / 进阶）
-   ================================================================ */
+/* -- 页头 ---------------------------------------------------- */
 .page-head {
   display: flex; align-items: flex-end; justify-content: space-between;
   gap: 1rem; margin-top: 1.25rem; flex-wrap: wrap;
 }
-.page-title { font-size: 1.25rem; font-weight: 700; letter-spacing: -.01em; }
-.page-sub { font-size: .8125rem; color: var(--muted-foreground); margin-top: 2px; }
+.page-title { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.01em; margin: 0; }
+.page-sub { font-size: 0.8125rem; color: var(--muted-foreground); margin-top: 2px; }
+.head-actions { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.head-actions .label { margin-bottom: 0; }
 .stack { display: flex; flex-direction: column; gap: 1.25rem; margin-top: 1.25rem; }
 .panel[hidden] { display: none; }
-.head-actions { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
 
-/* 表单控件（shadcn input/select 语义） */
-.field-input, .select {
-  height: 2.25rem; padding: 0 .625rem;
-  border: 1px solid var(--input); border-radius: var(--radius-md);
-  background: var(--card); color: var(--foreground);
-  font: inherit; font-size: .8125rem; outline: none;
-  transition: border-color .15s, box-shadow .15s;
-}
-.field-input:focus, .select:focus {
-  border-color: var(--ring);
-  box-shadow: 0 0 0 2px color-mix(in oklab, var(--ring) 25%, transparent);
-}
-.field-input.num {
-  width: 7.5rem; text-align: right;
-  font-variant-numeric: tabular-nums; font-weight: 600;
-}
+/* -- 多人业绩总览 ---------------------------------------------- */
+.cell-sub { font-size: 0.75rem; color: var(--muted-foreground); line-height: 1.5; }
+.cell-right { text-align: right; }
+.team-tier { white-space: nowrap; }
 
-/* KPI 汇总卡（查看页顶部数据汇总） */
-.kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; }
-.kpis.four { grid-template-columns: repeat(4, 1fr); }
-.kpi { padding: .6rem .75rem; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--card); }
-.kpi-label { font-size: .75rem; color: var(--muted-foreground); }
-.kpi-value { font-size: 1.375rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; font-variant-numeric: tabular-nums; margin-top: 2px; }
-.kpi-sub { font-size: .75rem; color: var(--muted-foreground); margin-top: 2px; }
-.kpi-sub .tnum { font-weight: 600; }
+/* -- 分配设置（列表式） ------------------------------------------ */
+.setup-card > .card-header { flex-direction: row; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.setup-card > .card-header .card-head-text { min-width: 0; }
+.setup-card > .card-footer { justify-content: space-between; padding-top: 0; }
+.setup-actions { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.toolbar-item { display: flex; align-items: center; gap: 0.375rem; }
+.toolbar-item .label { margin-bottom: 0; }
+.select-sm { width: 8.5rem; }
+.select-role { width: 10rem; }
+.select-dept { width: 8.5rem; }
+.amount-input { width: 7.5rem; text-align: right; font-variant-numeric: tabular-nums; }
+.cell-name { font-weight: 600; }
+.self-badge { margin-left: 0.375rem; }
+.table-card .table-container { border: none; border-radius: 0; }
+.table-card { padding: 0 1.5rem 1rem; }
 
-/* 行内小行 / 名次 / 省略 */
-.mini-row { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding: .75rem 0; border-bottom: 1px solid var(--border); }
-.mini-row:first-child { padding-top: .25rem; }
-.mini-row:last-child { border-bottom: none; padding-bottom: .25rem; }
-.mini-left { display: flex; align-items: center; gap: .625rem; min-width: 0; }
-.mini-name { font-size: .875rem; font-weight: 600; }
-.mini-hint { font-size: .75rem; color: var(--muted-foreground); }
-.ell { max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-/* 阈值着色 */
-[data-tone="danger"] { color: var(--destructive); }
-[data-tone="warning"] { color: var(--warning); }
-[data-tone="ok"] { color: color-mix(in oklab, var(--success) 82%, var(--foreground)); font-weight: 600; }
-
-/* ===== 三指标卡（基础 / 目标 / 进阶） ===== */
-.metric-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; }
-.metric-card {
-  display: flex; flex-direction: column; gap: .625rem;
-  padding: .875rem .875rem .9375rem;
-  border: 1px solid var(--border); border-radius: var(--radius-md);
-  background: var(--card); min-width: 0;
-}
-.metric-card.is-done {
-  border-color: color-mix(in oklab, var(--success) 50%, var(--border));
-  background: color-mix(in oklab, var(--success) 4%, var(--card));
-}
-.metric-top { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
-.metric-name { font-size: .8125rem; font-weight: 600; }
-.metric-target { font-size: 1.5rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; font-variant-numeric: tabular-nums; }
-.metric-target small { font-size: .8125rem; font-weight: 500; color: var(--muted-foreground); margin-left: 2px; }
-.metric-now { display: flex; align-items: baseline; justify-content: space-between; gap: .5rem; font-size: .75rem; color: var(--muted-foreground); }
-.metric-now b { color: var(--foreground); font-size: .875rem; font-variant-numeric: tabular-nums; }
-.metric-pct { font-size: .75rem; font-variant-numeric: tabular-nums; color: var(--muted-foreground); text-align: right; }
-
-/* 响应式 */
+/* -- 响应式 --------------------------------------------------- */
 @media (max-width: 1120px) {
-  .kpis, .kpis.four { grid-template-columns: repeat(2, 1fr); }
-  .metric-cards { grid-template-columns: 1fr; }
   .search { display: none; }
   .quick .btn[data-size="xs"]:nth-child(n+3) { display: none; }
 }
@@ -446,11 +434,11 @@ progress.progress[data-tone="muted"]::-moz-progress-bar { background: var(--mute
 <body>
 <div class="wrap">
 
-  <!-- ===== 顶栏：品牌 · 搜索 · 快捷入口 · 用户菜单 ===== -->
+  <!-- ===== 顶栏 ===== -->
   <header class="topbar">
     <div class="brand">
       <b>客服CRM</b>
-      <span class="badge" data-variant="secondary">业绩指标</span>
+      <span class="badge" data-variant="secondary">业绩任务分配</span>
     </div>
     <span class="vsep" aria-hidden="true"></span>
     <label class="search">
@@ -471,11 +459,11 @@ progress.progress[data-tone="muted"]::-moz-progress-bar { background: var(--mute
     </button>
     <button class="btn" data-variant="ghost" data-size="sm" type="button" id="userBtn"
             aria-haspopup="menu" aria-expanded="false" aria-controls="userMenu">
-      <span class="avatar"><span>罗</span><img src="https://api.dicebear.com/9.x/pixel-art/svg?seed=Milo&amp;backgroundColor=3b82f6" alt="" onerror="this.remove();"></span>
+      <span class="avatar" data-size="sm"><span class="avatar-fallback">罗</span></span>
       罗屿
       <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
     </button>
-    <div id="userMenu" class="dropdown-content" popover role="menu" aria-label="用户菜单">
+    <div id="userMenu" class="dropdown-content" role="menu" aria-label="用户菜单">
       <div class="dropdown-label">罗屿 · 客服一部</div>
       <button class="dropdown-item" role="menuitem" tabindex="-1" data-demo="个人资料（演示）">个人资料</button>
       <button class="dropdown-item" role="menuitem" tabindex="-1" data-demo="切换演示账号（演示）">切换演示账号</button>
@@ -484,115 +472,118 @@ progress.progress[data-tone="muted"]::-moz-progress-bar { background: var(--mute
     </div>
   </header>
 
-  <!-- ===== 页头：标题 · 查看（默认）/ 指标设置 页签 ===== -->
+  <!-- ===== 页头：演示角色 + 月份选择器 + 页签 ===== -->
   <div class="page-head">
     <div>
-      <h1 class="page-title">业绩指标</h1>
-      <p class="page-sub">业绩分为 基础 · 目标 · 进阶 三种指标 — 查看达成情况，或在「指标设置」输入各指标目标值</p>
+      <h1 class="page-title">业绩任务分配</h1>
+      <p class="page-sub">每月为客服分配 基础 · 目标 · 进阶 三档业绩 — 经理分配本部门，总监可设置全部部门</p>
     </div>
-    <div class="tab-list" role="tablist" aria-label="页面切换">
-      <button class="tab-trigger" type="button" role="tab" aria-selected="true" data-panel="view">查看</button>
-      <button class="tab-trigger" type="button" role="tab" aria-selected="false" data-panel="setup">指标设置</button>
+    <div class="head-actions">
+      <div class="toolbar-item">
+        <label class="label" for="roleSel">演示角色</label>
+        <select class="select select-role" id="roleSel" aria-label="演示角色">
+          <option value="leader" selected>经理（客服一部）</option>
+          <option value="director">总监（全部部门）</option>
+        </select>
+      </div>
+      <div class="toolbar-item">
+        <label class="label" for="monthSel">月份</label>
+        <select class="select select-sm" id="monthSel" aria-label="选择月份">
+          <option value="2026-09">2026-09</option>
+          <option value="2026-10" selected>2026-10</option>
+          <option value="2026-11">2026-11</option>
+        </select>
+      </div>
+      <span class="vsep" aria-hidden="true"></span>
+      <div class="tab-list" role="tablist" aria-label="页面切换">
+        <button class="tab-trigger" type="button" role="tab" aria-selected="true" aria-controls="panel-view" data-panel="view">查看</button>
+        <button class="tab-trigger" type="button" role="tab" aria-selected="false" aria-controls="panel-setup" data-panel="setup" tabindex="-1">指标设置</button>
+      </div>
     </div>
   </div>
-  <!-- ================= 查看面板（默认打开） ================= -->
-  <div class="stack panel" id="panel-view" role="tabpanel">
 
-    <!-- 顶部 · 当前数据汇总 -->
-    <div class="kpis four">
-      <div class="kpi">
-        <p class="kpi-label">当前已完成</p>
-        <p class="kpi-value tnum" id="vDone">¥66,000</p>
-        <p class="kpi-sub">2026-10 · 演示数据</p>
-      </div>
-      <div class="kpi">
-        <p class="kpi-label">已达成指标</p>
-        <p class="kpi-value tnum" id="vHit">1 / 3</p>
-        <p class="kpi-sub" id="vHitSub" data-tone="ok">基础指标已达成 ✓</p>
-      </div>
-      <div class="kpi">
-        <p class="kpi-label">距目标指标</p>
-        <p class="kpi-value tnum" id="vGapT">¥14,000</p>
-        <p class="kpi-sub" id="vGapTSub">目标进度 <span class="tnum">82.5%</span></p>
-      </div>
-      <div class="kpi">
-        <p class="kpi-label">距进阶指标</p>
-        <p class="kpi-value tnum" id="vGapA">¥34,000</p>
-        <p class="kpi-sub" id="vGapASub">进阶进度 <span class="tnum">66.0%</span></p>
-      </div>
-    </div>
+  <!-- ================= 查看面板 ================= -->
+  <div class="stack panel" id="panel-view" role="tabpanel" aria-labelledby="tab-view">
 
-    <!-- 三指标达成 -->
+    <!-- 经理 / 总监视角：多人业绩总览 -->
     <article class="card">
       <div class="card-header">
         <div>
-          <h3 class="card-title">三指标达成</h3>
-          <p class="card-description">基础 · 目标 · 进阶 — 目标值来自「指标设置」页签</p>
+          <h3 class="card-title">多人业绩总览</h3>
+          <p class="card-description" id="teamDesc">经理视角：查看本部门（客服一部）客服的业绩达成情况</p>
         </div>
-        <span class="badge" data-variant="outline">2026-10</span>
+        <span class="badge" data-variant="outline" id="teamMonthBadge">2026-10</span>
       </div>
-      <div class="card-content">
-        <div class="metric-cards" id="metricCards"><!-- JS 渲染 --></div>
+      <div class="card-content table-card">
+        <div class="table-container">
+          <table class="table">
+            <caption class="table-caption" id="teamCaption">2026-10 · 客服一部 · 共 4 人 · 演示数据</caption>
+            <thead>
+              <tr>
+                <th class="table-head" scope="col">客服</th>
+                <th class="table-head" scope="col">已设置业绩</th>
+                <th class="table-head cell-right" scope="col">当前已完成</th>
+                <th class="table-head" scope="col">已达成档位</th>
+                <th class="table-head" scope="col">距下一档差额</th>
+              </tr>
+            </thead>
+            <tbody id="teamBody"><!-- JS 渲染 --></tbody>
+          </table>
+        </div>
       </div>
       <div class="card-footer">
-        <span id="metricFoot">基础 / 目标 / 进阶 · 当前完成 ¥66,000</span>
+        <span class="muted" id="teamFoot">档位规则：未达基础 → 已达基础 → 已达目标 → 全部达成</span>
         <span class="muted">演示数据 · 数值均为示例</span>
       </div>
     </article>
 
   </div><!-- /查看面板 -->
 
-  <!-- ================= 指标设置面板 ================= -->
-  <div class="stack panel" id="panel-setup" role="tabpanel" hidden>
+  <!-- ================= 指标设置面板（列表式分配） ================= -->
+  <div class="stack panel" id="panel-setup" role="tabpanel" aria-labelledby="tab-setup" hidden>
 
-    <article class="card">
+    <article class="card setup-card">
       <div class="card-header">
-        <div>
-          <h3 class="card-title">指标目标值 <span class="badge" data-variant="secondary" style="margin-left:.35rem;">输入</span></h3>
-          <p class="card-description">分别输入三种指标的金额，保存后「查看」页签即时联动</p>
+        <div class="card-head-text">
+          <h3 class="card-title">业绩任务分配 <span class="badge" data-variant="secondary" style="margin-left:.35rem;">列表</span></h3>
+          <p class="card-description" id="setupDesc">经理视角：仅可分配本部门（客服一部）客服的每月业绩</p>
         </div>
-        <div class="head-actions">
-          <button class="btn" data-variant="ghost" data-size="sm" type="button" id="metricResetBtn">重置</button>
-        </div>
-      </div>
-      <div class="card-content">
-        <div class="mini-row">
-          <div class="mini-left">
-            <span class="badge" data-variant="secondary">基础</span>
-            <span class="mini-name">基础指标</span>
-            <span class="mini-hint">达成基础线</span>
+        <div class="setup-actions">
+          <div class="toolbar-item">
+            <label class="label" for="deptSel">部门</label>
+            <select class="select select-dept" id="deptSel" aria-label="部门筛选">
+              <option value="全部部门">全部部门</option>
+              <option value="客服一部" selected>客服一部</option>
+              <option value="客服二部">客服二部</option>
+              <option value="客服三部">客服三部</option>
+            </select>
           </div>
-          <div class="head-actions">
-            <span class="muted" style="font-size:.75rem;">¥</span>
-            <input class="field-input num" data-metric="base" value="60,000" inputmode="numeric" aria-label="基础指标目标值">
-          </div>
-        </div>
-        <div class="mini-row">
-          <div class="mini-left">
-            <span class="badge" data-variant="default">目标</span>
-            <span class="mini-name">目标指标</span>
-            <span class="mini-hint">本月目标业绩</span>
-          </div>
-          <div class="head-actions">
-            <span class="muted" style="font-size:.75rem;">¥</span>
-            <input class="field-input num" data-metric="target" value="80,000" inputmode="numeric" aria-label="目标指标目标值">
-          </div>
-        </div>
-        <div class="mini-row">
-          <div class="mini-left">
-            <span class="badge" data-variant="warning">进阶</span>
-            <span class="mini-name">进阶指标</span>
-            <span class="mini-hint">冲刺进阶档</span>
-          </div>
-          <div class="head-actions">
-            <span class="muted" style="font-size:.75rem;">¥</span>
-            <input class="field-input num" data-metric="advance" value="100,000" inputmode="numeric" aria-label="进阶指标目标值">
-          </div>
+          <button class="btn" data-variant="ghost" data-size="sm" type="button" id="resetBtn">重置</button>
         </div>
       </div>
+
+      <div class="card-content table-card">
+        <div class="table-container">
+          <table class="table" id="assignTable">
+            <caption class="table-caption" id="assignCaption">2026-10 · 客服一部 · 共 4 人 · 演示数据</caption>
+            <thead>
+              <tr>
+                <th class="table-head" scope="col">客服</th>
+                <th class="table-head" scope="col">部门</th>
+                <th class="table-head" scope="col">基础</th>
+                <th class="table-head" scope="col">目标</th>
+                <th class="table-head" scope="col">进阶</th>
+              </tr>
+            </thead>
+            <tbody id="assignBody"><!-- JS 渲染 --></tbody>
+            <tfoot id="assignFoot"><!-- JS 渲染 --></tfoot>
+          </table>
+        </div>
+      </div>
+
       <div class="card-footer">
-        <span id="metricSetupFoot">当前设置 · 基础 <b class="tnum" style="color:var(--foreground);">¥60,000</b> · 目标 <b class="tnum" style="color:var(--foreground);">¥80,000</b> · 进阶 <b class="tnum" style="color:var(--foreground);">¥100,000</b></span>
-        <button class="btn" data-variant="default" data-size="sm" type="button" id="metricSaveBtn">保存设置</button>
+        <span class="muted" id="setupFoot">当前未保存的修改将实时记入演示数据</span>
+        <button class="btn" data-variant="default" data-size="sm" type="button" id="saveBtn">保存分配</button>
       </div>
     </article>
 
@@ -603,7 +594,7 @@ progress.progress[data-tone="muted"]::-moz-progress-bar { background: var(--mute
 <script>
 /* ===== 演示交互（线框稿：无后端，全部 mock） ===== */
 
-/* SRC: components/toast/component-skill.md — popover="manual" + 堆叠偏移 */
+/* -- Toast（自建 DOM 注入，零依赖，不用 Popover API） ---------- */
 var toastCount = 0;
 function toast(title, desc) {
   var el = document.createElement('div');
@@ -611,173 +602,355 @@ function toast(title, desc) {
   el.setAttribute('role', 'status');
   el.setAttribute('aria-live', 'polite');
   el.setAttribute('aria-atomic', 'true');
-  el.setAttribute('popover', 'manual');
   el.style.right = '1.25rem';
-  el.style.bottom = 'calc(1.25rem + ' + (toastCount * 60) + 'px)';
+  el.style.bottom = (1.25 + toastCount * 5) + 'rem';
+  el.style.opacity = '1';
+  el.style.transform = 'none';
   el.innerHTML =
-    '<svg class="toast-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>' +
-    '<div><p class="toast-title"></p>' + (desc ? '<p class="toast-description"></p>' : '') + '</div>';
+    '<div class="toast-content">' +
+      '<svg class="toast-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>' +
+      '<div class="toast-text"><p class="toast-title"></p>' + (desc ? '<p class="toast-description"></p>' : '') + '</div>' +
+      '<button class="toast-close" type="button" aria-label="关闭" data-toast-close><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button>' +
+    '</div>';
   el.querySelector('.toast-title').textContent = title;
   if (desc) el.querySelector('.toast-description').textContent = desc;
   document.body.appendChild(el);
-  el.show();
   toastCount++;
-  setTimeout(function () {
-    el.hide();
-    el.remove();
-    toastCount = Math.max(0, toastCount - 1);
-  }, 2600);
+  function dismiss() {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(0.5rem)';
+    setTimeout(function () {
+      if (el.parentNode) el.parentNode.removeChild(el);
+      toastCount = Math.max(0, toastCount - 1);
+    }, 200);
+  }
+  el.querySelector('[data-toast-close]').addEventListener('click', dismiss);
+  setTimeout(dismiss, 3200);
 }
 
-/* 全局演示按钮委托：[data-demo] */
+/* -- 全局演示按钮委托：[data-demo] ----------------------------- */
 document.addEventListener('click', function (e) {
   var t = e.target.closest('[data-demo]');
   if (t) toast(t.dataset.demo);
 });
 
-/* SRC: components/dropdown/component-skill.md — Popover API 用户菜单 */
+/* -- 用户菜单（JS 显隐，不用 Popover API） ---------------------- */
 (function () {
   var btn = document.getElementById('userBtn');
   var menu = document.getElementById('userMenu');
-  btn.addEventListener('click', function () {
-    if (!menu.matches(':popover-open')) {
-      var r = btn.getBoundingClientRect();
-      menu.style.top = (r.bottom + 6) + 'px';
-      menu.style.left = 'auto';
-      menu.style.right = Math.max(8, window.innerWidth - r.right) + 'px';
-      menu.show();
-    } else {
-      menu.hide();
-    }
+  function close() {
+    menu.style.display = 'none';
+    btn.setAttribute('aria-expanded', 'false');
+  }
+  btn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    if (menu.style.display === 'block') { close(); return; }
+    var r = btn.getBoundingClientRect();
+    menu.style.display = 'block';
+    menu.style.opacity = '1';
+    menu.style.transform = 'scale(1) translateY(0)';
+    menu.style.top = (r.bottom + 6) + 'px';
+    menu.style.left = 'auto';
+    menu.style.right = Math.max(8, window.innerWidth - r.right) + 'px';
+    btn.setAttribute('aria-expanded', 'true');
   });
-  menu.addEventListener('toggle', function () {
-    btn.setAttribute('aria-expanded', menu.matches(':popover-open') ? 'true' : 'false');
+  document.addEventListener('click', function (e) {
+    if (menu.style.display === 'block' && !menu.contains(e.target)) close();
   });
 })();
 
-/* 深浅色切换（主题含完整 .dark 令牌） */
+/* -- 深浅色切换 ------------------------------------------------ */
 document.getElementById('themeBtn').addEventListener('click', function () {
   var dark = document.documentElement.classList.toggle('dark');
   toast(dark ? '已切换深色模式' : '已切换浅色模式');
 });
-/* ===== 演示数据（数值均为示例，非真实数据） ===== */
-/* 三种业绩指标（目标值可在「指标设置」输入，部门总目标在另一处设置，此处不管） */
-var METRICS = [
-  { key: 'base',    name: '基础指标', tag: '基础', variant: 'secondary', value: 60000 },
-  { key: 'target',  name: '目标指标', tag: '目标', variant: 'default',   value: 80000 },
-  { key: 'advance', name: '进阶指标', tag: '进阶', variant: 'warning',   value: 100000 }
-];
-var DONE = 66000;              /* 当前已完成业绩（演示数据） */
-var METRICS_SNAPSHOT = JSON.parse(JSON.stringify(METRICS));
 
-function metricByKey(k) { for (var i = 0; i < METRICS.length; i++) { if (METRICS[i].key === k) return METRICS[i]; } return null; }
+/* ===== 演示数据 ===== */
+var DEPTS = ['客服一部', '客服二部', '客服三部'];
+var AGENTS = [
+  { id: 'luoyu',      name: '罗屿',   dept: '客服一部', self: true  },
+  { id: 'chenxi',     name: '陈曦',   dept: '客服一部', self: false },
+  { id: 'linran',     name: '林然',   dept: '客服一部', self: false },
+  { id: 'suwan',      name: '苏婉',   dept: '客服一部', self: false },
+  { id: 'wangyiming', name: '王一鸣', dept: '客服二部', self: false },
+  { id: 'zhaoqian',   name: '赵倩',   dept: '客服二部', self: false },
+  { id: 'liuchang',   name: '刘畅',   dept: '客服二部', self: false },
+  { id: 'zhouting',   name: '周婷',   dept: '客服三部', self: false },
+  { id: 'zhenghao',   name: '郑浩',   dept: '客服三部', self: false },
+  { id: 'sunyue',     name: '孙悦',   dept: '客服三部', self: false }
+];
+/* 每月：agents = 各客服三档指标与当月已完成业绩 */
+var DATA = {
+  '2026-09': {
+    agents: {
+      luoyu:      { base: 55000, target: 75000,  advance: 95000,  done: 58000  },
+      chenxi:     { base: 50000, target: 68000,  advance: 86000,  done: 34000  },
+      linran:     { base: 48000, target: 65000,  advance: 82000,  done: 70000  },
+      suwan:      { base: 45000, target: 62000,  advance: 80000,  done: 88000  },
+      wangyiming: { base: 52000, target: 70000,  advance: 88000,  done: 46000  },
+      zhaoqian:   { base: 47000, target: 64000,  advance: 82000,  done: 65000  },
+      liuchang:   { base: 44000, target: 60000,  advance: 76000,  done: 62000  },
+      zhouting:   { base: 50000, target: 67000,  advance: 84000,  done: 40000  },
+      zhenghao:   { base: 46000, target: 62000,  advance: 78000,  done: 93000  },
+      sunyue:     { base: 43000, target: 58000,  advance: 73000,  done: 55000  }
+    }
+  },
+  '2026-10': {
+    agents: {
+      luoyu:      { base: 60000, target: 80000,  advance: 100000, done: 66000  },
+      chenxi:     { base: 55000, target: 75000,  advance: 95000,  done: 42000  },
+      linran:     { base: 52000, target: 70000,  advance: 88000,  done: 78000  },
+      suwan:      { base: 50000, target: 68000,  advance: 86000,  done: 92000  },
+      wangyiming: { base: 58000, target: 78000,  advance: 98000,  done: 81000  },
+      zhaoqian:   { base: 53000, target: 72000,  advance: 90000,  done: 53000  },
+      liuchang:   { base: 49000, target: 66000,  advance: 84000,  done: 35000  },
+      zhouting:   { base: 55000, target: 74000,  advance: 92000,  done: 102000 },
+      zhenghao:   { base: 51000, target: 69000,  advance: 87000,  done: 69000  },
+      sunyue:     { base: 48000, target: 64000,  advance: 80000,  done: 60000  }
+    }
+  },
+  '2026-11': {
+    agents: {
+      luoyu:      { base: 65000, target: 85000,  advance: 105000, done: 72000  },
+      chenxi:     { base: 60000, target: 80000,  advance: 100000, done: 108000 },
+      linran:     { base: 56000, target: 75000,  advance: 94000,  done: 74000  },
+      suwan:      { base: 54000, target: 72000,  advance: 90000,  done: 89000  },
+      wangyiming: { base: 62000, target: 82000,  advance: 102000, done: 58000  },
+      zhaoqian:   { base: 57000, target: 76000,  advance: 95000,  done: 98000  },
+      liuchang:   { base: 53000, target: 71000,  advance: 89000,  done: 70000  },
+      zhouting:   { base: 59000, target: 79000,  advance: 99000,  done: 62000  },
+      zhenghao:   { base: 55000, target: 73000,  advance: 91000,  done: 75000  },
+      sunyue:     { base: 52000, target: 69000,  advance: 86000,  done: 43000  }
+    }
+  }
+};
+var DATA_SNAPSHOT = JSON.parse(JSON.stringify(DATA));
+
+/* 页面状态：月份 / 演示角色（leader=经理, director=总监）/ 部门筛选 */
+var state = { month: '2026-10', role: 'leader', dept: '客服一部' };
 
 /* ===== 工具 ===== */
 function fmt(n) { n = Number(n) || 0; return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
 function yuan(n) { return '¥' + fmt(n); }
+function wan(n) {
+  n = Number(n) || 0;
+  var s = (n / 10000).toFixed(1);
+  if (s.slice(-2) === '.0') s = s.slice(0, -2);
+  return s + ' 万';
+}
 function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 function parseNum(v) { return parseInt(String(v).replace(/[^\d]/g, ''), 10) || 0; }
-function pctOf(done, target) { return target > 0 ? (done / target * 100) : 0; }
-function statusOf(pct) {
-  if (pct >= 100) return '<span class="badge" data-variant="success">已达成</span>';
-  if (pct >= 60)  return '<span class="badge" data-variant="outline">进行中</span>';
-  if (pct > 0)    return '<span class="badge" data-variant="warning">进行中</span>';
-  return '<span class="badge" data-variant="outline">未开始</span>';
+function roleText(r) {
+  if (r === 'director') return '总监 · 可查看全部部门';
+  return '经理 · 仅本部门';
 }
-
-/* ===== 查看 · 顶部汇总 + 三指标卡 ===== */
-function renderView() {
-  /* —— 顶部数据汇总 —— */
-  var hit = 0;
-  for (var i = 0; i < METRICS.length; i++) if (DONE >= METRICS[i].value) hit++;
-  var mT = metricByKey('target'), mA = metricByKey('advance');
-  var pctT = pctOf(DONE, mT.value), pctA = pctOf(DONE, mA.value);
-  var gapT = Math.max(0, mT.value - DONE), gapA = Math.max(0, mA.value - DONE);
-
-  document.getElementById('vDone').textContent = yuan(DONE);
-  document.getElementById('vHit').textContent = hit + ' / ' + METRICS.length;
-  document.getElementById('vHitSub').innerHTML = hit > 0
-    ? (hit >= METRICS.length ? '<span data-tone="ok">三指标全部达成 ✓</span>' : '<span data-tone="ok">基础指标已达成 ✓</span>')
-    : '尚无达成指标';
-  document.getElementById('vGapT').textContent = gapT > 0 ? yuan(gapT) : '已达成 ✓';
-  document.getElementById('vGapT').style.color = gapT > 0 ? '' : 'color-mix(in oklab, var(--success) 82%, var(--foreground))';
-  document.getElementById('vGapTSub').innerHTML = '目标进度 <span class="tnum">' + pctT.toFixed(1) + '%</span>';
-  document.getElementById('vGapA').textContent = gapA > 0 ? yuan(gapA) : '已达成 ✓';
-  document.getElementById('vGapA').style.color = gapA > 0 ? '' : 'color-mix(in oklab, var(--success) 82%, var(--foreground))';
-  document.getElementById('vGapASub').innerHTML = '进阶进度 <span class="tnum">' + pctA.toFixed(1) + '%</span>';
-
-  /* —— 三指标卡 —— */
-  var html = '';
-  for (var j = 0; j < METRICS.length; j++) {
-    var m = METRICS[j];
-    var pct = pctOf(DONE, m.value);
-    var done = pct >= 100;
-    html +=
-      '<div class="metric-card' + (done ? ' is-done' : '') + '">' +
-        '<div class="metric-top">' +
-          '<span class="badge" data-variant="' + m.variant + '">' + m.tag + '</span>' +
-          statusOf(pct) +
-        '</div>' +
-        '<div class="metric-name">' + esc(m.name) + '</div>' +
-        '<div class="metric-target">' + yuan(m.value) + '<small>目标</small></div>' +
-        '<progress class="progress" ' + (done ? 'data-tone="success"' : '') + ' max="' + m.value + '" value="' + Math.min(DONE, m.value) + '" aria-label="' + esc(m.name) + '达成率">' + pct.toFixed(0) + '%</progress>' +
-        '<div class="metric-now"><span>当前完成</span><b>' + yuan(DONE) + '</b></div>' +
-        '<div class="metric-pct">' + pct.toFixed(1) + '%' + (done ? ' · 已达成' : ' · 还差 ' + yuan(m.value - DONE)) + '</div>' +
-      '</div>';
+function visibleAgents() {
+  if (state.role === 'director') {
+    if (state.dept === '全部部门') return AGENTS;
+    return AGENTS.filter(function (a) { return a.dept === state.dept; });
   }
-  document.getElementById('metricCards').innerHTML = html;
-  document.getElementById('metricFoot').textContent =
-    '基础 ' + yuan(metricByKey('base').value) + ' · 目标 ' + yuan(mT.value) + ' · 进阶 ' + yuan(mA.value) +
-    ' · 当前完成 ' + yuan(DONE);
-
-  /* —— 设置页脚同步 —— */
-  document.getElementById('metricSetupFoot').innerHTML =
-    '当前设置 · 基础 <b class="tnum" style="color:var(--foreground);">' + yuan(metricByKey('base').value) +
-    '</b> · 目标 <b class="tnum" style="color:var(--foreground);">' + yuan(mT.value) +
-    '</b> · 进阶 <b class="tnum" style="color:var(--foreground);">' + yuan(mA.value) + '</b>';
+  return AGENTS.filter(function (a) { return a.dept === '客服一部'; });
+}
+function deptLabel() {
+  if (state.role === 'director') return state.dept;
+  return '客服一部';
 }
 
-/* ===== 页签切换（查看默认 / 指标设置） ===== */
+/* ===== 档位判定与徽标映射（未达基础 destructive / 已达基础 success / 已达目标 default / 全部达成 warning） =====
+   未达基础 → destructive（红，警示）
+   已达基础 → success（绿，达成基础）
+   已达目标 → default（深色高对比）
+   全部达成 → warning（橙，突出完成）
+   ==================================================== */
+function tierInfo(m, done) {
+  if (done < m.base) return { label: '未达基础', variant: 'destructive', icon: false };
+  if (done < m.target) return { label: '已达基础', variant: 'success', icon: false };
+  if (done < m.advance) return { label: '已达目标', variant: 'default', icon: false };
+  return { label: '全部达成', variant: 'warning', icon: true };
+}
+function gapOf(m, done) {
+  if (done < m.base) return '距基础档还差 ' + wan(m.base - done);
+  if (done < m.target) return '距目标档还差 ' + wan(m.target - done);
+  if (done < m.advance) return '距进阶档还差 ' + wan(m.advance - done);
+  return '已超进阶 ' + wan(done - m.advance);
+}
+
+/* ===== 查看页渲染（多人业绩总览） ===== */
+function renderView() {
+  var d = DATA[state.month];
+  var list = visibleAgents();
+  var html = '', i;
+  for (i = 0; i < list.length; i++) {
+    var a = list[i];
+    var m = d.agents[a.id];
+    var done = m.done || 0;
+    var tier = tierInfo(m, done);
+    html +=
+      '<tr class="table-row">' +
+        '<td class="table-cell">' +
+          '<span class="cell-name">' + esc(a.name) + '</span>' +
+          (a.self ? '<span class="badge self-badge" data-variant="outline">我</span>' : '') +
+          '<div class="cell-sub">' + esc(a.dept) + '</div>' +
+        '</td>' +
+        '<td class="table-cell">' +
+          '<div class="cell-sub">基础 ' + yuan(m.base) + '</div>' +
+          '<div class="cell-sub">目标 ' + yuan(m.target) + '</div>' +
+          '<div class="cell-sub">进阶 ' + yuan(m.advance) + '</div>' +
+        '</td>' +
+        '<td class="table-cell cell-right tnum">' + yuan(done) + '</td>' +
+        '<td class="table-cell"><span class="badge team-tier" data-variant="' + tier.variant + '">' +
+          (tier.icon ? '<svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px;"><path d="M20 6 9 17l-5-5"/></svg>' : '') +
+          tier.label +
+        '</span></td>' +
+        '<td class="table-cell muted tnum">' + gapOf(m, done) + '</td>' +
+      '</tr>';
+  }
+  document.getElementById('teamBody').innerHTML = html;
+  document.getElementById('teamDesc').textContent = state.role === 'director'
+    ? '总监视角：查看全部部门客服的业绩达成情况'
+    : '经理视角：查看本部门（客服一部）客服的业绩达成情况';
+  document.getElementById('teamMonthBadge').textContent = state.month;
+  document.getElementById('teamCaption').textContent =
+    state.month + ' · ' + deptLabel() + ' · 共 ' + list.length + ' 人 · 演示数据';
+  document.getElementById('teamFoot').textContent =
+    state.month + ' · ' + deptLabel() + ' 共 ' + list.length + ' 人 · 档位规则：未达基础 → 已达基础 → 已达目标 → 全部达成';
+}
+
+/* ===== 设置页：表格渲染 ===== */
+function updateFoot() {
+  var list = visibleAgents();
+  var sb = 0, st = 0, sa = 0, i;
+  for (i = 0; i < list.length; i++) {
+    var m = DATA[state.month].agents[list[i].id];
+    sb += m.base; st += m.target; sa += m.advance;
+  }
+  var foot = document.getElementById('assignFoot');
+  foot.innerHTML =
+    '<tr class="table-row">' +
+      '<td class="table-cell">合计 · ' + list.length + ' 人</td>' +
+      '<td class="table-cell muted">' + esc(deptLabel()) + '</td>' +
+      '<td class="table-cell tnum">' + yuan(sb) + '</td>' +
+      '<td class="table-cell tnum">' + yuan(st) + '</td>' +
+      '<td class="table-cell tnum">' + yuan(sa) + '</td>' +
+    '</tr>';
+  document.getElementById('assignCaption').textContent =
+    state.month + ' · ' + deptLabel() + ' · 共 ' + list.length + ' 人 · 演示数据';
+  document.getElementById('setupFoot').textContent =
+    state.month + ' · ' + deptLabel() + ' 共 ' + list.length + ' 人 · 基础合计 ' + yuan(sb) +
+    ' · 目标合计 ' + yuan(st) + ' · 进阶合计 ' + yuan(sa);
+}
+
+function renderSetup() {
+  var list = visibleAgents();
+  var html = '', i;
+  for (i = 0; i < list.length; i++) {
+    var a = list[i];
+    var m = DATA[state.month].agents[a.id];
+    html +=
+      '<tr class="table-row">' +
+        '<td class="table-cell"><span class="cell-name">' + esc(a.name) + '</span>' +
+          (a.self ? '<span class="badge self-badge" data-variant="outline">我</span>' : '') +
+        '</td>' +
+        '<td class="table-cell muted">' + esc(a.dept) + '</td>' +
+        '<td class="table-cell"><input class="input amount-input" data-size="sm" data-agent="' + a.id + '" data-metric="base" value="' + fmt(m.base) + '" inputmode="numeric" aria-label="' + esc(a.name) + ' 基础指标"></td>' +
+        '<td class="table-cell"><input class="input amount-input" data-size="sm" data-agent="' + a.id + '" data-metric="target" value="' + fmt(m.target) + '" inputmode="numeric" aria-label="' + esc(a.name) + ' 目标指标"></td>' +
+        '<td class="table-cell"><input class="input amount-input" data-size="sm" data-agent="' + a.id + '" data-metric="advance" value="' + fmt(m.advance) + '" inputmode="numeric" aria-label="' + esc(a.name) + ' 进阶指标"></td>' +
+      '</tr>';
+  }
+  document.getElementById('assignBody').innerHTML = html;
+  updateFoot();
+}
+
+function updateHeaderDesc() {
+  var desc = document.getElementById('setupDesc');
+  if (state.role === 'director') {
+    desc.textContent = '总监视角：可查看并逐人设置全部部门的业绩分配';
+  } else {
+    desc.textContent = '经理视角：仅可分配本部门（客服一部）客服的每月业绩';
+  }
+}
+
+/* ===== 页签切换 ===== */
 document.querySelectorAll('.page-head .tab-trigger').forEach(function (btn) {
   btn.addEventListener('click', function () {
-    document.querySelectorAll('.page-head .tab-trigger').forEach(function (b) { b.setAttribute('aria-selected', String(b === btn)); });
+    document.querySelectorAll('.page-head .tab-trigger').forEach(function (b) {
+      b.setAttribute('aria-selected', String(b === btn));
+      b.setAttribute('tabindex', b === btn ? '0' : '-1');
+    });
     document.getElementById('panel-view').hidden = btn.dataset.panel !== 'view';
     document.getElementById('panel-setup').hidden = btn.dataset.panel !== 'setup';
   });
 });
 
-/* ===== 指标设置交互 ===== */
-document.getElementById('panel-setup').addEventListener('input', function (e) {
-  var el = e.target.closest('[data-metric]');
-  if (!el) return;
-  var m = metricByKey(el.getAttribute('data-metric'));
-  if (!m) return;
-  m.value = parseNum(el.value);
-  renderView();               /* 输入即联动查看页（输入焦点在设置页，安全） */
-});
-document.getElementById('panel-setup').addEventListener('change', function (e) {
-  var el = e.target.closest('[data-metric]');
-  if (el) el.value = fmt(parseNum(el.value));
-});
-document.getElementById('metricSaveBtn').addEventListener('click', function () {
-  toast('指标设置已保存',
-    '基础 ' + yuan(metricByKey('base').value) + ' · 目标 ' + yuan(metricByKey('target').value) +
-    ' · 进阶 ' + yuan(metricByKey('advance').value));
-});
-document.getElementById('metricResetBtn').addEventListener('click', function () {
-  METRICS = JSON.parse(JSON.stringify(METRICS_SNAPSHOT));
-  document.querySelectorAll('[data-metric]').forEach(function (el) {
-    var m = metricByKey(el.getAttribute('data-metric'));
-    if (m) el.value = fmt(m.value);
-  });
+/* ===== 角色 / 月份 / 部门 ===== */
+document.getElementById('roleSel').addEventListener('change', function () {
+  state.role = this.value;
+  var ds = document.getElementById('deptSel');
+  if (state.role === 'director') {
+    state.dept = '全部部门';
+    ds.value = '全部部门';
+    ds.disabled = false;
+  } else {
+    state.dept = '客服一部';
+    ds.value = '客服一部';
+    ds.disabled = true;
+  }
+  updateHeaderDesc();
   renderView();
-  toast('已重置为演示初始值');
+  renderSetup();
+  toast('已切换演示角色', roleText(state.role));
+});
+
+document.getElementById('monthSel').addEventListener('change', function () {
+  state.month = this.value;
+  renderView();
+  renderSetup();
+  toast('已切换月份', state.month);
+});
+
+document.getElementById('deptSel').addEventListener('change', function () {
+  state.dept = this.value;
+  renderView();
+  renderSetup();
+  toast('已切换部门', state.dept);
+});
+
+/* ===== 表格输入（实时写入 + 联动查看页） ===== */
+document.getElementById('assignBody').addEventListener('input', function (e) {
+  var inp = e.target.closest('input[data-agent]');
+  if (!inp) return;
+  var row = DATA[state.month].agents[inp.getAttribute('data-agent')];
+  if (!row) return;
+  row[inp.getAttribute('data-metric')] = parseNum(inp.value);
+  renderView();
+  updateFoot();
+});
+document.getElementById('assignBody').addEventListener('change', function (e) {
+  var inp = e.target.closest('input[data-agent]');
+  if (inp) inp.value = fmt(parseNum(inp.value));
+});
+
+/* ===== 保存 / 重置 ===== */
+document.getElementById('saveBtn').addEventListener('click', function () {
+  var list = visibleAgents();
+  toast('业绩分配已保存', state.month + ' · ' + deptLabel() + ' · 共 ' + list.length + ' 人');
+});
+document.getElementById('resetBtn').addEventListener('click', function () {
+  DATA = JSON.parse(JSON.stringify(DATA_SNAPSHOT));
+  renderView();
+  renderSetup();
+  toast('已重置为初始值', state.month);
 });
 
 /* ===== 初始化 ===== */
 (function init() {
+  var ds = document.getElementById('deptSel');
+  state.dept = '客服一部';
+  ds.value = '客服一部';
+  ds.disabled = true; /* 初始为经理视角 */
+  updateHeaderDesc();
   renderView();
-  /* 深链：#setup 直接打开指标设置页签 */
+  renderSetup();
   if (location.hash === '#setup') document.querySelector('.page-head .tab-trigger[data-panel="setup"]').click();
 })();
 </script>
