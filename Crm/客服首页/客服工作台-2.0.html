@@ -453,6 +453,25 @@ progress.progress[data-tone="muted"]::-moz-progress-bar { background: var(--mute
 .perf-tick { position: absolute; top: -1.4rem; transform: translateX(-50%); font-size: .6875rem; color: var(--muted-foreground); white-space: nowrap; text-align: center; }
 .perf-tick i { position: absolute; left: 50%; top: 1.3rem; width: 1px; height: .5rem; background: color-mix(in oklab, var(--muted-foreground) 70%, var(--card)); }
 .perf-tick.done { color: color-mix(in oklab, var(--success) 80%, var(--foreground)); font-weight: 600; }
+.perf-tick.hl { color: var(--primary); font-weight: 700; }
+.perf-tick.hl i { background: var(--primary); width: 2px; height: .75rem; top: 1.45rem; }
+.perf-target-marker {
+  position: absolute; top: 50%; transform: translate(-50%, -50%);
+  width: 14px; height: 14px; box-sizing: border-box;
+  border: 2.5px solid var(--primary); background: var(--card);
+  border-radius: 999px; box-shadow: var(--shadow-md); z-index: 1;
+}
+.perf-ticks-below { position: relative; height: 0; }
+.perf-tick-below { position: absolute; bottom: -1.4rem; transform: translateX(-50%); font-size: .6875rem; color: var(--muted-foreground); white-space: nowrap; text-align: center; }
+.perf-tick-below i { position: absolute; left: 50%; bottom: 1.3rem; width: 1px; height: .5rem; background: color-mix(in oklab, var(--muted-foreground) 70%, var(--card)); }
+.perf-tick-below.hl { color: var(--success); font-weight: 700; }
+.perf-tick-below.hl i { background: var(--success); width: 2px; height: .75rem; bottom: 1.35rem; }
+.perf-advance-marker {
+  position: absolute; top: 50%; left: 100%;
+  width: 12px; height: 12px; transform: translate(-50%, -50%);
+  border: 2.5px solid var(--success); background: var(--card);
+  border-radius: 999px; box-shadow: var(--shadow-md); z-index: 1;
+}
 .perf-dot {
   position: absolute; top: 50%; left: 59.4%;
   width: 12px; height: 12px; transform: translate(-50%, -50%);
@@ -716,19 +735,21 @@ progress.progress[data-tone="muted"]::-moz-progress-bar { background: var(--mute
               <p class="perf-now-val">59.4<small>%</small></p>
             </div>
           </div>
-          <!-- 主进度条 + 档位刻度 -->
+          <!-- 主进度条 + 档位刻度（目标上/进阶下） -->
           <div class="perf-track">
             <div class="perf-ticks" aria-hidden="true">
-              <span class="perf-tick" style="left:50%;">目标 ¥12,000<i></i></span>
-              <span class="perf-tick" style="left:100%;transform:translateX(-90%);">进阶 ¥16,000<i style="left:90%;"></i></span>
+              <span class="perf-tick hl" style="left:75%;">还差 ¥2,500 · 目标 ¥12,000<i></i></span>
             </div>
             <progress class="progress" value="9500" max="16000" aria-label="本月业绩进度：9,500 / 16,000">59.4%</progress>
+            <span class="perf-target-marker" style="left:75%;"></span>
             <span class="perf-dot" style="top:4px;" title="当前 ¥9,500"></span>
+            <div class="perf-ticks-below" aria-hidden="true">
+              <span class="perf-tick-below hl" style="left:100%;transform:translateX(-90%);">还差 ¥6,500 · 进阶 ¥16,000<i style="left:90%;"></i></span>
+            </div>
+            <span class="perf-advance-marker" style="left:100%;"></span>
           </div>
           <div class="perf-scale">
             <span>¥0</span>
-            <span class="tnum">当前 ¥9,500 · 距目标档 ¥2,500</span>
-            <span>距进阶 ¥6,500</span>
           </div>
           <!-- 三档明细 -->
           <div class="tiers">
