@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -559,181 +559,7 @@ tr.rv-weekend td { background: color-mix(in oklab, var(--success) 8%, var(--card
     <!-- ==================== 左列 ==================== -->
     <div class="col">
 
-      <!-- ---------- ① 客户库信息 ---------- -->
-      <section class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">客户库信息</div>
-          </div>
-        </div>
-        <div class="card-content">
-          <div class="profile">
-            <span class="avatar"><span>罗</span><img src="https://api.dicebear.com/9.x/pixel-art/svg?seed=Milo&amp;backgroundColor=3b82f6" alt="罗屿头像" onerror="this.remove();"></span>
-            <div class="profile-meta">
-              <div class="profile-name">罗屿</div>
-              <div class="profile-sub">北京 · 销售一部 · 销售顾问</div>
-              <div class="divider-label" style="margin:.625rem 0 0;">客户分布 · 共 720 家</div>
-              <div id="gradeChips"></div>
-            </div>
-          </div>
-          <div class="cap-row" style="margin-top:.9rem;">
-            <span class="cap-label">库容量</span>
-            <span class="cap-val">720 <small>/ 800</small></span>
-            <span class="cap-pct">90%</span>
-          </div>
-          <progress class="progress" value="720" max="800" aria-label="库容量使用率">90%</progress>
-        </div>
-      </section>
-
-      <!-- ---------- ② 外呼数据 ---------- -->
-      <section class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">外呼数据</div>
-          </div>
-        </div>
-        <div class="card-content">
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;">
-            <div class="statistic">
-              <p class="statistic-title">外呼</p>
-              <p class="statistic-value">86<small>次</small></p>
-              <p class="statistic-description"><span class="statistic-trend" data-trend="up">▲ 今日累计</span></p>
-            </div>
-            <div class="statistic">
-              <p class="statistic-title">接通</p>
-              <p class="statistic-value">32<small>次</small></p>
-              <p class="statistic-description"><span class="statistic-trend" data-trend="down">▼ 接通率 37.2%</span></p>
-            </div>
-            <div class="statistic">
-              <p class="statistic-title">通话时长</p>
-              <p class="statistic-value">2<small>时</small>36<small>分</small></p>
-              <p class="statistic-description"><span class="statistic-trend" data-trend="up">▲ 今日累计</span></p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ---------- ② 回访日程 ---------- -->
-      <section class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">回访日程</div>
-            <div class="card-description" id="rvDesc">回访日程 · 库中联系人 · 按客户等级统计日内回访安排（近两周）</div>
-          </div>
-          <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;justify-content:flex-end;">
-            <div class="tab-list" id="rvTabs" role="tablist"></div>
-            <div class="tab-list" id="rvWeekNav" style="gap:.25rem;">
-              <button class="tab-trigger" id="rvPrev" type="button" aria-label="上一周" onclick="rvWeek(-1)">上一周</button>
-              <span style="font-size:.75rem;font-variant-numeric:tabular-nums;color:var(--muted-foreground);padding:0 .25rem;" id="rvWeekLabel">10-19 ~ 10-25</span>
-              <button class="tab-trigger" id="rvNext" type="button" aria-label="下一周" onclick="rvWeek(1)">下一周</button>
-            </div>
-          </div>
-        </div>
-        <div class="card-content">
-          <div style="overflow-x:auto;">
-            <table class="table">
-              <thead id="rvHead"></thead>
-              <tbody id="rvBody"></tbody>
-              <tfoot id="rvFoot"></tfoot>
-            </table>
-          </div>
-        </div>
-        <div class="card-footer">
-          <span id="rvNote" style="color:var(--muted-foreground);"></span>
-          <button class="btn" data-variant="ghost" data-size="xs" data-demo="导出回访表">导出</button>
-        </div>
-      </section>
-
-      <!-- ---------- ④ 大额成单榜 ---------- -->
-      <section class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">大额成单榜</div>
-            <div class="card-description">近期签约订单 · 金额降序演示数据</div>
-          </div>
-          <button class="btn" data-variant="ghost" data-size="xs" data-demo="查看更多订单">查看更多 →</button>
-        </div>
-        <div class="card-content" style="padding-top:.75rem;">
-          <div class="marquee tall" id="ordersBox">
-            <table class="table">
-              <thead><tr><th>公司名称</th><th>会员级别</th><th>期限</th><th class="num">签约金额</th><th>主营业务</th><th>签单日期</th></tr></thead>
-              <tbody id="ordersBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- ---------- ⑥ 本月考勤 ---------- -->
-      <section class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">本月考勤</div>
-            <div class="card-description">2026年10月</div>
-          </div>
-          <span class="badge" data-variant="success">连续打卡 12 天</span>
-        </div>
-        <div class="card-content">
-          <div class="stat-inline" style="justify-content:space-between;margin-bottom:.375rem;">
-            <span class="stat-label">全勤奖进度 <b class="tnum" style="color:var(--foreground);font-weight:600;">12 / 22 天</b></span>
-            <span class="stat-label">还差 <b class="tnum" style="color:var(--foreground);font-weight:600;">10 天</b></span>
-          </div>
-          <progress class="progress" value="12" max="22" data-tone="warning"></progress>
-          <div class="kpis x3" style="margin-top:.875rem;">
-            <div class="kpi"><div class="kpi-label">迟到</div><div class="kpi-value tnum is-muted">0 次</div></div>
-            <div class="kpi"><div class="kpi-label">早退</div><div class="kpi-value tnum is-muted">0 次</div></div>
-            <div class="kpi"><div class="kpi-label">请假</div><div class="kpi-value tnum">0.5 天</div></div>
-            <div class="kpi"><div class="kpi-label">忘打卡</div><div class="kpi-value tnum is-muted">0 次</div></div>
-            <div class="kpi"><div class="kpi-label">外勤</div><div class="kpi-value tnum is-muted">0 次</div></div>
-            <div class="kpi"><div class="kpi-label">异常待补卡</div><div class="kpi-value tnum is-muted">0 次</div></div>
-          </div>
-        </div>
-        <div class="card-footer">
-          <span>统计至 10-19</span>
-          <button class="btn" data-variant="ghost" data-size="xs" data-demo="考勤明细">考勤明细 →</button>
-        </div>
-      </section>
-
-    </div><!-- /左列 -->
-
-    <!-- ==================== 右列 ==================== -->
-    <div class="col">
-
-      <!-- ---------- ① 今日数据 · 库中数据 ---------- -->
-      <section class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">今日数据 · 库中数据</div>
-          </div>
-        </div>
-        <div class="card-content">
-          <!-- 三组数据卡 -->
-          <div class="kpis x3">
-            <div class="kpi"><div class="kpi-label">今日待联系</div><div class="kpi-value tnum is-muted">0</div><div class="kpi-sub">逾期未联系 <span class="tnum">0</span></div></div>
-            <div class="kpi"><div class="kpi-label">本月总分发</div><div class="kpi-value tnum">51</div><div class="kpi-sub">签单量 0</div></div>
-            <div class="kpi"><div class="kpi-label">本月捡回</div><div class="kpi-value tnum">59</div><div class="kpi-sub">签单量 0</div></div>
-          </div>
-          <!-- 2×2 指标块 -->
-          <div class="metrics" style="margin-top:.9rem;">
-            <div class="metric">
-              <div class="metric-top"><span class="metric-label">今日捡回</span><span class="metric-value tnum">8</span></div>
-              <p class="metric-sub">已联系 8</p>
-            </div>
-            <div class="metric">
-              <div class="metric-top"><span class="metric-label">今日分发</span><span class="metric-value tnum">5</span></div>
-              <p class="metric-sub">已联系 5</p>
-            </div>
-            <div class="metric">
-              <div class="metric-top"><span class="metric-label">转化C级以上客户</span><span class="metric-value tnum is-muted">0</span></div>
-              <p class="metric-sub">B级以上客户 1</p>
-            </div>
-            <div class="metric">
-              <div class="metric-top"><span class="metric-label">系统删除</span><span class="metric-value tnum is-muted">0</span></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ---------- ② 我的业绩排名 ---------- -->
+      <!-- ---------- ⑦ 我的业绩排名 ---------- -->
       <section class="card is-rank">
         <div class="card-header">
           <div>
@@ -752,17 +578,10 @@ tr.rv-weekend td { background: color-mix(in oklab, var(--success) 8%, var(--card
           <div class="divider-label">标杆对比</div>
           <div class="rank-bars" id="rankBars"></div>
 
-          <div class="divider-label">月度目标</div>
-          <div class="stat-inline" style="justify-content:space-between;margin-bottom:.375rem;">
-            <span class="stat-label">月度目标 <b class="tnum" style="color:var(--foreground);font-weight:600;">60,000</b></span>
-            <span class="stat-label">已完成 <b class="tnum" style="color:var(--foreground);font-weight:600;">44.67%</b></span>
-          </div>
-          <progress class="progress" value="44.67" max="100"></progress>
-          <div class="stat-sub" style="margin-top:.375rem;">距目标还差 33,200 · 剩余 10 个工作日</div>
         </div>
       </section>
 
-      <!-- ---------- ③ TOP10 | TOP5 上下堆叠（各占整行） ---------- -->
+      <!-- ---------- ⑧⑨ 新签业绩 TOP10 / 团队完成率 TOP5（堆叠组，整体移动） ---------- -->
       <div class="col-half">
         <section class="card">
           <div class="card-header">
@@ -801,10 +620,202 @@ tr.rv-weekend td { background: color-mix(in oklab, var(--success) 8%, var(--card
         </section>
       </div>
 
+      <!-- ---------- ④ 大额成单榜 ---------- -->
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">大额成单榜</div>
+            <div class="card-description">近期签约订单 · 金额降序演示数据</div>
+          </div>
+          <button class="btn" data-variant="ghost" data-size="xs" data-demo="查看更多订单">查看更多 →</button>
+        </div>
+        <div class="card-content" style="padding-top:.75rem;">
+          <div class="marquee tall" id="ordersBox">
+            <table class="table">
+              <thead><tr><th>公司名称</th><th>会员级别</th><th>期限</th><th class="num">签约金额</th><th>主营业务</th><th>签单日期</th></tr></thead>
+              <tbody id="ordersBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /左列 -->
+
+    <!-- ==================== 右列 ==================== -->
+    <div class="col">
+
+      <!-- ---------- ⑥ 今日数据 · 库中数据 ---------- -->
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">今日数据 · 库中数据</div>
+          </div>
+        </div>
+        <div class="card-content">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;">
+            <div class="statistic">
+              <p class="statistic-title">今日待联系</p>
+              <p class="statistic-value">149</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">今日捡回</p>
+              <p class="statistic-value">1</p>
+              <p class="statistic-description">已联系 1</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">今日分发</p>
+              <p class="statistic-value">4</p>
+              <p class="statistic-description">已联系 4</p>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-top:.9rem;">
+            <!-- 逾期未联系阈值配色：值>5 加 data-tone="warning" 橙 / 值>10 加 data-tone="danger" 红 -->
+            <div class="statistic">
+              <p class="statistic-title">逾期未联系</p>
+              <p class="statistic-value">5</p>
+              <p class="statistic-description">.</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">B级以上客户</p>
+              <p class="statistic-value">61</p>
+            </div>
+            <!-- 占位：第二行最后空出，第三行放三个数据 -->
+            <div aria-hidden="true"></div>
+            <div class="statistic">
+              <p class="statistic-title">本月总分发</p>
+              <p class="statistic-value">61</p>
+              <p class="statistic-description">签单量 0</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">本月捡回</p>
+              <p class="statistic-value">272</p>
+              <p class="statistic-description">签单量 0</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">系统删除</p>
+              <p class="statistic-value">61</p>
+            </div>
+        </div>
+      </section>
+
+      <!-- ---------- ① 客户库信息 ---------- -->
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">客户库信息</div>
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="profile">
+            <span class="avatar"><span>罗</span><img src="https://api.dicebear.com/9.x/pixel-art/svg?seed=Milo&amp;backgroundColor=3b82f6" alt="罗屿头像" onerror="this.remove();"></span>
+            <div class="profile-meta">
+              <div class="profile-name">罗屿</div>
+              <div class="profile-sub">北京 · 销售一部 · 销售顾问</div>
+              <div class="divider-label" style="margin:.625rem 0 0;">客户分布 · 共 720 家</div>
+              <div id="gradeChips"></div>
+            </div>
+          </div>
+          <div class="cap-row" style="margin-top:.9rem;">
+            <span class="cap-label">库容量</span>
+            <span class="cap-val">720 <small>/ 800</small></span>
+            <span class="cap-pct">90%</span>
+          </div>
+          <progress class="progress" value="720" max="800" aria-label="库容量使用率">90%</progress>
+        </div>
+      </section>
+
+      <!-- ---------- ③ 回访日程 ---------- -->
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">回访日程</div>
+            <div class="card-description" id="rvDesc">回访日程 · 库中联系人 · 按客户等级统计日内回访安排（近两周）</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;justify-content:flex-end;">
+            <div class="tab-list" id="rvTabs" role="tablist"></div>
+            <div class="tab-list" id="rvWeekNav" style="gap:.25rem;">
+              <button class="tab-trigger" id="rvPrev" type="button" aria-label="上一周" onclick="rvWeek(-1)">上一周</button>
+              <span style="font-size:.75rem;font-variant-numeric:tabular-nums;color:var(--muted-foreground);padding:0 .25rem;" id="rvWeekLabel">10-19 ~ 10-25</span>
+              <button class="tab-trigger" id="rvNext" type="button" aria-label="下一周" onclick="rvWeek(1)">下一周</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-content">
+          <div style="overflow-x:auto;">
+            <table class="table">
+              <thead id="rvHead"></thead>
+              <tbody id="rvBody"></tbody>
+              <tfoot id="rvFoot"></tfoot>
+            </table>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span id="rvNote" style="color:var(--muted-foreground);"></span>
+          <button class="btn" data-variant="ghost" data-size="xs" data-demo="导出回访表">导出</button>
+        </div>
+      </section>
+
+      <!-- ---------- ② 外呼数据 ---------- -->
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">外呼数据</div>
+          </div>
+        </div>
+        <div class="card-content">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;">
+            <div class="statistic">
+              <p class="statistic-title">外呼</p>
+              <p class="statistic-value">86<small>次</small></p>
+              <p class="statistic-description"><span class="statistic-trend" data-trend="up">▲ 今日累计</span></p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">接通</p>
+              <p class="statistic-value">32<small>次</small></p>
+              <p class="statistic-description"><span class="statistic-trend" data-trend="down">▼ 接通率 37.2%</span></p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">通话时长</p>
+              <p class="statistic-value">2<small>时</small>36<small>分</small></p>
+              <p class="statistic-description"><span class="statistic-trend" data-trend="up">▲ 今日累计</span></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- ⑤ 本月考勤 ---------- -->
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">本月考勤</div>
+            <div class="card-description">2026年10月</div>
+          </div>
+          <span class="badge" data-variant="success">连续打卡 12 天</span>
+        </div>
+        <div class="card-content">
+          <div class="stat-inline" style="justify-content:space-between;margin-bottom:.375rem;">
+            <span class="stat-label">全勤奖进度 <b class="tnum" style="color:var(--foreground);font-weight:600;">12 / 22 天</b></span>
+            <span class="stat-label">还差 <b class="tnum" style="color:var(--foreground);font-weight:600;">10 天</b></span>
+          </div>
+          <progress class="progress" value="12" max="22" data-tone="warning"></progress>
+          <div class="kpis x3" style="margin-top:.875rem;">
+            <div class="kpi"><div class="kpi-label">迟到</div><div class="kpi-value tnum is-muted">0 次</div></div>
+            <div class="kpi"><div class="kpi-label">早退</div><div class="kpi-value tnum is-muted">0 次</div></div>
+            <div class="kpi"><div class="kpi-label">请假</div><div class="kpi-value tnum">0.5 天</div></div>
+            <div class="kpi"><div class="kpi-label">忘打卡</div><div class="kpi-value tnum is-muted">0 次</div></div>
+            <div class="kpi"><div class="kpi-label">外勤</div><div class="kpi-value tnum is-muted">0 次</div></div>
+            <div class="kpi"><div class="kpi-label">异常待补卡</div><div class="kpi-value tnum is-muted">0 次</div></div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span>统计至 10-19</span>
+          <button class="btn" data-variant="ghost" data-size="xs" data-demo="考勤明细">考勤明细 →</button>
+        </div>
+      </section>
     </div><!-- /右列 -->
   </div><!-- /cols -->
 
-  <!-- ---------- ⑧ 消息中心（通栏） ---------- -->
+  <!-- ---------- ⑩ 消息中心（通栏） ---------- -->
   <section class="card full">
     <div class="card-header" style="align-items:center;">
       <div class="card-title">消息中心</div>
@@ -882,7 +893,6 @@ var RANK = {
     { r: 5, name: '吴静',   dept: '北京一部', money: 27500 }
   ],
   next: { r: 5, name: '吴静', dept: '北京一部', money: 27500 },
-  progress: 97.5
 };
 
 /* ===== 新签销售业绩TOP10 ===== */
