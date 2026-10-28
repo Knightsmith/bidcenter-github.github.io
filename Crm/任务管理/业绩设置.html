@@ -349,6 +349,30 @@ button { font: inherit; color: inherit; }
 #copyPrevBtn:hover { opacity: 0.9; }
 #saveBtn { background-color: oklch(0.2050 0 0); color: oklch(0.9850 0 0); }
 #saveBtn:hover { opacity: 0.9; }
+/* 弹窗确认按钮：同样固定深底白字，避免 dark 主题下 default 变体翻转导致文字不可读 */
+#saveOkBtn { background-color: oklch(0.2050 0 0); color: oklch(0.9850 0 0); }
+#saveOkBtn:hover { opacity: 0.9; }
+
+/* -- 保存确认弹窗 --------------------------------------------- */
+.overlay {
+  position: fixed; inset: 0; z-index: 50;
+  display: none; align-items: center; justify-content: center;
+  background: oklch(0.1450 0 0 / 0.45);
+  padding: 1rem;
+}
+.overlay.show { display: flex; }
+.dialog {
+  width: 100%; max-width: 26rem;
+  background: var(--card); color: var(--card-foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 1.5rem;
+}
+.dialog-title { font-size: 1.0625rem; font-weight: 600; margin: 0 0 0.5rem; }
+.dialog-desc { font-size: 0.875rem; color: var(--muted-foreground); margin: 0 0 1.25rem; line-height: 1.6; }
+.dialog-desc b { color: var(--foreground); font-weight: 600; }
+.dialog-actions { display: flex; justify-content: flex-end; gap: 0.5rem; }
 
 /* -- 响应式 --------------------------------------------------- */
 @media (max-width: 1120px) { }
@@ -419,6 +443,18 @@ button { font: inherit; color: inherit; }
       <button class="btn" data-variant="default" data-size="sm" type="button" id="saveBtn">保存分配</button>
     </div>
   </article>
+
+  <!-- 保存确认弹窗 -->
+  <div class="overlay" id="saveConfirmOverlay">
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="saveConfirmTitle">
+      <h3 class="dialog-title" id="saveConfirmTitle">确认保存分配？</h3>
+      <p class="dialog-desc" id="saveConfirmDesc"></p>
+      <div class="dialog-actions">
+        <button class="btn" data-variant="outline" data-size="sm" type="button" id="saveCancelBtn">取消</button>
+        <button class="btn" data-variant="default" data-size="sm" type="button" id="saveOkBtn">确认保存</button>
+      </div>
+    </div>
+  </div>
 
 </div><!-- /wrap -->
 
@@ -631,9 +667,22 @@ document.getElementById('assignBody').addEventListener('change', function (e) {
   if (inp) inp.value = fmt(parseNum(inp.value));
 });
 
-/* ===== 保存 / 重置 ===== */
-document.getElementById('saveBtn').addEventListener('click', function () {
+/* ===== 保存确认弹窗 / 保存 / 重置 ===== */
+var saveOverlay = document.getElementById('saveConfirmOverlay');
+function openSaveConfirm() {
   if (isLocked()) return;
+  var list = visibleAgents();
+  document.getElementById('saveConfirmDesc').innerHTML =
+    '将保存 <b>' + state.month + '</b> · <b>' + deptLabel() + '</b> 共 <b>' + list.length + '</b> 人的业绩分配，确认继续？';
+  saveOverlay.classList.add('show');
+}
+function closeSaveConfirm() { saveOverlay.classList.remove('show'); }
+
+document.getElementById('saveBtn').addEventListener('click', openSaveConfirm);
+document.getElementById('saveCancelBtn').addEventListener('click', closeSaveConfirm);
+saveOverlay.addEventListener('click', function (e) { if (e.target === saveOverlay) closeSaveConfirm(); });
+document.getElementById('saveOkBtn').addEventListener('click', function () {
+  closeSaveConfirm();
   var list = visibleAgents();
   toast('业绩分配已保存', state.month + ' · ' + deptLabel() + ' · 共 ' + list.length + ' 人');
 });

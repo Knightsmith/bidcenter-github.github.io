@@ -536,6 +536,10 @@ progress.progress[data-tone="muted"]::-moz-progress-bar { background: var(--mute
 
   <!-- ===== 顶栏：品牌 · 搜索 · 快捷入口（同销售） · 用户菜单 ===== -->
   <header class="topbar">
+    <!-- 左上角展开菜单按钮（预留占位，后期自行接入菜单） -->
+    <button class="btn" data-variant="ghost" data-size="icon-xs" type="button" id="menuBtn" aria-label="展开菜单" aria-haspopup="menu" data-demo="展开菜单（演示）">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
     <div class="brand">
       <b>客服CRM</b>
       <span class="badge" data-variant="secondary">客服工作台</span>
@@ -803,11 +807,14 @@ progress.progress[data-tone="muted"]::-moz-progress-bar { background: var(--mute
             <div class="statistic">
               <p class="statistic-title">逾期未联系</p>
               <p class="statistic-value">5</p>
+              <p class="statistic-description">.</p>
             </div>
             <div class="statistic">
               <p class="statistic-title">B级以上客户</p>
               <p class="statistic-value">61</p>
             </div>
+            <!-- 占位：第二行最后空出，第三行放三个数据 -->
+            <div aria-hidden="true"></div>
             <div class="statistic">
               <p class="statistic-title">本月总分发</p>
               <p class="statistic-value">61</p>
@@ -866,10 +873,10 @@ function toast(title, desc) {
   el.querySelector('.toast-title').textContent = title;
   if (desc) el.querySelector('.toast-description').textContent = desc;
   document.body.appendChild(el);
-  el.show();
+  try { el.show(); } catch (e) { el.style.display = 'flex'; }
   toastCount++;
   setTimeout(function () {
-    el.hide();
+    try { el.hide(); } catch (e) { el.style.display = 'none'; }
     el.remove();
     toastCount = Math.max(0, toastCount - 1);
   }, 2600);
