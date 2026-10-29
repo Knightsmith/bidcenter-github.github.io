@@ -611,7 +611,7 @@ tr.rv-weekend td { background: color-mix(in oklab, var(--success) 8%, var(--card
           <div class="kpis x3">
             <div class="kpi"><div class="kpi-label">我的排名</div><div class="kpi-value tnum">第6名</div><div class="kpi-sub">共 128 人</div></div>
             <div class="kpi"><div class="kpi-label">实际业绩</div><div class="kpi-value tnum">26,800</div></div>
-            <div class="kpi"><div class="kpi-label">距第5名差</div><div class="kpi-value tnum" style="color:var(--destructive);">700</div></div>
+            <div class="kpi"><div class="kpi-label">距上一名</div><div class="kpi-value tnum" style="color:var(--destructive);">差 700</div><div class="kpi-sub">即将追上</div></div>
           </div>
 
           <div class="divider-label">标杆对比</div>
@@ -723,19 +723,14 @@ tr.rv-weekend td { background: color-mix(in oklab, var(--success) 8%, var(--card
         <div class="card-header">
           <div>
             <div class="card-title">回访日程</div>
-            <div class="card-description" id="rvDesc">回访日程 · 库中联系人 · 按客户等级统计日内回访安排（近两周）</div>
+            <div class="card-description" id="rvDesc">回访日程 · 库中联系人 · 按客户等级统计日内回访安排（近十天）</div>
           </div>
           <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;justify-content:flex-end;">
             <div class="tab-list" id="rvTabs" role="tablist"></div>
-            <div class="tab-list" id="rvWeekNav" style="gap:.25rem;">
-              <button class="tab-trigger" id="rvPrev" type="button" aria-label="上一周" onclick="rvWeek(-1)">上一周</button>
-              <span style="font-size:.75rem;font-variant-numeric:tabular-nums;color:var(--muted-foreground);padding:0 .25rem;" id="rvWeekLabel">10-19 ~ 10-25</span>
-              <button class="tab-trigger" id="rvNext" type="button" aria-label="下一周" onclick="rvWeek(1)">下一周</button>
-            </div>
           </div>
         </div>
         <div class="card-content">
-          <div style="overflow-x:auto;">
+          <div id="rvScroll" style="overflow-x:auto;">
             <table class="table">
               <thead id="rvHead"></thead>
               <tbody id="rvBody"></tbody>
@@ -824,25 +819,19 @@ var GRADES = [
   { g: 'D', n: 658 }, { g: 'E', n: 22 }, { g: 'S', n: 0 }, { g: 'N', n: 1 }, { g: 'K', n: 0 }
 ];
 
-/* ===== 回访日程：库中联系人（近两周，双周翻页） ===== */
+/* ===== 回访日程：库中联系人（近十天） ===== */
 var REVIEW_LIB = [
-  { week: '10-19 ~ 10-25', rows: [
+  { week: '10-19 ~ 10-28', rows: [
     { date: '10-19', wd: '周一', today: true, AA: 2, A: 5, B: 8,  C: 12, D: 9,  E: 6 },
     { date: '10-20', wd: '周二', AA: 1, A: 4, B: 9,  C: 11, D: 8,  E: 5 },
     { date: '10-21', wd: '周三', AA: 3, A: 6, B: 7,  C: 10, D: 7,  E: 4 },
     { date: '10-22', wd: '周四', AA: 2, A: 3, B: 8,  C: 13, D: 10, E: 5 },
     { date: '10-23', wd: '周五', AA: 1, A: 5, B: 6,  C: 9,  D: 6,  E: 3 },
     { date: '10-24', wd: '周六', AA: 0, A: 1, B: 2,  C: 4,  D: 3,  E: 2 },
-    { date: '10-25', wd: '周日', AA: 0, A: 0, B: 1,  C: 2,  D: 2,  E: 1 }
-  ]},
-  { week: '10-26 ~ 11-01', rows: [
-    { date: '10-26', wd: '周一', AA: 2, A: 4, B: 7, C: 10, D: 8, E: 5 },
-    { date: '10-27', wd: '周二', AA: 1, A: 5, B: 8, C: 9,  D: 7, E: 4 },
-    { date: '10-28', wd: '周三', AA: 3, A: 4, B: 6, C: 11, D: 6, E: 3 },
-    { date: '10-29', wd: '周四', AA: 2, A: 6, B: 9, C: 12, D: 9, E: 5 },
-    { date: '10-30', wd: '周五', AA: 1, A: 3, B: 5, C: 8,  D: 5, E: 2 },
-    { date: '10-31', wd: '周六', AA: 0, A: 1, B: 2, C: 3,  D: 2, E: 1 },
-    { date: '11-01', wd: '周日', AA: 0, A: 0, B: 1, C: 2,  D: 1, E: 1 }
+    { date: '10-25', wd: '周日', AA: 0, A: 0, B: 1,  C: 2,  D: 2,  E: 1 },
+    { date: '10-26', wd: '周一', AA: 2, A: 4, B: 7,  C: 10, D: 8,  E: 5 },
+    { date: '10-27', wd: '周二', AA: 1, A: 5, B: 8,  C: 9,  D: 7,  E: 4 },
+    { date: '10-28', wd: '周三', AA: 3, A: 4, B: 6,  C: 11, D: 6,  E: 3 }
   ]}
 ];
 
@@ -1087,9 +1076,8 @@ function renderRv() {
   document.getElementById('rvTabs').innerHTML =
     '<button class="tab-trigger" type="button" role="tab" aria-selected="' + isLib + '" onclick="switchRvTab(\'lib\')">库中联系人</button>' +
     '<button class="tab-trigger" type="button" role="tab" aria-selected="' + (!isLib) + '" onclick="switchRvTab(\'b\')">提交B级客户</button>';
-  document.getElementById('rvWeekNav').style.display = isLib ? '' : 'none';
   document.getElementById('rvDesc').textContent = isLib
-    ? '回访日程 · 库中联系人 · 按客户等级统计日内回访安排（近两周）'
+    ? '回访日程 · 库中联系人 · 按客户等级统计日内回访安排（近十天）'
     : '回访日程 · 我提交的B级及以上客户 · 七日内回访安排';
 
   var grades = ['AA', 'A', 'B', 'C', 'D', 'E'];
@@ -1129,13 +1117,25 @@ function renderRv() {
   foot += '<td class="num">' + grand + '</td></tr>';
   document.getElementById('rvFoot').innerHTML = foot;
 
-  document.getElementById('rvWeekLabel').textContent = REVIEW_LIB[rvWeekIdx].week;
-  document.getElementById('rvPrev').disabled = (rvWeekIdx <= 0);
-  document.getElementById('rvNext').disabled = (rvWeekIdx >= REVIEW_LIB.length - 1);
+  fitRvHeight();
+}
+
+/* 回访日程：表格高度固定为七天高度，十天数据超出部分上下滚动 */
+function fitRvHeight() {
+  var wrap = document.getElementById('rvScroll');
+  if (!wrap) return;
+  var headH = document.getElementById('rvHead').offsetHeight || 0;
+  var footH = document.getElementById('rvFoot').offsetHeight || 0;
+  var trs = document.querySelectorAll('#rvBody tr');
+  var rowH = trs.length ? trs[0].offsetHeight : 0;
+  wrap.style.maxHeight = (headH + footH + rowH * 7) + 'px';
+  wrap.style.overflowY = 'auto';
 }
 /* ===== 业绩排名标杆对比条 =====
    规则：我进前五名 → 显示前五名（我的条高亮）；
-        未进前五名 → 显示第1、2、3名 + 我前一名 + 我的业绩 */
+        未进前五名 → 显示第1、2、3名 + 我前一名 + 我的业绩；
+   零业绩边界（月初无业绩）：业绩为 0 的名次条留空占位——名次徽章与姓名照常显示，
+        进度条宽度为 0、金额显示「—」；名次位人员有业绩（>0）才正常渲染条与金额。 */
 function renderRank() {
   var me = RANK.me;
   var list;
@@ -1152,13 +1152,14 @@ function renderRank() {
   for (var i = 0; i < list.length; i++) {
     var b = list[i];
     var mine = (b.r === me.rank);
-    var pct = Math.round(b.money / maxMoney * 100);
+    var pct = (maxMoney > 0 && b.money > 0) ? Math.round(b.money / maxMoney * 100) : 0;
+    var moneyHtml = (b.money > 0) ? fmt(b.money) : '—';
     html += '<div class="rank-bar' + (mine ? ' is-mine' : '') + '">' +
       badgeHtml('第' + b.r + '名', mine ? 'default' : 'outline') +
       '<span class="rb-name"' + (mine ? ' style="font-weight:600;"' : '') + '>' + (mine ? '我' : esc(b.name)) + '</span>' +
       '<span class="rb-dept">' + esc(b.dept) + '</span>' +
       '<div class="rb-track"><div class="rb-fill" style="width:' + pct + '%;"></div></div>' +
-      '<span class="rb-money">' + fmt(b.money) + '</span>' +
+      '<span class="rb-money">' + moneyHtml + '</span>' +
     '</div>';
   }
   document.getElementById('rankBars').innerHTML = html;

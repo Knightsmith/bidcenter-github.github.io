@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>客服工作台 · 线框稿</title>
+<style>
+/* ================================================================
+   Token Layer — shadcn-html · 用户指定主题（tailwind v4 令牌集）
+   纯 HTML+CSS 无构建：剥离 @custom-variant / @theme inline / @apply，
+   保留 :root / .dark 语义变量本体，取值与原主题逐字一致。
+   圆角：--radius: 0.5rem → sm 4 / md 6 / lg 8 / xl 12 px
+   ================================================================ */
+:root {
+  color-scheme: light;
+  --background: oklch(0.9850 0 0);
+  --foreground: oklch(0.2050 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2050 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2050 0 0);
+  --primary: oklch(0.4600 0.2200 266);
+  --primary-foreground: oklch(0.9850 0 0);
+  --secondary: oklch(0.9400 0 0);
+  --secondary-foreground: oklch(0.2500 0 0);
+  --muted: oklch(0.9700 0 0);
+  --muted-foreground: oklch(0.4400 0 0);
+  --accent: oklch(0.9200 0.0400 272);
+  --accent-foreground: oklch(0.2100 0.0600 268);
+  --destructive: oklch(0.6300 0.1900 23.0300);
+  --destructive-foreground: oklch(0.9850 0 0);
+  --border: oklch(0.9200 0 0);
+  --input: oklch(0.9400 0 0);
+  --ring: oklch(0.4600 0.2200 266);
+  --chart-1: oklch(0.9200 0.0400 272);
+  --chart-2: oklch(0.7500 0.1300 269);
+  --chart-3: oklch(0.4600 0.2200 266);
+  --chart-4: oklch(0.4200 0.1500 266);
+  --chart-5: oklch(0.2100 0.0600 268);
+  --sidebar: oklch(0.9850 0 0);
+  --sidebar-foreground: oklch(0.2050 0 0);
+  --sidebar-primary: oklch(0.4600 0.2200 266);
+  --sidebar-primary-foreground: oklch(0.9850 0 0);
+  --sidebar-accent: oklch(0.9200 0.0400 272);
+  --sidebar-accent-foreground: oklch(0.2100 0.0600 268);
+  --sidebar-border: oklch(0.9200 0 0);
+  --sidebar-ring: oklch(0.4600 0.2200 266);
+  --font-sans: Geist, sans-serif;
+  --font-serif: "Noto Serif Georgian", ui-serif, serif;
+  --font-mono: "Geist Mono", monospace;
+  --radius: 0.5rem;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --shadow-x: 0.25px; --shadow-y: 1px; --shadow-blur: 3px;
+  --shadow-spread: 0px; --shadow-opacity: 0.15;
+  --shadow-color: oklch(0.2571 0.1161 272.24);
+  --shadow-2xs: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.07);
+  --shadow-xs: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.07);
+  --shadow-sm: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.15), 0.25px 1px 2px -1px hsl(236.5829 64.2250% 21.4383% / 0.15);
+  --shadow: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.15), 0.25px 1px 2px -1px hsl(236.5829 64.2250% 21.4383% / 0.15);
+  --shadow-md: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.15), 0.25px 2px 4px -1px hsl(236.5829 64.2250% 21.4383% / 0.15);
+  --shadow-lg: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.15), 0.25px 4px 6px -1px hsl(236.5829 64.2250% 21.4383% / 0.15);
+  --shadow-xl: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.15), 0.25px 8px 10px -1px hsl(236.5829 64.2250% 21.4383% / 0.15);
+  --shadow-2xl: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.38);
+  --tracking-normal: 0em;
+  --spacing: 0.25rem;
+  /* —— 扩展：主题未提供，按语义补齐 —— */
+  --success: oklch(0.6000 0.1500 150);
+  --warning: oklch(0.6800 0.1500 75);
+}
+.dark {
+  color-scheme: dark;
+  --background: oklch(0 0 0);
+  --foreground: oklch(0.9460 0 0);
+  --card: oklch(0.1450 0 0);
+  --card-foreground: oklch(0.9460 0 0);
+  --popover: oklch(0.1450 0 0);
+  --popover-foreground: oklch(0.9460 0 0);
+  --primary: oklch(0.4600 0.2200 266);
+  --primary-foreground: oklch(0.9850 0 0);
+  --secondary: oklch(0.2500 0 0);
+  --secondary-foreground: oklch(0.9460 0 0);
+  --muted: oklch(0.2300 0 0);
+  --muted-foreground: oklch(0.7200 0 0);
+  --accent: oklch(0.3200 0 0);
+  --accent-foreground: oklch(0.9200 0.0400 272);
+  --destructive: oklch(0.6900 0.2000 23.9100);
+  --destructive-foreground: oklch(0.9850 0 0);
+  --border: oklch(0.2600 0 0);
+  --input: oklch(0.3200 0 0);
+  --ring: oklch(0.4600 0.2200 266);
+  --chart-1: oklch(0.2100 0.0600 268);
+  --chart-2: oklch(0.4200 0.1500 266);
+  --chart-3: oklch(0.4600 0.2200 266);
+  --chart-4: oklch(0.7500 0.1300 269);
+  --chart-5: oklch(0.9200 0.0400 272);
+  --sidebar: oklch(0 0 0);
+  --sidebar-foreground: oklch(0.9460 0 0);
+  --sidebar-primary: oklch(0.4600 0.2200 266);
+  --sidebar-primary-foreground: oklch(0.9850 0 0);
+  --sidebar-accent: oklch(0.3200 0 0);
+  --sidebar-accent-foreground: oklch(0.9200 0.0400 272);
+  --sidebar-border: oklch(0.2600 0 0);
+  --sidebar-ring: oklch(0.4600 0.2200 266);
+  --font-sans: Geist, sans-serif;
+  --font-serif: "Noto Serif Georgian", ui-serif, serif;
+  --font-mono: "Geist Mono", monospace;
+  --radius: 0.5rem;
+  --shadow-2xs: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.07);
+  --shadow-xs: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.07);
+  --shadow-sm: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.15), 0.25px 1px 2px -1px hsl(236.5829 64.2250% 21.4383% / 0.15);
+  --shadow: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.15), 0.25px 1px 2px -1px hsl(236.5829 64.2250% 21.4383% / 0.15);
+  --shadow-md: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.15), 0.25px 2px 4px -1px hsl(236.5829 64.2250% 21.4383% / 0.15);
+  --shadow-lg: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.15), 0.25px 4px 6px -1px hsl(236.5829 64.2250% 21.4383% / 0.15);
+  --shadow-xl: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.15), 0.25px 8px 10px -1px hsl(236.5829 64.2250% 21.4383% / 0.15);
+  --shadow-2xl: 0.25px 1px 3px 0px hsl(236.5829 64.2250% 21.4383% / 0.38);
+  /* —— 扩展 —— */
+  --success: oklch(0.7000 0.1500 150);
+  --warning: oklch(0.7800 0.1500 85);
+}
+/* @layer base 等价 */
+* { border-color: var(--border); outline-color: color-mix(in oklab, var(--ring) 50%, transparent); }
+
+/* ============================ Base ============================ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  font-family: "Geist", "PingFang SC", "Microsoft YaHei", "Noto Sans SC",
+               system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px; line-height: 1.55;
+  background: var(--background); color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+table { border-collapse: collapse; width: 100%; }
+svg { display: block; }
+.muted { color: var(--muted-foreground); }
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* ================================================================
+   SRC: components/button/component-skill.md
+   .btn + data-variant / data-size
+   ================================================================ */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .375rem;
+  height: 2.25rem; padding: 0 1rem;
+  border-radius: var(--radius-md); border: 1px solid transparent;
+  font-size: .875rem; font-weight: 500; white-space: nowrap;
+  transition: background .15s, opacity .15s, color .15s;
+}
+.btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.btn:disabled { opacity: .5; pointer-events: none; }
+.btn[data-variant="default"]    { background: var(--primary); color: var(--primary-foreground); }
+.btn[data-variant="default"]:hover    { opacity: .88; }
+.btn[data-variant="secondary"]  { background: var(--secondary); color: var(--secondary-foreground); }
+.btn[data-variant="secondary"]:hover  { opacity: .8; }
+.btn[data-variant="outline"]    { background: var(--background); border-color: var(--border); box-shadow: var(--shadow-xs); color: var(--foreground); }
+.btn[data-variant="outline"]:hover    { background: var(--accent); }
+.btn[data-variant="ghost"]      { background: transparent; color: var(--foreground); }
+.btn[data-variant="ghost"]:hover      { background: var(--accent); }
+.btn[data-variant="link"]       { height: auto; padding: 0; background: transparent; color: var(--primary); text-decoration: underline; text-underline-offset: 3px; }
+.btn[data-size="xs"]  { height: 1.75rem; padding: 0 .5rem;  font-size: .75rem;  border-radius: var(--radius-sm); }
+.btn[data-size="sm"]  { height: 2rem;    padding: 0 .75rem; font-size: .8125rem; border-radius: var(--radius-md); }
+.btn[data-size="icon"]    { height: 2.25rem; width: 2.25rem; padding: 0; }
+.btn[data-size="icon-sm"] { height: 2rem;    width: 2rem;    padding: 0; border-radius: var(--radius-md); }
+.btn[data-size="icon-xs"] { height: 1.75rem; width: 1.75rem; padding: 0; border-radius: var(--radius-sm); }
+@media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
+@media (prefers-contrast: more) { .btn[data-variant="ghost"] { border: 1px solid var(--border); } }
+
+/* ================================================================
+   SRC: components/badge/component-skill.md
+   .badge + data-variant（default/secondary/outline + 业务扩展 success/warning/destructive）
+   ================================================================ */
+.badge {
+  display: inline-flex; align-items: center; gap: .25rem;
+  height: 1.3125rem; padding: 0 .5rem;
+  border-radius: 999px; border: 1px solid transparent;
+  font-size: .71875rem; font-weight: 600; white-space: nowrap;
+}
+.badge[data-variant="default"]     { background: var(--primary); color: var(--primary-foreground); }
+.badge[data-variant="secondary"]   { background: var(--secondary); color: var(--secondary-foreground); }
+.badge[data-variant="outline"]     { background: var(--card); color: var(--foreground); border-color: var(--border); }
+.badge[data-variant="success"]     { background: color-mix(in oklab, var(--success) 14%, var(--card)); color: color-mix(in oklab, var(--success) 78%, var(--foreground)); }
+.badge[data-variant="warning"]     { background: color-mix(in oklab, var(--warning) 16%, var(--card)); color: color-mix(in oklab, var(--warning) 80%, var(--foreground)); }
+.badge[data-variant="destructive"] { background: color-mix(in oklab, var(--destructive) 14%, var(--card)); color: var(--destructive); }
+.badge[data-variant="danger-outline"] { background: var(--card); color: var(--destructive); box-shadow: inset 0 0 0 1px var(--destructive); }
+
+/* ================================================================
+   SRC: components/card/component-skill.md
+   .card / .card-header / .card-title / .card-description / .card-content / .card-footer
+   ================================================================ */
+.card {
+  background: var(--card); color: var(--card-foreground);
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+  display: flex; flex-direction: column; min-width: 0;
+}
+.card-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: .75rem; padding: 1.25rem 1.5rem 0;
+}
+.card-title { font-size: .9375rem; font-weight: 600; letter-spacing: .01em; }
+.card-description { font-size: .8125rem; color: var(--muted-foreground); margin-top: 2px; }
+.card-content { padding: 1rem 1.5rem; flex: 1; min-width: 0; }
+.card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: .75rem; padding: .75rem 1.5rem;
+  border-top: 1px solid var(--border);
+  font-size: .8125rem; color: var(--muted-foreground);
+}
+
+/* ================================================================
+   SRC: components/progress/component-skill.md
+   原生 <progress> + WebKit/Moz 伪元素
+   ================================================================ */
+progress.progress {
+  appearance: none; -webkit-appearance: none;
+  display: block; width: 100%; height: .5rem;
+  border: none; border-radius: 999px; overflow: hidden;
+}
+progress.progress::-webkit-progress-bar { background: var(--muted); border-radius: 999px; }
+progress.progress::-webkit-progress-value { background: var(--primary); border-radius: 999px; transition: width .5s ease; }
+progress.progress::-moz-progress-bar { background: var(--primary); border-radius: 999px; }
+progress.progress[data-tone="success"]::-webkit-progress-value { background: var(--success); }
+progress.progress[data-tone="success"]::-moz-progress-bar { background: var(--success); }
+progress.progress[data-tone="muted"]::-webkit-progress-value { background: var(--muted-foreground); }
+progress.progress[data-tone="muted"]::-moz-progress-bar { background: var(--muted-foreground); }
+
+/* ================================================================
+   SRC: components/statistic/component-skill.md
+   .statistic / -title / -value / -description / -trend[data-trend]
+   ================================================================ */
+.statistic { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.statistic-title { font-size: .8125rem; color: var(--muted-foreground); }
+.statistic-value { font-size: 1.5rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; font-variant-numeric: tabular-nums; }
+.statistic-value small { font-size: .8125rem; font-weight: 500; color: var(--muted-foreground); margin-left: 2px; }
+.statistic-description { font-size: .75rem; color: var(--muted-foreground); }
+.statistic-trend { font-weight: 600; display: inline-flex; align-items: center; gap: 2px; }
+.statistic-trend[data-trend="up"]   { color: color-mix(in oklab, var(--success) 85%, var(--foreground)); }
+.statistic-trend[data-trend="down"] { color: var(--destructive); }
+
+/* ================================================================
+   SRC: components/table/component-skill.md
+   .table-container / .table / .table-row / .table-head / .table-cell
+   ================================================================ */
+.table-container { width: 100%; overflow-x: auto; }
+.table { width: 100%; font-size: .8125rem; }
+.table-head {
+  text-align: left; font-size: .71875rem; font-weight: 600;
+  color: var(--muted-foreground); padding: .625rem .875rem;
+  border-bottom: 1px solid var(--border); white-space: nowrap;
+}
+.table-cell { padding: .625rem .875rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.table tbody tr:last-child .table-cell { border-bottom: none; }
+.table tbody tr:hover .table-cell { background: color-mix(in oklab, var(--accent) 45%, transparent); }
+.table .num { text-align: right; font-variant-numeric: tabular-nums; }
+/* ================================================================
+   SRC: components/dropdown/component-skill.md
+   Popover API + .dropdown-content / .dropdown-item / .dropdown-separator
+   （定位由 JS 设置 fixed 坐标，light-dismiss 由 popover 提供）
+   ================================================================ */
+.dropdown-content {
+  position: fixed; inset: auto; margin: 0;
+  min-width: 11rem; padding: .375rem;
+  background: var(--popover); color: var(--popover-foreground);
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg); z-index: 80;
+  opacity: 0; transform: scale(.96) translateY(-.25rem);
+  transition: opacity .15s ease, transform .15s ease, display .15s allow-discrete;
+}
+.dropdown-content:popover-open { opacity: 1; transform: scale(1) translateY(0); }
+@starting-style {
+  .dropdown-content:popover-open { opacity: 0; transform: scale(.96) translateY(-.25rem); }
+}
+.dropdown-item {
+  display: flex; align-items: center; gap: .5rem;
+  width: 100%; padding: .5rem .625rem;
+  border-radius: var(--radius-sm); font-size: .8125rem;
+  text-align: left; color: var(--foreground);
+}
+.dropdown-item:hover { background: var(--accent); }
+.dropdown-item[data-variant="destructive"] { color: var(--destructive); }
+.dropdown-separator { height: 1px; background: var(--border); margin: .25rem -.375rem; }
+.dropdown-label { padding: .375rem .625rem .25rem; font-size: .71875rem; color: var(--muted-foreground); }
+@media (prefers-reduced-motion: reduce) { .dropdown-content { transition: none; } }
+
+/* ================================================================
+   SRC: components/toast/component-skill.md
+   popover="manual" + role="status" aria-live="polite"；容器管理堆叠偏移
+   ================================================================ */
+.toast {
+  position: fixed; inset: auto; margin: 0;
+  min-width: 250px; max-width: 340px;
+  padding: .75rem .875rem;
+  background: var(--popover); color: var(--popover-foreground);
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  display: flex; gap: .55rem; align-items: flex-start;
+  z-index: 100;
+  animation: toastIn .18s ease;
+}
+@keyframes toastIn { from { opacity: 0; transform: translateY(8px); } }
+.toast-icon { flex: none; margin-top: 2px; color: var(--primary); }
+.toast-title { font-size: .8125rem; font-weight: 600; }
+.toast-description { font-size: .75rem; color: var(--muted-foreground); }
+
+/* ================================================================
+   布局 — 顶栏 / 双列（无左侧导航，v4 结构）
+   ================================================================ */
+.wrap { max-width: 1400px; margin: 0 auto; padding: 1.25rem 1.25rem 2.5rem; }
+.topbar {
+  position: sticky; top: .75rem; z-index: 40;
+  display: flex; align-items: center; gap: .75rem;
+  padding: .625rem .75rem .625rem 1.25rem;
+  background: color-mix(in oklab, var(--card) 92%, transparent);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+}
+.topbar .brand { display: flex; align-items: center; gap: .5rem; flex: 0 0 auto; }
+.topbar .brand b { font-size: 1rem; font-weight: 700; letter-spacing: -.01em; }
+.vsep { width: 1px; height: 1.25rem; background: var(--border); flex: none; }
+.spacer { flex: 1 1 auto; }
+.quick { display: flex; align-items: center; gap: .125rem; flex: 0 0 auto; }
+.search {
+  display: flex; align-items: center; gap: .5rem;
+  height: 2.25rem; width: min(320px, 26vw);
+  padding: 0 .75rem; flex: 0 1 auto;
+  background: var(--muted); border: 1px solid transparent;
+  border-radius: var(--radius-md); color: var(--muted-foreground); font-size: .8125rem;
+}
+.search:focus-within { background: var(--card); border-color: var(--ring); }
+.search input { flex: 1; min-width: 0; border: none; outline: none; background: transparent; font: inherit; color: var(--foreground); }
+.search kbd {
+  font: .6875rem/1.4 inherit; color: var(--muted-foreground);
+  border: 1px solid var(--border); border-radius: 4px;
+  padding: 0 5px; background: var(--card); white-space: nowrap;
+}
+.avatar {
+  position: relative; width: 1.75rem; height: 1.75rem; flex: none;
+  border-radius: 999px; overflow: hidden;
+  display: grid; place-items: center;
+  background: var(--primary); color: var(--primary-foreground);
+  font-size: .75rem; font-weight: 700;
+}
+.avatar img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; }
+
+/* 双列：左右独立流 */
+.cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; margin-top: 1.25rem; align-items: start; }
+.col { display: flex; flex-direction: column; gap: 1.25rem; min-width: 0; }
+
+/* 线框说明条 */
+.wire-note {
+  display: flex; align-items: center; gap: .75rem;
+  margin-top: 1.25rem; padding: .7rem 1rem;
+  background: color-mix(in oklab, var(--accent) 45%, var(--card));
+  border: 1px dashed color-mix(in oklab, var(--accent) 55%, var(--muted-foreground));
+  border-radius: var(--radius-md); font-size: .8125rem;
+  color: var(--accent-foreground);
+}
+.wire-note b { color: var(--primary); }
+
+/* ================================================================
+   业务样式
+   ================================================================ */
+/* 动态流（今日动作 / 消息中心） */
+.feed-row { display: flex; gap: .65rem; padding: .65rem 0; border-bottom: 1px solid var(--border); }
+.feed-row:last-child { border-bottom: none; }
+.feed-dot { flex: none; width: 8px; height: 8px; margin-top: 6px; border-radius: 999px; background: var(--primary); }
+.feed-dot.ok { background: var(--success); }
+.feed-dot.warn { background: var(--warning); }
+.feed-row strong { font-weight: 600; }
+.feed-sub { font-size: .8125rem; color: var(--muted-foreground); }
+.feed-time { font-size: .75rem; color: var(--muted-foreground); font-variant-numeric: tabular-nums; }
+.between { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+
+/* 消息中心：Tabs（pill 变体，同销售工作台） */
+.tab-list {
+  display: inline-flex; align-items: center; flex-wrap: wrap;
+  background: var(--muted); border-radius: var(--radius-lg);
+  padding: .25rem; gap: .125rem;
+}
+.tab-trigger {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  padding: .375rem .75rem; border-radius: calc(var(--radius) * .6);
+  font-size: .875rem; font-weight: 500; border: none;
+  background: transparent; color: var(--muted-foreground);
+  cursor: pointer; transition: all 150ms ease; white-space: nowrap; outline: none;
+}
+.tab-trigger[aria-selected="true"] {
+  background: var(--background); color: var(--foreground);
+  box-shadow: 0 1px 3px oklch(0 0 0 / 0.08), 0 0 0 1px var(--border);
+}
+.tab-trigger:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.separator { border: none; margin: 0; flex-shrink: 0; background: var(--border); height: 1px; width: 100%; }
+
+/* ① 今日动作 · 指标块 + 数据组 */
+.metrics { display: grid; grid-template-columns: repeat(2, 1fr); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
+.metric { padding: .6rem .75rem; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.metric:nth-child(2n) { border-right: none; }
+.metric:nth-child(n+3) { border-bottom: none; }
+.metric-top { display: flex; align-items: baseline; justify-content: space-between; gap: .5rem; }
+.metric-label { font-size: .8125rem; color: var(--muted-foreground); }
+.metric-value { font-size: 1.25rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; font-variant-numeric: tabular-nums; }
+.metric-sub { font-size: .75rem; color: var(--muted-foreground); margin-top: 2px; }
+/* 阈值着色（逾期未联系等）：≤5 data-tone="danger" 红 / >5 data-tone="warning" 橙 */
+[data-tone="danger"] { color: var(--destructive); }
+[data-tone="warning"] { color: var(--warning); }
+/* 三组数据卡（① 上区域） */
+.kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; }
+.kpi { padding: .6rem .75rem; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--card); }
+.kpi-label { font-size: .75rem; color: var(--muted-foreground); }
+.kpi-value { font-size: 1.375rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; font-variant-numeric: tabular-nums; margin-top: 2px; }
+.kpi-sub { font-size: .75rem; color: var(--muted-foreground); margin-top: 2px; }
+.kpi-sub .tnum { font-weight: 600; }
+
+/* 个人信息（⓪） */
+.profile { display: flex; align-items: center; gap: .875rem; min-width: 0; }
+.profile .avatar { width: 117px; height: 167px; font-size: 2.5rem; border-radius: var(--radius-lg); }
+.profile-name { font-size: .9375rem; font-weight: 650; }
+.profile-meta { min-width: 0; flex: 1; font-size: .8125rem; color: var(--muted-foreground); margin-top: 2px; }
+.divider-label {
+  display: flex; align-items: center; gap: .625rem;
+  margin-top: 1rem; font-size: .71875rem; font-weight: 600;
+  color: var(--muted-foreground);
+}
+.divider-label::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+.chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .625rem; }
+.chip {
+  display: inline-flex; align-items: baseline; gap: .35rem;
+  padding: .35rem .6rem; border: 1px solid var(--border);
+  border-radius: var(--radius-md); background: var(--card);
+}
+.chip b { font-size: .875rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.chip span { font-size: .75rem; color: var(--muted-foreground); }
+.chip.hl { border-color: color-mix(in oklab, var(--primary) 45%, var(--border)); background: color-mix(in oklab, var(--primary) 8%, var(--card)); }
+
+/* 库容量（⓪ · 重点数据，大号展示） */
+.cap-row { display: flex; align-items: center; gap: .75rem; }
+.cap-label { font-size: .8125rem; color: var(--muted-foreground); }
+.cap-val { font-size: 1.75rem; font-weight: 700; letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1.15; margin-right: auto; }
+.cap-val small { font-size: .9375rem; font-weight: 600; color: var(--muted-foreground); }
+.cap-pct { font-size: 1.5rem; font-weight: 700; color: var(--primary); font-variant-numeric: tabular-nums; line-height: 1.15; }
+
+/* 业绩 · 进度效果（v4：无旗帜） */
+.perf-sum { display: flex; align-items: flex-end; justify-content: space-between; gap: .75rem; }
+.perf-now-val { font-size: 1.75rem; font-weight: 700; letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1.15; }
+.perf-now-val small { font-size: .8125rem; font-weight: 500; color: var(--muted-foreground); }
+.perf-track { position: relative; margin-top: 1.25rem; }
+.perf-ticks { position: relative; height: 0; }
+.perf-tick { position: absolute; top: -1.4rem; transform: translateX(-50%); font-size: .6875rem; color: var(--muted-foreground); white-space: nowrap; text-align: center; }
+.perf-tick i { position: absolute; left: 50%; top: 1.3rem; width: 1px; height: .5rem; background: color-mix(in oklab, var(--muted-foreground) 70%, var(--card)); }
+.perf-tick.done { color: color-mix(in oklab, var(--success) 80%, var(--foreground)); font-weight: 600; }
+.perf-tick.hl { color: var(--primary); font-weight: 700; }
+.perf-tick.hl i { background: var(--primary); width: 2px; height: .75rem; top: 1.45rem; }
+.perf-target-marker {
+  position: absolute; top: 50%; transform: translate(-50%, -50%);
+  width: 14px; height: 14px; box-sizing: border-box;
+  border: 2.5px solid var(--primary); background: var(--card);
+  border-radius: 999px; box-shadow: var(--shadow-md); z-index: 1;
+}
+.perf-ticks-below { position: relative; height: 0; }
+.perf-tick-below { position: absolute; bottom: -1.4rem; transform: translateX(-50%); font-size: .6875rem; color: var(--muted-foreground); white-space: nowrap; text-align: center; }
+.perf-tick-below i { position: absolute; left: 50%; bottom: 1.3rem; width: 1px; height: .5rem; background: color-mix(in oklab, var(--muted-foreground) 70%, var(--card)); }
+.perf-tick-below.hl { color: var(--success); font-weight: 700; }
+.perf-tick-below.hl i { background: var(--success); width: 2px; height: .75rem; bottom: 1.35rem; }
+.perf-advance-marker {
+  position: absolute; top: 50%; left: 100%;
+  width: 12px; height: 12px; transform: translate(-50%, -50%);
+  border: 2.5px solid var(--success); background: var(--card);
+  border-radius: 999px; box-shadow: var(--shadow-md); z-index: 1;
+}
+.perf-dot {
+  position: absolute; top: 50%; left: 59.4%;
+  width: 12px; height: 12px; transform: translate(-50%, -50%);
+  background: var(--primary); border: 2.5px solid var(--card);
+  border-radius: 999px; box-shadow: var(--shadow-md);
+}
+.perf-scale { display: flex; justify-content: space-between; margin-top: .5rem; font-size: .75rem; color: var(--muted-foreground); }
+
+/* 两档 mini 卡 */
+.tiers { display: grid; grid-template-columns: repeat(2, 1fr); gap: .75rem; margin-top: 1.125rem; }
+.tier { padding: .7rem .8rem; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--card); }
+.tier-top { display: flex; align-items: center; justify-content: space-between; gap: .35rem; }
+.tier-name { font-size: .75rem; font-weight: 600; color: var(--muted-foreground); }
+.tier-value { font-size: 1.0625rem; font-weight: 700; font-variant-numeric: tabular-nums; margin-top: 2px; }
+.tier-state { font-size: .6875rem; color: var(--muted-foreground); margin-top: 2px; display: flex; justify-content: space-between; gap: .5rem; }
+.tier-gap { font-size: 1.0625rem; font-weight: 700; font-variant-numeric: tabular-nums; margin-top: 2px; }
+.tier progress.progress { height: .375rem; margin-top: .5rem; }
+.tier.done { background: color-mix(in oklab, var(--success) 9%, var(--card)); border-color: color-mix(in oklab, var(--success) 38%, var(--border)); }
+.tier.done .tier-name, .tier.done .tier-state { color: color-mix(in oklab, var(--success) 75%, var(--foreground)); }
+.tier.next { border-color: var(--primary); box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary) 13%, transparent); }
+
+/* 考勤行 / 榜单名次 */
+.mini-row { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding: .6rem 0; border-bottom: 1px solid var(--border); }
+.mini-row:last-child { border-bottom: none; }
+.rank-no {
+  display: inline-grid; place-items: center;
+  width: 24px; height: 24px; border-radius: 999px;
+  font-size: .75rem; font-weight: 700;
+  background: var(--muted); color: var(--muted-foreground);
+}
+.rank-no.r1 { background: oklch(0.9 0.13 85); color: oklch(0.45 0.1 65); }
+.rank-no.r2 { background: oklch(0.93 0.02 260); color: oklch(0.5 0.02 260); }
+.rank-no.r3 { background: oklch(0.9 0.07 60); color: oklch(0.45 0.1 50); }
+.ell { max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* 响应式 */
+@media (max-width: 1120px) {
+  .cols { grid-template-columns: 1fr; }
+  .search { display: none; }
+  .quick .btn[data-size="xs"]:nth-child(n+3) { display: none; }
+}
+/* —— 主导航条（同销售页） —— */
+.subnav {
+  display: flex; align-items: center; gap: .25rem;
+  margin-top: .75rem; padding: .375rem .5rem;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); box-shadow: var(--shadow-xs);
+  overflow-x: auto; scrollbar-width: none;
+}
+.subnav::-webkit-scrollbar { display: none; }
+.subnav .btn { color: var(--muted-foreground); white-space: nowrap; }
+.subnav .btn:hover { color: var(--foreground); }
+.subnav .btn[aria-current="page"] {
+  background: color-mix(in oklab, var(--primary) 10%, transparent);
+  color: var(--primary); font-weight: 600;
+}
+.subnav .hot { font-size: .625rem; color: var(--destructive); align-self: flex-start; margin-left: -2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ===== 顶栏：品牌 · 搜索 · 快捷入口（同销售） · 用户菜单 ===== -->
+  <header class="topbar">
+    <!-- 左上角展开菜单按钮（预留占位，后期自行接入菜单） -->
+    <button class="btn" data-variant="outline" data-size="sm" type="button" id="menuBtn" aria-label="展开菜单" aria-haspopup="menu" data-demo="展开菜单（演示）">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      菜单
+    </button>
+    <div class="brand">
+      <b>客服CRM</b>
+      <span class="badge" data-variant="secondary">客服工作台</span>
+    </div>
+    <span class="vsep" aria-hidden="true"></span>
+    <label class="search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="search" placeholder="搜索客户、工单、联系人…" aria-label="搜索">
+      <kbd>Ctrl K</kbd>
+    </label>
+    <span class="spacer"></span>
+    <nav class="quick" aria-label="快捷入口">
+      <button class="btn" data-variant="ghost" data-size="xs" type="button" data-demo="登录外网（演示）">登录外网</button>
+      <button class="btn" data-variant="ghost" data-size="xs" type="button" data-demo="结构化数据（演示）">结构化数据</button>
+      <button class="btn" data-variant="ghost" data-size="xs" type="button" data-demo="内部通讯录（演示）">内部通讯录</button>
+      <button class="btn" data-variant="ghost" data-size="xs" type="button" data-demo="问题反馈（演示）">问题反馈</button>
+    </nav>
+    <span class="vsep" aria-hidden="true"></span>
+    <button class="btn" data-variant="ghost" data-size="icon-xs" type="button" id="themeBtn" aria-label="切换深浅色">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+    </button>
+    <button class="btn" data-variant="ghost" data-size="sm" type="button" id="userBtn"
+            aria-haspopup="menu" aria-expanded="false" aria-controls="userMenu">
+      <span class="avatar"><span>罗</span><img src="https://api.dicebear.com/9.x/pixel-art/svg?seed=Milo&amp;backgroundColor=3b82f6" alt="" onerror="this.remove();"></span>
+      罗屿
+      <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div id="userMenu" class="dropdown-content" popover role="menu" aria-label="用户菜单">
+      <div class="dropdown-label">罗屿 · 客服一部</div>
+      <button class="dropdown-item" role="menuitem" tabindex="-1" data-demo="个人资料（演示）">个人资料</button>
+      <button class="dropdown-item" role="menuitem" tabindex="-1" data-demo="切换演示账号（演示）">切换演示账号</button>
+      <div class="dropdown-separator" role="separator"></div>
+      <button class="dropdown-item" role="menuitem" tabindex="-1" data-variant="destructive" data-demo="退出登录（演示）">退出登录</button>
+    </div>
+  </header>
+
+  <!-- ===== 主导航：我的客户库 / 公共库热 / 验重 / 捡新注册 / 库中中标（同销售页） ===== -->
+  <nav class="subnav" aria-label="主导航">
+    <button class="btn" data-variant="ghost" data-size="sm" aria-current="page" data-demo="我的客户库">我的客户库</button>
+    <button class="btn" data-variant="ghost" data-size="sm" data-demo="公共库热">公共库热<span class="hot">●</span></button>
+    <button class="btn" data-variant="ghost" data-size="sm" data-demo="验重">验重</button>
+    <button class="btn" data-variant="ghost" data-size="sm" data-demo="捡新注册客户">捡新注册客户</button>
+    <button class="btn" data-variant="ghost" data-size="sm" data-demo="库中中标企业">库中中标企业</button>
+  </nav>
+
+  <div class="cols">
+
+    <!-- ===== 左列 ===== -->
+    <div class="col">
+
+      <!-- ⓪ 客服库信息（样式对齐销售客户库信息） -->
+      <article class="card">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">客服库信息</h3>
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="profile">
+            <span class="avatar"><span>罗</span><img src="https://api.dicebear.com/9.x/pixel-art/svg?seed=Milo&amp;backgroundColor=3b82f6" alt="罗屿头像" onerror="this.remove();"></span>
+            <div class="profile-meta">
+              <div class="profile-name">罗屿 · 北京 · 客服一部 · 客服顾问</div>
+              <div class="cap-row" style="margin-top:.625rem;">
+                <span class="cap-label">库容量</span>
+                <span class="cap-val">720 <small>/ 800</small></span>
+                <span class="cap-pct">90%</span>
+              </div>
+              <progress class="progress" value="720" max="800" aria-label="库容量使用率">90%</progress>
+              <div class="chips" style="margin-top:.625rem;">
+                <span class="chip"><span>AA 级</span><b>0</b></span>
+                <span class="chip"><span>A 级</span><b>0</b></span>
+                <span class="chip"><span>B 级</span><b>1</b></span>
+                <span class="chip"><span>C 级</span><b>38</b></span>
+              </div>
+              <div class="chips">
+                <span class="chip"><span>D 级</span><b>658</b></span>
+                <span class="chip"><span>E 级</span><b>22</b></span>
+                <span class="chip"><span>S 级</span><b>0</b></span>
+                <span class="chip"><span>N 级</span><b>1</b></span>
+                <span class="chip"><span>K 级</span><b>0</b></span>
+              </div>
+            </div>
+          </div>
+          <div class="divider-label" style="margin-top:.9rem;">电话数据</div>
+          <!-- 外呼数据（并入客服库信息） -->
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-top:.75rem;">
+            <div class="statistic">
+              <p class="statistic-title">外呼</p>
+              <p class="statistic-value">86<small>次</small></p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">接通</p>
+              <p class="statistic-value">32<small>次</small></p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">通话时长</p>
+              <p class="statistic-value">2<small>时</small>36<small>分</small></p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ⑦ 大额成单榜 -->
+      <article class="card">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">大额成单榜</h3>
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="table-container">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="table-head" scope="col">成单公司</th>
+                  <th class="table-head" scope="col">会员等级</th>
+                  <th class="table-head" scope="col">主营业务</th>
+                  <th class="table-head num" scope="col">金额</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="table-cell ell" title="野村****公司">野村****公司</td>
+                  <td class="table-cell">标准*1年</td>
+                  <td class="table-cell">机械加工</td>
+                  <td class="table-cell num tnum" style="font-weight:700;">¥7,460</td>
+                </tr>
+                <tr>
+                  <td class="table-cell ell" title="河南****公司">河南****公司</td>
+                  <td class="table-cell">高级*3年</td>
+                  <td class="table-cell">建材贸易</td>
+                  <td class="table-cell num tnum" style="font-weight:700;">¥6,800</td>
+                </tr>
+                <tr>
+                  <td class="table-cell ell" title="青海****公司">青海****公司</td>
+                  <td class="table-cell">标准*2年</td>
+                  <td class="table-cell">电子元件</td>
+                  <td class="table-cell num tnum" style="font-weight:700;">¥6,000</td>
+                </tr>
+                <tr>
+                  <td class="table-cell ell" title="福建****公司">福建****公司</td>
+                  <td class="table-cell">标准*1年</td>
+                  <td class="table-cell">服装批发</td>
+                  <td class="table-cell num tnum" style="font-weight:700;">¥5,900</td>
+                </tr>
+                <tr>
+                  <td class="table-cell ell" title="广州****公司">广州****公司</td>
+                  <td class="table-cell">标准*4年</td>
+                  <td class="table-cell">食品加工</td>
+                  <td class="table-cell num tnum" style="font-weight:700;">¥5,888</td>
+                </tr>
+                <tr>
+                  <td class="table-cell ell" title="上海****公司">上海****公司</td>
+                  <td class="table-cell">高级*2年</td>
+                  <td class="table-cell">物流运输</td>
+                  <td class="table-cell num tnum" style="font-weight:700;">¥5,670</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </article>
+
+    </div><!-- /左列 -->
+
+    <!-- ===== 右列 ===== -->
+    <div class="col">
+
+      <!-- ④ 我的业绩 · 目标/进阶两档（进度式） -->
+      <article class="card">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">我的业绩</h3>
+          </div>
+        </div>
+        <div class="card-content">
+          <!-- 汇总 -->
+          <div class="perf-sum">
+            <div>
+              <p class="statistic-title">当前业绩</p>
+              <p class="perf-now-val">¥9,500</p>
+            </div>
+            <div style="text-align:right;">
+              <p class="statistic-title">完成进阶</p>
+              <p class="perf-now-val">59.4<small>%</small></p>
+            </div>
+          </div>
+          <!-- 主进度条 + 档位刻度（目标上/进阶下） -->
+          <div class="perf-track">
+            <div class="perf-ticks" aria-hidden="true">
+              <span class="perf-tick hl" style="left:75%;">还差 ¥2,500 · 目标 ¥12,000<i></i></span>
+            </div>
+            <progress class="progress" value="9500" max="16000" aria-label="本月业绩进度：9,500 / 16,000">59.4%</progress>
+            <span class="perf-target-marker" style="left:75%;"></span>
+            <span class="perf-dot" style="top:4px;" title="当前 ¥9,500"></span>
+            <div class="perf-ticks-below" aria-hidden="true">
+              <span class="perf-tick-below hl" style="left:100%;transform:translateX(-90%);">还差 ¥6,500 · 进阶 ¥16,000<i style="left:90%;"></i></span>
+            </div>
+            <span class="perf-advance-marker" style="left:100%;"></span>
+          </div>
+          <div class="perf-scale">
+            <span>¥0</span>
+          </div>
+          <!-- 三档明细 -->
+          <div class="tiers">
+            <div class="tier next">
+              <div class="tier-top">
+                <span class="tier-name">目标</span>
+              </div>
+              <p class="tier-value" style="display:flex;align-items:baseline;justify-content:space-between;gap:.5rem;">¥12,000<span class="tier-gap">还差 ¥2,500</span></p>
+              <progress class="progress" value="9500" max="12000" aria-label="目标完成度">79%</progress>
+              <p class="tier-state">79%</p>
+            </div>
+            <div class="tier">
+              <div class="tier-top">
+                <span class="tier-name">进阶</span>
+              </div>
+              <p class="tier-value" style="display:flex;align-items:baseline;justify-content:space-between;gap:.5rem;">¥16,000<span class="tier-gap">还差 ¥6,500</span></p>
+              <progress class="progress" data-tone="muted" value="9500" max="16000" aria-label="进阶完成度">59%</progress>
+              <p class="tier-state">59%</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ① 今日动作 · 库中数据 -->
+      <article class="card">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">今日数据 · 库中数据</h3>
+          </div>
+          <span style="font-size:.8125rem;color:var(--muted-foreground);white-space:nowrap;">数据截至 14:32</span>
+        </div>
+        <div class="card-content">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;">
+            <div class="statistic">
+              <p class="statistic-title">今日待联系</p>
+              <p class="statistic-value">149</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">今日捡回</p>
+              <p class="statistic-value">1</p>
+              <p class="statistic-description">已联系 1</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">今日分发</p>
+              <p class="statistic-value">4</p>
+              <p class="statistic-description">已联系 4</p>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-top:.9rem;">
+            <!-- 逾期未联系阈值配色：值>5 加 data-tone="warning" 橙 / 值>10 加 data-tone="danger" 红 -->
+            <div class="statistic">
+              <p class="statistic-title">逾期未联系</p>
+              <p class="statistic-value">5</p>
+              <p class="statistic-description">.</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">B级以上客户</p>
+              <p class="statistic-value">61</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">系统删除</p>
+              <p class="statistic-value">61</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">本月总分发</p>
+              <p class="statistic-value">61</p>
+              <p class="statistic-description">签单量 0</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">本月捡回</p>
+              <p class="statistic-value">272</p>
+              <p class="statistic-description">签单量 0</p>
+            </div>
+            <div class="statistic">
+              <p class="statistic-title">总签单数量</p>
+              <p class="statistic-value">128</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div><!-- /右列 -->
+  </div><!-- /cols -->
+
+  <!-- ⑧ 消息中心（通栏 · 四 Tab，同销售工作台） -->
+  <article class="card" style="margin-top:1.25rem;">
+    <div class="card-header">
+      <h3 class="card-title">消息中心</h3>
+      <div class="tab-list" id="msgTabs" role="tablist" aria-label="消息分类"></div>
+    </div>
+    <div class="card-content" style="padding-top:1.25rem;">
+      <div id="msgList" style="max-height:16rem;overflow-y:auto;"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-top:.75rem;">
+        <span class="muted" id="msgCount">「通知」共 10 条</span>
+        <button class="btn" data-variant="outline" data-size="xs" type="button" data-demo="查看更多记录（演示）">查看更多记录</button>
+      </div>
+    </div>
+  </article>
+
+</div><!-- /wrap -->
+
+<script>
+/* ===== 演示交互（线框稿：无后端，全部 mock） ===== */
+
+/* SRC: components/toast/component-skill.md — popover="manual" + 堆叠偏移 */
+var toastCount = 0;
+function toast(title, desc) {
+  var el = document.createElement('div');
+  el.className = 'toast';
+  el.setAttribute('role', 'status');
+  el.setAttribute('aria-live', 'polite');
+  el.setAttribute('aria-atomic', 'true');
+  el.setAttribute('popover', 'manual');
+  el.style.right = '1.25rem';
+  el.style.bottom = 'calc(1.25rem + ' + (toastCount * 60) + 'px)';
+  el.innerHTML =
+    '<svg class="toast-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>' +
+    '<div><p class="toast-title"></p>' + (desc ? '<p class="toast-description"></p>' : '') + '</div>';
+  el.querySelector('.toast-title').textContent = title;
+  if (desc) el.querySelector('.toast-description').textContent = desc;
+  document.body.appendChild(el);
+  try { el.show(); } catch (e) { el.style.display = 'flex'; }
+  toastCount++;
+  setTimeout(function () {
+    try { el.hide(); } catch (e) { el.style.display = 'none'; }
+    el.remove();
+    toastCount = Math.max(0, toastCount - 1);
+  }, 2600);
+}
+
+/* 全局演示按钮委托：[data-demo] */
+document.addEventListener('click', function (e) {
+  var t = e.target.closest('[data-demo]');
+  if (t) toast(t.dataset.demo);
+});
+
+/* SRC: components/dropdown/component-skill.md — Popover API 用户菜单 */
+(function () {
+  var btn = document.getElementById('userBtn');
+  var menu = document.getElementById('userMenu');
+  btn.addEventListener('click', function () {
+    if (!menu.matches(':popover-open')) {
+      var r = btn.getBoundingClientRect();
+      menu.style.top = (r.bottom + 6) + 'px';
+      menu.style.left = 'auto';
+      menu.style.right = Math.max(8, window.innerWidth - r.right) + 'px';
+      menu.show();
+    } else {
+      menu.hide();
+    }
+  });
+  menu.addEventListener('toggle', function () {
+    btn.setAttribute('aria-expanded', menu.matches(':popover-open') ? 'true' : 'false');
+  });
+})();
+
+/* ===== 消息中心（四 Tab · 数据与销售工作台一致） ===== */
+var MSG_TABS = [
+  { key: 'tz', label: '通知' },
+  { key: 'ly', label: '留言' },
+  { key: 'zb', label: '邀请招标' },
+  { key: 'zd', label: '制度栏' }
+];
+var MSGS = {
+  tz: [
+    { t: '2026【国庆】放假及锁库时间安排', from: '刘卫娟', time: '2026/09/30_17:29:46', hit: 129 },
+    { t: '2026版网站广告刊例更新通知！', from: '营销部经理(周海贵)', time: '2026/06/16_18:30:11', hit: 260 },
+    { t: '新签序列采乐会签约规则说明【补充更新】', from: '营销部经理(周海贵)', time: '2026/06/15_10:24:30', hit: 156 },
+    { t: '关于在线支付订单业绩计入规则调整的通知！', from: '营销部经理(周海贵)', time: '2026/06/08_11:23:17', hit: 193 },
+    { t: '新签序列采乐会开通挂账操作！【请注意】', from: '营销部经理(周海贵)', time: '2026/06/08_09:49:37', hit: 138 },
+    { t: '2026【五一】放假及锁库时间安排', from: '营销部经理(周海贵)', time: '2026/04/30_17:10:45', hit: 218 },
+    { t: '关于客服一部编制撤销及人员调整的通知！-2026/4/1', from: '行政部(杨婷)', time: '2026/04/01_10:45:03', hit: 312 },
+    { t: '合同无法盖电子章问题解决方案！【销售必看】', from: '营销部经理(周海贵)', time: '2026/03/26_17:25:52', hit: 246 },
+    { t: '处罚通告48', from: '刘卫娟', time: '2026/03/09_14:45:02', hit: 512 },
+    { t: '员工违纪违规通报', from: '史景凤', time: '2026/02/28_14:14:18', hit: 510 }
+  ],
+  ly: [
+    { t: '销售死于报价？看十年销冠教你阶梯式报价！', from: '营销部经理(周海贵)', time: '2025/03/10_13:56:20', hit: 218 },
+    { t: '开发 | 找准KP开单快人一步，阿里铁军月入100万销售秘籍', from: '营销部经理(周海贵)', time: '2024/09/29_15:39:13', hit: 217 },
+    { t: '资质通事业部目前能够办理的相关资质目录（2024版）', from: '周海贵', time: '2024/05/16_13:52:47', hit: 292 },
+    { t: '2024年度（第一季）标讯话术PK赛优秀话术分享', from: '刘卫娟', time: '2024/03/25_16:21:21', hit: 461 },
+    { t: '2024年度（第一季）标讯话术PK赛【冠亚季军】话术分享', from: '刘卫娟', time: '2024/03/25_16:06:48', hit: 387 },
+    { t: '销售常用短信营销模板集合——2022年10月更新', from: '营销部经理(周海贵)', time: '2022/10/24_14:00:22', hit: 641 },
+    { t: '销售详情页添加客户「行为通知」', from: '窦驰坤', time: '2021/10/11_11:57:07', hit: 366 },
+    { t: '销售客户详情页「相关客户」功能调整为「客户相关权限」功能', from: '窦驰坤', time: '2021/09/24_13:49:32', hit: 289 },
+    { t: '不受信任证书(此网站的安全证书有问题)相关问题解决方案', from: '窦驰坤', time: '2021/08/24_17:37:07', hit: 323 },
+    { t: '移动端退费申请流程（新）', from: '窦驰坤', time: '2021/08/18_14:42:56', hit: 282 }
+  ],
+  zb: [],
+  zd: [
+    { t: '新签序列采乐会签约规则说明', from: '刘卫娟', time: '2026/06/04_13:58:07', hit: 49, bj: true },
+    { t: '员工手册', from: '行政部(杨婷)', time: '2025/08/27_10:18:51', hit: 530, bj: true },
+    { t: '【销售】关于候补优惠折扣业绩通知 -HCTS-XS-23-018', from: '刘卫娟', time: '2023/12/28_17:20:56', hit: 302, bj: true },
+    { t: '员工奖惩制度【202200019号】文件培训视频', from: '行政部', time: '2022/11/21_15:46:48', hit: 397, bj: true },
+    { t: '员工奖惩制度', from: '行政部', time: '2022/11/17_17:56:41', hit: 362, bj: true },
+    { t: '考勤管理制度', from: '行政部', time: '2022/11/17_17:55:35', hit: 769, bj: true },
+    { t: '疫情期间居家办公管理办法-HCTS-XZ--22-016', from: '行政部', time: '2022/05/10_15:59:55', hit: 458, bj: true },
+    { t: '2022版客户投诉退款/退费管理制度', from: '行政部', time: '2022/03/10_13:04:35', hit: 285, bj: true },
+    { t: '保密管理制度2022版', from: '行政部', time: '2022/02/16_12:59:18', hit: 138, bj: true },
+    { t: '【行政】公司物品管理制度-HCTS-XZ-21-009', from: '王红雪', time: '2022/01/06_14:25:10', hit: 257, bj: true }
+  ]
+};
+
+function escMsg(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+var msgTab = 'tz';
+function switchMsgTab(key) { msgTab = key; renderMsg(); }
+function msgTabLabel(key) {
+  for (var i = 0; i < MSG_TABS.length; i++) { if (MSG_TABS[i].key === key) return MSG_TABS[i].label; }
+  return '';
+}
+function msgItem(m) {
+  return '<div style="padding:.625rem .25rem;">' +
+    '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;">' +
+      '<span style="font-weight:500;cursor:pointer;" data-demo="打开消息（演示）">' + escMsg(m.t) + '</span>' +
+      (m.bj ? '<span class="badge" data-variant="danger-outline">北京发布</span>' : '') +
+    '</div>' +
+    '<div class="muted" style="display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.25rem;font-size:.75rem;">' +
+      '<span>发布者：' + escMsg(m.from) + '</span><span>|</span>' +
+      '<span>时间：' + escMsg(m.time) + '</span><span>|</span>' +
+      '<span>点击量：' + m.hit + '</span>' +
+    '</div>' +
+  '</div>';
+}
+function renderMsg() {
+  var tabsHtml = '';
+  for (var i = 0; i < MSG_TABS.length; i++) {
+    var tb = MSG_TABS[i];
+    var n = MSGS[tb.key] ? MSGS[tb.key].length : 0;
+    tabsHtml += '<button class="tab-trigger" type="button" role="tab" aria-selected="' + (msgTab === tb.key) + '" onclick="switchMsgTab(\'' + tb.key + '\')">' +
+      tb.label + '<span class="badge" data-variant="outline">' + n + '</span></button>';
+  }
+  document.getElementById('msgTabs').innerHTML = tabsHtml;
+
+  var list = MSGS[msgTab] || [];
+  var host = document.getElementById('msgList');
+  if (!list.length) {
+    host.innerHTML = '<div class="muted" style="padding:2.5rem 0;text-align:center;">暂无' + msgTabLabel(msgTab) + '记录</div>';
+  } else {
+    var parts = [];
+    for (var j = 0; j < list.length; j++) {
+      if (j > 0) parts.push('<hr class="separator">');
+      parts.push(msgItem(list[j]));
+    }
+    host.innerHTML = parts.join('');
+  }
+  document.getElementById('msgCount').textContent = '「' + msgTabLabel(msgTab) + '」共 ' + list.length + ' 条';
+}
+renderMsg();
+
+/* 深浅色切换（主题含完整 .dark 令牌） */
+document.getElementById('themeBtn').addEventListener('click', function () {
+  var dark = document.documentElement.classList.toggle('dark');
+  toast(dark ? '已切换深色模式' : '已切换浅色模式');
+});
+</script>
+</body>
+</html>
+
