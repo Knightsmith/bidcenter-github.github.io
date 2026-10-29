@@ -626,40 +626,45 @@ tr.rv-weekend td { background: color-mix(in oklab, var(--success) 8%, var(--card
         </div>
       </section>
 
-      <!-- ---------- ⑨ 团队完成率 TOP5 ---------- -->
+      <!-- ---------- ④ 大额成单榜 ---------- -->
       <section class="card">
         <div class="card-header">
           <div>
-            <div class="card-title">团队完成率 TOP5</div>
-            <div class="card-description">月目标完成率</div>
+            <div class="card-title">大额成单榜</div>
+            <div class="card-description">近期签约订单 · 金额降序演示数据</div>
           </div>
-          <span class="badge" data-variant="secondary">本月</span>
         </div>
         <div class="card-content" style="padding-top:.75rem;">
-          <div style="overflow-x:auto;">
+          <div class="marquee tall" id="ordersBox">
             <table class="table">
-              <thead><tr><th>名次</th><th>部门</th><th>经理</th><th>完成率</th></tr></thead>
-              <tbody id="teamBody"></tbody>
+              <thead><tr><th>公司名称</th><th>会员级别</th><th>期限</th><th class="num">签约金额</th><th>主营业务</th><th>签单日期</th></tr></thead>
+              <tbody id="ordersBody"></tbody>
             </table>
           </div>
         </div>
       </section>
 
-      <!-- ---------- ⑧ 新签业绩 TOP10（位于大额成单榜下方） ---------- -->
+      <!-- 外呼数据已并入客户库信息，此处删除原卡 -->
+      <!-- ---------- ⑤ 本月考勤 ---------- -->
       <section class="card">
         <div class="card-header">
           <div>
-            <div class="card-title">新签业绩 TOP10</div>
-            <div class="card-description">悬停暂停滚动</div>
+            <div class="card-title">本月考勤</div>
+            <div class="card-description">2026年10月</div>
           </div>
-          <span class="badge" data-variant="secondary">本月</span>
+          <span class="badge" data-variant="success">连续打卡 12 天</span>
         </div>
-        <div class="card-content" style="padding-top:.75rem;">
-          <div class="marquee" id="top10Box">
-            <table class="table">
-              <thead><tr><th>名次</th><th>姓名</th><th>部门</th><th class="num">业绩</th></tr></thead>
-              <tbody id="top10Body"></tbody>
-            </table>
+        <div class="card-content">
+          <div class="stat-inline" style="justify-content:space-between;margin-bottom:.375rem;">
+            <span class="stat-label">全勤奖进度 <b class="tnum" style="color:var(--foreground);font-weight:600;">12 / 22 天</b></span>
+            <span class="stat-label">还差 <b class="tnum" style="color:var(--foreground);font-weight:600;">10 天</b></span>
+          </div>
+          <progress class="progress" value="12" max="22" data-tone="warning"></progress>
+          <div class="kpis" style="margin-top:.875rem;">
+            <div class="kpi"><div class="kpi-label">迟到</div><div class="kpi-value tnum is-muted">0 次</div></div>
+            <div class="kpi"><div class="kpi-label">早退</div><div class="kpi-value tnum is-muted">0 次</div></div>
+            <div class="kpi"><div class="kpi-label">请假</div><div class="kpi-value tnum">0.5 天</div></div>
+            <div class="kpi"><div class="kpi-label">忘打卡</div><div class="kpi-value tnum is-muted">0 次</div></div>
           </div>
         </div>
       </section>
@@ -744,45 +749,40 @@ tr.rv-weekend td { background: color-mix(in oklab, var(--success) 8%, var(--card
         </div>
       </section>
 
-      <!-- ---------- ④ 大额成单榜 ---------- -->
+      <!-- ---------- ⑨ 团队完成率 TOP5 ---------- -->
       <section class="card">
         <div class="card-header">
           <div>
-            <div class="card-title">大额成单榜</div>
-            <div class="card-description">近期签约订单 · 金额降序演示数据</div>
+            <div class="card-title">团队完成率 TOP5</div>
+            <div class="card-description">月目标完成率</div>
           </div>
+          <span class="badge" data-variant="secondary">本月</span>
         </div>
         <div class="card-content" style="padding-top:.75rem;">
-          <div class="marquee tall" id="ordersBox">
+          <div style="overflow-x:auto;">
             <table class="table">
-              <thead><tr><th>公司名称</th><th>会员级别</th><th>期限</th><th class="num">签约金额</th><th>主营业务</th><th>签单日期</th></tr></thead>
-              <tbody id="ordersBody"></tbody>
+              <thead><tr><th>名次</th><th>部门</th><th>经理</th><th>完成率</th></tr></thead>
+              <tbody id="teamBody"></tbody>
             </table>
           </div>
         </div>
       </section>
 
-      <!-- 外呼数据已并入客户库信息，此处删除原卡 -->
-      <!-- ---------- ⑤ 本月考勤 ---------- -->
+      <!-- ---------- ⑧ 新签业绩 TOP10（位于大额成单榜下方） ---------- -->
       <section class="card">
         <div class="card-header">
           <div>
-            <div class="card-title">本月考勤</div>
-            <div class="card-description">2026年10月</div>
+            <div class="card-title">新签业绩 TOP10</div>
+            <div class="card-description">悬停暂停滚动</div>
           </div>
-          <span class="badge" data-variant="success">连续打卡 12 天</span>
+          <span class="badge" data-variant="secondary">本月</span>
         </div>
-        <div class="card-content">
-          <div class="stat-inline" style="justify-content:space-between;margin-bottom:.375rem;">
-            <span class="stat-label">全勤奖进度 <b class="tnum" style="color:var(--foreground);font-weight:600;">12 / 22 天</b></span>
-            <span class="stat-label">还差 <b class="tnum" style="color:var(--foreground);font-weight:600;">10 天</b></span>
-          </div>
-          <progress class="progress" value="12" max="22" data-tone="warning"></progress>
-          <div class="kpis" style="margin-top:.875rem;">
-            <div class="kpi"><div class="kpi-label">迟到</div><div class="kpi-value tnum is-muted">0 次</div></div>
-            <div class="kpi"><div class="kpi-label">早退</div><div class="kpi-value tnum is-muted">0 次</div></div>
-            <div class="kpi"><div class="kpi-label">请假</div><div class="kpi-value tnum">0.5 天</div></div>
-            <div class="kpi"><div class="kpi-label">忘打卡</div><div class="kpi-value tnum is-muted">0 次</div></div>
+        <div class="card-content" style="padding-top:.75rem;">
+          <div class="marquee" id="top10Box">
+            <table class="table">
+              <thead><tr><th>名次</th><th>姓名</th><th>部门</th><th class="num">业绩</th></tr></thead>
+              <tbody id="top10Body"></tbody>
+            </table>
           </div>
         </div>
       </section>
