@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>联系方式（积分解锁演示） - 企业详情 | v2.2.2</title>
+<title>联系方式（积分解锁演示） - 企业详情 | v3.6</title>
 <style>
 @layer tokens, base, components;
 @layer tokens {
@@ -33,7 +33,7 @@
 
 /* 斜切页签：外层留出血，防止平行四边形缺角 */
 .channel-bar-wrap { padding: 0 16px; }
-.channel-bar { background: #e4edfb; display: flex; gap: 4px; padding: 6px 12px 0; overflow: visible; }
+.channel-bar { background: #e4edfb; display: flex; gap: 4px; padding: 6px 20px 0; overflow: visible; }
 .channel-tab {
   width: 132px; height: 46px; display: flex; align-items: center; justify-content: center;
   transform: skewX(-18deg); cursor: pointer; border: none; font: 500 16px var(--font-sans);
@@ -99,28 +99,30 @@
 .pagination-list a[aria-disabled="true"] { opacity: .5; pointer-events: none; }
 .pagination-ellipsis { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; color: #909399; }
 
-/* 积分解锁门 */
+/* 积分解锁弹窗（橙色版视觉；遮罩只盖表格区域，不遮盖整个页面） */
+.lock-area { position: relative; min-height: 420px; }
+.lock-overlay {
+  position: absolute; inset: 0; z-index: 60;
+  background: rgba(0, 0, 0, .32);
+  display: flex; align-items: center; justify-content: center;
+}
+.lock-overlay[hidden] { display: none; }
 .lock-gate {
-  position: relative; margin: 22px 32px 8px; padding: 56px 48px 40px; text-align: center;
-  background: linear-gradient(180deg, #fff8ec 0%, #ffffff 70%);
+  position: relative; width: 400px; margin: 0; padding: 26px 28px 24px; text-align: center;
+  background: linear-gradient(180deg, #fff8ec 0%, #ffffff 55%);
   border: 2px solid #ffb35c; border-radius: 12px;
-  box-shadow: 0 12px 40px rgba(255, 119, 0, 0.16);
+  box-shadow: 0 12px 40px rgba(255, 119, 0, 0.28);
 }
-.lock-icon { margin: 0 auto; display: block; }
-.lock-gate h3 { margin: 14px 0 0; font-size: 22px; color: #333333; }
-.lock-desc { margin: 10px 0 0; font-size: 14px; color: #666666; }
-.lock-desc b { color: #ff5000; font-size: 18px; }
-.lock-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; }
-.lock-chip {
-  display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 999px;
-  background: #ffefe2; border: 1px solid #ffcf9f; color: #e65c00; font-size: 13px; font-weight: 500;
-}
-.lock-credits { margin-top: 22px; font-size: 14px; color: #666666; }
-.lock-credits b { color: #ff5000; font-size: 18px; }
+.lock-gate h3 { margin: 0; font-size: 16px; color: #333333; }
+.lock-sub { margin: 12px 0 0; font-size: 13px; color: #666666; }
+.lock-digits { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 10px; }
+.lock-digits .d { min-width: 34px; padding: 5px 0; border: 2px dashed #ffb35c; border-radius: 6px; background: #ffffff; font-size: 22px; font-weight: 800; color: #ff5000; }
+.lock-digits .u { font-size: 13px; color: #666666; }
+.lock-note { margin: 12px 0 0; font-size: 12px; color: #999999; }
 .btn-unlock {
-  margin-top: 14px; height: 52px; padding: 0 44px; border: none; border-radius: 8px;
+  margin-top: 16px; height: 44px; padding: 0 40px; border: none; border-radius: 8px;
   background: linear-gradient(90deg, #ff8f3c 0%, #ff5000 100%); color: #ffffff;
-  font-size: 17px; font-weight: 600; font-family: var(--font-sans); cursor: pointer;
+  font-size: 16px; font-weight: 600; font-family: var(--font-sans); cursor: pointer;
   animation: unlock-pulse 1.6s infinite;
 }
 .btn-unlock:hover { opacity: 0.92; }
@@ -195,29 +197,30 @@
       <a class="contact-tab active" href="#sec-bid">中标联系人</a>
       <a class="contact-tab" href="#sec-biz">工商联系人</a>
     </div>
-    <div class="lock-gate" id="lock-gate">
-      <svg class="lock-icon" aria-hidden="true" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ff5000" stroke-width="1.6" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.6" fill="#ff5000" stroke="none"/></svg>
-      <h3>以下联系方式已锁定</h3>
-      <p class="lock-desc">使用 <b>10 积分</b> 永久解锁该企业全部联系电话</p>
-      <div class="lock-chips">
-        <span class="lock-chip"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>企业联系电话</span>
-        <span class="lock-chip"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>中标项目联系人电话</span>
-        <span class="lock-chip"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>工商登记联系人电话</span>
+    <div class="lock-area">
+      <section class="section" id="sec-bid">
+        <h3 class="sec-title">中标项目联系人</h3>
+        <div id="tbl-bid"></div>
+      </section>
+      <section class="section" id="sec-biz" hidden>
+        <h3 class="sec-title">工商登记联系人</h3>
+        <div id="tbl-biz"></div>
+      </section>
+      <div class="lock-overlay" id="lock-overlay">
+        <div class="lock-gate" id="lock-gate">
+          <h3>解锁「华为技术有限公司」的联系方式</h3>
+          <p class="lock-sub">解锁全维度工商信息 · 账户剩余积分：</p>
+          <div class="lock-digits" id="lock-digits">
+            <span class="d">5</span><span class="d">0</span><span class="u">积分</span>
+          </div>
+          <p class="lock-note">解锁后有效期内不会重复扣分</p>
+          <button class="btn-unlock" id="unlock-btn">使用 10 积分 立即解锁</button>
+        </div>
       </div>
-      <div class="lock-credits">我的积分：<b id="my-credits">50</b></div>
-      <button class="btn-unlock" id="unlock-btn">立即用 10 积分永久解锁全部电话</button>
     </div>
-    <section class="section" id="sec-bid">
-      <h3 class="sec-title">中标项目联系人</h3>
-      <div id="tbl-bid"></div>
-    </section>
-    <section class="section" id="sec-biz">
-      <h3 class="sec-title">工商登记联系人</h3>
-      <div id="tbl-biz"></div>
-    </section>
   </div>
 </div>
-<div class="version-badge">v2.2.2</div>
+<div class="version-badge">v3.8</div>
 <script>
 (function () {
   'use strict';
@@ -281,12 +284,18 @@
     if (total>PER) html += '<div class="pager"><span class="pager-total">共 '+total+' 条</span><ul class="pagination-list">'+pag(type,cur,tp)+'</ul></div>';
     document.getElementById('tbl-'+type).innerHTML = html;
   }
+  /* 锁定态渲染表格（电话 **** 遮罩）在遮罩后展示，解锁后重渲染真实电话 */
   render('bid'); render('biz');
 
   document.querySelector('.contact-tabs').addEventListener('click', function (e) {
     var t = e.target.closest('.contact-tab'); if (!t) return;
     document.querySelectorAll('.contact-tab').forEach(function(x){ x.classList.remove('active'); });
     t.classList.add('active');
+    var id = t.getAttribute('href');
+    var bidSec2 = document.getElementById('sec-bid');
+    var bizSec2 = document.getElementById('sec-biz');
+    if (bidSec2) bidSec2.hidden = (id !== '#sec-bid');
+    if (bizSec2) bizSec2.hidden = (id !== '#sec-biz');
   });
   document.addEventListener('click', function (e) {
     var a = e.target.closest('.pagination a[data-type]');
@@ -308,13 +317,19 @@
   /* 积分解锁 */
   document.addEventListener('click', function (e) {
     if (!e.target.closest('#unlock-btn')) return;
-    var mc = document.getElementById('my-credits');
-    if (mc) mc.textContent = String(parseInt(mc.textContent, 10) - 10);
+    /* 扣 10 积分：数字格 50 → 40 */
+    var ds = document.querySelectorAll('#lock-digits .d');
+    if (ds.length) {
+      var cur = parseInt(Array.prototype.map.call(ds, function (d) { return d.textContent; }).join(''), 10) || 50;
+      var next = String(Math.max(0, cur - 10));
+      while (next.length < ds.length) next = '0' + next;
+      Array.prototype.forEach.call(ds, function (d, i) { d.textContent = next[i]; });
+    }
     LOCKED = false;
     var bp = document.getElementById('base-phone');
     if (bp) bp.textContent = '0755-28780808';
-    var gate = document.getElementById('lock-gate');
-    if (gate) gate.remove();
+    var ov = document.getElementById('lock-overlay');
+    if (ov) ov.remove();
     render('bid'); render('biz');
     var badge = document.createElement('span');
     badge.className = 'badge unlock-badge';
@@ -322,7 +337,7 @@
     document.querySelector('.co-tags').appendChild(badge);
     var t = document.createElement('div');
     t.className = 'toast';
-    t.textContent = '解锁成功：已扣 10 积分，该企业全部联系电话已解锁';
+    t.textContent = '解锁成功：已扣 10 积分，该企业联系电话已解锁';
     document.body.appendChild(t);
     setTimeout(function () { t.classList.add('show'); }, 20);
     setTimeout(function () { t.classList.remove('show'); setTimeout(function () { t.remove(); }, 400); }, 2800);

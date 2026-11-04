@@ -94,11 +94,11 @@
 .page { max-width: 1400px; margin: 0 auto; }
 
 /* top channel tabs (skewed) */
-.channel-bar { background: #e4edfb; display: flex; gap: 4px; padding-left: 0; overflow: hidden; }
+.channel-bar { background: #e4edfb; display: flex; gap: 4px; padding: 6px 20px 0; overflow: visible; }
 .channel-tab {
   width: 132px; height: 46px; display: flex; align-items: center; justify-content: center;
   transform: skewX(-18deg); cursor: pointer; border: none; font-family: var(--font-sans);
-  font-size: 16px; font-weight: 500; background: #d5e5fb; color: #2b7bff;
+  font-size: 16px; font-weight: 500; background: #d5e5fb; color: #2b7bff; box-shadow: 3px 0 0 0 #e4edfb;
 }
 .channel-tab > span { transform: skewX(18deg); }
 .channel-tab.active { background: linear-gradient(180deg, #6ba1f5 0%, #4d8bf0 100%); color: #ffffff; }
@@ -213,28 +213,30 @@
 .pagination-ellipsis { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; color: #909399; }
 .link-cell { color: #2b7bff; text-decoration: none; }
 
-/* 积分解锁门 */
+/* 积分解锁弹窗（橙色版视觉；遮罩只盖锁定内容区域，不遮盖整个页面） */
+.lock-area { position: relative; min-height: 460px; }
+.lock-overlay {
+  position: absolute; inset: 0; z-index: 60;
+  background: rgba(0, 0, 0, .32);
+  display: flex; align-items: center; justify-content: center;
+}
+.lock-overlay[hidden] { display: none; }
 .lock-gate {
-  position: relative; margin: 10px 32px 44px; padding: 56px 48px 40px; text-align: center;
-  background: linear-gradient(180deg, #fff8ec 0%, #ffffff 70%);
+  position: relative; width: 400px; margin: 0; padding: 26px 28px 24px; text-align: center;
+  background: linear-gradient(180deg, #fff8ec 0%, #ffffff 55%);
   border: 2px solid #ffb35c; border-radius: 12px;
-  box-shadow: 0 12px 40px rgba(255, 119, 0, 0.16);
+  box-shadow: 0 12px 40px rgba(255, 119, 0, 0.28);
 }
-.lock-icon { margin: 0 auto; display: block; }
-.lock-gate h3 { margin: 14px 0 0; font-size: 22px; color: #333333; }
-.lock-desc { margin: 10px 0 0; font-size: 14px; color: #666666; }
-.lock-desc b { color: #ff5000; font-size: 18px; }
-.lock-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; }
-.lock-chip {
-  display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 999px;
-  background: #ffefe2; border: 1px solid #ffcf9f; color: #e65c00; font-size: 13px; font-weight: 500;
-}
-.lock-credits { margin-top: 22px; font-size: 14px; color: #666666; }
-.lock-credits b { color: #ff5000; font-size: 18px; }
+.lock-gate h3 { margin: 0; font-size: 16px; color: #333333; }
+.lock-sub { margin: 12px 0 0; font-size: 13px; color: #666666; }
+.lock-digits { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 10px; }
+.lock-digits .d { min-width: 34px; padding: 5px 0; border: 2px dashed #ffb35c; border-radius: 6px; background: #ffffff; font-size: 22px; font-weight: 800; color: #ff5000; }
+.lock-digits .u { font-size: 13px; color: #666666; }
+.lock-note { margin: 12px 0 0; font-size: 12px; color: #999999; }
 .btn-unlock {
-  margin-top: 14px; height: 52px; padding: 0 44px; border: none; border-radius: 8px;
+  margin-top: 16px; height: 44px; padding: 0 40px; border: none; border-radius: 8px;
   background: linear-gradient(90deg, #ff8f3c 0%, #ff5000 100%); color: #ffffff;
-  font-size: 17px; font-weight: 600; font-family: var(--font-sans); cursor: pointer;
+  font-size: 16px; font-weight: 600; font-family: var(--font-sans); cursor: pointer;
   animation: unlock-pulse 1.6s infinite;
 }
 .btn-unlock:hover { opacity: 0.92; }
@@ -586,17 +588,22 @@
   var LOCKED = true;   /* 积分解锁演示版：默认仅显示工商信息，其余维度锁定 */
 
   function gateHTML() {
-    var chips = visibleSecs.slice(1).map(function (s) {
-      return '<span class="lock-chip"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>' + s.title + '</span>';
-    }).join('');
-    return '<div class="lock-gate" id="lock-gate">' +
-      '<svg class="lock-icon" aria-hidden="true" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ff5000" stroke-width="1.6" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.6" fill="#ff5000" stroke="none"/></svg>' +
-      '<h3>以下内容已锁定</h3>' +
-      '<p class="lock-desc">使用 <b>10 积分</b> 永久解锁该企业全部维度信息</p>' +
-      '<div class="lock-chips">' + chips + '</div>' +
-      '<div class="lock-credits">我的积分：<b id="my-credits">50</b></div>' +
-      '<button class="btn-unlock" id="unlock-btn">立即用 10 积分解锁该企业</button>' +
+    var name = (document.querySelector('.co-name') || {}).textContent || '该企业';
+    return '<div class="lock-overlay" id="lock-overlay">' +
+      '<div class="lock-gate" id="lock-gate">' +
+        '<h3>解锁「' + name.trim() + '」全维度工商信息</h3>' +
+        '<p class="lock-sub">解锁全维度工商信息 · 账户剩余积分：</p>' +
+        '<div class="lock-digits" id="lock-digits"><span class="d">5</span><span class="d">0</span><span class="u">积分</span></div>' +
+        '<p class="lock-note">解锁后有效期内不会重复扣分</p>' +
+        '<button class="btn-unlock" id="unlock-btn">使用 10 积分 立即解锁</button>' +
+      '</div>' +
     '</div>';
+  }
+
+  /* 锁定区底层占位：复制工商信息表，伪装成其他维度的信息 */
+  function lockMockHTML() {
+    return '<section class="section"><h3 class="sec-title">股东信息</h3><div class="sec-body">' + kvTable() + '</div></section>' +
+      '<section class="section"><h3 class="sec-title">历史变更</h3><div class="sec-body">' + kvTable() + '</div></section>';
   }
 
   function renderAll() {
@@ -604,7 +611,7 @@
   }
 
   if (LOCKED) {
-    secBox.innerHTML = sectionHTML(visibleSecs[0]) + gateHTML();
+    secBox.innerHTML = sectionHTML(visibleSecs[0]) + '<div class="lock-area">' + lockMockHTML() + gateHTML() + '</div>';
   } else {
     renderAll();
   }
@@ -631,18 +638,24 @@
   /* 积分解锁 */
   document.addEventListener('click', function (e) {
     if (!e.target.closest('#unlock-btn')) return;
-    var mc = document.getElementById('my-credits');
-    if (mc) mc.textContent = String(parseInt(mc.textContent, 10) - 10);
-    var gate = document.getElementById('lock-gate');
-    if (gate) gate.remove();
+    /* 扣 10 积分：数字格 50 → 40 */
+    var ds = document.querySelectorAll('#lock-digits .d');
+    if (ds.length) {
+      var cur = parseInt(Array.prototype.map.call(ds, function (d) { return d.textContent; }).join(''), 10) || 50;
+      var next = String(Math.max(0, cur - 10));
+      while (next.length < ds.length) next = '0' + next;
+      Array.prototype.forEach.call(ds, function (d, i) { d.textContent = next[i]; });
+    }
+    var ov = document.getElementById('lock-overlay');
+    if (ov && ov.parentNode) ov.parentNode.remove();   /* 整个 lock-area（遮罩+弹窗）移除 */
     renderAll();
     var badge = document.createElement('span');
     badge.className = 'badge unlock-badge';
-    badge.textContent = '已永久解锁';
+    badge.textContent = '已解锁';
     document.querySelector('.co-tags').appendChild(badge);
     var t = document.createElement('div');
     t.className = 'toast';
-    t.textContent = '解锁成功：已扣 10 积分，该企业全部信息永久解锁';
+    t.textContent = '解锁成功：已扣 10 积分，该企业全维度工商信息已解锁';
     document.body.appendChild(t);
     setTimeout(function () { t.classList.add('show'); }, 20);
     setTimeout(function () { t.classList.remove('show'); setTimeout(function () { t.remove(); }, 400); }, 2800);
@@ -688,6 +701,6 @@
 })();
 </script>
 
-<div class="version-badge">v2.1</div>
+<div class="version-badge">v3.8</div>
 </body>
 </html>

@@ -27,7 +27,7 @@ AIGC:
 | 文件 | 说明 |
 |------|------|
 | `sidebar.html` | 主入口：shadcn sidebar-07 风格侧边栏 + 内容区，含菜单切换、折叠、面包屑 |
-| `workbench.html` | 独立的「工作台」落地页（统计卡 + 快捷入口 + 最新动态），在 sidebar.html 内容区 iframe 中加载此页（v2.1 由 `workbench.html` 重命名） |
+| `workbench.html` | 「工作台」落地页（v3.7 按官网截图重构）：顶部「免费福利领取」横幅 + 待办事项 + 功能板 + 待支付订单 + 历史企业分析（中国地图/月度折线）+ 右栏会员信息/优质线索/商机工具/同行中标信息，在 sidebar.html 内容区 iframe 中加载此页 |
 | `team-batch-auth.html` | 「账号中心 → 企业团队(子账户)」的真实落地页（v2.1 由中文名重命名） |
 | `README.md` | 本文档 |
 | `CHANGELOG.md` | 版本变更记录（新版本在前，每次改动必须更新） |
