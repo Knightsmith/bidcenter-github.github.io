@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>企业详情 - 360度企业全景画像分析</title>
+<style>
+@layer tokens, base, components;
+
+@layer tokens {
+  :root {
+    --background: #ffffff;        --foreground: #333333;
+    --card: #ffffff;              --card-foreground: #333333;
+    --popover: #ffffff;           --popover-foreground: #333333;
+    --primary: #2b7bff;           --primary-foreground: #ffffff;
+    --secondary: #f4f4f5;         --secondary-foreground: #606266;
+    --muted: #f5f7fa;             --muted-foreground: #999999;
+    --accent: #ecf5ff;            --accent-foreground: #2b7bff;
+    --destructive: #f56c6c;       --destructive-foreground: #ffffff;
+    --border: #ebeef5;            --input: #dcdfe6;            --ring: #2b7bff;
+    --radius-sm: 0.125rem; --radius-md: 0.25rem; --radius-lg: 0.5rem; --radius-xl: 0.75rem;
+    --font-sans: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    --shadow-xs: 0 1px 2px rgb(0 0 0 / .05);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / .1);
+  }
+}
+
+@layer base {
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: #f0f3fa;
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+}
+
+/* ==== library component CSS: button ==== */
+@layer components {
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    white-space: nowrap; font-size: 0.875rem; font-weight: 500; font-family: var(--font-sans);
+    line-height: 1; border-radius: var(--radius-md); border: 1px solid transparent;
+    cursor: pointer; text-decoration: none; transition: all 150ms ease; outline: none;
+    flex-shrink: 0; height: 2.25rem; padding: 0 1rem;
+    background-color: var(--primary); color: var(--primary-foreground);
+    & svg { pointer-events: none; flex-shrink: 0; &:not([class*="size-"]) { width: 1rem; height: 1rem; } }
+    &:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+    &:disabled, &[aria-disabled="true"] { pointer-events: none; opacity: 0.5; }
+    &[data-variant="default"] { background-color: var(--primary); color: var(--primary-foreground); &:hover { opacity: 0.9; } }
+    &[data-variant="secondary"] { background-color: var(--secondary); color: var(--secondary-foreground); &:hover { opacity: 0.8; } }
+    &[data-variant="outline"] { background-color: var(--background); color: var(--foreground); border: 1px solid var(--border); box-shadow: var(--shadow-xs); &:hover { background-color: var(--accent); color: var(--accent-foreground); } }
+    &[data-variant="ghost"] { background-color: transparent; color: var(--foreground); border-color: transparent; &:hover { background-color: var(--accent); color: var(--accent-foreground); } }
+    &[data-variant="link"] { background-color: transparent; color: var(--primary); height: auto; padding: 0; text-underline-offset: 4px; &:hover { text-decoration: underline; } }
+    &[data-size="xs"] { height: 1.75rem; padding: 0 0.5rem; font-size: 0.75rem; border-radius: var(--radius-sm); }
+    &[data-size="sm"] { height: 2rem; padding: 0 0.75rem; font-size: 0.8125rem; }
+    &[data-size="lg"] { height: 2.75rem; padding: 0 2rem; font-size: 1rem; }
+    &[data-size="icon"] { height: 2.25rem; width: 2.25rem; padding: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
+}
+
+/* ==== library component CSS: badge ==== */
+@layer components {
+  .badge {
+    display: inline-flex; align-items: center; border-radius: 9999px;
+    padding: 0.125rem 0.625rem; font-size: 0.6875rem; font-weight: 500;
+    letter-spacing: 0.01em; line-height: 1.5rem;
+    &[data-variant="outline"] { border: 1px solid var(--border); color: var(--muted-foreground); }
+    &[data-variant="secondary"] { background: var(--secondary); color: var(--secondary-foreground); }
+    &[data-variant="default"] { background: var(--primary); color: var(--primary-foreground); }
+  }
+}
+
+/* ==== library component CSS: input ==== */
+@layer components {
+  .input {
+    height: 2.5rem; width: 100%; border: 1px solid var(--input); border-radius: var(--radius-md);
+    background: var(--background); padding: 0 0.75rem; font-size: 0.875rem; font-family: var(--font-sans);
+    color: var(--foreground); outline: none; box-shadow: var(--shadow-xs);
+    transition: border-color 150ms, box-shadow 150ms;
+    &:focus { border-color: var(--ring); box-shadow: 0 0 0 2px oklch(from var(--ring) l c h / 0.2); }
+    &::placeholder { color: var(--muted-foreground); }
+    &:disabled { opacity: 0.5; cursor: not-allowed; }
+  }
+}
+
+/* ============ page-level (unlayered) ============ */
+.page { max-width: 1400px; margin: 0 auto; }
+
+/* top channel tabs (skewed) */
+.channel-bar { background: #e4edfb; display: flex; gap: 4px; padding-left: 0; overflow: hidden; }
+.channel-tab {
+  width: 132px; height: 46px; display: flex; align-items: center; justify-content: center;
+  transform: skewX(-18deg); cursor: pointer; border: none; font-family: var(--font-sans);
+  font-size: 16px; font-weight: 500; background: #d5e5fb; color: #2b7bff;
+}
+.channel-tab > span { transform: skewX(18deg); }
+.channel-tab.active { background: linear-gradient(180deg, #6ba1f5 0%, #4d8bf0 100%); color: #ffffff; }
+
+.card { background: #ffffff; border: 1px solid #ebeef5; border-top: none; }
+
+/* company header */
+.co-head { display: flex; align-items: flex-start; gap: 14px; padding: 22px 32px 18px; position: relative; }
+.co-icon {
+  width: 52px; height: 52px; border-radius: 6px; background: #d8e6fd; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.co-name { font-size: 22px; font-weight: 600; color: #333333; margin: 2px 0 0; }
+.co-tags { margin-top: 10px; }
+.badge[data-variant="tag-blue"] { background: #e8f1ff; color: #409eff; border-radius: 2px; padding: 0 8px; font-size: 12px; line-height: 20px; font-weight: 400; }
+.co-actions { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.co-btns { display: flex; gap: 12px; }
+.btn-orange { background: linear-gradient(90deg, #ff8f3c 0%, #ff5000 100%); color: #fff; }
+.btn-orange:hover { opacity: 0.92; }
+.btn-monitor { background: #d6e4ff; color: #2b7bff; }
+.btn-monitor:hover { opacity: 0.88; }
+.co-update { display: inline-flex; align-items: center; gap: 5px; color: #999999; font-size: 12px; }
+
+/* base info panel */
+.base-panel { margin: 0 32px; background: #f4f6fb; border-radius: 4px; padding: 20px 28px; position: relative; }
+.base-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 60px; font-size: 14px; }
+.base-item .k { color: #999999; }
+.base-item .v { color: #333333; margin-left: 6px; }
+.base-item .v a { color: #2b7bff; text-decoration: none; margin-left: 10px; font-size: 13px; }
+.base-item .v a:hover { text-decoration: underline; }
+.base-tools { position: absolute; top: 16px; right: 24px; display: flex; align-items: center; gap: 14px; }
+.copy-link { color: #2b7bff; font-size: 13px; text-decoration: none; background: none; border: none; padding: 0; cursor: pointer; font-family: var(--font-sans); }
+.copy-link:hover { text-decoration: underline; }
+.follow-btn {
+  display: inline-flex; align-items: center; gap: 6px; background: none; border: none; padding: 0;
+  color: #666666; font-size: 14px; font-family: var(--font-sans); cursor: pointer;
+}
+.follow-btn:hover { color: #2b7bff; }
+.follow-btn.on { color: #2b7bff; }
+.follow-btn.on svg { fill: currentColor; }
+
+/* main nav tabs */
+.main-nav { display: flex; gap: 64px; padding: 0 32px; margin-top: 22px; border-bottom: 1px solid #ebeef5; }
+.main-nav a {
+  position: relative; display: inline-flex; align-items: center; height: 54px;
+  color: #333333; font-size: 16px; font-weight: 600; text-decoration: none;
+}
+.main-nav a.active { color: #2b7bff; }
+.main-nav a.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; background: #2b7bff; }
+.nav-badge {
+  position: absolute; top: 6px; right: -34px; background: #f5484d; color: #ffffff;
+  font-size: 10px; font-weight: 400; line-height: 16px; padding: 0 6px; border-radius: 3px; white-space: nowrap;
+}
+
+/* sub pills */
+.pill-bar { display: flex; flex-wrap: wrap; gap: 12px; padding: 18px 32px; background: #ffffff; }
+.pill {
+  height: 32px; padding: 0 16px; border-radius: 4px; border: 1px solid #dcdfe6; background: #ffffff;
+  color: #606266; font-size: 13px; font-family: var(--font-sans); cursor: pointer;
+}
+.pill:hover { color: #2b7bff; border-color: #2b7bff; }
+.pill.active { background: #2b7bff; border-color: #2b7bff; color: #ffffff; }
+.pill.disabled { background: #f4f4f5; border-color: #f4f4f5; color: #c0c4cc; cursor: not-allowed; }
+.pill.disabled:hover { color: #c0c4cc; border-color: #f4f4f5; }
+
+/* sections */
+.section { padding: 6px 32px 26px; background: #ffffff; }
+.sec-title {
+  font-size: 14px; font-weight: 600; color: #333333; margin: 0 0 14px;
+  padding-left: 8px; border-left: 3px solid #2b7bff; line-height: 16px;
+}
+.sec-head { display: flex; align-items: center; gap: 16px; margin-bottom: 14px; }
+.sec-head .sec-title { margin: 0; }
+.ad-banner { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; }
+.ad-banner .ad-logo { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: #333333; font-size: 15px; }
+.ad-banner a { color: #2b7bff; text-decoration: none; }
+.ad-banner a:hover { text-decoration: underline; }
+.cert-search { position: relative; width: 200px; flex-shrink: 0; }
+.cert-search .input { height: 32px; font-size: 12px; padding-right: 28px; }
+.cert-search svg { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #c0c4cc; }
+
+/* tables */
+.tbl { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
+.tbl th, .tbl td { border: 1px solid #ebeef5; padding: 10px 12px; text-align: center; color: #606266; word-break: break-all; }
+.tbl th { background: #f4f6fb; color: #333333; font-weight: 500; }
+.tbl tbody tr:hover td { background: #e8f1fd; }
+.tbl td.left { text-align: left; }
+.tbl-kv th { width: 12.5%; }
+.tbl-kv td { text-align: left; color: #606266; }
+.tbl .empty-row td { text-align: center; color: #999999; padding: 30px 0; }
+.tbl .empty-row:hover td { background: transparent; }
+.detail-btn {
+  background: #d6e4ff; color: #2b7bff; border: none; border-radius: 3px;
+  font-size: 12px; line-height: 24px; padding: 0 14px; cursor: pointer; font-family: var(--font-sans);
+}
+.detail-btn:hover { background: #c3d9ff; }
+.pager { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 14px; }
+.pager-total { font-size: 13px; color: #666666; }
+.pagination { display: flex; justify-content: flex-end; }
+.pagination-list { display: flex; align-items: center; gap: 8px; list-style: none; margin: 0; padding: 0; }
+.pagination-list a {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 32px; height: 32px; padding: 0 8px;
+  border: 1px solid #dcdfe6; border-radius: 4px; background: #ffffff;
+  color: #606266; font-size: 13px; text-decoration: none;
+}
+.pagination-list a:hover { border-color: #2b7bff; color: #2b7bff; }
+.pagination-list a.pag-text { background: #f4f4f5; border-color: #f4f4f5; padding: 0 12px; }
+.pagination-list a.pag-text:hover { color: #2b7bff; }
+.pagination-list a.pagination-active { border-color: #2b7bff; color: #2b7bff; font-weight: 500; }
+.pagination-list a[aria-disabled="true"] { opacity: 0.5; pointer-events: none; }
+.pagination-ellipsis { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; color: #909399; }
+.link-cell { color: #2b7bff; text-decoration: none; }
+
+/* back to top */
+.back-top {
+  position: fixed; right: 60px; bottom: 100px; width: 56px; height: 56px; border-radius: 50%;
+  background: #ffffff; border: none; cursor: pointer; box-shadow: 0 4px 16px rgba(31, 45, 61, 0.15);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden; transition: opacity .2s, visibility .2s; z-index: 50;
+}
+.back-top.show { opacity: 1; visibility: visible; }
+/* 版本徽标 */
+.version-badge { position: fixed; right: 16px; bottom: 14px; z-index: 40; font-size: 11px; color: #999; background: rgba(255,255,255,.8); border: 1px solid #ebeef5; border-radius: 999px; padding: 2px 10px; letter-spacing: .5px; user-select: none; }
+
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="channel-bar">
+    <button class="channel-tab active"><span>业主</span></button>
+    <button class="channel-tab"><span>供应商</span></button>
+  </div>
+
+  <div class="card">
+    <!-- company header -->
+    <div class="co-head">
+      <div class="co-icon">
+        <svg aria-hidden="true" width="28" height="28" viewBox="0 0 48 48" fill="none" stroke="#6d9bf2" stroke-width="2.5" stroke-linejoin="round">
+          <path d="M8 40V18l14-6v28"/><path d="M22 40V22l16-4v22"/><path d="M4 40h40"/>
+          <rect x="13" y="22" width="4" height="4" fill="#6d9bf2" stroke="none"/>
+          <rect x="13" y="30" width="4" height="4" fill="#6d9bf2" stroke="none"/>
+          <rect x="28" y="26" width="4" height="4" fill="#6d9bf2" stroke="none"/>
+          <rect x="28" y="33" width="4" height="4" fill="#6d9bf2" stroke="none"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="co-name" id="co-name">--</h1>
+        <div class="co-tags"><span class="badge" data-variant="tag-blue" id="co-status">--</span></div>
+      </div>
+      <div class="co-actions">
+        <div class="co-btns">
+          <button class="btn btn-orange">企业报告</button>
+          <button class="btn btn-monitor">企业监控</button>
+        </div>
+        <span class="co-update">
+          <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <span id="co-update">--</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- base info panel -->
+    <div class="base-panel">
+      <div class="base-tools">
+        <button class="copy-link" id="copy-btn">复制企业信息</button>
+        <button class="follow-btn" id="follow-btn">
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <span>关注</span>
+        </button>
+      </div>
+      <div class="base-grid" id="base-grid"></div>
+    </div>
+
+    <!-- main nav -->
+    <nav class="main-nav">
+      <a href="#" onclick="return false;">中标分析</a>
+      <a href="#" onclick="return false;">中标业绩</a>
+      <a href="#" onclick="return false;">商机脉络<span class="nav-badge">关系网</span></a>
+      <a href="#" class="active" onclick="return false;">查企业</a>
+      <a href="#" onclick="return false;">找人脉<span class="nav-badge">联系方式</span></a>
+    </nav>
+
+    <!-- sub pills -->
+    <div class="pill-bar" id="pill-bar"></div>
+
+    <!-- sections rendered by JS -->
+    <div id="sections"></div>
+  </div>
+</div>
+
+<button class="back-top" id="back-top" aria-label="回到顶部">
+  <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2b7bff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></svg>
+</button>
+
+<!-- 水滴信用开放平台 · 企业全维度信息接口（Full/V1）返回数据 -->
+<script type="application/json" id="api-data">__API_DATA__</script>
+
+<script>
+(function () {
+  'use strict';
+
+  var RAW = JSON.parse(document.getElementById('api-data').textContent);
+  var R = (RAW && RAW.data && RAW.data.result) || {};
+  var B = R.Base || {};
+  var CI = R.ContactInfo || {};
+  var IND = R.Industry || {};
+
+  function esc(s) {
+    if (s === null || s === undefined || s === '') return '--';
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function d10(s) { return s ? String(s).slice(0, 10) : '--'; }
+  function list(v) { return Array.isArray(v) ? v : []; }
+
+  /* 示例数据：接口包含但本次数据文件为空的维度（经营异常/行政处罚/被执行人/失信/动产抵押/股权出质/清算），字段与接口文档一致 */
+  var MOCK = {
+    exceptions: [
+      { AddReason: '通过登记的住所或者经营场所无法取得联系', AddDate: '2025-03-14', RemoveReason: '依法办理住所变更登记后合规列入', RemoveDate: '2025-06-20', DecisionOffice: '深圳市市场监督管理局', RemoveDecisionOffice: '深圳市市场监督管理局' },
+      { AddReason: '未依照《企业信息公示暂行条例》规定履行信息公示义务', AddDate: '2024-07-08', RemoveReason: '已补报年度报告并公示', RemoveDate: '2024-09-15', DecisionOffice: '深圳市市场监督管理局龙岗监管局', RemoveDecisionOffice: '深圳市市场监督管理局龙岗监管局' },
+      { AddReason: '公示企业信息隐瞒真实情况、弄虚作假', AddDate: '2023-05-22', RemoveReason: '已整改并公示更正信息', RemoveDate: '2023-08-30', DecisionOffice: '深圳市市场监督管理局', RemoveDecisionOffice: '深圳市市场监督管理局' }
+    ],
+    penalties: [
+      { DocNo: '深市监处罚〔2025〕128号', PenaltyType: '违反《中华人民共和国价格法》规定', OfficeName: '深圳市市场监督管理局', Content: '警告，罚款人民币5万元', PenaltyDate: '2025-04-18', PublicDate: '2025-04-25', Remark: null },
+      { DocNo: '深市监处罚〔2024〕356号', PenaltyType: '违反《中华人民共和国广告法》规定', OfficeName: '深圳市市场监督管理局龙岗监管局', Content: '责令停止发布广告，罚款人民币3万元', PenaltyDate: '2024-11-06', PublicDate: '2024-11-12', Remark: null },
+      { DocNo: '深市监处罚〔2023〕89号', PenaltyType: '违反《中华人民共和国特种设备安全法》规定', OfficeName: '深圳市市场监督管理局', Content: '责令限期改正，罚款人民币2万元', PenaltyDate: '2023-09-01', PublicDate: '2023-09-08', Remark: '已按期整改并验收合格' }
+    ],
+    zhixing: [
+      { ExecCourtName: '深圳市中级人民法院', ExecMoney: '12500000', LastUpdateTime: '2026-08-14', CaseState: '执行中', PartyCardNum: '914403001922038216', ZxId: '1234567890', Pname: '华为技术有限公司', CaseCreateTime: '2026-07-02', CaseCode: '(2026) 粤03执789号' },
+      { ExecCourtName: '上海铁路运输法院', ExecMoney: '3680000', LastUpdateTime: '2026-05-09', CaseState: '已结案', PartyCardNum: '914403001922038216', ZxId: '9876543210', Pname: '华为技术有限公司', CaseCreateTime: '2026-03-18', CaseCode: '(2026) 沪7101执123号' },
+      { ExecCourtName: '深圳市龙岗区人民法院', ExecMoney: '890000', LastUpdateTime: '2025-12-01', CaseState: '执行中', PartyCardNum: '914403001922038216', ZxId: '5556667770', Pname: '华为技术有限公司', CaseCreateTime: '2025-10-11', CaseCode: '(2025) 粤0303执456号' }
+    ],
+    shixin: [
+      { Performance: '生效判决未履行完毕', DisreputTypeName: '有履行能力而拒不履行生效法律文书确定义务', CourtName: '深圳市中级人民法院', Iname: '华为技术有限公司', RegDate: '2024-03-11', CaseCode: '(2024) 粤03执456号', CardNum: '914403001922038216', GistCid: '(2023) 粤03民初7890号', PublishDate: '2024-03-15' },
+      { Performance: '生效判决未履行完毕', DisreputTypeName: '以隐匿、转移财产等方法规避执行', CourtName: '深圳市中级人民法院', Iname: '华为技术有限公司', RegDate: '2023-08-02', CaseCode: '(2023) 粤03执1234号', CardNum: '914403001922038216', GistCid: '(2022) 粤03民初5678号', PublishDate: '2023-08-06' },
+      { Performance: '全部履行', DisreputTypeName: '违反财产报告制度', CourtName: '深圳市龙岗区人民法院', Iname: '华为技术有限公司', RegDate: '2022-01-20', CaseCode: '(2022) 粤0303执89号', CardNum: '914403001922038216', GistCid: '(2021) 粤0303民初4567号', PublishDate: '2022-01-25' }
+    ],
+    mpledges: [
+      { RegisterNo: '44032025000123', RegisterDate: '2025-02-10', PublicDate: '2025-02-12', RegisterOffice: '深圳市市场监督管理局', DebtSecuredAmount: '8500万元人民币', Status: '有效' },
+      { RegisterNo: '44032024000456', RegisterDate: '2024-06-18', PublicDate: '2024-06-20', RegisterOffice: '深圳市市场监督管理局', DebtSecuredAmount: '12000万元人民币', Status: '已注销' },
+      { RegisterNo: '44032023000789', RegisterDate: '2023-03-05', PublicDate: '2023-03-07', RegisterOffice: '深圳市市场监督管理局', DebtSecuredAmount: '4600万元人民币', Status: '有效' }
+    ],
+    pledges: [
+      { RegDate: '2024-09-12', PublicDate: '2024-09-14', Status: '有效', RegistNo: '440300202409120001', Pledgor: '华为投资控股有限公司', PledgorNo: '914403001922038216', Pledgee: '中国建设银行股份有限公司深圳市分行', PledgeeNo: '91440300455766375X', PledgedAmount: '5000万股' },
+      { RegDate: '2023-11-20', PublicDate: '2023-11-22', Status: '已注销', RegistNo: '440300202311200002', Pledgor: '华为投资控股有限公司', PledgorNo: '914403001922038216', Pledgee: '中国银行股份有限公司深圳市分行', PledgeeNo: '91440300455766376Y', PledgedAmount: '3000万股' },
+      { RegDate: '2022-05-16', PublicDate: '2022-05-18', Status: '有效', RegistNo: '440300202205160003', Pledgor: '华为投资控股有限公司', PledgorNo: '914403001922038216', Pledgee: '中国工商银行股份有限公司深圳市分行', PledgeeNo: '91440300455766377Z', PledgedAmount: '2000万股' }
+    ],
+    liquidation: [
+      { Leader: '张伟', Member: '李娜、王强、刘洋' },
+      { Leader: '陈静', Member: '赵磊、孙丽、周涛' },
+      { Leader: '吴敏', Member: '郑华、冯杰' }
+    ]
+  };
+
+  /* ---------- header ---------- */
+  document.getElementById('co-name').textContent = B.CompanyName || '--';
+  document.getElementById('co-status').textContent = B.CompanyStatus || '--';
+  document.getElementById('co-update').textContent = d10(B.IssueDate) + '更新';
+
+  var sites = list(CI.WebSite).map(function (w) { return w && w.Url; }).filter(Boolean);
+  var baseItems = [
+    ['企业法人', esc(B.LegalPerson)],
+    ['注册资本', esc(B.Capital)],
+    ['联系电话', esc(CI.PhoneNumber) + (CI.Email ? ' <a href="#" id="more-contact" data-mail="' + esc(CI.Email) + '">更多联系方式</a>' : '')],
+    ['公司地址', esc(B.CompanyAddress)]
+  ];
+  document.getElementById('base-grid').innerHTML = baseItems.map(function (it) {
+    return '<div class="base-item"><span class="k">' + it[0] + '：</span><span class="v">' + it[1] + '</span></div>';
+  }).join('');
+
+  /* ---------- sections config（字段对应接口文档 Full/V1） ---------- */
+  function src(real, mock) { return (real && real.length) ? real : mock; }
+
+  /* 区块与接口维度一一对应（Full/V1 的 18 个维度） */
+  var sections = [
+    { id: 'gongshang', title: '工商信息', kv: true },
+    { id: 'partners', title: '股东信息',
+      cols: ['序号', '股东', '股东类型', '出资比例', '认缴出资额', '认缴出资时间', '认缴出资方式', '实缴出资额', '实缴时间', '实际出资方式'],
+      rows: list(R.Partners).map(function (p, i) {
+        return [i + 1, p.StockName, p.StockType, p.StockPercent, p.StockCapital, d10(p.ShouldDate), p.InvestType, p.StockRealCapital, d10(p.CapiDate), p.InvestName];
+      }) },
+    { id: 'employees', title: '企业高管',
+      cols: ['序号', '姓名', '职位'],
+      rows: list(R.Employees).map(function (p, i) { return [i + 1, p.EmployeeName, p.Position]; }) },
+    { id: 'branches', title: '分支机构',
+      cols: ['序号', '名称', '注册号', '社会统一信用代码', '登记机关', '法人姓名'],
+      rows: list(R.Branches).map(function (p, i) { return [i + 1, p.CompanyName, p.CompanyCode, p.CreditNo, p.Authority, p.LegalPerson]; }) },
+    { id: 'permissions', title: '行政许可',
+      cols: ['序号', '项目名称', '地域', '决定日期', '决定文书号'],
+      rows: list(R.Permissions).map(function (p, i) { return [i + 1, p.Name, p.Province, d10(p.Liandate), p.CaseNo]; }) },
+    { id: 'tax', title: '纳税信息',
+      cols: ['序号', '评价年度', '信用等级', '纳税人识别号', '纳税人名称'],
+      rows: list(R.TaxCreditItems).map(function (p, i) { return [i + 1, p.Year, p.Level, p.TaxPayerNo, p.TaxPayerName]; }) },
+    { id: 'origname', title: '曾用名',
+      cols: ['序号', '曾用名', '变更日期'],
+      rows: list(R.OriginalName).map(function (p, i) { return [i + 1, p.Name, d10(p.ChangeDate)]; }) },
+    { id: 'changes', title: '历史变更',
+      cols: ['序号', '变更事项', '变更前内容', '变更后内容', '变更日期'],
+      rows: list(R.Changes).map(function (p, i) { return [i + 1, p.ChangeField, p.ChangeBefore, p.ChangeAfter, d10(p.ChangeDate)]; }) },
+    { id: 'spotchecks', title: '抽查检查',
+      cols: ['序号', '登记编号', '检查实施机关', '类型', '日期', '结果', '备注'],
+      rows: list(R.SpotChecks).map(function (p, i) { return [i + 1, p.No, p.ExecutiveOrg, p.Type, d10(p.Date), p.Consequence, p.Remark]; }) },
+    { id: 'exceptions', title: '经营异常',
+      cols: ['序号', '列入原因', '列入日期', '移出原因', '移出日期', '作出决定机关', '移除决定机关'],
+      rows: src(list(R.Exceptions), MOCK.exceptions).map(function (p, i) { return [i + 1, p.AddReason, d10(p.AddDate), p.RemoveReason, d10(p.RemoveDate), p.DecisionOffice, p.RemoveDecisionOffice]; }) },
+    { id: 'penalties', title: '行政处罚',
+      cols: ['序号', '决定书文号', '违法行为类型', '处罚决定机关', '处罚内容', '处罚决定日期', '公示日期', '备注'],
+      rows: src(list(R.Penalties), MOCK.penalties).map(function (p, i) { return [i + 1, p.DocNo, p.PenaltyType, p.OfficeName, p.Content, d10(p.PenaltyDate), d10(p.PublicDate), p.Remark]; }) },
+    { id: 'zhixing', title: '被执行人',
+      cols: ['序号', '名称', '立案时间', '立案号', '执行法院', '标的金额', '状态', '最后更新时间'],
+      rows: src(list(R.ZhiXingItems), MOCK.zhixing).map(function (p, i) { return [i + 1, p.Pname, d10(p.CaseCreateTime), p.CaseCode, p.ExecCourtName, p.ExecMoney, p.CaseState, d10(p.LastUpdateTime)]; }) },
+    { id: 'shixin', title: '失信',
+      cols: ['序号', '公司名称', '立案日期', '立案文书号', '执行法院', '履约情况', '行为备注', '发布时间'],
+      rows: src(list(R.ShiXinItems), MOCK.shixin).map(function (p, i) { return [i + 1, p.Iname, d10(p.RegDate), p.CaseCode, p.CourtName, p.Performance, p.DisreputTypeName, d10(p.PublishDate)]; }) },
+    { id: 'mpledges', title: '动产抵押',
+      cols: ['序号', '登记编号', '登记时间', '公示时间', '登记机关', '被担保债权数额', '状态'],
+      rows: src(list(R.MPledges), MOCK.mpledges).map(function (p, i) { return [i + 1, p.RegisterNo, d10(p.RegisterDate), d10(p.PublicDate), p.RegisterOffice, p.DebtSecuredAmount, p.Status]; }) },
+    { id: 'pledges', title: '股权出质',
+      cols: ['序号', '设立登记日期', '公示时间', '出质状态', '质权登记编号', '出质人', '质权人', '出质股权数额'],
+      rows: src(list(R.Pledges), MOCK.pledges).map(function (p, i) { return [i + 1, d10(p.RegDate), d10(p.PublicDate), p.Status, p.RegistNo, p.Pledgor, p.Pledgee, p.PledgedAmount]; }) },
+    { id: 'liquidation', title: '清算信息',
+      cols: ['序号', '清算组负责人', '清算组成员'],
+      rows: src(R.Liquidation ? [R.Liquidation] : [], MOCK.liquidation).map(function (p, i) { return [i + 1, p.Leader, p.Member]; }) }
+  ];
+
+  /* pills：截图原有 15 个 + 接口新增维度 */
+  var pills = [
+    { label: '工商信息', target: 'gongshang' },
+    { label: '股东信息', target: 'partners' },
+    { label: '企业高管', target: 'employees' },
+    { label: '分支机构', target: 'branches' },
+    { label: '行政许可', target: 'permissions' },
+    { label: '纳税信息', target: 'tax' },
+    { label: '曾用名', target: 'origname' },
+    { label: '历史变更', target: 'changes' },
+    { label: '抽查检查', target: 'spotchecks' },
+    { label: '经营异常', target: 'exceptions' },
+    { label: '行政处罚', target: 'penalties' },
+    { label: '被执行人', target: 'zhixing' },
+    { label: '失信', target: 'shixin' },
+    { label: '动产抵押', target: 'mpledges' },
+    { label: '股权出质', target: 'pledges' },
+    { label: '清算信息', target: 'liquidation' }
+  ];
+
+  function sectionVisible(s) {
+    if (s.hiddenWhenEmpty) return s.rows.length > 0;
+    return true;
+  }
+  function pillEnabled(p) {
+    if (!p.target) return false;
+    var s = sections.filter(function (x) { return x.id === p.target; })[0];
+    if (!s) return false;
+    if (s.hiddenWhenEmpty) return s.rows.length > 0;
+    if (s.kv) return true;
+    /* 有区块但无数据的维度（企业资质/资质资格/裁判文书）保持可点，展示空表 */
+    return true;
+  }
+
+  /* ---------- render pills ---------- */
+  var pillBar = document.getElementById('pill-bar');
+  pillBar.innerHTML = pills.map(function (p, i) {
+    var en = pillEnabled(p);
+    return '<button class="pill' + (i === 0 ? ' active' : '') + (en ? '' : ' disabled') + '" data-target="' + (p.target || '') + '">' + p.label + '</button>';
+  }).join('');
+
+  /* ---------- render sections ---------- */
+  function kvTable() {
+    var html = '<table class="tbl tbl-kv"><tbody>';
+    html += '<tr><th>统一社会信用代码</th><td>' + esc(B.CreditNo) + '</td><th>注册号</th><td>' + esc(B.CompanyCode) + '</td><th>组织机构代码</th><td>' + esc(B.OrgCode) + '</td></tr>';
+    html += '<tr><th>工商注册类型</th><td>' + esc(B.CompanyType) + '</td><th>企业成立日期</th><td>' + d10(B.EstablishDate) + '</td><th>营业期限</th><td>' + d10(B.BusinessDateFromStr) + ' 至 ' + esc(B.BusinessDateToStr) + '</td></tr>';
+    html += '<tr><th>行业大类</th><td>' + esc(IND.Industry) + '</td><th>行业小类</th><td>' + esc(IND.SubIndustry) + '</td><th>注册资本</th><td>' + esc(B.Capital) + '</td></tr>';
+    html += '<tr><th>登记机关</th><td>' + esc(B.Authority) + '</td><th>发照日期</th><td>' + d10(B.IssueDate) + '</td><th>实收资本</th><td>' + esc(B.RealCapital) + '</td></tr>';
+    html += '<tr><th>经营范围</th><td colspan="5">' + esc(B.BusinessScope) + '</td></tr>';
+    html += '<tr><th>网址</th><td colspan="5">' + esc(sites[0]) + '</td></tr>';
+    html += '</tbody></table>';
+    return html;
+  }
+
+  function tableHTML(s, rows) {
+    var head = s.cols.map(function (c) { return '<th>' + c + '</th>'; }).join('');
+    var body;
+    if (!rows.length) {
+      body = '<tr class="empty-row"><td colspan="' + s.cols.length + '">暂无数据</td></tr>';
+    } else {
+      body = rows.map(function (r) {
+        var cells = r.map(function (c, ci) {
+          var v = esc(c);
+          if (s.cols[ci] === '操作') v = '<button class="detail-btn">详情</button>';
+          var cls = (ci === 1 || String(c).length > 24) ? ' class="left"' : '';
+          return '<td' + cls + '>' + v + '</td>';
+        }).join('');
+        return '<tr>' + cells + '</tr>';
+      }).join('');
+    }
+    return '<table class="tbl"><thead><tr>' + head + '</tr></thead><tbody>' + body + '</tbody></table>';
+  }
+
+  /* 分页器：与列表页同款窗口算法（10 个页码 + 省略号 + 末页） */
+  function pagHTML(sec, cur, total) {
+    var h = '';
+    h += '<li><a class="pagination-link pag-text" href="#" data-sec="' + sec + '" data-page="prev"' + (cur === 1 ? ' aria-disabled="true"' : '') + '>上一页</a></li>';
+    var s = total <= 10 ? 1 : Math.max(1, Math.min(cur - 4, total - 9));
+    var e = Math.min(total, s + 9);
+    if (s > 1) {
+      h += '<li><a class="pagination-link" href="#" data-sec="' + sec + '" data-page="1">1</a></li>';
+      h += '<li><span class="pagination-ellipsis" aria-hidden="true">&hellip;</span></li>';
+    }
+    for (var p = s; p <= e; p++) {
+      h += '<li><a class="pagination-link' + (p === cur ? ' pagination-active" aria-current="page' : '') + '" href="#" data-sec="' + sec + '" data-page="' + p + '">' + p + '</a></li>';
+    }
+    if (e < total) {
+      h += '<li><span class="pagination-ellipsis" aria-hidden="true">&hellip;</span></li>';
+      h += '<li><a class="pagination-link" href="#" data-sec="' + sec + '" data-page="' + total + '">' + total + '</a></li>';
+    }
+    h += '<li><a class="pagination-link pag-text" href="#" data-sec="' + sec + '" data-page="next"' + (cur === total ? ' aria-disabled="true"' : '') + '>下一页</a></li>';
+    return h;
+  }
+
+  var PER = 10;               /* 每种信息单页最多 10 条 */
+  var secPages = {};
+  var secBox = document.getElementById('sections');
+
+  function bodyHTML(s, page) {
+    if (s.kv) return kvTable();
+    var total = s.rows.length;
+    var pages = Math.max(1, Math.ceil(total / PER));
+    if (page > pages) page = pages;
+    secPages[s.id] = page;
+    var html = tableHTML(s, s.rows.slice((page - 1) * PER, page * PER));
+    if (total > PER) {
+      html += '<div class="pager"><span class="pager-total">共 ' + total + ' 条</span>' +
+        '<nav class="pagination" aria-label="Pagination"><ul class="pagination-list">' + pagHTML(s.id, page, pages) + '</ul></nav></div>';
+    }
+    return html;
+  }
+
+  secBox.innerHTML = sections.filter(sectionVisible).map(function (s) {
+    return '<section class="section" id="sec-' + s.id + '" data-rows="' + (s.rows ? s.rows.length : 0) + '">' +
+      '<h3 class="sec-title">' + s.title + '</h3>' +
+      '<div class="sec-body">' + bodyHTML(s, 1) + '</div></section>';
+  }).join('');
+
+  /* 分页切换：只重渲染对应区块 */
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('.pagination a[data-sec]');
+    if (!a || a.getAttribute('aria-disabled') === 'true') return;
+    e.preventDefault();
+    var sec = a.dataset.sec;
+    var s = sections.filter(function (x) { return x.id === sec; })[0];
+    if (!s) return;
+    var pages = Math.max(1, Math.ceil(s.rows.length / PER));
+    var cur = secPages[sec] || 1;
+    var p = a.dataset.page;
+    if (p === 'prev') cur = Math.max(1, cur - 1);
+    else if (p === 'next') cur = Math.min(pages, cur + 1);
+    else cur = parseInt(p, 10);
+    if (cur === (secPages[sec] || 1)) return;
+    var box = document.querySelector('#sec-' + sec + ' .sec-body');
+    if (box) box.innerHTML = bodyHTML(s, cur);
+  });
+
+  /* ---------- events ---------- */
+  pillBar.addEventListener('click', function (e) {
+    var b = e.target.closest('.pill');
+    if (!b || b.classList.contains('disabled')) return;
+    pillBar.querySelectorAll('.pill').forEach(function (x) { x.classList.remove('active'); });
+    b.classList.add('active');
+    var t = b.dataset.target;
+    if (t) {
+      var sec = document.getElementById('sec-' + t);
+      if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+
+  document.getElementById('follow-btn').addEventListener('click', function () {
+    this.classList.toggle('on');
+    this.querySelector('span').textContent = this.classList.contains('on') ? '已关注' : '关注';
+  });
+
+  document.getElementById('copy-btn').addEventListener('click', function () {
+    var txt = ['公司名称：' + (B.CompanyName || ''), '统一社会信用代码：' + (B.CreditNo || ''), '法人：' + (B.LegalPerson || ''), '注册资本：' + (B.Capital || ''), '联系电话：' + (CI.PhoneNumber || ''), '地址：' + (B.CompanyAddress || '')].join('\n');
+    var done = function () { alert('企业信息已复制'); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, done);
+    else { var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); done(); }
+  });
+
+  document.getElementById('base-grid').addEventListener('click', function (e) {
+    var a = e.target.closest('#more-contact');
+    if (!a) return;
+    e.preventDefault();
+    alert('联系邮箱：' + a.dataset.mail);
+  });
+
+  var backTop = document.getElementById('back-top');
+  window.addEventListener('scroll', function () {
+    backTop.classList.toggle('show', window.scrollY > 300);
+  }, { passive: true });
+  backTop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+})();
+</script>
+<div class="version-badge">v2.1</div>
+</body>
+</html>

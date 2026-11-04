@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>用户中心 - 采招网</title>
+<style>
+  :root {
+    --background: #ffffff;
+    --foreground: #333333;
+    --border: #e5e5e5;
+    --muted-foreground: #999999;
+    --accent: #f5f5f5;
+    --accent-foreground: #333333;
+    --primary: #0063FF;
+    --radius: 8px;
+
+    --sidebar: #ffffff;
+    --sidebar-foreground: #333333;
+    --sidebar-accent: #f0f0f0;
+    --sidebar-accent-foreground: #202020;
+    --sidebar-border: #e5e5e5;
+    --sidebar-active: #e8f0ff;
+    --sidebar-width: 16rem;
+    --sidebar-width-icon: 3rem;
+
+    --topbar-h: 56px;
+    --topbar-blue: #0063FF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body { height: 100%; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    background: var(--background);
+    color: var(--foreground);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+
+  a { text-decoration: none; color: inherit; cursor: pointer; }
+  button { font-family: inherit; }
+  svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+  /* ============ 顶部蓝色通栏 ============ */
+  .topbar {
+    height: var(--topbar-h);
+    background: var(--topbar-blue);
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding-right: 20px;
+    color: #ffffff;
+  }
+  .topbar-logo {
+    position: relative;
+    width: var(--sidebar-width);
+    min-width: var(--sidebar-width);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 16px;
+    transition: width .2s ease, min-width .2s ease;
+    flex-shrink: 0;
+  }
+  /* 左上角 logo 区不随侧边栏收起：固定宽度、始终显示完整文字 */
+  .logo-text {
+    display: flex; flex-direction: column; line-height: 1.15;
+    white-space: nowrap; overflow: visible; flex-shrink: 0;
+  }
+  .logo-text .name { font-size: 19px; font-weight: 700; letter-spacing: 2px; }
+  .logo-text .url { font-size: 10px; opacity: .85; }
+
+  .topbar-search {
+    flex: 0 1 480px;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.22);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 4px;
+    padding: 0 4px 0 12px;
+  }
+  .topbar-search input {
+    flex: 1; border: none; outline: none; background: transparent;
+    color: #ffffff; font-size: 13px; font-family: inherit;
+  }
+  .topbar-search input::placeholder { color: rgba(255, 255, 255, 0.75); }
+  .topbar-search button {
+    width: 30px; height: 28px; border: none; border-radius: 3px; background: transparent;
+    color: #ffffff; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+  .topbar-search button:hover { background: rgba(255, 255, 255, 0.18); }
+  .topbar-search button svg { width: 16px; height: 16px; }
+
+  .topbar-right { display: flex; align-items: center; gap: 20px; flex-shrink: 0; }
+  .topbar-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: #ffffff; font-size: 13px; cursor: pointer; background: none; border: none;
+  }
+  .topbar-link svg { width: 15px; height: 15px; }
+  .topbar-link:hover { opacity: .85; }
+  .topbar-vip {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: linear-gradient(90deg, #ffd75e 0%, #f6b52a 100%);
+    color: #6b4300; font-size: 13px; font-weight: 600;
+    height: 30px; padding: 0 14px; border: none; border-radius: 4px; cursor: pointer;
+  }
+  .topbar-vip svg { width: 14px; height: 14px; }
+  .topbar-icons { display: flex; align-items: center; gap: 16px; }
+  .topbar-icons button { background: none; border: none; color: #ffffff; cursor: pointer; display: flex; }
+  .topbar-icons button:hover { opacity: .85; }
+  .topbar-icons svg { width: 18px; height: 18px; }
+  .topbar-user {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: none; border: none; color: #ffffff; font-size: 13px; cursor: pointer;
+  }
+  .topbar-user .ava {
+    position: relative;
+    overflow: hidden;
+    width: 30px; height: 30px; border-radius: 50%;
+    background: linear-gradient(135deg, #ffd75e 0%, #ff8f3c 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; color: #ffffff;
+  }
+  .topbar-user .ava img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+  .topbar-user svg { width: 12px; height: 12px; }
+
+  /* ============ Shell ============ */
+  .app-shell { display: flex; height: calc(100vh - var(--topbar-h)); }
+
+  /* ============ Sidebar ============ */
+  .sidebar {
+    position: relative;
+    width: var(--sidebar-width);
+    min-width: var(--sidebar-width);
+    background: var(--sidebar);
+    border-right: 1px solid var(--sidebar-border);
+    display: flex;
+    flex-direction: column;
+    transition: width 0.2s ease, min-width 0.2s ease;
+  }
+  .sidebar[data-state="collapsed"] { width: var(--sidebar-width-icon); min-width: var(--sidebar-width-icon); }
+
+  .sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--sidebar-border) transparent;
+  }
+  .sidebar-content::-webkit-scrollbar { width: 6px; }
+  .sidebar-content::-webkit-scrollbar-thumb { background: var(--sidebar-border); border-radius: 3px; }
+
+  .sidebar-menu { display: flex; flex-direction: column; gap: 4px; }
+
+  .sidebar-menu-button {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    min-height: 40px;
+    padding: 0.5rem 0.75rem;
+    border: none;
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--sidebar-foreground);
+    font-size: 14px;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .sidebar-menu-button:hover { background: var(--sidebar-accent); color: var(--sidebar-accent-foreground); }
+  .sidebar-menu-button.active { background: var(--sidebar-accent); color: var(--primary); font-weight: 600; }
+  .sidebar-menu-button svg { width: 17px; height: 17px; flex-shrink: 0; }
+
+  .sidebar-menu-button-label { flex: 1; overflow: hidden; text-overflow: ellipsis; }
+
+  .sidebar-menu-button-chevron {
+    margin-left: auto;
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    color: var(--muted-foreground);
+    transition: transform 0.2s ease;
+  }
+  .sidebar-group-item[data-state="open"] > .sidebar-menu-button > .sidebar-menu-button-chevron { transform: rotate(180deg); }
+
+  .sidebar-menu-sub {
+    display: none;
+    flex-direction: column;
+    gap: 2px;
+    padding-left: 2.6rem;
+    margin: 2px 0 6px;
+  }
+  .sidebar-group-item[data-state="open"] > .sidebar-menu-sub { display: flex; }
+
+  .sidebar-menu-sub-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 36px;
+    padding: 0 0.75rem;
+    border-radius: var(--radius);
+    color: #606266;
+    font-size: 13.5px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .sidebar-menu-sub-item:hover { background: var(--sidebar-accent); color: var(--sidebar-accent-foreground); }
+  .sidebar-menu-sub-item.active {
+    background: var(--sidebar-active);
+    color: var(--primary);
+    font-weight: 600;
+  }
+  .sidebar-menu-sub-item.active::before {
+    content: "";
+    position: absolute;
+    left: -2.6rem;
+    top: 4px;
+    bottom: 4px;
+    width: 3px;
+    border-radius: 2px;
+    background: var(--primary);
+  }
+
+  /* 折叠态：只留图标 */
+  .sidebar[data-state="collapsed"] .sidebar-menu-button { justify-content: center; padding: 0.5rem; }
+  .sidebar[data-state="collapsed"] .sidebar-menu-button-label,
+  .sidebar[data-state="collapsed"] .sidebar-menu-button-chevron,
+  .sidebar[data-state="collapsed"] .sidebar-menu-sub { display: none; }
+
+  /* ============ Main ============ */
+  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; background: var(--background); }
+
+  .main-header {
+    height: 48px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0 1rem;
+    background: var(--background);
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar-trigger {
+    width: 32px; height: 32px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    border: none; border-radius: var(--radius);
+    background: transparent; color: var(--muted-foreground); cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .sidebar-trigger:hover { background: var(--accent); color: var(--accent-foreground); }
+  .sidebar-trigger svg { width: 16px; height: 16px; }
+  .header-separator { width: 1px; height: 16px; background: var(--border); flex-shrink: 0; }
+  .breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 14px; color: var(--muted-foreground); }
+  .breadcrumb-separator { color: var(--muted-foreground); }
+  .breadcrumb-current { color: var(--foreground); font-weight: 500; }
+
+  .content { flex: 1; display: flex; flex-direction: column; padding: 16px; min-height: 0; }
+  .content-body {
+    flex: 1; min-height: 0;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: #ffffff;
+    overflow: hidden;
+    position: relative;
+  }
+  .content-frame { width: 100%; height: 100%; border: none; display: block; background: #ffffff; }
+  .placeholder-view {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+    background: #ffffff; color: var(--muted-foreground); text-align: center;
+  }
+  .placeholder-view svg { width: 56px; height: 56px; stroke-width: 1.2; color: var(--border); }
+  .placeholder-view h3 { font-size: 17px; font-weight: 600; color: var(--foreground); }
+  .placeholder-view p { font-size: 13px; }
+
+/* 版本徽标 */
+.version-badge { position: fixed; right: 16px; bottom: 14px; z-index: 40; font-size: 11px; color: #999; background: rgba(255,255,255,.8); border: 1px solid #ebeef5; border-radius: 999px; padding: 2px 10px; letter-spacing: .5px; user-select: none; }
+</style>
+</head>
+<body>
+
+<!-- ============ 顶部蓝色通栏 ============ -->
+<div class="topbar">
+  <div class="topbar-logo">
+    <span class="logo-text">
+      <span class="name">采 招 网</span>
+      <span class="url">www.bidcenter.com.cn</span>
+    </span>
+  </div>
+
+  <div class="topbar-search">
+    <input type="search" placeholder="请输入您的产品关键词" aria-label="搜索产品关键词">
+    <button type="button" aria-label="搜索">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+    </button>
+  </div>
+
+  <div class="topbar-right">
+    <button class="topbar-link" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+      全屏显示
+    </button>
+    <button class="topbar-link" type="button">前往官网</button>
+    <button class="topbar-vip" type="button">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="m3 8 4 3 5-6 5 6 4-3v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8z"/></svg>
+      开通会员
+    </button>
+    <button class="topbar-link" type="button">服务列表</button>
+    <button class="topbar-link" type="button">客服经理</button>
+
+    <div class="topbar-icons">
+      <button type="button" aria-label="主题">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a10 10 0 1 1 10-10c0 2-1.5 3-3 3h-2a2 2 0 0 0-2 2c0 1 .5 1.5.5 2.5S14 22 12 22z"/><circle cx="7.5" cy="11.5" r="1"/><circle cx="11" cy="7.5" r="1"/><circle cx="15.5" cy="9.5" r="1"/></svg>
+      </button>
+      <button type="button" aria-label="微信">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+      </button>
+      <button type="button" aria-label="手机端">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>
+      </button>
+      <button type="button" aria-label="帮助">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+      </button>
+    </div>
+
+    <button class="topbar-user" type="button">
+      <span class="ava">b<img src="https://ui.shadcn.com/avatars/shadcn.jpg" alt="bidcenter" onerror="this.remove()"></span>
+      bidcenter
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="app-shell">
+
+  <!-- ============ Sidebar ============ -->
+  <aside class="sidebar" id="sidebar" data-state="collapsed">
+
+    <div class="sidebar-content">
+      <div class="sidebar-menu">
+
+        <!-- 工作台 -->
+        <button class="sidebar-menu-button" data-page="workbench.html" data-title="工作台" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+          <span class="sidebar-menu-button-label">工作台</span>
+        </button>
+
+        <!-- 订阅中心 -->
+        <div class="sidebar-group-item" data-state="open">
+          <button class="sidebar-menu-button" data-page="placeholder" data-title="订阅中心" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+            <span class="sidebar-menu-button-label">订阅中心</span>
+            <svg class="sidebar-menu-button-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="sidebar-menu-sub">
+            <a class="sidebar-menu-sub-item" href="#" data-page="placeholder" data-title="订阅信息">订阅信息</a>
+            <a class="sidebar-menu-sub-item" href="#" data-page="placeholder" data-title="订阅管理">订阅管理</a>
+          </div>
+        </div>
+
+        <!-- 收藏中心 -->
+        <div class="sidebar-group-item" data-state="open">
+          <button class="sidebar-menu-button" data-page="placeholder" data-title="收藏中心" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <span class="sidebar-menu-button-label">收藏中心</span>
+            <svg class="sidebar-menu-button-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="sidebar-menu-sub">
+            <a class="sidebar-menu-sub-item" href="#" data-page="placeholder" data-title="商机收藏">商机收藏</a>
+          </div>
+        </div>
+
+        <!-- 追踪与监控 -->
+        <div class="sidebar-group-item" data-state="open">
+          <button class="sidebar-menu-button" data-page="placeholder" data-title="追踪与监控" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="m8 12 2.5-3 2 2L16 8"/><path d="M9 20h6"/></svg>
+            <span class="sidebar-menu-button-label">追踪与监控</span>
+            <svg class="sidebar-menu-button-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="sidebar-menu-sub">
+            <a class="sidebar-menu-sub-item" href="#" data-page="placeholder" data-title="企业关注与监控">企业关注与监控</a>
+            <a class="sidebar-menu-sub-item" href="#" data-page="placeholder" data-title="中标追踪">中标追踪</a>
+            <a class="sidebar-menu-sub-item" href="#" data-page="placeholder" data-title="项目追踪">项目追踪</a>
+          </div>
+        </div>
+
+        <!-- 轻SaaS应用 -->
+        <div class="sidebar-group-item" data-state="open">
+          <button class="sidebar-menu-button" data-page="placeholder" data-title="轻SaaS应用" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2.5 2.5"/></svg>
+            <span class="sidebar-menu-button-label">轻SaaS应用</span>
+            <svg class="sidebar-menu-button-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="sidebar-menu-sub">
+            <a class="sidebar-menu-sub-item" href="#" data-page="search.html" data-title="企情分析">企情分析</a>
+            <a class="sidebar-menu-sub-item" href="#" data-page="placeholder" data-title="潜在客户挖掘">潜在客户挖掘</a>
+            <a class="sidebar-menu-sub-item" href="#" data-page="placeholder" data-title="潜在商机预测">潜在商机预测</a>
+            <a class="sidebar-menu-sub-item" href="#" data-page="placeholder" data-title="合同商机">合同商机</a>
+            <a class="sidebar-menu-sub-item" href="#" data-page="placeholder" data-title="数据库查询">数据库查询</a>
+            <a class="sidebar-menu-sub-item" href="#" data-page="placeholder" data-title="友商监控">友商监控</a>
+            <a class="sidebar-menu-sub-item" href="#" data-page="placeholder" data-title="中标业绩认证">中标业绩认证</a>
+          </div>
+        </div>
+
+        <!-- 行业解决方案 -->
+        <div class="sidebar-group-item" data-state="open">
+          <button class="sidebar-menu-button" data-page="placeholder" data-title="行业解决方案" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            <span class="sidebar-menu-button-label">行业解决方案</span>
+            <svg class="sidebar-menu-button-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="sidebar-menu-sub">
+            <a class="sidebar-menu-sub-item" href="#" data-page="placeholder" data-title="物业云商机">物业云商机</a>
+          </div>
+        </div>
+
+        <!-- 数据中心 -->
+        <div class="sidebar-group-item" data-state="open">
+          <button class="sidebar-menu-button" data-page="placeholder" data-title="数据中心" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>
+            <span class="sidebar-menu-button-label">数据中心</span>
+            <svg class="sidebar-menu-button-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="sidebar-menu-sub">
+            <a class="sidebar-menu-sub-item" href="#" data-page="placeholder" data-title="结构化数据导出">结构化数据导出</a>
+            <a class="sidebar-menu-sub-item" href="#" data-page="placeholder" data-title="招投标大数据指数">招投标大数据指数</a>
+            <a class="sidebar-menu-sub-item" href="#" data-page="placeholder" data-title="大数据分析报告">大数据分析报告</a>
+            <a class="sidebar-menu-sub-item" href="#" data-page="placeholder" data-title="营销大数据DBI">营销大数据DBI</a>
+            <a class="sidebar-menu-sub-item" href="#" data-page="placeholder" data-title="api接口定制">api接口定制</a>
+          </div>
+        </div>
+
+        <!-- 信息发布 -->
+        <div class="sidebar-group-item" data-state="open">
+          <button class="sidebar-menu-button" data-page="placeholder" data-title="信息发布" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+            <span class="sidebar-menu-button-label">信息发布</span>
+            <svg class="sidebar-menu-button-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="sidebar-menu-sub">
+            <a class="sidebar-menu-sub-item" href="#" data-page="placeholder" data-title="信息发布">信息发布</a>
+            <a class="sidebar-menu-sub-item" href="#" data-page="placeholder" data-title="发布管理">发布管理</a>
+          </div>
+        </div>
+
+        <!-- 采招服务 -->
+        <button class="sidebar-menu-button" data-page="placeholder" data-title="采招服务" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22L12 19L7 22L8.523 12.89"/></svg>
+          <span class="sidebar-menu-button-label">采招服务</span>
+        </button>
+
+        <!-- 账号中心 -->
+        <div class="sidebar-group-item" data-state="open">
+          <button class="sidebar-menu-button" data-page="placeholder" data-title="账号中心" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span class="sidebar-menu-button-label">账号中心</span>
+            <svg class="sidebar-menu-button-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="sidebar-menu-sub">
+            <a class="sidebar-menu-sub-item" href="#" data-page="placeholder" data-title="个人信息">个人信息</a>
+            <a class="sidebar-menu-sub-item" href="#" data-page="placeholder" data-title="安全设置">安全设置</a>
+            <a class="sidebar-menu-sub-item" href="#" data-page="placeholder" data-title="积分余额">积分余额</a>
+            <a class="sidebar-menu-sub-item" href="#" data-page="placeholder" data-title="我的发票">我的发票</a>
+            <a class="sidebar-menu-sub-item" href="#" data-page="team-batch-auth.html" data-title="企业团队(子账户)">企业团队(子账户)</a>
+            <a class="sidebar-menu-sub-item" href="#" data-page="placeholder" data-title="导出/下载">导出/下载</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============ 主区域 ============ -->
+  <main class="main">
+    <div class="content">
+      <header class="main-header">
+        <button class="sidebar-trigger" id="sidebarTrigger" type="button" aria-label="切换侧边栏">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
+        </button>
+        <div class="header-separator"></div>
+        <nav class="breadcrumb" aria-label="面包屑">
+          <span class="breadcrumb-item">采招网</span>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-item">用户中心</span>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-item breadcrumb-current" id="breadcrumbCurrent">工作台</span>
+        </nav>
+      </header>
+      <div class="content-body">
+        <iframe id="contentFrame" class="content-frame" title="内容区"></iframe>
+        <div class="placeholder-view" id="placeholderView" style="display:none">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <h3>页面尚未生成</h3>
+          <p>该功能页面正在建设中，敬请期待</p>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  var iframe = document.getElementById('contentFrame');
+  var placeholderView = document.getElementById('placeholderView');
+  var breadcrumbCurrent = document.getElementById('breadcrumbCurrent');
+
+  // 根据当前加载的页面同步菜单：展开对应一级菜单并选中对应二级菜单
+  function syncMenuToPage(src, expandSidebar) {
+    var el = document.querySelector('.sidebar-menu [data-page="' + src + '"]');
+    if (!el) return null;
+    setActive(el);
+    var wrapper = el.closest('.sidebar-group-item');
+    if (wrapper) {
+      wrapper.setAttribute('data-state', 'open');
+      if (expandSidebar) sidebarEl.setAttribute('data-state', 'expanded');
+    }
+    return el;
+  }
+
+  function showIframe(src) {
+    iframe.removeAttribute('srcdoc');
+    iframe.src = src;
+    iframe.style.display = 'block';
+    placeholderView.style.display = 'none';
+    syncMenuToPage(src, true);
+  }
+
+  function showPlaceholder() {
+    iframe.style.display = 'none';
+    placeholderView.style.display = 'flex';
+  }
+
+  function setActive(el) {
+    document.querySelectorAll('.sidebar-menu-button.active, .sidebar-menu-sub-item.active').forEach(function (n) { n.classList.remove('active'); });
+    el.classList.add('active');
+    if (el.classList.contains('sidebar-menu-sub-item')) {
+      var wrapper = el.closest('.sidebar-group-item');
+      if (wrapper) {
+        var parentBtn = wrapper.querySelector(':scope > .sidebar-menu-button');
+        if (parentBtn) parentBtn.classList.add('active');
+      }
+    }
+  }
+
+  function handleNavClick(el) {
+    var page = el.getAttribute('data-page');
+    var title = el.getAttribute('data-title') || el.textContent.trim();
+    setActive(el);
+    breadcrumbCurrent.textContent = title;
+    if (page && page !== 'placeholder') {
+      showIframe(page);
+    } else {
+      showPlaceholder();
+    }
+  }
+
+  // 一级菜单：点击同时展开/收起折叠组并联动内容区
+  document.querySelectorAll('.sidebar-menu button.sidebar-menu-button').forEach(function (item) {
+    item.addEventListener('click', function (e) {
+      e.preventDefault();
+      var wrapper = item.closest('.sidebar-group-item');
+      var sidebarEl = document.getElementById('sidebar');
+      var collapsed = sidebarEl.getAttribute('data-state') === 'collapsed';
+      if (wrapper && !collapsed) {
+        var isOpen = wrapper.getAttribute('data-state') === 'open';
+        wrapper.setAttribute('data-state', isOpen ? 'closed' : 'open');
+      }
+      handleNavClick(item);
+    });
+  });
+
+  // 二级菜单
+  document.querySelectorAll('.sidebar-menu-sub-item').forEach(function (leaf) {
+    leaf.addEventListener('click', function (e) {
+      e.preventDefault();
+      handleNavClick(leaf);
+    });
+  });
+
+  // 顶栏折叠按钮（左下角收起已移除）
+  var sidebarEl = document.getElementById('sidebar');
+  document.getElementById('sidebarTrigger').addEventListener('click', function () {
+    var collapsed = sidebarEl.getAttribute('data-state') === 'collapsed';
+    sidebarEl.setAttribute('data-state', collapsed ? 'expanded' : 'collapsed');
+  });
+
+  // 初始页面：支持 ?page=xxx 指定；默认工作台（侧边栏默认收起，命中二级菜单时自动展开并选中）
+  var initialPage = new URLSearchParams(location.search).get('page') || 'workbench.html';
+  var matched = document.querySelector('.sidebar-menu [data-page="' + initialPage + '"]');
+  if (matched) {
+    showIframe(initialPage);
+    breadcrumbCurrent.textContent = matched.getAttribute('data-title') || '工作台';
+  } else {
+    setActive(document.querySelector('.sidebar-menu > .sidebar-menu-button[data-page="workbench.html"]'));
+    breadcrumbCurrent.textContent = '工作台';
+    showPlaceholder();
+  }
+</script>
+
+<div class="version-badge">v2.1</div>
+</body>
+</html>

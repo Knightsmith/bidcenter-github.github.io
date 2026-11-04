@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>工作台 - 采招网用户中心</title>
+<style>
+  :root {
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.145 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.145 0 0);
+    --primary: oklch(0.508 0.118 165.612);
+    --primary-foreground: oklch(0.979 0.021 166.113);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --accent: oklch(0.97 0 0);
+    --accent-foreground: oklch(0.205 0 0);
+    --border: oklch(0.922 0 0);
+    --radius: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    background: var(--background);
+    color: var(--foreground);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page { max-width: 1100px; margin: 0 auto; padding: 24px 28px; }
+
+  /* 页面标题：右上角（与父页面内容区一致） */
+  .page-header { margin-bottom: 20px; display: flex; flex-direction: column; align-items: flex-end; text-align: right; }
+  .page-title { font-size: 20px; font-weight: 700; margin-bottom: 2px; }
+  .page-desc { color: var(--muted-foreground); font-size: 13px; }
+
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+  .stat {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+  }
+  .stat .label { color: var(--muted-foreground); font-size: 12.5px; margin-bottom: 8px; }
+  .stat .value { font-size: 24px; font-weight: 700; color: var(--foreground); }
+  .stat .trend { color: var(--primary); font-size: 12px; margin-top: 6px; }
+
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .panel h2 { margin: 0 0 14px; font-size: 14px; font-weight: 600; color: var(--foreground); }
+
+  .quick-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .quick-item {
+    background: var(--muted);
+    border: none;
+    border-radius: calc(var(--radius) - 2px);
+    padding: 7px 14px;
+    font-size: 13px;
+    color: var(--foreground);
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .quick-item:hover { background: var(--accent); color: var(--accent-foreground); }
+
+  .notice-list { display: flex; flex-direction: column; gap: 10px; }
+  .notice { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--foreground); }
+  .notice .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
+  .notice .time { margin-left: auto; color: var(--muted-foreground); font-size: 12px; flex-shrink: 0; }
+
+  @media (max-width: 1100px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+
+/* 版本徽标 */
+.version-badge { position: fixed; right: 16px; bottom: 14px; z-index: 40; font-size: 11px; color: #999; background: rgba(255,255,255,.8); border: 1px solid #ebeef5; border-radius: 999px; padding: 2px 10px; letter-spacing: .5px; user-select: none; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="page-header">
+    <h1 class="page-title">工作台</h1>
+    <p class="page-desc">欢迎使用采招网用户中心</p>
+  </div>
+
+  <div class="grid">
+    <div class="stat">
+      <div class="label">有效订阅</div>
+      <div class="value">12</div>
+      <div class="trend">较上月 +2</div>
+    </div>
+    <div class="stat">
+      <div class="label">今日推送</div>
+      <div class="value">36</div>
+      <div class="trend">实时更新</div>
+    </div>
+    <div class="stat">
+      <div class="label">本周商机</div>
+      <div class="value">128</div>
+      <div class="trend">覆盖 8 个行业</div>
+    </div>
+    <div class="stat">
+      <div class="label">累计触达</div>
+      <div class="value">2,340</div>
+      <div class="trend">近 30 天</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>快捷入口</h2>
+    <div class="quick-list">
+      <button class="quick-item" type="button">订阅信息</button>
+      <button class="quick-item" type="button">商机收藏</button>
+      <button class="quick-item" type="button">中标追踪</button>
+      <button class="quick-item" type="button">大数据分析报告</button>
+      <button class="quick-item" type="button">企业团队</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>最新动态</h2>
+    <div class="notice-list">
+      <div class="notice"><span class="dot"></span><span>您关注的 8 家企业本周发布中标公告</span><span class="time">10-30</span></div>
+      <div class="notice"><span class="dot"></span><span>「招投标大数据指数」新增月度趋势维度</span><span class="time">10-28</span></div>
+      <div class="notice"><span class="dot"></span><span>本月发票已可在线开具与下载</span><span class="time">10-25</span></div>
+      <div class="notice"><span class="dot"></span><span>合同商机模块数据已更新至最新批次</span><span class="time">10-22</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="version-badge">v2.1</div>
+</body>
+</html>

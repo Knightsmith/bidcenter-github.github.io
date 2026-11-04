@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>联系方式 - 企业详情 | v2.2.1</title>
+<style>
+@layer tokens, base, components;
+@layer tokens {
+  :root {
+    --primary: #0063FF; --border: #ebeef5;
+    --font-sans: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    --radius-md: 0.25rem; --ring: #0063FF;
+  }
+}
+@layer base {
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #f0f3fa; color: #333; font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+}
+@layer components {
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+    height: 2.25rem; padding: 0 1rem; border: none; border-radius: var(--radius-md);
+    font: 500 .875rem var(--font-sans); cursor: pointer; background: var(--primary); color: #fff;
+  }
+  .badge { display: inline-flex; align-items: center; border-radius: 9999px; padding: .125rem .625rem; font: 500 .6875rem var(--font-sans); }
+}
+
+/* ===== 页面 ===== */
+.page { max-width: 1400px; margin: 0 auto; padding-top: 12px; }
+
+/* 斜切页签：外层留出血，防止平行四边形缺角 */
+.channel-bar-wrap { padding: 0 16px; }
+.channel-bar { background: #e4edfb; display: flex; gap: 4px; padding: 6px 12px 0; overflow: visible; }
+.channel-tab {
+  width: 132px; height: 46px; display: flex; align-items: center; justify-content: center;
+  transform: skewX(-18deg); cursor: pointer; border: none; font: 500 16px var(--font-sans);
+  background: #d5e5fb; color: var(--primary); box-shadow: 3px 0 0 0 #e4edfb;
+}
+.channel-tab > span { transform: skewX(18deg); }
+.channel-tab.active { background: linear-gradient(180deg,#6ba1f5,#4d8bf0); color: #fff; }
+
+.card { background: #fff; border: 1px solid var(--border); border-top: none; margin: 0 16px; }
+
+/* 公司抬头 */
+.co-head { display: flex; gap: 14px; padding: 22px 32px 18px; }
+.co-icon { width: 52px; height: 52px; border-radius: 6px; background: #d8e6fd; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.co-name { font-size: 22px; font-weight: 600; margin: 2px 0 0; }
+.co-tags { margin-top: 10px; }
+.tag-blue { background: #e8f1ff; color: #409eff; border-radius: 2px; padding: 0 8px; font: 400 12px/20px var(--font-sans); }
+.co-actions { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.co-btns { display: flex; gap: 12px; }
+.btn-orange { background: linear-gradient(90deg,#ff8f3c,#ff5000); }
+.btn-monitor { background: #d6e4ff; color: var(--primary); }
+.co-update { display: inline-flex; gap: 5px; color: #999; font-size: 12px; align-items: center; }
+
+.base-panel { margin: 0 32px; background: #f4f6fb; border-radius: 4px; padding: 20px 28px; position: relative; }
+.base-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 60px; font-size: 14px; }
+.base-item .k { color: #999; }
+.base-item .v { color: #333; margin-left: 6px; }
+.base-tools { position: absolute; top: 16px; right: 24px; display: flex; gap: 14px; }
+.copy-link { color: var(--primary); font: 400 13px var(--font-sans); background: none; border: none; cursor: pointer; }
+.follow-btn { display: inline-flex; gap: 6px; background: none; border: none; color: #666; font: 400 14px var(--font-sans); cursor: pointer; }
+.follow-btn.on { color: var(--primary); }
+
+.main-nav { display: flex; gap: 64px; padding: 0 32px; margin-top: 22px; border-bottom: 1px solid var(--border); }
+.main-nav a { position: relative; display: inline-flex; align-items: center; height: 54px; color: #333; font: 600 16px var(--font-sans); text-decoration: none; }
+.main-nav a.active { color: var(--primary); }
+.main-nav a.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; background: var(--primary); }
+.nav-badge { position: absolute; top: 6px; right: -34px; background: #f5484d; color: #fff; font: 400 10px/16px var(--font-sans); padding: 0 6px; border-radius: 3px; }
+
+.contact-tabs { display: flex; gap: 12px; padding: 20px 32px 0; }
+.contact-tab { display: inline-flex; align-items: center; height: 36px; padding: 0 22px; border: none; border-radius: 4px; background: #f4f4f5; color: #606266; font: 400 14px var(--font-sans); cursor: pointer; text-decoration: none; }
+.contact-tab.active { background: var(--primary); color: #fff; font-weight: 500; }
+
+.section { padding: 6px 32px 26px; scroll-margin-top: 20px; }
+.sec-title { font: 600 14px var(--font-sans); color: #333; margin: 0 0 14px; padding-left: 8px; border-left: 3px solid var(--primary); line-height: 16px; }
+
+.tbl { width: 100%; border-collapse: collapse; font: 400 13px var(--font-sans); table-layout: fixed; }
+.tbl th, .tbl td { border: 1px solid var(--border); padding: 12px; text-align: center; color: #606266; word-break: break-all; }
+.tbl th { background: #f4f6fb; color: #333; font-weight: 500; }
+.tbl tbody tr:hover td { background: #e8f1fd; }
+.phone-cell { display: inline-flex; align-items: center; gap: 6px; color: #333; }
+.phone-cell svg { color: var(--primary); }
+.link-cell { color: var(--primary); text-decoration: none; }
+.add-btn { background: #d6e4ff; color: var(--primary); border: none; border-radius: 3px; font: 400 12px/24px var(--font-sans); padding: 0 14px; cursor: pointer; }
+.add-btn.done { background: #f4f4f5; color: #999; cursor: default; }
+
+.pager { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; }
+.pager-total { font-size: 13px; color: #666; }
+.pagination-list { display: flex; gap: 8px; list-style: none; margin: 0; padding: 0; }
+.pagination-list a { display: inline-flex; align-items: center; justify-content: center; min-width: 32px; height: 32px; padding: 0 8px; border: 1px solid #dcdfe6; border-radius: 4px; color: #606266; font-size: 13px; text-decoration: none; }
+.pagination-list a:hover { border-color: var(--primary); color: var(--primary); }
+.pagination-list a.pag-text { background: #f4f4f5; border-color: #f4f4f5; padding: 0 12px; }
+.pagination-list a.pagination-active { border-color: var(--primary); color: var(--primary); font-weight: 500; }
+.pagination-list a[aria-disabled="true"] { opacity: .5; pointer-events: none; }
+.pagination-ellipsis { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; color: #909399; }
+
+/* 版本徽标 */
+.version-badge { position: fixed; right: 16px; bottom: 14px; z-index: 40; font-size: 11px; color: #999; background: rgba(255,255,255,.8); border: 1px solid var(--border); border-radius: 999px; padding: 2px 10px; letter-spacing: .5px; user-select: none; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="channel-bar-wrap">
+    <div class="channel-bar">
+      <button class="channel-tab"><span>业主</span></button>
+      <button class="channel-tab active"><span>供应商</span></button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="co-head">
+      <div class="co-icon">
+        <svg width="28" height="28" viewBox="0 0 48 48" fill="none" stroke="#6d9bf2" stroke-width="2.5" stroke-linejoin="round"><path d="M8 40V18l14-6v28"/><path d="M22 40V22l16-4v22"/><path d="M4 40h40"/><rect x="13" y="22" width="4" height="4" fill="#6d9bf2" stroke="none"/><rect x="13" y="30" width="4" height="4" fill="#6d9bf2" stroke="none"/><rect x="28" y="26" width="4" height="4" fill="#6d9bf2" stroke="none"/><rect x="28" y="33" width="4" height="4" fill="#6d9bf2" stroke="none"/></svg>
+      </div>
+      <div>
+        <h1 class="co-name">华为技术有限公司</h1>
+        <div class="co-tags"><span class="badge tag-blue">存续（在营、开业、在册）</span></div>
+      </div>
+      <div class="co-actions">
+        <div class="co-btns">
+          <button class="btn btn-orange">企业报告</button>
+          <button class="btn btn-monitor">企业监控</button>
+        </div>
+        <span class="co-update">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          2026-10-16更新
+        </span>
+      </div>
+    </div>
+    <div class="base-panel">
+      <div class="base-tools">
+        <button class="copy-link" id="copy-btn">复制企业信息</button>
+        <button class="follow-btn" id="follow-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <span>关注</span>
+        </button>
+      </div>
+      <div class="base-grid">
+        <div class="base-item"><span class="k">企业法人：</span><span class="v">赵明路</span></div>
+        <div class="base-item"><span class="k">注册资本：</span><span class="v">4114113.182000万人民币</span></div>
+        <div class="base-item"><span class="k">联系电话：</span><span class="v">0755-28780808</span></div>
+        <div class="base-item"><span class="k">公司地址：</span><span class="v">深圳市龙岗区坂田华为总部办公楼</span></div>
+      </div>
+    </div>
+    <nav class="main-nav">
+      <a href="bid-analysis.html">中标分析</a>
+      <a href="#">中标业绩(523)</a>
+      <a href="#">商机脉络<span class="nav-badge">关系网</span></a>
+      <a href="enterprise-detail.html">查企业</a>
+      <a href="contact.html" class="active">找人脉<span class="nav-badge">联系方式</span></a>
+    </nav>
+    <div class="contact-tabs">
+      <a class="contact-tab active" href="#sec-bid">中标联系人</a>
+      <a class="contact-tab" href="#sec-biz">工商联系人</a>
+    </div>
+    <section class="section" id="sec-bid">
+      <h3 class="sec-title">中标项目联系人</h3>
+      <div id="tbl-bid"></div>
+    </section>
+    <section class="section" id="sec-biz">
+      <h3 class="sec-title">工商登记联系人</h3>
+      <div id="tbl-biz"></div>
+    </section>
+  </div>
+</div>
+<div class="version-badge">v2.2.1</div>
+<script>
+(function () {
+  'use strict';
+  var PER = 10;
+  /* 假数据：中标联系人（联系人/电话/来源/相关项目数/更新时间）；工商联系人（电话/类型/邮箱/来源/更新时间） */
+  var BID = [
+    ['经理','57646169','其他',0,'2017-03-09'],
+    ['张伟','0755-28780808','中标公告',12,'2026-09-14'],
+    ['李娜','13800138001','中标公告',8,'2026-08-02'],
+    ['王强','0755-28782888','招标公告',5,'2026-07-21'],
+    ['陈静','13900139002','其他',3,'2026-06-18'],
+    ['刘洋','0755-28783888','中标公告',2,'2026-05-09'],
+    ['赵磊','13700137003','招标公告',1,'2026-04-25'],
+    ['孙丽','13600136004','其他',0,'2026-03-30'],
+    ['周涛','0755-28784888','中标公告',6,'2026-02-16'],
+    ['吴敏','13500135005','招标公告',4,'2026-01-08'],
+    ['郑华','0755-28785888','其他',2,'2025-12-11'],
+    ['冯杰','13400134006','中标公告',9,'2025-11-27']
+  ];
+  var BIZ = [
+    ['何晓敏','0755-28780808','2026-10-16'],
+    ['何晓敏','0755-28782888','2026-10-16'],
+    ['谢思远','13800138002','2026-08-30'],
+    ['陈立','0755-28783888','2026-08-30']
+  ];
+  function esc(s){ return String(s==null?'--':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  var PHONE = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>';
+  var pages = { bid: 1, biz: 1 };
+  function pag(type, cur, total) {
+    var h = '<li><a class="pag-text" href="#" data-type="'+type+'" data-page="prev"'+(cur===1?' aria-disabled="true"':'')+'>上一页</a></li>';
+    var s = total<=10?1:Math.max(1,Math.min(cur-4,total-9)), e = Math.min(total,s+9);
+    if (s>1) h += '<li><a href="#" data-type="'+type+'" data-page="1">1</a></li><li><span class="pagination-ellipsis">…</span></li>';
+    for (var p=s;p<=e;p++) h += '<li><a'+(p===cur?' class="pagination-active" aria-current="page"':'')+' href="#" data-type="'+type+'" data-page="'+p+'">'+p+'</a></li>';
+    if (e<total) h += '<li><span class="pagination-ellipsis">…</span></li><li><a href="#" data-type="'+type+'" data-page="'+total+'">'+total+'</a></li>';
+    h += '<li><a class="pag-text" href="#" data-type="'+type+'" data-page="next"'+(cur===total?' aria-disabled="true"':'')+'>下一页</a></li>';
+    return h;
+  }
+  function render(type) {
+    var data = type==='bid'?BID:BIZ;
+    var total = data.length, tp = Math.max(1, Math.ceil(total/PER));
+    var cur = Math.min(pages[type], tp); pages[type] = cur;
+    var rows = data.slice((cur-1)*PER, cur*PER);
+    var head, body;
+    if (type==='bid') {
+      head = '<tr><th>联系人</th><th>联系电话</th><th>电话来源</th><th>相关项目</th><th>更新时间</th><th>操作</th></tr>';
+      body = rows.map(function(r){
+        return '<tr><td>'+esc(r[0])+'</td><td><span class="phone-cell">'+PHONE+esc(r[1])+'</span></td><td>'+esc(r[2])+'</td><td><a class="link-cell" href="#" onclick="return false;">'+r[3]+'</a></td><td>'+esc(r[4])+'</td><td><button class="add-btn" type="button">添加通讯录</button></td></tr>';
+      }).join('');
+    } else {
+      head = '<tr><th>联系人</th><th>联系电话</th><th>更新时间</th><th>操作</th></tr>';
+      body = rows.map(function(r){
+        return '<tr><td>'+esc(r[0])+'</td><td><span class="phone-cell">'+PHONE+esc(r[1])+'</span></td><td>'+esc(r[2])+'</td><td><button class="add-btn" type="button">添加通讯录</button></td></tr>';
+      }).join('');
+    }
+    var html = '<table class="tbl"><thead>'+head+'</thead><tbody>'+body+'</tbody></table>';
+    if (total>PER) html += '<div class="pager"><span class="pager-total">共 '+total+' 条</span><ul class="pagination-list">'+pag(type,cur,tp)+'</ul></div>';
+    document.getElementById('tbl-'+type).innerHTML = html;
+  }
+  render('bid'); render('biz');
+
+  document.querySelector('.contact-tabs').addEventListener('click', function (e) {
+    var t = e.target.closest('.contact-tab'); if (!t) return;
+    document.querySelectorAll('.contact-tab').forEach(function(x){ x.classList.remove('active'); });
+    t.classList.add('active');
+  });
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('.pagination a[data-type]');
+    if (!a || a.getAttribute('aria-disabled')==='true') return;
+    e.preventDefault();
+    var type = a.dataset.type, data = type==='bid'?BID:BIZ;
+    var tp = Math.max(1, Math.ceil(data.length/PER)), cur = pages[type], p = a.dataset.page;
+    if (p==='prev') cur = Math.max(1,cur-1);
+    else if (p==='next') cur = Math.min(tp,cur+1);
+    else cur = parseInt(p,10);
+    if (cur===pages[type]) return;
+    pages[type] = cur; render(type);
+  });
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('.add-btn');
+    if (!b || b.classList.contains('done')) return;
+    b.classList.add('done'); b.textContent = '已添加';
+  });
+  document.getElementById('follow-btn').addEventListener('click', function () {
+    this.classList.toggle('on');
+    this.querySelector('span').textContent = this.classList.contains('on')?'已关注':'关注';
+  });
+  document.getElementById('copy-btn').addEventListener('click', function () {
+    var t = '公司名称：华为技术有限公司\n联系电话：0755-28780808\n地址：深圳市龙岗区坂田华为总部办公楼';
+    var done = function(){ alert('企业信息已复制'); };
+    if (navigator.clipboard) navigator.clipboard.writeText(t).then(done,done);
+    else { var ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); done(); }
+  });
+})();
+</script>
+</body>
+</html>
