@@ -194,9 +194,10 @@ body { overflow: hidden; }
 
 /* 平铺分区标题 */
 .part-head {
-  display: flex; align-items: center; gap: 10px; margin: 0 32px; padding-top: 34px;
+  display: flex; align-items: center; gap: 10px; margin: 0 32px; padding-top: 24px;
   font-size: 19px; font-weight: 600; color: #333333;
 }
+.part-head:not(.first) { border-top: 1px solid #f0f2f5; }
 .part-head.first { padding-top: 20px; }
 .part-head .idx {
   width: 26px; height: 26px; border-radius: 6px; background: #eaf1fd; color: #2b7bff;
@@ -660,10 +661,9 @@ body { overflow: hidden; }
                       <div id="mapSvg"></div>
                     </div>
                     <div class="map-legend">
-                      <div class="t" id="mapLegendTitle">数量(个)</div>
+                      <div class="nums"><span id="mapLegendMax">0</span><span>0</span></div>
                       <div class="bar"></div>
-                      <div class="t" id="mapLegendMax">10000</div>
-                      <div class="t">0</div>
+                      <div class="cap" id="mapLegendTitle">数量(个)</div>
                     </div>
                     <div class="map-note">南海诸岛</div>
                   </div>
@@ -771,7 +771,12 @@ body { overflow: hidden; }
               </div>
             </section>
 
-            <!-- ================= Tab4 关联企业分析 ================= -->
+            <!-- ================= 04 关联企业分析 ================= -->
+            <div class="part-head">
+              <span class="idx">04</span>关联企业分析
+              <span class="desc">上下游关联企业分布，点击外围节点可展开二级关联</span>
+              <span class="rule"></span>
+            </div>
             <section class="panel" id="panel-related">
               <div class="stats-band stats-band-4" id="statsBand4"></div>
               <div class="rel-canvas">
@@ -815,7 +820,7 @@ body { overflow: hidden; }
 <button class="back-top" id="backTop" type="button" aria-label="回到顶部">
   <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#999999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 12l9 4 9-4"/><path d="M3 17l9 4 9-4"/></svg>
 </button>
-<div class="version-badge">v3.8</div>
+<div class="version-badge">v3.10.2</div>
 <div class="tip" id="tip"></div>
 
 <script type="application/json" id="network-data">
@@ -1036,22 +1041,6 @@ var CN_MAP = {"北京市":["M434.9,133.4L436.0,132.4L431.8,132.1L429.6,128.8L427
     });
   });
 
-  /* ---------- 二级 tab ---------- */
-  var scrollBox = $('contentScroll');
-  document.querySelectorAll('.sub-tab').forEach(function (t) {
-    t.addEventListener('click', function () {
-      document.querySelectorAll('.sub-tab').forEach(function (x) { x.classList.remove('active'); });
-      t.classList.add('active');
-      document.querySelectorAll('.panel').forEach(function (p) { p.classList.remove('active'); });
-      var panel = document.getElementById('panel-' + t.dataset.tab);
-      if (panel) { panel.classList.add('active'); }
-      scrollBox.scrollTop = 0;
-      hideTip();
-      if (t.dataset.tab === 'graph') { renderGraph(state.graph); }
-      if (t.dataset.tab === 'related') { renderRelated(); }
-    });
-  });
-
   /* ---------- 指标条 ---------- */
   function renderStats(box) {
     if (!box) { return; }
@@ -1068,51 +1057,48 @@ var CN_MAP = {"北京市":["M434.9,133.4L436.0,132.4L431.8,132.1L429.6,128.8L427
   renderStats($('statsBand2'));
   renderStats($('statsBand4'));
 
-  /* ---------- 地图 ---------- */
-  var OUTLINE = [
-    [73.5,39.5],[75,40.5],[76,41.5],[80,42.5],[80.5,45],[82.5,45.5],[83,47],[85.5,47],[87,49],[90,48.5],
-    [91,46],[96,42.5],[100,42.5],[105,41.5],[110,42.5],[112,43.5],[115,44.5],[117,46],[119,46.5],[117.5,48],
-    [115.5,48.5],[117,49.5],[120,50],[122,51.5],[125,53],[127,50.5],[130,48.5],[134,48],[131,45],[131,42.5],
-    [128,41.5],[124.5,40],[121.5,39.5],[121,37.5],[119,37],[120,36],[122,37],[121.5,34.5],[120,33.5],[122,31],
-    [121,29.5],[120,27.5],[119,25.5],[116,23],[113,22],[110,21.5],[108,21.5],[106,22.5],[103,22.5],[101,21.5],
-    [99,22.5],[97.5,24],[98,25.5],[97.5,27.5],[96,29],[92,27.5],[89,28],[85,28.5],[81,30],[79,31.5],[78,34],
-    [76,36],[73.5,39.5]
-  ];
-  var MW = 640, MH = 430;
-  function px(lon) { return (lon - 73) * (MW / 62); }
-  function py(lat) { return (53.5 - lat) * (MH / 36); }
-  function colorScale(t) {
-    var a = [223, 233, 251], b = [43, 109, 232];
-    var c = a.map(function (v, i) { return Math.round(v + (b[i] - v) * t); });
+  /* ---------- 地图（省界地图，复用 workbench.html 的 CN_MAP 与配色） ---------- */
+  var state = { map: 'count', industry: 'amount', region: 'all', graph: 'upstream', related: null };
+  var MAP_LIGHT = [219, 230, 250], MAP_DARK = [47, 98, 217];
+
+  /* 省名归一：去掉 省/市/自治区 等后缀，便于与业务数据中的短名匹配 */
+  function cnShort(n) {
+    return n.replace(/(维吾尔|壮族|回族)?自治区$/, '').replace(/(省|市|特别行政区)$/, '');
+  }
+  /* 与 workbench.html provColor 一致的幂次渐变配色 */
+  function provColor(v, max) {
+    var t = max > 0 ? Math.pow(Math.min(v / max, 1), 0.62) : 0;
+    var c = MAP_LIGHT.map(function (x, i) { return Math.round(x + (MAP_DARK[i] - x) * t); });
     return 'rgb(' + c.join(',') + ')';
   }
-
-  var state = { map: 'count', industry: 'amount', region: 'all', graph: 'upstream', related: null };
 
   function renderMap() {
     var mode = state.map;
     var rows = D.provinces.filter(function (p) { return state.region === 'all' || p.name === state.region; });
-    var vals = (state.region === 'all' ? D.provinces : rows).map(function (p) { return mode === 'count' ? p.count : p.amount; });
-    var max = Math.max.apply(null, vals);
-    var path = OUTLINE.map(function (pt, i) { return (i ? 'L' : 'M') + px(pt[0]).toFixed(1) + ' ' + py(pt[1]).toFixed(1); }).join(' ') + ' Z';
-    var svg = '<svg viewBox="0 0 ' + MW + ' ' + MH + '" role="img" aria-label="下游地区分布图">';
-    svg += '<path d="' + path + '" fill="#eef3fc" stroke="#c9d8f2" stroke-width="1"/>';
-    svg += '<ellipse cx="' + px(121.0).toFixed(1) + '" cy="' + py(23.8).toFixed(1) + '" rx="7" ry="12" fill="#eef3fc" stroke="#c9d8f2" transform="rotate(18 ' + px(121.0).toFixed(1) + ' ' + py(23.8).toFixed(1) + ')"/>';
-    rows.forEach(function (p) {
-      var v = mode === 'count' ? p.count : p.amount;
-      var t = max ? v / max : 0;
-      var r = 5 + Math.sqrt(t) * 16;
-      var tip = mode === 'count'
-        ? tipHTML([p.name, '下游单位数量： <b>' + v + '家</b>'])
-        : tipHTML([p.name, '下游金额： <b>' + v + '万元</b>']);
-      svg += '<circle cx="' + px(p.lon).toFixed(1) + '" cy="' + py(p.lat).toFixed(1) + '" r="' + r.toFixed(1) +
-        '" fill="' + colorScale(0.15 + t * 0.85) + '" fill-opacity="0.88" stroke="#ffffff" stroke-width="1" data-tip="' + escAttr(tip) + '"></circle>';
+    var vals = rows.map(function (p) { return mode === 'count' ? p.count : p.amount; });
+    var max = vals.length ? Math.max.apply(null, vals) : 0;
+    var byProv = {};
+    rows.forEach(function (p) { byProv[p.name] = p; });
+    var svg = '<svg id="chinaMap" viewBox="0 0 660 500" role="img" aria-label="下游行业地区分布地图">';
+    Object.keys(CN_MAP).forEach(function (fullName) {
+      var item = byProv[cnShort(fullName)];
+      var v = item ? (mode === 'count' ? item.count : item.amount) : 0;
+      var fill = provColor(v, max);
+      var tip = item
+        ? (mode === 'count'
+          ? tipHTML([fullName, '下游单位数量： <b>' + v.toLocaleString('en-US') + '家</b>'])
+          : tipHTML([fullName, '下游金额： <b>' + v.toLocaleString('en-US') + '万元</b>']))
+        : tipHTML([fullName, '该地区暂无下游数据']);
+      CN_MAP[fullName].forEach(function (d) {
+        svg += '<path d="' + d + '" fill="' + fill + '" stroke="#ffffff" stroke-width="1"' +
+          ' stroke-join="round" vector-effect="non-scaling-stroke" data-tip="' + escAttr(tip) + '"></path>';
+      });
     });
     svg += '</svg>';
     $('mapSvg').innerHTML = svg;
     bindTips($('mapSvg'));
     $('mapLegendTitle').textContent = mode === 'count' ? '数量(个)' : '金额(万元)';
-    $('mapLegendMax').textContent = mode === 'count' ? max : max.toLocaleString('en-US');
+    $('mapLegendMax').textContent = max.toLocaleString('en-US');
   }
 
   /* ---------- 下游 TOP10 表格 ---------- */
@@ -1601,6 +1587,7 @@ var CN_MAP = {"北京市":["M434.9,133.4L436.0,132.4L431.8,132.1L429.6,128.8L427
   });
 
   var backTop = $('backTop');
+  var scrollBox = $('contentScroll');
   scrollBox.addEventListener('scroll', function () {
     backTop.classList.toggle('show', scrollBox.scrollTop > 240);
   });
