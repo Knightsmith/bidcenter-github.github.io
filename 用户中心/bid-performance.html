@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>企情分析-企业信息-中标业绩</title>
+<style>
+@layer tokens, base, components;
+
+@layer tokens {
+  :root {
+    --background: #ffffff;        --foreground: #333333;
+    --primary: #2b7bff;           --primary-foreground: #ffffff;
+    --secondary: #f4f4f5;         --secondary-foreground: #606266;
+    --muted: #f5f7fa;             --muted-foreground: #999999;
+    --accent: #ecf5ff;            --accent-foreground: #2b7bff;
+    --destructive: #f56c6c;       --destructive-foreground: #ffffff;
+    --border: #ebeef5;            --input: #dcdfe6;            --ring: #2b7bff;
+    --radius-sm: 0.125rem; --radius-md: 0.25rem; --radius-lg: 0.5rem;
+    --font-sans: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    --shadow-xs: 0 1px 2px rgb(0 0 0 / .05);
+  }
+}
+
+@layer base {
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #f0f3fa; color: var(--foreground); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+}
+
+@layer components {
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    white-space: nowrap; font-size: 0.875rem; font-weight: 500; font-family: var(--font-sans);
+    line-height: 1; border-radius: var(--radius-md); border: 1px solid transparent;
+    cursor: pointer; text-decoration: none; transition: all 150ms ease; outline: none;
+    flex-shrink: 0; height: 2.25rem; padding: 0 1rem;
+    background-color: var(--primary); color: var(--primary-foreground);
+    & svg { pointer-events: none; flex-shrink: 0; &:not([class*="size-"]) { width: 1rem; height: 1rem; } }
+    &:disabled, &[aria-disabled="true"] { pointer-events: none; opacity: 0.5; }
+    &[data-variant="default"] { &:hover { opacity: 0.9; } }
+    &[data-variant="secondary"] { background-color: var(--secondary); color: var(--secondary-foreground); &:hover { opacity: 0.8; } }
+    &[data-variant="outline"] { background-color: var(--background); color: var(--foreground); border: 1px solid var(--border); box-shadow: var(--shadow-xs); &:hover { background-color: var(--accent); color: var(--accent-foreground); } }
+    &[data-size="sm"] { height: 2rem; padding: 0 0.75rem; font-size: 0.8125rem; }
+    &[data-size="xs"] { height: 1.75rem; padding: 0 0.5rem; font-size: 0.75rem; border-radius: var(--radius-sm); }
+  }
+  .badge {
+    display: inline-flex; align-items: center; border-radius: 9999px;
+    padding: 0.125rem 0.625rem; font-size: 0.6875rem; font-weight: 500; line-height: 1.5rem;
+    &[data-variant="secondary"] { background: var(--secondary); color: var(--secondary-foreground); }
+  }
+  .input {
+    height: 2.5rem; width: 100%; border: 1px solid var(--input); border-radius: var(--radius-md);
+    background: var(--background); padding: 0 0.75rem; font-size: 0.875rem; font-family: var(--font-sans);
+    color: var(--foreground); outline: none; box-shadow: var(--shadow-xs);
+    &::placeholder { color: var(--muted-foreground); }
+  }
+}
+
+/* ============ 通用外框（用户中心 sidebar-07，内联无外链） ============ */
+:root {
+  --sidebar: #fafafa; --sidebar-foreground: #333333;
+  --sidebar-accent: #f0f0f0; --sidebar-accent-foreground: #202020;
+  --sidebar-border: #e5e5e5;
+  --sidebar-width: 16rem; --sidebar-width-icon: 3rem;
+  --radius: 8px;
+}
+html, body { height: 100%; }
+body { overflow: hidden; }
+.app-shell { display: flex; height: 100vh; }
+.sidebar {
+  position: relative; width: var(--sidebar-width); min-width: var(--sidebar-width);
+  background: var(--sidebar); border-right: 1px solid var(--sidebar-border);
+  display: flex; flex-direction: column; transition: width .2s ease, min-width .2s ease;
+}
+.sidebar[data-state="collapsed"] { width: var(--sidebar-width-icon); min-width: var(--sidebar-width-icon); }
+.sidebar-header { display: flex; align-items: center; padding: 0.5rem; border-bottom: 1px solid var(--sidebar-border); }
+.sidebar-content { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 0.5rem; scrollbar-width: thin; }
+.sidebar-content::-webkit-scrollbar { width: 6px; }
+.sidebar-content::-webkit-scrollbar-thumb { background: var(--sidebar-border); border-radius: 3px; }
+.sidebar-menu { display: flex; flex-direction: column; gap: 8px; }
+.sidebar-menu-button {
+  display: flex; align-items: center; gap: 0.75rem; width: 100%; min-height: 32px; padding: 0.5rem 0.75rem;
+  border: none; border-radius: var(--radius); background: transparent; color: var(--sidebar-foreground);
+  font-size: 14px; font-weight: 500; font-family: inherit; text-align: left; cursor: pointer; white-space: nowrap;
+  transition: background .15s ease, color .15s ease;
+}
+.sidebar-menu-button:hover { background: var(--sidebar-accent); color: var(--sidebar-accent-foreground); }
+.sidebar-menu-button.active { background: var(--sidebar-accent); color: var(--sidebar-accent-foreground); font-weight: 600; }
+.sidebar-menu-button svg { width: 16px; height: 16px; flex-shrink: 0; }
+.sidebar-menu-button-label { flex: 1; overflow: hidden; text-overflow: ellipsis; }
+.sidebar-menu-button-chevron { margin-left: auto; width: 16px; height: 16px; flex-shrink: 0; color: #999999; transition: transform .2s ease; }
+.sidebar-group-item[data-state="open"] > .sidebar-menu-button > .sidebar-menu-button-chevron { transform: rotate(90deg); }
+.sidebar-menu-sub { display: none; flex-direction: column; gap: 1px; padding-left: 3rem; margin: 1px 0 3px; }
+.sidebar-group-item[data-state="open"] > .sidebar-menu-sub { display: flex; }
+.sidebar-menu-sub-item {
+  display: flex; align-items: center; gap: 0.5rem; min-height: 30px; padding: 0 0.5rem; border-radius: var(--radius);
+  color: var(--sidebar-foreground); font-size: 13.5px; cursor: pointer; white-space: nowrap; text-decoration: none;
+  transition: background .15s ease, color .15s ease;
+}
+.sidebar-menu-sub-item:hover { background: var(--sidebar-accent); color: var(--sidebar-accent-foreground); }
+.sidebar-menu-sub-item.active { background: var(--sidebar-accent); color: var(--sidebar-accent-foreground); font-weight: 600; }
+.sidebar-footer { padding: 0.5rem; border-top: 1px solid var(--sidebar-border); }
+.sidebar-footer .sidebar-menu-button { background: var(--sidebar-accent); border-radius: var(--radius); gap: 0.625rem; }
+.sidebar-menu-button-avatar {
+  width: 32px; height: 32px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius); background: #10b981; color: #ffffff; font-size: 13px; font-weight: 600;
+}
+.sidebar-menu-button-avatar svg { width: 16px; height: 16px; }
+.sidebar-menu-button-avatar.user-avatar { border-radius: 50%; background: var(--sidebar-accent); color: var(--sidebar-accent-foreground); }
+.sidebar-menu-button-text { flex: 1; min-width: 0; display: flex; flex-direction: column; text-align: left; line-height: 1.25; }
+.sidebar-menu-button-name { font-size: 14px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sidebar-menu-button-sub { font-size: 11.5px; color: #999999; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sidebar-menu-button-chevrons { margin-left: auto; width: 16px; height: 16px; flex-shrink: 0; color: #999999; }
+.sidebar-rail { position: absolute; top: 0; bottom: 0; left: 100%; width: 1px; margin-left: -1px; background: var(--sidebar-border); cursor: pointer; z-index: 10; transition: width .2s ease; }
+.sidebar-rail:hover { width: 8px; }
+.sidebar[data-state="collapsed"] .sidebar-header { padding: 0.5rem 0.25rem; }
+.sidebar[data-state="collapsed"] .sidebar-menu-button { justify-content: center; padding: 0.5rem; }
+.sidebar[data-state="collapsed"] .sidebar-menu-button-label,
+.sidebar[data-state="collapsed"] .sidebar-menu-button-text,
+.sidebar[data-state="collapsed"] .sidebar-menu-button-chevrons,
+.sidebar[data-state="collapsed"] .sidebar-menu-button-chevron,
+.sidebar[data-state="collapsed"] .sidebar-menu-sub { display: none; }
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.main-header { height: 56px; flex-shrink: 0; display: flex; align-items: center; gap: 0.75rem; padding: 0 1rem; background: #ffffff; border-bottom: 1px solid var(--border); }
+.sidebar-trigger { width: 32px; height: 32px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: var(--radius); background: transparent; color: #999999; cursor: pointer; }
+.sidebar-trigger:hover { background: var(--accent); color: var(--accent-foreground); }
+.sidebar-trigger svg { width: 16px; height: 16px; }
+.header-separator { width: 1px; height: 16px; background: var(--border); flex-shrink: 0; }
+.breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 14px; color: #999999; }
+.breadcrumb-separator { color: #999999; }
+.breadcrumb-current { color: #333333; font-weight: 500; }
+.content { flex: 1; display: flex; flex-direction: column; padding: 20px 24px; min-height: 0; }
+.content-scroll { flex: 1; min-height: 0; overflow-y: auto; background: #f0f3fa; }
+.placeholder-view { display: none; flex-direction: column; align-items: center; justify-content: center; gap: 12px; height: 100%; color: #999999; text-align: center; }
+.placeholder-view svg { width: 56px; height: 56px; stroke-width: 1.2; color: #dcdfe6; }
+.placeholder-view h3 { font-size: 17px; font-weight: 600; color: #333333; margin: 0; }
+.placeholder-view p { font-size: 13px; margin: 0; }
+
+/* ============ page ============ */
+.page { max-width: 1400px; margin: 0 auto; padding-top: 12px; }
+.crumb { padding: 10px 4px; font-size: 13px; color: #909399; }
+.crumb b { color: #2b7bff; font-weight: 500; }
+.crumb .sep { margin: 0 6px; color: #c0c4cc; }
+
+.channel-bar { background: #e4edfb; display: flex; gap: 4px; overflow: hidden; }
+.channel-tab {
+  width: 132px; height: 46px; display: flex; align-items: center; justify-content: center;
+  transform: skewX(-18deg); cursor: pointer; border: none; font-family: var(--font-sans);
+  font-size: 16px; font-weight: 500; background: #d5e5fb; color: #2b7bff;
+}
+.channel-tab > span { transform: skewX(18deg); }
+.channel-tab.active { background: linear-gradient(180deg, #6ba1f5 0%, #4d8bf0 100%); color: #ffffff; }
+
+.card { background: #ffffff; border: 1px solid #ebeef5; border-top: none; }
+
+.co-head { display: flex; align-items: flex-start; gap: 14px; padding: 22px 32px 18px; }
+.co-icon { width: 52px; height: 52px; border-radius: 6px; background: #d8e6fd; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.co-name { font-size: 22px; font-weight: 600; color: #333333; margin: 2px 0 0; }
+.co-tags { margin-top: 10px; }
+.badge[data-variant="tag-blue"] { background: #e8f1ff; color: #409eff; border-radius: 2px; padding: 0 8px; font-size: 12px; line-height: 20px; font-weight: 400; }
+.co-actions { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.co-btns { display: flex; gap: 12px; }
+.btn-orange { background: linear-gradient(90deg, #ff8f3c 0%, #ff5000 100%); color: #fff; }
+.btn-orange:hover { opacity: 0.92; }
+.btn-monitor { background: #d6e4ff; color: #2b7bff; }
+.co-update { display: inline-flex; align-items: center; gap: 5px; color: #999999; font-size: 12px; }
+
+.base-panel { margin: 0 32px; background: #f4f6fb; border-radius: 4px; padding: 20px 28px; position: relative; }
+.base-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 60px; font-size: 14px; }
+.base-item .k { color: #999999; }
+.base-item .v { color: #333333; margin-left: 6px; }
+.base-item .v a { color: #2b7bff; text-decoration: none; margin-left: 10px; font-size: 13px; }
+.base-tools { position: absolute; top: 16px; right: 24px; display: flex; align-items: center; gap: 14px; }
+.copy-link { color: #2b7bff; font-size: 13px; text-decoration: none; background: none; border: none; padding: 0; cursor: pointer; font-family: var(--font-sans); }
+.follow-btn { display: inline-flex; align-items: center; gap: 6px; background: none; border: none; padding: 0; color: #666666; font-size: 14px; font-family: var(--font-sans); cursor: pointer; }
+.follow-btn.on { color: #2b7bff; }
+.follow-btn.on svg { fill: currentColor; }
+
+.main-nav { display: flex; gap: 64px; padding: 0 32px; margin-top: 22px; border-bottom: 1px solid #ebeef5; }
+.main-nav a { position: relative; display: inline-flex; align-items: center; height: 54px; color: #333; font: 600 16px var(--font-sans); text-decoration: none; }
+.main-nav a.active { color: #0063FF; }
+.main-nav a.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; background: #0063FF; }
+.nav-badge { position: absolute; top: 6px; right: -34px; background: #f5484d; color: #fff; font: 400 10px/16px var(--font-sans); padding: 0 6px; border-radius: 3px; }
+
+/* filter row */
+.filter-row { display: flex; gap: 12px; padding: 18px 32px 0; }
+.kw-box { position: relative; width: 220px; }
+.kw-box .input { height: 34px; font-size: 13px; padding-right: 30px; }
+.kw-box svg { position: absolute; right: 9px; top: 50%; transform: translateY(-50%); color: #c0c4cc; }
+.range-box {
+  display: inline-flex; align-items: center; gap: 10px; height: 34px; padding: 0 12px;
+  border: 1px solid #dcdfe6; border-radius: 4px; background: #fff; font-size: 13px; color: #606266; cursor: pointer;
+}
+.range-box .lab { color: #333333; }
+
+/* stats band */
+.stats-band {
+  margin: 16px 32px 0; background: #e8f1fd; border-radius: 6px;
+  display: grid; grid-template-columns: repeat(5, 1fr); padding: 26px 8px 22px;
+}
+.stat { text-align: center; }
+.stat .num { font-size: 30px; font-weight: 700; color: #333333; line-height: 1; }
+.stat .unit { font-size: 13px; font-weight: 500; color: #333333; margin-left: 2px; }
+.stat .lab { margin-top: 12px; display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #606266; }
+.stat .ico { width: 16px; height: 16px; border-radius: 50%; color: #fff; font-size: 9px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.help { display: inline-flex; align-items: center; justify-content: center; width: 14px; height: 14px; border-radius: 50%; border: 1px solid #c0c4cc; color: #909399; font-size: 10px; cursor: help; flex-shrink: 0; }
+
+/* charts */
+.charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 16px 32px 32px; }
+.chart-card { border: 1px solid #ebeef5; border-radius: 8px; background: #fff; padding: 16px 18px 14px; position: relative; }
+.chart-head { display: flex; align-items: center; gap: 8px; }
+.chart-title { font-size: 15px; font-weight: 600; color: #333333; }
+.chart-title .q { color: #f5484d; }
+.chart-tools { margin-left: auto; display: flex; gap: 8px; }
+.tool-btn {
+  height: 28px; padding: 0 14px; border-radius: 4px; border: 1px solid #dcdfe6; background: #f4f4f5;
+  color: #606266; font-size: 12px; font-family: var(--font-sans); cursor: pointer; display: inline-flex; align-items: center; gap: 5px;
+}
+.tool-btn.active { background: #2b7bff; border-color: #2b7bff; color: #fff; }
+.tool-btn.plain { background: #fff; }
+.tool-btn:hover { color: #2b7bff; border-color: #2b7bff; }
+.tool-btn.active:hover { color: #fff; }
+.chart-body { margin-top: 10px; }
+.chart-body svg { width: 100%; height: auto; display: block; }
+.zoom-bar { height: 12px; border-radius: 6px; background: #dce8fb; margin: 8px 4px 2px; position: relative; }
+.zoom-bar::after { content: ""; position: absolute; left: 46%; top: 3px; width: 10px; height: 6px; border-radius: 2px; background: #b9cdf2; }
+.map-legend { position: absolute; left: 26px; bottom: 40px; font-size: 11px; color: #606266; }
+.map-legend .bar { width: 10px; height: 90px; margin: 6px auto; border-radius: 2px; background: linear-gradient(180deg, #2b6de8 0%, #dfe9fb 100%); }
+.map-legend .t { text-align: center; }
+
+/* tooltip */
+.tip {
+  position: fixed; z-index: 60; pointer-events: none; background: #ffffff; border: 1px solid #ebeef5;
+  box-shadow: 0 4px 16px rgba(31, 45, 61, 0.15); border-radius: 4px; padding: 8px 14px;
+  font-size: 13px; color: #606266; opacity: 0; transition: opacity .12s;
+}
+.tip.show { opacity: 1; }
+.tip .t1 { color: #333333; font-weight: 600; margin-bottom: 4px; }
+.tip .t2 b { color: #2b7bff; font-weight: 600; }
+
+.back-top {
+  position: fixed; right: 60px; bottom: 100px; width: 56px; height: 56px; border-radius: 50%;
+  background: #ffffff; border: none; cursor: pointer; box-shadow: 0 4px 16px rgba(31, 45, 61, 0.15);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden; transition: opacity .2s, visibility .2s; z-index: 50;
+}
+.back-top.show { opacity: 1; visibility: visible; }
+
+/* 版本徽标 */
+.version-badge { position: fixed; right: 16px; bottom: 14px; z-index: 40; font-size: 11px; color: #999; background: rgba(255,255,255,.8); border: 1px solid #ebeef5; border-radius: 999px; padding: 2px 10px; letter-spacing: .5px; user-select: none; }
+
+/* ============ 中标业绩 · 列表页 ============ */
+.filter-row { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; padding: 18px 32px 0; }
+.sel { position: relative; }
+.sel-btn {
+  display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px;
+  border: 1px solid #dcdfe6; border-radius: 4px; background: #ffffff; color: #606266;
+  font-size: 13px; font-family: var(--font-sans); cursor: pointer;
+}
+.sel-btn:hover { color: #2b7bff; border-color: #2b7bff; }
+.sel.open .sel-btn { color: #2b7bff; border-color: #2b7bff; background: #ecf5ff; }
+.sel-btn .caret { transition: transform .15s; }
+.sel.open .sel-btn .caret { transform: rotate(180deg); }
+.sel-menu {
+  position: absolute; top: 40px; left: 0; z-index: 20; min-width: 100%;
+  background: #ffffff; border: 1px solid #ebeef5; border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(31, 45, 61, .12); padding: 4px 0; display: none;
+}
+.sel.open .sel-menu { display: block; }
+.sel-menu button {
+  display: block; width: 100%; padding: 8px 16px; border: none; background: none;
+  text-align: left; white-space: nowrap; font-size: 13px; color: #606266;
+  font-family: var(--font-sans); cursor: pointer;
+}
+.sel-menu button:hover { background: #f4f6fb; color: #2b7bff; }
+.sel-menu button.active { color: #2b7bff; font-weight: 500; }
+.spacer { flex: 1; }
+.export-btn {
+  display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px;
+  border: 1px solid #2b7bff; border-radius: 4px; background: #ffffff; color: #2b7bff;
+  font-size: 13px; font-family: var(--font-sans); cursor: pointer;
+}
+.export-btn:hover { background: #ecf5ff; }
+
+/* 列表 */
+.list-wrap { padding: 16px 32px 26px; }
+.list-hint {
+  display: flex; align-items: center; gap: 6px; margin: 2px 0 12px;
+  font-size: 12px; color: #909399;
+}
+.list-hint .ico {
+  width: 14px; height: 14px; border-radius: 50%; background: #dfe6f2; color: #6b7d99;
+  font-size: 10px; line-height: 14px; text-align: center; flex-shrink: 0; font-style: normal;
+}
+.perf-tbl { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
+.perf-tbl th, .perf-tbl td { border: 1px solid #ebeef5; padding: 11px 12px; text-align: center; color: #606266; word-break: break-all; }
+.perf-tbl th { background: #f4f6fb; color: #333333; font-weight: 500; }
+.perf-tbl tbody tr:hover td { background: #e8f1fd; }
+.perf-tbl td.left { text-align: left; }
+.perf-tbl .proj-link { color: #2b7bff; text-decoration: none; }
+.perf-tbl .proj-link:hover { text-decoration: underline; }
+.perf-tbl .amount { color: #333333; font-weight: 500; }
+.perf-tbl .empty-row td { text-align: center; color: #999999; padding: 34px 0; }
+.perf-tbl .empty-row:hover td { background: transparent; }
+.star-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+  background: none; border: none; padding: 0; cursor: pointer;
+  color: #c0c4cc; font-size: 12px; font-family: var(--font-sans);
+}
+.star-btn:hover { color: #ffb020; }
+.star-btn.on { color: #ffb020; }
+.star-btn.on svg { fill: currentColor; }
+
+/* 分页 */
+.pager { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 16px; }
+.pager-total { font-size: 13px; color: #666666; }
+.pagination-list { display: flex; align-items: center; gap: 8px; list-style: none; margin: 0; padding: 0; }
+.pagination-list a {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 32px; height: 32px;
+  padding: 0 8px; border: 1px solid #dcdfe6; border-radius: 4px; background: #ffffff;
+  color: #606266; font-size: 13px; text-decoration: none;
+}
+.pagination-list a:hover { border-color: #2b7bff; color: #2b7bff; }
+.pagination-list a.pag-text { background: #f4f4f5; border-color: #f4f4f5; padding: 0 12px; }
+.pagination-list a.pag-text:hover { color: #2b7bff; }
+.pagination-list a.pagination-active { border-color: #2b7bff; color: #2b7bff; font-weight: 500; }
+.pagination-list a[aria-disabled="true"] { opacity: .5; pointer-events: none; }
+.pagination-ellipsis { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; color: #909399; }
+
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ============ 主区域 ============ -->
+  <main class="main">
+    <div class="content">
+      <header class="main-header">
+        <div class="header-separator"></div>
+        <nav class="breadcrumb" aria-label="面包屑">
+          <span>采招网</span>
+          <span class="breadcrumb-separator">/</span>
+          <span>企情分析</span>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current" id="breadcrumbCurrent">中标业绩</span>
+        </nav>
+      </header>
+
+      <div class="content-scroll" id="contentScroll">
+        <div id="viewAnalysis">
+          <div class="page">
+
+            <div class="channel-bar">
+              <button class="channel-tab" type="button"><span>业主</span></button>
+              <button class="channel-tab active" type="button"><span>供应商</span></button>
+            </div>
+
+            <div class="card">
+              <!-- 公司头部 -->
+              <div class="co-head">
+                <div class="co-icon">
+                  <svg aria-hidden="true" width="28" height="28" viewBox="0 0 48 48" fill="none" stroke="#6d9bf2" stroke-width="2.5" stroke-linejoin="round">
+                    <path d="M8 40V18l14-6v28"/><path d="M22 40V22l16-4v22"/><path d="M4 40h40"/>
+                    <rect x="13" y="22" width="4" height="4" fill="#6d9bf2" stroke="none"/>
+                    <rect x="13" y="30" width="4" height="4" fill="#6d9bf2" stroke="none"/>
+                    <rect x="28" y="26" width="4" height="4" fill="#6d9bf2" stroke="none"/>
+                    <rect x="28" y="33" width="4" height="4" fill="#6d9bf2" stroke="none"/>
+                  </svg>
+                </div>
+                <div>
+                  <h1 class="co-name" id="co-name">华为技术有限公司</h1>
+                  <div class="co-tags"><span class="badge" data-variant="tag-blue" id="co-status">存续（在营、开业、在册）</span></div>
+                </div>
+                <div class="co-actions">
+                  <div class="co-btns">
+                    <button class="btn btn-orange" type="button">企业报告</button>
+                    <button class="btn btn-monitor" type="button">企业监控</button>
+                  </div>
+                  <span class="co-update">
+                    <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+                    <span id="co-update">2026-11-05 更新</span>
+                  </span>
+                </div>
+              </div>
+
+              <!-- 企业基本信息 -->
+              <div class="base-panel">
+                <div class="base-tools">
+                  <button class="copy-link" id="copy-btn" type="button">复制企业信息</button>
+                  <button class="follow-btn" id="follow-btn" type="button">
+                    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <span>关注</span>
+                  </button>
+                </div>
+                <div class="base-grid">
+                  <div class="base-item"><span class="k">企业法人：</span><span class="v">赵明路</span></div>
+                  <div class="base-item"><span class="k">注册资本：</span><span class="v">4114113.182000万人民币</span></div>
+                  <div class="base-item"><span class="k">联系电话：</span><span class="v">0755-28780808</span></div>
+                  <div class="base-item"><span class="k">注册日期：</span><span class="v">1987年09月15日</span></div>
+                  <div class="base-item"><span class="k">网址：</span><span class="v">https://www.huawei.com</span></div>
+                  <div class="base-item"><span class="k">公司地址：</span><span class="v">深圳市龙岗区坂田华为总部办公楼</span></div>
+                  <div class="base-item" style="grid-column:1 / -1;"><span class="k">简介：</span><span class="v">公司主营通信网络设备、IT设备、智能终端及云服务的研发、生产与销售，为全球运营商及政企客户提供端到端信息通信解决方案，业务覆盖5G网络、数据中心、云计算与人工智能算力基础设施等领域。</span></div>
+                </div>
+              </div>
+
+              <!-- 主导航 -->
+              <nav class="main-nav">
+      <a href="bid-analysis.html">中标分析</a>
+      <a href="bid-performance.html" class="active">中标业绩</a>
+      <a href="business-network.html">商机脉络<span class="nav-badge">关系网</span></a>
+      <a href="enterprise-detail.html">查企业</a>
+      <a href="contact.html">找人脉<span class="nav-badge">联系方式</span></a>
+    </nav>
+
+              <!-- 筛选行 -->
+              <div class="filter-row">
+                <div class="sel" id="sel-role">
+                  <button class="sel-btn" type="button" data-role="btn">
+                    <span data-role="label">参与项目</span>
+                    <svg class="caret" aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                  </button>
+                  <div class="sel-menu" data-role="menu">
+                    <button type="button" class="active" data-value="all">全部项目</button>
+                    <button type="button" data-value="lead">牵头中标</button>
+                    <button type="button" data-value="union">联合体中标</button>
+                  </div>
+                </div>
+                <div class="sel" id="sel-time">
+                  <button class="sel-btn" type="button" data-role="btn">
+                    <span data-role="label">按时间</span>
+                    <svg class="caret" aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                  </button>
+                  <div class="sel-menu" data-role="menu">
+                    <button type="button" class="active" data-value="all">全部时间</button>
+                    <button type="button" data-value="半年">近半年</button>
+                    <button type="button" data-value="一年">近一年</button>
+                    <button type="button" data-value="三年">近三年</button>
+                  </div>
+                </div>
+                <div class="sel" id="sel-amount">
+                  <button class="sel-btn" type="button" data-role="btn">
+                    <span data-role="label">按金额</span>
+                    <svg class="caret" aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                  </button>
+                  <div class="sel-menu" data-role="menu">
+                    <button type="button" class="active" data-value="all">不限金额</button>
+                    <button type="button" data-value="lt1000">1000万以下</button>
+                    <button type="button" data-value="1000to5000">1000万-5000万</button>
+                    <button type="button" data-value="gt5000">5000万以上</button>
+                  </div>
+                </div>
+                <button class="range-box" id="range-box" type="button">
+                  <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                  <span class="lab">近一年</span>
+                  <span>2025.11.05 ~ 2026.11.05</span>
+                  <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <span class="spacer"></span>
+                <button class="export-btn" id="export-btn" type="button">
+                  <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+                  <span>数据导出</span>
+                </button>
+              </div>
+
+              <!-- 列表 -->
+              <div class="list-wrap">
+                <div class="list-hint"><i class="ico">i</i><span>为方便您对比查看，此列表保留了全部原始信息，未进行去重处理。</span></div>
+                <table class="perf-tbl">
+                  <colgroup>
+                    <col style="width:70px">
+                    <col>
+                    <col style="width:150px">
+                    <col style="width:110px">
+                    <col style="width:130px">
+                    <col style="width:100px">
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th>序号</th><th>项目名称</th><th>金额</th><th>地区</th><th>发布时间</th><th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody id="perf-body"></tbody>
+                </table>
+
+                <div class="pager">
+                  <span class="pager-total" id="pager-total">共 0 条</span>
+                  <div class="pagination">
+                    <ul class="pagination-list" id="pager-list"></ul>
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- /card -->
+          </div><!-- /page -->
+        </div><!-- /viewAnalysis -->
+      </div><!-- /content-scroll -->
+    </div><!-- /content -->
+  </main>
+</div><!-- /app-shell -->
+
+<button class="back-top" id="back-top" aria-label="回到顶部">
+  <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2b7bff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></svg>
+</button>
+
+<!-- 中标业绩数据（示例，与企业主体一致） -->
+<script type="application/json" id="perf-data">
+{
+"total": 57,
+"rows": [
+{
+"no": 1,
+"name": "中国移动2026年至2027年通信设备集中采购项目",
+"amount": "12.86亿元",
+"amountWan": 128600,
+"region": "广东",
+"date": "2026-10-28",
+"role": "牵头中标"
+},
+{
+"no": 2,
+"name": "中国电信2026年云资源池服务器集中采购项目",
+"amount": "3.42亿元",
+"amountWan": 34200,
+"region": "北京",
+"date": "2026-10-21",
+"role": "牵头中标"
+},
+{
+"no": 3,
+"name": "国家电网2026年第二批信息化设备采购项目",
+"amount": "8652.00万元",
+"amountWan": 8652,
+"region": "江苏",
+"date": "2026-10-15",
+"role": "联合体中标"
+},
+{
+"no": 4,
+"name": "深圳市政务云三期建设项目设备采购",
+"amount": "5180.60万元",
+"amountWan": 5180.6,
+"region": "广东",
+"date": "2026-09-30",
+"role": "牵头中标"
+},
+{
+"no": 5,
+"name": "中国联通2026年5G基站及配套设备采购项目",
+"amount": "2.16亿元",
+"amountWan": 21600,
+"region": "北京",
+"date": "2026-09-24",
+"role": "牵头中标"
+},
+{
+"no": 6,
+"name": "广东省公安厅数据中心扩容采购项目",
+"amount": "3760.00万元",
+"amountWan": 3760,
+"region": "广东",
+"date": "2026-09-11",
+"role": "联合体中标"
+},
+{
+"no": 7,
+"name": "中国银行IT基础设施国产化改造采购项目",
+"amount": "1.28亿元",
+"amountWan": 12800,
+"region": "上海",
+"date": "2026-08-29",
+"role": "牵头中标"
+},
+{
+"no": 8,
+"name": "国家税务总局服务器及存储设备采购项目",
+"amount": "6420.00万元",
+"amountWan": 6420,
+"region": "北京",
+"date": "2026-08-18",
+"role": "联合体中标"
+},
+{
+"no": 9,
+"name": "上海市城市运行管理中心算力平台建设项目",
+"amount": "9850.00万元",
+"amountWan": 9850,
+"region": "上海",
+"date": "2026-08-05",
+"role": "牵头中标"
+},
+{
+"no": 10,
+"name": "中国邮政集团寄递业务信息系统升级采购项目",
+"amount": "2930.00万元",
+"amountWan": 2930,
+"region": "北京",
+"date": "2026-07-27",
+"role": "牵头中标"
+},
+{
+"no": 11,
+"name": "中国移动通信集团2026年数据中心扩容改造项目",
+"amount": "2.77亿元",
+"amountWan": 27717.11,
+"region": "北京",
+"date": "2026-07-15",
+"role": "牵头中标"
+},
+{
+"no": 12,
+"name": "中国电信集团2026年视频会议系统采购项目",
+"amount": "3.19亿元",
+"amountWan": 31921.75,
+"region": "浙江",
+"date": "2026-07-08",
+"role": "联合体中标"
+},
+{
+"no": 13,
+"name": "中国联合网络通信集团2026年大数据平台建设项目",
+"amount": "2.60亿元",
+"amountWan": 25987.2,
+"region": "山东",
+"date": "2026-07-01",
+"role": "牵头中标"
+},
+{
+"no": 14,
+"name": "国家电网有限公司2026年通信设备集中采购项目",
+"amount": "3.26亿元",
+"amountWan": 32569.53,
+"region": "河南",
+"date": "2026-06-24",
+"role": "联合体中标"
+},
+{
+"no": 15,
+"name": "南方电网有限责任公司2026年信息化基础设施国产化改造项目",
+"amount": "2.72亿元",
+"amountWan": 27232.76,
+"region": "北京",
+"date": "2026-06-17",
+"role": "牵头中标"
+},
+{
+"no": 16,
+"name": "中国工商银行股份有限公司2026年核心网设备扩容项目",
+"amount": "2819.90万元",
+"amountWan": 2819.9,
+"region": "浙江",
+"date": "2026-06-10",
+"role": "联合体中标"
+},
+{
+"no": 17,
+"name": "中国建设银行股份有限公司2026年UPS电源及机房配套设施采购项目",
+"amount": "1735.88万元",
+"amountWan": 1735.88,
+"region": "山东",
+"date": "2026-06-03",
+"role": "牵头中标"
+},
+{
+"no": 18,
+"name": "中国农业银行股份有限公司2026年云资源池建设项目",
+"amount": "1.70亿元",
+"amountWan": 16975.66,
+"region": "河南",
+"date": "2026-05-27",
+"role": "联合体中标"
+},
+{
+"no": 19,
+"name": "中国石油天然气集团2026年网络安全设备采购项目",
+"amount": "885.56万元",
+"amountWan": 885.56,
+"region": "北京",
+"date": "2026-05-20",
+"role": "牵头中标"
+},
+{
+"no": 20,
+"name": "国家能源投资集团2026年统一存储系统采购项目",
+"amount": "1269.51万元",
+"amountWan": 1269.51,
+"region": "浙江",
+"date": "2026-05-13",
+"role": "联合体中标"
+},
+{
+"no": 21,
+"name": "中国铁路通信信号集团2026年专网通信系统建设项目",
+"amount": "4814.83万元",
+"amountWan": 4814.83,
+"region": "山东",
+"date": "2026-05-06",
+"role": "牵头中标"
+},
+{
+"no": 22,
+"name": "中国烟草总公司2026年5G基站及配套设备采购项目",
+"amount": "4327.73万元",
+"amountWan": 4327.73,
+"region": "河南",
+"date": "2026-04-29",
+"role": "联合体中标"
+},
+{
+"no": 23,
+"name": "中国储备粮管理集团2026年智能运维平台建设项目",
+"amount": "2.29亿元",
+"amountWan": 22940.8,
+"region": "北京",
+"date": "2026-04-22",
+"role": "牵头中标"
+},
+{
+"no": 24,
+"name": "公安部第一研究所2026年指挥调度系统建设项目",
+"amount": "4916.39万元",
+"amountWan": 4916.39,
+"region": "浙江",
+"date": "2026-04-15",
+"role": "联合体中标"
+},
+{
+"no": 25,
+"name": "北京市经济和信息化局2026年服务器及存储设备集中采购项目",
+"amount": "3.42亿元",
+"amountWan": 34229.43,
+"region": "山东",
+"date": "2026-04-08",
+"role": "牵头中标"
+},
+{
+"no": 26,
+"name": "国网江苏省电力有限公司2026年算力平台建设项目",
+"amount": "3971.53万元",
+"amountWan": 3971.53,
+"region": "河南",
+"date": "2026-04-01",
+"role": "联合体中标"
+},
+{
+"no": 27,
+"name": "国网浙江省电力有限公司2026年光传输设备集中采购项目",
+"amount": "560.06万元",
+"amountWan": 560.06,
+"region": "北京",
+"date": "2026-03-25",
+"role": "牵头中标"
+},
+{
+"no": 28,
+"name": "广州市政务服务数据管理局2026年终端设备集中采购项目",
+"amount": "2.16亿元",
+"amountWan": 21638.12,
+"region": "浙江",
+"date": "2026-03-18",
+"role": "联合体中标"
+},
+{
+"no": 29,
+"name": "中国民用航空局空中交通管理局2026年数据中心扩容改造项目",
+"amount": "4321.36万元",
+"amountWan": 4321.36,
+"region": "山东",
+"date": "2026-03-11",
+"role": "牵头中标"
+},
+{
+"no": 30,
+"name": "四川省大数据中心2026年视频会议系统采购项目",
+"amount": "1.60亿元",
+"amountWan": 15972.44,
+"region": "河南",
+"date": "2026-03-04",
+"role": "联合体中标"
+},
+{
+"no": 31,
+"name": "中国移动通信集团2026年大数据平台建设项目",
+"amount": "204.25万元",
+"amountWan": 204.25,
+"region": "北京",
+"date": "2026-02-25",
+"role": "牵头中标"
+},
+{
+"no": 32,
+"name": "中国电信集团2026年通信设备集中采购项目",
+"amount": "4205.49万元",
+"amountWan": 4205.49,
+"region": "浙江",
+"date": "2026-02-18",
+"role": "联合体中标"
+},
+{
+"no": 33,
+"name": "中国联合网络通信集团2026年信息化基础设施国产化改造项目",
+"amount": "224.45万元",
+"amountWan": 224.45,
+"region": "山东",
+"date": "2026-02-11",
+"role": "牵头中标"
+},
+{
+"no": 34,
+"name": "国家电网有限公司2026年核心网设备扩容项目",
+"amount": "1806.91万元",
+"amountWan": 1806.91,
+"region": "河南",
+"date": "2026-02-04",
+"role": "联合体中标"
+},
+{
+"no": 35,
+"name": "南方电网有限责任公司2026年UPS电源及机房配套设施采购项目",
+"amount": "2.04亿元",
+"amountWan": 20431.63,
+"region": "北京",
+"date": "2026-01-28",
+"role": "牵头中标"
+},
+{
+"no": 36,
+"name": "中国工商银行股份有限公司2026年云资源池建设项目",
+"amount": "1164.78万元",
+"amountWan": 1164.78,
+"region": "浙江",
+"date": "2026-01-21",
+"role": "联合体中标"
+},
+{
+"no": 37,
+"name": "中国建设银行股份有限公司2026年网络安全设备采购项目",
+"amount": "3760.29万元",
+"amountWan": 3760.29,
+"region": "山东",
+"date": "2026-01-14",
+"role": "牵头中标"
+},
+{
+"no": 38,
+"name": "中国农业银行股份有限公司2026年统一存储系统采购项目",
+"amount": "3689.29万元",
+"amountWan": 3689.29,
+"region": "河南",
+"date": "2026-01-07",
+"role": "联合体中标"
+},
+{
+"no": 39,
+"name": "中国石油天然气集团2025年专网通信系统建设项目",
+"amount": "445.65万元",
+"amountWan": 445.65,
+"region": "北京",
+"date": "2025-12-31",
+"role": "牵头中标"
+},
+{
+"no": 40,
+"name": "国家能源投资集团2025年5G基站及配套设备采购项目",
+"amount": "4260.26万元",
+"amountWan": 4260.26,
+"region": "浙江",
+"date": "2025-12-24",
+"role": "联合体中标"
+},
+{
+"no": 41,
+"name": "中国铁路通信信号集团2025年智能运维平台建设项目",
+"amount": "2.67亿元",
+"amountWan": 26679.34,
+"region": "山东",
+"date": "2025-12-17",
+"role": "牵头中标"
+},
+{
+"no": 42,
+"name": "中国烟草总公司2025年指挥调度系统建设项目",
+"amount": "3.17亿元",
+"amountWan": 31673.8,
+"region": "河南",
+"date": "2025-12-10",
+"role": "联合体中标"
+},
+{
+"no": 43,
+"name": "中国储备粮管理集团2025年服务器及存储设备集中采购项目",
+"amount": "3818.94万元",
+"amountWan": 3818.94,
+"region": "北京",
+"date": "2025-12-03",
+"role": "牵头中标"
+},
+{
+"no": 44,
+"name": "公安部第一研究所2025年算力平台建设项目",
+"amount": "2.13亿元",
+"amountWan": 21269.15,
+"region": "浙江",
+"date": "2025-11-26",
+"role": "联合体中标"
+},
+{
+"no": 45,
+"name": "北京市经济和信息化局2025年光传输设备集中采购项目",
+"amount": "296.60万元",
+"amountWan": 296.6,
+"region": "山东",
+"date": "2025-11-19",
+"role": "牵头中标"
+},
+{
+"no": 46,
+"name": "国网江苏省电力有限公司2025年终端设备集中采购项目",
+"amount": "2862.92万元",
+"amountWan": 2862.92,
+"region": "河南",
+"date": "2025-11-12",
+"role": "联合体中标"
+},
+{
+"no": 47,
+"name": "国网浙江省电力有限公司2025年数据中心扩容改造项目",
+"amount": "3.60亿元",
+"amountWan": 35969.33,
+"region": "北京",
+"date": "2025-11-05",
+"role": "牵头中标"
+},
+{
+"no": 48,
+"name": "广州市政务服务数据管理局2025年视频会议系统采购项目",
+"amount": "3.34亿元",
+"amountWan": 33417.42,
+"region": "浙江",
+"date": "2025-10-29",
+"role": "联合体中标"
+},
+{
+"no": 49,
+"name": "中国民用航空局空中交通管理局2025年大数据平台建设项目",
+"amount": "1.89亿元",
+"amountWan": 18897.04,
+"region": "山东",
+"date": "2025-10-22",
+"role": "牵头中标"
+},
+{
+"no": 50,
+"name": "四川省大数据中心2025年通信设备集中采购项目",
+"amount": "2.02亿元",
+"amountWan": 20156.27,
+"region": "河南",
+"date": "2025-10-15",
+"role": "联合体中标"
+},
+{
+"no": 51,
+"name": "中国移动通信集团2025年信息化基础设施国产化改造项目",
+"amount": "579.16万元",
+"amountWan": 579.16,
+"region": "北京",
+"date": "2025-10-08",
+"role": "牵头中标"
+},
+{
+"no": 52,
+"name": "中国电信集团2025年核心网设备扩容项目",
+"amount": "2468.87万元",
+"amountWan": 2468.87,
+"region": "浙江",
+"date": "2025-10-01",
+"role": "联合体中标"
+},
+{
+"no": 53,
+"name": "中国联合网络通信集团2025年UPS电源及机房配套设施采购项目",
+"amount": "3.00亿元",
+"amountWan": 29969.19,
+"region": "山东",
+"date": "2025-09-24",
+"role": "牵头中标"
+},
+{
+"no": 54,
+"name": "国家电网有限公司2025年云资源池建设项目",
+"amount": "2.30亿元",
+"amountWan": 22972.68,
+"region": "河南",
+"date": "2025-09-17",
+"role": "联合体中标"
+},
+{
+"no": 55,
+"name": "南方电网有限责任公司2025年网络安全设备采购项目",
+"amount": "1045.99万元",
+"amountWan": 1045.99,
+"region": "北京",
+"date": "2025-09-10",
+"role": "牵头中标"
+},
+{
+"no": 56,
+"name": "中国工商银行股份有限公司2025年统一存储系统采购项目",
+"amount": "2.56亿元",
+"amountWan": 25601.79,
+"region": "浙江",
+"date": "2025-09-03",
+"role": "联合体中标"
+},
+{
+"no": 57,
+"name": "中国建设银行股份有限公司2025年专网通信系统建设项目",
+"amount": "306.65万元",
+"amountWan": 306.65,
+"region": "山东",
+"date": "2025-08-27",
+"role": "牵头中标"
+}
+]
+}
+</script>
+
+<script>
+(function () {
+  var PAGE_SIZE = 10;
+  var DATA = JSON.parse(document.getElementById('perf-data').textContent);
+  var ALL = DATA.rows;
+  var state = { page: 1, role: 'all', time: 'all', amount: 'all' };
+  var body = document.getElementById('perf-body');
+  var pagerList = document.getElementById('pager-list');
+  var pagerTotal = document.getElementById('pager-total');
+  var favs = {};
+
+  function filtered() {
+    var now = new Date('2026-11-05');
+    return ALL.filter(function (r) {
+      if (state.role === 'lead' && r.role !== '牵头中标') return false;
+      if (state.role === 'union' && r.role !== '联合体中标') return false;
+      var d = new Date(r.date);
+      var days = (now - d) / 86400000;
+      if (state.time === '半年' && days > 183) return false;
+      if (state.time === '一年' && days > 365) return false;
+      if (state.time === '三年' && days > 1095) return false;
+      if (state.amount === 'lt1000' && r.amountWan >= 1000) return false;
+      if (state.amount === '1000to5000' && (r.amountWan < 1000 || r.amountWan > 5000)) return false;
+      if (state.amount === 'gt5000' && r.amountWan <= 5000) return false;
+      return true;
+    });
+  }
+
+  var STAR = '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+
+  function render() {
+    var rows = filtered();
+    var pages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+    if (state.page > pages) state.page = pages;
+    var start = (state.page - 1) * PAGE_SIZE;
+    var slice = rows.slice(start, start + PAGE_SIZE);
+
+    if (!slice.length) {
+      body.innerHTML = '<tr class="empty-row"><td colspan="6">暂无符合条件的中标业绩</td></tr>';
+    } else {
+      body.innerHTML = slice.map(function (r) {
+        var on = favs[r.no] ? ' on' : '';
+        return '<tr>' +
+          '<td>' + r.no + '</td>' +
+          '<td class="left"><a class="proj-link" href="javascript:void(0)">' + r.name + '</a></td>' +
+          '<td class="amount">' + r.amount + '</td>' +
+          '<td>' + r.region + '</td>' +
+          '<td>' + r.date + '</td>' +
+          '<td><button class="star-btn' + on + '" type="button" data-no="' + r.no + '">' + STAR + '<span>收藏</span></button></td>' +
+          '</tr>';
+      }).join('');
+    }
+
+    pagerTotal.textContent = '共 ' + rows.length + ' 条';
+
+    var parts = [];
+    parts.push('<li><a class="pag-text" href="javascript:void(0)" data-go="prev"' + (state.page === 1 ? ' aria-disabled="true"' : '') + '>上一页</a></li>');
+    for (var p = 1; p <= pages; p++) {
+      if (pages > 10 && p > 3 && p < pages - 1 && Math.abs(p - state.page) > 2) {
+        if (parts[parts.length - 1].indexOf('pagination-ellipsis') < 0) parts.push('<li class="pagination-ellipsis">…</li>');
+        continue;
+      }
+      parts.push('<li><a href="javascript:void(0)" data-go="' + p + '"' + (p === state.page ? ' class="pagination-active"' : '') + '>' + p + '</a></li>');
+    }
+    parts.push('<li><a class="pag-text" href="javascript:void(0)" data-go="next"' + (state.page === pages ? ' aria-disabled="true"' : '') + '>下一页</a></li>');
+    pagerList.innerHTML = parts.join('');
+  }
+
+  pagerList.addEventListener('click', function (e) {
+    var a = e.target.closest('a[data-go]');
+    if (!a) return;
+    var rows = filtered();
+    var pages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+    var go = a.dataset.go;
+    if (go === 'prev') state.page = Math.max(1, state.page - 1);
+    else if (go === 'next') state.page = Math.min(pages, state.page + 1);
+    else state.page = parseInt(go, 10);
+    render();
+  });
+
+  body.addEventListener('click', function (e) {
+    var b = e.target.closest('.star-btn');
+    if (b) {
+      favs[b.dataset.no] = !favs[b.dataset.no];
+      b.classList.toggle('on', !!favs[b.dataset.no]);
+      return;
+    }
+    if (e.target.closest('.proj-link')) e.preventDefault();
+  });
+
+  /* 下拉筛选 */
+  document.querySelectorAll('.sel').forEach(function (sel) {
+    var btn = sel.querySelector('[data-role="btn"]');
+    var label = sel.querySelector('[data-role="label"]');
+    var menu = sel.querySelector('[data-role="menu"]');
+    var key = sel.id.replace('sel-', '');
+    var names = { role: '参与项目', time: '按时间', amount: '按金额' };
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var open = sel.classList.contains('open');
+      document.querySelectorAll('.sel').forEach(function (s) { s.classList.remove('open'); });
+      sel.classList.toggle('open', !open);
+    });
+    menu.addEventListener('click', function (e) {
+      var o = e.target.closest('button[data-value]');
+      if (!o) return;
+      menu.querySelectorAll('button').forEach(function (n) { n.classList.remove('active'); });
+      o.classList.add('active');
+      var v = o.dataset.value;
+      state[key] = (key === 'time' && v !== 'all') ? v : v;
+      if (key === 'time') state.time = v;
+      if (key === 'role') state.role = v;
+      if (key === 'amount') state.amount = v;
+      label.textContent = (v === 'all') ? names[key] : o.textContent;
+      state.page = 1;
+      sel.classList.remove('open');
+      render();
+    });
+  });
+  document.addEventListener('click', function () {
+    document.querySelectorAll('.sel').forEach(function (s) { s.classList.remove('open'); });
+  });
+
+  /* 数据导出 */
+  document.getElementById('export-btn').addEventListener('click', function () {
+    var rows = filtered();
+    var lines = ['序号,项目名称,金额,地区,发布时间,参与方式'];
+    rows.forEach(function (r) {
+      lines.push([r.no, '"' + r.name + '"', r.amount, r.region, r.date, r.role].join(','));
+    });
+    var blob = new Blob(['\ufeff' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = '中标业绩-华为技术有限公司.csv';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  });
+
+  /* 复制企业信息 / 关注 */
+  document.getElementById('copy-btn').addEventListener('click', function () {
+    var txt = ['公司名称：华为技术有限公司', '法人：赵明路', '注册资本：4114113.182000万人民币',
+               '联系电话：0755-28780808', '地址：深圳市龙岗区坂田华为总部办公楼'].join('\n');
+    var done = function () { alert('企业信息已复制'); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, done);
+    else {
+      var ta = document.createElement('textarea');
+      ta.value = txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); done();
+    }
+  });
+  var fb = document.getElementById('follow-btn');
+  fb.addEventListener('click', function () { fb.classList.toggle('on'); });
+
+  /* 回到顶部（与 enterprise-detail.html 一致） */
+  var backTop = document.getElementById('back-top');
+  var scroller = document.getElementById('contentScroll');
+  function onScroll() {
+    var top = Math.max(window.scrollY || 0, scroller ? scroller.scrollTop : 0);
+    /* 与 enterprise-detail.html 一致：滚动超过 300px 显示；容器可滚动距离不足 300px 时按 40% 折算，保证按钮可见 */
+    var max = scroller
+      ? scroller.scrollHeight - scroller.clientHeight
+      : document.documentElement.scrollHeight - window.innerHeight;
+    var threshold = Math.min(300, Math.round(max * 0.4));
+    backTop.classList.toggle('show', top > Math.max(0, threshold));
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  if (scroller) scroller.addEventListener('scroll', onScroll, { passive: true });
+  backTop.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (scroller) scroller.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  render();
+})();
+</script>
+
+<div class="version-badge">v3.14.0</div>
+</body>
+</html>

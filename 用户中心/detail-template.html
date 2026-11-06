@@ -142,16 +142,10 @@
 
 /* main nav tabs */
 .main-nav { display: flex; gap: 64px; padding: 0 32px; margin-top: 22px; border-bottom: 1px solid #ebeef5; }
-.main-nav a {
-  position: relative; display: inline-flex; align-items: center; height: 54px;
-  color: #333333; font-size: 16px; font-weight: 600; text-decoration: none;
-}
-.main-nav a.active { color: #2b7bff; }
-.main-nav a.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; background: #2b7bff; }
-.nav-badge {
-  position: absolute; top: 6px; right: -34px; background: #f5484d; color: #ffffff;
-  font-size: 10px; font-weight: 400; line-height: 16px; padding: 0 6px; border-radius: 3px; white-space: nowrap;
-}
+.main-nav a { position: relative; display: inline-flex; align-items: center; height: 54px; color: #333; font: 600 16px var(--font-sans); text-decoration: none; }
+.main-nav a.active { color: #0063FF; }
+.main-nav a.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; background: #0063FF; }
+.nav-badge { position: absolute; top: 6px; right: -34px; background: #f5484d; color: #fff; font: 400 10px/16px var(--font-sans); padding: 0 6px; border-radius: 3px; }
 
 /* sub pills */
 .pill-bar { display: flex; flex-wrap: wrap; gap: 12px; padding: 18px 32px; background: #ffffff; }
@@ -276,11 +270,11 @@
 
     <!-- main nav -->
     <nav class="main-nav">
-      <a href="#" onclick="return false;">中标分析</a>
-      <a href="#" onclick="return false;">中标业绩</a>
-      <a href="#" onclick="return false;">商机脉络<span class="nav-badge">关系网</span></a>
-      <a href="#" class="active" onclick="return false;">查企业</a>
-      <a href="#" onclick="return false;">找人脉<span class="nav-badge">联系方式</span></a>
+      <a href="bid-analysis.html">中标分析</a>
+      <a href="bid-performance.html">中标业绩</a>
+      <a href="business-network.html">商机脉络<span class="nav-badge">关系网</span></a>
+      <a href="enterprise-detail.html" class="active">查企业</a>
+      <a href="contact.html">找人脉<span class="nav-badge">联系方式</span></a>
     </nav>
 
     <!-- sub pills -->
@@ -480,7 +474,7 @@
     html += '<tr><th>统一社会信用代码</th><td>' + esc(B.CreditNo) + '</td><th>注册号</th><td>' + esc(B.CompanyCode) + '</td><th>组织机构代码</th><td>' + esc(B.OrgCode) + '</td></tr>';
     html += '<tr><th>工商注册类型</th><td>' + esc(B.CompanyType) + '</td><th>企业成立日期</th><td>' + d10(B.EstablishDate) + '</td><th>营业期限</th><td>' + d10(B.BusinessDateFromStr) + ' 至 ' + esc(B.BusinessDateToStr) + '</td></tr>';
     html += '<tr><th>行业大类</th><td>' + esc(IND.Industry) + '</td><th>行业小类</th><td>' + esc(IND.SubIndustry) + '</td><th>注册资本</th><td>' + esc(B.Capital) + '</td></tr>';
-    html += '<tr><th>登记机关</th><td>' + esc(B.Authority) + '</td><th>发照日期</th><td>' + d10(B.IssueDate) + '</td><th>实收资本</th><td>' + esc(B.RealCapital) + '</td></tr>';
+    html += '<tr><th>登记机关</th><td>' + esc(B.Authority) + '</td><th>发照日期</th><td>' + d10(B.IssueDate) + '</td><th>实缴出资额</th><td>' + esc(B.RealCapital) + '</td></tr>';
     html += '<tr><th>经营范围</th><td colspan="5">' + esc(B.BusinessScope) + '</td></tr>';
     html += '<tr><th>网址</th><td colspan="5">' + esc(sites[0]) + '</td></tr>';
     html += '</tbody></table>';
@@ -615,6 +609,6 @@
   backTop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
 })();
 </script>
-<div class="version-badge">v3.10.2</div>
+<div class="version-badge">v3.14.0</div>
 </body>
 </html>

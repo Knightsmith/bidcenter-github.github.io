@@ -12,7 +12,7 @@ AIGC:
 # 版本变更记录（CHANGELOG）
 
 > 记录 `用户中心/` 目录下每个页面文件随版本的变化，**新版本在前、旧版本在后**，供 AI 协作者与使用人快速了解每版差异。
-> 生成日期：2026-11-05 ｜ 当前版本：**v3.10.2**
+> 生成日期：2026-11-06 ｜ 当前版本：**v3.14.0**
 
 ## 维护规则（每次改动必须执行）
 
@@ -21,6 +21,72 @@ AIGC:
 3. 在本文件**顶部**新增一条版本记录，写清：版本号、日期、作用、每个文件的变化。
 
 ---
+
+## v3.14.0 — 2026-11-06
+
+**作用**：全站顶部 tab（`nav.main-nav`）区域样式统一为 `contact.html` 的样式，并去掉「中标业绩」后的数量；同时收窄 `bid-analysis-locked-vip.html` 遮罩作用域，使该页 tab 不再被遮罩压暗（第二名位 +1、第三位归 0：tab 样式与文案为小改，但遮罩作用域改动涉及 DOM 层级包裹，按结构调整计）。
+
+| 文件 | 变化 |
+|------|------|
+| 16 个含 main-nav 页面：`enterprise-detail.html`、`contact.html`、`bid-analysis.html`、`bid-performance.html`、`business-network.html`、`enterprise-detail-locked.html`、`contact-locked.html`、`business-network-locked.html`、`enterprise-detail-locked-count.html`、`contact-locked-count.html`、`business-network-locked-count.html`、`enterprise-detail-locked-vip.html`、`contact-locked-vip.html`、`business-network-locked-vip.html`、`bid-analysis-locked-vip.html`、`detail-template.html` | **tab 样式逐属性对齐 contact.html**。统一后的 5 条规则：`.main-nav { display:flex; gap:64px; padding:0 32px; margin-top:22px; border-bottom:1px solid #ebeef5 }`；`.main-nav a { position:relative; display:inline-flex; align-items:center; height:54px; color:#333; font:600 16px var(--font-sans); text-decoration:none }`；`.main-nav a.active { color:#0063FF }`；`.main-nav a.active::after { content:""; position:absolute; left:0; right:0; bottom:-1px; height:3px; background:#0063FF }`；`.nav-badge { position:absolute; top:6px; right:-34px; background:#f5484d; color:#fff; font:400 10px/16px var(--font-sans); padding:0 6px; border-radius:3px }`。改写前差异：非橙族页容器边框用 `#ebeef5`、标签色 `#333333`、选中色/下划线 `#2b7bff`、徽标色 `#ffffff` 且多一句 `white-space:nowrap`；橙族 3 页用 `#0063FF` 但其余同上。因 `contact.html` 原用 `var(--primary)`/`var(--border)` 而其余页面未定义同名变量，统一时把这两处改为硬编码 `#0063FF`/`#ebeef5`（`contact.html` 的 `--primary` 值即为 `#0063FF`，观感不变） |
+| 同上 16 个文件的 `<nav class="main-nav">` | **tab 文案与徽标统一**：五 tab 固定为 中标分析 / 中标业绩 / 商机脉络（+徽标「关系网」）/ 查企业 / 找人脉（+徽标「联系方式」）。「中标业绩」去掉数值徽标（原 `中标业绩(523)`、`中标业绩(57)`、`中标业绩523` 三种写法统一为无数字）；拼写差异「商机联络」统一为「商机脉络」；「关系网」「联系方式」保持为 `.nav-badge` 红色小徽标，位置随容器规则固定在标签右上角。各页 active 指向自身不变，链接目标按色族互链不变 |
+| `bid-analysis.html`、`bid-analysis-locked-vip.html` | 选中态「中标分析」标签去掉历史残留的 `onclick="return false;"`，与其他 14 页选中态行为一致（`return false` 仅保留在 JS 模板字符串内的「更多联系方式」占位链接中） |
+| `bid-analysis-locked-vip.html` | **遮罩作用域收窄（tab 不再被压暗）**：原 `.lock-area` 包裹整个 `#viewAnalysis`（面包屑 + `.co-head` + `.base-panel` + `nav.main-nav` + 筛选/图表），`.lock-overlay` 以 `inset:0` 铺满，且带 `align-items:flex-start; padding-top:60px`，实测遮罩从 y=76 覆盖到 y=1464，把顶部 tab 整片压成灰色，与本轮「tab 区域全站一致」目标冲突，也违反项目约定「遮罩只盖锁定内容区、不盖全页」。改法：把 `filter-row` + `stats-band` + `charts-grid` 三个锁定区块包进新增的 `.lock-scope { position: relative }`，`.lock-overlay` 移入其中作为最后子节点，`.lock-overlay` 去掉 `align-items:flex-start` 与 `padding-top:60px`、改为 `align-items:center; justify-content:center`（与 `contact-locked-vip.html`、`enterprise-detail-locked-vip.html` 同规则）。修复后：遮罩从 y=414（tab 底边）起，`elementFromPoint(tab 中心)` 命中的是 `NAV.main-nav` 而非遮罩，网关卡片在遮罩内垂直居中（offset=(1049-265)/2），与同族红族页表现一致 |
+
+**自检结论（v3.14.0）**：16 页 Playwright 逐页加载，`nav`/`a`/`a.active`/`a.active::after`/`.nav-badge` 按同角色（选中态对选中态、未选中态对未选中态）比对 computed style，**差异项 0**；同一文案同状态的 tab 裁剪截图两两像素比对 **56 对全部一致**，把各页 `active` 强制挂到「中标分析」后的选中态像素比对 **16 页全部一致**；悬停态：全站无任何可命中 nav 的 `:hover` 规则（命中数 0），故默认态即悬停态；横向溢出 1280/1440/1920 三档均为 0，徽标右边界未越出容器；控制台报错 0（`detail-template.html` 的 `__API_DATA__` JSON 解析报错为模板占位符固有设计，非本轮引入）。逐页 16 张 tab 区域截图拼接成对照图人工复核无异常行；16 页 `elementFromPoint(tab 中心)` 全部命中 `nav.main-nav`（无遮罩压在 tab 上）；横向溢出复检 1280/1440/1920 × 16 页共 48 次测量均为 0。各页 nav 容器实测宽 1246（contact 族）/1278（enterprise 族）/1230（bid-analysis、business-network 族）差异源自页面外框 `.card` 内边距与 `content-scroll` 留白，属页面布局而非 tab 样式，本轮未改动 |
+| 全部 HTML（20 个） | 版本徽标 `.version-badge` 统一升 v3.14.0；`contact.html`、`contact-locked.html`、`contact-locked-count.html`、`contact-locked-vip.html` title 版本同步 |
+
+## v3.13.1 — 2026-11-06
+
+**作用**：修复 T4 全站回归体检发现的两项 P1 问题（小改，第三位 +1）。P2 项本轮不动。
+
+| 文件 | 变化 |
+|------|------|
+| `contact.html`、`contact-locked.html`、`contact-locked-count.html`、`contact-locked-vip.html` | **分页失效 + 点击跳回页首修复**：分页事件委托选择器由 `.pagination a[data-type]` 改为 `.pager a[data-type]`。原选择器在 DOM 中无 `.pagination` 祖先（实际结构为 `div.pager > span.pager-total + ul.pagination-list`），`closest()` 返回 null 导致拦截分支不进入、`e.preventDefault()` 未执行，`href="#"` 交给浏览器处理即跳回页首；表现为点击页码后选中态仍为 1、表格行数仍为 10、scrollY 由 143 变 0。修复后四页点击页码：选中态 1→2、行数 10→2、上一页/下一页切换正常、`location.hash` 保持为空、不再跳顶 |
+| `business-network-locked-vip.html` | **红族「纯演示不解锁」约定对齐**：删除 `.btn-unlock` 点击解锁逻辑（`overlays.forEach(ov => ov.remove())` 清除 4 个遮罩、`.badge.unlock-badge`「会员已开通」徽标、`showToast('会员开通成功：该企业商机脉络全维度数据已解锁')`）以及随之不再被引用的 `showToast` 函数，改为注释说明纯演示。修复后点击 4 个网关按钮：遮罩仍为 4 个、无 toast、无徽标、正文文本长度不变，与同族 `enterprise-detail-locked-vip.html` / `contact-locked-vip.html` / `bid-analysis-locked-vip.html` 表现一致 |
+| 全部 HTML（20 个） | 版本徽标 `.version-badge` 统一升 v3.13.1；`contact.html`、`contact-locked.html` title 版本同步；顺带修正 `contact-locked-count.html`（原 `\| v3.0`）、`contact-locked-vip.html`（原 `\| v3.1`）title 中的历史残留版号为 v3.13.1 |
+
+## v3.13.0 — 2026-11-05
+
+**作用**：新增「中标业绩」基础版页面（新增页面，第二位 +1），并把全站各色族 tab 的「中标业绩」占位统一接入该页。
+
+| 文件 | 变化 |
+|------|------|
+| `bid-performance.html` | **新增**：中标业绩基础版，纯展示、无任何解锁/遮罩/积分概念。外框沿用 `bid-analysis.html` / `business-network.html` 的 `app-shell` + 面包屑 `main-header` + `content-scroll` 结构，**不自带侧边栏**（由 `sidebar.html` iframe 托管）；tab 为 中标分析 / 中标业绩(57) / 商机联络 / 查企业 / 找人脉，本页「中标业绩」为选中态；筛选行含 参与项目、按时间、按金额、近一年 `2025.11.05 ~ 2026.11.05`、数据导出（下拉可实际过滤，导出当前结果为 CSV）；列表上方提示「为方便您对比查看，此列表保留了全部原始信息，未进行去重处理。」；表格列 序号 / 项目名称 / 金额 / 地区 / 发布时间 / 操作(收藏)，共 57 条、每页 10 条，使用独立分页条（共 N 条 / 上一页 / 页码 / 下一页）；`.back-top` 的类名、SVG 箭头、`fixed; right:60px; bottom:100px; 56×56; 圆形白底; shadow; z-index:50` 样式与显示/隐藏、平滑回顶行为均与 `enterprise-detail.html` 一致 |
+| tab 接入（15 个文件） | 各页 tab 中的「中标业绩」由占位（`href="#"` + `onclick="return false;"` / `javascript:void(0)`）统一改为指向 `bid-performance.html`，tab 文案与徽标数字（如 523）保持不变 |
+| `sidebar.html` | 菜单「企业详情」组新增「中标业绩」入口（`data-page="bid-performance.html"`），使 `?page=bid-performance.html` 可正常以 iframe 托管本页 |
+| 全部 HTML（20 个） | 版本徽标统一升 v3.13.0；`contact.html`、`contact-locked.html` 标题版本同步 |
+
+## v3.12.0 — 2026-11-05
+
+**作用**：tab 按色族串联 + 外框统一为 sidebar.html 托管 + 新增红版中标分析页（结构调整，第二位 +1）。
+
+| 文件 | 变化 |
+|------|------|
+| `bid-analysis-locked-vip.html` | **新增**：红版中标分析页（复制 bid-analysis.html），内容区套红色会员弹窗（开通会员与中标分析功能 / 523 条 / 会员期内有效 / 红色按钮，纯演示不解锁）；tab 接入红族 |
+| tab 串联（15 个文件） | 红族 4 页互链（bid-analysis-locked-vip / business-network-locked-vip / enterprise-detail-locked-vip / contact-locked-vip）；橙族 3 页互链（*-locked）；蓝族 3 页互链（*-locked-count）；基础族 4 页互链（bid-analysis / enterprise-detail / contact / business-network）+ detail-template 同步；无同色页的 tab：橙/蓝「中标分析」指基础版 bid-analysis.html，「中标业绩」各族均保持占位 |
+| 外框拆除（6 个文件） | `bid-analysis.html`、`business-network.html`、`business-network-locked.html`、`-count`、`-vip` 删除内联 sidebar-07 侧边栏（aside + 顶栏触发按钮 + 对应 JS），`team-batch-auth.html` 删除旧 app-sidebar；页面统一改由 sidebar.html iframe 托管 |
+| `sidebar.html` | 菜单新增「企业详情」组：查企业 / 找人脉 / 中标分析 / 商机脉络 四个入口（带锁变体经页内 tab 进入） |
+| 全部 HTML（19 个） | 版本徽标统一升 v3.12.0；`contact.html`、`contact-locked.html` 标题版本同步 |
+
+## v3.11.0 — 2026-11-05
+
+**作用**：`business-network-locked.html` 01–04 四大区域按「子模块级遮罩」重构：每个功能子模块独立成卡、各自持有解锁遮罩，弹窗在所属遮罩内居中且按钮之下不留任何内容；同时把图表拆成更小的模块卡片并补充排行、分组、迷你指标，使锁定态与解锁态展示的数据更密集。
+
+| 文件 | 变化 |
+|------|------|
+| `business-network-locked.html` | 遮罩由 7 个拆为 10 个（01 四块 `ov-map`/`ov-table`/`ov-industry`/`ov-prov`，02 两块 `ov-chain-up`/`ov-chain-dn`，03 两块 `ov-graph-map`/`ov-graph-groups`，04 两块 `ov-related-map`/`ov-related-list`），过窄不宜承载弹窗的板块与相邻板块合并共用遮罩；弹窗统一为 h3 + `lock-sub` + `lock-digits` + `lock-note` + `btn-unlock`，按钮为最后一个子元素，删除 `lock-scale` 数字格行与 chips 明细项，`lock-gate` padding 收紧至 22px（按钮下沿距弹窗底边 24px），弹窗在遮罩内水平/垂直居中偏差 0；02 拆为「脉络总览·上游企业关系网」「下游企业关系网·上下游结构对比」两卡，新增上下游 4 项迷你指标与 TOP6 排行；03 拆为「企业脉络图谱」「关系分组构成明细」两卡，新增分组总数/主体数/口径数/平均规模与关系分组卡；04 拆为「关联企业分布图」「关联关系明细」两卡，新增 4 项迷你指标与关联企业 TOP10 排行 |
+| 全部 HTML（18 个） | 版本徽标统一升 v3.11.0；`contact.html`、`contact-locked.html` 标题版本同步 |
+
+## v3.10.3 — 2026-11-05
+
+**作用**：工商信息区「实收资本」格改名「实缴出资额」（仅改名，值源仍为 Base.RealCapital）；字段对照表同步。
+
+| 文件 | 变化 |
+|------|------|
+| `enterprise-detail.html` / `detail-template.html` | kv 表「实收资本」表头改「实缴出资额」，取值表达式不变 |
+| `field-mapping.md` | 对应行与附录确认项同步改名，保留「新接口 Base 无 RealCapital 字段」待确认标注 |
+| 全部 HTML（18 个） | 版本徽标统一升 v3.10.3；`contact.html`、`contact-locked.html` 标题版本同步 |
 
 ## v3.10.2 — 2026-11-05
 

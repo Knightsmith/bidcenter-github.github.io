@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>联系方式（预购次数解锁版） - 企业详情 | v3.0</title>
+<title>联系方式（预购次数解锁版） - 企业详情 | v3.14.0</title>
 <style>
 @layer tokens, base, components;
 @layer tokens {
@@ -65,10 +65,10 @@
 .follow-btn { display: inline-flex; gap: 6px; background: none; border: none; color: #666; font: 400 14px var(--font-sans); cursor: pointer; }
 .follow-btn.on { color: var(--primary); }
 
-.main-nav { display: flex; gap: 64px; padding: 0 32px; margin-top: 22px; border-bottom: 1px solid var(--border); }
+.main-nav { display: flex; gap: 64px; padding: 0 32px; margin-top: 22px; border-bottom: 1px solid #ebeef5; }
 .main-nav a { position: relative; display: inline-flex; align-items: center; height: 54px; color: #333; font: 600 16px var(--font-sans); text-decoration: none; }
-.main-nav a.active { color: var(--primary); }
-.main-nav a.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; background: var(--primary); }
+.main-nav a.active { color: #0063FF; }
+.main-nav a.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; background: #0063FF; }
 .nav-badge { position: absolute; top: 6px; right: -34px; background: #f5484d; color: #fff; font: 400 10px/16px var(--font-sans); padding: 0 6px; border-radius: 3px; }
 
 .contact-tabs { display: flex; gap: 12px; padding: 20px 32px 0; }
@@ -188,10 +188,10 @@
     </div>
     <nav class="main-nav">
       <a href="bid-analysis.html">中标分析</a>
-      <a href="#">中标业绩(523)</a>
-      <a href="#">商机脉络<span class="nav-badge">关系网</span></a>
-      <a href="enterprise-detail.html">查企业</a>
-      <a href="contact-locked.html" class="active">找人脉<span class="nav-badge">联系方式</span></a>
+      <a href="bid-performance.html">中标业绩</a>
+      <a href="business-network-locked-count.html">商机脉络<span class="nav-badge">关系网</span></a>
+      <a href="enterprise-detail-locked-count.html">查企业</a>
+      <a href="contact-locked-count.html" class="active">找人脉<span class="nav-badge">联系方式</span></a>
     </nav>
     <div class="contact-tabs">
       <a class="contact-tab active" href="#sec-bid">中标联系人</a>
@@ -220,7 +220,7 @@
     </div>
   </div>
 </div>
-<div class="version-badge">v3.10.2</div>
+<div class="version-badge">v3.14.0</div>
 <script>
 (function () {
   'use strict';
@@ -298,7 +298,7 @@
     if (bizSec2) bizSec2.hidden = (id !== '#sec-biz');
   });
   document.addEventListener('click', function (e) {
-    var a = e.target.closest('.pagination a[data-type]');
+    var a = e.target.closest('.pager a[data-type]');
     if (!a || a.getAttribute('aria-disabled')==='true') return;
     e.preventDefault();
     var type = a.dataset.type, data = type==='bid'?BID:BIZ;

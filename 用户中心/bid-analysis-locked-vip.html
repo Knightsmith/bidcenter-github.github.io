@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>企情分析-企业信息-中标分析（会员解锁演示）</title>
+<style>
+@layer tokens, base, components;
+
+@layer tokens {
+  :root {
+    --background: #ffffff;        --foreground: #333333;
+    --primary: #2b7bff;           --primary-foreground: #ffffff;
+    --secondary: #f4f4f5;         --secondary-foreground: #606266;
+    --muted: #f5f7fa;             --muted-foreground: #999999;
+    --accent: #ecf5ff;            --accent-foreground: #2b7bff;
+    --destructive: #f56c6c;       --destructive-foreground: #ffffff;
+    --border: #ebeef5;            --input: #dcdfe6;            --ring: #2b7bff;
+    --radius-sm: 0.125rem; --radius-md: 0.25rem; --radius-lg: 0.5rem;
+    --font-sans: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    --shadow-xs: 0 1px 2px rgb(0 0 0 / .05);
+  }
+}
+
+@layer base {
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #f0f3fa; color: var(--foreground); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+}
+
+@layer components {
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    white-space: nowrap; font-size: 0.875rem; font-weight: 500; font-family: var(--font-sans);
+    line-height: 1; border-radius: var(--radius-md); border: 1px solid transparent;
+    cursor: pointer; text-decoration: none; transition: all 150ms ease; outline: none;
+    flex-shrink: 0; height: 2.25rem; padding: 0 1rem;
+    background-color: var(--primary); color: var(--primary-foreground);
+    & svg { pointer-events: none; flex-shrink: 0; &:not([class*="size-"]) { width: 1rem; height: 1rem; } }
+    &:disabled, &[aria-disabled="true"] { pointer-events: none; opacity: 0.5; }
+    &[data-variant="default"] { &:hover { opacity: 0.9; } }
+    &[data-variant="secondary"] { background-color: var(--secondary); color: var(--secondary-foreground); &:hover { opacity: 0.8; } }
+    &[data-variant="outline"] { background-color: var(--background); color: var(--foreground); border: 1px solid var(--border); box-shadow: var(--shadow-xs); &:hover { background-color: var(--accent); color: var(--accent-foreground); } }
+    &[data-size="sm"] { height: 2rem; padding: 0 0.75rem; font-size: 0.8125rem; }
+    &[data-size="xs"] { height: 1.75rem; padding: 0 0.5rem; font-size: 0.75rem; border-radius: var(--radius-sm); }
+  }
+  .badge {
+    display: inline-flex; align-items: center; border-radius: 9999px;
+    padding: 0.125rem 0.625rem; font-size: 0.6875rem; font-weight: 500; line-height: 1.5rem;
+    &[data-variant="secondary"] { background: var(--secondary); color: var(--secondary-foreground); }
+  }
+  .input {
+    height: 2.5rem; width: 100%; border: 1px solid var(--input); border-radius: var(--radius-md);
+    background: var(--background); padding: 0 0.75rem; font-size: 0.875rem; font-family: var(--font-sans);
+    color: var(--foreground); outline: none; box-shadow: var(--shadow-xs);
+    &::placeholder { color: var(--muted-foreground); }
+  }
+}
+
+/* ============ 通用外框（用户中心 sidebar-07，内联无外链） ============ */
+:root {
+  --sidebar: #fafafa; --sidebar-foreground: #333333;
+  --sidebar-accent: #f0f0f0; --sidebar-accent-foreground: #202020;
+  --sidebar-border: #e5e5e5;
+  --sidebar-width: 16rem; --sidebar-width-icon: 3rem;
+  --radius: 8px;
+}
+html, body { height: 100%; }
+body { overflow: hidden; }
+.app-shell { display: flex; height: 100vh; }
+.sidebar {
+  position: relative; width: var(--sidebar-width); min-width: var(--sidebar-width);
+  background: var(--sidebar); border-right: 1px solid var(--sidebar-border);
+  display: flex; flex-direction: column; transition: width .2s ease, min-width .2s ease;
+}
+.sidebar[data-state="collapsed"] { width: var(--sidebar-width-icon); min-width: var(--sidebar-width-icon); }
+.sidebar-header { display: flex; align-items: center; padding: 0.5rem; border-bottom: 1px solid var(--sidebar-border); }
+.sidebar-content { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 0.5rem; scrollbar-width: thin; }
+.sidebar-content::-webkit-scrollbar { width: 6px; }
+.sidebar-content::-webkit-scrollbar-thumb { background: var(--sidebar-border); border-radius: 3px; }
+.sidebar-menu { display: flex; flex-direction: column; gap: 8px; }
+.sidebar-menu-button {
+  display: flex; align-items: center; gap: 0.75rem; width: 100%; min-height: 32px; padding: 0.5rem 0.75rem;
+  border: none; border-radius: var(--radius); background: transparent; color: var(--sidebar-foreground);
+  font-size: 14px; font-weight: 500; font-family: inherit; text-align: left; cursor: pointer; white-space: nowrap;
+  transition: background .15s ease, color .15s ease;
+}
+.sidebar-menu-button:hover { background: var(--sidebar-accent); color: var(--sidebar-accent-foreground); }
+.sidebar-menu-button.active { background: var(--sidebar-accent); color: var(--sidebar-accent-foreground); font-weight: 600; }
+.sidebar-menu-button svg { width: 16px; height: 16px; flex-shrink: 0; }
+.sidebar-menu-button-label { flex: 1; overflow: hidden; text-overflow: ellipsis; }
+.sidebar-menu-button-chevron { margin-left: auto; width: 16px; height: 16px; flex-shrink: 0; color: #999999; transition: transform .2s ease; }
+.sidebar-group-item[data-state="open"] > .sidebar-menu-button > .sidebar-menu-button-chevron { transform: rotate(90deg); }
+.sidebar-menu-sub { display: none; flex-direction: column; gap: 1px; padding-left: 3rem; margin: 1px 0 3px; }
+.sidebar-group-item[data-state="open"] > .sidebar-menu-sub { display: flex; }
+.sidebar-menu-sub-item {
+  display: flex; align-items: center; gap: 0.5rem; min-height: 30px; padding: 0 0.5rem; border-radius: var(--radius);
+  color: var(--sidebar-foreground); font-size: 13.5px; cursor: pointer; white-space: nowrap; text-decoration: none;
+  transition: background .15s ease, color .15s ease;
+}
+.sidebar-menu-sub-item:hover { background: var(--sidebar-accent); color: var(--sidebar-accent-foreground); }
+.sidebar-menu-sub-item.active { background: var(--sidebar-accent); color: var(--sidebar-accent-foreground); font-weight: 600; }
+.sidebar-footer { padding: 0.5rem; border-top: 1px solid var(--sidebar-border); }
+.sidebar-footer .sidebar-menu-button { background: var(--sidebar-accent); border-radius: var(--radius); gap: 0.625rem; }
+.sidebar-menu-button-avatar {
+  width: 32px; height: 32px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius); background: #10b981; color: #ffffff; font-size: 13px; font-weight: 600;
+}
+.sidebar-menu-button-avatar svg { width: 16px; height: 16px; }
+.sidebar-menu-button-avatar.user-avatar { border-radius: 50%; background: var(--sidebar-accent); color: var(--sidebar-accent-foreground); }
+.sidebar-menu-button-text { flex: 1; min-width: 0; display: flex; flex-direction: column; text-align: left; line-height: 1.25; }
+.sidebar-menu-button-name { font-size: 14px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sidebar-menu-button-sub { font-size: 11.5px; color: #999999; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sidebar-menu-button-chevrons { margin-left: auto; width: 16px; height: 16px; flex-shrink: 0; color: #999999; }
+.sidebar-rail { position: absolute; top: 0; bottom: 0; left: 100%; width: 1px; margin-left: -1px; background: var(--sidebar-border); cursor: pointer; z-index: 10; transition: width .2s ease; }
+.sidebar-rail:hover { width: 8px; }
+.sidebar[data-state="collapsed"] .sidebar-header { padding: 0.5rem 0.25rem; }
+.sidebar[data-state="collapsed"] .sidebar-menu-button { justify-content: center; padding: 0.5rem; }
+.sidebar[data-state="collapsed"] .sidebar-menu-button-label,
+.sidebar[data-state="collapsed"] .sidebar-menu-button-text,
+.sidebar[data-state="collapsed"] .sidebar-menu-button-chevrons,
+.sidebar[data-state="collapsed"] .sidebar-menu-button-chevron,
+.sidebar[data-state="collapsed"] .sidebar-menu-sub { display: none; }
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.main-header { height: 56px; flex-shrink: 0; display: flex; align-items: center; gap: 0.75rem; padding: 0 1rem; background: #ffffff; border-bottom: 1px solid var(--border); }
+.sidebar-trigger { width: 32px; height: 32px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: var(--radius); background: transparent; color: #999999; cursor: pointer; }
+.sidebar-trigger:hover { background: var(--accent); color: var(--accent-foreground); }
+.sidebar-trigger svg { width: 16px; height: 16px; }
+.header-separator { width: 1px; height: 16px; background: var(--border); flex-shrink: 0; }
+.breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 14px; color: #999999; }
+.breadcrumb-separator { color: #999999; }
+.breadcrumb-current { color: #333333; font-weight: 500; }
+.content { flex: 1; display: flex; flex-direction: column; padding: 20px 24px; min-height: 0; }
+.content-scroll { flex: 1; min-height: 0; overflow-y: auto; background: #f0f3fa; }
+/* 会员解锁弹窗（红版，纯演示） */
+.lock-area { position: relative; }
+.lock-scope { position: relative; }
+.lock-overlay { position: absolute; inset: 0; z-index: 60; background: rgba(0,0,0,.32); display: flex; align-items: center; justify-content: center; }
+.lock-gate { position: relative; width: 400px; padding: 26px 28px 24px; text-align: center; background: linear-gradient(180deg, #fdefee 0%, #ffffff 55%); border: 2px solid #f5b0aa; border-radius: 12px; box-shadow: 0 12px 40px rgba(225,37,27,.16); }
+.lock-gate h3 { margin: 0; font-size: 16px; font-weight: 700; color: #E1251B; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.lock-sub { margin: 10px 0 0; font-size: 13px; color: #666666; }
+.lock-digits { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 10px; }
+.lock-digits .d { min-width: 34px; padding: 5px 0; border: 2px dashed #c0c8d6; border-radius: 6px; background: #ffffff; font-size: 22px; font-weight: 800; color: #333333; }
+.lock-digits .u { font-size: 13px; color: #666666; }
+.lock-note { margin: 12px 0 0; font-size: 12px; color: #999999; }
+.btn-unlock { margin-top: 16px; height: 44px; padding: 0 40px; border: none; border-radius: 8px; background: #E1251B; color: #ffffff; font-size: 16px; font-weight: 600; cursor: pointer; animation: unlock-pulse 1.6s infinite; }
+@keyframes unlock-pulse { 0% { box-shadow: 0 0 0 0 rgba(225,37,27,.4); } 70% { box-shadow: 0 0 0 18px rgba(225,37,27,0); } 100% { box-shadow: 0 0 0 0 rgba(225,37,27,0); } }
+.placeholder-view { display: none; flex-direction: column; align-items: center; justify-content: center; gap: 12px; height: 100%; color: #999999; text-align: center; }
+.placeholder-view svg { width: 56px; height: 56px; stroke-width: 1.2; color: #dcdfe6; }
+.placeholder-view h3 { font-size: 17px; font-weight: 600; color: #333333; margin: 0; }
+.placeholder-view p { font-size: 13px; margin: 0; }
+
+/* ============ page ============ */
+.page { max-width: 1400px; margin: 0 auto; padding-top: 12px; }
+.crumb { padding: 10px 4px; font-size: 13px; color: #909399; }
+.crumb b { color: #2b7bff; font-weight: 500; }
+.crumb .sep { margin: 0 6px; color: #c0c4cc; }
+
+.channel-bar { background: #e4edfb; display: flex; gap: 4px; overflow: hidden; }
+.channel-tab {
+  width: 132px; height: 46px; display: flex; align-items: center; justify-content: center;
+  transform: skewX(-18deg); cursor: pointer; border: none; font-family: var(--font-sans);
+  font-size: 16px; font-weight: 500; background: #d5e5fb; color: #2b7bff;
+}
+.channel-tab > span { transform: skewX(18deg); }
+.channel-tab.active { background: linear-gradient(180deg, #6ba1f5 0%, #4d8bf0 100%); color: #ffffff; }
+
+.card { background: #ffffff; border: 1px solid #ebeef5; border-top: none; }
+
+.co-head { display: flex; align-items: flex-start; gap: 14px; padding: 22px 32px 18px; }
+.co-icon { width: 52px; height: 52px; border-radius: 6px; background: #d8e6fd; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.co-name { font-size: 22px; font-weight: 600; color: #333333; margin: 2px 0 0; }
+.co-tags { margin-top: 10px; }
+.badge[data-variant="tag-blue"] { background: #e8f1ff; color: #409eff; border-radius: 2px; padding: 0 8px; font-size: 12px; line-height: 20px; font-weight: 400; }
+.co-actions { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.co-btns { display: flex; gap: 12px; }
+.btn-orange { background: linear-gradient(90deg, #ff8f3c 0%, #ff5000 100%); color: #fff; }
+.btn-orange:hover { opacity: 0.92; }
+.btn-monitor { background: #d6e4ff; color: #2b7bff; }
+.co-update { display: inline-flex; align-items: center; gap: 5px; color: #999999; font-size: 12px; }
+
+.base-panel { margin: 0 32px; background: #f4f6fb; border-radius: 4px; padding: 20px 28px; position: relative; }
+.base-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 60px; font-size: 14px; }
+.base-item .k { color: #999999; }
+.base-item .v { color: #333333; margin-left: 6px; }
+.base-item .v a { color: #2b7bff; text-decoration: none; margin-left: 10px; font-size: 13px; }
+.base-tools { position: absolute; top: 16px; right: 24px; display: flex; align-items: center; gap: 14px; }
+.copy-link { color: #2b7bff; font-size: 13px; text-decoration: none; background: none; border: none; padding: 0; cursor: pointer; font-family: var(--font-sans); }
+.follow-btn { display: inline-flex; align-items: center; gap: 6px; background: none; border: none; padding: 0; color: #666666; font-size: 14px; font-family: var(--font-sans); cursor: pointer; }
+.follow-btn.on { color: #2b7bff; }
+.follow-btn.on svg { fill: currentColor; }
+
+.main-nav { display: flex; gap: 64px; padding: 0 32px; margin-top: 22px; border-bottom: 1px solid #ebeef5; }
+.main-nav a { position: relative; display: inline-flex; align-items: center; height: 54px; color: #333; font: 600 16px var(--font-sans); text-decoration: none; }
+.main-nav a.active { color: #0063FF; }
+.main-nav a.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; background: #0063FF; }
+.nav-badge { position: absolute; top: 6px; right: -34px; background: #f5484d; color: #fff; font: 400 10px/16px var(--font-sans); padding: 0 6px; border-radius: 3px; }
+
+/* filter row */
+.filter-row { display: flex; gap: 12px; padding: 18px 32px 0; }
+.kw-box { position: relative; width: 220px; }
+.kw-box .input { height: 34px; font-size: 13px; padding-right: 30px; }
+.kw-box svg { position: absolute; right: 9px; top: 50%; transform: translateY(-50%); color: #c0c4cc; }
+.range-box {
+  display: inline-flex; align-items: center; gap: 10px; height: 34px; padding: 0 12px;
+  border: 1px solid #dcdfe6; border-radius: 4px; background: #fff; font-size: 13px; color: #606266; cursor: pointer;
+}
+.range-box .lab { color: #333333; }
+
+/* stats band */
+.stats-band {
+  margin: 16px 32px 0; background: #e8f1fd; border-radius: 6px;
+  display: grid; grid-template-columns: repeat(5, 1fr); padding: 26px 8px 22px;
+}
+.stat { text-align: center; }
+.stat .num { font-size: 30px; font-weight: 700; color: #333333; line-height: 1; }
+.stat .unit { font-size: 13px; font-weight: 500; color: #333333; margin-left: 2px; }
+.stat .lab { margin-top: 12px; display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #606266; }
+.stat .ico { width: 16px; height: 16px; border-radius: 50%; color: #fff; font-size: 9px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.help { display: inline-flex; align-items: center; justify-content: center; width: 14px; height: 14px; border-radius: 50%; border: 1px solid #c0c4cc; color: #909399; font-size: 10px; cursor: help; flex-shrink: 0; }
+
+/* charts */
+.charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 16px 32px 32px; }
+.chart-card { border: 1px solid #ebeef5; border-radius: 8px; background: #fff; padding: 16px 18px 14px; position: relative; }
+.chart-head { display: flex; align-items: center; gap: 8px; }
+.chart-title { font-size: 15px; font-weight: 600; color: #333333; }
+.chart-title .q { color: #f5484d; }
+.chart-tools { margin-left: auto; display: flex; gap: 8px; }
+.tool-btn {
+  height: 28px; padding: 0 14px; border-radius: 4px; border: 1px solid #dcdfe6; background: #f4f4f5;
+  color: #606266; font-size: 12px; font-family: var(--font-sans); cursor: pointer; display: inline-flex; align-items: center; gap: 5px;
+}
+.tool-btn.active { background: #2b7bff; border-color: #2b7bff; color: #fff; }
+.tool-btn.plain { background: #fff; }
+.tool-btn:hover { color: #2b7bff; border-color: #2b7bff; }
+.tool-btn.active:hover { color: #fff; }
+.chart-body { margin-top: 10px; }
+.chart-body svg { width: 100%; height: auto; display: block; }
+.zoom-bar { height: 12px; border-radius: 6px; background: #dce8fb; margin: 8px 4px 2px; position: relative; }
+.zoom-bar::after { content: ""; position: absolute; left: 46%; top: 3px; width: 10px; height: 6px; border-radius: 2px; background: #b9cdf2; }
+.map-legend { position: absolute; left: 26px; bottom: 40px; font-size: 11px; color: #606266; }
+.map-legend .bar { width: 10px; height: 90px; margin: 6px auto; border-radius: 2px; background: linear-gradient(180deg, #2b6de8 0%, #dfe9fb 100%); }
+.map-legend .t { text-align: center; }
+
+/* tooltip */
+.tip {
+  position: fixed; z-index: 60; pointer-events: none; background: #ffffff; border: 1px solid #ebeef5;
+  box-shadow: 0 4px 16px rgba(31, 45, 61, 0.15); border-radius: 4px; padding: 8px 14px;
+  font-size: 13px; color: #606266; opacity: 0; transition: opacity .12s;
+}
+.tip.show { opacity: 1; }
+.tip .t1 { color: #333333; font-weight: 600; margin-bottom: 4px; }
+.tip .t2 b { color: #2b7bff; font-weight: 600; }
+
+.back-top {
+  position: fixed; right: 60px; bottom: 100px; width: 56px; height: 56px; border-radius: 50%;
+  background: #ffffff; border: none; cursor: pointer; box-shadow: 0 4px 16px rgba(31, 45, 61, 0.15);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden; transition: opacity .2s, visibility .2s; z-index: 50;
+}
+.back-top.show { opacity: 1; visibility: visible; }
+
+/* 版本徽标 */
+.version-badge { position: fixed; right: 16px; bottom: 14px; z-index: 40; font-size: 11px; color: #999; background: rgba(255,255,255,.8); border: 1px solid #ebeef5; border-radius: 999px; padding: 2px 10px; letter-spacing: .5px; user-select: none; }
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+
+
+  <!-- ============ 主区域 ============ -->
+  <main class="main">
+    <div class="content">
+      <header class="main-header">
+        <div class="header-separator"></div>
+        <nav class="breadcrumb" aria-label="面包屑">
+          <span>采招网</span>
+          <span class="breadcrumb-separator">/</span>
+          <span>企情分析</span>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current" id="breadcrumbCurrent">中标分析</span>
+        </nav>
+      </header>
+
+      <div class="content-scroll" id="contentScroll">
+        <div class="lock-area">
+        <div id="viewAnalysis">
+<div class="page">
+
+  <div class="channel-bar">
+    <button class="channel-tab active"><span>业主</span></button>
+    <button class="channel-tab"><span>供应商</span></button>
+  </div>
+
+  <div class="card">
+    <div class="co-head">
+      <div class="co-icon">
+        <svg aria-hidden="true" width="28" height="28" viewBox="0 0 48 48" fill="none" stroke="#6d9bf2" stroke-width="2.5" stroke-linejoin="round">
+          <path d="M8 40V18l14-6v28"/><path d="M22 40V22l16-4v22"/><path d="M4 40h40"/>
+          <rect x="13" y="22" width="4" height="4" fill="#6d9bf2" stroke="none"/>
+          <rect x="13" y="30" width="4" height="4" fill="#6d9bf2" stroke="none"/>
+          <rect x="28" y="26" width="4" height="4" fill="#6d9bf2" stroke="none"/>
+          <rect x="28" y="33" width="4" height="4" fill="#6d9bf2" stroke="none"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="co-name" id="co-name">--</h1>
+        <div class="co-tags"><span class="badge" data-variant="tag-blue" id="co-status">--</span></div>
+      </div>
+      <div class="co-actions">
+        <div class="co-btns">
+          <button class="btn btn-orange">企业报告</button>
+          <button class="btn btn-monitor">企业监控</button>
+        </div>
+        <span class="co-update">
+          <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <span id="co-update">--</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="base-panel">
+      <div class="base-tools">
+        <button class="copy-link" id="copy-btn">复制企业信息</button>
+        <button class="follow-btn" id="follow-btn">
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <span>关注</span>
+        </button>
+      </div>
+      <div class="base-grid" id="base-grid"></div>
+    </div>
+
+    <nav class="main-nav">
+      <a href="bid-analysis-locked-vip.html" class="active">中标分析</a>
+      <a href="bid-performance.html">中标业绩</a>
+      <a href="business-network-locked-vip.html">商机脉络<span class="nav-badge">关系网</span></a>
+      <a href="enterprise-detail-locked-vip.html">查企业</a>
+      <a href="contact-locked-vip.html">找人脉<span class="nav-badge">联系方式</span></a>
+    </nav>
+
+    <div class="lock-scope">
+        <div class="filter-row">
+      <div class="kw-box">
+        <label class="sr-only" for="kw">关键词</label>
+        <input class="input" id="kw" type="search" placeholder="请输入关键词">
+        <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+      </div>
+      <button class="range-box" id="range-box">
+        <span class="lab">近一年</span>
+        <span>2025.11.03–2026.11.03</span>
+        <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+    </div>
+
+    <div class="stats-band" id="stats-band"></div>
+
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-head">
+          <span class="chart-title">单击选中地区，双击进入省份</span>
+          <span class="help">?</span>
+          <div class="chart-tools">
+            <button class="tool-btn active" data-chart="map" data-mode="count">次数</button>
+            <button class="tool-btn" data-chart="map" data-mode="amount">金额</button>
+            <button class="tool-btn plain" data-dl="map">
+              <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>下载
+            </button>
+          </div>
+        </div>
+        <div class="chart-body" id="map-body"></div>
+        <div class="map-legend" id="map-legend"></div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-head">
+          <span class="chart-title"><span class="q">“</span>全国地区<span class="q">”</span>中标<span id="top10-metric">次数</span>TOP10</span>
+          <span class="help">?</span>
+          <div class="chart-tools">
+            <button class="tool-btn active" data-chart="top10" data-mode="count">次数</button>
+            <button class="tool-btn" data-chart="top10" data-mode="amount">金额</button>
+            <button class="tool-btn plain" data-dl="top10">
+              <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>下载
+            </button>
+          </div>
+        </div>
+        <div class="chart-body" id="top10-body"></div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-head">
+          <span class="chart-title"><span class="q">“</span>全国<span class="q">”</span>中标项目月度分布</span>
+          <span class="help">?</span>
+          <div class="chart-tools">
+            <button class="tool-btn active" data-chart="line" data-mode="month">月度</button>
+            <button class="tool-btn" data-chart="line" data-mode="quarter">季度</button>
+            <button class="tool-btn plain" data-dl="line">
+              <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>下载
+            </button>
+          </div>
+        </div>
+        <div class="chart-body" id="line-body"></div>
+        <div class="zoom-bar"></div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-head">
+          <span class="chart-title"><span class="q">“</span>全国<span class="q">”</span>中标金额月度分布</span>
+          <div class="chart-tools">
+            <button class="tool-btn active" data-chart="bar" data-mode="month">月度</button>
+            <button class="tool-btn" data-chart="bar" data-mode="quarter">季度</button>
+            <button class="tool-btn plain" data-dl="bar">
+              <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>下载
+            </button>
+          </div>
+        </div>
+        <div class="chart-body" id="bar-body"></div>
+        <div class="zoom-bar"></div>
+      </div>
+    </div>
+        <div class="lock-overlay" id="lock-overlay">
+          <div class="lock-gate" id="lock-gate">
+            <h3><svg class="lock-icon" aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E1251B" stroke-width="1.6" stroke-linejoin="round"><circle cx="12" cy="9" r="5.2"/><path d="M8.7 13.3 7 21l5-2.6 5 2.6-1.7-7.7"/><path d="M12 6.6l.9 1.9 2 .3-1.5 1.4.4 2-1.8-1-1.8 1 .4-2L9.1 8.8l2-.3z" fill="#E1251B" stroke="none"/></svg>开通会员与中标分析功能</h3>
+            <p class="lock-sub">开通会员和中标分析功能，即可解锁「华为技术有限公司」的中标分析</p>
+            <div class="lock-digits"><span class="d">5</span><span class="d">2</span><span class="d">3</span><span class="u">条</span></div>
+            <p class="lock-note">会员期内有效</p>
+            <button class="btn-unlock" id="unlock-btn">开通会员与中标分析</button>
+          </div>
+        </div>
+        </div><!-- /lock-scope -->
+
+  </div>
+</div>
+        </div><!-- /viewAnalysis -->
+        <div class="placeholder-view" id="placeholderView">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <h3>页面尚未生成</h3>
+          <p>该功能页面正在建设中，敬请期待</p>
+        </div>
+        </div><!-- /lock-area -->
+      </div><!-- /content-scroll -->
+    </div><!-- /content -->
+  </main>
+</div><!-- /app-shell -->
+
+<button class="back-top" id="back-top" aria-label="回到顶部">
+  <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2b7bff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></svg>
+</button>
+
+<div class="tip" id="tip"></div>
+
+<!-- 分析数据（示例）：与接口 Full/V1 企业主体一致 -->
+<script type="application/json" id="analysis-data">
+{
+  "company": { "name": "华为技术有限公司", "status": "存续（在营、开业、在册）", "legal": "赵明路", "capital": "4114113.182000万人民币", "phone": "0755-28780808", "address": "深圳市龙岗区坂田华为总部办公楼", "update": "2026-10-16" },
+  "stats": [
+    { "num": "523", "unit": "次", "label": "中标次数", "color": "#2b7bff", "glyph": "次" },
+    { "num": "8.98", "unit": "亿元", "label": "中标金额", "color": "#ff8f3c", "glyph": "金" },
+    { "num": "843", "unit": "个", "label": "参与项目", "color": "#8f7bf0", "glyph": "项" },
+    { "num": "226", "unit": "家", "label": "合作业主数量", "color": "#52c41a", "glyph": "主" },
+    { "num": "29", "unit": "家", "label": "竞争对手数量", "color": "#f5484d", "glyph": "竞" }
+  ],
+  "provinces": [
+    { "name": "四川", "lon": 104.1, "lat": 30.7, "count": 59, "amount": 12600 },
+    { "name": "广东", "lon": 113.3, "lat": 23.1, "count": 44, "amount": 9800 },
+    { "name": "上海", "lon": 121.5, "lat": 31.2, "count": 28, "amount": 6400 },
+    { "name": "江苏", "lon": 118.8, "lat": 32.1, "count": 25, "amount": 5200 },
+    { "name": "天津", "lon": 117.2, "lat": 39.1, "count": 22, "amount": 4300 },
+    { "name": "河北", "lon": 114.5, "lat": 38.0, "count": 20, "amount": 3800 },
+    { "name": "湖北", "lon": 114.3, "lat": 30.6, "count": 19, "amount": 3600 },
+    { "name": "北京", "lon": 116.4, "lat": 39.9, "count": 18, "amount": 3400 },
+    { "name": "辽宁", "lon": 123.4, "lat": 41.8, "count": 18, "amount": 3300 },
+    { "name": "福建", "lon": 119.3, "lat": 26.1, "count": 18, "amount": 3300 },
+    { "name": "浙江", "lon": 120.2, "lat": 30.3, "count": 16, "amount": 2900 },
+    { "name": "山东", "lon": 117.0, "lat": 36.7, "count": 15, "amount": 2600 },
+    { "name": "黑龙江", "lon": 126.6, "lat": 45.8, "count": 12, "amount": 2100 },
+    { "name": "河南", "lon": 113.7, "lat": 34.8, "count": 11, "amount": 1700 },
+    { "name": "重庆", "lon": 106.6, "lat": 29.6, "count": 10, "amount": 1800 },
+    { "name": "湖南", "lon": 113.0, "lat": 28.2, "count": 9, "amount": 1500 },
+    { "name": "陕西", "lon": 108.9, "lat": 34.3, "count": 8, "amount": 1300 },
+    { "name": "安徽", "lon": 117.3, "lat": 31.9, "count": 8, "amount": 1400 },
+    { "name": "云南", "lon": 102.7, "lat": 25.0, "count": 7, "amount": 1100 },
+    { "name": "广西", "lon": 108.3, "lat": 22.8, "count": 6, "amount": 900 },
+    { "name": "江西", "lon": 115.9, "lat": 28.7, "count": 5, "amount": 800 },
+    { "name": "山西", "lon": 112.5, "lat": 37.9, "count": 5, "amount": 700 },
+    { "name": "吉林", "lon": 125.3, "lat": 43.9, "count": 4, "amount": 600 },
+    { "name": "甘肃", "lon": 103.8, "lat": 36.1, "count": 3, "amount": 500 },
+    { "name": "贵州", "lon": 106.7, "lat": 26.6, "count": 3, "amount": 450 },
+    { "name": "内蒙古", "lon": 111.7, "lat": 40.8, "count": 2, "amount": 400 },
+    { "name": "新疆", "lon": 87.6, "lat": 43.8, "count": 2, "amount": 300 },
+    { "name": "青海", "lon": 101.8, "lat": 36.6, "count": 1, "amount": 200 },
+    { "name": "宁夏", "lon": 106.3, "lat": 38.5, "count": 1, "amount": 150 },
+    { "name": "海南", "lon": 110.3, "lat": 20.0, "count": 1, "amount": 100 }
+  ],
+  "months": ["2025-11","2025-12","2026-01","2026-02","2026-03","2026-04","2026-05","2026-06","2026-07","2026-08","2026-09","2026-10","2026-11"],
+  "monthCount": [58, 86, 27, 16, 29, 31, 43, 87, 47, 43, 27, 24, 0],
+  "monthAmount": [0, 50, 520, 37800, 820, 19600, 0, 3200, 620, 18500, 8400, 1300, 0]
+}
+</script>
+
+<script>
+(function () {
+  'use strict';
+
+  var D = JSON.parse(document.getElementById('analysis-data').textContent);
+  var BLUE = '#3d7ef0';
+
+  function esc(s) { return String(s == null ? '--' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function escAttr(s) { return esc(s).replace(/"/g, '&quot;'); }
+
+  /* ---------- header ---------- */
+  document.getElementById('co-name').textContent = D.company.name;
+  document.getElementById('co-status').textContent = D.company.status;
+  document.getElementById('co-update').textContent = D.company.update + '更新';
+  document.getElementById('base-grid').innerHTML = [
+    ['企业法人', D.company.legal], ['注册资本', D.company.capital],
+    ['联系电话', D.company.phone + ' <a href="#" onclick="return false;">更多联系方式</a>'], ['公司地址', D.company.address]
+  ].map(function (it) {
+    return '<div class="base-item"><span class="k">' + it[0] + '：</span><span class="v">' + it[1] + '</span></div>';
+  }).join('');
+
+  /* ---------- stats ---------- */
+  document.getElementById('stats-band').innerHTML = D.stats.map(function (s) {
+    return '<div class="stat"><div><span class="num">' + s.num + '</span><span class="unit">' + s.unit + '</span></div>' +
+      '<span class="lab"><span class="ico" style="background:' + s.color + '">' + s.glyph + '</span>' + s.label + '<span class="help">?</span></span></div>';
+  }).join('');
+
+  /* ---------- tooltip ---------- */
+  var tip = document.getElementById('tip');
+  function showTip(html, x, y) {
+    tip.innerHTML = html;
+    tip.classList.add('show');
+    var w = tip.offsetWidth, h = tip.offsetHeight;
+    var left = Math.min(x + 14, window.innerWidth - w - 8);
+    var top = Math.max(8, y - h - 12);
+    tip.style.left = left + 'px';
+    tip.style.top = top + 'px';
+  }
+  function hideTip() { tip.classList.remove('show'); }
+  function bindTips(root) {
+    root.querySelectorAll('[data-tip]').forEach(function (el) {
+      el.addEventListener('mousemove', function (e) { showTip(el.dataset.tip, e.clientX, e.clientY); });
+      el.addEventListener('mouseleave', hideTip);
+    });
+  }
+  function tipHTML(lines) {
+    return '<div class="t1">' + lines[0] + '</div>' + lines.slice(1).map(function (l) { return '<div class="t2">' + l + '</div>'; }).join('');
+  }
+
+  /* ---------- state ---------- */
+  var state = { map: 'count', top10: 'count', line: 'month', bar: 'month' };
+
+  function fmtAmount(v) { return v >= 10000 ? (v / 10000).toFixed(2) + '亿元' : v + '万元'; }
+
+  /* ---------- china outline (lon/lat) ---------- */
+  var OUTLINE = [
+    [73.5,39.5],[75,40.5],[76,41.5],[80,42.5],[80.5,45],[82.5,45.5],[83,47],[85.5,47],[87,49],[90,48.5],
+    [91,46],[96,42.5],[100,42.5],[105,41.5],[110,42.5],[112,43.5],[115,44.5],[117,46],[119,46.5],[117.5,48],
+    [115.5,48.5],[117,49.5],[120,50],[122,51.5],[125,53],[127,50.5],[130,48.5],[134,48],[131,45],[131,42.5],
+    [128,41.5],[124.5,40],[121.5,39.5],[121,37.5],[119,37],[120,36],[122,37],[121.5,34.5],[120,33.5],[122,31],
+    [121,29.5],[120,27.5],[119,25.5],[116,23],[113,22],[110,21.5],[108,21.5],[106,22.5],[103,22.5],[101,21.5],
+    [99,22.5],[97.5,24],[98,25.5],[97.5,27.5],[96,29],[92,27.5],[89,28],[85,28.5],[81,30],[79,31.5],[78,34],
+    [76,36],[73.5,39.5]
+  ];
+  var MW = 640, MH = 430;
+  function px(lon) { return (lon - 73) * (MW / 62); }
+  function py(lat) { return (53.5 - lat) * (MH / 36); }
+
+  function colorScale(t) {
+    /* #dfe9fb -> #2b6de8 */
+    var a = [223, 233, 251], b = [43, 109, 232];
+    var c = a.map(function (v, i) { return Math.round(v + (b[i] - v) * t); });
+    return 'rgb(' + c.join(',') + ')';
+  }
+
+  /* ---------- map ---------- */
+  function renderMap() {
+    var mode = state.map;
+    var vals = D.provinces.map(function (p) { return mode === 'count' ? p.count : p.amount; });
+    var max = Math.max.apply(null, vals), min = Math.min.apply(null, vals);
+    var path = OUTLINE.map(function (pt, i) { return (i ? 'L' : 'M') + px(pt[0]).toFixed(1) + ' ' + py(pt[1]).toFixed(1); }).join(' ') + ' Z';
+    var svg = '<svg viewBox="0 0 ' + MW + ' ' + MH + '" role="img" aria-label="中标地区分布图">';
+    svg += '<path d="' + path + '" fill="#eef3fc" stroke="#c9d8f2" stroke-width="1"/>';
+    svg += '<ellipse cx="' + px(121.0).toFixed(1) + '" cy="' + py(23.8).toFixed(1) + '" rx="7" ry="12" fill="#eef3fc" stroke="#c9d8f2" transform="rotate(18 ' + px(121.0).toFixed(1) + ' ' + py(23.8).toFixed(1) + ')"/>';
+    D.provinces.forEach(function (p) {
+      var v = mode === 'count' ? p.count : p.amount;
+      var t = max === min ? 1 : (v - min) / (max - min);
+      var r = 5 + Math.sqrt(v / max) * 16;
+      var unit = mode === 'count' ? '次' : '万元';
+      var tip = tipHTML([p.name, (mode === 'count' ? '中标次数： <b>' + v + '次</b>' : '中标金额： <b>' + fmtAmount(v) + '</b>')]);
+      svg += '<circle cx="' + px(p.lon).toFixed(1) + '" cy="' + py(p.lat).toFixed(1) + '" r="' + r.toFixed(1) + '" fill="' + colorScale(0.15 + t * 0.85) + '" fill-opacity="0.85" stroke="#ffffff" stroke-width="1" data-tip="' + escAttr(tip) + '"><title>' + esc(p.name) + '</title></circle>';
+    });
+    svg += '</svg>';
+    var box = document.getElementById('map-body');
+    box.innerHTML = svg;
+    document.getElementById('map-legend').innerHTML =
+      '<div class="t">数量（' + (mode === 'count' ? '次' : '万元') + '）</div><div class="t">' + max + '</div><div class="bar"></div><div class="t">' + min + '</div>';
+    bindTips(box);
+  }
+
+  /* ---------- top10 bars ---------- */
+  function renderTop10() {
+    var mode = state.top10;
+    document.getElementById('top10-metric').textContent = mode === 'count' ? '次数' : '金额';
+    var rows = D.provinces.slice().sort(function (a, b) { return (mode === 'count' ? b.count - a.count : b.amount - a.amount); }).slice(0, 10);
+    var vals = rows.map(function (p) { return mode === 'count' ? p.count : p.amount; });
+    var max = Math.max.apply(null, vals);
+    var step = mode === 'count' ? 10 : 10000;
+    var top = Math.ceil(max / step) * step;
+    var W = 640, H = 360, L = 56, R = 12, T = 30, Bm = 40;
+    var iw = W - L - R, ih = H - T - Bm;
+    var total = D.provinces.reduce(function (s, p) { return s + (mode === 'count' ? p.count : p.amount); }, 0);
+    var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="中标TOP10">';
+    svg += '<text x="' + L + '" y="16" font-size="12" fill="#606266">' + (mode === 'count' ? '次数' : '金额（万元）') + '</text>';
+    for (var v = 0; v <= top; v += step) {
+      var y = T + ih - (v / top) * ih;
+      svg += '<line x1="' + L + '" y1="' + y + '" x2="' + (W - R) + '" y2="' + y + '" stroke="#ebeef5"/>';
+      svg += '<text x="' + (L - 8) + '" y="' + (y + 4) + '" font-size="11" fill="#909399" text-anchor="end">' + v + '</text>';
+    }
+    var bw = iw / rows.length;
+    rows.forEach(function (p, i) {
+      var v = mode === 'count' ? p.count : p.amount;
+      var h = (v / top) * ih;
+      var x = L + i * bw + bw / 2 - 13;
+      var share = (v / total * 100).toFixed(2) + '%';
+      var tip = tipHTML([p.name, (mode === 'count' ? '中标次数： ' + v + '次' : '中标金额： ' + fmtAmount(v)), '占比： ' + share]);
+      svg += '<rect x="' + x.toFixed(1) + '" y="' + (T + ih - h).toFixed(1) + '" width="26" height="' + h.toFixed(1) + '" fill="' + BLUE + '" data-tip="' + escAttr(tip) + '"><title>' + esc(p.name) + '</title></rect>';
+      svg += '<text x="' + (L + i * bw + bw / 2).toFixed(1) + '" y="' + (H - 16) + '" font-size="12" fill="#606266" text-anchor="middle">' + p.name + '</text>';
+    });
+    svg += '</svg>';
+    var box = document.getElementById('top10-body');
+    box.innerHTML = svg;
+    bindTips(box);
+  }
+
+  /* ---------- quarter aggregate ---------- */
+  function quarters() {
+    var q = [{ label: '2025-Q4', c: 0, a: 0 }, { label: '2026-Q1', c: 0, a: 0 }, { label: '2026-Q2', c: 0, a: 0 }, { label: '2026-Q3', c: 0, a: 0 }, { label: '2026-Q4', c: 0, a: 0 }];
+    D.months.forEach(function (m, i) {
+      var idx = m === '2025-11' || m === '2025-12' ? 0 : m <= '2026-03' ? 1 : m <= '2026-06' ? 2 : m <= '2026-09' ? 3 : 4;
+      q[idx].c += D.monthCount[i];
+      q[idx].a += D.monthAmount[i];
+    });
+    return q;
+  }
+
+  /* ---------- line chart ---------- */
+  function renderLine() {
+    var mode = state.line;
+    var labels, vals;
+    if (mode === 'month') { labels = D.months; vals = D.monthCount; }
+    else { var q = quarters(); labels = q.map(function (x) { return x.label; }); vals = q.map(function (x) { return x.c; }); }
+    var W = 640, H = 340, L = 52, R = 16, T = 30, Bm = 36;
+    var iw = W - L - R, ih = H - T - Bm;
+    var max = Math.max.apply(null, vals);
+    var top = Math.ceil(max / 20) * 20 || 20;
+    var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="中标项目分布">';
+    svg += '<text x="' + L + '" y="16" font-size="12" fill="#606266">数量（条）</text>';
+    for (var v = 0; v <= top; v += 20) {
+      var y = T + ih - (v / top) * ih;
+      svg += '<line x1="' + L + '" y1="' + y + '" x2="' + (W - R) + '" y2="' + y + '" stroke="#ebeef5"/>';
+      svg += '<text x="' + (L - 8) + '" y="' + (y + 4) + '" font-size="11" fill="#909399" text-anchor="end">' + v + '</text>';
+    }
+    var pts = vals.map(function (v, i) {
+      var x = L + (vals.length === 1 ? iw / 2 : i * (iw / (vals.length - 1)));
+      var y = T + ih - (v / top) * ih;
+      return [x, y];
+    });
+    svg += '<polyline points="' + pts.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' ') + '" fill="none" stroke="' + BLUE + '" stroke-width="2.5"/>';
+    var every = mode === 'month' ? 2 : 1;
+    pts.forEach(function (p, i) {
+      var tip = tipHTML([labels[i], '中标次数： ' + vals[i] + '条']);
+      svg += '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="4.5" fill="#ffffff" stroke="' + BLUE + '" stroke-width="2" data-tip="' + escAttr(tip) + '"><title>' + esc(labels[i]) + '</title></circle>';
+      if (i % every === 0) svg += '<text x="' + p[0].toFixed(1) + '" y="' + (H - 12) + '" font-size="11" fill="#606266" text-anchor="middle">' + labels[i] + '</text>';
+    });
+    svg += '</svg>';
+    var box = document.getElementById('line-body');
+    box.innerHTML = svg;
+    bindTips(box);
+  }
+
+  /* ---------- amount bars ---------- */
+  function renderBar() {
+    var mode = state.bar;
+    var labels, vals;
+    if (mode === 'month') { labels = D.months; vals = D.monthAmount; }
+    else { var q = quarters(); labels = q.map(function (x) { return x.label; }); vals = q.map(function (x) { return x.a; }); }
+    var W = 640, H = 340, L = 60, R = 16, T = 30, Bm = 36;
+    var iw = W - L - R, ih = H - T - Bm;
+    var max = Math.max.apply(null, vals);
+    var step = 10000;
+    var top = Math.max(step, Math.ceil(max / step) * step);
+    var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="中标金额分布">';
+    svg += '<text x="' + L + '" y="16" font-size="12" fill="#606266">金额（万元）</text>';
+    for (var v = 0; v <= top; v += step) {
+      var y = T + ih - (v / top) * ih;
+      svg += '<line x1="' + L + '" y1="' + y + '" x2="' + (W - R) + '" y2="' + y + '" stroke="#ebeef5"/>';
+      svg += '<text x="' + (L - 8) + '" y="' + (y + 4) + '" font-size="11" fill="#909399" text-anchor="end">' + v + '</text>';
+    }
+    var bw = iw / vals.length;
+    vals.forEach(function (v, i) {
+      var h = (v / top) * ih;
+      var x = L + i * bw + bw / 2 - 11;
+      var tip = tipHTML([labels[i], '中标金额： ' + fmtAmount(v)]);
+      if (h > 0) svg += '<rect x="' + x.toFixed(1) + '" y="' + (T + ih - h).toFixed(1) + '" width="22" height="' + h.toFixed(1) + '" fill="' + BLUE + '" data-tip="' + escAttr(tip) + '"><title>' + esc(labels[i]) + '</title></rect>';
+      var every = mode === 'month' ? 2 : 1;
+      if (i % every === 0) svg += '<text x="' + (L + i * bw + bw / 2).toFixed(1) + '" y="' + (H - 12) + '" font-size="11" fill="#606266" text-anchor="middle">' + labels[i] + '</text>';
+    });
+    svg += '</svg>';
+    var box = document.getElementById('bar-body');
+    box.innerHTML = svg;
+    bindTips(box);
+  }
+
+  function renderAll() { renderMap(); renderTop10(); renderLine(); renderBar(); }
+  renderAll();
+
+  /* ---------- toggles ---------- */
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('.tool-btn[data-chart]');
+    if (b) {
+      var chart = b.dataset.chart;
+      state[chart] = b.dataset.mode;
+      b.parentElement.querySelectorAll('.tool-btn[data-chart]').forEach(function (x) { x.classList.remove('active'); });
+      b.classList.add('active');
+      renderAll();
+      return;
+    }
+    var dl = e.target.closest('.tool-btn[data-dl]');
+    if (dl) {
+      var kind = dl.dataset.dl;
+      var rows = [];
+      if (kind === 'map' || kind === 'top10') {
+        rows.push(['地区', '中标次数', '中标金额(万元)']);
+        D.provinces.forEach(function (p) { rows.push([p.name, p.count, p.amount]); });
+      } else if (kind === 'line') {
+        rows.push(['月份', '中标次数']);
+        D.months.forEach(function (m, i) { rows.push([m, D.monthCount[i]]); });
+      } else {
+        rows.push(['月份', '中标金额(万元)']);
+        D.months.forEach(function (m, i) { rows.push([m, D.monthAmount[i]]); });
+      }
+      var csv = '\ufeff' + rows.map(function (r) { return r.join(','); }).join('\n');
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+      a.download = '中标分析-' + kind + '.csv';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+  });
+
+  /* ---------- misc ---------- */
+  document.getElementById('follow-btn').addEventListener('click', function () {
+    this.classList.toggle('on');
+    this.querySelector('span').textContent = this.classList.contains('on') ? '已关注' : '关注';
+  });
+  document.getElementById('copy-btn').addEventListener('click', function () {
+    var c = D.company;
+    var txt = ['公司名称：' + c.name, '法人：' + c.legal, '注册资本：' + c.capital, '联系电话：' + c.phone, '地址：' + c.address].join('\n');
+    var done = function () { alert('企业信息已复制'); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, done);
+    else { var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); done(); }
+  });
+
+  var backTop = document.getElementById('back-top');
+  var scroller = document.getElementById('contentScroll');
+  scroller.addEventListener('scroll', function () { backTop.classList.toggle('show', scroller.scrollTop > 300); }, { passive: true });
+  backTop.addEventListener('click', function () { scroller.scrollTo({ top: 0, behavior: 'smooth' }); });
+})();
+</script>
+
+<!-- 通用外框交互：侧边栏折叠 / 菜单切换视图 -->
+<script>
+(function () {
+  var sidebar = document.getElementById('sidebar');
+  function toggleSidebar() {
+    var c = sidebar.getAttribute('data-state') === 'collapsed';
+    sidebar.setAttribute('data-state', c ? 'expanded' : 'collapsed');
+  }
+
+  var viewA = document.getElementById('viewAnalysis');
+  var viewP = document.getElementById('placeholderView');
+  var bc = document.getElementById('breadcrumbCurrent');
+
+  function nav(el) {
+    document.querySelectorAll('.sidebar-menu-button.active, .sidebar-menu-sub-item.active').forEach(function (n) { n.classList.remove('active'); });
+    el.classList.add('active');
+    if (el.classList.contains('sidebar-menu-sub-item')) {
+      var w = el.closest('.sidebar-group-item');
+      if (w) { var pb = w.querySelector(':scope > .sidebar-menu-button'); if (pb) pb.classList.add('active'); }
+    }
+    bc.textContent = el.getAttribute('data-title') || el.textContent.trim();
+    var v = el.getAttribute('data-view');
+    viewA.style.display = (v === 'analysis') ? '' : 'none';
+    viewP.style.display = (v === 'analysis') ? 'none' : 'flex';
+    document.getElementById('contentScroll').scrollTop = 0;
+  }
+
+  document.querySelectorAll('.sidebar-menu button.sidebar-menu-button').forEach(function (item) {
+    item.addEventListener('click', function (e) {
+      e.preventDefault();
+      var w = item.closest('.sidebar-group-item');
+      if (w && sidebar.getAttribute('data-state') !== 'collapsed') {
+        w.setAttribute('data-state', w.getAttribute('data-state') === 'open' ? 'closed' : 'open');
+      }
+      nav(item);
+    });
+  });
+  document.querySelectorAll('.sidebar-menu-sub-item').forEach(function (leaf) {
+    leaf.addEventListener('click', function (e) { e.preventDefault(); nav(leaf); });
+  });
+})();
+</script>
+
+<div class="version-badge">v3.14.0</div>
+</body>
+</html>

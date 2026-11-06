@@ -176,10 +176,10 @@ body { overflow: hidden; }
 .follow-btn.on svg { fill: currentColor; }
 
 .main-nav { display: flex; gap: 64px; padding: 0 32px; margin-top: 22px; border-bottom: 1px solid #ebeef5; }
-.main-nav a { position: relative; display: inline-flex; align-items: center; height: 54px; color: #333333; font-size: 16px; font-weight: 600; text-decoration: none; }
-.main-nav a.active { color: #2b7bff; }
-.main-nav a.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; background: #2b7bff; }
-.nav-badge { position: absolute; top: 6px; right: -34px; background: #f5484d; color: #ffffff; font-size: 10px; font-weight: 400; line-height: 16px; padding: 0 6px; border-radius: 3px; white-space: nowrap; }
+.main-nav a { position: relative; display: inline-flex; align-items: center; height: 54px; color: #333; font: 600 16px var(--font-sans); text-decoration: none; }
+.main-nav a.active { color: #0063FF; }
+.main-nav a.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; background: #0063FF; }
+.nav-badge { position: absolute; top: 6px; right: -34px; background: #f5484d; color: #fff; font: 400 10px/16px var(--font-sans); padding: 0 6px; border-radius: 3px; }
 
 /* filter row */
 .filter-row { display: flex; gap: 12px; padding: 18px 32px 0; }
@@ -430,138 +430,11 @@ body { overflow: hidden; }
 
 <div class="app-shell">
 
-  <!-- ============ Sidebar（sidebar-07，内联通用外框） ============ -->
-  <aside class="sidebar" id="sidebar" data-state="collapsed">
-    <div class="sidebar-header">
-      <div class="sidebar-menu-button">
-        <span class="sidebar-menu-button-avatar">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/><path d="M3 21h18"/></svg>
-        </span>
-        <span class="sidebar-menu-button-text">
-          <span class="sidebar-menu-button-name">采招网</span>
-          <span class="sidebar-menu-button-sub">www.bidcenter.com.cn</span>
-        </span>
-      </div>
-    </div>
-
-    <div class="sidebar-content">
-      <div class="sidebar-menu">
-
-        <!-- 企情分析（当前页所在组） -->
-        <div class="sidebar-group-item" data-state="open">
-          <button class="sidebar-menu-button" data-view="analysis" data-title="企情分析" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 5-6"/></svg>
-            <span class="sidebar-menu-button-label">企情分析</span>
-            <svg class="sidebar-menu-button-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
-          </button>
-          <div class="sidebar-menu-sub">
-            <a class="sidebar-menu-sub-item" href="bid-analysis.html" data-view="analysis" data-title="中标分析">中标分析</a>
-            <a class="sidebar-menu-sub-item active" href="#" data-view="analysis" data-title="商机脉络">商机脉络</a>
-          </div>
-        </div>
-
-        <!-- 工作台 -->
-        <button class="sidebar-menu-button" data-view="placeholder" data-title="工作台" type="button">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
-          <span class="sidebar-menu-button-label">工作台</span>
-        </button>
-
-        <!-- 订阅中心 -->
-        <div class="sidebar-group-item" data-state="open">
-          <button class="sidebar-menu-button" data-view="placeholder" data-title="订阅中心" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
-            <span class="sidebar-menu-button-label">订阅中心</span>
-            <svg class="sidebar-menu-button-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
-          </button>
-          <div class="sidebar-menu-sub">
-            <a class="sidebar-menu-sub-item" href="#" data-view="placeholder" data-title="订阅信息">订阅信息</a>
-            <a class="sidebar-menu-sub-item" href="#" data-view="placeholder" data-title="订阅管理">订阅管理</a>
-          </div>
-        </div>
-
-        <!-- 收藏中心 -->
-        <div class="sidebar-group-item" data-state="open">
-          <button class="sidebar-menu-button" data-view="placeholder" data-title="收藏中心" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <span class="sidebar-menu-button-label">收藏中心</span>
-            <svg class="sidebar-menu-button-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
-          </button>
-          <div class="sidebar-menu-sub">
-            <a class="sidebar-menu-sub-item" href="#" data-view="placeholder" data-title="商机收藏">商机收藏</a>
-          </div>
-        </div>
-
-        <!-- 追踪与监控 -->
-        <div class="sidebar-group-item" data-state="open">
-          <button class="sidebar-menu-button" data-view="placeholder" data-title="追踪与监控" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <span class="sidebar-menu-button-label">追踪与监控</span>
-            <svg class="sidebar-menu-button-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
-          </button>
-          <div class="sidebar-menu-sub">
-            <a class="sidebar-menu-sub-item" href="#" data-view="placeholder" data-title="中标追踪">中标追踪</a>
-            <a class="sidebar-menu-sub-item" href="#" data-view="placeholder" data-title="项目追踪">项目追踪</a>
-          </div>
-        </div>
-
-        <!-- 数据中心 -->
-        <div class="sidebar-group-item" data-state="open">
-          <button class="sidebar-menu-button" data-view="placeholder" data-title="数据中心" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>
-            <span class="sidebar-menu-button-label">数据中心</span>
-            <svg class="sidebar-menu-button-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
-          </button>
-          <div class="sidebar-menu-sub">
-            <a class="sidebar-menu-sub-item" href="#" data-view="placeholder" data-title="结构化数据导出">结构化数据导出</a>
-            <a class="sidebar-menu-sub-item" href="#" data-view="placeholder" data-title="招投标大数据指数">招投标大数据指数</a>
-            <a class="sidebar-menu-sub-item" href="#" data-view="placeholder" data-title="大数据分析报告">大数据分析报告</a>
-          </div>
-        </div>
-
-        <!-- 采招服务 -->
-        <button class="sidebar-menu-button" data-view="placeholder" data-title="采招服务" type="button">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22L12 19L7 22L8.523 12.89"/></svg>
-          <span class="sidebar-menu-button-label">采招服务</span>
-        </button>
-
-        <!-- 账号中心 -->
-        <div class="sidebar-group-item" data-state="open">
-          <button class="sidebar-menu-button" data-view="placeholder" data-title="账号中心" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            <span class="sidebar-menu-button-label">账号中心</span>
-            <svg class="sidebar-menu-button-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
-          </button>
-          <div class="sidebar-menu-sub">
-            <a class="sidebar-menu-sub-item" href="#" data-view="placeholder" data-title="个人信息">个人信息</a>
-            <a class="sidebar-menu-sub-item" href="#" data-view="placeholder" data-title="积分余额">积分余额</a>
-            <a class="sidebar-menu-sub-item" href="#" data-view="placeholder" data-title="我的发票">我的发票</a>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="sidebar-footer">
-      <button class="sidebar-menu-button" id="userBtn" type="button">
-        <span class="sidebar-menu-button-avatar user-avatar"><span>sh</span></span>
-        <span class="sidebar-menu-button-text">
-          <span class="sidebar-menu-button-name">shadcn</span>
-          <span class="sidebar-menu-button-sub">m@example.com</span>
-        </span>
-        <svg class="sidebar-menu-button-chevrons" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
-      </button>
-    </div>
-
-    <div class="sidebar-rail" id="sidebarRail" title="折叠/展开侧边栏"></div>
-  </aside>
 
   <!-- ============ 主区域 ============ -->
   <main class="main">
     <div class="content">
       <header class="main-header">
-        <button class="sidebar-trigger" id="sidebarTrigger" type="button" aria-label="切换侧边栏">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
-        </button>
         <div class="header-separator"></div>
         <nav class="breadcrumb" aria-label="面包屑">
           <span>采招网</span>
@@ -649,12 +522,12 @@ body { overflow: hidden; }
 
             <!-- 主导航 -->
             <nav class="main-nav">
-              <a href="javascript:void(0)" data-tip="示例页：暂未内嵌">中标分析</a>
-              <a href="javascript:void(0)">中标业绩<span class="nav-badge">523</span></a>
-              <a href="javascript:void(0)" class="active">商机脉络</a>
-              <a href="javascript:void(0)" data-tip="示例页：暂未内嵌">查企业</a>
-              <a href="javascript:void(0)" data-tip="示例页：暂未内嵌">找人脉</a>
-            </nav>
+      <a href="bid-analysis-locked-vip.html">中标分析</a>
+      <a href="bid-performance.html">中标业绩</a>
+      <a href="business-network-locked-vip.html" class="active">商机脉络<span class="nav-badge">关系网</span></a>
+      <a href="enterprise-detail-locked-vip.html">查企业</a>
+      <a href="contact-locked-vip.html">找人脉<span class="nav-badge">联系方式</span></a>
+    </nav>
 
             <!-- 筛选行 -->
             <div class="filter-row">
@@ -908,7 +781,7 @@ body { overflow: hidden; }
 <button class="back-top" id="backTop" type="button" aria-label="回到顶部">
   <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#999999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 12l9 4 9-4"/><path d="M3 17l9 4 9-4"/></svg>
 </button>
-<div class="version-badge">v3.10.2</div>
+<div class="version-badge">v3.14.0</div>
 <div class="tip" id="tip"></div>
 
 <script type="application/json" id="network-data">
@@ -1080,14 +953,6 @@ var CN_MAP = {"北京市":["M434.9,133.4L436.0,132.4L431.8,132.1L429.6,128.8L427
 
   bindTips(document);
 
-  /* ---------- sidebar ---------- */
-  var sidebar = $('sidebar');
-  $('sidebarTrigger').addEventListener('click', function () {
-    sidebar.dataset.state = sidebar.dataset.state === 'collapsed' ? 'expanded' : 'collapsed';
-  });
-  $('sidebarRail').addEventListener('click', function () {
-    sidebar.dataset.state = sidebar.dataset.state === 'collapsed' ? 'expanded' : 'collapsed';
-  });
 
   var viewAnalysis = $('viewAnalysis'), viewPlaceholder = $('viewPlaceholder');
   function showPlaceholder(title) {
@@ -1783,28 +1648,8 @@ var CN_MAP = {"北京市":["M434.9,133.4L436.0,132.4L431.8,132.1L429.6,128.8L427
   setTimeout(fitGates, 60);
   fitGates();
 
-  function showToast(msg) {
-    var t = document.createElement('div');
-    t.className = 'toast';
-    t.textContent = msg;
-    document.body.appendChild(t);
-    setTimeout(function () { t.classList.add('show'); }, 20);
-    setTimeout(function () { t.classList.remove('show'); setTimeout(function () { t.remove(); }, 400); }, 2800);
-  }
-
-  document.addEventListener('click', function (e) {
-    if (!e.target.closest('.btn-unlock')) return;
-    /* 会员开通为演示：不做取数/扣费处理，直接解锁展示 */
-    overlays.forEach(function (ov) { ov.remove(); });
-    var tags = document.querySelector('.co-tags');
-    if (tags) {
-      var badge = document.createElement('span');
-      badge.className = 'badge unlock-badge';
-      badge.textContent = '会员已开通';
-      tags.appendChild(badge);
-    }
-    showToast('会员开通成功：该企业商机脉络全维度数据已解锁');
-  });
+  /* 红族（会员版）为纯演示：不挂解锁点击逻辑，不清除遮罩、不弹提示、不扣费，
+     与 enterprise-detail-locked-vip.html / contact-locked-vip.html / bid-analysis-locked-vip.html 保持一致 */
 })();
 </script>
 </body>

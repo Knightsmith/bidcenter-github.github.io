@@ -176,10 +176,10 @@ body { overflow: hidden; }
 .follow-btn.on svg { fill: currentColor; }
 
 .main-nav { display: flex; gap: 64px; padding: 0 32px; margin-top: 22px; border-bottom: 1px solid #ebeef5; }
-.main-nav a { position: relative; display: inline-flex; align-items: center; height: 54px; color: #333333; font-size: 16px; font-weight: 600; text-decoration: none; }
-.main-nav a.active { color: #2b7bff; }
-.main-nav a.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; background: #2b7bff; }
-.nav-badge { position: absolute; top: 6px; right: -34px; background: #f5484d; color: #ffffff; font-size: 10px; font-weight: 400; line-height: 16px; padding: 0 6px; border-radius: 3px; white-space: nowrap; }
+.main-nav a { position: relative; display: inline-flex; align-items: center; height: 54px; color: #333; font: 600 16px var(--font-sans); text-decoration: none; }
+.main-nav a.active { color: #0063FF; }
+.main-nav a.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; background: #0063FF; }
+.nav-badge { position: absolute; top: 6px; right: -34px; background: #f5484d; color: #fff; font: 400 10px/16px var(--font-sans); padding: 0 6px; border-radius: 3px; }
 
 /* filter row */
 .filter-row { display: flex; gap: 12px; padding: 18px 32px 0; }
@@ -391,7 +391,7 @@ body { overflow: hidden; }
 }
 .lock-overlay[hidden] { display: none; }
 .lock-gate {
-  position: relative; width: 400px; margin: 0; padding: 26px 28px 24px; text-align: center;
+  position: relative; width: 400px; margin: 0; padding: 26px 28px 22px; text-align: center;
   background: linear-gradient(180deg, #fff8ec 0%, #ffffff 55%);
   border: 2px solid #ffb35c; border-radius: 12px;
   box-shadow: 0 12px 40px rgba(255, 119, 0, 0.28);
@@ -421,144 +421,78 @@ body { overflow: hidden; }
   opacity: 0; transition: opacity .3s, transform .3s; pointer-events: none;
 }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* ============ 01 数据概览：子模块卡片 + 细分遮罩（样板改造） ============ */
+.lock-area-mod { margin: 16px 32px 0; }
+.lock-area-mod + .lock-area-mod { margin-top: 16px; }
+.mod-card {
+  border: 1px solid #ebeef5; border-radius: 10px; background: #fff;
+  padding: 14px 18px 16px; position: relative;
+}
+.mod-card .stats-band { margin: 12px 0 4px; }
+.mod-head { display: flex; align-items: center; gap: 10px; padding-bottom: 11px; border-bottom: 1px solid #f2f4f8; }
+.mod-title { font-size: 15px; font-weight: 600; color: #333333; }
+.mod-tag { font-size: 11px; color: #ff5000; background: #fff3e6; border: 1px solid #ffe0c2; border-radius: 999px; padding: 1px 8px; }
+.mod-split { display: grid; grid-template-columns: minmax(0, 676px) minmax(0, 1fr); gap: 24px; align-items: start; margin-top: 12px; }
+.mod-split-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: start; margin-top: 12px; }
+.map-wrap { position: relative; padding-top: 8px; }
+.map-wrap #mapSvg svg { width: 100%; height: auto; display: block; }
+.tbl-scroll { max-height: 396px; overflow: auto; }
+.tbl-scroll .data-table th { position: sticky; top: 0; z-index: 1; }
+.sub-title { display: flex; align-items: center; gap: 7px; margin: 16px 0 10px; font-size: 13px; font-weight: 600; color: #333333; }
+.sub-title .bar { width: 3px; height: 13px; border-radius: 2px; background: #ff5000; }
+.rk-list { display: flex; flex-direction: column; gap: 12px; }
+.rk-row { display: grid; grid-template-columns: 20px 58px minmax(0, 1fr) 70px 46px; align-items: center; gap: 8px; font-size: 12.5px; color: #606266; }
+.rk-idx { width: 20px; height: 20px; border-radius: 5px; background: #f2f4f8; color: #909399; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
+.rk-idx.hot { background: #fff1e6; color: #ff5000; }
+.rk-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rk-track { height: 8px; border-radius: 4px; background: #f2f4f8; overflow: hidden; }
+.rk-track i { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, #ffc48c, #ff6a00); }
+.rk-val { text-align: right; color: #333333; }
+.rk-share { text-align: right; color: #909399; font-size: 11.5px; }
+.ind-list { display: flex; flex-direction: column; gap: 11px; }
+.ind-row { display: grid; grid-template-columns: 66px minmax(0, 1fr) 82px 48px; align-items: center; gap: 8px; font-size: 12.5px; color: #606266; }
+.ind-track { height: 13px; border-radius: 4px; background: #f5f7fa; overflow: hidden; }
+.ind-track i { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, #dbe9ff, #2b7bff); }
+.ind-val { text-align: right; color: #333333; }
+.ind-share { text-align: right; color: #909399; font-size: 11.5px; }
+.mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.mini-item { border: 1px solid #f0f2f5; border-radius: 8px; padding: 9px 12px; background: #fbfcfe; }
+.mini-item .mv { font-size: 17px; font-weight: 700; color: #ff5000; }
+.mini-item .mk { margin-top: 3px; font-size: 11.5px; color: #909399; }
+
+/* ============ 02/03/04：子模块卡片内嵌图表与统计 ============ */
+.mod-card .rel-grid, .mod-card .graph-wrap, .mod-card .rel-canvas { margin: 12px 0 0; }
+.mod-card .rel-body svg { width: 100%; height: auto; display: block; }
+.mod-split .rel-body { min-height: 0; }
+.mini-grid.mg4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.rk-list.wide .rk-row { grid-template-columns: 20px minmax(0, 1fr) 92px 66px 46px; gap: 10px; }
+.rk-name .dir-tag { font-size: 10.5px; border-radius: 3px; padding: 0 5px; margin-left: 6px; font-weight: 400; }
+.dir-tag.up { color: #52c41a; background: #e8f7ee; }
+.dir-tag.down { color: #f5484d; background: #fdecec; }
+.mod-split-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 4px; }
+.grp-card { border: 1px solid #f0f2f5; border-radius: 8px; background: #fbfcfe; padding: 12px 14px 13px; }
+.grp-title { display: flex; align-items: center; gap: 7px; font-size: 13.5px; font-weight: 600; color: #333333; }
+.grp-title .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.grp-meta { margin-top: 7px; font-size: 11.5px; color: #909399; }
+.grp-nums { display: flex; gap: 22px; margin-top: 10px; }
+.grp-nums .n { font-size: 18px; font-weight: 700; color: #333333; line-height: 1; }
+.grp-nums .k { margin-top: 4px; font-size: 11px; color: #909399; }
+.grp-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 11px; }
+.grp-tag { font-size: 11.5px; color: #606266; background: #fff; border: 1px solid #ebeef5; border-radius: 4px; padding: 2px 7px; }
+.grp-tag.more { color: #2b7bff; border-color: #dbe9ff; background: #f4f9ff; }
+
 </style>
 </head>
 <body>
 
 <div class="app-shell">
 
-  <!-- ============ Sidebar（sidebar-07，内联通用外框） ============ -->
-  <aside class="sidebar" id="sidebar" data-state="collapsed">
-    <div class="sidebar-header">
-      <div class="sidebar-menu-button">
-        <span class="sidebar-menu-button-avatar">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/><path d="M3 21h18"/></svg>
-        </span>
-        <span class="sidebar-menu-button-text">
-          <span class="sidebar-menu-button-name">采招网</span>
-          <span class="sidebar-menu-button-sub">www.bidcenter.com.cn</span>
-        </span>
-      </div>
-    </div>
-
-    <div class="sidebar-content">
-      <div class="sidebar-menu">
-
-        <!-- 企情分析（当前页所在组） -->
-        <div class="sidebar-group-item" data-state="open">
-          <button class="sidebar-menu-button" data-view="analysis" data-title="企情分析" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 5-6"/></svg>
-            <span class="sidebar-menu-button-label">企情分析</span>
-            <svg class="sidebar-menu-button-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
-          </button>
-          <div class="sidebar-menu-sub">
-            <a class="sidebar-menu-sub-item" href="bid-analysis.html" data-view="analysis" data-title="中标分析">中标分析</a>
-            <a class="sidebar-menu-sub-item active" href="#" data-view="analysis" data-title="商机脉络">商机脉络</a>
-          </div>
-        </div>
-
-        <!-- 工作台 -->
-        <button class="sidebar-menu-button" data-view="placeholder" data-title="工作台" type="button">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
-          <span class="sidebar-menu-button-label">工作台</span>
-        </button>
-
-        <!-- 订阅中心 -->
-        <div class="sidebar-group-item" data-state="open">
-          <button class="sidebar-menu-button" data-view="placeholder" data-title="订阅中心" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
-            <span class="sidebar-menu-button-label">订阅中心</span>
-            <svg class="sidebar-menu-button-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
-          </button>
-          <div class="sidebar-menu-sub">
-            <a class="sidebar-menu-sub-item" href="#" data-view="placeholder" data-title="订阅信息">订阅信息</a>
-            <a class="sidebar-menu-sub-item" href="#" data-view="placeholder" data-title="订阅管理">订阅管理</a>
-          </div>
-        </div>
-
-        <!-- 收藏中心 -->
-        <div class="sidebar-group-item" data-state="open">
-          <button class="sidebar-menu-button" data-view="placeholder" data-title="收藏中心" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <span class="sidebar-menu-button-label">收藏中心</span>
-            <svg class="sidebar-menu-button-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
-          </button>
-          <div class="sidebar-menu-sub">
-            <a class="sidebar-menu-sub-item" href="#" data-view="placeholder" data-title="商机收藏">商机收藏</a>
-          </div>
-        </div>
-
-        <!-- 追踪与监控 -->
-        <div class="sidebar-group-item" data-state="open">
-          <button class="sidebar-menu-button" data-view="placeholder" data-title="追踪与监控" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <span class="sidebar-menu-button-label">追踪与监控</span>
-            <svg class="sidebar-menu-button-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
-          </button>
-          <div class="sidebar-menu-sub">
-            <a class="sidebar-menu-sub-item" href="#" data-view="placeholder" data-title="中标追踪">中标追踪</a>
-            <a class="sidebar-menu-sub-item" href="#" data-view="placeholder" data-title="项目追踪">项目追踪</a>
-          </div>
-        </div>
-
-        <!-- 数据中心 -->
-        <div class="sidebar-group-item" data-state="open">
-          <button class="sidebar-menu-button" data-view="placeholder" data-title="数据中心" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>
-            <span class="sidebar-menu-button-label">数据中心</span>
-            <svg class="sidebar-menu-button-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
-          </button>
-          <div class="sidebar-menu-sub">
-            <a class="sidebar-menu-sub-item" href="#" data-view="placeholder" data-title="结构化数据导出">结构化数据导出</a>
-            <a class="sidebar-menu-sub-item" href="#" data-view="placeholder" data-title="招投标大数据指数">招投标大数据指数</a>
-            <a class="sidebar-menu-sub-item" href="#" data-view="placeholder" data-title="大数据分析报告">大数据分析报告</a>
-          </div>
-        </div>
-
-        <!-- 采招服务 -->
-        <button class="sidebar-menu-button" data-view="placeholder" data-title="采招服务" type="button">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22L12 19L7 22L8.523 12.89"/></svg>
-          <span class="sidebar-menu-button-label">采招服务</span>
-        </button>
-
-        <!-- 账号中心 -->
-        <div class="sidebar-group-item" data-state="open">
-          <button class="sidebar-menu-button" data-view="placeholder" data-title="账号中心" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            <span class="sidebar-menu-button-label">账号中心</span>
-            <svg class="sidebar-menu-button-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
-          </button>
-          <div class="sidebar-menu-sub">
-            <a class="sidebar-menu-sub-item" href="#" data-view="placeholder" data-title="个人信息">个人信息</a>
-            <a class="sidebar-menu-sub-item" href="#" data-view="placeholder" data-title="积分余额">积分余额</a>
-            <a class="sidebar-menu-sub-item" href="#" data-view="placeholder" data-title="我的发票">我的发票</a>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="sidebar-footer">
-      <button class="sidebar-menu-button" id="userBtn" type="button">
-        <span class="sidebar-menu-button-avatar user-avatar"><span>sh</span></span>
-        <span class="sidebar-menu-button-text">
-          <span class="sidebar-menu-button-name">shadcn</span>
-          <span class="sidebar-menu-button-sub">m@example.com</span>
-        </span>
-        <svg class="sidebar-menu-button-chevrons" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
-      </button>
-    </div>
-
-    <div class="sidebar-rail" id="sidebarRail" title="折叠/展开侧边栏"></div>
-  </aside>
 
   <!-- ============ 主区域 ============ -->
   <main class="main">
     <div class="content">
       <header class="main-header">
-        <button class="sidebar-trigger" id="sidebarTrigger" type="button" aria-label="切换侧边栏">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
-        </button>
         <div class="header-separator"></div>
         <nav class="breadcrumb" aria-label="面包屑">
           <span>采招网</span>
@@ -646,12 +580,12 @@ body { overflow: hidden; }
 
             <!-- 主导航 -->
             <nav class="main-nav">
-              <a href="javascript:void(0)" data-tip="示例页：暂未内嵌">中标分析</a>
-              <a href="javascript:void(0)">中标业绩<span class="nav-badge">523</span></a>
-              <a href="javascript:void(0)" class="active">商机脉络</a>
-              <a href="javascript:void(0)" data-tip="示例页：暂未内嵌">查企业</a>
-              <a href="javascript:void(0)" data-tip="示例页：暂未内嵌">找人脉</a>
-            </nav>
+      <a href="bid-analysis.html">中标分析</a>
+      <a href="bid-performance.html">中标业绩</a>
+      <a href="business-network-locked.html" class="active">商机脉络<span class="nav-badge">关系网</span></a>
+      <a href="enterprise-detail-locked.html">查企业</a>
+      <a href="contact-locked.html">找人脉<span class="nav-badge">联系方式</span></a>
+    </nav>
 
             <!-- 筛选行 -->
             <div class="filter-row">
@@ -673,80 +607,168 @@ body { overflow: hidden; }
               <span class="desc">企业商机整体指标与下游行业地区分布</span>
               <span class="rule"></span>
             </div>
-            <div class="lock-area">
-            <section class="panel" id="panel-overview">
-              <div class="stats-band stats-band-4" id="statsBand"></div>
-
-              <div class="sec-head"><span class="bar"></span>下游脉络分析</div>
-
-              <div style="margin:16px 32px 0;border:1px solid #ebeef5;border-radius:8px;background:#fff;padding:14px 18px 10px;">
-                <div class="chart-head">
-                  <span class="chart-title">下游行业地区分析</span>
-                  <span class="help" data-tip="按中标/成交单位所在地区统计下游分布">?</span>
-                  <div class="chart-tools">
-                    <div class="select-box" id="regionSelect">
-                      <span id="regionLabel">选择地区</span>
-                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-                      <div class="select-menu" id="regionMenu"></div>
+            <!-- ===== 01-1 核心指标 + 下游区域分布地图 ===== -->
+            <div class="lock-area lock-area-mod">
+              <section class="mod-card">
+                <div class="mod-head">
+                  <span class="mod-title">核心指标 · 下游区域分布</span>
+                  <span class="mod-tag">地图模块</span>
+                </div>
+                <div class="stats-band stats-band-4" id="statsBand"></div>
+                <div class="mod-split">
+                  <div>
+                    <div class="chart-head">
+                      <span class="chart-title">下游区域分布地图</span>
+                      <span class="help" data-tip="按中标/成交单位所在地区统计下游分布">?</span>
+                      <div class="chart-tools">
+                        <div class="select-box" id="regionSelect">
+                          <span id="regionLabel">选择地区</span>
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                          <div class="select-menu" id="regionMenu"></div>
+                        </div>
+                        <button class="tool-btn active" data-metric="count" type="button">次数</button>
+                        <button class="tool-btn" data-metric="amount" type="button">金额</button>
+                        <button class="tool-btn plain" data-export="downstream" type="button">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                          下载
+                        </button>
+                      </div>
                     </div>
-                    <button class="tool-btn active" data-metric="count" type="button">次数</button>
-                    <button class="tool-btn" data-metric="amount" type="button">金额</button>
-                    <button class="tool-btn plain" data-export="downstream" type="button">
+                    <div class="map-wrap" id="mapBox">
+                      <div id="mapSvg"></div>
+                      <div class="map-legend">
+                        <div class="nums"><span id="mapLegendMax">0</span><span>0</span></div>
+                        <div class="bar"></div>
+                        <div class="cap" id="mapLegendTitle">数量(个)</div>
+                      </div>
+                      <div class="map-note">南海诸岛</div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="mini-grid" id="coverBox"></div>
+                    <div class="sub-title"><span class="bar"></span>下游省份 TOP10</div>
+                    <div class="rk-list" id="provRankBox"></div>
+                  </div>
+                </div>
+              </section>
+              <div class="lock-overlay" data-lock="ov-map">
+                <div class="lock-gate">
+                  <h3>解锁「上海金戈电力设备安装有限公司」的商机脉络</h3>
+                  <p class="lock-sub">解锁商机脉络全维度数据 · 账户剩余积分：</p>
+                  <div class="lock-digits"><span class="d">5</span><span class="d">0</span><span class="u">积分</span></div>
+                  <p class="lock-note">解锁后有效期内不会重复扣分</p>
+                  <button class="btn-unlock" type="button">使用 10 积分 立即解锁</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- ===== 01-2 关键排名明细（较窄的数据表与相邻表格合并共用同一遮罩） ===== -->
+            <div class="lock-area lock-area-mod">
+              <section class="mod-card">
+                <div class="mod-head">
+                  <span class="mod-title">关键排名明细</span>
+                  <span class="mod-tag">数据表模块</span>
+                </div>
+                <div class="mod-split-2">
+                  <div>
+                    <div class="chart-head">
+                      <span class="chart-title">下游业主 TOP10</span>
+                      <span class="help" data-tip="按中标次数或金额排序的下游业主">?</span>
+                    </div>
+                    <div class="chart-body">
+                      <table class="data-table" id="dsTable"></table>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="chart-head">
+                      <span class="chart-title">上游业主招标金额 TOP10</span>
+                      <span class="help" data-tip="按招标金额排序的上游业主">?</span>
+                      <div class="chart-tools">
+                        <button class="tool-btn plain" data-export="upstream" type="button">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                          下载
+                        </button>
+                      </div>
+                    </div>
+                    <div class="chart-body">
+                      <table class="data-table" id="usTable"></table>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <div class="lock-overlay" data-lock="ov-table">
+                <div class="lock-gate">
+                  <h3>解锁「上海金戈电力设备安装有限公司」的商机脉络</h3>
+                  <p class="lock-sub">解锁商机脉络全维度数据 · 账户剩余积分：</p>
+                  <div class="lock-digits"><span class="d">5</span><span class="d">0</span><span class="u">积分</span></div>
+                  <p class="lock-note">解锁后有效期内不会重复扣分</p>
+                  <button class="btn-unlock" type="button">使用 10 积分 立即解锁</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- ===== 01-3 下游行业结构分析 ===== -->
+            <div class="lock-area lock-area-mod">
+              <section class="mod-card">
+                <div class="mod-head">
+                  <span class="mod-title">下游行业地区结构分析</span>
+                  <span class="mod-tag">行业图模块</span>
+                </div>
+                <div class="mod-split-2">
+                  <div>
+                    <div class="chart-head">
+                      <span class="chart-title">行业地区金额 / 次数分布</span>
+                      <span class="help" data-tip="按行业维度统计招标金额与占比">?</span>
+                      <div class="chart-tools">
+                        <button class="tool-btn active" data-ind="amount" type="button">金额</button>
+                        <button class="tool-btn" data-ind="count" type="button">次数</button>
+                      </div>
+                    </div>
+                    <div class="chart-body" id="industryBox"></div>
+                  </div>
+                  <div>
+                    <div class="chart-head">
+                      <span class="chart-title">行业地区占比排行</span>
+                      <span class="help" data-tip="与左侧图表同口径，展示各行业占比">?</span>
+                    </div>
+                    <div class="chart-body"><div class="ind-list" id="indShareBox"></div></div>
+                    <div class="mini-grid" id="indTopBox" style="margin-top:16px;"></div>
+                  </div>
+                </div>
+              </section>
+              <div class="lock-overlay" data-lock="ov-industry">
+                <div class="lock-gate">
+                  <h3>解锁「上海金戈电力设备安装有限公司」的商机脉络</h3>
+                  <p class="lock-sub">解锁商机脉络全维度数据 · 账户剩余积分：</p>
+                  <div class="lock-digits"><span class="d">5</span><span class="d">0</span><span class="u">积分</span></div>
+                  <p class="lock-note">解锁后有效期内不会重复扣分</p>
+                  <button class="btn-unlock" type="button">使用 10 积分 立即解锁</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- ===== 01-4 区域分布明细 ===== -->
+            <div class="lock-area lock-area-mod">
+              <section class="mod-card">
+                <div class="mod-head">
+                  <span class="mod-title">区域分布明细</span>
+                  <span class="mod-tag">明细模块</span>
+                </div>
+                <div class="chart-head">
+                  <span class="chart-title">下游地区分布明细（共 29 个省级地区）</span>
+                  <span class="help" data-tip="按次数或金额排序，可滚动查看全部地区">?</span>
+                  <div class="chart-tools">
+                    <button class="tool-btn plain" data-export="region" type="button">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                       下载
                     </button>
                   </div>
                 </div>
-                <div class="ds-grid">
-                  <div class="ds-left">
-                    <div class="chart-body" id="mapBox">
-                      <div id="mapSvg"></div>
-                    </div>
-                    <div class="map-legend">
-                      <div class="nums"><span id="mapLegendMax">0</span><span>0</span></div>
-                      <div class="bar"></div>
-                      <div class="cap" id="mapLegendTitle">数量(个)</div>
-                    </div>
-                    <div class="map-note">南海诸岛</div>
-                  </div>
-                  <div class="ds-right">
-                    <table class="data-table" id="dsTable"></table>
-                  </div>
+                <div class="chart-body tbl-scroll">
+                  <table class="data-table" id="provTable"></table>
                 </div>
-              </div>
-
-              <div class="sec-head"><span class="bar"></span>上游市场份额分析</div>
-
-              <div class="charts-grid">
-                <div class="chart-card">
-                  <div class="chart-head">
-                    <span class="chart-title">上游业主招标金额</span>
-                    <span class="help" data-tip="按招标金额排序的上游业主">?</span>
-                    <div class="chart-tools">
-                      <button class="tool-btn plain" data-export="upstream" type="button">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                        下载
-                      </button>
-                    </div>
-                  </div>
-                  <div class="chart-body">
-                    <table class="data-table" id="usTable"></table>
-                  </div>
-                </div>
-                <div class="chart-card">
-                  <div class="chart-head">
-                    <span class="chart-title">行业分析</span>
-                    <span class="help" data-tip="按行业维度统计招标金额与占比">?</span>
-                    <div class="chart-tools">
-                      <button class="tool-btn active" data-ind="amount" type="button">金额</button>
-                      <button class="tool-btn" data-ind="count" type="button">次数</button>
-                    </div>
-                  </div>
-                  <div class="chart-body" id="industryBox"></div>
-                </div>
-              </div>
-            </section>
-              <div class="lock-overlay" data-lock="panel-overview">
+              </section>
+              <div class="lock-overlay" data-lock="ov-prov">
                 <div class="lock-gate">
                   <h3>解锁「上海金戈电力设备安装有限公司」的商机脉络</h3>
                   <p class="lock-sub">解锁商机脉络全维度数据 · 账户剩余积分：</p>
@@ -763,37 +785,74 @@ body { overflow: hidden; }
               <span class="desc">上游供应商与下游业主的企业关系网</span>
               <span class="rule"></span>
             </div>
-            <div class="lock-area">
-            <section class="panel" id="panel-chain">
-              <div class="stats-band stats-band-4" id="statsBand2"></div>
-              <div class="rel-grid">
-                <div class="chart-card">
-                  <div class="chart-head">
-                    <span class="chart-title">上游企业关系网</span>
-                    <span class="help" data-tip="箭头指向本企业，代表上游供应商/材料方">?</span>
-                    <div class="chart-tools">
-                      <button class="tool-btn plain" data-export="upstreamNet" type="button">导出</button>
-                    </div>
-                  </div>
-                  <p class="rel-desc">箭头指向本企业，代表上游供应商 / 材料方</p>
-                  <div class="rel-body" id="upstreamNet"></div>
-                  <div class="rel-more"><button class="more-btn" data-more="上游企业关系网" type="button">查看更多 ▾</button></div>
+
+            <!-- ===== 02-1 脉络总览 + 上游企业关系网 ===== -->
+            <div class="lock-area lock-area-mod">
+              <section class="mod-card">
+                <div class="mod-head">
+                  <span class="mod-title">脉络总览 · 上游企业关系网</span>
+                  <span class="mod-tag">关系网模块</span>
                 </div>
-                <div class="chart-card">
-                  <div class="chart-head">
-                    <span class="chart-title">下游企业关系网</span>
-                    <span class="help" data-tip="本企业指向箭头，代表下游业主/客户">?</span>
-                    <div class="chart-tools">
-                      <button class="tool-btn plain" data-export="downstreamNet" type="button">导出</button>
+                <div class="stats-band stats-band-4" id="statsBand2"></div>
+                <div class="mod-split">
+                  <div>
+                    <div class="chart-head">
+                      <span class="chart-title">上游企业关系网</span>
+                      <span class="help" data-tip="箭头指向本企业，代表上游供应商/材料方">?</span>
+                      <div class="chart-tools">
+                        <button class="tool-btn plain" data-export="upstreamNet" type="button">导出</button>
+                      </div>
                     </div>
+                    <p class="rel-desc">箭头指向本企业，代表上游供应商 / 材料方</p>
+                    <div class="rel-body" id="upstreamNet"></div>
+                    <div class="rel-more"><button class="more-btn" data-more="上游企业关系网" type="button">查看更多 ▾</button></div>
                   </div>
-                  <p class="rel-desc">本企业指向箭头，代表下游业主 / 客户</p>
-                  <div class="rel-body" id="downstreamNet"></div>
-                  <div class="rel-more"><button class="more-btn" data-more="下游企业关系网" type="button">查看更多 ▾</button></div>
+                  <div>
+                    <div class="mini-grid" id="chainUpBox"></div>
+                    <div class="sub-title"><span class="bar"></span>上游供应商 TOP6（按合作次数）</div>
+                    <div class="rk-list wide" id="chainUpRank"></div>
+                  </div>
+                </div>
+              </section>
+              <div class="lock-overlay" data-lock="ov-chain-up">
+                <div class="lock-gate">
+                  <h3>解锁「上海金戈电力设备安装有限公司」的商机脉络</h3>
+                  <p class="lock-sub">解锁商机脉络全维度数据 · 账户剩余积分：</p>
+                  <div class="lock-digits"><span class="d">5</span><span class="d">0</span><span class="u">积分</span></div>
+                  <p class="lock-note">解锁后有效期内不会重复扣分</p>
+                  <button class="btn-unlock" type="button">使用 10 积分 立即解锁</button>
                 </div>
               </div>
-            </section>
-              <div class="lock-overlay" data-lock="panel-chain">
+            </div>
+
+            <!-- ===== 02-2 下游企业关系网 + 上下游结构对比 ===== -->
+            <div class="lock-area lock-area-mod">
+              <section class="mod-card">
+                <div class="mod-head">
+                  <span class="mod-title">下游企业关系网 · 上下游结构对比</span>
+                  <span class="mod-tag">关系网模块</span>
+                </div>
+                <div class="mod-split">
+                  <div>
+                    <div class="chart-head">
+                      <span class="chart-title">下游企业关系网</span>
+                      <span class="help" data-tip="本企业指向箭头，代表下游业主/客户">?</span>
+                      <div class="chart-tools">
+                        <button class="tool-btn plain" data-export="downstreamNet" type="button">导出</button>
+                      </div>
+                    </div>
+                    <p class="rel-desc">本企业指向箭头，代表下游业主 / 客户</p>
+                    <div class="rel-body" id="downstreamNet"></div>
+                    <div class="rel-more"><button class="more-btn" data-more="下游企业关系网" type="button">查看更多 ▾</button></div>
+                  </div>
+                  <div>
+                    <div class="mini-grid" id="chainDnBox"></div>
+                    <div class="sub-title"><span class="bar"></span>下游业主 TOP6（按成交次数）</div>
+                    <div class="rk-list wide" id="chainDnRank"></div>
+                  </div>
+                </div>
+              </section>
+              <div class="lock-overlay" data-lock="ov-chain-dn">
                 <div class="lock-gate">
                   <h3>解锁「上海金戈电力设备安装有限公司」的商机脉络</h3>
                   <p class="lock-sub">解锁商机脉络全维度数据 · 账户剩余积分：</p>
@@ -810,31 +869,59 @@ body { overflow: hidden; }
               <span class="desc">按关系分组展开的企业脉络，可点击节点查看详情</span>
               <span class="rule"></span>
             </div>
-            <div class="lock-area">
-            <section class="panel" id="panel-graph">
-              <div class="graph-wrap">
-                <div class="chart-head">
-                  <span class="chart-title">企业脉络图谱</span>
-                  <span class="help" data-tip="点击节点查看该企业与本企业的关系详情">?</span>
-                  <div class="chart-tools">
-                    <button class="tool-btn active" data-graph="upstream" type="button">上游图谱</button>
-                    <button class="tool-btn" data-graph="competitor" type="button">竞争对手图谱</button>
-                    <button class="tool-btn plain" data-export="graph" type="button">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                      下载
-                    </button>
+
+            <!-- ===== 03-1 企业脉络图谱主视图 ===== -->
+            <div class="lock-area lock-area-mod">
+              <section class="mod-card">
+                <div class="mod-head">
+                  <span class="mod-title">企业脉络图谱</span>
+                  <span class="mod-tag">图谱模块</span>
+                </div>
+                <div class="graph-wrap">
+                  <div class="chart-head">
+                    <span class="chart-title">关系图谱主视图</span>
+                    <span class="help" data-tip="点击节点查看该企业与本企业的关系详情">?</span>
+                    <div class="chart-tools">
+                      <button class="tool-btn active" data-graph="upstream" type="button">上游图谱</button>
+                      <button class="tool-btn" data-graph="competitor" type="button">竞争对手图谱</button>
+                      <button class="tool-btn plain" data-export="graph" type="button">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        下载
+                      </button>
+                    </div>
+                  </div>
+                  <div class="graph-canvas" id="graphCanvas"></div>
+                  <div class="graph-foot"><button class="more-btn" data-more="企业脉络图谱" type="button">查看更多 ▾</button></div>
+                  <div class="node-panel" id="nodePanel">
+                    <button class="np-close" type="button" id="npClose">×</button>
+                    <div class="np-title" id="npTitle"></div>
+                    <div id="npBody"></div>
                   </div>
                 </div>
-                <div class="graph-canvas" id="graphCanvas"></div>
-                <div class="graph-foot"><button class="more-btn" data-more="企业脉络图谱" type="button">查看更多 ▾</button></div>
-                <div class="node-panel" id="nodePanel">
-                  <button class="np-close" type="button" id="npClose">×</button>
-                  <div class="np-title" id="npTitle"></div>
-                  <div id="npBody"></div>
+              </section>
+              <div class="lock-overlay" data-lock="ov-graph-map">
+                <div class="lock-gate">
+                  <h3>解锁「上海金戈电力设备安装有限公司」的商机脉络</h3>
+                  <p class="lock-sub">解锁商机脉络全维度数据 · 账户剩余积分：</p>
+                  <div class="lock-digits"><span class="d">5</span><span class="d">0</span><span class="u">积分</span></div>
+                  <p class="lock-note">解锁后有效期内不会重复扣分</p>
+                  <button class="btn-unlock" type="button">使用 10 积分 立即解锁</button>
                 </div>
               </div>
-            </section>
-              <div class="lock-overlay" data-lock="panel-graph">
+            </div>
+
+            <!-- ===== 03-2 关系分组构成明细 ===== -->
+            <div class="lock-area lock-area-mod">
+              <section class="mod-card">
+                <div class="mod-head">
+                  <span class="mod-title">关系分组构成明细</span>
+                  <span class="mod-tag">分组模块</span>
+                </div>
+                <div class="mini-grid mg4" id="graphSumBox" style="margin-top:12px;"></div>
+                <div class="sub-title"><span class="bar"></span>各关系分组规模与关联主体</div>
+                <div class="mod-split-3" id="graphGroupsBox"></div>
+              </section>
+              <div class="lock-overlay" data-lock="ov-graph-groups">
                 <div class="lock-gate">
                   <h3>解锁「上海金戈电力设备安装有限公司」的商机脉络</h3>
                   <p class="lock-sub">解锁商机脉络全维度数据 · 账户剩余积分：</p>
@@ -851,31 +938,59 @@ body { overflow: hidden; }
               <span class="desc">上下游关联企业分布，点击外围节点可展开二级关联</span>
               <span class="rule"></span>
             </div>
-            <div class="lock-area">
-            <section class="panel" id="panel-related">
-              <div class="stats-band stats-band-4" id="statsBand4"></div>
-              <div class="rel-canvas">
-                <div id="relSvg"></div>
-                <div class="rel-legend">
-                  <span class="item"><span class="sq unit"></span>分析单位</span>
-                  <span class="item"><span class="sq bid"></span>中标单位</span>
-                  <span class="item">
-                    <svg width="22" height="10" viewBox="0 0 22 10"><path d="M0 5h16" stroke="#52c41a" stroke-width="1.6"/><path d="M16 1l5 4-5 4z" fill="#52c41a"/></svg>
-                    上游
-                  </span>
-                  <span class="item">
-                    <svg width="22" height="10" viewBox="0 0 22 10"><path d="M0 5h16" stroke="#f5484d" stroke-width="1.6"/><path d="M16 1l5 4-5 4z" fill="#f5484d"/></svg>
-                    下游
-                  </span>
+
+            <!-- ===== 04-1 关联企业分布图 ===== -->
+            <div class="lock-area lock-area-mod">
+              <section class="mod-card">
+                <div class="mod-head">
+                  <span class="mod-title">关联企业分布图</span>
+                  <span class="mod-tag">关系图模块</span>
                 </div>
-                <div class="rel-info" id="relInfo">
-                  <button class="ri-close" type="button" id="riClose">×</button>
-                  <div class="ri-title" id="riTitle"></div>
-                  <div id="riBody"></div>
+                <div class="stats-band stats-band-4" id="statsBand4"></div>
+                <div class="rel-canvas">
+                  <div id="relSvg"></div>
+                  <div class="rel-legend">
+                    <span class="item"><span class="sq unit"></span>分析单位</span>
+                    <span class="item"><span class="sq bid"></span>中标单位</span>
+                    <span class="item">
+                      <svg width="22" height="10" viewBox="0 0 22 10"><path d="M0 5h16" stroke="#52c41a" stroke-width="1.6"/><path d="M16 1l5 4-5 4z" fill="#52c41a"/></svg>
+                      上游
+                    </span>
+                    <span class="item">
+                      <svg width="22" height="10" viewBox="0 0 22 10"><path d="M0 5h16" stroke="#f5484d" stroke-width="1.6"/><path d="M16 1l5 4-5 4z" fill="#f5484d"/></svg>
+                      下游
+                    </span>
+                  </div>
+                  <div class="rel-info" id="relInfo">
+                    <button class="ri-close" type="button" id="riClose">×</button>
+                    <div class="ri-title" id="riTitle"></div>
+                    <div id="riBody"></div>
+                  </div>
+                </div>
+              </section>
+              <div class="lock-overlay" data-lock="ov-related-map">
+                <div class="lock-gate">
+                  <h3>解锁「上海金戈电力设备安装有限公司」的商机脉络</h3>
+                  <p class="lock-sub">解锁商机脉络全维度数据 · 账户剩余积分：</p>
+                  <div class="lock-digits"><span class="d">5</span><span class="d">0</span><span class="u">积分</span></div>
+                  <p class="lock-note">解锁后有效期内不会重复扣分</p>
+                  <button class="btn-unlock" type="button">使用 10 积分 立即解锁</button>
                 </div>
               </div>
-            </section>
-              <div class="lock-overlay" data-lock="panel-related">
+            </div>
+
+            <!-- ===== 04-2 关联关系明细 ===== -->
+            <div class="lock-area lock-area-mod">
+              <section class="mod-card">
+                <div class="mod-head">
+                  <span class="mod-title">关联关系明细</span>
+                  <span class="mod-tag">明细模块</span>
+                </div>
+                <div class="mini-grid mg4" id="relSumBox" style="margin-top:12px;"></div>
+                <div class="sub-title"><span class="bar"></span>关联企业 TOP10（按合作次数）</div>
+                <div class="rk-list wide" id="relRankBox"></div>
+              </section>
+              <div class="lock-overlay" data-lock="ov-related-list">
                 <div class="lock-gate">
                   <h3>解锁「上海金戈电力设备安装有限公司」的商机脉络</h3>
                   <p class="lock-sub">解锁商机脉络全维度数据 · 账户剩余积分：</p>
@@ -889,7 +1004,7 @@ body { overflow: hidden; }
           </div>
         </div>
 
-        </div><!-- /#viewAnalysis -->
+        <!-- /#viewAnalysis -->
 
         <div class="placeholder-view" id="viewPlaceholder">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
@@ -905,7 +1020,7 @@ body { overflow: hidden; }
 <button class="back-top" id="backTop" type="button" aria-label="回到顶部">
   <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#999999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 12l9 4 9-4"/><path d="M3 17l9 4 9-4"/></svg>
 </button>
-<div class="version-badge">v3.10.2</div>
+<div class="version-badge">v3.14.0</div>
 <div class="tip" id="tip"></div>
 
 <script type="application/json" id="network-data">
@@ -1077,14 +1192,6 @@ var CN_MAP = {"北京市":["M434.9,133.4L436.0,132.4L431.8,132.1L429.6,128.8L427
 
   bindTips(document);
 
-  /* ---------- sidebar ---------- */
-  var sidebar = $('sidebar');
-  $('sidebarTrigger').addEventListener('click', function () {
-    sidebar.dataset.state = sidebar.dataset.state === 'collapsed' ? 'expanded' : 'collapsed';
-  });
-  $('sidebarRail').addEventListener('click', function () {
-    sidebar.dataset.state = sidebar.dataset.state === 'collapsed' ? 'expanded' : 'collapsed';
-  });
 
   var viewAnalysis = $('viewAnalysis'), viewPlaceholder = $('viewPlaceholder');
   function showPlaceholder(title) {
@@ -1253,6 +1360,112 @@ var CN_MAP = {"北京市":["M434.9,133.4L436.0,132.4L431.8,132.1L429.6,128.8L427
     bindTips($('industryBox'));
   }
 
+  /* ---------- 01 区域辅助模块：区域覆盖、省份排行、行业占比、省份明细 ---------- */
+  function provVal(p, mode) { return mode === 'count' ? p.count : p.amount; }
+
+  function renderCover() {
+    var box = $('coverBox');
+    if (!box) return;
+    var ps = D.provinces;
+    var byAmount = ps.slice().sort(function (a, b) { return b.amount - a.amount; });
+    var totalAmount = ps.reduce(function (s, p) { return s + p.amount; }, 0);
+    var top5 = byAmount.slice(0, 5).reduce(function (s, p) { return s + p.amount; }, 0);
+    var top = byAmount[0];
+    var items = [
+      { v: ps.length + ' 个', k: '覆盖省级地区' },
+      { v: top.name, k: '金额最高地区' },
+      { v: Math.round(totalAmount / ps.length).toLocaleString('en-US'), k: '单省平均金额(万元)' },
+      { v: (totalAmount ? top5 / totalAmount * 100 : 0).toFixed(1) + '%', k: 'TOP5 金额集中度' }
+    ];
+    box.innerHTML = items.map(function (it) {
+      return '<div class="mini-item"><div class="mv">' + esc(it.v) + '</div><div class="mk">' + esc(it.k) + '</div></div>';
+    }).join('');
+  }
+
+  function renderProvRank() {
+    var box = $('provRankBox');
+    if (!box) return;
+    var mode = state.map;
+    var rows = D.provinces.slice().sort(function (a, b) { return provVal(b, mode) - provVal(a, mode); }).slice(0, 10);
+    var total = D.provinces.reduce(function (s, p) { return s + provVal(p, mode); }, 0);
+    var max = rows.length ? provVal(rows[0], mode) : 0;
+    box.innerHTML = rows.map(function (r, i) {
+      var v = provVal(r, mode);
+      var pct = max ? (v / max * 100) : 0;
+      var share = total ? (v / total * 100) : 0;
+      return '<div class="rk-row">' +
+        '<span class="rk-idx' + (i < 3 ? ' hot' : '') + '">' + (i + 1) + '</span>' +
+        '<span class="rk-name" title="' + escAttr(r.name) + '">' + esc(r.name) + '</span>' +
+        '<span class="rk-track"><i style="width:' + pct.toFixed(1) + '%"></i></span>' +
+        '<span class="rk-val">' + v.toLocaleString('en-US') + '</span>' +
+        '<span class="rk-share">' + share.toFixed(1) + '%</span>' +
+        '</div>';
+    }).join('');
+  }
+
+  function renderIndShare() {
+    var box = $('indShareBox');
+    if (!box) return;
+    var mode = state.industry;
+    var rows = D.industries.slice().sort(function (a, b) { return (mode === 'amount' ? b.amount - a.amount : b.count - a.count); });
+    var total = rows.reduce(function (s, r) { return s + (mode === 'amount' ? r.amount : r.count); }, 0);
+    var max = rows.length ? (mode === 'amount' ? rows[0].amount : rows[0].count) : 0;
+    box.innerHTML = rows.map(function (r) {
+      var v = mode === 'amount' ? r.amount : r.count;
+      var pct = max ? (v / max * 100) : 0;
+      var share = total ? (v / total * 100) : 0;
+      return '<div class="ind-row">' +
+        '<span class="rk-name" title="' + escAttr(r.name) + '">' + esc(r.name) + '</span>' +
+        '<span class="ind-track"><i style="width:' + pct.toFixed(1) + '%"></i></span>' +
+        '<span class="ind-val">' + v.toLocaleString('en-US') + '</span>' +
+        '<span class="ind-share">' + share.toFixed(1) + '%</span>' +
+        '</div>';
+    }).join('');
+    var top = $('indTopBox');
+    if (top) {
+      var unit = mode === 'amount' ? '万元' : '次';
+      var top1 = total ? (mode === 'amount' ? rows[0].amount : rows[0].count) / total * 100 : 0;
+      var top3 = total ? rows.slice(0, 3).reduce(function (s, r) { return s + (mode === 'amount' ? r.amount : r.count); }, 0) / total * 100 : 0;
+      var avg = rows.length ? Math.round(total / rows.length) : 0;
+      var items = [
+        { v: top1.toFixed(1) + '%', k: 'TOP1 项占比' },
+        { v: top3.toFixed(1) + '%', k: 'TOP3 集中度' },
+        { v: rows.length + ' 个', k: '统计项数' },
+        { v: avg.toLocaleString('en-US'), k: '均值(' + unit + ')' }
+      ];
+      top.innerHTML = items.map(function (it) {
+        return '<div class="mini-item"><div class="mv">' + esc(it.v) + '</div><div class="mk">' + esc(it.k) + '</div></div>';
+      }).join('');
+    }
+  }
+
+  function renderProvTable() {
+    var tbl = $('provTable');
+    if (!tbl) return;
+    var mode = state.map;
+    var rows = D.provinces.slice().sort(function (a, b) { return provVal(b, mode) - provVal(a, mode); });
+    var total = D.provinces.reduce(function (s, p) { return s + provVal(p, mode); }, 0);
+    var html = '<thead><tr><th style="width:56px;">排名</th><th>地区</th>' +
+      '<th style="width:118px;">中标次数(条)</th><th style="width:132px;">招标金额(万元)</th><th style="width:86px;">占比</th></tr></thead><tbody>';
+    rows.forEach(function (r, i) {
+      var share = total ? (provVal(r, mode) / total * 100) : 0;
+      html += '<tr' + (i === 0 ? ' class="top"' : '') + '>' +
+        '<td class="rank">' + (i + 1) + '</td>' +
+        '<td class="name">' + esc(r.name) + '</td>' +
+        '<td class="amt">' + r.count.toLocaleString('en-US') + '</td>' +
+        '<td class="amt">' + r.amount.toLocaleString('en-US') + '</td>' +
+        '<td class="amt">' + share.toFixed(1) + '%</td></tr>';
+    });
+    html += '</tbody>';
+    tbl.innerHTML = html;
+  }
+
+  function renderOverviewAux() {
+    renderCover();
+    renderProvRank();
+    renderProvTable();
+  }
+
   /* ---------- 控件绑定 ---------- */
   document.querySelectorAll('[data-metric]').forEach(function (b) {
     b.addEventListener('click', function () {
@@ -1261,6 +1474,7 @@ var CN_MAP = {"北京市":["M434.9,133.4L436.0,132.4L431.8,132.1L429.6,128.8L427
       state.map = b.dataset.metric;
       renderMap();
       renderDsTable();
+      renderOverviewAux();
     });
   });
   document.querySelectorAll('[data-ind]').forEach(function (b) {
@@ -1269,6 +1483,7 @@ var CN_MAP = {"北京市":["M434.9,133.4L436.0,132.4L431.8,132.1L429.6,128.8L427
       b.classList.add('active');
       state.industry = b.dataset.ind;
       renderIndustry();
+      renderIndShare();
     });
   });
 
@@ -1295,6 +1510,8 @@ var CN_MAP = {"北京市":["M434.9,133.4L436.0,132.4L431.8,132.1L429.6,128.8L427
   renderDsTable();
   renderUsTable();
   renderIndustry();
+  renderOverviewAux();
+  renderIndShare();
 
   /* ---------- 上下游关系网 ---------- */
   function truncate(s, n) { return s.length > n ? s.slice(0, n) + '…' : s; }
@@ -1302,6 +1519,116 @@ var CN_MAP = {"北京市":["M434.9,133.4L436.0,132.4L431.8,132.1L429.6,128.8L427
     var out = [];
     for (var i = 0; i < s.length; i += 8) { out.push(s.slice(i, i + 8)); }
     return out;
+  }
+
+  /* ---------- 02/03/04 子模块辅助统计 ---------- */
+  function sumBy(arr, key) {
+    return arr.reduce(function (s, x) { return s + (Number(x[key]) || 0); }, 0);
+  }
+  function yi(v) { return (Math.round(v / 100) / 10) + ' 亿'; }
+  function fillMini(box, items) {
+    if (!box) { return; }
+    box.innerHTML = items.map(function (it) {
+      return '<div class="mini-item"><div class="mv">' + it.v + '</div><div class="mk">' + it.k + '</div></div>';
+    }).join('');
+  }
+  function fillRank(box, rows, opt) {
+    if (!box) { return; }
+    opt = opt || {};
+    var key = opt.key || 'count';
+    var total = sumBy(rows, key);
+    var max = rows.reduce(function (m, r) { return Math.max(m, Number(r[key]) || 0); }, 0);
+    box.innerHTML = rows.map(function (r, i) {
+      var v = Number(r[key]) || 0;
+      var pct = max ? (v / max * 100) : 0;
+      var share = total ? (v / total * 100) : 0;
+      var dirTag = '';
+      if (r.dir === 'up') { dirTag = '<span class="dir-tag up">上游</span>'; }
+      else if (r.dir === 'down') { dirTag = '<span class="dir-tag down">下游</span>'; }
+      return '<div class="rk-row">' +
+        '<span class="rk-idx' + (i < 3 ? ' hot' : '') + '">' + (i + 1) + '</span>' +
+        '<span class="rk-name" title="' + escAttr(r.name) + '">' + esc(r.name) + dirTag + '</span>' +
+        '<span class="rk-track"><i style="width:' + pct.toFixed(1) + '%"></i></span>' +
+        '<span class="rk-val">' + v.toLocaleString('en-US') + '</span>' +
+        '<span class="rk-share">' + share.toFixed(1) + '%</span>' +
+        '</div>';
+    }).join('');
+  }
+
+  function renderChainAux() {
+    var up = D.upstreamNodes, dn = D.downstreamNodes;
+    var upC = sumBy(up, 'count'), upA = sumBy(up, 'amount');
+    var dnC = sumBy(dn, 'count'), dnA = sumBy(dn, 'amount');
+    fillMini($('chainUpBox'), [
+      { v: up.length + ' 家', k: '上游供应商' },
+      { v: upC.toLocaleString('en-US') + ' 次', k: '累计合作次数' },
+      { v: yi(upA), k: '累计采购金额' },
+      { v: Math.round(upA / upC).toLocaleString('en-US') + ' 万', k: '平均单次采购' }
+    ]);
+    fillMini($('chainDnBox'), [
+      { v: dn.length + ' 家', k: '下游业主' },
+      { v: dnC.toLocaleString('en-US') + ' 次', k: '累计成交次数' },
+      { v: yi(dnA), k: '累计成交金额' },
+      { v: Math.round(dnA / dnC).toLocaleString('en-US') + ' 万', k: '平均单笔成交' }
+    ]);
+    fillRank($('chainUpRank'), up.slice().sort(function (a, b) { return b.count - a.count; }).slice(0, 6), { key: 'count' });
+    fillRank($('chainDnRank'), dn.slice().sort(function (a, b) { return b.count - a.count; }).slice(0, 6), { key: 'count' });
+  }
+
+  function groupMetric(g) {
+    var num = parseInt(String(g.title).replace(/[^\d]/g, ''), 10);
+    return isNaN(num) ? 0 : num;
+  }
+
+  function renderGraphAux() {
+    var cfg = D.graph[state.graph];
+    var groups = cfg.groups || [];
+    var nodeTotal = groups.reduce(function (s, g) { return s + g.nodes.length; }, 0);
+    var metrics = {};
+    groups.forEach(function (g) { metrics[g.metric] = 1; });
+    var metricCount = Object.keys(metrics).length;
+    var avg = groups.length ? (nodeTotal / groups.length) : 0;
+    fillMini($('graphSumBox'), [
+      { v: groups.length + ' 组', k: '关系分组' },
+      { v: nodeTotal + ' 个', k: '关联主体' },
+      { v: metricCount + ' 项', k: '度量口径' },
+      { v: (Math.round(avg * 10) / 10) + ' 个/组', k: '分组平均规模' }
+    ]);
+    var box = $('graphGroupsBox');
+    if (!box) { return; }
+    box.innerHTML = groups.map(function (g) {
+      var tone = TONES[g.tone] || TONES.blue;
+      var num = groupMetric(g);
+      var title = String(g.title).replace(/\s*\d+\s*$/, '');
+      var names = g.nodes.map(function (n) { return String(n).trim(); });
+      var tags = names.slice(0, 6).map(function (n) {
+        return '<span class="grp-tag" title="' + escAttr(n) + '">' + esc(truncate(n, 8)) + '</span>';
+      }).join('');
+      if (names.length > 6) { tags += '<span class="grp-tag more">+' + (names.length - 6) + '</span>'; }
+      return '<div class="grp-card">' +
+        '<div class="grp-title"><span class="dot" style="background:' + tone.stroke + '"></span>' + esc(title) + '</div>' +
+        '<div class="grp-meta">度量口径：' + esc(g.metric) + '</div>' +
+        '<div class="grp-nums">' +
+          '<div><div class="n" style="color:' + tone.stroke + '">' + num.toLocaleString('en-US') + '</div><div class="k">' + esc(g.metric) + '</div></div>' +
+          '<div><div class="n">' + names.length + '</div><div class="k">关联主体</div></div>' +
+        '</div>' +
+        '<div class="grp-tags">' + tags + '</div>' +
+        '</div>';
+    }).join('');
+  }
+
+  function renderRelatedAux() {
+    var nodes = D.related.nodes || [];
+    var upN = nodes.filter(function (n) { return n.dir === 'up'; });
+    var dnN = nodes.filter(function (n) { return n.dir === 'down'; });
+    var totalC = sumBy(nodes, 'count'), totalA = sumBy(nodes, 'amount');
+    fillMini($('relSumBox'), [
+      { v: nodes.length + ' 家', k: '关联企业' },
+      { v: upN.length + ' / ' + dnN.length, k: '上游 / 下游' },
+      { v: totalC.toLocaleString('en-US') + ' 次', k: '累计合作次数' },
+      { v: yi(totalA), k: '累计合作金额' }
+    ]);
+    fillRank($('relRankBox'), nodes.slice().sort(function (a, b) { return b.count - a.count; }), { key: 'count' });
   }
 
   function renderNet(boxId, nodes, dir) {
@@ -1374,6 +1701,7 @@ var CN_MAP = {"北京市":["M434.9,133.4L436.0,132.4L431.8,132.1L429.6,128.8L427
 
   renderNet('upstreamNet', D.upstreamNodes, 'up');
   renderNet('downstreamNet', D.downstreamNodes, 'down');
+  renderChainAux();
 
   /* ---------- Tab3 企业脉络图谱 ---------- */
   var TONES = {
@@ -1497,9 +1825,11 @@ var CN_MAP = {"北京市":["M434.9,133.4L436.0,132.4L431.8,132.1L429.6,128.8L427
       state.graph = b.dataset.graph;
       $('nodePanel').classList.remove('show');
       renderGraph(state.graph);
+      renderGraphAux();
     });
   });
   renderGraph('upstream');
+  renderGraphAux();
 
   /* ---------- Tab4 关联企业分析 ---------- */
   function twoLines(s, n) {
@@ -1618,6 +1948,7 @@ var CN_MAP = {"北京市":["M434.9,133.4L436.0,132.4L431.8,132.1L429.6,128.8L427
     renderRelated(null);
   });
   renderRelated(null);
+  renderRelatedAux();
 
   /* ---------- 下载 ---------- */
   function downloadCSV(name, rows) {
@@ -1748,37 +2079,6 @@ var CN_MAP = {"北京市":["M434.9,133.4L436.0,132.4L431.8,132.1L429.6,128.8L427
 (function () {
   var overlays = Array.prototype.slice.call(document.querySelectorAll('.lock-overlay'));
   if (!overlays.length) return;
-
-  /* 弹窗默认居中于所在区域；区域高于可视区时，随滚动夹在可视区内，保证滚到任意位置都能就地看到锁（不改样式） */
-  var scrollBox = document.getElementById('contentScroll');
-  function fitGates() {
-    if (!scrollBox) return;
-    var boxTop = scrollBox.getBoundingClientRect().top;
-    var boxBottom = boxTop + scrollBox.clientHeight;
-    var pad = 16;
-    overlays.forEach(function (ov) {
-      if (!ov.isConnected) return;
-      var gate = ov.querySelector('.lock-gate');
-      if (!gate) return;
-      gate.style.transform = '';
-      var g = gate.getBoundingClientRect();
-      var a = ov.getBoundingClientRect();
-      /* 目标位置：优先落在视口垂直中心，但必须留在本区域（遮罩）内部，避免两个区域的锁互相重叠 */
-      var lo = a.top + pad;
-      var hi = a.bottom - pad - g.height;
-      if (hi < lo) hi = lo;
-      var target = (boxTop + boxBottom) / 2 - g.height / 2;
-      if (target < lo) target = lo;
-      if (target > hi) target = hi;
-      var dy = Math.round(target - g.top);
-      gate.style.transform = dy ? 'translateY(' + dy + 'px)' : '';
-    });
-  }
-  window.addEventListener('resize', fitGates);
-  if (scrollBox) scrollBox.addEventListener('scroll', fitGates);
-  window.addEventListener('load', fitGates);
-  setTimeout(fitGates, 60);
-  fitGates();
 
   function showToast(msg) {
     var t = document.createElement('div');
