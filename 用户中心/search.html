@@ -1073,6 +1073,16 @@ new MutationObserver(init).observe(document, { childList: true, subtree: true })
 })();
 </script>
 
-<div class="version-badge">v3.14.1</div>
+<div class="version-badge">v3.15.0</div>
+<script data-frame-report>
+(function () {
+  try {
+    if (window.parent === window) return;
+    var p = decodeURIComponent((location.pathname.split('/').pop() || ''));
+    if (!/\.html$/i.test(p)) return;
+    parent.postMessage({ type: 'bidcenter-location', page: p, title: document.title || '' }, '*');
+  } catch (e) {}
+})();
+</script>
 </body>
 </html>

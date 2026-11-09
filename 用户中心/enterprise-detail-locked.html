@@ -610,7 +610,7 @@
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>' +
       '</a>' +
       '</div>' +
-        '<button class="btn-unlock" id="unlock-btn">使用 10 积分 立即解锁</button>' +
+        '<button class="btn-unlock" id="unlock-btn">使用 3 积分 立即解锁</button>' +
       '</div>' +
     '</div>';
   }
@@ -665,11 +665,11 @@
       return;
     }
     if (!e.target.closest('#unlock-btn')) return;
-    /* 扣 10 积分：数字格 50 → 40 */
+    /* 扣 3 积分：数字格 50 → 47 */
     var ds = document.querySelectorAll('#lock-digits .d');
     if (ds.length) {
       var cur = parseInt(Array.prototype.map.call(ds, function (d) { return d.textContent; }).join(''), 10) || 50;
-      var next = String(Math.max(0, cur - 10));
+      var next = String(Math.max(0, cur - 3));
       while (next.length < ds.length) next = '0' + next;
       Array.prototype.forEach.call(ds, function (d, i) { d.textContent = next[i]; });
     }
@@ -682,7 +682,7 @@
     document.querySelector('.co-tags').appendChild(badge);
     var t = document.createElement('div');
     t.className = 'toast';
-    t.textContent = '解锁成功：已扣 10 积分，该企业全维度工商信息已解锁';
+    t.textContent = '解锁成功：已扣 3 积分，该企业全维度工商信息已解锁';
     document.body.appendChild(t);
     setTimeout(function () { t.classList.add('show'); }, 20);
     setTimeout(function () { t.classList.remove('show'); setTimeout(function () { t.remove(); }, 400); }, 2800);
@@ -728,6 +728,16 @@
 })();
 </script>
 
-<div class="version-badge">v3.14.1</div>
+<div class="version-badge">v3.15.0</div>
+<script data-frame-report>
+(function () {
+  try {
+    if (window.parent === window) return;
+    var p = decodeURIComponent((location.pathname.split('/').pop() || ''));
+    if (!/\.html$/i.test(p)) return;
+    parent.postMessage({ type: 'bidcenter-location', page: p, title: document.title || '' }, '*');
+  } catch (e) {}
+})();
+</script>
 </body>
 </html>

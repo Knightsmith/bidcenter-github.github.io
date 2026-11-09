@@ -2,7 +2,7 @@
 
 > 项目：bidcenter 用户中心（采招网/水滴信用复刻原型）
 > 路径：`D:\workspace\bidcenter-github.github.io\用户中心\`
-> 交接时版本：**v3.14.0**（2026-11-06）｜ 交接人：QwenWork
+> 交接时版本：**v3.15.0**（2026-11-09）｜ 交接人：QwenWork
 > 使用方式：接手前通读「项目约定」，按「任务清单」领任务；完成后按「回写协议」更新本文档与 CHANGELOG。
 
 ---
@@ -44,6 +44,7 @@
 | T3 | 「中标业绩」tab 占位处理 | 完成 | v3.13.0 新增基础版 `bid-performance.html`（纯展示、无锁概念，`.back-top` 与 enterprise-detail 一致）；全站 15 个页面 tab 已统一接入。v3.14.0 起该 tab 文案统一为「中标业绩」，**不再带数字徽标**（原 523/57 三种写法已去除），见约定 8 |
 | T4 | 切换后回归 | 进行中 | 只读体检已出报告，两项 P1 已于 v3.13.1 修复并回归通过（contact 四页分页选择器改 `.pager`；`business-network-locked-vip.html` 删除演示解锁逻辑，对齐红族纯演示）。剩余 P2 项待处理；注入新接口数据后仍需复查：分页（每页 10 条）、三族解锁门数据、tab 串联链接、sidebar 托管入口 |
 | T5 | 全站 tab 样式与文案统一 | 完成 | v3.14.0：16 个含 main-nav 页面按 `contact.html` 逐属性对齐（5 条规则硬编码色值），computed style 差异项 0、同角色像素比对 56 对 0 差异、选中态像素比对 16 页 0 差异；「中标业绩」去数字、「商机联络」→「商机脉络」、徽标「关系网」「联系方式」保留；`bid-analysis*.html` 选中态去掉 `onclick="return false"`；`bid-analysis-locked-vip.html` 新增 `.lock-scope` 包裹锁定区块、遮罩移入其中并改居中，遮罩不再压住 tab（原覆盖 y=76–1464 → 现 y=414 起）；16 页 tab 中心 `elementFromPoint` 全部命中 `nav.main-nav`；1280/1440/1920×16 页共 48 次测量无横向溢出、控制台 0 报错 |
+| T6 | contact 系四页取消页签改平铺 | 完成 | v3.15.0：`contact.html`、`contact-locked.html`、`contact-locked-vip.html`、`contact-locked-count.html` 删除「中标联系人/工商联系人」页签（DOM + 三行 CSS + 切换脚本），改为上下平铺两段，标题「中标联系方式」「工商联系方式」；中标表`电话来源`统一「中标信息」，工商表新增`电话来源`列统一「工商信息」；无 `.lock-area` 页留白用 `.card > .section:first-of-type`、锁定族用 `.lock-area > .section:first-of-type`（均 22px）；四页 Playwright 实测两段同可见、页签残留 0、横向溢出 0、pageerror 0，count 版解锁后电话还原与 toast 正常、vip 版按设计点击不解锁 |
 
 ## 四、回写协议（mavis 完成后必做）
 

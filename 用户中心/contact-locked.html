@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <script>if (window.top === window.self) location.replace('sidebar.html?page=' + encodeURIComponent(location.pathname.split('/').pop()));</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>联系方式（积分解锁演示） - 企业详情 | v3.14.1</title>
+<title>联系方式（积分解锁演示） - 企业详情 | v3.15.0</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%237c3aed'/%3E%3Ctext%20x='32'%20y='45'%20text-anchor='middle'%20font-size='40'%20font-weight='700'%20fill='%23ffffff'%20font-family='Microsoft%20YaHei,sans-serif'%3E%E5%B1%BF%3C/text%3E%3C/svg%3E">
 <style>
 @layer tokens, base, components;
@@ -75,9 +75,6 @@
 .main-nav a.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; background: #0063FF; }
 .nav-badge { position: absolute; top: 6px; right: -34px; background: #f5484d; color: #fff; font: 400 10px/16px var(--font-sans); padding: 0 6px; border-radius: 3px; }
 
-.contact-tabs { display: flex; gap: 12px; padding: 20px 32px 0; }
-.contact-tab { display: inline-flex; align-items: center; height: 36px; padding: 0 22px; border: none; border-radius: 4px; background: #f4f4f5; color: #606266; font: 400 14px var(--font-sans); cursor: pointer; text-decoration: none; }
-.contact-tab.active { background: var(--primary); color: #fff; font-weight: 500; }
 
 .section { padding: 6px 32px 26px; scroll-margin-top: 20px; }
 .sec-title { font: 600 14px var(--font-sans); color: #333; margin: 0 0 14px; padding-left: 8px; border-left: 3px solid var(--primary); line-height: 16px; }
@@ -105,6 +102,7 @@
 
 /* 积分解锁弹窗（橙色版视觉；遮罩只盖表格区域，不遮盖整个页面） */
 .lock-area { position: relative; min-height: 420px; }
+.lock-area > .section:first-of-type { padding-top: 22px; }
 .lock-overlay {
   position: absolute; inset: 0; z-index: 60;
   background: rgba(0, 0, 0, .32);
@@ -123,6 +121,11 @@
 .lock-digits .d { min-width: 34px; padding: 5px 0; border: 2px dashed #ffb35c; border-radius: 6px; background: #ffffff; font-size: 22px; font-weight: 800; color: #ff5000; }
 .lock-digits .u { font-size: 13px; color: #666666; }
 .lock-note { margin: 12px 0 0; font-size: 12px; color: #999999; }
+.lock-note-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; }
+.lock-note-row .lock-note { margin: 0; }
+.lock-buy { display: inline-flex; align-items: center; gap: 2px; flex-shrink: 0; font-size: 12px; line-height: 1; color: #2b7bff; text-decoration: none; cursor: pointer; }
+.lock-buy:hover { text-decoration: underline; }
+.lock-buy svg { width: 11px; height: 11px; }
 .btn-unlock {
   margin-top: 16px; height: 44px; padding: 0 40px; border: none; border-radius: 8px;
   background: linear-gradient(90deg, #ff8f3c 0%, #ff5000 100%); color: #ffffff;
@@ -204,17 +207,13 @@
       <a href="enterprise-detail-locked.html">查企业</a>
       <a href="contact-locked.html" class="active">找人脉<span class="nav-badge">联系方式</span></a>
     </nav>
-    <div class="contact-tabs">
-      <a class="contact-tab active" href="#sec-bid">中标联系人</a>
-      <a class="contact-tab" href="#sec-biz">工商联系人</a>
-    </div>
     <div class="lock-area">
       <section class="section" id="sec-bid">
-        <h3 class="sec-title">中标项目联系人</h3>
+        <h3 class="sec-title">中标联系方式</h3>
         <div id="tbl-bid"></div>
       </section>
-      <section class="section" id="sec-biz" hidden>
-        <h3 class="sec-title">工商登记联系人</h3>
+      <section class="section" id="sec-biz">
+        <h3 class="sec-title">工商联系方式</h3>
         <div id="tbl-biz"></div>
       </section>
       <div class="lock-overlay" id="lock-overlay">
@@ -224,14 +223,14 @@
           <div class="lock-digits" id="lock-digits">
             <span class="d">5</span><span class="d">0</span><span class="u">积分</span>
           </div>
-          <p class="lock-note">解锁后有效期内不会重复扣分</p>
-          <button class="btn-unlock" id="unlock-btn">使用 10 积分 立即解锁</button>
+          <div class="lock-note-row"><span class="lock-note">解锁后有效期内不会重复扣分</span><a class="lock-buy" href="javascript:;" data-buy-points>积分不足？购买积分<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div>
+          <button class="btn-unlock" id="unlock-btn">使用 30 积分 立即解锁</button>
         </div>
       </div>
     </div>
   </div>
 </div>
-<div class="version-badge">v3.14.1</div>
+<div class="version-badge">v3.15.0</div>
 <script>
 (function () {
   'use strict';
@@ -239,18 +238,18 @@
   var LOCKED = true;   /* 积分解锁演示版：默认联系电话以 **** 遮罩，需消耗积分解锁 */
   /* 假数据：中标联系人（联系人/电话/来源/相关项目数/更新时间）；工商联系人（联系人/电话/更新时间） */
   var BID = [
-    ['经理','57646169','其他',0,'2017-03-09'],
-    ['张伟','0755-28780808','中标公告',12,'2026-09-14'],
-    ['李娜','13800138001','中标公告',8,'2026-08-02'],
-    ['王强','0755-28782888','招标公告',5,'2026-07-21'],
-    ['陈静','13900139002','其他',3,'2026-06-18'],
-    ['刘洋','0755-28783888','中标公告',2,'2026-05-09'],
-    ['赵磊','13700137003','招标公告',1,'2026-04-25'],
-    ['孙丽','13600136004','其他',0,'2026-03-30'],
-    ['周涛','0755-28784888','中标公告',6,'2026-02-16'],
-    ['吴敏','13500135005','招标公告',4,'2026-01-08'],
-    ['郑华','0755-28785888','其他',2,'2025-12-11'],
-    ['冯杰','13400134006','中标公告',9,'2025-11-27']
+    ['经理','57646169','中标信息',0,'2017-03-09'],
+    ['张伟','0755-28780808','中标信息',12,'2026-09-14'],
+    ['李娜','13800138001','中标信息',8,'2026-08-02'],
+    ['王强','0755-28782888','中标信息',5,'2026-07-21'],
+    ['陈静','13900139002','中标信息',3,'2026-06-18'],
+    ['刘洋','0755-28783888','中标信息',2,'2026-05-09'],
+    ['赵磊','13700137003','中标信息',1,'2026-04-25'],
+    ['孙丽','13600136004','中标信息',0,'2026-03-30'],
+    ['周涛','0755-28784888','中标信息',6,'2026-02-16'],
+    ['吴敏','13500135005','中标信息',4,'2026-01-08'],
+    ['郑华','0755-28785888','中标信息',2,'2025-12-11'],
+    ['冯杰','13400134006','中标信息',9,'2025-11-27']
   ];
   var BIZ = [
     ['何晓敏','0755-28780808','2026-10-16'],
@@ -286,9 +285,9 @@
         return '<tr><td>'+esc(r[0])+'</td><td>'+phoneHTML(r[1])+'</td><td>'+esc(r[2])+'</td><td><a class="link-cell" href="#" onclick="return false;">'+r[3]+'</a></td><td>'+esc(r[4])+'</td><td><button class="add-btn" type="button">添加通讯录</button></td></tr>';
       }).join('');
     } else {
-      head = '<tr><th>联系人</th><th>联系电话</th><th>更新时间</th><th>操作</th></tr>';
+      head = '<tr><th>联系人</th><th>联系电话</th><th>电话来源</th><th>更新时间</th><th>操作</th></tr>';
       body = rows.map(function(r){
-        return '<tr><td>'+esc(r[0])+'</td><td>'+phoneHTML(r[1])+'</td><td>'+esc(r[2])+'</td><td><button class="add-btn" type="button">添加通讯录</button></td></tr>';
+        return '<tr><td>'+esc(r[0])+'</td><td>'+phoneHTML(r[1])+'</td><td>工商信息</td><td>'+esc(r[2])+'</td><td><button class="add-btn" type="button">添加通讯录</button></td></tr>';
       }).join('');
     }
     var html = '<table class="tbl"><thead>'+head+'</thead><tbody>'+body+'</tbody></table>';
@@ -298,16 +297,6 @@
   /* 锁定态渲染表格（电话 **** 遮罩）在遮罩后展示，解锁后重渲染真实电话 */
   render('bid'); render('biz');
 
-  document.querySelector('.contact-tabs').addEventListener('click', function (e) {
-    var t = e.target.closest('.contact-tab'); if (!t) return;
-    document.querySelectorAll('.contact-tab').forEach(function(x){ x.classList.remove('active'); });
-    t.classList.add('active');
-    var id = t.getAttribute('href');
-    var bidSec2 = document.getElementById('sec-bid');
-    var bizSec2 = document.getElementById('sec-biz');
-    if (bidSec2) bidSec2.hidden = (id !== '#sec-bid');
-    if (bizSec2) bizSec2.hidden = (id !== '#sec-biz');
-  });
   document.addEventListener('click', function (e) {
     var a = e.target.closest('.pager a[data-type]');
     if (!a || a.getAttribute('aria-disabled')==='true') return;
@@ -328,11 +317,11 @@
   /* 积分解锁 */
   document.addEventListener('click', function (e) {
     if (!e.target.closest('#unlock-btn')) return;
-    /* 扣 10 积分：数字格 50 → 40 */
+    /* 扣 30 积分：数字格 50 → 20 */
     var ds = document.querySelectorAll('#lock-digits .d');
     if (ds.length) {
       var cur = parseInt(Array.prototype.map.call(ds, function (d) { return d.textContent; }).join(''), 10) || 50;
-      var next = String(Math.max(0, cur - 10));
+      var next = String(Math.max(0, cur - 30));
       while (next.length < ds.length) next = '0' + next;
       Array.prototype.forEach.call(ds, function (d, i) { d.textContent = next[i]; });
     }
@@ -348,7 +337,7 @@
     document.querySelector('.co-tags').appendChild(badge);
     var t = document.createElement('div');
     t.className = 'toast';
-    t.textContent = '解锁成功：已扣 10 积分，该企业联系电话已解锁';
+    t.textContent = '解锁成功：已扣 30 积分，该企业联系电话已解锁';
     document.body.appendChild(t);
     setTimeout(function () { t.classList.add('show'); }, 20);
     setTimeout(function () { t.classList.remove('show'); setTimeout(function () { t.remove(); }, 400); }, 2800);
@@ -362,6 +351,32 @@
     var done = function(){ alert('企业信息已复制'); };
     if (navigator.clipboard) navigator.clipboard.writeText(t).then(done,done);
     else { var ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); done(); }
+  });
+})();
+</script>
+<script data-frame-report>
+(function () {
+  try {
+    if (window.parent === window) return;
+    var p = decodeURIComponent((location.pathname.split('/').pop() || ''));
+    if (!/\.html$/i.test(p)) return;
+    parent.postMessage({ type: 'bidcenter-location', page: p, title: document.title || '' }, '*');
+  } catch (e) {}
+})();
+</script>
+
+<script data-buy-points-js>
+/* 积分不足 -> 跳转积分余额页（iframe 内先通知 sidebar 切页并同步面包屑，顶层直接跳转兜底） */
+(function () {
+  function gotoPoints() {
+    try { window.top.postMessage({ type: 'bidcenter-nav', page: 'points.html', title: '积分余额' }, '*'); } catch (err) {}
+    setTimeout(function () { location.href = 'points.html'; }, 300);
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('.lock-buy');
+    if (!a) return;
+    e.preventDefault();
+    gotoPoints();
   });
 })();
 </script>

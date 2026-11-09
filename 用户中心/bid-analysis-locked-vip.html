@@ -144,7 +144,7 @@ body { overflow: hidden; }
 .lock-sub { margin: 10px 0 0; font-size: 13px; color: #666666; }
 .lock-digits { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 10px; }
 .lock-digits .d { min-width: 34px; padding: 5px 0; border: 2px dashed #c0c8d6; border-radius: 6px; background: #ffffff; font-size: 22px; font-weight: 800; color: #333333; }
-.lock-digits .u { font-size: 13px; color: #666666; }
+.lock-digits .u { font-size: 13px; color: #666666; white-space: nowrap; }
 .lock-note { margin: 12px 0 0; font-size: 12px; color: #999999; }
 .btn-unlock { margin-top: 16px; height: 44px; padding: 0 40px; border: none; border-radius: 8px; background: #E1251B; color: #ffffff; font-size: 16px; font-weight: 600; cursor: pointer; animation: unlock-pulse 1.6s infinite; }
 @keyframes unlock-pulse { 0% { box-shadow: 0 0 0 0 rgba(225,37,27,.4); } 70% { box-shadow: 0 0 0 18px rgba(225,37,27,0); } 100% { box-shadow: 0 0 0 0 rgba(225,37,27,0); } }
@@ -391,7 +391,7 @@ body { overflow: hidden; }
           <div class="lock-gate">
             <h3><svg class="lock-icon" aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E1251B" stroke-width="1.6" stroke-linejoin="round"><circle cx="12" cy="9" r="5.2"/><path d="M8.7 13.3 7 21l5-2.6 5 2.6-1.7-7.7"/><path d="M12 6.6l.9 1.9 2 .3-1.5 1.4.4 2-1.8-1-1.8 1 .4-2L9.1 8.8l2-.3z" fill="#E1251B" stroke="none"/></svg>开通会员与中标分析功能</h3>
             <p class="lock-sub">开通会员和中标分析功能，即可解锁「华为技术有限公司」的中标分析</p>
-            <div class="lock-digits"><span class="d">5</span><span class="d">2</span><span class="d">3</span><span class="u">条</span></div>
+            <div class="lock-digits"><span class="u">对</span><span class="d">5</span><span class="d">2</span><span class="d">3</span><span class="u">条信息进行分析</span></div>
             <p class="lock-note">会员期内有效</p>
             <button class="btn-unlock">开通会员与中标分析</button>
           </div>
@@ -436,7 +436,7 @@ body { overflow: hidden; }
           <div class="lock-gate" id="lock-gate">
             <h3><svg class="lock-icon" aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E1251B" stroke-width="1.6" stroke-linejoin="round"><circle cx="12" cy="9" r="5.2"/><path d="M8.7 13.3 7 21l5-2.6 5 2.6-1.7-7.7"/><path d="M12 6.6l.9 1.9 2 .3-1.5 1.4.4 2-1.8-1-1.8 1 .4-2L9.1 8.8l2-.3z" fill="#E1251B" stroke="none"/></svg>开通会员与中标分析功能</h3>
             <p class="lock-sub">开通会员和中标分析功能，即可解锁「华为技术有限公司」的中标分析</p>
-            <div class="lock-digits"><span class="d">5</span><span class="d">2</span><span class="d">3</span><span class="u">条</span></div>
+            <div class="lock-digits"><span class="u">对</span><span class="d">5</span><span class="d">2</span><span class="d">3</span><span class="u">条信息进行分析</span></div>
             <p class="lock-note">会员期内有效</p>
             <button class="btn-unlock" id="unlock-btn">开通会员与中标分析</button>
           </div>
@@ -826,6 +826,16 @@ body { overflow: hidden; }
 })();
 </script>
 
-<div class="version-badge">v3.14.1</div>
+<div class="version-badge">v3.15.0</div>
+<script data-frame-report>
+(function () {
+  try {
+    if (window.parent === window) return;
+    var p = decodeURIComponent((location.pathname.split('/').pop() || ''));
+    if (!/\.html$/i.test(p)) return;
+    parent.postMessage({ type: 'bidcenter-location', page: p, title: document.title || '' }, '*');
+  } catch (e) {}
+})();
+</script>
 </body>
 </html>

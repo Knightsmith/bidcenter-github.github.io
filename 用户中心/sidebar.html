@@ -783,12 +783,37 @@
     refreshVersionSwitch();
   });
 
-  iframe.addEventListener('load', refreshVersionSwitch);
+  // iframe 内部跳转（如详情页顶部 tab：中标分析 / 联系方式等）时，同步顶层地址栏 ?page=
+  function syncUrlFromFrame() {
+    var name = '';
+    try {
+      var path = iframe.contentWindow.location.pathname;
+      name = decodeURIComponent(path.substring(path.lastIndexOf('/') + 1));
+    } catch (err) { return; } // 读不到就不动地址栏，交给内容页 postMessage 上报，避免用 lastPage 覆盖成旧值
+    if (!name) return;
+    lastPage = name; // 同步记录当前帧页面，供版本切换按钮判断当前页族
+    syncUrlParam(name);
+  }
+
+  iframe.addEventListener('load', function () {
+    refreshVersionSwitch();
+    syncUrlFromFrame();
+  });
 
   // 子页面（如企情分析 search.html）请求切换内容区页面
   window.addEventListener('message', function (e) {
     var d = e.data;
-    if (!d || d.type !== 'bidcenter-nav' || !d.page) return;
+    if (!d || !d.page) return;
+    // 内容页上报自身文件名（file:// 下 sidebar 读不到 contentWindow 时用于同步地址栏）
+    if (d.type === 'bidcenter-location') {
+      if (/^[A-Za-z0-9_\-\/]+\.html$/.test(d.page)) {
+        lastPage = d.page; // 帧内 tab 跳转后以实际上报页为准，避免版本按钮沿用旧页
+        syncUrlParam(d.page);
+        refreshVersionSwitch();
+      }
+      return;
+    }
+    if (d.type !== 'bidcenter-nav') return;
     if (!/^[A-Za-z0-9_\-\/]+\.html(\?[^"']*)?$/.test(d.page)) return;
     breadcrumbCurrent.textContent = d.title || '企业详情';
     showIframe(d.page);

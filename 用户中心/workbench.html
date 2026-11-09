@@ -687,7 +687,7 @@
   </footer>
 </div>
 
-<div class="version-badge">v3.14.1</div>
+<div class="version-badge">v3.15.0</div>
 
 <script>
 /* ===== 中国地图渲染（数据由构建脚本内联） ===== */
@@ -758,6 +758,16 @@ function provColor(v) {
   }
   paint();
   setInterval(function () { total--; paint(); }, 1000);
+})();
+</script>
+<script data-frame-report>
+(function () {
+  try {
+    if (window.parent === window) return;
+    var p = decodeURIComponent((location.pathname.split('/').pop() || ''));
+    if (!/\.html$/i.test(p)) return;
+    parent.postMessage({ type: 'bidcenter-location', page: p, title: document.title || '' }, '*');
+  } catch (e) {}
 })();
 </script>
 </body>

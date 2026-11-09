@@ -12,7 +12,7 @@ AIGC:
 # 版本变更记录（CHANGELOG）
 
 > 记录 `用户中心/` 目录下每个页面文件随版本的变化，**新版本在前、旧版本在后**，供 AI 协作者与使用人快速了解每版差异。
-> 生成日期：2026-11-06 ｜ 当前版本：**v3.14.1**
+> 生成日期：2026-11-06 ｜ 当前版本：**v3.15.0**
 
 ## 维护规则（每次改动必须执行）
 
@@ -21,6 +21,20 @@ AIGC:
 3. 在本文件**顶部**新增一条版本记录，写清：版本号、日期、作用、每个文件的变化。
 
 ---
+
+## v3.15.0 — 2026-11-09
+
+**作用**：联系方式页（contact 系 4 页）取消「中标联系人 / 工商联系人」页签，改为上下平铺两段，标题改为「中标联系方式」「工商联系方式」；中标联系方式表「电话来源」列统一为「中标信息」，工商联系方式表新增「电话来源」列统一为「工商信息」。属结构调整（删除页签 DOM 与切换脚本、改页面段落层级），按约定第二位 +1、第三位归 0。
+
+| 文件 | 变化 |
+|------|------|
+| `contact-locked.html`（v3.14.1 内已先行改造，计入本版） | 删除 `<div class="contact-tabs">`（两个页签 + 各自 `data-target`）、删除 `.contact-tabs` / `.contact-tab` / `.contact-tab.active` 三行 CSS、删除 `.contact-tabs` 点击切换脚本；`<section class="section" id="sec-biz" hidden>` 去掉 `hidden`；标题「中标项目联系人」→「中标联系方式」、「工商登记联系人」→「工商联系方式」；工商表头「联系人/联系电话/更新时间/操作」→「联系人/联系电话/电话来源/更新时间/操作」，表体来源列写死「工商信息」；BID 假数据来源字段原混用（其他/中标公告/招标公告）整块改为统一「中标信息」；新增 `.lock-area > .section:first-of-type { padding-top: 22px; }` 补首段留白 |
+| `contact.html` | 同上结构改造：删页签 DOM 与切换脚本、删三行页签 CSS、标题改两处、BID 来源统一「中标信息」、工商表新增「电话来源」列写「工商信息」；本页无 `.lock-area`，留白规则写作 `.card > .section:first-of-type { padding-top: 22px; }`（`#sec-bid` 为 `.card` 下首个 `.section`）。本页原本两段即同时可见，页签原为纯装饰，故无需去 `hidden` |
+| `contact-locked-vip.html`（红·会员版） | 同 `contact.html` 结构改造，另去掉 `#sec-biz` 的 `hidden`；解锁机制未动（遮罩、`phoneHTML` 遮罩逻辑、「开通会员与查企业」按钮保持纯演示点击不处理） |
+| `contact-locked-count.html`（蓝·预购次数版） | 同上；解锁机制未动（`#lock-digits` 数字格、`#unlock-btn` 扣次数、toast 文案均原样保留） |
+| 全部 HTML（20 个） | 版本徽标 `.version-badge` 与 title 版本引用统一升 v3.15.0 |
+
+**自检结论（v3.15.0）**：四页经 `sidebar.html?page=` 入口 Playwright 实测（1500×1200，msedge headless）——`#sec-bid`/`#sec-biz` 均无 `hidden` 且 `getBoundingClientRect().height > 0`（两段同时可见）；页内 `.contact-tabs`/`.contact-tab` 残留 0；标题实测「中标联系方式」「工商联系方式」；中标表 6 列、`电话来源` 取值集合 `["中标信息"]`；工商表 5 列、`电话来源` 取值集合 `["工商信息"]`；首段 `padding-top` 实测 22px；横向溢出 `scrollWidth - clientWidth = 0`；`pageerror` 与控制台 error 均为 0。解锁回归：count 版点击 `#unlock-btn` 后首行电话由 `****` 变 `57646169`、`.masked` 消失、遮罩移除、toast「解锁成功：已消耗 1 次解锁次数，该企业联系电话已解锁」、两段仍可见；vip 版按设计点击不解锁（纯演示）；`contact.html` 与 count 版解锁后 `.card` 高度实测同为 1242px，结构一致。
 
 ## v3.14.1 — 2026-11-06
 
