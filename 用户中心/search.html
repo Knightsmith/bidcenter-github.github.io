@@ -514,7 +514,9 @@
 }
 
 .list { list-style: none; margin: 6px 0 0; padding: 0; }
-.item { display: flex; gap: 16px; padding: 24px 0; border-bottom: 1px solid #ebeef5; }
+.item { display: flex; gap: 16px; padding: 24px 0; border-bottom: 1px solid #ebeef5; cursor: pointer; transition: background .15s ease; }
+.item:hover { background: #f7faff; }
+.item:hover .item-name { color: #2b7bff; }
 .item:last-child { border-bottom: none; }
 .item-icon {
   width: 64px; height: 64px; flex-shrink: 0;
@@ -883,7 +885,7 @@ new MutationObserver(init).observe(document, { childList: true, subtree: true })
 
     var amount = it.amount ? it.amount + '万元' : '查看详情';
 
-    return '<li class="item">' +
+    return '<li class="item" data-name="' + esc(it.name) + '" title="查看企业详情">' +
       '<div class="item-icon">' + ICON_BUILDING + '</div>' +
       '<div class="item-main">' +
         '<div class="item-head">' +
@@ -1034,6 +1036,26 @@ new MutationObserver(init).observe(document, { childList: true, subtree: true })
     if (!b) return;
     b.classList.toggle('on');
     b.querySelector('span').textContent = b.classList.contains('on') ? '已关注' : '关注';
+  });
+
+  // 点击结果整行 -> 企业详情
+  function openEnterprise(name) {
+    var target = 'enterprise-detail.html' + (name ? '?name=' + encodeURIComponent(name) : '');
+    if (window.top !== window.self) {
+      // file:// 下父级 document 不可读（SecurityError），postMessage 不受同源限制，直接发
+      try { window.top.postMessage({ type: 'bidcenter-nav', page: target, title: name || '企业详情' }, '*'); } catch (err) {}
+      // 兜底：父级未响应（单独打开本页）时自身跳转；若父级已切页，本文档已被卸载，定时器自然失效
+      setTimeout(function () { location.href = target; }, 400);
+      return;
+    }
+    location.href = target;
+  }
+
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('.follow-btn')) return;
+    var li = e.target.closest('.list .item');
+    if (!li) return;
+    openEnterprise(li.getAttribute('data-name') || '');
   });
 
   // back to top

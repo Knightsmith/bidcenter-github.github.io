@@ -132,6 +132,43 @@
   .topbar-user .ava img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
   .topbar-user svg { width: 12px; height: 12px; }
 
+  /* ============ 右上角版本切换（企业详情族） ============ */
+  .topbar-versions { display: inline-flex; align-items: center; gap: 6px; margin-right: 2px; }
+  .topbar-versions[data-show="false"] { display: none; }
+  .topbar-versions button {
+    height: 26px; padding: 0 10px; border-radius: 4px; cursor: pointer; white-space: nowrap;
+    font-size: 12px; line-height: 1; color: #ffffff;
+    background: rgba(255, 255, 255, .14); border: 1px solid rgba(255, 255, 255, .38);
+  }
+  .topbar-versions button:hover { background: rgba(255, 255, 255, .28); }
+  .topbar-versions button.active {
+    background: #ffffff; color: #1f6fd0; border-color: #ffffff; font-weight: 600;
+  }
+  .topbar-versions .vt-short { display: none; }
+
+  /* 窄屏收紧：按钮文案缩短、间距压缩，避免顶栏横向溢出 */
+  @media (max-width: 1680px) {
+    .topbar-right { gap: 12px; }
+    .topbar-versions { gap: 4px; margin-right: 0; }
+    .topbar-versions button { padding: 0 8px; font-size: 11px; height: 24px; }
+    .topbar-versions .vt-full { display: none; }
+    .topbar-versions .vt-short { display: inline; }
+  }
+  @media (max-width: 1400px) {
+    .topbar-icons { gap: 10px; }
+    .topbar-user { gap: 6px; }
+    .topbar-vip { padding: 0 10px; }
+  }
+
+  /* 轻提示 */
+  .nav-toast {
+    position: fixed; left: 50%; top: 72px; transform: translate(-50%, -8px);
+    background: rgba(0, 0, 0, .78); color: #fff; font-size: 13px; line-height: 1.4;
+    padding: 9px 16px; border-radius: 6px; max-width: 70vw;
+    opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease; z-index: 9999;
+  }
+  .nav-toast.show { opacity: 1; transform: translate(-50%, 0); }
+
   /* ============ Shell ============ */
   .app-shell { display: flex; height: calc(100vh - var(--topbar-h)); }
 
@@ -268,6 +305,17 @@
   .breadcrumb-separator { color: var(--muted-foreground); }
   .breadcrumb-current { color: var(--foreground); font-weight: 500; }
 
+  /* ============ 面包屑栏右侧版本切换（企业详情族） ============ */
+  .main-header .topbar-versions { margin-left: auto; margin-right: 0; flex-shrink: 0; }
+  .main-header .breadcrumb { min-width: 0; overflow: hidden; white-space: nowrap; }
+  .main-header .topbar-versions button {
+    background: #ffffff; color: #374151; border: 1px solid #d8dce3; font-weight: 500;
+  }
+  .main-header .topbar-versions button:hover { background: #f2f5f9; color: #1f2937; }
+  .main-header .topbar-versions button.active {
+    background: #2b7bff; color: #ffffff; border-color: #2b7bff; font-weight: 600;
+  }
+
   .content { flex: 1; display: flex; flex-direction: column; padding: 20px; min-height: 0; }
   .content-body {
     flex: 1; min-height: 0;
@@ -358,22 +406,6 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
           <span class="sidebar-menu-button-label">工作台</span>
         </button>
-
-        <!-- 企业详情 -->
-        <div class="sidebar-group-item" data-state="open">
-          <button class="sidebar-menu-button" data-page="placeholder" data-title="企业详情" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-4h6v4"/><path d="M9 10h.01M15 10h.01M9 14h.01M15 14h.01"/></svg>
-            <span class="sidebar-menu-button-label">企业详情</span>
-            <svg class="sidebar-menu-button-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <div class="sidebar-menu-sub">
-            <a class="sidebar-menu-sub-item" href="#" data-page="enterprise-detail.html" data-title="查企业">查企业</a>
-            <a class="sidebar-menu-sub-item" href="#" data-page="contact.html" data-title="找人脉">找人脉</a>
-            <a class="sidebar-menu-sub-item" href="#" data-page="bid-analysis.html" data-title="中标分析">中标分析</a>
-            <a class="sidebar-menu-sub-item" href="#" data-page="bid-performance.html" data-title="中标业绩">中标业绩</a>
-            <a class="sidebar-menu-sub-item" href="#" data-page="business-network.html" data-title="商机脉络">商机脉络</a>
-          </div>
-        </div>
 
         <!-- 订阅中心 -->
         <div class="sidebar-group-item" data-state="open">
@@ -515,6 +547,14 @@
           <span class="breadcrumb-separator">/</span>
           <span class="breadcrumb-item breadcrumb-current" id="breadcrumbCurrent">工作台</span>
         </nav>
+
+        <!-- 企业详情族页面：面包屑栏右侧版本切换（仅当前页属于企业详情族时显示） -->
+        <div class="topbar-versions" id="versionSwitch" data-show="true">
+          <button type="button" data-ver="free"><span class="vt-full">已解锁版本</span><span class="vt-short">已解锁</span></button>
+          <button type="button" data-ver="vip"><span class="vt-full">未开通会员版本</span><span class="vt-short">会员</span></button>
+          <button type="button" data-ver="points"><span class="vt-full">积分解锁版本</span><span class="vt-short">积分</span></button>
+          <button type="button" data-ver="count"><span class="vt-full">次数解锁</span><span class="vt-short">次数</span></button>
+        </div>
       </header>
       <div class="content-body">
         <iframe id="contentFrame" class="content-frame" title="内容区"></iframe>
@@ -530,6 +570,7 @@
 
 <script>
   var iframe = document.getElementById('contentFrame');
+  var lastPage = ''; // sidebar 侧记录的当前内容区页面（file:// 下无法读 contentWindow 时兜底）
   var placeholderView = document.getElementById('placeholderView');
   var breadcrumbCurrent = document.getElementById('breadcrumbCurrent');
 
@@ -547,11 +588,27 @@
   }
 
   function showIframe(src) {
+    var p = String(src).split('?')[0];
+    lastPage = p.substring(p.lastIndexOf('/') + 1);
     iframe.removeAttribute('srcdoc');
     iframe.src = src;
     iframe.style.display = 'block';
     placeholderView.style.display = 'none';
     syncMenuToPage(src, !narrowOnLoad);
+    syncUrlParam(src);
+    refreshVersionSwitch();
+  }
+
+  // 地址栏 ?page= 与内容区保持同步：刷新、复制链接后仍停在原页
+  function syncUrlParam(src) {
+    try {
+      var page = String(src).split('?')[0];
+      if (!page) return;
+      var u = new URL(location.href);
+      if (u.searchParams.get('page') === page) return;
+      u.searchParams.set('page', page);
+      history.replaceState(null, '', u.toString());
+    } catch (err) { /* file:// 或历史接口受限时忽略 */ }
   }
 
   function showPlaceholder() {
@@ -617,6 +674,127 @@
     sidebarEl.setAttribute('data-state', collapsed ? 'expanded' : 'collapsed');
   });
 
+  // ====== 企业详情族：右上角版本切换（已解锁 / 未开通会员 / 积分解锁 / 次数解锁） ======
+  var VERSION_PAGES = {
+    'enterprise-detail.html': {
+      free: 'enterprise-detail.html',
+      vip: 'enterprise-detail-locked-vip.html',
+      points: 'enterprise-detail-locked.html',
+      count: 'enterprise-detail-locked-count.html'
+    },
+    'contact.html': {
+      free: 'contact.html',
+      vip: 'contact-locked-vip.html',
+      points: 'contact-locked.html',
+      count: 'contact-locked-count.html'
+    },
+    'bid-analysis.html': {
+      free: 'bid-analysis.html',
+      vip: 'bid-analysis-locked-vip.html'
+    },
+    'bid-performance.html': {
+      free: 'bid-performance.html'
+    },
+    'business-network.html': {
+      free: 'business-network.html',
+      vip: 'business-network-locked-vip.html',
+      points: 'business-network-locked.html',
+      count: 'business-network-locked-count.html'
+    }
+  };
+  var VERSION_LABEL = { vip: '未开通会员版本', points: '积分解锁版本', count: '次数解锁版本' };
+  var BASE_TITLE = {
+    'enterprise-detail.html': '查企业',
+    'contact.html': '找人脉',
+    'bid-analysis.html': '中标分析',
+    'bid-performance.html': '中标业绩',
+    'business-network.html': '商机脉络'
+  };
+  console.log('[sidebar] build 2026-11-09t1 已加载');
+  var verSwitch = document.getElementById('versionSwitch');
+  var verBase = '';
+
+  // 解析文件名 -> { base, ver }
+  function parseVerPage(name) {
+    if (!name) return null;
+    var m = /^(.+?)(-locked(-vip|-count)?)?\.html$/.exec(name);
+    if (!m) return null;
+    var base = m[1] + '.html';
+    if (!VERSION_PAGES[base]) return null;
+    var ver = 'free';
+    if (m[2]) ver = (m[3] === '-vip') ? 'vip' : ((m[3] === '-count') ? 'count' : 'points');
+    return { base: base, ver: ver };
+  }
+
+  // 取 iframe 里当前真实页面文件名（iframe 内二次跳转时 src 属性不会变，优先读 contentWindow）
+  function currentFrameName() {
+    try {
+      var path = iframe.contentWindow.location.pathname;
+      var n = path.substring(path.lastIndexOf('/') + 1);
+      if (n) return decodeURIComponent(n);
+    } catch (err) { /* file:// 无同源授权时 contentWindow 不可读，走 lastPage */ }
+    if (lastPage) return lastPage;
+    var src = iframe.getAttribute('src') || '';
+    src = src.split('?')[0];
+    return src.substring(src.lastIndexOf('/') + 1);
+  }
+
+  function refreshVersionSwitch() {
+    var info = parseVerPage(currentFrameName());
+    if (!info) {
+      verBase = '';
+      verSwitch.setAttribute('data-show', 'false');
+      Array.prototype.forEach.call(verSwitch.querySelectorAll('button[data-ver]'), function (b) {
+        b.classList.remove('active');
+      });
+      return;
+    }
+    verBase = info.base;
+    verSwitch.setAttribute('data-show', 'true');
+    Array.prototype.forEach.call(verSwitch.querySelectorAll('button[data-ver]'), function (b) {
+      b.classList.toggle('active', b.getAttribute('data-ver') === info.ver);
+    });
+  }
+
+  // 轻提示
+  var navToast = document.createElement('div');
+  navToast.className = 'nav-toast';
+  document.body.appendChild(navToast);
+  var navToastTimer;
+  function showToast(msg) {
+    navToast.textContent = msg;
+    navToast.classList.add('show');
+    clearTimeout(navToastTimer);
+    navToastTimer = setTimeout(function () { navToast.classList.remove('show'); }, 2200);
+  }
+
+  verSwitch.addEventListener('click', function (e) {
+    var btn = e.target.closest('button[data-ver]');
+    if (!btn || !verBase) return;
+    var map = VERSION_PAGES[verBase];
+    if (!map) return;
+    var ver = btn.getAttribute('data-ver');
+    var target = map[ver];
+    if (!target) {
+      showToast('该页面暂无' + VERSION_LABEL[ver] + '，请切换其他版本查看');
+      return;
+    }
+    if (currentFrameName() === target) return;
+    showIframe(target);
+    refreshVersionSwitch();
+  });
+
+  iframe.addEventListener('load', refreshVersionSwitch);
+
+  // 子页面（如企情分析 search.html）请求切换内容区页面
+  window.addEventListener('message', function (e) {
+    var d = e.data;
+    if (!d || d.type !== 'bidcenter-nav' || !d.page) return;
+    if (!/^[A-Za-z0-9_\-\/]+\.html(\?[^"']*)?$/.test(d.page)) return;
+    breadcrumbCurrent.textContent = d.title || '企业详情';
+    showIframe(d.page);
+  });
+
   // 初始页面：支持 ?page=xxx 指定；默认工作台（侧边栏默认收起，命中二级菜单时自动展开并选中）
   var initialPage = new URLSearchParams(location.search).get('page') || 'workbench.html';
   var matched = document.querySelector('.sidebar-menu [data-page="' + initialPage + '"]');
@@ -626,7 +804,7 @@
   } else if (/^[A-Za-z0-9_\-]+\.html$/.test(initialPage)) {
     // 未挂菜单的独立页面（如 *-locked*.html、detail-template.html）：直接 iframe 托管，避免落到空白占位
     showIframe(initialPage);
-    breadcrumbCurrent.textContent = '页面预览';
+    breadcrumbCurrent.textContent = BASE_TITLE[initialPage.replace(/-locked(-vip|-count)?\.html$/, '.html')] || '页面预览';
   } else {
     setActive(document.querySelector('.sidebar-menu > .sidebar-menu-button[data-page="workbench.html"]'));
     breadcrumbCurrent.textContent = '工作台';

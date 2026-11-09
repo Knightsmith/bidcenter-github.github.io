@@ -535,8 +535,8 @@ body { overflow: hidden; }
               <span class="desc">企业商机整体指标与下游行业地区分布</span>
               <span class="rule"></span>
             </div>
-            <div class="lock-area">
             <section class="panel" id="panel-overview">
+              <div class="lock-area">
               <div class="stats-band stats-band-4" id="statsBand"></div>
 
               <div class="sec-head"><span class="bar"></span>下游脉络分析</div>
@@ -577,7 +577,19 @@ body { overflow: hidden; }
                 </div>
               </div>
 
-              <div class="sec-head"><span class="bar"></span>上游市场份额分析</div>
+              
+<div class="lock-overlay" data-lock="panel-overview">
+                <div class="lock-gate">
+                  <h3><svg class="lock-icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0063FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>解锁「上海金戈电力设备安装有限公司」的商机脉络</h3>
+                  <p class="lock-sub">商机脉络剩余可解锁次数：</p>
+                  <div class="lock-digits"><span class="d">9</span><span class="d">6</span><span class="d">2</span><span class="u">次</span></div>
+                  <p class="lock-note">解锁后权限生效期间不会重复解锁</p>
+                  <button class="btn-unlock" type="button">立即解锁</button>
+                </div>
+              </div>
+              </div>
+              <div class="lock-area" style="margin-top:16px;">
+<div class="sec-head"><span class="bar"></span>上游市场份额分析</div>
 
               <div class="charts-grid">
                 <div class="chart-card">
@@ -607,8 +619,8 @@ body { overflow: hidden; }
                   <div class="chart-body" id="industryBox"></div>
                 </div>
               </div>
-            </section>
-              <div class="lock-overlay" data-lock="panel-overview">
+            
+<div class="lock-overlay" data-lock="panel-upstream">
                 <div class="lock-gate">
                   <h3><svg class="lock-icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0063FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>解锁「上海金戈电力设备安装有限公司」的商机脉络</h3>
                   <p class="lock-sub">商机脉络剩余可解锁次数：</p>
@@ -617,7 +629,8 @@ body { overflow: hidden; }
                   <button class="btn-unlock" type="button">立即解锁</button>
                 </div>
               </div>
-            </div>
+              </div>
+            </section>
 
             <!-- ================= 02 上下游脉络分析 ================= -->
             <div class="part-head">
@@ -1603,36 +1616,7 @@ var CN_MAP = {"北京市":["M434.9,133.4L436.0,132.4L431.8,132.1L429.6,128.8L427
   var overlays = Array.prototype.slice.call(document.querySelectorAll('.lock-overlay'));
   if (!overlays.length) return;
 
-  /* 弹窗默认居中于所在区域；区域高于可视区时，随滚动夹在可视区内，保证滚到任意位置都能就地看到锁（不改样式） */
-  var scrollBox = document.getElementById('contentScroll');
-  function fitGates() {
-    if (!scrollBox) return;
-    var boxTop = scrollBox.getBoundingClientRect().top;
-    var boxBottom = boxTop + scrollBox.clientHeight;
-    var pad = 16;
-    overlays.forEach(function (ov) {
-      if (!ov.isConnected) return;
-      var gate = ov.querySelector('.lock-gate');
-      if (!gate) return;
-      gate.style.transform = '';
-      var g = gate.getBoundingClientRect();
-      var a = ov.getBoundingClientRect();
-      /* 目标位置：优先落在视口垂直中心，但必须留在本区域（遮罩）内部，避免两个区域的锁互相重叠 */
-      var lo = a.top + pad;
-      var hi = a.bottom - pad - g.height;
-      if (hi < lo) hi = lo;
-      var target = (boxTop + boxBottom) / 2 - g.height / 2;
-      if (target < lo) target = lo;
-      if (target > hi) target = hi;
-      var dy = Math.round(target - g.top);
-      gate.style.transform = dy ? 'translateY(' + dy + 'px)' : '';
-    });
-  }
-  window.addEventListener('resize', fitGates);
-  if (scrollBox) scrollBox.addEventListener('scroll', fitGates);
-  window.addEventListener('load', fitGates);
-  setTimeout(fitGates, 60);
-  fitGates();
+  /* 弹窗固定在本区块遮罩正中（由 .lock-overlay 的 flex 居中保证），不随滚动移动，避免遮挡/漂移到相邻板块 */
 
   function showToast(msg) {
     var t = document.createElement('div');
