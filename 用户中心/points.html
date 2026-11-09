@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<script>if (window.top === window.self) location.replace('sidebar.html?page=' + encodeURIComponent(location.pathname.split('/').pop()));</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>积分余额</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%237c3aed'/%3E%3Ctext%20x='32'%20y='45'%20text-anchor='middle'%20font-size='40'%20font-weight='700'%20fill='%23ffffff'%20font-family='Microsoft%20YaHei,sans-serif'%3E%E5%B1%BF%3C/text%3E%3C/svg%3E">
+<style>
+/* ==== cascade layer order ==== */
+@layer tokens, base, components;
+
+/* ==== design tokens (library does not bundle them) ==== */
+@layer tokens {
+  :root {
+    --background: #ffffff;        --foreground: #333333;
+    --card: #ffffff;              --card-foreground: #333333;
+    --popover: #ffffff;           --popover-foreground: #333333;
+    --primary: #2b7bff;           --primary-foreground: #ffffff;
+    --secondary: #f4f4f5;         --secondary-foreground: #606266;
+    --muted: #f5f7fa;             --muted-foreground: #999999;
+    --accent: #ecf5ff;            --accent-foreground: #2b7bff;
+    --destructive: #f56c6c;       --destructive-foreground: #ffffff;
+    --border: #ebeef5;            --input: #dcdfe6;            --ring: #2b7bff;
+    --radius-sm: 0.125rem; --radius-md: 0.25rem; --radius-lg: 0.5rem; --radius-xl: 0.75rem;
+    --font-sans: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    --shadow-xs: 0 1px 2px rgb(0 0 0 / .05);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / .1);
+  }
+}
+
+@layer base {
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: #ffffff;
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+}
+
+/* ==== library component CSS: button ==== */
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--font-sans);
+    line-height: 1;
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 150ms ease;
+    outline: none;
+    flex-shrink: 0;
+    height: 2.25rem;
+    padding: 0 1rem;
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+
+    & svg {
+      pointer-events: none;
+      flex-shrink: 0;
+
+      &:not([class*="size-"]) { width: 1rem; height: 1rem; }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &:disabled, &[aria-disabled="true"] {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    &[data-variant="default"] {
+      background-color: var(--primary);
+      color: var(--primary-foreground);
+
+      &:hover { opacity: 0.9; }
+    }
+
+    &[data-variant="secondary"] {
+      background-color: var(--secondary);
+      color: var(--secondary-foreground);
+
+      &:hover { opacity: 0.8; }
+    }
+
+    &[data-variant="outline"] {
+      background-color: var(--background);
+      color: var(--foreground);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-xs);
+
+      &:hover {
+        background-color: var(--accent);
+        color: var(--accent-foreground);
+      }
+    }
+
+    &[data-variant="ghost"] {
+      background-color: transparent;
+      color: var(--foreground);
+      border-color: transparent;
+
+      &:hover {
+        background-color: var(--accent);
+        color: var(--accent-foreground);
+      }
+    }
+
+    &[data-variant="destructive"] {
+      background-color: var(--destructive);
+      color: var(--destructive-foreground);
+
+      &:hover { opacity: 0.9; }
+    }
+
+    &[data-variant="link"] {
+      background-color: transparent;
+      color: var(--primary);
+      height: auto;
+      padding: 0;
+      text-underline-offset: 4px;
+
+      &:hover { text-decoration: underline; }
+    }
+
+    &[data-size="xs"]      { height: 1.75rem; padding: 0 0.5rem;  font-size: 0.75rem; border-radius: var(--radius-sm); }
+    &[data-size="sm"]      { height: 2rem;    padding: 0 0.75rem; font-size: 0.8125rem; }
+    &[data-size="lg"]      { height: 2.75rem; padding: 0 2rem;    font-size: 1rem; }
+    &[data-size="icon"]    { height: 2.25rem; width: 2.25rem;  padding: 0; }
+    &[data-size="icon-xs"] { height: 1.75rem; width: 1.75rem;  padding: 0; border-radius: var(--radius-sm); }
+    &[data-size="icon-sm"] { height: 2rem;    width: 2rem;     padding: 0; }
+    &[data-size="icon-lg"] { height: 2.75rem; width: 2.75rem;  padding: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn { transition: none; }
+  }
+}
+
+/* ==== library component CSS: badge ==== */
+@layer components {
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+    padding: 0.125rem 0.625rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    line-height: 1.5rem;
+
+    &[data-variant="outline"] {
+      border: 1px solid var(--border);
+      color: var(--muted-foreground);
+    }
+
+    &[data-variant="secondary"] {
+      background: var(--secondary);
+      color: var(--secondary-foreground);
+    }
+
+    &[data-variant="default"] {
+      background: var(--primary);
+      color: var(--primary-foreground);
+    }
+  }
+}
+
+/* ==== library component CSS: input ==== */
+@layer components {
+  .input {
+    height: 2.5rem;
+    width: 100%;
+    border: 1px solid var(--input);
+    border-radius: var(--radius-md);
+    background: var(--background);
+    padding: 0 0.75rem;
+    font-size: 0.875rem;
+    font-family: var(--font-sans);
+    color: var(--foreground);
+    outline: none;
+    box-shadow: var(--shadow-xs);
+    transition: border-color 150ms, box-shadow 150ms;
+
+    &:focus {
+      border-color: var(--ring);
+      box-shadow: 0 0 0 2px oklch(from var(--ring) l c h / 0.2);
+    }
+
+    &::placeholder { color: var(--muted-foreground); }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+/* ==== library component CSS: pagination ==== */
+@layer components {
+  .pagination { display: flex; justify-content: center; }
+  .pagination-list { display: flex; align-items: center; gap: 0.25rem; list-style: none; margin: 0; padding: 0; }
+  .pagination-link, .pagination-prev, .pagination-next {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 2.25rem; height: 2.25rem; padding-inline: 0.5rem;
+    border: 1px solid transparent; border-radius: var(--radius-md);
+    font-size: 0.875rem; color: var(--foreground); text-decoration: none;
+    cursor: pointer; outline: none;
+    transition: background-color 150ms ease, border-color 150ms ease; gap: 0.25rem;
+    &:hover { background-color: var(--accent); }
+    &:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+    & svg { width: 1rem; height: 1rem; flex-shrink: 0; }
+
+    &[aria-disabled="true"], &.disabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+  }
+  .pagination-prev, .pagination-next { padding-inline: 0.75rem; gap: 0.375rem; }
+  .pagination-active { border-color: var(--border); background-color: var(--background); font-weight: 500; }
+  .pagination-ellipsis {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 2.25rem; height: 2.25rem; color: var(--muted-foreground);
+  }
+}
+
+/* ==== library component CSS: tabs ==== */
+@layer components {
+  .tab-list {
+    display: inline-flex;
+    align-items: center;
+    background: var(--muted);
+    border-radius: var(--radius-lg);
+    padding: 0.25rem;
+    gap: 0.125rem;
+
+    &[data-variant="line"] {
+      background: transparent;
+      border-radius: 0;
+      padding: 0;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+
+      & .tab-trigger {
+        border-radius: 0;
+        padding: 0.5rem 1rem;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -1px;
+
+        &[aria-selected="true"] {
+          background: transparent;
+          color: var(--foreground);
+          border-bottom-color: var(--primary);
+          box-shadow: none;
+        }
+      }
+    }
+
+    &[aria-orientation="vertical"] {
+      flex-direction: column;
+      width: auto;
+
+      & .tab-trigger {
+        justify-content: flex-start;
+        width: 100%;
+      }
+    }
+  }
+
+  .tab-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: calc(var(--radius) * 0.6);
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: none;
+    background: transparent;
+    color: var(--muted-foreground);
+    cursor: pointer;
+    transition: all 150ms ease;
+    white-space: nowrap;
+    outline: none;
+
+    &[aria-selected="true"] {
+      background: var(--background);
+      color: var(--foreground);
+      box-shadow: 0 1px 3px oklch(0 0 0 / 0.08), 0 0 0 1px var(--border);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+  }
+
+  .tabs:has(.tab-list[aria-orientation="vertical"]) {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+
+    & > .tab-content {
+      margin-top: 0;
+      flex: 1;
+    }
+  }
+
+  .tab-content {
+    margin-top: 0.75rem;
+
+    &:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    &[hidden] { display: none; }
+  }
+}
+
+
+/* ================================================================
+   PAGE-LEVEL OVERRIDES (unlayered — win over @layer components)
+   ================================================================ */
+
+.page { max-width: 1600px; margin: 0 auto; padding: 20px; }
+
+/* ---- hero：我的积分卡 + 套餐选择 ---- */
+.hero { display: flex; flex-direction: column; gap: 12px; }
+
+/* 上：我的积分（橙色卡） */
+.balance-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  background: linear-gradient(118deg, #ffab48 0%, #ff8a24 45%, #fa6f0e 100%);
+  padding: 22px 28px 20px;
+  color: #ffffff;
+}
+.hero-deco { display: none; }
+.hero-inner { position: relative; z-index: 2; }
+.bc-label { font-size: 16px; font-weight: 500; color: rgba(255, 255, 255, 0.96); letter-spacing: 1px; }
+.balance { display: flex; align-items: flex-end; gap: 8px; margin-top: 6px; }
+.balance-num {
+  font-size: 46px;
+  font-weight: 600;
+  line-height: 1;
+  color: #ffffff;
+  letter-spacing: -1px;
+  font-variant-numeric: tabular-nums;
+}
+.balance-unit { font-size: 15px; color: rgba(255, 255, 255, 0.92); margin-bottom: 5px; line-height: 1; }
+.bc-note {
+  position: relative;
+  z-index: 2;
+  margin: 14px 0 0;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.7;
+  max-width: calc(100% - 150px);
+}
+.bc-link { color: #ffffff; cursor: pointer; text-decoration: none; border-bottom: 1px solid rgba(255, 255, 255, 0.55); padding-bottom: 1px; margin-left: 6px; }
+.bc-link:hover { border-bottom-color: #ffffff; }
+.bc-coin {
+  position: absolute;
+  right: 40px;
+  bottom: -22px;
+  width: 118px;
+  height: 118px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 33% 26%, #fff0bd 0%, #ffd977 42%, #f0a72c 100%);
+  box-shadow: inset 0 0 0 6px rgba(255, 255, 255, 0.32), 0 8px 20px rgba(176, 88, 0, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 46px;
+  font-weight: 700;
+  color: #cf8109;
+  z-index: 1;
+  user-select: none;
+}
+
+/* 下：套餐选择 */
+.pack-card {
+  border-radius: 8px;
+  border: 1px solid #ebeef5;
+  background: #ffffff;
+  padding: 16px 20px 14px;
+}
+.pack-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.pack-title { margin: 0; font-size: 16px; font-weight: 600; color: #333333; }
+.pack-sub { font-size: 12px; color: #909399; }
+.pack-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+.pack-item {
+  position: relative;
+  border: 1px solid #e4e7ed;
+  border-radius: 6px;
+  background: #ffffff;
+  padding: 20px 14px 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.pack-item:hover { border-color: #ffb27a; box-shadow: 0 2px 10px rgba(255, 120, 0, 0.08); }
+.pack-item.is-active {
+  border-color: #ff6a00;
+  background: #fffaf6;
+  box-shadow: 0 0 0 2px rgba(255, 106, 0, 0.12);
+}
+.pack-flag {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  height: 22px;
+  line-height: 22px;
+  padding: 0 10px;
+  border-radius: 6px 0 8px 0;
+  background: #ff6a00;
+  color: #ffffff;
+  font-size: 12.5px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.pack-pt {
+  display: block;
+  font-size: 22px;
+  font-weight: 600;
+  color: #ff5000;
+  line-height: 1.28;
+  font-variant-numeric: tabular-nums;
+}
+.pack-pt small { font-size: 13px; font-weight: 400; color: #b08a7a; margin-left: 4px; }
+.pack-price {
+  display: block;
+  margin-top: 8px;
+  font-size: 23px;
+  font-weight: 700;
+  color: #222222;
+  line-height: 1.25;
+  letter-spacing: -0.2px;
+  font-variant-numeric: tabular-nums;
+}
+.pack-price-alt {
+  font-size: 15px;
+  font-weight: 500;
+  color: #606266;
+  letter-spacing: 0;
+  line-height: 1.92;
+}
+.pack-item-more {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.pack-item-more .pack-pt { font-size: 22px; line-height: 1.3; }
+.pack-price del {
+  margin-left: 8px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #b8bcc4;
+}
+.pack-foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #f2f3f5;
+}
+.pack-tip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #c2410c;
+  line-height: 1.2;
+  background: linear-gradient(90deg, #fff3ea 0%, #fff8f4 100%);
+  border: 1px solid #ffd9c2;
+  border-radius: 999px;
+  padding: 7px 14px 7px 12px;
+}
+.pack-tip svg { width: 15px; height: 15px; color: #ff6a00; flex-shrink: 0; }
+.pack-tip em {
+  font-style: normal;
+  font-weight: 700;
+  color: #ff5000;
+  font-variant-numeric: tabular-nums;
+}
+.btn-buy {
+  flex-shrink: 0;
+  min-width: 168px;
+  height: 38px;
+  padding: 0 44px;
+  font-size: 14.5px;
+  border-radius: 4px;
+  gap: 8px;
+  white-space: nowrap;
+}
+.btn-buy svg { width: 16px; height: 16px; flex-shrink: 0; }
+.btn-orange { background: linear-gradient(90deg, #ff8f3c 0%, #ff5000 100%); color: #ffffff; }
+.btn-orange:hover { opacity: 0.92; }
+
+@media (max-width: 1180px) {
+  .pack-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  .pack-list { grid-template-columns: minmax(0, 1fr); }
+  .bc-note { max-width: none; }
+  .bc-coin { display: none; }
+}
+
+/* ---- content card ---- */
+.panel-card {
+  margin-top: 16px;
+  background: #ffffff;
+  border: 1px solid #ebeef5;
+  border-radius: 8px;
+  padding: 24px 32px 0;
+}
+.section-title { margin: 0; font-size: 18px; font-weight: 600; color: #333333; }
+.section-title::after {
+  content: "";
+  display: block;
+  width: 88px;
+  height: 3px;
+  border-radius: 2px;
+  background: #2b7bff;
+  margin-top: 10px;
+}
+
+/* ---- filter bar ---- */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 24px;
+  margin-top: 20px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #ebeef5;
+}
+.filter-item { display: inline-flex; align-items: center; gap: 8px; }
+.filter-label { font-size: 14px; color: #666666; white-space: nowrap; }
+
+.quick-tabs {
+  display: inline-flex;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #ffffff;
+}
+.qtab {
+  height: 32px;
+  padding: 0 16px;
+  border: none;
+  background: #ffffff;
+  color: #606266;
+  font-size: 13px;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease;
+}
+.qtab + .qtab { border-left: 1px solid #dcdfe6; }
+.qtab:hover { color: #2b7bff; }
+.qtab.is-active { background: #2b7bff; color: #ffffff; }
+
+/* ---- 日期范围选择器（shadcn 风格） ---- */
+.dp { position: relative; display: inline-flex; }
+.dp-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  min-width: 214px;
+  padding: 0 10px 0 11px;
+  box-sizing: border-box;
+  border: 1px solid #e4e4e7;
+  border-radius: 6px;
+  background: #ffffff;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: #71717a;
+  cursor: pointer;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.dp-trigger:hover { border-color: #d4d4d8; }
+.dp-trigger:focus-visible,
+.dp.is-open .dp-trigger {
+  outline: none;
+  border-color: #18181b;
+  box-shadow: 0 0 0 3px rgba(24, 24, 27, .08);
+}
+.dp.is-set .dp-trigger { color: #18181b; }
+.dp-ic { width: 14px; height: 14px; flex-shrink: 0; color: #71717a; }
+.dp-value {
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.dp-caret {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: #a1a1aa;
+  transition: transform .15s ease;
+}
+.dp.is-open .dp-caret { transform: rotate(180deg); }
+
+.dp-pop {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 60;
+  padding: 12px 12px 10px;
+  background: #ffffff;
+  border: 1px solid #e4e4e7;
+  border-radius: 8px;
+  box-shadow: 0 16px 40px -12px rgba(24, 24, 27, .18), 0 2px 8px rgba(24, 24, 27, .06);
+  animation: dpIn .14s ease;
+}
+@keyframes dpIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+.dp-head { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+.dp-nav {
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #71717a;
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease;
+}
+.dp-nav:hover { background: #f4f4f5; color: #18181b; }
+.dp-nav svg { width: 14px; height: 14px; }
+.dp-titles { display: flex; flex: 1; gap: 16px; }
+.dp-titles > span {
+  flex: 1;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #18181b;
+}
+.dp-body { display: flex; gap: 16px; }
+.dp-m { width: 224px; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
+.dp-m th {
+  width: 32px;
+  height: 26px;
+  padding: 0;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #a1a1aa;
+  text-align: center;
+}
+.dp-m td { padding: 0; text-align: center; }
+.dp-day {
+  width: 32px;
+  height: 30px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  color: #18181b;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: background .12s ease;
+}
+.dp-day:hover { background: #f4f4f5; }
+.dp-day.is-out { color: #d4d4d8; }
+.dp-day.is-today { box-shadow: inset 0 0 0 1px #d4d4d8; }
+.dp-day.is-edge { background: #18181b; color: #ffffff; }
+.dp-day.is-edge:hover { background: #18181b; }
+.dp-m td.dp-in-range { background: #f4f4f5; }
+.dp-m td.dp-in-range .dp-day:hover { background: #e4e4e7; }
+.dp-m td.dp-range-start { border-radius: 6px 0 0 6px; }
+.dp-m td.dp-range-end { border-radius: 0 6px 6px 0; }
+.dp-m td.dp-range-start.dp-range-end { border-radius: 6px; }
+.dp-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #f4f4f5;
+}
+.dp-hint { font-size: 12px; color: #a1a1aa; font-variant-numeric: tabular-nums; }
+.dp-acts { display: inline-flex; gap: 8px; }
+.dp-btn {
+  height: 28px;
+  padding: 0 12px;
+  border: 1px solid #e4e4e7;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #18181b;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease;
+}
+.dp-btn:hover { background: #f4f4f5; }
+.dp-btn-dark { background: #18181b; border-color: #18181b; color: #ffffff; }
+.dp-btn-dark:hover { background: #27272a; border-color: #27272a; }
+
+.pts-select {
+  height: 32px;
+  width: 132px;
+  font-size: 13px;
+  padding: 0 8px;
+  border-radius: 4px;
+  border: 1px solid #dcdfe6;
+  background: #ffffff;
+  color: #333333;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  outline: none;
+}
+.pts-select:focus { border-color: #2b7bff; }
+
+.filter-actions { display: inline-flex; align-items: center; gap: 12px; margin-left: auto; }
+.filter-actions .btn { height: 32px; padding: 0 18px; font-size: 13px; border-radius: 4px; }
+.btn-primary { background: #2b7bff; color: #ffffff; }
+.btn-primary:hover { background: #1a6bee; }
+.btn-plain { background: #ffffff; color: #606266; border: 1px solid #dcdfe6; }
+.btn-plain:hover { color: #2b7bff; border-color: #2b7bff; }
+
+/* ---- table ---- */
+.pts-table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+.pts-table th {
+  text-align: left;
+  background: #f5f7fa;
+  color: #606266;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 16px;
+  border-bottom: 1px solid #ebeef5;
+  white-space: nowrap;
+}
+.pts-table td {
+  padding: 15px 16px;
+  font-size: 14px;
+  color: #333333;
+  border-bottom: 1px solid #ebeef5;
+  vertical-align: middle;
+}
+.pts-table tbody tr { transition: background .15s ease; }
+.pts-table tbody tr:hover { background: #f7faff; }
+.pts-table tbody tr:last-child td { border-bottom: none; }
+.col-time { white-space: nowrap; color: #606266; }
+.col-delta { white-space: nowrap; font-weight: 600; }
+.col-delta.plus { color: #2b7bff; }
+.col-delta.minus { color: #333333; }
+.col-remain { white-space: nowrap; }
+.col-reason { display: flex; align-items: center; gap: 8px; min-height: 22px; }
+
+/* badge */
+.badge { border-radius: 2px; padding: 0 8px; font-size: 12px; line-height: 20px; font-weight: 400; display: inline-block; flex-shrink: 0; }
+.badge[data-variant="tag-red"]    { background: #feeeee; color: #f56c6c; }
+.badge[data-variant="tag-green"]  { background: #e9f7ea; color: #67c23a; }
+.badge[data-variant="tag-blue"]   { background: #e8f1ff; color: #409eff; }
+.badge[data-variant="tag-gray"]   { background: #f4f4f5; color: #909399; }
+/* 中性标签：无强调色，仅浅描边 */
+.badge[data-variant="tag-plain"]  { background: #ffffff; color: #606266; border: 1px solid #e4e7ed; line-height: 18px; }
+
+.empty { padding: 64px 0; text-align: center; color: #999999; font-size: 14px; }
+
+/* footer + pagination */
+.list-footer {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  border-top: 1px solid #ebeef5; padding: 18px 0 22px;
+}
+.total { font-size: 14px; color: #666666; }
+.pagination { justify-content: flex-end; }
+.pagination-list { gap: 8px; }
+.pagination-link, .pagination-prev, .pagination-next {
+  height: 32px; min-width: 32px; padding-inline: 8px;
+  border: 1px solid #dcdfe6; border-radius: 4px;
+  background: #ffffff; color: #606266; font-size: 13px;
+}
+.pagination-link:hover, .pagination-prev:hover, .pagination-next:hover {
+  background: #ffffff; border-color: #2b7bff; color: #2b7bff;
+}
+.pagination-link.pag-text { background: #f4f4f5; border-color: #f4f4f5; padding-inline: 12px; }
+.pagination-link.pag-text:hover { background: #f4f4f5; border-color: #f4f4f5; color: #2b7bff; }
+.pagination-active, .pagination-active:hover {
+  border-color: #2b7bff; color: #2b7bff; background: #ffffff; font-weight: 500;
+}
+.pagination-ellipsis { width: 32px; height: 32px; color: #909399; }
+
+/* back to top */
+.back-top {
+  position: fixed; right: 60px; bottom: 100px;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: #ffffff; border: none; cursor: pointer;
+  box-shadow: 0 4px 16px rgba(31, 45, 61, 0.15);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden; transition: opacity .2s, visibility .2s;
+  z-index: 50;
+}
+.back-top.show { opacity: 1; visibility: visible; }
+.back-top:hover { box-shadow: 0 6px 20px rgba(31, 45, 61, 0.22); }
+
+/* toast */
+.toast {
+  position: fixed; left: 50%; bottom: 80px; transform: translate(-50%, 12px);
+  background: rgba(48, 49, 51, .92); color: #ffffff;
+  font-size: 13px; padding: 10px 18px; border-radius: 4px;
+  opacity: 0; visibility: hidden; transition: all .2s ease; z-index: 99;
+  max-width: 80%;
+}
+.toast.show { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+
+/* 版本徽标 */
+.version-badge { position: fixed; right: 16px; bottom: 14px; z-index: 40; font-size: 11px; color: #999; background: rgba(255,255,255,.8); border: 1px solid #ebeef5; border-radius: 999px; padding: 2px 10px; letter-spacing: .5px; user-select: none; }
+
+/* 窄屏 */
+@media (max-width: 900px) {
+  .filter-actions { margin-left: 0; }
+  .date-input { width: 126px; }
+  .dp-trigger { min-width: 190px; }
+  .dp-titles { gap: 10px; }
+  .dp-body { gap: 12px; }
+  .pts-table th, .pts-table td { padding: 12px; }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <!-- ===================== hero ===================== -->
+  <header class="hero">
+    <!-- 上：我的积分 -->
+    <section class="balance-card">
+      <div class="hero-inner">
+        <div class="bc-label">我的积分</div>
+        <div class="balance">
+          <span class="balance-num" id="balance-num">2687</span>
+          <span class="balance-unit">积分</span>
+        </div>
+        <p class="bc-note">可用于解锁企业画像、查看联系方式、批量导出数据等增值服务</p>
+      </div>
+      <span class="bc-coin" aria-hidden="true">¥</span>
+    </section>
+
+    <!-- 下：套餐选择 -->
+    <section class="pack-card">
+      <div class="pack-head">
+        <h2 class="pack-title">套餐选择</h2>
+      </div>
+      <div class="pack-list" id="pack-list">
+        <div class="pack-item is-active" data-pt="10000" data-price="1000">
+          <span class="pack-pt">10000<small>积分</small></span>
+          <span class="pack-price">¥1000</span>
+        </div>
+        <div class="pack-item" data-pt="35000" data-price="3000">
+          <span class="pack-flag">赠 5000 积分</span>
+          <span class="pack-pt">35000<small>积分</small></span>
+          <span class="pack-price">¥3000<del>¥3500</del></span>
+        </div>
+        <div class="pack-item" data-pt="60000" data-price="5000">
+          <span class="pack-flag">赠 10000 积分</span>
+          <span class="pack-pt">60000<small>积分</small></span>
+          <span class="pack-price">¥5000<del>¥6000</del></span>
+        </div>
+        <div class="pack-item pack-item-more" data-more="1">
+          <span class="pack-pt">更多套餐</span>
+        </div>
+      </div>
+      <div class="pack-foot">
+        <button class="btn btn-orange btn-buy" id="buy-btn">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/>
+            <path d="M2.05 2h2.95l3.2 12.6a2 2 0 0 0 2 1.4h7.7a2 2 0 0 0 2-1.6L21.5 7H6"/>
+          </svg>
+          <span id="buy-btn-text">购买</span>
+        </button>
+        <span class="pack-tip">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="8" width="18" height="4" rx="1"/>
+            <path d="M12 12v9"/>
+            <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/>
+            <path d="M12 8S10.6 3 8.1 3a2.5 2.5 0 0 0 0 5H12zM12 8s1.4-5 3.9-5a2.5 2.5 0 0 1 0 5H12z"/>
+          </svg>
+          <span>单笔满 <em>¥3000</em> 享额外赠送，支持对公转账与开票</span>
+        </span>
+      </div>
+    </section>
+  </header>
+
+  <!-- ===================== 积分记录 ===================== -->
+  <section class="panel-card">
+    <h2 class="section-title">积分记录</h2>
+
+    <div class="filter-bar">
+      <div class="filter-item">
+        <span class="filter-label">时间段</span>
+        <div class="quick-tabs" id="quick-tabs">
+          <button class="qtab is-active" data-days="0">全部</button>
+          <button class="qtab" data-days="7">近7天</button>
+          <button class="qtab" data-days="30">近30天</button>
+          <button class="qtab" data-days="90">近3个月</button>
+        </div>
+      </div>
+
+      <div class="filter-item">
+        <span class="filter-label">自定义</span>
+        <input type="hidden" id="date-start" value="">
+        <input type="hidden" id="date-end" value="">
+        <div class="dp" id="dp">
+          <button type="button" class="dp-trigger" id="dp-trigger" aria-haspopup="dialog" aria-expanded="false">
+            <svg class="dp-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span class="dp-value" id="dp-value">选择日期范围</span>
+            <svg class="dp-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="dp-pop" id="dp-pop" role="dialog" aria-label="选择日期范围" hidden>
+            <div class="dp-head">
+              <button type="button" class="dp-nav" data-nav="-1" aria-label="上两个月">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              <div class="dp-titles"><span id="dp-title-0"></span><span id="dp-title-1"></span></div>
+              <button type="button" class="dp-nav" data-nav="1" aria-label="下两个月">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
+            <div class="dp-body" id="dp-body"></div>
+            <div class="dp-foot">
+              <span class="dp-hint" id="dp-hint">请选择开始日期</span>
+              <div class="dp-acts">
+                <button type="button" class="dp-btn" id="dp-clear">清除</button>
+                <button type="button" class="dp-btn dp-btn-dark" id="dp-confirm">确定</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-item">
+        <span class="filter-label">类型</span>
+        <select class="pts-select" id="type-select" aria-label="记录类型">
+          <option value="">全部类型</option>
+          <option value="consume">消费</option>
+          <option value="recharge">充值</option>
+          <option value="gift">赠送</option>
+        </select>
+      </div>
+
+      <div class="filter-actions">
+        <button class="btn btn-primary" id="apply-btn">查询</button>
+        <button class="btn btn-plain" id="reset-btn">重置</button>
+      </div>
+    </div>
+
+    <table class="pts-table">
+      <thead>
+        <tr>
+          <th style="width:210px">操作时间</th>
+          <th style="width:140px">积分变化</th>
+          <th style="width:140px">积分剩余</th>
+          <th>操作原因</th>
+        </tr>
+      </thead>
+      <tbody id="pts-body"></tbody>
+    </table>
+
+    <div class="list-footer">
+      <span class="total" id="total">共 0 条</span>
+      <nav class="pagination" aria-label="Pagination"><ul class="pagination-list" id="pag"></ul></nav>
+    </div>
+  </section>
+</div>
+
+<button class="back-top" id="back-top" aria-label="回到顶部">
+  <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2b7bff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m6 15 6-6 6 6"/>
+  </svg>
+</button>
+
+<div class="toast" id="toast"></div>
+
+<!-- ==== page logic ==== -->
+<script>
+(function () {
+  'use strict';
+
+  var PER = 10;
+
+  /* ---------- mock data：时间 / 变化 / 类型 / 原因 ---------- */
+  var RAW = [
+    ['2026-11-09 10:24:00', -10, 'consume',  '解锁「山东润维信息技术有限公司」全维度工商信息'],
+    ['2026-11-08 16:02:00', -10, 'consume',  '解锁「西安凯歌智能工程有限公司」全维度工商信息'],
+    ['2026-11-07 09:41:00', -10, 'consume',  '解锁「宁波胜达高科信息有限公司」联系方式'],
+    ['2026-11-05 15:18:00', -10, 'consume',  '解锁「成都中科合迅科技有限公司」企业报告'],
+    ['2026-11-05 09:30:00',  20, 'gift',     '邀请同事注册赠送'],
+    ['2026-11-03 14:07:00', -10, 'consume',  '解锁「数创智城（上海）科技有限公司」企业报告'],
+    ['2026-11-02 11:52:00', 2000, 'recharge', '积分加油包充值'],
+    ['2026-11-01 17:26:00', -10, 'consume',  '解锁「北海市如丰贸易有限公司」全维度工商信息'],
+    ['2026-10-30 10:05:00', -10, 'consume',  '解锁「金华启创建设有限公司」联系方式'],
+    ['2026-10-28 15:44:00', -10, 'consume',  '解锁「淮安市淮阴区啸达水运服务有限公司」企业报告'],
+    ['2026-10-27 09:12:00',  10, 'gift',     '新人体验积分赠送'],
+    ['2026-10-26 16:33:00', -10, 'consume',  '解锁「上海同为电子有限公司」全维度工商信息'],
+    ['2026-10-24 14:20:00', -10, 'consume',  '解锁「杭州云启数字技术有限公司」企业报告'],
+    ['2026-10-23 10:48:00',  500, 'recharge', '积分加油包充值'],
+    ['2026-10-21 09:36:00', -10, 'consume',  '解锁「苏州立衡精密机械有限公司」联系方式'],
+    ['2026-10-20 16:11:00', -10, 'consume',  '批量查询企业工商信息扣减'],
+    ['2026-10-18 11:02:00', -10, 'consume',  '解锁「青岛海纳德智能装备有限公司」企业报告'],
+    ['2026-10-16 15:57:00',  30, 'gift',     '活动奖励积分'],
+    ['2026-10-14 09:23:00', -10, 'consume',  '解锁「长沙智联信息技术有限公司」全维度工商信息'],
+    ['2026-10-12 14:39:00', -10, 'consume',  '解锁「郑州汇通工程咨询有限公司」联系方式'],
+    ['2026-10-09 10:15:00', -10, 'consume',  '解锁「广州市南沙区建设投资有限公司」企业报告'],
+    ['2026-10-08 16:48:00',  100, 'recharge', '积分加油包充值'],
+    ['2026-09-30 11:31:00', -10, 'consume',  '解锁「天津滨海新区科技发展有限公司」企业报告'],
+    ['2026-09-25 15:06:00', -10, 'consume',  '解锁「南京麒麟智慧科技有限公司」联系方式'],
+    ['2026-09-22 10:42:00',  20, 'gift',     '邀请同事注册赠送'],
+    ['2026-09-18 14:28:00', -10, 'consume',  '解锁「武汉光谷智联科技有限公司」全维度工商信息'],
+    ['2026-09-15 09:54:00',  100, 'recharge', '积分加油包充值']
+  ];
+
+  var TYPE_META = {
+    consume:  { label: '消费', variant: 'tag-plain' },
+    recharge: { label: '充值', variant: 'tag-green' },
+    gift:     { label: '赠送', variant: 'tag-blue' }
+  };
+
+  /* 由最新记录倒推每条记录的剩余积分 */
+  var BALANCE_NOW = 2687;
+  var DATA = (function () {
+    var out = [], remain = BALANCE_NOW;
+    RAW.forEach(function (r, i) {
+      out.push({ time: r[0], delta: r[1], type: r[2], reason: r[3], remain: remain, idx: i });
+      remain = remain - r[1];
+    });
+    return out;
+  })();
+
+  var state = { days: 0, start: '', end: '', type: '', page: 1, list: DATA.slice() };
+
+  var bodyEl = document.getElementById('pts-body');
+  var totalEl = document.getElementById('total');
+  var pagEl = document.getElementById('pag');
+  var toastEl = document.getElementById('toast');
+  var toastTimer = null;
+
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function showToast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 2200);
+  }
+
+  function todayStr() {
+    var d = new Date();
+    function p(n) { return n < 10 ? '0' + n : '' + n; }
+    return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+  }
+
+  function addDays(str, n) {
+    var p = str.split('-');
+    var d = new Date(+p[0], +p[1] - 1, +p[2]);
+    d.setDate(d.getDate() + n);
+    function q(v) { return v < 10 ? '0' + v : '' + v; }
+    return d.getFullYear() + '-' + q(d.getMonth() + 1) + '-' + q(d.getDate());
+  }
+
+  /* ---------- filter ---------- */
+  function filterData() {
+    var start = state.start, end = state.end;
+    if (!start && !end && state.days > 0) {
+      end = todayStr();
+      start = addDays(end, -(state.days - 1));
+    }
+    return DATA.filter(function (it) {
+      var d = it.time.slice(0, 10);
+      if (start && d < start) return false;
+      if (end && d > end) return false;
+      if (state.type && it.type !== state.type) return false;
+      return true;
+    });
+  }
+
+  function pagHTML(cur, total) {
+    var html = '';
+    html += '<li><a class="pagination-link pag-text" href="#" data-page="home"' + (cur === 1 ? ' aria-disabled="true"' : '') + '>首页</a></li>';
+    html += '<li><a class="pagination-link pag-text" href="#" data-page="prev"' + (cur === 1 ? ' aria-disabled="true"' : '') + '>上一页</a></li>';
+    var s = total <= 10 ? 1 : Math.max(1, Math.min(cur - 4, total - 9));
+    var e = Math.min(total, s + 9);
+    if (s > 1) {
+      html += '<li><a class="pagination-link" href="#" data-page="1">1</a></li>';
+      html += '<li><span class="pagination-ellipsis" aria-hidden="true">&hellip;</span></li>';
+    }
+    for (var p = s; p <= e; p++) {
+      if (p === cur) html += '<li><a class="pagination-link pagination-active" href="#" data-page="' + p + '" aria-current="page">' + p + '</a></li>';
+      else html += '<li><a class="pagination-link" href="#" data-page="' + p + '">' + p + '</a></li>';
+    }
+    if (e < total) {
+      html += '<li><span class="pagination-ellipsis" aria-hidden="true">&hellip;</span></li>';
+      html += '<li><a class="pagination-link" href="#" data-page="' + total + '">' + total + '</a></li>';
+    }
+    html += '<li><a class="pagination-link pag-text" href="#" data-page="next"' + (cur === total ? ' aria-disabled="true"' : '') + '>下一页</a></li>';
+    return html;
+  }
+
+  function rowHTML(it) {
+    var meta = TYPE_META[it.type] || { label: '其他', variant: 'tag-gray' };
+    var sign = it.delta > 0 ? '+' : '';
+    var cls = it.delta > 0 ? 'plus' : 'minus';
+    return '<tr>' +
+      '<td class="col-time">' + esc(it.time) + '</td>' +
+      '<td class="col-delta ' + cls + '">' + sign + it.delta + '</td>' +
+      '<td class="col-remain">' + it.remain + '</td>' +
+      '<td><span class="col-reason"><span class="badge" data-variant="' + meta.variant + '">' + meta.label + '</span>' + esc(it.reason) + '</span></td>' +
+      '</tr>';
+  }
+
+  function render() {
+    state.list = filterData();
+    var totalPages = Math.max(1, Math.ceil(state.list.length / PER));
+    if (state.page > totalPages) state.page = totalPages;
+    var items = state.list.slice((state.page - 1) * PER, state.page * PER);
+
+    bodyEl.innerHTML = items.length
+      ? items.map(rowHTML).join('')
+      : '<tr><td colspan="4"><div class="empty">暂无符合条件的积分记录</div></td></tr>';
+    totalEl.textContent = '共 ' + state.list.length + ' 条';
+    pagEl.innerHTML = state.list.length ? pagHTML(state.page, totalPages) : '';
+  }
+
+  /* ---------- 日期范围选择器（shadcn 风格，双月面板） ---------- */
+  var dpEl = document.getElementById('dp');
+  var dpPop = document.getElementById('dp-pop');
+  var dpTrigger = document.getElementById('dp-trigger');
+  var dpValueEl = document.getElementById('dp-value');
+  var dpBody = document.getElementById('dp-body');
+  var dpHint = document.getElementById('dp-hint');
+  var dpTitle0 = document.getElementById('dp-title-0');
+  var dpTitle1 = document.getElementById('dp-title-1');
+  var elStart = document.getElementById('date-start');
+  var elEnd = document.getElementById('date-end');
+  var WEEK_CN = ['一', '二', '三', '四', '五', '六', '日'];
+  var dpView = { y: new Date().getFullYear(), m: new Date().getMonth() };
+  var dpSel = { start: null, end: null };
+  var dpHover = null;
+
+  function dpPad(n) { return (n < 10 ? '0' : '') + n; }
+  function dpFmt(d) { return d.getFullYear() + '-' + dpPad(d.getMonth() + 1) + '-' + dpPad(d.getDate()); }
+  function dpParse(s) {
+    if (!s) return null;
+    var p = String(s).split('-');
+    if (p.length !== 3) return null;
+    return new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10));
+  }
+  function dpAddMonth(v, n) {
+    var d = new Date(v.y, v.m + n, 1);
+    return { y: d.getFullYear(), m: d.getMonth() };
+  }
+  function dpMonthCells(mm) {
+    var first = new Date(mm.y, mm.m, 1);
+    var offset = (first.getDay() + 6) % 7;   /* 周一为一周起点 */
+    var cursor = new Date(mm.y, mm.m, 1 - offset);
+    var arr = [];
+    for (var i = 0; i < 42; i++) {
+      arr.push(new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate() + i));
+    }
+    return arr;
+  }
+  function dpRange() {
+    if (!dpSel.start) return null;
+    var a = dpSel.start;
+    var b = dpSel.end || dpHover || dpSel.start;
+    return a <= b ? { s: a, e: b } : { s: b, e: a };
+  }
+  function dpMonthHTML(mm) {
+    var cells = dpMonthCells(mm);
+    var today = dpFmt(new Date());
+    var rg = dpRange();
+    var h = '<table class="dp-m"><thead><tr>';
+    for (var k = 0; k < 7; k++) h += '<th>' + WEEK_CN[k] + '</th>';
+    h += '</tr></thead><tbody>';
+    for (var r = 0; r < 6; r++) {
+      h += '<tr>';
+      for (var c = 0; c < 7; c++) {
+        var d = cells[r * 7 + c];
+        var ds = dpFmt(d);
+        var tdCls = [];
+        var dayCls = ['dp-day'];
+        if (d.getMonth() !== mm.m) dayCls.push('is-out');
+        if (ds === today) dayCls.push('is-today');
+        if (rg && ds >= rg.s && ds <= rg.e) {
+          tdCls.push('dp-in-range');
+          if (ds === rg.s) tdCls.push('dp-range-start');
+          if (ds === rg.e) tdCls.push('dp-range-end');
+          if (ds === rg.s || ds === rg.e) dayCls.push('is-edge');
+        }
+        h += '<td class="' + tdCls.join(' ') + '">' +
+          '<button type="button" class="' + dayCls.join(' ') + '" data-date="' + ds + '">' +
+          d.getDate() + '</button></td>';
+      }
+      h += '</tr>';
+    }
+    h += '</tbody></table>';
+    return h;
+  }
+  function dpRender() {
+    var m0 = dpView;
+    var m1 = dpAddMonth(dpView, 1);
+    dpTitle0.textContent = m0.y + '年' + (m0.m + 1) + '月';
+    dpTitle1.textContent = m1.y + '年' + (m1.m + 1) + '月';
+    dpBody.innerHTML = dpMonthHTML(m0) + dpMonthHTML(m1);
+    if (!dpSel.start) dpHint.textContent = '请选择开始日期';
+    else if (!dpSel.end) dpHint.textContent = '请选择结束日期';
+    else dpHint.textContent = dpSel.start + ' 至 ' + dpSel.end;
+  }
+  function syncDateFields() {
+    var s = elStart.value;
+    var e2 = elEnd.value;
+    if (s && e2) dpValueEl.textContent = s + ' ~ ' + e2;
+    else if (s) dpValueEl.textContent = s + ' ~';
+    else dpValueEl.textContent = '选择日期范围';
+    dpEl.classList.toggle('is-set', !!(s || e2));
+  }
+  function dpOpen() {
+    dpSel = { start: elStart.value || null, end: elEnd.value || null };
+    dpHover = null;
+    var base = dpParse(dpSel.start) || new Date();
+    dpView = { y: base.getFullYear(), m: base.getMonth() };
+    dpRender();
+    dpPop.hidden = false;
+    dpEl.classList.add('is-open');
+    dpTrigger.setAttribute('aria-expanded', 'true');
+    /* 视口右侧空间不足时改为右对齐，避免横向溢出 */
+    dpPop.style.left = '';
+    dpPop.style.right = '';
+    var pRect = dpPop.getBoundingClientRect();
+    var vw = document.documentElement.clientWidth;
+    if (pRect.right > vw - 8) {
+      dpPop.style.right = '0';
+      dpPop.style.left = 'auto';
+    }
+    document.addEventListener('mousedown', dpOutside, true);
+  }
+  function dpClose() {
+    if (dpPop.hidden) return;
+    dpPop.hidden = true;
+    dpEl.classList.remove('is-open');
+    dpTrigger.setAttribute('aria-expanded', 'false');
+    document.removeEventListener('mousedown', dpOutside, true);
+  }
+  function dpOutside(e) {
+    if (!dpEl.contains(e.target)) dpClose();
+  }
+  function dpApplyRange(s, e2) {
+    elStart.value = s || '';
+    elEnd.value = e2 || '';
+    syncDateFields();
+    Array.prototype.forEach.call(document.querySelectorAll('.qtab'), function (x) { x.classList.remove('is-active'); });
+    state.start = elStart.value;
+    state.end = elEnd.value;
+    state.days = 0;
+    state.type = document.getElementById('type-select').value;
+    state.page = 1;
+    render();
+  }
+
+  dpTrigger.addEventListener('click', function (ev) {
+    ev.stopPropagation();
+    if (dpPop.hidden) dpOpen(); else dpClose();
+  });
+  dpEl.addEventListener('click', function (e2) {
+    var nav = e2.target.closest('.dp-nav');
+    if (nav) {
+      dpView = dpAddMonth(dpView, parseInt(nav.getAttribute('data-nav'), 10) * 1);
+      dpRender();
+    }
+  });
+  dpBody.addEventListener('click', function (e2) {
+    var btn = e2.target.closest('.dp-day');
+    if (!btn) return;
+    var ds = btn.getAttribute('data-date');
+    if (!dpSel.start || dpSel.end) {
+      dpSel.start = ds;
+      dpSel.end = null;
+    } else if (ds < dpSel.start) {
+      dpSel.end = dpSel.start;
+      dpSel.start = ds;
+    } else {
+      dpSel.end = ds;
+    }
+    dpHover = null;
+    dpRender();
+  });
+  dpBody.addEventListener('mouseover', function (e2) {
+    var btn = e2.target.closest('.dp-day');
+    if (!btn || !dpSel.start || dpSel.end) return;
+    var ds = btn.getAttribute('data-date');
+    if (ds === dpHover) return;
+    dpHover = ds;
+    dpRender();
+  });
+  document.getElementById('dp-clear').addEventListener('click', function () {
+    dpSel = { start: null, end: null };
+    dpHover = null;
+    dpRender();
+    dpClose();
+    dpApplyRange('', '');
+  });
+  document.getElementById('dp-confirm').addEventListener('click', function () {
+    if (!dpSel.start) { showToast('请先选择开始日期'); return; }
+    var s = dpSel.start;
+    var e2 = dpSel.end || dpSel.start;
+    dpClose();
+    dpApplyRange(s, e2);
+  });
+  document.addEventListener('keydown', function (e2) {
+    if (e2.key === 'Escape' && !dpPop.hidden) dpClose();
+  });
+  syncDateFields();
+
+  /* ---------- events ---------- */
+  document.getElementById('quick-tabs').addEventListener('click', function (e) {
+    var b = e.target.closest('.qtab');
+    if (!b) return;
+    Array.prototype.forEach.call(this.querySelectorAll('.qtab'), function (x) { x.classList.remove('is-active'); });
+    b.classList.add('is-active');
+    state.days = parseInt(b.dataset.days, 10) || 0;
+    document.getElementById('date-start').value = '';
+    document.getElementById('date-end').value = '';
+    syncDateFields();
+    state.start = state.end = '';
+    state.page = 1;
+    render();
+  });
+
+  document.getElementById('type-select').addEventListener('change', function () {
+    state.type = this.value;
+    state.page = 1;
+    render();
+  });
+
+  document.getElementById('apply-btn').addEventListener('click', function () {
+    var s = document.getElementById('date-start').value;
+    var e2 = document.getElementById('date-end').value;
+    if (s && e2 && s > e2) { showToast('开始日期不能晚于结束日期'); return; }
+    state.start = s;
+    state.end = e2;
+    if (s || e2) {
+      state.days = 0;
+      Array.prototype.forEach.call(document.querySelectorAll('.qtab'), function (x) { x.classList.remove('is-active'); });
+    }
+    state.type = document.getElementById('type-select').value;
+    state.page = 1;
+    render();
+  });
+
+  document.getElementById('reset-btn').addEventListener('click', function () {
+    state = { days: 0, start: '', end: '', type: '', page: 1, list: DATA.slice() };
+    document.getElementById('date-start').value = '';
+    document.getElementById('date-end').value = '';
+    syncDateFields();
+    document.getElementById('type-select').value = '';
+    Array.prototype.forEach.call(document.querySelectorAll('.qtab'), function (x) {
+      x.classList.toggle('is-active', x.dataset.days === '0');
+    });
+    render();
+  });
+
+  pagEl.addEventListener('click', function (e) {
+    var a = e.target.closest('a');
+    if (!a) return;
+    e.preventDefault();
+    if (a.getAttribute('aria-disabled') === 'true') return;
+    var max = Math.max(1, Math.ceil(state.list.length / PER));
+    var p = a.dataset.page, cur = state.page;
+    if (p === 'home') cur = 1;
+    else if (p === 'prev') cur = Math.max(1, cur - 1);
+    else if (p === 'next') cur = Math.min(max, cur + 1);
+    else cur = parseInt(p, 10);
+    if (cur === state.page) return;
+    state.page = cur;
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* 套餐档位选择 */
+  var packList = document.getElementById('pack-list');
+  var buyBtnText = document.getElementById('buy-btn-text');
+  var curPack = { pt: 10000, price: 1000 };
+  if (packList) {
+    packList.addEventListener('click', function (e) {
+      var item = e.target.closest('.pack-item');
+      if (!item) return;
+      Array.prototype.forEach.call(packList.querySelectorAll('.pack-item'), function (x) {
+        x.classList.toggle('is-active', x === item);
+      });
+      if (item.hasAttribute('data-more')) {
+        curPack = { more: true };
+        buyBtnText.textContent = '购买';
+      } else {
+        curPack = { pt: item.getAttribute('data-pt'), price: item.getAttribute('data-price') };
+        buyBtnText.textContent = '购买';
+      }
+    });
+  }
+
+  document.getElementById('buy-btn').addEventListener('click', function () {
+    if (curPack.more) {
+      showToast('正在为你打开专属套餐通道，请稍候');
+      return;
+    }
+    showToast('正在前往积分购买页：' + curPack.pt + ' 积分 / ¥' + curPack.price + '，支付后立即到账，可跨场景通用');
+  });
+
+  /* 跳转到积分明细 */
+  var viewRecords = document.getElementById('view-records');
+  if (viewRecords) {
+    viewRecords.addEventListener('click', function (e) {
+      e.preventDefault();
+      var card = document.querySelector('.panel-card');
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  /* back to top */
+  var backTop = document.getElementById('back-top');
+  window.addEventListener('scroll', function () {
+    backTop.classList.toggle('show', window.scrollY > 300);
+  }, { passive: true });
+  backTop.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  render();
+})();
+</script>
+
+<div class="version-badge">v3.14.1</div>
+</body>
+</html>

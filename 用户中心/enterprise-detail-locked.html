@@ -5,6 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>企业详情（积分解锁演示） - 360度企业全景画像分析</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%237c3aed'/%3E%3Ctext%20x='32'%20y='45'%20text-anchor='middle'%20font-size='40'%20font-weight='700'%20fill='%23ffffff'%20font-family='Microsoft%20YaHei,sans-serif'%3E%E5%B1%BF%3C/text%3E%3C/svg%3E">
 <style>
 @layer tokens, base, components;
 
@@ -228,6 +229,12 @@
 .lock-digits .d { min-width: 34px; padding: 5px 0; border: 2px dashed #ffb35c; border-radius: 6px; background: #ffffff; font-size: 22px; font-weight: 800; color: #ff5000; }
 .lock-digits .u { font-size: 13px; color: #666666; }
 .lock-note { margin: 12px 0 0; font-size: 12px; color: #999999; }
+/* 积分购买引导：与说明文案同行两端对齐 */
+.lock-note-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; }
+.lock-note-row .lock-note { margin: 0; }
+.lock-buy { display: inline-flex; align-items: center; gap: 2px; flex-shrink: 0; font-size: 12px; line-height: 1; color: #2b7bff; text-decoration: none; cursor: pointer; }
+.lock-buy:hover { text-decoration: underline; }
+.lock-buy svg { width: 11px; height: 11px; }
 .btn-unlock {
   margin-top: 16px; height: 44px; padding: 0 40px; border: none; border-radius: 8px;
   background: linear-gradient(90deg, #ff8f3c 0%, #ff5000 100%); color: #ffffff;
@@ -597,7 +604,12 @@
         '<h3>解锁「' + name.trim() + '」全维度工商信息</h3>' +
         '<p class="lock-sub">解锁全维度工商信息 · 账户剩余积分：</p>' +
         '<div class="lock-digits" id="lock-digits"><span class="d">5</span><span class="d">0</span><span class="u">积分</span></div>' +
-        '<p class="lock-note">解锁后有效期内不会重复扣分</p>' +
+        '<div class="lock-note-row">' +
+      '<span class="lock-note">解锁后有效期内不会重复扣分</span>' +
+      '<a class="lock-buy" href="javascript:;" id="buy-points">积分不足？购买积分' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>' +
+      '</a>' +
+      '</div>' +
         '<button class="btn-unlock" id="unlock-btn">使用 10 积分 立即解锁</button>' +
       '</div>' +
     '</div>';
@@ -638,8 +650,20 @@
     if (box) box.innerHTML = bodyHTML(s, cur);
   });
 
+  /* 跳转到积分余额页（iframe 内先通知 sidebar 切页并同步面包屑，顶层直接跳转兜底） */
+  function gotoPoints() {
+    try { window.top.postMessage({ type: 'bidcenter-nav', page: 'points.html', title: '积分余额' }, '*'); } catch (err) {}
+    setTimeout(function () { location.href = 'points.html'; }, 300);
+  }
+
   /* 积分解锁 */
   document.addEventListener('click', function (e) {
+    /* 积分购买引导 */
+    if (e.target.closest('#buy-points')) {
+      e.preventDefault();
+      gotoPoints();
+      return;
+    }
     if (!e.target.closest('#unlock-btn')) return;
     /* 扣 10 积分：数字格 50 → 40 */
     var ds = document.querySelectorAll('#lock-digits .d');
