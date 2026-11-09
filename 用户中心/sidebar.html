@@ -268,7 +268,7 @@
   .breadcrumb-separator { color: var(--muted-foreground); }
   .breadcrumb-current { color: var(--foreground); font-weight: 500; }
 
-  .content { flex: 1; display: flex; flex-direction: column; padding: 16px; min-height: 0; }
+  .content { flex: 1; display: flex; flex-direction: column; padding: 20px; min-height: 0; }
   .content-body {
     flex: 1; min-height: 0;
     border-radius: var(--radius);
@@ -551,7 +551,7 @@
     iframe.src = src;
     iframe.style.display = 'block';
     placeholderView.style.display = 'none';
-    syncMenuToPage(src, true);
+    syncMenuToPage(src, !narrowOnLoad);
   }
 
   function showPlaceholder() {
@@ -606,8 +606,12 @@
     });
   });
 
-  // 顶栏折叠按钮（左下角收起已移除）
+  // ====== 打开时一次性判断：页面宽度 < 1600px 则侧边栏初始收起（不锁定，可手动展开） ======
   var sidebarEl = document.getElementById('sidebar');
+  var narrowOnLoad = window.innerWidth < 1600;
+  if (narrowOnLoad) sidebarEl.setAttribute('data-state', 'collapsed');
+
+  // 顶栏折叠按钮（左下角收起已移除）
   document.getElementById('sidebarTrigger').addEventListener('click', function () {
     var collapsed = sidebarEl.getAttribute('data-state') === 'collapsed';
     sidebarEl.setAttribute('data-state', collapsed ? 'expanded' : 'collapsed');
@@ -619,6 +623,10 @@
   if (matched) {
     showIframe(initialPage);
     breadcrumbCurrent.textContent = matched.getAttribute('data-title') || '工作台';
+  } else if (/^[A-Za-z0-9_\-]+\.html$/.test(initialPage)) {
+    // 未挂菜单的独立页面（如 *-locked*.html、detail-template.html）：直接 iframe 托管，避免落到空白占位
+    showIframe(initialPage);
+    breadcrumbCurrent.textContent = '页面预览';
   } else {
     setActive(document.querySelector('.sidebar-menu > .sidebar-menu-button[data-page="workbench.html"]'));
     breadcrumbCurrent.textContent = '工作台';
@@ -626,6 +634,5 @@
   }
 </script>
 
-<div class="version-badge">v3.14.0</div>
 </body>
 </html>

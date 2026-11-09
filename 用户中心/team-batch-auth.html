@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+<script>if (window.top === window.self) location.replace('sidebar.html?page=' + encodeURIComponent(location.pathname.split('/').pop()));</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>用户中心-企业团队-批量授权</title>
@@ -2003,9 +2004,9 @@ h1, h2, h3, h4, p { margin: 0; }
 .page {
   flex: 1;
   width: 100%;
-  max-width: 1280px;
+  max-width: 1600px;
   margin: 0 auto;
-  padding: 1.5rem;
+  padding: 20px;
 }
 .doc-tabs {
   display: flex;
@@ -2254,7 +2255,7 @@ h1, h2, h3, h4, p { margin: 0; }
   .topbar .brand-mobile { display: inline-flex; align-items: center; }
   .search-box { display: none; }
   .team-overview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .page { padding: 1rem; }
+  .page { padding: 12px 16px 16px; }
   .head-actions { width: 100%; justify-content: flex-end; }
 }
 </style>
@@ -3063,6 +3064,6 @@ if (!document.__sidebarKbInit) {
 </script>
 
 
-<div class="version-badge">v3.14.0</div>
+<div class="version-badge">v3.14.1</div>
 </body>
 </html>

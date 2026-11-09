@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+<script>if (window.top === window.self) location.replace('sidebar.html?page=' + encodeURIComponent(location.pathname.split('/').pop()));</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>企业详情 - 360度企业全景画像分析</title>
@@ -91,10 +92,10 @@
 }
 
 /* ============ page-level (unlayered) ============ */
-.page { max-width: 1400px; margin: 0 auto; }
+.page { max-width: 1600px; margin: 0 auto; padding: 20px; }
 
 /* top channel tabs (skewed) */
-.channel-bar { background: #e4edfb; display: flex; gap: 4px; padding-left: 0; overflow: hidden; }
+.channel-bar { background: #e4edfb; display: flex; gap: 0; padding: 0 20px 0 15px; overflow: visible; border-radius: 7px 7px 0 0; }
 .channel-tab {
   width: 132px; height: 46px; display: flex; align-items: center; justify-content: center;
   transform: skewX(-18deg); cursor: pointer; border: none; font-family: var(--font-sans);
@@ -103,7 +104,7 @@
 .channel-tab > span { transform: skewX(18deg); }
 .channel-tab.active { background: linear-gradient(180deg, #6ba1f5 0%, #4d8bf0 100%); color: #ffffff; }
 
-.card { background: #ffffff; border: 1px solid #ebeef5; border-top: none; }
+.card { background: #ffffff; border: 1px solid #ebeef5; border-radius: 8px; }
 
 /* company header */
 .co-head { display: flex; align-items: flex-start; gap: 14px; padding: 22px 32px 18px; position: relative; }
@@ -224,8 +225,8 @@
 
 <div class="page">
   <div class="channel-bar">
-    <button class="channel-tab active"><span>业主</span></button>
-    <button class="channel-tab"><span>供应商</span></button>
+    <button class="channel-tab" type="button"><span>业主</span></button>
+    <button class="channel-tab active" type="button"><span>供应商</span></button>
   </div>
 
   <div class="card">
@@ -609,6 +610,6 @@
   backTop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
 })();
 </script>
-<div class="version-badge">v3.14.0</div>
+<div class="version-badge">v3.14.1</div>
 </body>
 </html>

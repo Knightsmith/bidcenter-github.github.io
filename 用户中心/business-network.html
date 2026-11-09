@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+<script>if (window.top === window.self) location.replace('sidebar.html?page=' + encodeURIComponent(location.pathname.split('/').pop()));</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>企情分析-企业信息-商机脉络</title>
@@ -131,7 +132,7 @@ body { overflow: hidden; }
 .breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 14px; color: #999999; }
 .breadcrumb-separator { color: #999999; }
 .breadcrumb-current { color: #333333; font-weight: 500; }
-.content { flex: 1; display: flex; flex-direction: column; padding: 20px 24px; min-height: 0; }
+.content { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 .content-scroll { flex: 1; min-height: 0; overflow-y: auto; background: #f0f3fa; }
 .placeholder-view { display: none; flex-direction: column; align-items: center; justify-content: center; gap: 12px; height: 100%; color: #999999; text-align: center; }
 .placeholder-view svg { width: 56px; height: 56px; stroke-width: 1.2; color: #dcdfe6; }
@@ -139,9 +140,9 @@ body { overflow: hidden; }
 .placeholder-view p { font-size: 13px; margin: 0; }
 
 /* ============ page ============ */
-.page { max-width: 1400px; margin: 0 auto; padding-top: 12px; }
+.page { max-width: 1600px; margin: 0 auto; padding: 20px; }
 
-.channel-bar { background: #e4edfb; display: flex; gap: 4px; overflow: hidden; }
+.channel-bar { background: #e4edfb; display: flex; gap: 0; padding: 0 20px 0 15px; overflow: visible; border-radius: 7px 7px 0 0; }
 .channel-tab {
   width: 132px; height: 46px; display: flex; align-items: center; justify-content: center;
   transform: skewX(-18deg); cursor: pointer; border: none; font-family: var(--font-sans);
@@ -150,7 +151,7 @@ body { overflow: hidden; }
 .channel-tab > span { transform: skewX(18deg); }
 .channel-tab.active { background: linear-gradient(180deg, #6ba1f5 0%, #4d8bf0 100%); color: #ffffff; }
 
-.card { background: #ffffff; border: 1px solid #ebeef5; border-top: none; }
+.card { background: #ffffff; border: 1px solid #ebeef5; border-radius: 8px; }
 
 .co-head { display: flex; align-items: flex-start; gap: 14px; padding: 22px 32px 18px; }
 .co-icon { width: 52px; height: 52px; border-radius: 6px; background: #d8e6fd; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
@@ -390,28 +391,17 @@ body { overflow: hidden; }
   <!-- ============ 主区域 ============ -->
   <main class="main">
     <div class="content">
-      <header class="main-header">
-        <div class="header-separator"></div>
-        <nav class="breadcrumb" aria-label="面包屑">
-          <span>采招网</span>
-          <span class="breadcrumb-separator">/</span>
-          <span>企情分析</span>
-          <span class="breadcrumb-separator">/</span>
-          <span class="breadcrumb-current" id="breadcrumbCurrent">商机脉络</span>
-        </nav>
-      </header>
 
       <div class="content-scroll" id="contentScroll">
         <div id="viewAnalysis">
 
         <div class="page">
-          <div style="background:#ffffff;border:1px solid #ebeef5;border-radius:8px;overflow:hidden;">
+          <div class="card">
             <!-- 渠道页签 -->
             <div class="channel-bar">
-              <button class="channel-tab" type="button"><span>业主</span></button>
-              <button class="channel-tab active" type="button"><span>供应商</span></button>
-              <button class="channel-tab" type="button"><span>代理商</span></button>
-            </div>
+    <button class="channel-tab" type="button"><span>业主</span></button>
+    <button class="channel-tab active" type="button"><span>供应商</span></button>
+  </div>
 
             <!-- 公司头部 -->
             <div class="co-head">
@@ -419,10 +409,10 @@ body { overflow: hidden; }
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#5b9bff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/><path d="M3 21h18"/></svg>
               </div>
               <div>
-                <h1 class="co-name" id="coName">上海金戈电力设备安装有限公司</h1>
+                <h1 class="co-name" id="coName">华为技术有限公司</h1>
                 <div class="co-tags">
-                  <span class="badge" data-variant="tag-blue">上海</span>
-                  <span class="badge" data-variant="tag-blue" style="background:#e8f7ee;color:#52c41a;margin-left:6px;">在营</span>
+                  <span class="badge" data-variant="tag-blue">存续（在营、开业、在册）</span>
+
                 </div>
               </div>
               <div class="co-actions">
@@ -442,7 +432,7 @@ body { overflow: hidden; }
                 </div>
                 <span class="co-update">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>
-                  2026-11-04 更新
+                  2026-11-04更新
                 </span>
               </div>
             </div>
@@ -463,16 +453,7 @@ body { overflow: hidden; }
                   <span class="k">联系电话：</span><span class="v">0577-56671561</span>
                   <a href="javascript:void(0)" data-tip="更多联系方式需登录后查看">更多联系方式</a>
                 </div>
-                <div class="base-item"><span class="k">注册日期：</span><span class="v">1960年12月22日</span></div>
-                <div class="base-item">
-                  <span class="k">网址：</span><span class="v">http://www.ciae.ac.cn/index.jsp</span>
-                </div>
-                <div class="base-item"><span class="k">公司地址：</span><span class="v">中国（上海）自由贸易试验区源深路1122号</span>
-                  <a href="javascript:void(0)" id="copyAddr">复制</a>
-                </div>
-                <div class="base-item" style="grid-column:1 / -1;">
-                  <span class="k">简介：</span><span class="v">公司主营电力设备安装、输配电及控制设备制造与检修，具备电力工程施工总承包资质，长期服务于国网上海市电力公司及下属供电公司，业务覆盖变配电设备安装、电气试验、线路运维等领域，是华东地区具有一定规模的电力工程服务供应商。</span>
-                </div>
+                <div class="base-item"><span class="k">公司地址：</span><span class="v">中国（上海）自由贸易试验区源深路1122号</span></div>
               </div>
             </div>
 
@@ -693,7 +674,7 @@ body { overflow: hidden; }
 <button class="back-top" id="backTop" type="button" aria-label="回到顶部">
   <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#999999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 12l9 4 9-4"/><path d="M3 17l9 4 9-4"/></svg>
 </button>
-<div class="version-badge">v3.14.0</div>
+<div class="version-badge">v3.14.1</div>
 <div class="tip" id="tip"></div>
 
 <script type="application/json" id="network-data">
@@ -871,12 +852,12 @@ var CN_MAP = {"北京市":["M434.9,133.4L436.0,132.4L431.8,132.1L429.6,128.8L427
     viewAnalysis.style.display = 'none';
     viewPlaceholder.style.display = 'flex';
     $('phTitle').textContent = title;
-    $('breadcrumbCurrent').textContent = title;
+    var _bc = $('breadcrumbCurrent'); if (_bc) _bc.textContent = title;
   }
   function showAnalysis(title) {
     viewPlaceholder.style.display = 'none';
     viewAnalysis.style.display = 'block';
-    $('breadcrumbCurrent').textContent = title || '商机脉络';
+    var _bc = $('breadcrumbCurrent'); if (_bc) _bc.textContent = title || '商机脉络';
     $('contentScroll').scrollTop = 0;
   }
   document.querySelectorAll('.sidebar-menu-button').forEach(function (btn) {

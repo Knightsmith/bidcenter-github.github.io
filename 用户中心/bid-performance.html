@@ -131,7 +131,7 @@ body { overflow: hidden; }
 .breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 14px; color: #999999; }
 .breadcrumb-separator { color: #999999; }
 .breadcrumb-current { color: #333333; font-weight: 500; }
-.content { flex: 1; display: flex; flex-direction: column; padding: 20px 24px; min-height: 0; }
+.content { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 .content-scroll { flex: 1; min-height: 0; overflow-y: auto; background: #f0f3fa; }
 .placeholder-view { display: none; flex-direction: column; align-items: center; justify-content: center; gap: 12px; height: 100%; color: #999999; text-align: center; }
 .placeholder-view svg { width: 56px; height: 56px; stroke-width: 1.2; color: #dcdfe6; }
@@ -139,12 +139,12 @@ body { overflow: hidden; }
 .placeholder-view p { font-size: 13px; margin: 0; }
 
 /* ============ page ============ */
-.page { max-width: 1400px; margin: 0 auto; padding-top: 12px; }
+.page { max-width: 1600px; margin: 0 auto; padding: 20px; }
 .crumb { padding: 10px 4px; font-size: 13px; color: #909399; }
 .crumb b { color: #2b7bff; font-weight: 500; }
 .crumb .sep { margin: 0 6px; color: #c0c4cc; }
 
-.channel-bar { background: #e4edfb; display: flex; gap: 4px; overflow: hidden; }
+.channel-bar { background: #e4edfb; display: flex; gap: 0; padding: 0 20px 0 15px; overflow: visible; border-radius: 7px 7px 0 0; }
 .channel-tab {
   width: 132px; height: 46px; display: flex; align-items: center; justify-content: center;
   transform: skewX(-18deg); cursor: pointer; border: none; font-family: var(--font-sans);
@@ -153,7 +153,7 @@ body { overflow: hidden; }
 .channel-tab > span { transform: skewX(18deg); }
 .channel-tab.active { background: linear-gradient(180deg, #6ba1f5 0%, #4d8bf0 100%); color: #ffffff; }
 
-.card { background: #ffffff; border: 1px solid #ebeef5; border-top: none; }
+.card { background: #ffffff; border: 1px solid #ebeef5; border-radius: 8px; }
 
 .co-head { display: flex; align-items: flex-start; gap: 14px; padding: 22px 32px 18px; }
 .co-icon { width: 52px; height: 52px; border-radius: 6px; background: #d8e6fd; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
@@ -338,16 +338,6 @@ body { overflow: hidden; }
   <!-- ============ 主区域 ============ -->
   <main class="main">
     <div class="content">
-      <header class="main-header">
-        <div class="header-separator"></div>
-        <nav class="breadcrumb" aria-label="面包屑">
-          <span>采招网</span>
-          <span class="breadcrumb-separator">/</span>
-          <span>企情分析</span>
-          <span class="breadcrumb-separator">/</span>
-          <span class="breadcrumb-current" id="breadcrumbCurrent">中标业绩</span>
-        </nav>
-      </header>
 
       <div class="content-scroll" id="contentScroll">
         <div id="viewAnalysis">
@@ -376,12 +366,22 @@ body { overflow: hidden; }
                 </div>
                 <div class="co-actions">
                   <div class="co-btns">
-                    <button class="btn btn-orange" type="button">企业报告</button>
-                    <button class="btn btn-monitor" type="button">企业监控</button>
+                    <button class="btn btn-orange" data-size="sm" type="button" id="gen-report-btn">
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                      企业数据报告下载
+                    </button>
+                    <button class="btn btn-monitor" data-size="sm" type="button" id="fav-top-btn">
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                      收藏
+                    </button>
+                    <button class="btn btn-monitor" data-size="sm" type="button" id="monitor-btn">
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+                      企业监控
+                    </button>
                   </div>
                   <span class="co-update">
                     <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-                    <span id="co-update">2026-11-05 更新</span>
+                    <span id="co-update">2026-11-05更新</span>
                   </span>
                 </div>
               </div>
@@ -398,11 +398,8 @@ body { overflow: hidden; }
                 <div class="base-grid">
                   <div class="base-item"><span class="k">企业法人：</span><span class="v">赵明路</span></div>
                   <div class="base-item"><span class="k">注册资本：</span><span class="v">4114113.182000万人民币</span></div>
-                  <div class="base-item"><span class="k">联系电话：</span><span class="v">0755-28780808</span></div>
-                  <div class="base-item"><span class="k">注册日期：</span><span class="v">1987年09月15日</span></div>
-                  <div class="base-item"><span class="k">网址：</span><span class="v">https://www.huawei.com</span></div>
+                  <div class="base-item"><span class="k">联系电话：</span><span class="v">0755-28780808 <a href="#" onclick="return false;">更多联系方式</a></span></div>
                   <div class="base-item"><span class="k">公司地址：</span><span class="v">深圳市龙岗区坂田华为总部办公楼</span></div>
-                  <div class="base-item" style="grid-column:1 / -1;"><span class="k">简介：</span><span class="v">公司主营通信网络设备、IT设备、智能终端及云服务的研发、生产与销售，为全球运营商及政企客户提供端到端信息通信解决方案，业务覆盖5G网络、数据中心、云计算与人工智能算力基础设施等领域。</span></div>
                 </div>
               </div>
 
@@ -1203,6 +1200,6 @@ body { overflow: hidden; }
 })();
 </script>
 
-<div class="version-badge">v3.14.0</div>
+<div class="version-badge">v3.14.1</div>
 </body>
 </html>

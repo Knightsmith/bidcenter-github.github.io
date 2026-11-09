@@ -4,18 +4,26 @@
 
 ## 任务
 
-| ID | 任务 | owner | 状态 | 占用文件 | 验收标准 |
-|---|---|---|---|---|---|
-| OC-1 | 新接口注入脚本 inject_new_api.py（读新接口导出 → 替换 detail-template.html 的 __API_DATA__ → 写出 enterprise-detail.html；含维度对齐与空维度补 3 条示例逻辑） | opencode | 待办 | collab/scripts/*、仅读 detail-template.html | 脚本可跑通 dry-run；不直接改任何页面文件；report-OC-1.md 说明用法 |
-| MV-1 | 全站一致性巡检：19 页徽标/title 版本一致、main-nav 同族互链正确、sidebar 菜单入口齐全、三族解锁门文案一致；只出报告不改文件 | mavis | 待办 | 只读全部 html | report-MV-1.md 列出问题清单（文件+行+建议），不直接修改 |
-| QW-1 | field-mapping.md 三处待确认（实缴出资额值源 / WebSite 大小写 / 工程信息区块去留）汇总问用户 | leader | 阻塞-等用户 | — | 用户答复后转任务派发 |
-| QW-2 | 「中标业绩」tab 占位去留问用户 | leader | 阻塞-等用户 | — | 同上 |
+| ID | 建立时间 | 任务 | owner | 状态 | 占用文件 | 验收标准 |
+|---|---|---|---|---|---|---|
+| OC-1 | 2026-11-05 | 新接口注入脚本 inject_new_api.py（读新接口导出 → 替换 detail-template.html 的 __API_DATA__ → 写出 enterprise-detail.html；含维度对齐与空维度补 3 条示例逻辑） | opencode | 待办 | collab/scripts/*、仅读 detail-template.html | 脚本可跑通 dry-run；不直接改任何页面文件；report-OC-1.md 说明用法 |
+| MV-1 | 2026-11-05 | 全站一致性巡检：19 页徽标/title 版本一致、main-nav 同族互链正确、sidebar 菜单入口齐全、三族解锁门文案一致；只出报告不改文件 | mavis | 待验收 | 只读全部 html | report-MV-1.md 列出问题清单（文件+行+建议），不直接修改 |
+| MV-2 | 2026-11-05 | 18 个内容页 `<head>` 后第一行插入 sidebar 托管自跳转 script（代码见 inbox）；sidebar.html 不加；不改版本/CHANGELOG | mavis | 待验收 | 18 个内容页 html | 双击任一页自动跳 sidebar.html?page=该页且菜单高亮；从 sidebar 进入不二次跳转；回报文件清单 |
+| MV-3 | 2026-11-06 | 顶部公司信息区与联系方式统一：以 enterprise-detail.html 为基准（公司名/状态标签/企业报告/企业监控按钮/更新时间 + 复制企业信息/关注/企业法人/注册资本/联系电话/公司地址），所有含该区域的页面结构与文案对齐；联系电话值统一 0755-28780808（带锁族锁定态 ****、解锁后真实）；无该区域的页面不新增 | mavis | 待验收 | 含公司信息区的各页 | 各页该区域 markup/文案与基准一致；差异过大无法统一的记 report 并进提问区 |
+| MV-4 | 2026-11-06 | 容器宽度统一：所有页面内容容器 max-width 1400px → 1600px（含 sidebar.html 内容区），保持居中；个别页硬编码宽度导致不一致的记 report | mavis | 待验收 | 全部 html | 全站 grep 无残留 1400 容器宽；各页宽度一致 |
+| QW-1 | 2026-11-05 | field-mapping.md 三处待确认（实缴出资额值源 / WebSite 大小写 / 工程信息区块去留）汇总问用户 | leader | 阻塞-等用户 | — | 用户答复后转任务派发 |
+| QW-2 | 2026-11-05 | 「中标业绩」tab 占位去留问用户 | leader | 阻塞-等用户 | — | 同上 |
 
 ## 提问区
 
 （格式：`[日期 提问者] 问题 … [日期 答复者] 答复`）
 
-- 暂无
+- [2026-11-06 提问者 mavis] MV-3：`bid-performance.html`（第 398 行）顶部信息格为**六格**（企业法人/注册资本/联系电话/注册日期/网址/公司地址），基准 `enterprise-detail.html` 为**四格**。以哪边为准？（A 保留六格，把基准也补成六格 / B 删两格对齐基准 / C 保持现状不统一）
+- [2026-11-06 提问者 mavis] MV-3：`business-network` 系 4 页主体是「上海金戈电力设备安装有限公司」，与基准「华为技术有限公司」在 公司名/状态标签（上海+在营 双标签）/按钮（多「企业数据报告下载」「收藏」）/信息格（六格）/联系电话（0577-56671561）五处不同。统一会串数据。请裁决：（A 保持现状，仅记录差异 / B 只统一按钮为「企业报告」「企业监控」/ C 只统一联系电话为 0755-28780808）
+- [2026-11-06 提问者 mavis] MV-1：`.sidebar-trigger` CSS 残留于 7 个内容页（bid-analysis 系 2、bid-performance、business-network 系 4）、`team-batch-auth.html` 另含 JS 选择器残留。是否授权清理这 3 行无用 CSS？
+- [2026-11-06 提问者 mavis] MV-1：title 版本引用两种口径——contact 系 4 页含「\| v3.14.0」，其余 15 页无。是否全站统一去掉 title 内版本号？
+- [2026-11-06 提问者 mavis] MV-1：红族解锁门文案「开通会员与查企业功能 / 开通会员与中标分析功能 / 开通会员与查企业」及描述句「和/与」混用，属已确认文案（协议红线 4），请 leader 给统一口径后再改。
+- [2026-11-06 提问者 mavis] MV-4：`workbench.html:93` 1560px、`team-batch-auth.html:2007` 1280px 属页面自有布局基准，未改 1600。是否要求一并统一？
 
 ## 完成归档
 
