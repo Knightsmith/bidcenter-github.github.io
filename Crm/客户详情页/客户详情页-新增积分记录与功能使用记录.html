@@ -1498,23 +1498,28 @@ textarea.input { height: auto; padding: 8px 12px; resize: none; line-height: 1.5
           <input type="text" class="input" placeholder="搜索用户名" style="width:120px;">
           <span class="btn btn-sm btn-default" onclick="alert('搜索')">搜索</span>
         </div>
-        <table class="records-table">
+        <table class="records-table" id="behavior_table_info">
           <thead><tr><th>账号</th><th>信息类型</th><th>地区</th><th>记录创建时间</th><th>信息内容</th><th>积分变化</th><th>积分剩余</th></tr></thead>
           <tbody id="behavior_body">
-            <tr data-type="consume"><td>15650132296</td><td>积分消耗</td><td>--</td><td>2026-11-09 10:24:00</td><td class="log-content truncate">解锁「山东润维信息技术有限公司」全维度工商信息</td><td><span class="text-destructive">-10</span></td><td>2687</td></tr>
-            <tr data-type="consume"><td>15650132296</td><td>积分消耗</td><td>--</td><td>2026-11-08 16:02:00</td><td class="log-content truncate">解锁「西安凯歌智能工程有限公司」全维度工商信息</td><td><span class="text-destructive">-10</span></td><td>2697</td></tr>
-            <tr data-type="consume"><td>15650132296</td><td>积分消耗</td><td>--</td><td>2026-11-07 09:41:00</td><td class="log-content truncate">解锁「宁波胜达高科信息有限公司」联系方式</td><td><span class="text-destructive">-10</span></td><td>2707</td></tr>
-            <tr data-type="consume"><td>15650132296</td><td>积分消耗</td><td>--</td><td>2026-11-05 15:18:00</td><td class="log-content truncate">解锁「成都中科合迅科技有限公司」企业报告</td><td><span class="text-destructive">-10</span></td><td>2717</td></tr>
-            <tr data-type="consume"><td>15650132296</td><td>积分消耗</td><td>--</td><td>2026-11-03 14:07:00</td><td class="log-content truncate">解锁「数创智城（上海）科技有限公司」企业报告</td><td><span class="text-destructive">-10</span></td><td>2707</td></tr>
-            <tr data-type="consume"><td>15650132296</td><td>积分消耗</td><td>--</td><td>2026-11-01 17:26:00</td><td class="log-content truncate">解锁「北海市如丰贸易有限公司」全维度工商信息</td><td><span class="text-destructive">-10</span></td><td>717</td></tr>
-            <tr data-type="consume"><td>15650132296</td><td>积分消耗</td><td>--</td><td>2026-10-30 10:05:00</td><td class="log-content truncate">解锁「金华启创建设有限公司」联系方式</td><td><span class="text-destructive">-10</span></td><td>727</td></tr>
-            <tr data-type="consume"><td>15650132296</td><td>积分消耗</td><td>--</td><td>2026-10-28 15:44:00</td><td class="log-content truncate">解锁「淮安市淮阴区啸达水运服务有限公司」企业报告</td><td><span class="text-destructive">-10</span></td><td>737</td></tr>
-            <tr data-type="consume"><td>15650132296</td><td>积分消耗</td><td>--</td><td>2026-10-26 16:33:00</td><td class="log-content truncate">解锁「上海同为电子有限公司」全维度工商信息</td><td><span class="text-destructive">-10</span></td><td>737</td></tr>
-            <tr data-type="consume"><td>15650132296</td><td>积分消耗</td><td>--</td><td>2026-10-24 14:20:00</td><td class="log-content truncate">解锁「杭州云启数字技术有限公司」企业报告</td><td><span class="text-destructive">-10</span></td><td>747</td></tr>
             <tr data-type="search"><td>15650132296</td><td>搜索记录</td><td>全国</td><td>2026-07-14 10:30:00</td><td class="log-content truncate">搜索关键词"医院采购"相关招标信息，命中 126 条结果</td><td></td><td></td></tr>
             <tr data-type="info_view"><td>15650132296</td><td>信息查看记录</td><td>北京市</td><td>2026-07-13 15:20:00</td><td class="log-content truncate">查看招标公告《北京市第三人民医院改造工程项目》</td><td></td><td></td></tr>
             <tr data-type="login"><td>15650132296</td><td>登录记录</td><td>--</td><td>2026-07-14 15:59:43</td><td class="log-content truncate">IP 192.168.1.100 通过 PC 端登录成功</td><td></td><td></td></tr>
             <tr data-type="export"><td>15650132296</td><td>导出记录</td><td>全国</td><td>2026-07-12 11:00:00</td><td class="log-content truncate">导出招标数据（全国）共 236 条，格式 Excel</td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        <table class="records-table" id="behavior_table_consume" style="display:none;">
+          <thead><tr><th>账号</th><th>记录创建时间</th><th>信息内容</th><th>IP</th><th>积分变化</th><th>积分剩余</th></tr></thead>
+          <tbody id="behavior_consume_body">
+            <tr><td>15650132296</td><td>2026-11-09 10:24:00</td><td class="log-content truncate">解锁「山东润维信息技术有限公司」全维度工商信息</td><td>114.86.137.42</td><td><span class="text-destructive">-10</span></td><td>2687</td></tr>
+            <tr><td>15650132296</td><td>2026-11-08 16:02:00</td><td class="log-content truncate">解锁「西安凯歌智能工程有限公司」全维度工商信息</td><td>223.104.38.156</td><td><span class="text-destructive">-10</span></td><td>2697</td></tr>
+            <tr><td>15650132296</td><td>2026-11-07 09:41:00</td><td class="log-content truncate">解锁「宁波胜达高科信息有限公司」联系方式</td><td>114.86.137.42</td><td><span class="text-destructive">-10</span></td><td>2707</td></tr>
+            <tr><td>15650132296</td><td>2026-11-05 15:18:00</td><td class="log-content truncate">解锁「成都中科合迅科技有限公司」企业报告</td><td>183.6.52.201</td><td><span class="text-destructive">-10</span></td><td>2717</td></tr>
+            <tr><td>15650132296</td><td>2026-11-03 14:07:00</td><td class="log-content truncate">解锁「数创智城（上海）科技有限公司」企业报告</td><td>223.104.38.156</td><td><span class="text-destructive">-10</span></td><td>2707</td></tr>
+            <tr><td>15650132296</td><td>2026-11-01 17:26:00</td><td class="log-content truncate">解锁「北海市如丰贸易有限公司」全维度工商信息</td><td>114.86.137.42</td><td><span class="text-destructive">-10</span></td><td>717</td></tr>
+            <tr><td>15650132296</td><td>2026-10-30 10:05:00</td><td class="log-content truncate">解锁「金华启创建设有限公司」联系方式</td><td>101.88.204.77</td><td><span class="text-destructive">-10</span></td><td>727</td></tr>
+            <tr><td>15650132296</td><td>2026-10-28 15:44:00</td><td class="log-content truncate">解锁「淮安市淮阴区啸达水运服务有限公司」企业报告</td><td>192.168.1.100</td><td><span class="text-destructive">-10</span></td><td>737</td></tr>
+            <tr><td>15650132296</td><td>2026-10-26 16:33:00</td><td class="log-content truncate">解锁「上海同为电子有限公司」全维度工商信息</td><td>114.86.137.42</td><td><span class="text-destructive">-10</span></td><td>737</td></tr>
+            <tr><td>15650132296</td><td>2026-10-24 14:20:00</td><td class="log-content truncate">解锁「杭州云启数字技术有限公司」企业报告</td><td>223.104.38.156</td><td><span class="text-destructive">-10</span></td><td>747</td></tr>
           </tbody>
         </table>
         <a href="javascript:;" class="load-more" onclick="alert('加载更多')">点击加载更多》</a>
@@ -1624,6 +1629,12 @@ function switchBehaviorTypeTab(el) {
   filterBehaviorRows(el.getAttribute('data-filter'));
 }
 function filterBehaviorRows(type) {
+  var infoTable = document.getElementById('behavior_table_info');
+  var consumeTable = document.getElementById('behavior_table_consume');
+  var isConsume = (type === 'consume');
+  if (infoTable) infoTable.style.display = isConsume ? 'none' : '';
+  if (consumeTable) consumeTable.style.display = isConsume ? '' : 'none';
+  if (isConsume) return;
   var body = document.getElementById('behavior_body');
   if (!body) return;
   var oldEmpty = body.querySelector('.behavior-empty-row');
