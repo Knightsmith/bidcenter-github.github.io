@@ -304,9 +304,9 @@ textarea.input { height: auto; padding: 8px 12px; resize: none; line-height: 1.5
 /* ===== 记录管理区（一级区块） ===== */
 .records-section { background: var(--card); padding: 16px 0; margin-bottom: 2px; }
 .records-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); }
-.records-tabs li { padding: 8px 18px; cursor: pointer; font-size: 13px; color: var(--muted-foreground); border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; background: transparent; transition: all 0.2s; }
-.records-tabs li.active { color: var(--primary); font-weight: 600; border-bottom-color: var(--primary); background: transparent; }
-.records-tabs li:hover:not(.active) { color: var(--foreground); background: var(--accent); }
+.records-tabs li { padding: 8px 18px; cursor: pointer; font-size: 13px; color: #414A56; font-weight: 500; border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; background: transparent; transition: all 0.2s; }
+.records-tabs li.active { color: #3F6C93; font-weight: 700; border-bottom-color: #3F6C93; background: transparent; }
+.records-tabs li:hover:not(.active) { color: #2A2A2A; background: var(--accent); }
 .records-content { padding: 12px 0; overflow-x: auto; }
 .records-table { width: 100%; border-collapse: collapse; font-size: 12px; }
 .records-table th { background: var(--muted); color: var(--card-foreground); padding: 8px 10px; text-align: left; font-weight: 700; border: 1px solid var(--border-dark); }
@@ -318,9 +318,9 @@ textarea.input { height: auto; padding: 8px 12px; resize: none; line-height: 1.5
 
 /* ===== 用户行为记录：信息类型胶囊页签（仅 rec_behavior 使用，独立于 .records-tabs / .sub-tabs） ===== */
 .behavior-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
-.behavior-pill { padding: 5px 14px; cursor: pointer; font-size: 12px; line-height: 18px; color: var(--muted-foreground); background: var(--card); border: 1px solid var(--border); border-radius: 999px; transition: all 0.2s; user-select: none; }
-.behavior-pill:hover:not(.is-active) { color: var(--foreground); background: var(--accent); }
-.behavior-pill.is-active { color: #fff; background: var(--primary); border-color: var(--primary); font-weight: 600; }
+.behavior-pill { padding: 5px 14px; cursor: pointer; font-size: 12px; line-height: 18px; color: #414A56; font-weight: 500; background: #F4F6F8; border: 1px solid #8A94A1; border-radius: 999px; transition: all 0.2s; user-select: none; }
+.behavior-pill:hover:not(.is-active) { color: #2A2A2A; background: var(--accent); border-color: #6E8FAC; }
+.behavior-pill.is-active { color: #fff; background: #3F6C93; border-color: #3F6C93; font-weight: 700; }
 .behavior-empty-row td { padding: 24px 10px; text-align: center; color: var(--muted-foreground); }
 
 /* ===== 快捷记录添加 ===== */
@@ -1488,6 +1488,7 @@ textarea.input { height: auto; padding: 8px 12px; resize: none; line-height: 1.5
           <span class="behavior-pill is-active" data-filter="info_view" onclick="switchBehaviorTypeTab(this)">信息查看记录</span>
           <span class="behavior-pill" data-filter="search" onclick="switchBehaviorTypeTab(this)">搜索记录</span>
           <span class="behavior-pill" data-filter="login" onclick="switchBehaviorTypeTab(this)">登录记录</span>
+          <span class="behavior-pill" data-filter="func_use" onclick="switchBehaviorTypeTab(this)">功能使用记录</span>
           <span class="behavior-pill" data-filter="service" onclick="switchBehaviorTypeTab(this)">服务记录</span>
           <span class="behavior-pill" data-filter="export" onclick="switchBehaviorTypeTab(this)">导出记录</span>
           <span class="behavior-pill" data-filter="consume" onclick="switchBehaviorTypeTab(this)">积分消耗</span>
@@ -1520,6 +1521,19 @@ textarea.input { height: auto; padding: 8px 12px; resize: none; line-height: 1.5
             <tr><td>15650132296</td><td>2026-10-28 15:44:00</td><td class="log-content truncate">解锁「淮安市淮阴区啸达水运服务有限公司」企业报告</td><td>192.168.1.100</td><td><span class="text-destructive">-10</span></td><td>737</td></tr>
             <tr><td>15650132296</td><td>2026-10-26 16:33:00</td><td class="log-content truncate">解锁「上海同为电子有限公司」全维度工商信息</td><td>114.86.137.42</td><td><span class="text-destructive">-10</span></td><td>737</td></tr>
             <tr><td>15650132296</td><td>2026-10-24 14:20:00</td><td class="log-content truncate">解锁「杭州云启数字技术有限公司」企业报告</td><td>223.104.38.156</td><td><span class="text-destructive">-10</span></td><td>747</td></tr>
+          </tbody>
+        </table>
+        <table class="records-table" id="behavior_table_funcuse" style="display:none;">
+          <thead><tr><th>查看时间</th><th>企业名称·关键词·信息标题</th><th>功能名称</th></tr></thead>
+          <tbody>
+            <tr><td>2026-11-09 10:24:00</td><td class="log-content truncate">山东润维信息技术有限公司</td><td>全维度工商信息</td></tr>
+            <tr><td>2026-11-08 16:02:00</td><td class="log-content truncate">西安凯歌智能工程有限公司</td><td>联系方式解锁</td></tr>
+            <tr><td>2026-11-07 09:41:00</td><td class="log-content truncate">宁波胜达高科信息有限公司</td><td>联系方式解锁</td></tr>
+            <tr><td>2026-11-06 14:15:00</td><td class="log-content truncate">关键词「医院采购」</td><td>商机脉络</td></tr>
+            <tr><td>2026-11-05 11:38:00</td><td class="log-content truncate">关键词「智慧医院」</td><td>商机脉络</td></tr>
+            <tr><td>2026-11-04 15:52:00</td><td class="log-content truncate">成都中科合迅科技有限公司</td><td>全维度工商信息</td></tr>
+            <tr><td>2026-11-03 10:20:00</td><td class="log-content truncate">《数创智城（上海）科技有限公司企业报告》</td><td>企业报告下载</td></tr>
+            <tr><td>2026-11-01 17:26:00</td><td class="log-content truncate">北海市如丰贸易有限公司</td><td>全维度工商信息</td></tr>
           </tbody>
         </table>
         <a href="javascript:;" class="load-more" onclick="alert('加载更多')">点击加载更多》</a>
@@ -1631,10 +1645,13 @@ function switchBehaviorTypeTab(el) {
 function filterBehaviorRows(type) {
   var infoTable = document.getElementById('behavior_table_info');
   var consumeTable = document.getElementById('behavior_table_consume');
+  var funcUseTable = document.getElementById('behavior_table_funcuse');
   var isConsume = (type === 'consume');
-  if (infoTable) infoTable.style.display = isConsume ? 'none' : '';
+  var isFuncUse = (type === 'func_use');
+  if (infoTable) infoTable.style.display = (isConsume || isFuncUse) ? 'none' : '';
   if (consumeTable) consumeTable.style.display = isConsume ? '' : 'none';
-  if (isConsume) return;
+  if (funcUseTable) funcUseTable.style.display = isFuncUse ? '' : 'none';
+  if (isConsume || isFuncUse) return;
   var body = document.getElementById('behavior_body');
   if (!body) return;
   var oldEmpty = body.querySelector('.behavior-empty-row');
