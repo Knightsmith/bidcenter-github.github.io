@@ -4,7 +4,7 @@
 <script>if (window.top === window.self) location.replace('sidebar.html?page=' + encodeURIComponent(location.pathname.split('/').pop()));</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>联系方式（积分解锁演示） - 企业详情 | v3.15.0</title>
+<title>联系方式（积分解锁演示） - 企业详情 | v3.15.1</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%237c3aed'/%3E%3Ctext%20x='32'%20y='45'%20text-anchor='middle'%20font-size='40'%20font-weight='700'%20fill='%23ffffff'%20font-family='Microsoft%20YaHei,sans-serif'%3E%E5%B1%BF%3C/text%3E%3C/svg%3E">
 <style>
 @layer tokens, base, components;
@@ -224,13 +224,13 @@
             <span class="d">5</span><span class="d">0</span><span class="u">积分</span>
           </div>
           <div class="lock-note-row"><span class="lock-note">解锁后有效期内不会重复扣分</span><a class="lock-buy" href="javascript:;" data-buy-points>积分不足？购买积分<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div>
-          <button class="btn-unlock" id="unlock-btn">使用 30 积分 立即解锁</button>
+          <button class="btn-unlock" id="unlock-btn">使用 35 积分 立即解锁</button>
         </div>
       </div>
     </div>
   </div>
 </div>
-<div class="version-badge">v3.15.0</div>
+<div class="version-badge">v3.15.1</div>
 <script>
 (function () {
   'use strict';
@@ -317,11 +317,11 @@
   /* 积分解锁 */
   document.addEventListener('click', function (e) {
     if (!e.target.closest('#unlock-btn')) return;
-    /* 扣 30 积分：数字格 50 → 20 */
+    /* 扣 35 积分：数字格 50 → 15 */
     var ds = document.querySelectorAll('#lock-digits .d');
     if (ds.length) {
       var cur = parseInt(Array.prototype.map.call(ds, function (d) { return d.textContent; }).join(''), 10) || 50;
-      var next = String(Math.max(0, cur - 30));
+      var next = String(Math.max(0, cur - 35));
       while (next.length < ds.length) next = '0' + next;
       Array.prototype.forEach.call(ds, function (d, i) { d.textContent = next[i]; });
     }
@@ -337,7 +337,7 @@
     document.querySelector('.co-tags').appendChild(badge);
     var t = document.createElement('div');
     t.className = 'toast';
-    t.textContent = '解锁成功：已扣 30 积分，该企业联系电话已解锁';
+    t.textContent = '解锁成功：已扣 35 积分，该企业联系电话已解锁';
     document.body.appendChild(t);
     setTimeout(function () { t.classList.add('show'); }, 20);
     setTimeout(function () { t.classList.remove('show'); setTimeout(function () { t.remove(); }, 400); }, 2800);
