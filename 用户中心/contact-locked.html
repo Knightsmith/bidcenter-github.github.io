@@ -120,6 +120,7 @@
 .lock-digits { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 10px; }
 .lock-digits .d { min-width: 34px; padding: 5px 0; border: 2px dashed #ffb35c; border-radius: 6px; background: #ffffff; font-size: 22px; font-weight: 800; color: #ff5000; }
 .lock-digits .u { font-size: 13px; color: #666666; }
+  .lock-digits .lbl { font-size: 13px; color: #666666; margin-right: 2px; }
 .lock-note { margin: 12px 0 0; font-size: 12px; color: #999999; }
 .lock-note-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; }
 .lock-note-row .lock-note { margin: 0; }
@@ -219,11 +220,10 @@
       <div class="lock-overlay" id="lock-overlay">
         <div class="lock-gate" id="lock-gate">
           <h3>解锁「华为技术有限公司」的联系方式</h3>
-          <p class="lock-sub">解锁全维度工商信息 · 账户剩余积分：</p>
-          <div class="lock-digits" id="lock-digits">
-            <span class="d">5</span><span class="d">0</span><span class="u">积分</span>
+          <p class="lock-sub">解锁全维度工商信息</p>
+          <div class="lock-digits" id="lock-digits"><span class="lbl">账户剩余积分：</span><span class="d">5</span><span class="d">0</span><span class="u">积分</span>
           </div>
-          <div class="lock-note-row"><span class="lock-note">解锁后有效期内不会重复扣分</span><a class="lock-buy" href="javascript:;" data-buy-points>积分不足？购买积分<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div>
+          <div class="lock-note-row"><span class="lock-note">解锁后有效期内不会重复扣分</span><a class="lock-buy" href="javascript:;" data-buy-points>充值积分<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></a></div>
           <button class="btn-unlock" id="unlock-btn">使用 35 积分 立即解锁</button>
         </div>
       </div>
@@ -366,16 +366,25 @@
 </script>
 
 <script data-buy-points-js>
-/* 积分不足 -> 跳转积分余额页（iframe 内先通知 sidebar 切页并同步面包屑，顶层直接跳转兜底） */
+/* 充值积分 -> 先给出提示，再打开积分充值弹窗（效果同积分充值页面的充值弹窗） */
 (function () {
+  function showRechargeTip(msg) {
+    var t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function () { t.classList.add('show'); }, 20);
+    setTimeout(function () { t.classList.remove('show'); setTimeout(function () { t.remove(); }, 400); }, 1600);
+  }
   function gotoPoints() {
     try { window.top.postMessage({ type: 'bidcenter-nav', page: 'points.html', title: '积分余额' }, '*'); } catch (err) {}
-    setTimeout(function () { location.href = 'points.html'; }, 300);
+    setTimeout(function () { location.href = 'points.html'; }, 1200);
   }
   document.addEventListener('click', function (e) {
     var a = e.target.closest('.lock-buy');
     if (!a) return;
     e.preventDefault();
+    showRechargeTip('正在打开积分充值弹窗，效果同积分充值页面的充值弹窗');
     gotoPoints();
   });
 })();

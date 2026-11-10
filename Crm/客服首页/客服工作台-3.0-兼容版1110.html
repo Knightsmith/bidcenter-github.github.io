@@ -255,6 +255,16 @@ progress.progress[data-tone="muted"]::-moz-progress-bar{background: var(--muted-
 .rank-no.r2{background: #e0e8f6;color: #5d646f;}
 .rank-no.r3{background: #ffd4b0;color: #80421a;}
 .ell{max-width: 200px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+/* —— 大额成单榜：与销售工作台完全一致（marquee 滚动 + 裸 th/td 表格样式） ——
+   作用域限定 #ordersBox，避免影响客服页其它使用 .table-head/.table-cell 的表格 */
+#ordersBox table th,
+#ordersBox table td{padding: .5rem .625rem;text-align: left;vertical-align: middle;}
+#ordersBox table thead th{position: sticky;top: 0;z-index: 1;background: var(--muted);color: var(--muted-foreground);font-size: .71875rem;font-weight: 600;white-space: nowrap;}
+#ordersBox table tbody td{border-top: 1px solid var(--border);}
+#ordersBox table tbody tr:hover td{background: color-mix(in oklab, var(--accent) 55%, transparent);}
+.trunc{overflow: hidden;text-overflow: ellipsis;white-space: nowrap;max-width: 100%;}
+.marquee{max-height: 19rem;overflow-y: hidden;}
+.marquee.tall{max-height: 22rem;}
 /* 响应式 */
 @media (max-width: 1120px) {
   .cols{grid-template-columns: 1fr;}
@@ -381,62 +391,19 @@ progress.progress[data-tone="muted"]::-moz-progress-bar{background: var(--muted-
         </div>
       </article>
 
-      <!-- ⑦ 大额成单榜 -->
+      <!-- ⑦ 大额成单榜（与销售工作台完全一致：marquee 无缝滚动 + 同源 ORDERS 数据） -->
       <article class="card">
         <div class="card-header">
           <div>
             <h3 class="card-title">大额成单榜</h3>
+            <div class="card-description">近期签约订单 · 签单日期倒序演示数据</div>
           </div>
         </div>
-        <div class="card-content">
-          <div class="table-container">
+        <div class="card-content" style="padding-top:.75rem;">
+          <div class="marquee tall" id="ordersBox">
             <table class="table">
-              <thead>
-                <tr>
-                  <th class="table-head" scope="col">成单公司</th>
-                  <th class="table-head" scope="col">会员等级</th>
-                  <th class="table-head" scope="col">主营业务</th>
-                  <th class="table-head num" scope="col">金额</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="table-cell ell" title="野村****公司">野村****公司</td>
-                  <td class="table-cell">标准*1年</td>
-                  <td class="table-cell">机械加工</td>
-                  <td class="table-cell num tnum" style="font-weight:700;">¥7,460</td>
-                </tr>
-                <tr>
-                  <td class="table-cell ell" title="河南****公司">河南****公司</td>
-                  <td class="table-cell">高级*3年</td>
-                  <td class="table-cell">建材贸易</td>
-                  <td class="table-cell num tnum" style="font-weight:700;">¥6,800</td>
-                </tr>
-                <tr>
-                  <td class="table-cell ell" title="青海****公司">青海****公司</td>
-                  <td class="table-cell">标准*2年</td>
-                  <td class="table-cell">电子元件</td>
-                  <td class="table-cell num tnum" style="font-weight:700;">¥6,000</td>
-                </tr>
-                <tr>
-                  <td class="table-cell ell" title="福建****公司">福建****公司</td>
-                  <td class="table-cell">标准*1年</td>
-                  <td class="table-cell">服装批发</td>
-                  <td class="table-cell num tnum" style="font-weight:700;">¥5,900</td>
-                </tr>
-                <tr>
-                  <td class="table-cell ell" title="广州****公司">广州****公司</td>
-                  <td class="table-cell">标准*4年</td>
-                  <td class="table-cell">食品加工</td>
-                  <td class="table-cell num tnum" style="font-weight:700;">¥5,888</td>
-                </tr>
-                <tr>
-                  <td class="table-cell ell" title="上海****公司">上海****公司</td>
-                  <td class="table-cell">高级*2年</td>
-                  <td class="table-cell">物流运输</td>
-                  <td class="table-cell num tnum" style="font-weight:700;">¥5,670</td>
-                </tr>
-              </tbody>
+              <thead><tr><th>成单公司</th><th>会员等级</th><th class="num">金额</th><th>签单日期</th><th>主营业务</th></tr></thead>
+              <tbody id="ordersBody"></tbody>
             </table>
           </div>
         </div>
@@ -729,6 +696,81 @@ function renderMsg() {
   document.getElementById('msgCount').textContent = '「' + msgTabLabel(msgTab) + '」共 ' + list.length + ' 条';
 }
 renderMsg();
+
+/* ===== 大额成单榜（与销售工作台完全一致：同源 ORDERS + renderOrders + marquee 无缝滚动） ===== */
+/* 说明：本页原有工具函数仅 escMsg，无 esc/fmt/renderOrders/startMarquee，故此处新增的同名函数不与既有代码冲突 */
+var ORDERS = [
+  { name: '内蒙***************公司', lv: '标准会员', term: '1年', amount: 4500, biz: '防水,玻璃', date: '2026-05-16' },
+  { name: '陕西***************公司', lv: '高级会员', term: '1年', amount: 4000, biz: '福利,礼品', date: '2026-05-15' },
+  { name: '野村***************公司', lv: '标准会员', term: '1年', amount: 7460, biz: '软件开发,人才派遣', date: '2026-05-15' },
+  { name: '上海***************公司', lv: '高级会员', term: '1年', amount: 5670, biz: '机器人,自动化', date: '2026-05-14' },
+  { name: '中国***************公司', lv: '标准会员', term: '1年', amount: 4500, biz: '险', date: '2026-05-14' },
+  { name: '中科***************公司', lv: '标准会员', term: '1年', amount: 4000, biz: '--', date: '2026-05-14' },
+  { name: '上海***************公司', lv: '标准会员', term: '1年', amount: 4250, biz: '门户网站制作,门户网站开发', date: '2026-05-14' },
+  { name: '天津***************公司', lv: '标准会员', term: '1年', amount: 4500, biz: '节能风机', date: '2026-05-13' },
+  { name: '福建***************公司', lv: '标准会员', term: '1年', amount: 5900, biz: '监理,服务', date: '2026-05-13' },
+  { name: '青岛***************公司', lv: '标准会员', term: '1年', amount: 4000, biz: '尼龙砂带,砂带', date: '2026-05-13' },
+  { name: '河南***************公司', lv: '高级会员', term: '1年', amount: 6800, biz: '中车成都机车车辆有限公司+双梁起重机', date: '2026-05-13' },
+  { name: '桐乡***************公司', lv: '标准会员', term: '1年', amount: 4500, biz: '智能问数', date: '2026-05-13' },
+  { name: '浙江***************公司', lv: '标准会员', term: '1年', amount: 4800, biz: '废旧+光伏板回收,废旧太阳能光伏板', date: '2026-05-12' },
+  { name: '北京***************公司', lv: '标准会员', term: '1年', amount: 4000, biz: '在线英语,英语培训', date: '2026-05-11' },
+  { name: '山东***************公司', lv: '标准会员', term: '1年', amount: 3600, biz: '钢材,管材', date: '2026-05-11' },
+  { name: '南通***************公司', lv: '标准会员', term: '1年', amount: 4000, biz: 'EPP模具,EPS模具', date: '2026-05-11' },
+  { name: '广州***************公司', lv: '标准会员', term: '1年', amount: 5888, biz: '检定,校准', date: '2026-05-08' },
+  { name: '上海***************公司', lv: '标准会员', term: '1年', amount: 4000, biz: '浦东国际机场+便利店,虹桥国际机场+便利店', date: '2026-05-08' },
+  { name: '彩讯***************公司', lv: '标准会员', term: '1年', amount: 4000, biz: '信息化,软件', date: '2026-05-07' },
+  { name: '青海***************公司', lv: '标准会员', term: '1年', amount: 6000, biz: '广告制作,平面设计', date: '2025-07-31' }
+];
+
+function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+function fmt(n) { n = Number(n); return isNaN(n) ? String(n) : String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+
+function renderOrders() {
+  /* 列序与销售工作台一致：成单公司 / 会员等级（等级*年限合并）/ 金额 / 签单日期 / 主营业务；按签单日期倒序 */
+  var rows = ORDERS.slice().sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); });
+  var html = '';
+  for (var i = 0; i < rows.length; i++) {
+    var o = rows[i];
+    html += '<tr>' +
+      '<td class="trunc" title="' + esc(o.name) + '">' + esc(o.name) + '</td>' +
+      '<td style="white-space:nowrap;">' + esc(String(o.lv).replace(/会员$/, '') + '*' + o.term) + '</td>' +
+      '<td class="num tnum" style="font-weight:700;">¥' + fmt(o.amount) + '</td>' +
+      '<td class="muted" style="white-space:nowrap;">' + esc(o.date) + '</td>' +
+      '<td class="trunc" title="' + esc(o.biz) + '">' + esc(o.biz) + '</td>' +
+    '</tr>';
+  }
+  document.getElementById('ordersBody').innerHTML = html + html;
+}
+
+/* ===== 无缝自动滚动（悬停暂停；内容不足一屏则不滚） ===== */
+function startMarquee(boxId, speed) {
+  var box = document.getElementById(boxId);
+  if (!box) return;
+  var tbody = box.querySelector('tbody');
+  if (!tbody) return;
+  var rows = tbody.children;
+  var half = Math.floor(rows.length / 2);
+  if (half <= 0) return;
+  var single = 0;
+  for (var i = 0; i < half; i++) single += rows[i].offsetHeight;
+  if (single <= box.clientHeight) return;
+
+  var st = 0, paused = false;
+  box.addEventListener('mouseenter', function () { paused = true; });
+  box.addEventListener('mouseleave', function () { paused = false; });
+  function step() {
+    if (!paused) {
+      st += speed;
+      if (st >= single) st -= single;
+      box.scrollTop = st;
+    }
+    window.requestAnimationFrame(step);
+  }
+  window.requestAnimationFrame(step);
+}
+
+renderOrders();
+startMarquee('ordersBox', 0.35);
 
 /* 深浅色切换（主题含完整 .dark 令牌） */
 document.getElementById('themeBtn').addEventListener('click', function () {

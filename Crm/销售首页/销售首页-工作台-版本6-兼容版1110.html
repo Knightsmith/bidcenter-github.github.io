@@ -501,13 +501,13 @@ tr.rv-weekend td{background: color-mix(in oklab, var(--success) 8%, var(--card))
         <div class="card-header">
           <div>
             <div class="card-title">大额成单榜</div>
-            <div class="card-description">近期签约订单 · 金额降序演示数据</div>
+            <div class="card-description">近期签约订单 · 签单日期倒序演示数据</div>
           </div>
         </div>
         <div class="card-content" style="padding-top:.75rem;">
           <div class="marquee tall" id="ordersBox">
             <table class="table">
-              <thead><tr><th>公司名称</th><th>会员级别</th><th>期限</th><th class="num">签约金额</th><th>主营业务</th><th>签单日期</th></tr></thead>
+              <thead><tr><th>成单公司</th><th>会员等级</th><th class="num">金额</th><th>签单日期</th><th>主营业务</th></tr></thead>
               <tbody id="ordersBody"></tbody>
             </table>
           </div>
@@ -952,16 +952,17 @@ function renderTeam() {
   document.getElementById('teamBody').innerHTML = html;
 }
 function renderOrders() {
+  /* 与客服工作台同口径：成单公司 / 会员等级（等级*年限合并）/ 金额 / 签单日期 / 主营业务；按签单日期倒序 */
+  var rows = ORDERS.slice().sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); });
   var html = '';
-  for (var i = 0; i < ORDERS.length; i++) {
-    var o = ORDERS[i];
+  for (var i = 0; i < rows.length; i++) {
+    var o = rows[i];
     html += '<tr>' +
       '<td class="trunc" title="' + esc(o.name) + '">' + esc(o.name) + '</td>' +
-      '<td>' + badgeHtml(o.lv, o.lv === '高级会员' ? 'outline' : 'secondary') + '</td>' +
-      '<td style="white-space:nowrap;">' + esc(o.term) + '</td>' +
-      '<td class="num tnum">' + fmt(o.amount) + '</td>' +
-      '<td class="trunc" title="' + esc(o.biz) + '">' + esc(o.biz) + '</td>' +
+      '<td style="white-space:nowrap;">' + esc(String(o.lv).replace(/会员$/, '') + '*' + o.term) + '</td>' +
+      '<td class="num tnum" style="font-weight:700;">¥' + fmt(o.amount) + '</td>' +
       '<td class="muted" style="white-space:nowrap;">' + esc(o.date) + '</td>' +
+      '<td class="trunc" title="' + esc(o.biz) + '">' + esc(o.biz) + '</td>' +
     '</tr>';
   }
   document.getElementById('ordersBody').innerHTML = html + html;
