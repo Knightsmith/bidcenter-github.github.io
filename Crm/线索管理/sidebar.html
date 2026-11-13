@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>侧边栏 - 采招CRM系统</title>
+<style>
+  :root {
+    --background: #ffffff;
+    --foreground: #262626;
+    --border: #e8ebf0;
+    --muted-foreground: #8a8f99;
+    --accent: #f5f6f8;
+    --accent-foreground: #262626;
+    --primary: #0063FF;
+    --primary-dark: #0052d9;
+    --primary-light: #e8f0ff;
+    --radius: 6px;
+
+    --sidebar: #ffffff;
+    --sidebar-foreground: #3d4350;
+    --sidebar-accent: #f2f4f7;
+    --sidebar-accent-foreground: #1a1f29;
+    --sidebar-border: #e8ebf0;
+    --sidebar-active: #e8f0ff;
+    --sidebar-width: 16rem;
+    --sidebar-width-icon: 3.4rem;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    background: var(--sidebar);
+    color: var(--foreground);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  a { text-decoration: none; color: inherit; cursor: pointer; }
+  button { font-family: inherit; }
+  svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+  /* ============ Sidebar ============ */
+  .sidebar {
+    position: relative;
+    width: var(--sidebar-width);
+    min-width: var(--sidebar-width);
+    background: var(--sidebar);
+    border-right: 1px solid var(--sidebar-border);
+    display: flex;
+    flex-direction: column;
+    transition: width .2s ease, min-width .2s ease;
+  }
+  .sidebar[data-state="collapsed"] { width: var(--sidebar-width-icon); min-width: var(--sidebar-width-icon); }
+
+  .sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: #d8dce3 transparent;
+  }
+  .sidebar-content::-webkit-scrollbar { width: 6px; }
+  .sidebar-content::-webkit-scrollbar-thumb { background: #d8dce3; border-radius: 3px; }
+
+  .sidebar-menu { display: flex; flex-direction: column; gap: 3px; }
+
+  .sidebar-menu-button {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    width: 100%;
+    min-height: 44px;
+    padding: 0 10px;
+    border: none;
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--sidebar-foreground);
+    font-size: 15px;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background .15s ease, color .15s ease;
+  }
+  .sidebar-menu-button:hover { background: var(--sidebar-accent); color: var(--sidebar-accent-foreground); }
+  .sidebar-menu-button.active { color: var(--primary); font-weight: 600; }
+  .sidebar-menu-button svg { width: 18px; height: 18px; flex-shrink: 0; color: #7b8391; }
+  .sidebar-menu-button:hover svg,
+  .sidebar-menu-button.active svg { color: var(--primary); }
+
+  .sidebar-menu-button-label { flex: 1; overflow: hidden; text-overflow: ellipsis; }
+
+  .sidebar-menu-button-chevron {
+    margin-left: auto;
+    width: 15px; height: 15px; flex-shrink: 0;
+    color: #a6adba;
+    transition: transform .2s ease;
+  }
+  .sidebar-group-item[data-state="open"] > .sidebar-menu-button > .sidebar-menu-button-chevron { transform: rotate(180deg); }
+
+  .sidebar-menu-sub {
+    display: none;
+    flex-direction: column;
+    gap: 2px;
+    padding-left: 2.7rem;
+    margin: 3px 0 8px;
+  }
+  .sidebar-group-item[data-state="open"] > .sidebar-menu-sub { display: flex; }
+
+  .sidebar-menu-sub-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 38px;
+    padding: 0 10px;
+    border-radius: var(--radius);
+    color: #5b6270;
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background .15s ease, color .15s ease;
+  }
+  .sidebar-menu-sub-item:hover { background: var(--sidebar-accent); color: var(--sidebar-accent-foreground); }
+  .sidebar-menu-sub-item.active { background: var(--sidebar-active); color: var(--primary); font-weight: 600; }
+  .sidebar-menu-sub-item.active::before {
+    content: "";
+    position: absolute;
+    left: -2.7rem;
+    top: 6px; bottom: 6px;
+    width: 3px; border-radius: 2px;
+    background: var(--primary);
+  }
+  .sidebar-menu-sub-item .tag-new {
+    margin-left: auto; font-size: 10.5px; line-height: 17px; font-weight: 600;
+    color: #b25e00; background: #fff3e0; border-radius: 4px; padding: 0 5px;
+  }
+
+  /* ============ 侧栏顶部：菜单搜索 ============ */
+  .sidebar-head {
+    flex-shrink: 0;
+    padding: 10px 10px 9px;
+    border-bottom: 1px solid var(--sidebar-border);
+  }
+  .sidebar-search {
+    display: flex; align-items: center; gap: 7px;
+    height: 36px; padding: 0 10px;
+    background: #f4f6f9; border: 1px solid #e8ebf0; border-radius: 6px;
+    color: #9aa0aa;
+    transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+  }
+  .sidebar-search:focus-within { background: #ffffff; border-color: #b9cffe; box-shadow: 0 0 0 2px rgba(0,99,255,.09); }
+  .sidebar-search svg { width: 16px; height: 16px; }
+  .sidebar-search input {
+    flex: 1; min-width: 0; border: none; outline: none; background: transparent;
+    font-size: 14px; color: var(--foreground); font-family: inherit;
+  }
+  .sidebar-search input::placeholder { color: #9aa0aa; }
+  .sidebar-search .clear {
+    display: none; border: none; background: transparent; color: #9aa0aa;
+    cursor: pointer; padding: 0; font-size: 16px; line-height: 1;
+  }
+  .sidebar-search.has-value .clear { display: block; }
+  .sidebar-search .clear:hover { color: #5b6270; }
+
+  /* ============ 侧栏底部：设置 ============ */
+  .sidebar-foot {
+    flex-shrink: 0;
+    padding: 8px 10px;
+    border-top: 1px solid var(--sidebar-border);
+    background: var(--sidebar);
+  }
+  .sidebar-foot-btn {
+    display: flex; align-items: center; gap: 11px;
+    width: 100%; min-height: 44px; padding: 0 10px;
+    border: none; border-radius: var(--radius); background: transparent;
+    color: var(--sidebar-foreground); font-size: 15px; font-weight: 500;
+    text-align: left; cursor: pointer; white-space: nowrap;
+    transition: background .15s ease, color .15s ease;
+  }
+  .sidebar-foot-btn:hover { background: var(--sidebar-accent); color: var(--sidebar-accent-foreground); }
+  .sidebar-foot-btn.active { color: var(--primary); font-weight: 600; }
+  .sidebar-foot-btn svg { width: 18px; height: 18px; flex-shrink: 0; color: #7b8391; }
+  .sidebar-foot-btn:hover svg,
+  .sidebar-foot-btn.active svg { color: var(--primary); }
+
+  .sidebar-settings-wrap { position: relative; }
+  .sidebar-settings-panel {
+    display: none;
+    position: absolute;
+    left: 0; right: 0; bottom: calc(100% + 8px);
+    padding: 6px;
+    background: #ffffff;
+    border: 1px solid var(--sidebar-border);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(16, 24, 40, .12), 0 2px 6px rgba(16, 24, 40, .06);
+    z-index: 50;
+  }
+  .sidebar-settings-panel.open { display: block; }
+  .sidebar-settings-title {
+    padding: 6px 10px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #98a0ad;
+    letter-spacing: .04em;
+  }
+  .sidebar-settings-item {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; min-height: 38px; padding: 0 10px;
+    border: none; border-radius: 6px; background: transparent;
+    color: var(--sidebar-foreground); font-size: 14px; font-family: inherit;
+    text-align: left; cursor: pointer; white-space: nowrap;
+    transition: background .15s ease, color .15s ease;
+  }
+  .sidebar-settings-item:hover { background: var(--sidebar-accent); color: var(--sidebar-accent-foreground); }
+  .sidebar-settings-item svg { width: 16px; height: 16px; flex-shrink: 0; color: #7b8391; }
+  .sidebar-settings-item:hover svg { color: var(--primary); }
+  .sidebar-settings-split { height: 1px; margin: 5px 6px; background: var(--sidebar-border); }
+
+  /* 折叠态：只留图标 */
+  .sidebar[data-state="collapsed"] .sidebar-head { display: none; }
+  .sidebar[data-state="collapsed"] .sidebar-settings-panel { display: none !important; }
+  .sidebar[data-state="collapsed"] .sidebar-menu-button { justify-content: center; padding: 0 8px; }
+  .sidebar[data-state="collapsed"] .sidebar-menu-button-label,
+  .sidebar[data-state="collapsed"] .sidebar-menu-button-chevron,
+  .sidebar[data-state="collapsed"] .sidebar-menu-sub { display: none; }
+  .sidebar[data-state="collapsed"] .sidebar-menu-sub-item,
+  .sidebar[data-state="collapsed"] .sidebar-empty { display: none; }
+  .sidebar[data-state="collapsed"] .sidebar-foot-btn { justify-content: center; padding: 0 8px; }
+  .sidebar[data-state="collapsed"] .sidebar-foot-btn span { display: none; }
+
+
+  /* ============ iframe 内：宽度/高度跟随父页容器 ============ */
+  .sidebar {
+    width: 100%; min-width: 0; height: 100%;
+    border-right: 1px solid var(--sidebar-border);
+    transition: none;
+  }
+  .sidebar[data-state="collapsed"] { width: 100%; min-width: 0; }
+</style>
+</head>
+<body>
+
+  <aside class="sidebar" id="sidebar" data-state="expanded">
+
+    <!-- 侧栏顶部：菜单搜索 -->
+    <div class="sidebar-head">
+      <div class="sidebar-search" id="sidebarSearch">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+        <input type="text" id="menuSearchInput" placeholder="搜索菜单" autocomplete="off" spellcheck="false">
+        <button class="clear" type="button" id="menuSearchClear" aria-label="清空">&times;</button>
+      </div>
+    </div>
+
+    <div class="sidebar-content">
+      <div class="sidebar-menu" id="sidebarMenu"></div>
+      <div class="sidebar-empty" id="sidebarEmpty">未找到相关菜单</div>
+    </div>
+
+    <!-- 侧栏底部：设置 -->
+    <div class="sidebar-foot">
+      <div class="sidebar-settings-wrap">
+        <button class="sidebar-foot-btn" type="button" id="btnSidebarSetting">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>设置</span>
+        </button>
+
+        <div class="sidebar-settings-panel" id="sidebarSettingsPanel">
+          <div class="sidebar-settings-title">设置</div>
+          <button class="sidebar-settings-item" type="button" data-set="general">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h10"/></svg>
+            通用设置
+          </button>
+          <button class="sidebar-settings-item" type="button" data-set="notice">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 8-3 8h18s-3-1-3-8"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+            消息通知
+          </button>
+          <button class="sidebar-settings-item" type="button" data-set="display">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.9 4.9l1.4 1.4"/><path d="M17.7 17.7l1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.9 19.1l1.4-1.4"/><path d="M17.7 6.3l1.4-1.4"/></svg>
+            显示与主题
+          </button>
+          <button class="sidebar-settings-item" type="button" data-set="shortcut">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01"/><path d="M10 10h.01"/><path d="M14 10h.01"/><path d="M18 10h.01"/><path d="M8 14h8"/></svg>
+            快捷键
+          </button>
+          <div class="sidebar-settings-split"></div>
+          <button class="sidebar-settings-item" type="button" data-set="about">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            关于系统
+          </button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+<script>
+  /* ================= 菜单配置（从这里增删菜单即可） ================= */
+  var ICONS = {
+    dashboard: '<rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>',
+    target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/>',
+    users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+    deal: '<path d="M3 7h18v13H3z"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/>',
+    task: '<path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/>',
+    bid: '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 9h6"/><path d="M7 13h10"/><path d="M7 17h7"/>',
+    trophy: '<circle cx="12" cy="8" r="6"/><path d="M15.5 12.9 17 22l-5-3-5 3 1.5-9.1"/>',
+    chart: '<path d="M3 3v18h18"/><path d="M7 15l3-4 3 3 4-6"/>',
+    campaign: '<path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M16 8a4 4 0 0 1 0 8"/>',
+    account: '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+    wallet: '<rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/><circle cx="17" cy="15" r="1.2"/>',
+    ticket: '<path d="M21 12a2 2 0 0 1-2-2V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v4a2 2 0 0 1 0 4v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4a2 2 0 0 1 2-2z"/><path d="M12 7v10"/>',
+    setting: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2 2 2 0 1 1-4 0 1.7 1.7 0 0 0-2.9-1.2l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.7 1.7 0 0 0 4.6 15a2 2 0 1 1 0-4 1.7 1.7 0 0 0 1.2-2.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.7 1.7 0 0 0 11.4 4a2 2 0 1 1 4 0 1.7 1.7 0 0 0 2.9 1.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.7 1.7 0 0 0 22 12a2 2 0 0 1-1 1.7z"/>'
+  };
+
+  var NAV = [
+    { title: '工作台', icon: 'dashboard', page: 'workbench', key: 'workbench' },
+    { title: '线索管理', icon: 'target', open: true, children: [
+      { title: '线索列表', page: 'lead-list', key: 'lead-list' },
+      { title: '线索池（公海）', page: 'placeholder', key: 'lead-pool' },
+      { title: '我的线索', page: 'placeholder', key: 'lead-mine' },
+      { title: '跟进记录', page: 'placeholder', key: 'lead-follow' },
+      { title: '线索分配', page: 'placeholder', key: 'lead-assign' },
+      { title: '回收与分配规则', page: 'placeholder', key: 'lead-rule' },
+      { title: '线索转客户', page: 'placeholder', key: 'lead-convert' }
+    ]},
+    { title: '客户库', icon: 'users', children: [
+      { title: '客户列表', page: 'placeholder', key: 'cust-list' },
+      { title: '客户公海', page: 'placeholder', key: 'cust-pool' },
+      { title: '客户详情', page: 'placeholder', key: 'cust-detail' },
+      { title: '联系人管理', page: 'placeholder', key: 'cust-contact' },
+      { title: '客户标签与分层', page: 'placeholder', key: 'cust-tag' },
+      { title: '客户关联企业', page: 'placeholder', key: 'cust-rel' },
+      { title: '流失与挽回', page: 'placeholder', key: 'cust-churn' }
+    ]},
+    { title: '商机与合同', icon: 'deal', children: [
+      { title: '商机列表', page: 'placeholder', key: 'opp-list' },
+      { title: '商机漏斗', page: 'placeholder', key: 'opp-funnel' },
+      { title: '报价单', page: 'placeholder', key: 'opp-quote' },
+      { title: '合同管理', page: 'placeholder', key: 'contract-list' },
+      { title: '合同回款计划', page: 'placeholder', key: 'contract-plan' },
+      { title: '合同审批', page: 'placeholder', key: 'contract-approve' }
+    ]},
+    { title: '任务与日程', icon: 'task', children: [
+      { title: '任务列表', page: 'placeholder', key: 'task-list' },
+      { title: '任务处理', page: 'placeholder', key: 'task-handle' },
+      { title: '任务报表', page: 'placeholder', key: 'task-report' },
+      { title: '业绩任务分配', page: 'placeholder', key: 'task-assign' },
+      { title: '拜访日程', page: 'placeholder', key: 'task-visit' },
+      { title: '待办提醒', page: 'placeholder', key: 'task-todo' }
+    ]},
+    { title: '招投标信息', icon: 'bid', children: [
+      { title: '招标公告', page: 'placeholder', key: 'bid-notice' },
+      { title: '中标结果', page: 'placeholder', key: 'bid-result' },
+      { title: '项目追踪', page: 'placeholder', key: 'bid-project' },
+      { title: '企业监控', page: 'placeholder', key: 'bid-company' },
+      { title: '关键词订阅', page: 'placeholder', key: 'bid-sub' },
+      { title: '标讯智能推荐', page: 'placeholder', key: 'bid-ai', isNew: true }
+    ]},
+    { title: '业绩', icon: 'trophy', children: [
+      { title: '业绩看板', page: 'placeholder', key: 'perf-board' },
+      { title: '业绩目标', page: 'placeholder', key: 'perf-goal' },
+      { title: '业绩排行', page: 'placeholder', key: 'perf-rank' },
+      { title: '提成核算', page: 'placeholder', key: 'perf-commission' },
+      { title: '业绩明细', page: 'placeholder', key: 'perf-detail' }
+    ]},
+    { title: '数据', icon: 'chart', children: [
+      { title: '客户分析', page: 'placeholder', key: 'data-cust' },
+      { title: '销售漏斗分析', page: 'placeholder', key: 'data-funnel' },
+      { title: '线索转化分析', page: 'placeholder', key: 'data-conv' },
+      { title: '团队数据看板', page: 'placeholder', key: 'data-team' },
+      { title: '自定义报表', page: 'placeholder', key: 'data-report' },
+      { title: '数据导出', page: 'placeholder', key: 'data-export' }
+    ]},
+    { title: '活动', icon: 'campaign', children: [
+      { title: '营销活动', page: 'placeholder', key: 'act-list' },
+      { title: '短信群发', page: 'placeholder', key: 'act-sms' },
+      { title: '短信统计', page: 'placeholder', key: 'act-sms-stat' },
+      { title: '人群包管理', page: 'placeholder', key: 'act-audience' },
+      { title: '活动效果分析', page: 'placeholder', key: 'act-effect' }
+    ]},
+    { title: '账户', icon: 'account', children: [
+      { title: '账号管理', page: 'placeholder', key: 'acct-list' },
+      { title: '组织架构', page: 'placeholder', key: 'acct-org' },
+      { title: '角色与权限', page: 'placeholder', key: 'acct-role' },
+      { title: '登录与安全', page: 'placeholder', key: 'acct-security' },
+      { title: '积分与额度', page: 'placeholder', key: 'acct-points' },
+      { title: '充值记录', page: 'placeholder', key: 'acct-recharge' }
+    ]},
+    { title: '财务', icon: 'wallet', children: [
+      { title: '订单与收款', page: 'placeholder', key: 'fin-order' },
+      { title: '发票管理', page: 'placeholder', key: 'fin-invoice' },
+      { title: '退款处理', page: 'placeholder', key: 'fin-refund' },
+      { title: '账单对账', page: 'placeholder', key: 'fin-bill' },
+      { title: '财务流水', page: 'placeholder', key: 'fin-flow' }
+    ]},
+    { title: '客服工单', icon: 'ticket', children: [
+      { title: '工单列表', page: 'placeholder', key: 'cs-ticket' },
+      { title: '工单处理', page: 'placeholder', key: 'cs-handle' },
+      { title: '回访记录', page: 'placeholder', key: 'cs-visit' },
+      { title: '知识库', page: 'placeholder', key: 'cs-kb' }
+    ]},
+    { title: '系统设置', icon: 'setting', children: [
+      { title: '字段与表单配置', page: 'placeholder', key: 'sys-field' },
+      { title: '数据字典', page: 'placeholder', key: 'sys-dict' },
+      { title: '审批流程', page: 'placeholder', key: 'sys-flow' },
+      { title: '操作日志', page: 'placeholder', key: 'sys-log' }
+    ]}
+  ];
+
+  /* ================= 渲染侧栏 ================= */
+  function svg(path) {
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + path + '</svg>';
+  }
+  var CHEVRON = '<svg class="sidebar-menu-button-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+
+  function renderNav() {
+    var html = '';
+    NAV.forEach(function (m, idx) {
+      if (!m.children) {
+        html += '<button class="sidebar-menu-button" type="button" data-page="' + (m.page || 'placeholder') + '" data-title="' + m.title + '" data-parent="' + m.title + '" data-key="' + m.key + '">' +
+          svg(ICONS[m.icon] || ICONS.dashboard) +
+          '<span class="sidebar-menu-button-label">' + m.title + '</span></button>';
+        return;
+      }
+      html += '<div class="sidebar-group-item" data-idx="' + idx + '" data-state="' + (m.open ? 'open' : 'closed') + '">' +
+        '<button class="sidebar-menu-button" type="button" data-title="' + m.title + '" data-group="1">' +
+        svg(ICONS[m.icon] || ICONS.dashboard) +
+        '<span class="sidebar-menu-button-label">' + m.title + '</span>' + CHEVRON + '</button>' +
+        '<div class="sidebar-menu-sub">';
+      m.children.forEach(function (c) {
+        html += '<a class="sidebar-menu-sub-item" href="#" data-page="' + (c.page || 'placeholder') + '" data-title="' + c.title + '" data-parent="' + m.title + '" data-key="' + c.key + '">' +
+          c.title + (c.isNew ? '<span class="tag-new">NEW</span>' : '') + '</a>';
+      });
+      html += '</div></div>';
+    });
+    document.getElementById('sidebarMenu').innerHTML = html;
+  }
+  renderNav();
+
+
+  /* ================= iframe 通信桥（与父页 线索管理.html 联动） ================= */
+  var sidebarEl = document.getElementById('sidebar');
+  var menuEl = document.getElementById('sidebarMenu');
+
+  function post(msg) {
+    msg.source = 'crm-sidebar';
+    try { window.parent.postMessage(msg, '*'); } catch (err) { /* 独立打开时忽略 */ }
+  }
+
+  function notifyToast(text) { post({ type: 'toast', text: text }); }
+
+  /* ---------- 高亮 ---------- */
+  function clearActive() {
+    Array.prototype.forEach.call(
+      document.querySelectorAll('.sidebar-menu-button.active, .sidebar-menu-sub-item.active'),
+      function (n) { n.classList.remove('active'); }
+    );
+  }
+
+  function markActive(key, expandGroup) {
+    if (!key) return null;
+    var el = menuEl.querySelector('[data-key="' + key + '"]');
+    if (!el) return null;
+    clearActive();
+    el.classList.add('active');
+    var wrap = el.closest('.sidebar-group-item');
+    if (wrap) {
+      var parentBtn = wrap.querySelector(':scope > .sidebar-menu-button');
+      if (parentBtn) parentBtn.classList.add('active');
+      if (expandGroup) wrap.setAttribute('data-state', 'open');
+    }
+    return el;
+  }
+
+  function navPayload(el) {
+    return {
+      type: 'nav',
+      key: el.getAttribute('data-key') || '',
+      page: el.getAttribute('data-page') || 'placeholder',
+      title: el.getAttribute('data-title') || '',
+      parent: el.getAttribute('data-parent') || el.getAttribute('data-title') || ''
+    };
+  }
+
+  /* ---------- 触发某个菜单项（等价于用户点击） ---------- */
+  function activateItem(el, silent) {
+    if (!el) return;
+    markActive(el.getAttribute('data-key'), true);
+    if (searchInput.value) { searchInput.value = ''; applyMenuFilter(); }
+    post(navPayload(el));
+  }
+
+  /* ---------- 折叠态 ---------- */
+  function setCollapsed(on) {
+    sidebarEl.setAttribute('data-state', on ? 'collapsed' : 'expanded');
+    if (on) closeSettings();
+  }
+
+  /* ---------- 菜单点击 ---------- */
+  menuEl.addEventListener('click', function (e) {
+    var sub = e.target.closest('.sidebar-menu-sub-item');
+    if (sub) {
+      e.preventDefault();
+      if (sidebarEl.getAttribute('data-state') === 'collapsed') {
+        setCollapsed(false);
+        post({ type: 'collapsed', value: false });
+      }
+      activateItem(sub);
+      return;
+    }
+    var btn = e.target.closest('.sidebar-menu-button');
+    if (!btn) return;
+    e.preventDefault();
+    var wrapper = btn.closest('.sidebar-group-item');
+    if (wrapper) {
+      // 有子菜单的一级项：点击只做展开/收起
+      if (sidebarEl.getAttribute('data-state') === 'collapsed') {
+        setCollapsed(false);
+        post({ type: 'collapsed', value: false });
+        wrapper.setAttribute('data-state', 'open');
+      } else {
+        wrapper.setAttribute('data-state', wrapper.getAttribute('data-state') === 'open' ? 'closed' : 'open');
+      }
+      return;
+    }
+    if (sidebarEl.getAttribute('data-state') === 'collapsed') {
+      setCollapsed(false);
+      post({ type: 'collapsed', value: false });
+    }
+    activateItem(btn);
+  });
+
+  /* ================= 菜单搜索 ================= */
+  var searchBox = document.getElementById('sidebarSearch');
+  var searchInput = document.getElementById('menuSearchInput');
+  var searchClear = document.getElementById('menuSearchClear');
+  var emptyEl = document.getElementById('sidebarEmpty');
+  var openStateSaved = null;
+
+  function snapshotOpenState() {
+    openStateSaved = {};
+    Array.prototype.forEach.call(menuEl.children, function (n) {
+      if (n.classList.contains('sidebar-group-item')) {
+        openStateSaved[n.getAttribute('data-idx')] = n.getAttribute('data-state');
+      }
+    });
+  }
+
+  function restoreOpenState() {
+    if (!openStateSaved) return;
+    Array.prototype.forEach.call(menuEl.children, function (n) {
+      if (n.classList.contains('sidebar-group-item')) {
+        n.setAttribute('data-state', openStateSaved[n.getAttribute('data-idx')] || 'closed');
+      }
+    });
+    openStateSaved = null;
+  }
+
+  function applyMenuFilter() {
+    var q = searchInput.value.trim().toLowerCase();
+    searchBox.classList.toggle('has-value', !!q);
+    var visible = 0;
+
+    if (!q) {
+      Array.prototype.forEach.call(menuEl.children, function (n) {
+        n.style.display = '';
+        Array.prototype.forEach.call(n.querySelectorAll('.sidebar-menu-sub-item'), function (s) { s.style.display = ''; });
+      });
+      emptyEl.style.display = 'none';
+      restoreOpenState();
+      return;
+    }
+
+    if (!openStateSaved) snapshotOpenState();
+
+    Array.prototype.forEach.call(menuEl.children, function (n) {
+      if (!n.classList.contains('sidebar-group-item')) {
+        var hit = n.textContent.toLowerCase().indexOf(q) !== -1;
+        n.style.display = hit ? '' : 'none';
+        if (hit) visible++;
+        return;
+      }
+      var labelEl = n.querySelector('.sidebar-menu-button-label');
+      var titleHit = labelEl && labelEl.textContent.toLowerCase().indexOf(q) !== -1;
+      var subHit = 0;
+      Array.prototype.forEach.call(n.querySelectorAll('.sidebar-menu-sub-item'), function (s) {
+        var h = titleHit || s.textContent.toLowerCase().indexOf(q) !== -1;
+        s.style.display = h ? '' : 'none';
+        if (h) subHit++;
+      });
+      var show = titleHit || subHit > 0;
+      n.style.display = show ? '' : 'none';
+      if (show) {
+        visible++;
+        n.setAttribute('data-state', 'open');
+      }
+    });
+
+    emptyEl.style.display = visible ? 'none' : 'block';
+  }
+
+  searchInput.addEventListener('input', applyMenuFilter);
+  searchClear.addEventListener('click', function () {
+    searchInput.value = '';
+    applyMenuFilter();
+    searchInput.focus();
+  });
+  searchBox.addEventListener('click', function () { searchInput.focus(); });
+  searchInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { searchInput.value = ''; applyMenuFilter(); searchInput.blur(); }
+  });
+
+  /* ================= 侧栏底部：设置 ================= */
+  var settingsBtn = document.getElementById('btnSidebarSetting');
+  var settingsPanel = document.getElementById('sidebarSettingsPanel');
+
+  function closeSettings() {
+    settingsPanel.classList.remove('open');
+    settingsBtn.classList.remove('active');
+  }
+
+  settingsBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    if (sidebarEl.getAttribute('data-state') === 'collapsed') {
+      setCollapsed(false);
+      post({ type: 'collapsed', value: false });
+      settingsPanel.classList.add('open');
+      settingsBtn.classList.add('active');
+      return;
+    }
+    var open = settingsPanel.classList.contains('open');
+    settingsPanel.classList.toggle('open', !open);
+    settingsBtn.classList.toggle('active', !open);
+  });
+
+  settingsPanel.addEventListener('click', function (e) {
+    var item = e.target.closest('.sidebar-settings-item');
+    if (!item) return;
+    e.stopPropagation();
+    var name = item.textContent.trim();
+    closeSettings();
+    notifyToast(name + '（示例入口）');
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!settingsPanel.classList.contains('open')) return;
+    if (e.target.closest('.sidebar-settings-wrap')) return;
+    closeSettings();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeSettings();
+  });
+  window.addEventListener('blur', closeSettings);
+
+  /* ================= 接收父页指令 ================= */
+  var gotInit = false;
+  window.addEventListener('message', function (e) {
+    var d = e.data || {};
+    if (d.source && d.source !== 'crm-main') return;
+    if (d.type === 'collapsed') {
+      setCollapsed(!!d.value);
+    } else if (d.type === 'activate') {
+      markActive(d.key, true);
+    } else if (d.type === 'navigate') {
+      var el = d.key ? menuEl.querySelector('[data-key="' + d.key + '"]') : null;
+      if (!el && d.page) el = menuEl.querySelector('[data-page="' + d.page + '"]');
+      if (el) activateItem(el);
+    } else if (d.type === 'init') {
+      var el2 = d.key ? menuEl.querySelector('[data-key="' + d.key + '"]') : null;
+      if (!el2) el2 = menuEl.querySelector('[data-key="lead-list"]');
+      if (el2) activateItem(el2);
+      gotInit = true;
+    }
+  });
+
+  /* 独立打开 sidebar.html 调试时的兜底高亮 */
+  setTimeout(function () {
+    if (!gotInit) markActive('lead-list', true);
+  }, 600);
+
+  /* 通知父页：侧栏已就绪 */
+  post({ type: 'ready' });
+
+</script>
+
+</body>
+</html>

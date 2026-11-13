@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大土豆有限责任公司 - 客户详情页（公司维度 · 多账户会员版）</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%236F9BC4'/%3E%3Ctext%20x='32'%20y='45'%20text-anchor='middle'%20font-size='38'%20font-weight='700'%20fill='%23ffffff'%20font-family='Microsoft%20YaHei,sans-serif'%3E%E5%B1%BF%3C/text%3E%3C/svg%3E">
+<style>
+/* ================= 设计令牌（沿用 CRM shadcn 体系） ================= */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --primary:#6F9BC4; --primary-dark:#5a87b0; --primary-light:#E2EBF6;
+  --background:#f5f6f8; --foreground:#555; --card:#fff; --card-foreground:#2A2A2A;
+  --muted:#F4F4F4; --muted-foreground:#999;
+  --destructive:#FF5454; --success:#00BFBF; --orange:#FF8F22; --purple:#7C6BD6; --pink:#E4578C;
+  --border:#E8E8E8; --border-dark:#D7D7D7; --ring:#6F9BC4;
+  --radius:8px; --radius-sm:6px;
+  --shadow:0 1px 3px rgba(0,0,0,.05),0 1px 2px rgba(0,0,0,.03);
+  --shadow-lg:0 4px 16px rgba(0,0,0,.08);
+  --mb-free:#8C8C8C;    --mb-free-bg:#F2F3F5;
+  --mb-normal:#5B7C99;  --mb-normal-bg:#EAF0F6;
+  --mb-standard:#0E9F9F;--mb-standard-bg:#E3F7F7;
+  --mb-advanced:#7C6BD6;--mb-advanced-bg:#EFECFB;
+  --mb-vip:#E4578C;     --mb-vip-bg:#FDECF3;
+  --mb-plus:#3B6FD4;    --mb-plus-bg:#E7EFFB;
+  --mb-madv:#12807A;    --mb-madv-bg:#E2F3F1;
+  --mb-mstd:#4AA3C7;    --mb-mstd-bg:#E9F4FA;
+}
+body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:14px;color:var(--foreground);background:var(--background);line-height:1.5;-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none;}
+li{list-style:none;}
+.container{max-width:1440px;margin:0 auto;padding:0 20px;}
+.flex{display:flex;}.items-center{align-items:center;}.items-start{align-items:flex-start;}.flex-wrap{flex-wrap:wrap;}
+.justify-between{justify-content:space-between;}.ml-auto{margin-left:auto;}.flex-1{flex:1;min-width:0;}
+.gap-1{gap:4px;}.gap-2{gap:8px;}.gap-3{gap:12px;}.gap-4{gap:16px;}
+.mt-1{margin-top:4px;}.mt-2{margin-top:8px;}.mt-3{margin-top:12px;}.mt-4{margin-top:16px;}
+.mb-2{margin-bottom:8px;}.mb-3{margin-bottom:12px;}.mb-4{margin-bottom:16px;}
+.ml-1{margin-left:4px;}.ml-2{margin-left:8px;}.ml-3{margin-left:12px;}.mr-2{margin-right:8px;}
+.text-xs{font-size:12px;}.text-sm{font-size:13px;}.text-lg{font-size:16px;}.text-xl{font-size:18px;}
+.font-medium{font-weight:500;}.font-semibold{font-weight:600;}.font-bold{font-weight:700;}
+.text-muted{color:var(--muted-foreground);}.text-primary{color:var(--primary);}
+.text-destructive{color:var(--destructive);}.text-success{color:var(--success);}.text-orange{color:var(--orange);}
+.text-right{text-align:right;}.text-center{text-align:center;}
+.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+/* ================= 按钮 ================= */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;height:32px;padding:0 13px;
+  border:1px solid transparent;border-radius:var(--radius-sm);font-size:13px;font-family:inherit;
+  cursor:pointer;white-space:nowrap;transition:all .15s ease;background:transparent;}
+.btn:active{transform:translateY(.5px);}
+.btn svg{width:14px;height:14px;}
+.btn-sm{height:27px;padding:0 10px;font-size:12.5px;border-radius:5px;}
+.btn-sm svg{width:12px;height:12px;}
+.btn-primary{background:var(--primary);color:#fff;}
+.btn-primary:hover{background:var(--primary-dark);}
+.btn-default{background:var(--primary);color:#fff;}
+.btn-default:hover{background:var(--primary-dark);}
+.btn-outline{background:var(--card);border-color:var(--border-dark);color:var(--foreground);}
+.btn-outline:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-light);}
+.btn-ghost{color:var(--muted-foreground);}
+.btn-ghost:hover{color:var(--primary);background:var(--primary-light);}
+.btn-danger{background:#fff;border-color:#FFC9C9;color:var(--destructive);}
+.btn-danger:hover{background:#FFF1F1;border-color:var(--destructive);}
+.btn-link{height:auto;padding:0;color:var(--primary);font-size:12.5px;}
+.btn-link:hover{text-decoration:underline;}
+
+/* ================= 顶栏 ================= */
+.topbar{background:#2A3B4D;color:#dbe4ee;font-size:13px;}
+.topbar .container{display:flex;align-items:center;height:44px;gap:16px;}
+.topbar a{opacity:.85;padding:0 2px;}
+.topbar a:hover{opacity:1;color:#fff;}
+.topbar .sep{width:1px;height:14px;background:rgba(255,255,255,.18);}
+.topbar .label{opacity:.55;}
+.topbar .danger-link{color:#FFB4B4;}
+
+/* ================= 公司信息头 ================= */
+.hero{background:var(--card);border-bottom:1px solid var(--border);padding:16px 0 0;}
+.hero-top{display:flex;align-items:flex-start;gap:12px;}
+.hero-avatar{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#8AB4D8,#6F9BC4);
+  color:#fff;font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.hero-name{font-size:20px;font-weight:700;color:var(--card-foreground);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.hero-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:5px;font-size:12.5px;color:var(--muted-foreground);}
+.hero-meta .dot{width:3px;height:3px;border-radius:50%;background:#c9ced6;}
+.tag{display:inline-flex;align-items:center;gap:4px;height:21px;padding:0 7px;border-radius:4px;
+  font-size:12px;font-weight:500;background:var(--muted);color:#666;border:1px solid transparent;}
+.tag-blue{background:#EAF1F9;color:#3d6a96;}
+.tag-red{background:#FFEDED;color:#d64b4b;}
+.tag-orange{background:#FFF3E5;color:#c47a1c;}
+.tag-green{background:#E4F7F5;color:#0d9285;}
+.tag-purple{background:#EFECFB;color:#6a58c4;}
+.tag-pink{background:#FDECF3;color:#c94a7b;}
+.tag-line{background:#fff;border-color:var(--border-dark);color:#777;}
+
+/* 会员统计条 */
+.mb-bar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:12px;padding:9px 12px;
+  background:#FAFBFC;border:1px solid var(--border);border-radius:var(--radius-sm);}
+.mb-bar .bar-label{font-size:12.5px;color:var(--muted-foreground);margin-right:2px;}
+.mb-chip{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 9px;border-radius:12px;
+  font-size:12px;font-weight:500;cursor:pointer;border:1px solid transparent;transition:all .15s;}
+.mb-chip .num{font-weight:700;}
+.mb-chip:hover{transform:translateY(-1px);}
+.mb-chip.off{opacity:.35;filter:grayscale(1);}
+
+/* 操作按钮行 */
+.hero-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 0;border-top:1px solid var(--border);margin-top:12px;}
+.hero-actions .divider{width:1px;height:18px;background:var(--border);margin:0 2px;}
+
+/* ================= 主体双栏 ================= */
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 356px;gap:16px;padding:16px 0 40px;align-items:start;}
+@media (max-width:1180px){.layout{grid-template-columns:1fr;}}
+
+/* 页签 */
+.tabs{display:flex;align-items:center;gap:2px;border-bottom:1px solid var(--border);background:var(--card);
+  border-radius:var(--radius) var(--radius) 0 0;padding:0 6px;overflow-x:auto;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{position:relative;padding:11px 14px;font-size:13.5px;color:var(--muted-foreground);cursor:pointer;
+  white-space:nowrap;border-bottom:2px solid transparent;transition:color .15s;}
+.tab:hover{color:var(--primary);}
+.tab.active{color:var(--primary);font-weight:600;border-bottom-color:var(--primary);}
+.tab .count{font-size:12px;opacity:.8;margin-left:3px;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* 卡片 */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);}
+.card + .card{margin-top:14px;}
+.card-head{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--border);}
+.card-title{font-size:14px;font-weight:600;color:var(--card-foreground);display:flex;align-items:center;gap:6px;}
+.card-title::before{content:"";width:3px;height:13px;border-radius:2px;background:var(--primary);}
+.card-body{padding:14px 16px;}
+.card-body.tight{padding:0;}
+
+/* 信息网格 */
+.info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 24px;}
+@media (max-width:760px){.info-grid{grid-template-columns:1fr;}}
+.info-row{display:flex;gap:10px;padding:7px 0;font-size:13px;border-bottom:1px dashed #F0F1F3;}
+.info-row:last-child{border-bottom:none;}
+.info-label{flex:0 0 92px;color:var(--muted-foreground);}
+.info-value{flex:1;color:var(--card-foreground);min-width:0;word-break:break-all;}
+
+/* 账户卡片网格 */
+.acc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(304px,1fr));gap:12px;}
+.acc-card{border:1px solid var(--border);border-radius:var(--radius);background:var(--card);
+  padding:12px 13px;cursor:pointer;transition:all .16s ease;position:relative;overflow:hidden;}
+.acc-card:hover{border-color:var(--primary);box-shadow:0 4px 14px rgba(111,155,196,.16);transform:translateY(-1px);}
+.acc-card.is-main::after{content:"主账号";position:absolute;top:0;right:0;background:var(--primary);color:#fff;
+  font-size:10.5px;padding:1px 7px;border-radius:0 0 0 6px;}
+.acc-top{display:flex;align-items:center;gap:8px;}
+.acc-avatar{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:600;color:#fff;background:var(--primary);flex-shrink:0;}
+.acc-account{font-size:13.5px;font-weight:600;color:var(--card-foreground);}
+.acc-sub{font-size:11.5px;color:var(--muted-foreground);margin-top:1px;}
+.acc-meta{display:grid;grid-template-columns:repeat(2,1fr);gap:6px 10px;margin-top:10px;font-size:12px;}
+.acc-meta .k{color:var(--muted-foreground);}
+.acc-meta .v{color:var(--card-foreground);font-weight:500;}
+.acc-foot{display:flex;align-items:center;gap:6px;margin-top:10px;padding-top:9px;border-top:1px dashed #EEF0F2;}
+.acc-points{font-size:12px;color:var(--muted-foreground);}
+.acc-points b{color:var(--primary);font-size:13px;}
+
+/* 会员徽章 */
+.mb{display:inline-flex;align-items:center;gap:4px;height:21px;padding:0 8px;border-radius:5px;
+  font-size:11.5px;font-weight:600;white-space:nowrap;}
+.mb .m-flag{font-size:9.5px;font-weight:700;padding:0 3px;border-radius:3px;background:rgba(255,255,255,.6);}
+.mb-free{color:var(--mb-free);background:var(--mb-free-bg);}
+.mb-normal{color:var(--mb-normal);background:var(--mb-normal-bg);}
+.mb-standard{color:var(--mb-standard);background:var(--mb-standard-bg);}
+.mb-advanced{color:var(--mb-advanced);background:var(--mb-advanced-bg);}
+.mb-vip{color:var(--mb-vip);background:var(--mb-vip-bg);}
+.mb-plus{color:var(--mb-plus);background:var(--mb-plus-bg);}
+.mb-madv{color:var(--mb-madv);background:var(--mb-madv-bg);}
+.mb-mstd{color:var(--mb-mstd);background:var(--mb-mstd-bg);}
+
+/* 表格 */
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead th{background:#FAFBFC;color:#7b8494;font-weight:500;text-align:left;padding:9px 12px;
+  border-bottom:1px solid var(--border);white-space:nowrap;font-size:12.5px;}
+tbody td{padding:10px 12px;border-bottom:1px solid #F2F3F5;color:var(--card-foreground);vertical-align:middle;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover{background:#FBFCFE;}
+tbody tr.clickable{cursor:pointer;}
+.empty{padding:26px;text-align:center;color:var(--muted-foreground);font-size:13px;}
+
+/* 联系人展开 */
+.c-expand td{background:#FAFCFF;padding:0;border-bottom:1px solid var(--border);}
+.c-detail{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 20px;padding:12px 16px;font-size:12.5px;}
+@media (max-width:760px){.c-detail{grid-template-columns:1fr;}}
+.c-detail .k{color:var(--muted-foreground);margin-right:6px;}
+.c-detail .full{grid-column:1/-1;}
+.c-actions{grid-column:1/-1;display:flex;gap:6px;flex-wrap:wrap;padding-top:8px;border-top:1px dashed #E7ECF2;}
+.kw{display:inline-block;padding:1px 7px;margin:2px 4px 2px 0;border:1px solid #DCE6F0;border-radius:4px;
+  font-size:11.5px;color:#5b7c99;background:#fff;}
+.main-dot{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:4px;
+  background:var(--primary);color:#fff;font-size:10.5px;}
+
+/* 右栏：客户动态时间轴 */
+.timeline{position:sticky;top:16px;}
+.tl-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);}
+.tl-filters{display:flex;gap:4px;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid var(--border);background:#FAFBFC;}
+.pill{height:24px;padding:0 10px;border-radius:12px;font-size:12px;color:var(--muted-foreground);
+  cursor:pointer;border:1px solid var(--border);background:#fff;display:inline-flex;align-items:center;}
+.pill:hover{color:var(--primary);border-color:var(--primary);}
+.pill.active{background:var(--primary);border-color:var(--primary);color:#fff;}
+.tl-list{max-height:calc(100vh - 250px);overflow-y:auto;padding:14px 16px 18px;position:relative;}
+.tl-list::-webkit-scrollbar{width:5px;}
+.tl-list::-webkit-scrollbar-thumb{background:#DCE3EC;border-radius:3px;}
+.tl-item{position:relative;padding-left:20px;padding-bottom:14px;}
+.tl-item::before{content:"";position:absolute;left:4px;top:5px;width:7px;height:7px;border-radius:50%;
+  background:#fff;border:2px solid #C9D6E4;}
+.tl-item::after{content:"";position:absolute;left:7px;top:14px;bottom:0;width:1px;background:#E6EBF1;}
+.tl-item:last-child{padding-bottom:0;}
+.tl-item:last-child::after{display:none;}
+.tl-item.today::before{border-color:var(--primary);background:var(--primary);box-shadow:0 0 0 3px rgba(111,155,196,.16);}
+.tl-card{background:#F7FAFD;border:1px solid #E9F0F8;border-radius:6px;padding:9px 11px;}
+.tl-item:hover .tl-card{background:#F2F7FC;}
+.tl-title{font-size:12.8px;font-weight:600;color:var(--card-foreground);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.tl-desc{font-size:12px;color:#777;margin-top:3px;word-break:break-all;}
+.tl-time{font-size:11.5px;color:#a0a8b4;margin-top:5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.tl-time .who{color:#7b8494;}
+
+/* 状态徽标 */
+.st{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:500;}
+.st::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;}
+.st-done{color:#12A594;}.st-doing{color:var(--primary);}.st-wait{color:var(--orange);}.st-cancel{color:#a6adba;}
+
+/* 订单金额 */
+.amount{font-family:"DIN Alternate","Helvetica Neue",Arial,sans-serif;font-weight:600;color:var(--card-foreground);}
+.amount.minus{color:var(--destructive);}
+</style>
+</head>
+<body>
+
+<!-- ================= 顶栏 ================= -->
+<div class="topbar">
+  <div class="container">
+    <span class="label">客户中心</span>
+    <a href="#">上报客户</a>
+    <a href="#">交流学习</a>
+    <a href="#">客户录音 ▾</a>
+    <span class="sep"></span>
+    <span class="label">快捷工具</span>
+    <a href="#">项目搜索</a>
+    <a href="#">招标搜索</a>
+    <a href="#">邀请招标</a>
+    <a href="#">服务话术</a>
+    <a href="#">工商企业查询</a>
+    <a href="#">库中中标企业</a>
+    <a href="#">问题反馈</a>
+    <span class="ml-auto"></span>
+    <a href="#" class="danger-link">删除此客户</a>
+  </div>
+</div>
+
+<!-- ================= 公司信息头 ================= -->
+<div class="hero">
+  <div class="container">
+    <div class="hero-top">
+      <div class="hero-avatar">大</div>
+      <div class="flex-1">
+        <div class="hero-name">
+          大土豆有限责任公司
+          <span class="tag tag-red">【未通过】验重</span>
+          <button class="btn btn-sm btn-primary">重新验证</button>
+          <button class="btn btn-sm btn-outline">扶</button>
+        </div>
+        <div class="hero-meta">
+          <span>客户 ID：6296201 E</span>
+          <span class="dot"></span>
+          <span>所属销售：张明（销售一部）</span>
+          <span class="dot"></span>
+          <span>入库时间：2022-11-25</span>
+          <span class="dot"></span>
+          <span>地区：辽宁省 · 海城市</span>
+          <span class="dot"></span>
+          <span>行业：医疗器械 / 食品加工</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap" style="justify-content:flex-end">
+        <button class="btn btn-sm btn-outline">编辑</button>
+        <button class="btn btn-sm btn-outline">更新验重信息</button>
+        <button class="btn btn-sm btn-outline">查看发票邮寄</button>
+        <div style="position:relative">
+          <button class="btn btn-sm btn-ghost" onclick="toggleOtherSearch(event)">其他查询 ▾</button>
+          <div id="otherSearchBox" style="display:none;position:absolute;right:0;top:34px;z-index:40;background:#fff;
+               border:1px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);padding:6px;min-width:150px">
+            <a href="#" style="display:block;padding:7px 10px;border-radius:5px;font-size:12.5px" onmouseover="this.style.background='#F4F7FA'" onmouseout="this.style.background='transparent'">百度一下</a>
+            <a href="#" style="display:block;padding:7px 10px;border-radius:5px;font-size:12.5px" onmouseover="this.style.background='#F4F7FA'" onmouseout="this.style.background='transparent'">天眼查</a>
+            <a href="#" style="display:block;padding:7px 10px;border-radius:5px;font-size:12.5px" onmouseover="this.style.background='#F4F7FA'" onmouseout="this.style.background='transparent'">爱企查</a>
+            <a href="#" style="display:block;padding:7px 10px;border-radius:5px;font-size:12.5px" onmouseover="this.style.background='#F4F7FA'" onmouseout="this.style.background='transparent'">企业信用查询</a>
+            <a href="#" style="display:block;padding:7px 10px;border-radius:5px;font-size:12.5px" onmouseover="this.style.background='#F4F7FA'" onmouseout="this.style.background='transparent'">信用中国</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 会员构成统计 -->
+    <div class="mb-bar">
+      <span class="bar-label">旗下会员构成（8 个账户）：</span>
+      <span class="mb-chip" data-filter="free"     style="color:var(--mb-free);background:var(--mb-free-bg)">免费 <span class="num">1</span></span>
+      <span class="mb-chip" data-filter="normal"   style="color:var(--mb-normal);background:var(--mb-normal-bg)">普通 <span class="num">1</span></span>
+      <span class="mb-chip" data-filter="standard" style="color:var(--mb-standard);background:var(--mb-standard-bg)">标准 <span class="num">1</span></span>
+      <span class="mb-chip" data-filter="advanced" style="color:var(--mb-advanced);background:var(--mb-advanced-bg)">高级 <span class="num">1</span></span>
+      <span class="mb-chip" data-filter="vip"      style="color:var(--mb-vip);background:var(--mb-vip-bg)">VIP <span class="num">2</span></span>
+      <span class="mb-chip" data-filter="plus"     style="color:var(--mb-plus);background:var(--mb-plus-bg)">Plus <span class="num">1</span></span>
+      <span class="mb-chip" data-filter="madv"     style="color:var(--mb-madv);background:var(--mb-madv-bg)">移动高级 <span class="num">1</span></span>
+      <span class="mb-chip" data-filter="mstd"     style="color:var(--mb-mstd);background:var(--mb-mstd-bg)">移动标准 <span class="num">0</span></span>
+      <span class="ml-auto text-xs text-muted">累计到款 ¥46,800 · 积分余额 12,860</span>
+    </div>
+
+    <!-- 操作按钮行 -->
+    <div class="hero-actions">
+      <button class="btn btn-sm btn-primary">写跟进</button>
+      <button class="btn btn-sm btn-outline">新建商机</button>
+      <button class="btn btn-sm btn-outline">新建联系人</button>
+      <button class="btn btn-sm btn-outline">新建账户</button>
+      <button class="btn btn-sm btn-outline">拨打电话</button>
+      <span class="divider"></span>
+      <button class="btn btn-sm btn-outline">在线开通会员</button>
+      <button class="btn btn-sm btn-outline">创建增值服务订单</button>
+      <button class="btn btn-sm btn-outline">生成合同</button>
+      <button class="btn btn-sm btn-outline">服务延期</button>
+      <button class="btn btn-sm btn-outline">密码重置</button>
+      <button class="btn btn-sm btn-outline">积分调整</button>
+      <span class="divider"></span>
+      <button class="btn btn-sm btn-ghost">变更所属人</button>
+      <button class="btn btn-sm btn-danger">放弃客户</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 主体：左内容 + 右动态 ================= -->
+<div class="container">
+  <div class="layout">
+
+    <!-- ============ 左栏 ============ -->
+    <div>
+      <div class="card" style="overflow:hidden">
+        <div class="tabs">
+          <div class="tab active" data-tab="overview" onclick="switchTab('overview')">概览</div>
+          <div class="tab" data-tab="accounts" onclick="switchTab('accounts')">账户与联系人<span class="count">(8/5)</span></div>
+          <div class="tab" data-tab="orders" onclick="switchTab('orders')">会员与订单<span class="count">(9)</span></div>
+          <div class="tab" data-tab="points" onclick="switchTab('points')">积分记录<span class="count">(12)</span></div>
+          <div class="tab" data-tab="usage" onclick="switchTab('usage')">功能使用记录</div>
+        </div>
+
+        <!-- ---------- 概览 ---------- -->
+        <div class="tab-panel active" id="panel-overview">
+          <div class="card-body">
+            <div class="info-grid">
+              <div>
+                <div class="info-row"><span class="info-label">公司全称</span><span class="info-value font-medium">大土豆有限责任公司</span></div>
+                <div class="info-row"><span class="info-label">统一信用码</span><span class="info-value">91210381MA0Y2X7L3K</span></div>
+                <div class="info-row"><span class="info-label">法定代表人</span><span class="info-value">杨海龙</span></div>
+                <div class="info-row"><span class="info-label">注册资本</span><span class="info-value">1,200 万人民币</span></div>
+                <div class="info-row"><span class="info-label">成立日期</span><span class="info-value">2016-04-18</span></div>
+                <div class="info-row"><span class="info-label">企业地址</span><span class="info-value">辽宁省海城市腾鳌镇工业园 3 号路 18 号</span></div>
+              </div>
+              <div>
+                <div class="info-row"><span class="info-label">客户来源</span><span class="info-value">400 来电 / 快速注册-服务号绑定</span></div>
+                <div class="info-row"><span class="info-label">客户评级</span><span class="info-value"><span class="tag tag-orange">AA</span> <span class="text-xs text-muted">（回访周期 1 天）</span></span></div>
+                <div class="info-row"><span class="info-label">归属销售</span><span class="info-value">张明 · 销售一部</span></div>
+                <div class="info-row"><span class="info-label">主营业务</span><span class="info-value">医疗器械、食品加工设备</span></div>
+                <div class="info-row"><span class="info-label">主营区域</span><span class="info-value">海城市 / 鞍山 / 沈阳</span></div>
+                <div class="info-row"><span class="info-label">同行网站</span><span class="info-value">
+                  <span class="kw">比地招标网</span><span class="kw">千里马</span><span class="kw">导航网</span><span class="kw">乙方宝</span><span class="kw">剑鱼</span><span class="kw">招标网</span>
+                </span></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body" style="border-top:1px solid var(--border)">
+            <div class="flex items-center gap-3 flex-wrap mb-3">
+              <div class="card-title" style="font-size:13.5px">经营数据</div>
+              <span class="text-xs text-muted">近 30 天</span>
+            </div>
+            <div class="flex gap-3 flex-wrap">
+              <div style="flex:1;min-width:150px;background:#FAFBFC;border:1px solid var(--border);border-radius:8px;padding:12px 14px">
+                <div class="text-xs text-muted">近 3 日中标</div>
+                <div class="text-xl font-bold" style="color:var(--card-foreground);margin-top:4px">0 <span class="text-xs text-muted font-medium">个</span></div>
+                <button class="btn btn-link mt-1">生成中标喜报</button>
+              </div>
+              <div style="flex:1;min-width:150px;background:#FAFBFC;border:1px solid var(--border);border-radius:8px;padding:12px 14px">
+                <div class="text-xs text-muted">累计中标</div>
+                <div class="text-xl font-bold" style="color:var(--card-foreground);margin-top:4px">7 <span class="text-xs text-muted font-medium">个</span></div>
+                <div class="text-xs text-muted mt-1">最近 2026-06-12</div>
+              </div>
+              <div style="flex:1;min-width:150px;background:#FAFBFC;border:1px solid var(--border);border-radius:8px;padding:12px 14px">
+                <div class="text-xs text-muted">在期会员账户</div>
+                <div class="text-xl font-bold" style="color:var(--card-foreground);margin-top:4px">6 <span class="text-xs text-muted font-medium">/ 8</span></div>
+                <div class="text-xs text-muted mt-1">2 个已到期</div>
+              </div>
+              <div style="flex:1;min-width:150px;background:#FAFBFC;border:1px solid var(--border);border-radius:8px;padding:12px 14px">
+                <div class="text-xs text-muted">积分余额</div>
+                <div class="text-xl font-bold" style="color:var(--primary);margin-top:4px">12,860</div>
+                <div class="text-xs text-muted mt-1">本月消耗 3,400</div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body" style="border-top:1px solid var(--border)">
+            <div class="card-title mb-3" style="font-size:13.5px">待办任务</div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>联系人</th><th>任务内容</th><th>任务类型</th><th>提醒时间</th><th>状态</th><th style="width:80px">操作</th></tr></thead>
+                <tbody>
+                  <tr><td>张明</td><td>VIP 账户 2030-09-30 到期，确认续费意向</td><td><span class="tag tag-blue">续费</span></td><td>2026-11-13 09:30</td><td><span class="st st-wait">待处理</span></td><td><button class="btn btn-link">完成</button></td></tr>
+                  <tr><td>李芳</td><td>高级会员发票信息缺失，补录开票资料</td><td><span class="tag tag-orange">服务</span></td><td>2026-11-13 14:00</td><td><span class="st st-wait">待处理</span></td><td><button class="btn btn-link">完成</button></td></tr>
+                  <tr><td>陈婷</td><td>积分临近耗尽（剩 180），推荐积分包</td><td><span class="tag tag-purple">运营</span></td><td>2026-11-14 10:00</td><td><span class="st st-doing">进行中</span></td><td><button class="btn btn-link">完成</button></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ---------- 账户与联系人 ---------- -->
+        <div class="tab-panel" id="panel-accounts">
+          <div class="card-body">
+            <div class="flex items-center gap-3 flex-wrap mb-3">
+              <div class="card-title" style="font-size:13.5px">账户列表</div>
+              <span class="text-xs text-muted">共 8 个账户 · 同一公司主体下多账户归一管理</span>
+              <span class="ml-auto"></span>
+              <select class="btn btn-sm btn-outline" style="padding:0 8px" onchange="filterAccounts(this.value)">
+                <option value="all">全部会员类型</option>
+                <option value="free">免费</option><option value="normal">普通</option><option value="standard">标准</option>
+                <option value="advanced">高级</option><option value="vip">VIP</option><option value="plus">Plus</option>
+                <option value="madv">移动高级</option><option value="mstd">移动标准</option>
+              </select>
+            </div>
+            <div class="acc-grid" id="accGrid">
+              <div class="acc-card is-main" data-mb="vip">
+                <div class="acc-top">
+                  <div class="acc-avatar">张</div>
+                  <div class="flex-1">
+                    <div class="acc-account">15650132296</div>
+                    <div class="acc-sub">张明 · 采购经理 · 主账号</div>
+                  </div>
+                  <span class="mb mb-vip">VIP会员<span class="m-flag">总站</span></span>
+                </div>
+                <div class="acc-meta">
+                  <div><span class="k">到期</span> <span class="v">2030-09-30</span></div>
+                  <div><span class="k">上次缴费</span> <span class="v">2025-07-07</span></div>
+                  <div><span class="k">绑定服务</span> <span class="v">邮/服/程/票/端</span></div>
+                  <div><span class="k">登录次数</span> <span class="v">128</span></div>
+                </div>
+                <div class="acc-foot">
+                  <span class="acc-points">积分余额 <b>5,320</b></span>
+                  <span class="tag tag-green">在期</span>
+                  <span class="ml-auto"></span>
+                  <button class="btn btn-sm btn-ghost">详情</button>
+                </div>
+              </div>
+
+              <div class="acc-card" data-mb="vip">
+                <div class="acc-top">
+                  <div class="acc-avatar" style="background:var(--mb-vip)">王</div>
+                  <div class="flex-1">
+                    <div class="acc-account">wangyan_bd</div>
+                    <div class="acc-sub">王艳 · 招投标专员 · 重复注册</div>
+                  </div>
+                  <span class="mb mb-vip">VIP会员<span class="m-flag">总站</span></span>
+                </div>
+                <div class="acc-meta">
+                  <div><span class="k">到期</span> <span class="v">2029-12-31</span></div>
+                  <div><span class="k">上次缴费</span> <span class="v">2024-12-20</span></div>
+                  <div><span class="k">绑定服务</span> <span class="v">邮/服/程</span></div>
+                  <div><span class="k">登录次数</span> <span class="v">46</span></div>
+                </div>
+                <div class="acc-foot">
+                  <span class="acc-points">积分余额 <b>2,180</b></span>
+                  <span class="tag tag-green">在期</span>
+                  <span class="ml-auto"></span>
+                  <button class="btn btn-sm btn-ghost">详情</button>
+                </div>
+              </div>
+
+              <div class="acc-card" data-mb="plus">
+                <div class="acc-top">
+                  <div class="acc-avatar" style="background:var(--mb-plus)">李</div>
+                  <div class="flex-1">
+                    <div class="acc-account">lifang_fin</div>
+                    <div class="acc-sub">李芳 · 财务总监</div>
+                  </div>
+                  <span class="mb mb-plus">Plus会员<span class="m-flag">总站</span></span>
+                </div>
+                <div class="acc-meta">
+                  <div><span class="k">到期</span> <span class="v">2028-03-15</span></div>
+                  <div><span class="k">上次缴费</span> <span class="v">2026-03-15</span></div>
+                  <div><span class="k">绑定服务</span> <span class="v">邮/票</span></div>
+                  <div><span class="k">登录次数</span> <span class="v">62</span></div>
+                </div>
+                <div class="acc-foot">
+                  <span class="acc-points">积分余额 <b>1,860</b></span>
+                  <span class="tag tag-green">在期</span>
+                  <span class="ml-auto"></span>
+                  <button class="btn btn-sm btn-ghost">详情</button>
+                </div>
+              </div>
+
+              <div class="acc-card" data-mb="advanced">
+                <div class="acc-top">
+                  <div class="acc-avatar" style="background:var(--mb-advanced)">陈</div>
+                  <div class="flex-1">
+                    <div class="acc-account">chent_zb</div>
+                    <div class="acc-sub">陈婷 · 招标专员</div>
+                  </div>
+                  <span class="mb mb-advanced">高级会员</span>
+                </div>
+                <div class="acc-meta">
+                  <div><span class="k">到期</span> <span class="v">2027-06-30</span></div>
+                  <div><span class="k">上次缴费</span> <span class="v">2025-06-30</span></div>
+                  <div><span class="k">绑定服务</span> <span class="v">邮/程</span></div>
+                  <div><span class="k">登录次数</span> <span class="v">88</span></div>
+                </div>
+                <div class="acc-foot">
+                  <span class="acc-points">积分余额 <b>180</b> <span class="text-xs" style="color:var(--destructive)">偏低</span></span>
+                  <span class="tag tag-green">在期</span>
+                  <span class="ml-auto"></span>
+                  <button class="btn btn-sm btn-ghost">详情</button>
+                </div>
+              </div>
+
+              <div class="acc-card" data-mb="standard">
+                <div class="acc-top">
+                  <div class="acc-avatar" style="background:var(--mb-standard)">赵</div>
+                  <div class="flex-1">
+                    <div class="acc-account">zhaolei88</div>
+                    <div class="acc-sub">赵磊 · 设备部主管</div>
+                  </div>
+                  <span class="mb mb-standard">标准会员</span>
+                </div>
+                <div class="acc-meta">
+                  <div><span class="k">到期</span> <span class="v">2026-05-20</span></div>
+                  <div><span class="k">上次缴费</span> <span class="v">2025-05-20</span></div>
+                  <div><span class="k">绑定服务</span> <span class="v">邮</span></div>
+                  <div><span class="k">登录次数</span> <span class="v">31</span></div>
+                </div>
+                <div class="acc-foot">
+                  <span class="acc-points">积分余额 <b>960</b></span>
+                  <span class="tag tag-line">已到期</span>
+                  <span class="ml-auto"></span>
+                  <button class="btn btn-sm btn-ghost">续费</button>
+                </div>
+              </div>
+
+              <div class="acc-card" data-mb="normal">
+                <div class="acc-top">
+                  <div class="acc-avatar" style="background:var(--mb-normal)">刘</div>
+                  <div class="flex-1">
+                    <div class="acc-account">liuyang1990</div>
+                    <div class="acc-sub">刘洋 · 行政专员</div>
+                  </div>
+                  <span class="mb mb-normal">普通会员</span>
+                </div>
+                <div class="acc-meta">
+                  <div><span class="k">到期</span> <span class="v">2026-08-01</span></div>
+                  <div><span class="k">上次缴费</span> <span class="v">2026-08-01</span></div>
+                  <div><span class="k">绑定服务</span> <span class="v">服务号</span></div>
+                  <div><span class="k">登录次数</span> <span class="v">12</span></div>
+                </div>
+                <div class="acc-foot">
+                  <span class="acc-points">积分余额 <b>320</b></span>
+                  <span class="tag tag-line">已到期</span>
+                  <span class="ml-auto"></span>
+                  <button class="btn btn-sm btn-ghost">续费</button>
+                </div>
+              </div>
+
+              <div class="acc-card" data-mb="madv">
+                <div class="acc-top">
+                  <div class="acc-avatar" style="background:var(--mb-madv)">孙</div>
+                  <div class="flex-1">
+                    <div class="acc-account">sunqiang_app</div>
+                    <div class="acc-sub">孙强 · 项目经理 · APP 端</div>
+                  </div>
+                  <span class="mb mb-madv">移动高级</span>
+                </div>
+                <div class="acc-meta">
+                  <div><span class="k">到期</span> <span class="v">2027-01-10</span></div>
+                  <div><span class="k">上次缴费</span> <span class="v">2026-01-10</span></div>
+                  <div><span class="k">绑定服务</span> <span class="v">APP/标讯助手</span></div>
+                  <div><span class="k">登录次数</span> <span class="v">203</span></div>
+                </div>
+                <div class="acc-foot">
+                  <span class="acc-points">积分余额 <b>1,540</b></span>
+                  <span class="tag tag-green">在期</span>
+                  <span class="ml-auto"></span>
+                  <button class="btn btn-sm btn-ghost">详情</button>
+                </div>
+              </div>
+
+              <div class="acc-card" data-mb="free">
+                <div class="acc-top">
+                  <div class="acc-avatar" style="background:var(--mb-free)">周</div>
+                  <div class="flex-1">
+                    <div class="acc-account">zhoumin_guest</div>
+                    <div class="acc-sub">周敏 · 前台 · 试用账号</div>
+                  </div>
+                  <span class="mb mb-free">免费会员</span>
+                </div>
+                <div class="acc-meta">
+                  <div><span class="k">到期</span> <span class="v">-</span></div>
+                  <div><span class="k">上次缴费</span> <span class="v">-</span></div>
+                  <div><span class="k">绑定服务</span> <span class="v">-</span></div>
+                  <div><span class="k">登录次数</span> <span class="v">3</span></div>
+                </div>
+                <div class="acc-foot">
+                  <span class="acc-points">积分余额 <b>500</b> <span class="text-xs text-muted">（注册赠送）</span></span>
+                  <span class="ml-auto"></span>
+                  <button class="btn btn-sm btn-ghost">升级会员</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body" style="border-top:1px solid var(--border)">
+            <div class="flex items-center gap-3 flex-wrap mb-3">
+              <div class="card-title" style="font-size:13.5px">联系人</div>
+              <span class="text-xs text-muted">共 5 位 · 点击行展开详情</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th style="width:170px">联系人</th><th style="width:130px">电话</th><th style="width:170px">级别 / 状态</th><th>绑定服务</th><th style="width:210px">搜索关键词</th><th style="width:70px">操作</th></tr>
+                </thead>
+                <tbody>
+                  <tr class="clickable" onclick="toggleContact(this)">
+                    <td><div class="flex items-center gap-2"><span class="main-dot">主</span><b>张明</b></div><div class="text-xs text-muted mt-1">采购经理 · ID:6296201</div></td>
+                    <td>15650132296</td>
+                    <td><span class="mb mb-vip" style="margin-bottom:3px">VIP会员</span><div class="text-xs text-muted">待核实 · 同事，禁止联系</div></td>
+                    <td class="text-xs">邮 / 服 / 程 / 票 / 端</td>
+                    <td><span class="kw">医院</span><span class="kw">食品</span><span class="kw">绩效</span><span class="kw">猪肉</span><span class="kw">水果</span></td>
+                    <td><button class="btn btn-link" onclick="event.stopPropagation()">编辑</button></td>
+                  </tr>
+                  <tr class="c-expand" style="display:none">
+                    <td colspan="6">
+                      <div class="c-detail">
+                        <div><span class="k">邮箱</span>zhangjiaming@bidcenter.cn</div>
+                        <div><span class="k">用户名/角色</span>张明 · 采购经理</div>
+                        <div><span class="k">绑定手机</span>15650132296</div>
+                        <div><span class="k">微信绑定</span>已绑定</div>
+                        <div><span class="k">到期时间</span>2030-09-30</div>
+                        <div><span class="k">邮件定制</span>120 条</div>
+                        <div><span class="k">销售跟进</span>张明（销售一部）</div>
+                        <div><span class="k">上次缴费</span>2025-07-07</div>
+                        <div><span class="k">注册/入库/登录</span>2022-11-25 / 2025-07-07 / 2026-07-14 15:59</div>
+                        <div class="full"><span class="k">搜索关键词</span>医院、食品、绩效、猪肉、水果</div>
+                        <div class="c-actions">
+                          <button class="btn btn-sm btn-outline">编辑</button>
+                          <button class="btn btn-sm btn-outline">创建维护任务</button>
+                          <button class="btn btn-sm btn-outline">客户ID变更</button>
+                          <button class="btn btn-sm btn-outline">发短信</button>
+                          <button class="btn btn-sm btn-outline">录音记录</button>
+                          <button class="btn btn-sm btn-danger">删除</button>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr class="clickable" onclick="toggleContact(this)">
+                    <td><div class="flex items-center gap-2"><b>李芳</b></div><div class="text-xs text-muted mt-1">财务总监</div></td>
+                    <td>13698765432</td>
+                    <td><span class="mb mb-plus" style="margin-bottom:3px">Plus会员</span><div class="text-xs text-muted">已核实</div></td>
+                    <td class="text-xs">邮 / 票</td>
+                    <td><span class="kw">财务系统</span><span class="kw">ERP</span><span class="kw">发票</span></td>
+                    <td><button class="btn btn-link" onclick="event.stopPropagation()">编辑</button></td>
+                  </tr>
+                  <tr class="c-expand" style="display:none">
+                    <td colspan="6">
+                      <div class="c-detail">
+                        <div><span class="k">邮箱</span>lifang@dtudou.com</div>
+                        <div><span class="k">用户名/角色</span>lifang_fin · 财务总监</div>
+                        <div><span class="k">绑定手机</span>13698765432</div>
+                        <div><span class="k">微信绑定</span>未绑定</div>
+                        <div><span class="k">到期时间</span>2028-03-15</div>
+                        <div><span class="k">邮件定制</span>60 条</div>
+                        <div><span class="k">销售跟进</span>李四（销售二部）</div>
+                        <div><span class="k">上次缴费</span>2026-03-15</div>
+                        <div><span class="k">注册/入库/登录</span>2023-05-08 / 2025-05-08 / 2026-11-02 09:12</div>
+                        <div class="full"><span class="k">搜索关键词</span>财务系统、ERP、发票</div>
+                        <div class="c-actions">
+                          <button class="btn btn-sm btn-outline">编辑</button>
+                          <button class="btn btn-sm btn-outline">创建维护任务</button>
+                          <button class="btn btn-sm btn-outline">客户ID变更</button>
+                          <button class="btn btn-sm btn-outline">发短信</button>
+                          <button class="btn btn-sm btn-outline">录音记录</button>
+                          <button class="btn btn-sm btn-danger">删除</button>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr class="clickable" onclick="toggleContact(this)">
+                    <td><div class="flex items-center gap-2"><b>陈婷</b></div><div class="text-xs text-muted mt-1">招标专员</div></td>
+                    <td>13512348888</td>
+                    <td><span class="mb mb-advanced" style="margin-bottom:3px">高级会员</span><div class="text-xs text-muted">已核实</div></td>
+                    <td class="text-xs">邮 / 程</td>
+                    <td><span class="kw">市政工程</span><span class="kw">管材</span></td>
+                    <td><button class="btn btn-link" onclick="event.stopPropagation()">编辑</button></td>
+                  </tr>
+                  <tr class="c-expand" style="display:none">
+                    <td colspan="6">
+                      <div class="c-detail">
+                        <div><span class="k">邮箱</span>chenting@dtudou.com</div>
+                        <div><span class="k">用户名/角色</span>chent_zb · 招标专员</div>
+                        <div><span class="k">绑定手机</span>13512348888</div>
+                        <div><span class="k">微信绑定</span>已绑定</div>
+                        <div><span class="k">到期时间</span>2027-06-30</div>
+                        <div><span class="k">邮件定制</span>35 条</div>
+                        <div><span class="k">销售跟进</span>张明（销售一部）</div>
+                        <div><span class="k">上次缴费</span>2025-06-30</div>
+                        <div><span class="k">注册/入库/登录</span>2024-03-11 / 2025-06-30 / 2026-11-11 10:34</div>
+                        <div class="full"><span class="k">搜索关键词</span>市政工程、管材</div>
+                        <div class="c-actions">
+                          <button class="btn btn-sm btn-outline">编辑</button>
+                          <button class="btn btn-sm btn-outline">创建维护任务</button>
+                          <button class="btn btn-sm btn-outline">客户ID变更</button>
+                          <button class="btn btn-sm btn-outline">发短信</button>
+                          <button class="btn btn-sm btn-outline">录音记录</button>
+                          <button class="btn btn-sm btn-danger">删除</button>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr class="clickable" onclick="toggleContact(this)">
+                    <td><div class="flex items-center gap-2"><b>孙强</b></div><div class="text-xs text-muted mt-1">项目经理</div></td>
+                    <td>13898887766</td>
+                    <td><span class="mb mb-madv" style="margin-bottom:3px">移动高级</span><div class="text-xs text-muted">已核实</div></td>
+                    <td class="text-xs">APP / 标讯助手</td>
+                    <td><span class="kw">冷库</span><span class="kw">冷链</span></td>
+                    <td><button class="btn btn-link" onclick="event.stopPropagation()">编辑</button></td>
+                  </tr>
+                  <tr class="c-expand" style="display:none">
+                    <td colspan="6">
+                      <div class="c-detail">
+                        <div><span class="k">邮箱</span>sunqiang@dtudou.com</div>
+                        <div><span class="k">用户名/角色</span>sunqiang_app · 项目经理</div>
+                        <div><span class="k">绑定手机</span>13898887766</div>
+                        <div><span class="k">微信绑定</span>未绑定</div>
+                        <div><span class="k">到期时间</span>2027-01-10</div>
+                        <div><span class="k">邮件定制</span>0 条</div>
+                        <div><span class="k">销售跟进</span>王五（销售三部）</div>
+                        <div><span class="k">上次缴费</span>2026-01-10</div>
+                        <div><span class="k">注册/入库/登录</span>2025-11-20 / 2025-11-20 / 2026-11-12 08:20</div>
+                        <div class="full"><span class="k">搜索关键词</span>冷库、冷链</div>
+                        <div class="c-actions">
+                          <button class="btn btn-sm btn-outline">编辑</button>
+                          <button class="btn btn-sm btn-outline">创建维护任务</button>
+                          <button class="btn btn-sm btn-outline">客户ID变更</button>
+                          <button class="btn btn-sm btn-outline">发短信</button>
+                          <button class="btn btn-sm btn-outline">录音记录</button>
+                          <button class="btn btn-sm btn-danger">删除</button>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td><div class="flex items-center gap-2"><b>王磊</b></div><div class="text-xs text-muted mt-1">项目经理</div></td>
+                    <td class="text-muted">--</td>
+                    <td><span class="tag tag-line">未注册</span></td>
+                    <td class="text-muted">--</td>
+                    <td class="text-muted">--</td>
+                    <td><button class="btn btn-link">邀请</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ---------- 会员与订单 ---------- -->
+        <div class="tab-panel" id="panel-orders">
+          <div class="card-body" style="padding-bottom:0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <div class="card-title" style="font-size:13.5px">会员与订单</div>
+              <span class="ml-auto"></span>
+              <button class="btn btn-sm btn-outline">导出</button>
+              <button class="btn btn-sm btn-primary">在线开通会员</button>
+            </div>
+            <div class="flex gap-2 flex-wrap mt-3">
+              <span class="pill active" data-sub="order" onclick="switchSub('order',this)">在线开通订单（9）</span>
+              <span class="pill" data-sub="subs" onclick="switchSub('subs',this)">订阅管理</span>
+              <span class="pill" data-sub="vip-order" onclick="switchSub('vip-order',this)">增值服务订单</span>
+              <span class="pill" data-sub="contract" onclick="switchSub('contract',this)">合同与回款</span>
+            </div>
+          </div>
+
+          <!-- 在线开通订单 -->
+          <div class="tab-panel active" id="sub-order">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>订单类型</th><th>会员账号</th><th>订单编号</th><th>服务时间</th><th>支付状态</th><th>开通金额</th><th>业绩归属</th><th>下单时间</th><th style="width:80px">操作</th></tr></thead>
+                <tbody>
+                  <tr><td><span class="tag tag-pink">VIP 会员</span></td><td>15650132296</td><td>DD20250707001</td><td>2025-07-07 ~ 2030-09-30</td><td><span class="st st-done">已支付</span></td><td class="amount">¥18,600</td><td>张明</td><td>2025-07-07 10:12</td><td><button class="btn btn-link">详情</button></td></tr>
+                  <tr><td><span class="tag tag-pink">VIP 会员</span></td><td>wangyan_bd</td><td>DD20241220003</td><td>2024-12-20 ~ 2029-12-31</td><td><span class="st st-done">已支付</span></td><td class="amount">¥16,800</td><td>李四</td><td>2024-12-20 15:40</td><td><button class="btn btn-link">详情</button></td></tr>
+                  <tr><td><span class="tag tag-blue">Plus 会员</span></td><td>lifang_fin</td><td>DD20260315002</td><td>2026-03-15 ~ 2028-03-15</td><td><span class="st st-done">已支付</span></td><td class="amount">¥6,800</td><td>李四</td><td>2026-03-15 09:05</td><td><button class="btn btn-link">详情</button></td></tr>
+                  <tr><td><span class="tag tag-purple">高级会员</span></td><td>chent_zb</td><td>DD20250630007</td><td>2025-06-30 ~ 2027-06-30</td><td><span class="st st-done">已支付</span></td><td class="amount">¥3,980</td><td>张明</td><td>2025-06-30 16:22</td><td><button class="btn btn-link">详情</button></td></tr>
+                  <tr><td><span class="tag tag-blue">移动高级</span></td><td>sunqiang_app</td><td>DD20260110011</td><td>2026-01-10 ~ 2027-01-10</td><td><span class="st st-done">已支付</span></td><td class="amount">¥1,280</td><td>王五</td><td>2026-01-10 11:38</td><td><button class="btn btn-link">详情</button></td></tr>
+                  <tr><td><span class="tag tag-green">标准会员</span></td><td>zhaolei88</td><td>DD20250520005</td><td>2025-05-20 ~ 2026-05-20</td><td><span class="st st-done">已支付</span></td><td class="amount">¥1,680</td><td>张明</td><td>2025-05-20 14:02</td><td><button class="btn btn-link">详情</button></td></tr>
+                  <tr><td><span class="tag tag-orange">普通会员</span></td><td>liuyang1990</td><td>DD20260801014</td><td>2026-08-01 ~ 2026-08-01</td><td><span class="st st-done">已支付</span></td><td class="amount">¥199</td><td>张明</td><td>2026-08-01 20:11</td><td><button class="btn btn-link">详情</button></td></tr>
+                  <tr><td><span class="tag tag-orange">积分包</span></td><td>15650132296</td><td>DD20260918021</td><td>即时到账 10,000 积分</td><td><span class="st st-done">已支付</span></td><td class="amount">¥499</td><td>张明</td><td>2026-09-18 10:26</td><td><button class="btn btn-link">详情</button></td></tr>
+                  <tr><td><span class="tag tag-purple">增值服务</span></td><td>chent_zb</td><td>DD20261020033</td><td>项目协助 · 30 天</td><td><span class="st st-wait">待支付</span></td><td class="amount">¥2,000</td><td>张明</td><td>2026-10-20 17:45</td><td><button class="btn btn-link">催付</button></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 订阅管理 -->
+          <div class="tab-panel" id="sub-subs">
+            <div class="card-body" style="padding-bottom:4px">
+              <div class="card-title mb-3" style="font-size:13px">关键词订阅</div>
+              <div class="flex gap-2 flex-wrap mb-2">
+                <span class="tag tag-line">PC 招标订阅（3）</span>
+                <span class="tag tag-line">PC 工程订阅（2）</span>
+                <span class="tag tag-line">APP 招标订阅（4）</span>
+                <span class="tag tag-line">APP 工程订阅（5）</span>
+                <span class="tag tag-line">标讯助手招标订阅（2）</span>
+                <span class="tag tag-line">标讯助手工程订阅（3）</span>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>邮箱（账户名/级别）</th><th>定制关键词</th><th>地区</th><th>类别</th><th>发送方式</th><th>检索方式</th><th>推送状态</th><th style="width:80px">操作</th></tr></thead>
+                <tbody>
+                  <tr><td>zhangjiaming@bidcenter.cn<br><span class="text-xs text-muted">15650132296 / VIP</span></td><td>医院、食品</td><td>辽宁-鞍山</td><td>招标公告</td><td>邮件 + 微信</td><td>标题+全文</td><td><span class="st st-done">推送中</span></td><td><button class="btn btn-link">编辑</button></td></tr>
+                  <tr><td>lifang@dtudou.com<br><span class="text-xs text-muted">lifang_fin / Plus</span></td><td>财务系统、ERP</td><td>全国</td><td>招标公告</td><td>邮件</td><td>标题</td><td><span class="st st-done">推送中</span></td><td><button class="btn btn-link">编辑</button></td></tr>
+                  <tr><td>chenting@dtudou.com<br><span class="text-xs text-muted">chent_zb / 高级</span></td><td>市政工程、管材</td><td>辽宁</td><td>招标公告 + 中标</td><td>邮件</td><td>标题+全文</td><td><span class="st st-doing">暂停</span></td><td><button class="btn btn-link">编辑</button></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="card-body" style="border-top:1px solid var(--border);padding-bottom:4px">
+              <div class="card-title mb-3" style="font-size:13px">结构化数据包 / 数据服务</div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>订阅名称</th><th>地区</th><th>行业类型</th><th>项目阶段</th><th>状态</th><th style="width:80px">操作</th></tr></thead>
+                <tbody>
+                  <tr><td>医疗器械月度数据包</td><td>辽宁</td><td>医疗器械</td><td>招标 / 中标</td><td><span class="st st-done">生效中</span></td><td><button class="btn btn-link">编辑</button></td></tr>
+                  <tr><td>食品加工设备定制</td><td>东北三省</td><td>食品加工</td><td>招标</td><td><span class="st st-wait">待审核</span></td><td><button class="btn btn-link">编辑</button></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 增值服务订单 -->
+          <div class="tab-panel" id="sub-vip-order">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>服务名称</th><th>会员账号</th><th>服务周期</th><th>订单金额</th><th>到款状态</th><th>负责人</th><th>下单时间</th><th style="width:80px">操作</th></tr></thead>
+                <tbody>
+                  <tr><td>项目协助（人工代查 20 条）</td><td>chent_zb</td><td>2026-10-20 ~ 2026-11-19</td><td class="amount">¥2,000</td><td><span class="st st-wait">未到款</span></td><td>张明</td><td>2026-10-20 17:45</td><td><button class="btn btn-link">详情</button></td></tr>
+                  <tr><td>中标喜报定制（5 期）</td><td>15650132296</td><td>2026-06-01 ~ 2026-12-01</td><td class="amount">¥1,500</td><td><span class="st st-done">已到款</span></td><td>张明</td><td>2026-06-01 09:30</td><td><button class="btn btn-link">详情</button></td></tr>
+                  <tr><td>广告位（首页行业推荐 7 天）</td><td>wangyan_bd</td><td>2026-09-01 ~ 2026-09-08</td><td class="amount">¥800</td><td><span class="st st-done">已到款</span></td><td>李四</td><td>2026-09-01 11:00</td><td><button class="btn btn-link">详情</button></td></tr>
+                  <tr><td>服务延期（VIP 延长 3 个月）</td><td>15650132296</td><td>延期至 2030-12-30</td><td class="amount">¥0</td><td><span class="st st-cancel">赠送</span></td><td>张明</td><td>2026-07-15 16:20</td><td><button class="btn btn-link">详情</button></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 合同与回款 -->
+          <div class="tab-panel" id="sub-contract">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>合同编号</th><th>合同名称</th><th>签约金额</th><th>已回款</th><th>订单状态</th><th>下单时间</th><th style="width:80px">操作</th></tr></thead>
+                <tbody>
+                  <tr><td>HT20250707-018</td><td>VIP 会员 5 年服务合同</td><td class="amount">¥18,600</td><td class="amount">¥18,600</td><td><span class="st st-done">已完成</span></td><td>2025-07-07</td><td><button class="btn btn-link">查看</button></td></tr>
+                  <tr><td>HT20241220-006</td><td>VIP 会员 5 年服务合同</td><td class="amount">¥16,800</td><td class="amount">¥16,800</td><td><span class="st st-done">已完成</span></td><td>2024-12-20</td><td><button class="btn btn-link">查看</button></td></tr>
+                  <tr><td>HT20260315-011</td><td>Plus 会员 2 年服务合同</td><td class="amount">¥6,800</td><td class="amount">¥6,800</td><td><span class="st st-done">已完成</span></td><td>2026-03-15</td><td><button class="btn btn-link">查看</button></td></tr>
+                  <tr><td>HT20261020-042</td><td>项目协助服务单</td><td class="amount">¥2,000</td><td class="amount minus">¥0</td><td><span class="st st-wait">待回款</span></td><td>2026-10-20</td><td><button class="btn btn-link">催款</button></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ---------- 积分记录 ---------- -->
+        <div class="tab-panel" id="panel-points">
+          <div class="card-body" style="padding-bottom:0">
+            <div class="flex items-center gap-3 flex-wrap">
+              <div class="card-title" style="font-size:13.5px">积分记录</div>
+              <span class="text-xs text-muted">按账户维度汇总 · 公司总分 12,860</span>
+              <span class="ml-auto"></span>
+              <select class="btn btn-sm btn-outline" style="padding:0 8px" onchange="filterPoints(this.value)">
+                <option value="all">全部账户</option>
+                <option value="15650132296">15650132296（VIP）</option>
+                <option value="wangyan_bd">wangyan_bd（VIP）</option>
+                <option value="lifang_fin">lifang_fin（Plus）</option>
+                <option value="chent_zb">chent_zb（高级）</option>
+                <option value="sunqiang_app">sunqiang_app（移动高级）</option>
+              </select>
+              <button class="btn btn-sm btn-outline">积分调整</button>
+              <button class="btn btn-sm btn-primary">充值积分</button>
+            </div>
+            <div class="flex gap-3 flex-wrap mt-3 mb-3">
+              <div style="flex:1;min-width:130px;background:#F7FAFD;border:1px solid #E9F0F8;border-radius:8px;padding:10px 12px">
+                <div class="text-xs text-muted">总获得</div><div class="font-bold text-lg" style="color:#0d9285">+18,260</div>
+              </div>
+              <div style="flex:1;min-width:130px;background:#FFF7F7;border:1px solid #FBE4E4;border-radius:8px;padding:10px 12px">
+                <div class="text-xs text-muted">总消耗</div><div class="font-bold text-lg" style="color:var(--destructive)">-5,400</div>
+              </div>
+              <div style="flex:1;min-width:130px;background:#F7FAFD;border:1px solid #E9F0F8;border-radius:8px;padding:10px 12px">
+                <div class="text-xs text-muted">当前余额</div><div class="font-bold text-lg" style="color:var(--primary)">12,860</div>
+              </div>
+              <div style="flex:1;min-width:130px;background:#FAFBFC;border:1px solid var(--border);border-radius:8px;padding:10px 12px">
+                <div class="text-xs text-muted">本月消耗</div><div class="font-bold text-lg" style="color:var(--orange)">3,400</div>
+              </div>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th style="width:150px">时间</th><th style="width:170px">账户</th><th style="width:150px">会员级别</th><th style="width:90px">类型</th><th>变动说明</th><th style="width:110px">积分变动</th><th style="width:110px">变动后余额</th><th style="width:110px">操作人</th></tr></thead>
+              <tbody id="pointsBody">
+                <tr data-acc="15650132296"><td>2026-11-12 08:26</td><td>15650132296</td><td><span class="mb mb-vip">VIP会员</span></td><td><span class="tag tag-red">消耗</span></td><td>查看中标联系人详情（5 条）</td><td class="amount minus">-50</td><td>5,320</td><td>系统</td></tr>
+                <tr data-acc="chent_zb"><td>2026-11-11 16:42</td><td>chent_zb</td><td><span class="mb mb-advanced">高级会员</span></td><td><span class="tag tag-red">消耗</span></td><td>导出招投标数据（100 条）</td><td class="amount minus">-200</td><td>180</td><td>系统</td></tr>
+                <tr data-acc="15650132296"><td>2026-11-11 10:14</td><td>15650132296</td><td><span class="mb mb-vip">VIP会员</span></td><td><span class="tag tag-red">消耗</span></td><td>使用 AI 标书解析 2 次</td><td class="amount minus">-120</td><td>5,370</td><td>系统</td></tr>
+                <tr data-acc="lifang_fin"><td>2026-11-10 15:03</td><td>lifang_fin</td><td><span class="mb mb-plus">Plus会员</span></td><td><span class="tag tag-red">消耗</span></td><td>下载招标文件（12 份）</td><td class="amount minus">-60</td><td>1,860</td><td>系统</td></tr>
+                <tr data-acc="wangyan_bd"><td>2026-11-09 09:31</td><td>wangyan_bd</td><td><span class="mb mb-vip">VIP会员</span></td><td><span class="tag tag-green">获得</span></td><td>每日签到（连续 7 天）</td><td class="amount" style="color:#0d9285">+70</td><td>2,180</td><td>系统</td></tr>
+                <tr data-acc="15650132296"><td>2026-10-20 18:00</td><td>15650132296</td><td><span class="mb mb-vip">VIP会员</span></td><td><span class="tag tag-orange">调整</span></td><td>销售赠送（续费谈判用）· 张明</td><td class="amount" style="color:#0d9285">+2,000</td><td>5,490</td><td>张明</td></tr>
+                <tr data-acc="15650132296"><td>2026-09-18 10:26</td><td>15650132296</td><td><span class="mb mb-vip">VIP会员</span></td><td><span class="tag tag-blue">充值</span></td><td>购买积分包 10,000 积分（订单 DD20260918021）</td><td class="amount" style="color:#0d9285">+10,000</td><td>13,490</td><td>系统</td></tr>
+                <tr data-acc="sunqiang_app"><td>2026-09-02 14:18</td><td>sunqiang_app</td><td><span class="mb mb-madv">移动高级</span></td><td><span class="tag tag-red">消耗</span></td><td>APP 端项目追踪提醒推送</td><td class="amount minus">-40</td><td>1,540</td><td>系统</td></tr>
+                <tr data-acc="chent_zb"><td>2026-08-25 11:07</td><td>chent_zb</td><td><span class="mb mb-advanced">高级会员</span></td><td><span class="tag tag-red">消耗</span></td><td>企业图谱分析 3 次</td><td class="amount minus">-90</td><td>380</td><td>系统</td></tr>
+                <tr data-acc="lifang_fin"><td>2026-07-01 09:00</td><td>lifang_fin</td><td><span class="mb mb-plus">Plus会员</span></td><td><span class="tag tag-green">获得</span></td><td>会员续费赠送积分</td><td class="amount" style="color:#0d9285">+1,500</td><td>1,920</td><td>系统</td></tr>
+                <tr data-acc="zhoumin_guest"><td>2026-06-18 20:11</td><td>zhoumin_guest</td><td><span class="mb mb-free">免费会员</span></td><td><span class="tag tag-green">获得</span></td><td>注册赠送积分</td><td class="amount" style="color:#0d9285">+500</td><td>500</td><td>系统</td></tr>
+                <tr data-acc="15650132296"><td>2026-06-12 17:55</td><td>15650132296</td><td><span class="mb mb-vip">VIP会员</span></td><td><span class="tag tag-red">消耗</span></td><td>中标喜报生成（1 期）</td><td class="amount minus">-100</td><td>3,490</td><td>系统</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ---------- 功能使用记录 ---------- -->
+        <div class="tab-panel" id="panel-usage">
+          <div class="card-body" style="padding-bottom:0">
+            <div class="flex items-center gap-3 flex-wrap">
+              <div class="card-title" style="font-size:13.5px">功能使用记录</div>
+              <span class="text-xs text-muted">近 30 天 · 共 1,286 次调用</span>
+              <span class="ml-auto"></span>
+              <select class="btn btn-sm btn-outline" style="padding:0 8px" onchange="filterUsage(this.value)">
+                <option value="all">全部账户</option>
+                <option value="15650132296">15650132296（VIP）</option>
+                <option value="chent_zb">chent_zb（高级）</option>
+                <option value="sunqiang_app">sunqiang_app（移动高级）</option>
+                <option value="lifang_fin">lifang_fin（Plus）</option>
+              </select>
+              <button class="btn btn-sm btn-outline">导出记录</button>
+            </div>
+            <div class="flex gap-2 flex-wrap mt-3">
+              <span class="pill active" data-usg="all" onclick="switchUsg('all',this)">全部</span>
+              <span class="pill" data-usg="search" onclick="switchUsg('search',this)">搜索</span>
+              <span class="pill" data-usg="view" onclick="switchUsg('view',this)">查看</span>
+              <span class="pill" data-usg="export" onclick="switchUsg('export',this)">导出</span>
+              <span class="pill" data-usg="ai" onclick="switchUsg('ai',this)">AI 能力</span>
+              <span class="pill" data-usg="push" onclick="switchUsg('push',this)">订阅推送</span>
+            </div>
+            <div class="flex gap-3 flex-wrap mt-3 mb-3">
+              <div style="flex:1;min-width:120px;background:#FAFBFC;border:1px solid var(--border);border-radius:8px;padding:9px 12px">
+                <div class="text-xs text-muted">搜索</div><div class="font-bold" style="color:var(--card-foreground)">642 次</div>
+              </div>
+              <div style="flex:1;min-width:120px;background:#FAFBFC;border:1px solid var(--border);border-radius:8px;padding:9px 12px">
+                <div class="text-xs text-muted">信息查看</div><div class="font-bold" style="color:var(--card-foreground)">418 次</div>
+              </div>
+              <div style="flex:1;min-width:120px;background:#FAFBFC;border:1px solid var(--border);border-radius:8px;padding:9px 12px">
+                <div class="text-xs text-muted">导出</div><div class="font-bold" style="color:var(--card-foreground)">96 次</div>
+              </div>
+              <div style="flex:1;min-width:120px;background:#FAFBFC;border:1px solid var(--border);border-radius:8px;padding:9px 12px">
+                <div class="text-xs text-muted">AI 能力</div><div class="font-bold" style="color:var(--card-foreground)">85 次</div>
+              </div>
+              <div style="flex:1;min-width:120px;background:#FAFBFC;border:1px solid var(--border);border-radius:8px;padding:9px 12px">
+                <div class="text-xs text-muted">订阅推送</div><div class="font-bold" style="color:var(--card-foreground)">45 次</div>
+              </div>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th style="width:150px">时间</th><th style="width:165px">账户</th><th style="width:110px">功能模块</th><th>操作内容</th><th style="width:90px">消耗积分</th><th style="width:120px">终端</th><th style="width:90px">结果</th></tr></thead>
+              <tbody id="usageBody">
+                <tr data-acc="15650132296" data-usg="search"><td>2026-11-12 08:26</td><td>15650132296</td><td><span class="tag tag-blue">搜索</span></td><td>关键词「医疗器械 采购」· 招标搜索</td><td>-5</td><td>PC 站</td><td><span class="st st-done">成功</span></td></tr>
+                <tr data-acc="sunqiang_app" data-usg="push"><td>2026-11-12 07:40</td><td>sunqiang_app</td><td><span class="tag tag-orange">订阅推送</span></td><td>标讯助手推送 12 条（冷库/冷链）</td><td>0</td><td>APP</td><td><span class="st st-done">成功</span></td></tr>
+                <tr data-acc="chent_zb" data-usg="export"><td>2026-11-11 16:42</td><td>chent_zb</td><td><span class="tag tag-purple">导出</span></td><td>导出「市政工程」招标数据 100 条（Excel）</td><td>-200</td><td>PC 站</td><td><span class="st st-done">成功</span></td></tr>
+                <tr data-acc="15650132296" data-usg="ai"><td>2026-11-11 10:14</td><td>15650132296</td><td><span class="tag tag-pink">AI 能力</span></td><td>AI 标书解析（2 份）· 资质匹配结论</td><td>-120</td><td>PC 站</td><td><span class="st st-done">成功</span></td></tr>
+                <tr data-acc="15650132296" data-usg="view"><td>2026-11-11 09:52</td><td>15650132296</td><td><span class="tag tag-blue">信息查看</span></td><td>查看中标联系人详情（5 条）</td><td>-50</td><td>PC 站</td><td><span class="st st-done">成功</span></td></tr>
+                <tr data-acc="lifang_fin" data-usg="view"><td>2026-11-10 15:03</td><td>lifang_fin</td><td><span class="tag tag-blue">信息查看</span></td><td>下载招标文件 12 份</td><td>-60</td><td>PC 站</td><td><span class="st st-done">成功</span></td></tr>
+                <tr data-acc="chent_zb" data-usg="search"><td>2026-11-10 09:20</td><td>chent_zb</td><td><span class="tag tag-blue">搜索</span></td><td>关键词「管材 招标」· 工程搜索</td><td>-3</td><td>PC 站</td><td><span class="st st-done">成功</span></td></tr>
+                <tr data-acc="sunqiang_app" data-usg="search"><td>2026-11-09 19:05</td><td>sunqiang_app</td><td><span class="tag tag-blue">搜索</span></td><td>APP 端「冷链 设备」搜索</td><td>-2</td><td>APP</td><td><span class="st st-done">成功</span></td></tr>
+                <tr data-acc="lifang_fin" data-usg="export"><td>2026-11-08 14:36</td><td>lifang_fin</td><td><span class="tag tag-purple">导出</span></td><td>导出「财务系统」中标结果 40 条</td><td>-80</td><td>PC 站</td><td><span class="st st-cancel">失败</span></td></tr>
+                <tr data-acc="15650132296" data-usg="ai"><td>2026-11-07 11:12</td><td>15650132296</td><td><span class="tag tag-pink">AI 能力</span></td><td>企业图谱分析 · 关联企业穿透</td><td>-30</td><td>PC 站</td><td><span class="st st-done">成功</span></td></tr>
+                <tr data-acc="wangyan_bd" data-usg="push"><td>2026-11-06 08:00</td><td>wangyan_bd</td><td><span class="tag tag-orange">订阅推送</span></td><td>邮件定制推送 20 条（医院/食品）</td><td>0</td><td>邮件</td><td><span class="st st-done">成功</span></td></tr>
+                <tr data-acc="chent_zb" data-usg="ai"><td>2026-11-05 16:48</td><td>chent_zb</td><td><span class="tag tag-pink">AI 能力</span></td><td>AI 商机解读（3 条）</td><td>-90</td><td>PC 站</td><td><span class="st st-done">成功</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div><!-- /card -->
+    </div><!-- /左栏 -->
+
+    <!-- ============ 右栏：客户动态 ============ -->
+    <div class="card timeline">
+      <div class="tl-head">
+        <div class="card-title" style="font-size:13.5px">客户动态</div>
+        <button class="btn btn-sm btn-primary">写跟进</button>
+      </div>
+      <div class="tl-filters">
+        <span class="pill active" data-tl="all" onclick="switchTl('all',this)">全部</span>
+        <span class="pill" data-tl="follow" onclick="switchTl('follow',this)">跟进</span>
+        <span class="pill" data-tl="order" onclick="switchTl('order',this)">订单</span>
+        <span class="pill" data-tl="system" onclick="switchTl('system',this)">系统</span>
+      </div>
+      <div class="tl-list">
+        <div class="tl-item today" data-tl="follow">
+          <div class="tl-card">
+            <div class="tl-title">张明 电话跟进</div>
+            <div class="tl-desc">确认 VIP 主账号续费意向，客户表示年底预算审批，12 月再定；同步推荐了移动端高级账号 1 个。</div>
+            <div class="tl-time"><span class="who">张明</span><span>今天 09:12</span></div>
+          </div>
+        </div>
+        <div class="tl-item today" data-tl="system">
+          <div class="tl-card">
+            <div class="tl-title">系统 触发预警</div>
+            <div class="tl-desc">chent_zb 积分余额 180，低于阈值 200，已推送运营提醒。</div>
+            <div class="tl-time"><span class="who">系统</span><span>今天 08:00</span></div>
+          </div>
+        </div>
+        <div class="tl-item" data-tl="order">
+          <div class="tl-card">
+            <div class="tl-title">订单 新增待支付</div>
+            <div class="tl-desc">增值服务订单 DD20261020033「项目协助 30 天」¥2,000，到款状态：未到款。</div>
+            <div class="tl-time"><span class="who">张明</span><span>10-20 17:45</span></div>
+          </div>
+        </div>
+        <div class="tl-item" data-tl="follow">
+          <div class="tl-card">
+            <div class="tl-title">李四 微信沟通</div>
+            <div class="tl-desc">李芳反馈发票信息需要补录抬头与税号，已提交财务；客户对 Plus 权益满意。</div>
+            <div class="tl-time"><span class="who">李四</span><span>10-16 14:30</span></div>
+          </div>
+        </div>
+        <div class="tl-item" data-tl="order">
+          <div class="tl-card">
+            <div class="tl-title">积分 充值到账</div>
+            <div class="tl-desc">15650132296 购买积分包 10,000 积分，金额 ¥499，已到账。</div>
+            <div class="tl-time"><span class="who">系统</span><span>09-18 10:26</span></div>
+          </div>
+        </div>
+        <div class="tl-item" data-tl="system">
+          <div class="tl-card">
+            <div class="tl-title">账户 新增</div>
+            <div class="tl-desc">新增移动端账户 sunqiang_app（孙强 · 项目经理），移动高级会员，到期 2027-01-10。</div>
+            <div class="tl-time"><span class="who">王五</span><span>01-10 11:38</span></div>
+          </div>
+        </div>
+        <div class="tl-item" data-tl="follow">
+          <div class="tl-card">
+            <div class="tl-title">张明 上门拜访</div>
+            <div class="tl-desc">上门拜访采购部，确认 2026 年医疗器械招标计划，客户关注鞍山地区项目。</div>
+            <div class="tl-time"><span class="who">张明</span><span>2025-12-08 15:00</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="padding:10px 16px;border-top:1px solid var(--border);text-align:center">
+        <button class="btn btn-link">查看更多（4）</button>
+      </div>
+    </div>
+
+  </div><!-- /layout -->
+</div><!-- /container -->
+
+<script>
+/* ---------- 顶部页签 ---------- */
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach(function(t){
+    t.classList.toggle('active', t.getAttribute('data-tab') === name);
+  });
+  document.querySelectorAll('.card .tab-panel').forEach(function(pn){
+    if(pn.id && pn.id.indexOf('panel-') === 0){
+      pn.classList.toggle('active', pn.id === 'panel-' + name);
+    }
+  });
+  document.querySelector('.tab[data-tab="'+name+'"]').scrollIntoView({block:'nearest',inline:'nearest'});
+}
+
+/* ---------- 会员与订单 子页签 ---------- */
+function switchSub(key, el){
+  var wrap = el.closest('.tab-panel');
+  wrap.querySelectorAll('.pill').forEach(function(x){ x.classList.remove('active'); });
+  el.classList.add('active');
+  ['order','subs','vip-order','contract'].forEach(function(k){
+    var box = document.getElementById('sub-' + k);
+    if(box) box.classList.toggle('active', k === key);
+  });
+}
+
+/* ---------- 客户动态筛选 ---------- */
+function switchTl(key, el){
+  var box = el.closest('.tl-filters');
+  box.querySelectorAll('.pill').forEach(function(x){ x.classList.remove('active'); });
+  el.classList.add('active');
+  document.querySelectorAll('.tl-list .tl-item').forEach(function(it){
+    it.style.display = (key === 'all' || it.getAttribute('data-tl') === key) ? '' : 'none';
+  });
+}
+
+/* ---------- 功能使用记录 类型筛选 ---------- */
+function switchUsg(key, el){
+  var box = el.closest('.flex');
+  box.querySelectorAll('.pill').forEach(function(x){ x.classList.remove('active'); });
+  el.classList.add('active');
+  document.querySelectorAll('#usageBody tr').forEach(function(tr){
+    tr.style.display = (key === 'all' || tr.getAttribute('data-usg') === key) ? '' : 'none';
+  });
+}
+
+/* ---------- 账户类型筛选（顶部统计条 + 下拉） ---------- */
+function applyAccountFilter(mb){
+  document.querySelectorAll('#accGrid .acc-card').forEach(function(c){
+    c.style.display = (mb === 'all' || c.getAttribute('data-mb') === mb) ? '' : 'none';
+  });
+  document.querySelectorAll('.mb-chip').forEach(function(ch){
+    ch.classList.toggle('off', mb !== 'all' && ch.getAttribute('data-filter') !== mb);
+  });
+}
+function filterAccounts(mb){ applyAccountFilter(mb); }
+document.querySelectorAll('.mb-chip').forEach(function(ch){
+  ch.addEventListener('click', function(){
+    var mb = ch.getAttribute('data-filter');
+    var cur = ch.classList.contains('off') ? mb : 'all';
+    applyAccountFilter(cur);
+    switchTab('accounts');
+  });
+});
+
+/* ---------- 联系人展开 ---------- */
+function toggleContact(tr){
+  var next = tr.nextElementSibling;
+  if(next && next.classList.contains('c-expand')){
+    next.style.display = (next.style.display === 'none' || !next.style.display) ? '' : 'none';
+  }
+}
+
+/* ---------- 积分记录 账户筛选 ---------- */
+function filterPoints(acc){
+  document.querySelectorAll('#pointsBody tr').forEach(function(tr){
+    tr.style.display = (acc === 'all' || tr.getAttribute('data-acc') === acc) ? '' : 'none';
+  });
+}
+
+/* ---------- 功能使用记录 账户筛选 ---------- */
+function filterUsage(acc){
+  document.querySelectorAll('#usageBody tr').forEach(function(tr){
+    tr.style.display = (acc === 'all' || tr.getAttribute('data-acc') === acc) ? '' : 'none';
+  });
+}
+
+/* ---------- 其他查询下拉 ---------- */
+function toggleOtherSearch(e){
+  e.stopPropagation();
+  var box = document.getElementById('otherSearchBox');
+  box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+}
+document.addEventListener('click', function(){
+  var box = document.getElementById('otherSearchBox');
+  if(box) box.style.display = 'none';
+});
+</script>
+</body>
+</html>

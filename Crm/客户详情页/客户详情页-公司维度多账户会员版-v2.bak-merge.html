@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>客户详情 · 大土豆有限责任公司 - 采招CRM系统</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%230063FF'/%3E%3Ctext%20x='32'%20y='45'%20text-anchor='middle'%20font-size='36'%20font-weight='700'%20fill='%23ffffff'%20font-family='Microsoft%20YaHei,sans-serif'%3E%E9%87%87%3C/text%3E%3C/svg%3E">
+<style>
+  /* ================= 令牌（与 sidebar.html 完全一致） ================= */
+  :root {
+    --background: #ffffff;
+    --foreground: #262626;
+    --border: #e8ebf0;
+    --muted-foreground: #4b5260;
+    --accent: #f2f4f7;
+    --accent-foreground: #1a1f29;
+    --primary: #0063FF;
+    --primary-dark: #0052d9;
+    --primary-light: #e8f0ff;
+    --radius: 6px;
+
+    --sidebar: #ffffff;
+    --sidebar-border: #e8ebf0;
+    --sidebar-active: #e8f0ff;
+    --sidebar-width: 16rem;
+    --sidebar-width-icon: 3.4rem;
+
+    --topbar-h: 56px;
+    --topbar-bg: #ffffff;
+    --topbar-fg: #262626;
+    --topbar-muted: #4b5260;
+    --topbar-border: #e8ebf0;
+
+    --success: #12A594;
+    --danger: #f04438;
+    --warning: #f79009;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    background: var(--background); color: var(--foreground); font-size: 15.5px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased; overflow: hidden;
+  }
+  a { text-decoration: none; color: inherit; cursor: pointer; }
+  button, select { font-family: inherit; }
+  svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+  /* ================= 顶部通栏 ================= */
+  .topbar {
+    height: var(--topbar-h); background: var(--topbar-bg); border-bottom: 1px solid var(--topbar-border);
+    display: flex; align-items: center; gap: 20px; padding-right: 20px; color: var(--topbar-fg);
+    position: relative; z-index: 20;
+  }
+  .topbar-logo {
+    width: var(--sidebar-width); min-width: var(--sidebar-width); height: 100%;
+    display: flex; align-items: center; gap: 10px; padding-left: 16px;
+    border-right: 1px solid var(--topbar-border); flex-shrink: 0; transition: width .2s ease, min-width .2s ease;
+  }
+  .logo-mark {
+    width: 28px; height: 28px; border-radius: 8px; background: var(--primary); color: #fff;
+    font-size: 15.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .logo-text { display: flex; flex-direction: column; line-height: 1.15; white-space: nowrap; flex-shrink: 0; }
+  .logo-text .name { font-size: 16px; font-weight: 700; letter-spacing: .5px; color: #1a1f29; }
+  .topbar-search {
+    flex: 1 1 auto; max-width: 420px; display: flex; align-items: center; height: 34px;
+    background: #f4f6f9; border: 1px solid var(--topbar-border); border-radius: 6px; padding: 0 4px 0 10px;
+    gap: 6px; color: var(--topbar-muted);
+  }
+  .topbar-search input { flex: 1; border: none; outline: none; background: transparent; color: var(--foreground); font-size: 14.5px; font-family: inherit; }
+  .topbar-search input::placeholder { color: #5a6270; }
+  .topbar-search .kbd { font-size: 12.5px; color: #5a6270; border: 1px solid #dfe3ea; border-radius: 4px; padding: 0 5px; line-height: 18px; background: #fff; }
+  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 14px; border: none;
+    border-radius: 6px; background: var(--primary); color: #fff; font-size: 14.5px; font-weight: 500; cursor: pointer;
+  }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-primary svg { width: 14px; height: 14px; }
+  .topbar-icons { display: flex; align-items: center; gap: 4px; }
+  .topbar-icons button {
+    position: relative; width: 32px; height: 32px; border: none; border-radius: 6px; background: transparent;
+    color: #3f4756; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+  .topbar-icons button:hover { background: var(--primary-light); color: var(--primary); }
+  .topbar-icons .dot { position: absolute; top: 5px; right: 6px; width: 6px; height: 6px; border-radius: 50%; background: var(--danger); border: 1.5px solid #fff; }
+  .topbar-sep { width: 1px; height: 20px; background: var(--topbar-border); }
+  .topbar-user { display: inline-flex; align-items: center; gap: 8px; background: none; border: none; color: var(--topbar-fg); font-size: 14.5px; cursor: pointer; padding: 0 2px; }
+  .topbar-user .ava {
+    position: relative; width: 28px; height: 28px; border-radius: 50%; overflow: hidden; flex-shrink: 0;
+    background: linear-gradient(135deg, #dbe7ff 0%, #9ec0ff 100%); color: #1a4fbf;
+    display: flex; align-items: center; justify-content: center; font-size: 13.5px; font-weight: 600;
+  }
+  .topbar-user .ava img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .topbar-user svg { width: 12px; height: 12px; color: var(--topbar-muted); }
+
+  /* ================= 快捷菜单（顶栏） ================= */
+  .top-quick { display: flex; align-items: center; gap: 2px; flex-shrink: 0; padding: 2px; background: #f4f6f9; border: 1px solid var(--topbar-border); border-radius: 6px; }
+  .top-quick-btn {
+    display: inline-flex; align-items: center; gap: 5px; height: 26px; padding: 0 10px; border: none; border-radius: 4px;
+    background: transparent; color: #333a47; font-size: 14px; font-weight: 500; font-family: inherit; cursor: pointer;
+    white-space: nowrap; transition: background .15s ease, color .15s ease, box-shadow .15s ease;
+  }
+  .top-quick-btn:hover { background: #fff; color: var(--primary); box-shadow: 0 1px 2px rgba(16,24,40,.06); }
+  .top-quick-btn svg { width: 14px; height: 14px; flex-shrink: 0; color: #4a5160; }
+  .top-quick-btn:hover svg { color: var(--primary); }
+  .top-quick-btn .tag-new { margin-left: 1px; font-size: 10px; line-height: 15px; font-weight: 600; color: #b25e00; background: #fff3e0; border-radius: 4px; padding: 0 4px; }
+  @media (max-width: 1360px) { .top-quick-btn span:not(.tag-new) { display: none; } .top-quick-btn { padding: 0 8px; } }
+
+  /* ================= Shell ================= */
+  .app-shell { display: flex; height: calc(100vh - var(--topbar-h)); }
+  .app-shell[data-sidebar="collapsed"] .sidebar-frame { width: var(--sidebar-width-icon); min-width: var(--sidebar-width-icon); }
+  .app-shell[data-sidebar="collapsed"] .topbar-logo { width: var(--sidebar-width-icon); min-width: var(--sidebar-width-icon); padding-left: 0; justify-content: center; }
+  .app-shell[data-sidebar="collapsed"] .logo-text { display: none; }
+  .sidebar-frame {
+    flex: 0 0 auto; width: var(--sidebar-width); min-width: var(--sidebar-width); height: 100%;
+    border: 0; display: block; background: var(--sidebar); transition: width .2s ease, min-width .2s ease;
+  }
+
+  /* ================= Main ================= */
+  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; background: var(--background); }
+  .main-header {
+    height: 46px; flex-shrink: 0; display: flex; align-items: center; gap: 10px; padding: 0 14px;
+    background: var(--background); border-bottom: 1px solid var(--border);
+  }
+  .sidebar-trigger { width: 30px; height: 30px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: var(--radius); background: transparent; color: #3f4756; cursor: pointer; }
+  .sidebar-trigger:hover { background: var(--accent); color: var(--accent-foreground); }
+  .sidebar-trigger svg { width: 16px; height: 16px; }
+  .header-separator { width: 1px; height: 15px; background: var(--border); flex-shrink: 0; }
+  .breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 14.5px; color: var(--muted-foreground); min-width: 0; overflow: hidden; white-space: nowrap; }
+  .breadcrumb-current { color: var(--foreground); font-weight: 600; }
+  .header-actions { margin-left: 8px; display: flex; align-items: center; gap: 6px; }
+  .header-actions button {
+    display: inline-flex; align-items: center; gap: 5px; height: 28px; padding: 0 9px; border: 1px solid var(--border);
+    border-radius: var(--radius); background: #fff; color: #333a47; font-size: 14px; cursor: pointer;
+  }
+  .header-actions button:hover { border-color: #cfd6e0; color: var(--accent-foreground); background: #fafbfc; }
+  .header-actions svg { width: 14px; height: 14px; }
+
+  .content { flex: 1; display: flex; flex-direction: column; padding: 14px; min-height: 0; background: #fafbfc; }
+  .content-body { flex: 1; min-height: 0; border-radius: var(--radius); border: 1px solid var(--border); background: #fff; overflow-y: auto; overflow-x: hidden; position: relative; }
+  .content-body::-webkit-scrollbar { width: 8px; }
+  .content-body::-webkit-scrollbar-thumb { background: #dfe3ea; border-radius: 4px; }
+  .content-body::-webkit-scrollbar-thumb:hover { background: #b6bec9; }
+
+  /* ================= 通用工具类 ================= */
+  .flex { display: flex; } .items-center { align-items: center; } .items-start { align-items: flex-start; } .flex-wrap { flex-wrap: wrap; }
+  .flex-1 { flex: 1; min-width: 0; } .ml-auto { margin-left: auto; }
+  .gap-1 { gap: 4px; } .gap-2 { gap: 8px; } .gap-3 { gap: 12px; } .gap-4 { gap: 16px; }
+  .mt-1 { margin-top: 4px; } .mt-2 { margin-top: 8px; } .mt-3 { margin-top: 12px; } .mt-4 { margin-top: 16px; }
+  .mb-2 { margin-bottom: 8px; } .mb-3 { margin-bottom: 12px; } .mb-4 { margin-bottom: 16px; }
+  .text-xs { font-size: 13.5px; } .text-sm { font-size: 14.5px; } .text-lg { font-size: 16px; } .text-xl { font-size: 18px; }
+  .font-medium { font-weight: 500; } .font-semibold { font-weight: 600; } .font-bold { font-weight: 700; }
+  .text-muted { color: var(--muted-foreground); } .text-primary { color: var(--primary); }
+  .text-success { color: var(--success); } .text-danger { color: var(--danger); } .text-warning { color: var(--warning); }
+  .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* ==================== 联系人左右布局 ==================== */
+  .contact-split { display: grid; grid-template-columns: 300px minmax(0, 1fr); height: calc(100vh - 430px); min-height: 520px;
+    background: #fff; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .cs-left { border-right: 1px solid var(--border); display: flex; flex-direction: column; min-height: 0; background: #fff; }
+  .cs-left-head { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-bottom: 1px solid var(--border); }
+  .cs-title { font-size: 15px; font-weight: 600; color: #1a1f29; display: flex; align-items: center; gap: 6px; }
+  .cs-title .cnt { font-size: 12.5px; font-weight: 600; color: var(--primary); background: var(--primary-light); border-radius: 999px; padding: 0 7px; line-height: 17px; }
+  .cs-sort { height: 30px; border: 1px solid var(--border); border-radius: 6px; background: #fff; font-size: 13px; color: #4b5260; padding: 0 4px; outline: none; cursor: pointer; }
+  .btn-add-ct { display: inline-flex; align-items: center; gap: 3px; height: 30px; padding: 0 9px; border: 1px solid #cfe0ff;
+    background: var(--primary-light); color: var(--primary); border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .btn-add-ct:hover { background: #dbe8ff; }
+  .btn-add-ct svg { width: 14px; height: 14px; }
+  .cs-search { display: flex; align-items: center; gap: 6px; padding: 8px 12px; border-bottom: 1px solid var(--border); background: #fcfdfe; }
+  .cs-search svg { width: 15px; height: 15px; color: #98a2b3; flex-shrink: 0; }
+  .cs-search input { flex: 1; min-width: 0; border: none; outline: none; font-size: 13.5px; color: #1a1f29; background: transparent; font-family: inherit; }
+  .cs-search input::placeholder { color: #a6adba; }
+  .cs-list { flex: 1; min-height: 0; overflow-y: auto; }
+  .cs-group { position: sticky; top: 0; z-index: 2; background: #f7f9fc; border-bottom: 1px solid var(--border);
+    font-size: 12px; font-weight: 600; color: #7b8391; letter-spacing: 1px; padding: 5px 12px; }
+  .ct-item { position: relative; display: flex; gap: 9px; padding: 9px 12px; border-bottom: 1px solid #f2f4f7; cursor: pointer; align-items: flex-start; }
+  .ct-item:hover { background: #fafbfc; }
+  .ct-item.active { background: var(--primary-light); box-shadow: inset 3px 0 0 var(--primary); }
+  .ct-ava { width: 30px; height: 30px; border-radius: 50%; background: var(--primary-light); color: var(--primary);
+    display: flex; align-items: center; justify-content: center; font-size: 13.5px; font-weight: 600; flex-shrink: 0; }
+  .ct-item.active .ct-ava { background: #fff; }
+  .ct-item.pinned .ct-ava { box-shadow: 0 0 0 1.5px var(--primary); }
+  .ct-main { flex: 1; min-width: 0; padding-right: 18px; }
+  .ct-line1 { display: flex; align-items: center; gap: 5px; min-width: 0; }
+  .ct-name { font-size: 14px; font-weight: 600; color: #1a1f29; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ct-tag { font-size: 11.5px; line-height: 15px; padding: 0 5px; border-radius: 4px; background: #eef2f8; color: #4b5563; font-weight: 500; white-space: nowrap; flex-shrink: 0; }
+  .ct-tag.primary { background: var(--primary-light); color: var(--primary); }
+  .ct-phone { font-size: 12.5px; color: #5a6270; margin-top: 2px; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+  .ct-job { font-size: 12.5px; color: #7b8391; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ct-pin { position: absolute; right: 8px; top: 9px; width: 22px; height: 22px; border: none; border-radius: 5px; background: transparent;
+    color: #b0b8c4; cursor: pointer; display: none; align-items: center; justify-content: center; padding: 0; }
+  .ct-pin svg { width: 13px; height: 13px; }
+  .ct-item:hover .ct-pin, .ct-item.active .ct-pin, .ct-item.pinned .ct-pin { display: flex; }
+  .ct-pin:hover { background: #e8f0ff; color: var(--primary); }
+  .ct-pin.on { color: var(--primary); }
+  .ct-empty { padding: 22px 12px; text-align: center; color: var(--muted-foreground); font-size: 13.5px; }
+  .cs-right { display: flex; flex-direction: column; min-height: 0; overflow-y: auto; }
+  .ct-d-head { display: flex; gap: 12px; padding: 14px; border-bottom: 1px solid var(--border); align-items: flex-start; }
+  .ct-ava.lg { width: 44px; height: 44px; font-size: 17px; }
+  .ct-d-name { font-size: 16px; font-weight: 600; color: #1a1f29; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .ct-d-sub { font-size: 13px; color: #5a6270; margin-top: 3px; }
+  .ct-d-actions { display: flex; gap: 7px; margin-left: auto; flex-shrink: 0; }
+  .ct-btn { display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 10px; border: 1px solid var(--border);
+    background: #fff; color: #4b5260; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap; }
+  .ct-btn:hover { border-color: #cfe0ff; color: var(--primary); background: #f7faff; }
+  .ct-btn svg { width: 14px; height: 14px; }
+  .ct-btn.on { border-color: #cfe0ff; color: var(--primary); background: var(--primary-light); }
+  .ct-logs { padding: 12px 14px 16px; border-top: 1px solid var(--border); }
+  .ct-logs-head { font-size: 14px; font-weight: 600; color: #1a1f29; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .ct-logs-head .cnt { font-size: 12.5px; font-weight: 600; color: #4a5160; background: #f0f2f5; border-radius: 999px; padding: 0 6px; line-height: 17px; }
+  .ct-log { position: relative; padding: 0 0 13px 16px; border-left: 1.5px solid #e8ebf0; }
+  .ct-log:last-child { border-left-color: transparent; padding-bottom: 0; }
+  .ct-log:before { content: ''; position: absolute; left: -4.5px; top: 3px; width: 8px; height: 8px; border-radius: 50%; background: #fff; border: 2px solid var(--primary); }
+  .ct-log-top { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #7b8391; flex-wrap: wrap; }
+  .ct-log-way { font-size: 11.5px; line-height: 16px; padding: 0 6px; border-radius: 4px; background: var(--primary-light); color: var(--primary); font-weight: 600; }
+  .ct-log-text { font-size: 13.5px; color: #262626; margin-top: 3px; line-height: 1.55; }
+  .ct-log-next { font-size: 12.5px; color: #b54708; margin-top: 3px; }
+  .cs-filter { display: flex; gap: 6px; padding: 7px 12px; border-bottom: 1px solid var(--border); background: #fcfdfe; }
+  .cs-filter button { flex: 1; height: 27px; border: 1px solid var(--border); border-radius: 6px; background: #fff;
+    font-size: 12.5px; color: #4b5260; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center;
+    justify-content: center; gap: 4px; padding: 0 4px; white-space: nowrap; }
+  .cs-filter button:hover { border-color: #cfe0ff; color: var(--primary); }
+  .cs-filter button.on { background: var(--primary); border-color: var(--primary); color: #fff; font-weight: 600; }
+  .cs-filter .n { font-size: 11.5px; opacity: .9; }
+  .ct-row2 { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-top: 2px; }
+  .ct-row2 .ct-phone { margin-top: 0; }
+  .ct-reg { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; line-height: 15px; padding: 0 6px;
+    border-radius: 4px; font-weight: 600; white-space: nowrap; flex-shrink: 0; }
+  .ct-reg:before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+  .ct-reg.on { background: #e6f7ee; color: #0f8a52; }
+  .ct-reg.off { background: #f0f2f5; color: #8a93a3; }
+  .ct-item.unreg .ct-ava { background: #f2f4f7; color: #8a93a3; }
+  .ct-d-reg { font-size: 12px; line-height: 18px; padding: 0 7px; border-radius: 5px; font-weight: 600; }
+  .ct-d-reg.on { background: #e6f7ee; color: #0f8a52; }
+  .ct-d-reg.off { background: #f0f2f5; color: #8a93a3; }
+  .ct-unreg-flag { color: #8a93a3; font-weight: 600; }
+  .ct-invite { margin-left: 8px; height: 24px; padding: 0 9px; border: 1px solid #cfe0ff; background: var(--primary-light);
+    color: var(--primary); border-radius: 5px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .ct-invite:hover { background: #dbe8ff; }
+  .dr-hint { color: #98a2b3; font-weight: 400; font-size: 12px; margin-left: 6px; }
+  .ct-placeholder { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 40px; color: #98a2b3; font-size: 14px; }
+
+  /* 悬浮：写小计 */
+  .fab-note { position: fixed; right: 24px; bottom: 24px; z-index: 60; display: inline-flex; align-items: center; gap: 6px;
+    height: 40px; padding: 0 17px; border: none; border-radius: 999px; background: var(--primary); color: #fff;
+    font-size: 14px; font-weight: 600; cursor: pointer; box-shadow: 0 6px 18px rgba(0, 99, 255, .28); font-family: inherit; }
+  .fab-note:hover { background: var(--primary-dark); }
+  .fab-note:disabled { background: #c9d0da; box-shadow: none; cursor: not-allowed; }
+  .fab-note svg { width: 15px; height: 15px; }
+
+  /* 右侧抽屉 */
+  .drawer-mask { position: fixed; inset: 0; background: rgba(16, 24, 40, .3); z-index: 70; opacity: 0; pointer-events: none; transition: opacity .18s; }
+  .drawer-mask.show { opacity: 1; pointer-events: auto; }
+  .drawer { position: fixed; top: 0; right: 0; height: 100vh; width: 460px; max-width: 92vw; background: #fff; z-index: 71;
+    box-shadow: -8px 0 28px rgba(16, 24, 40, .12); transform: translateX(102%); transition: transform .22s ease;
+    display: flex; flex-direction: column; }
+  .drawer.show { transform: translateX(0); }
+  .drawer-head { display: flex; align-items: center; gap: 8px; padding: 14px 16px; border-bottom: 1px solid var(--border); font-size: 15.5px; font-weight: 600; color: #1a1f29; }
+  .drawer-close { margin-left: auto; width: 28px; height: 28px; border: none; background: transparent; color: #7b8391; font-size: 20px; line-height: 1; cursor: pointer; border-radius: 6px; }
+  .drawer-close:hover { background: #f2f4f7; }
+  .drawer-body { padding: 6px 16px 16px; overflow-y: auto; flex: 1; }
+  .drawer-foot { padding: 12px 16px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; }
+  .dr-label { font-size: 13px; color: #4b5260; margin: 12px 0 5px; font-weight: 500; }
+  .dr-label .req { color: var(--danger); margin-left: 2px; }
+  .dr-input, .dr-area, .dr-select { width: 100%; border: 1px solid var(--border); border-radius: 6px; padding: 7px 9px;
+    font-size: 14px; color: #1a1f29; outline: none; background: #fff; font-family: inherit; }
+  .dr-input:focus, .dr-area:focus, .dr-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 99, 255, .1); }
+  .dr-area { min-height: 80px; resize: vertical; line-height: 1.6; }
+  .dr-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .dr-chip { padding: 4px 10px; border: 1px solid var(--border); border-radius: 999px; font-size: 13px; color: #4b5260; background: #fff; cursor: pointer; font-family: inherit; }
+  .dr-chip.on { border-color: #cfe0ff; background: var(--primary-light); color: var(--primary); font-weight: 600; }
+  .dr-row { display: flex; gap: 10px; }
+  .dr-row > * { flex: 1; min-width: 0; }
+  .dr-err { font-size: 12.5px; color: var(--danger); margin-top: 4px; display: none; }
+  @media (max-width: 1180px) { .contact-split { grid-template-columns: 260px minmax(0, 1fr); } }
+
+</style>
+</head>
+<body>
+<style>
+  /* ================= 公司信息头 ================= */
+  .hero { padding: 16px 20px 14px; border-bottom: 1px solid var(--border); }
+  .hero-top { display: flex; align-items: flex-start; gap: 12px; }
+  .hero-logo {
+    width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0;
+    background: var(--primary-light); color: var(--primary);
+    display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 700;
+  }
+  .hero-title-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .hero-title { font-size: 18px; font-weight: 700; color: #1a1f29; letter-spacing: .2px; }
+  .grade-badge {
+    display: inline-flex; align-items: center; gap: 2px; height: 20px; padding: 0 7px;
+    border-radius: 4px; background: var(--primary-light); border: 1px solid #cfe0ff;
+    color: var(--primary); font-size: 13.5px; font-weight: 700; letter-spacing: .4px;
+  }
+  .grade-badge i { font-style: normal; font-weight: 600; opacity: .8; }
+  .score-chip {
+    display: inline-flex; align-items: center; gap: 5px; height: 20px; padding: 0 8px;
+    border-radius: 4px; background: #ffffff; border: 1px solid #cfe0ff;
+    color: #0b3a9e; font-size: 13.5px; font-weight: 600; white-space: nowrap;
+  }
+  .score-chip b { font-size: 15px; font-weight: 700; color: #0b3a9e; }
+  .score-chip em { font-style: normal; font-size: 12.5px; font-weight: 500; color: #5c636f; }
+  .hero-tags { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+  .tag {
+    display: inline-flex; align-items: center; height: 20px; padding: 0 7px; border-radius: 4px;
+    font-size: 13.5px; background: #f4f6f9; color: #333a47; border: 1px solid var(--border); white-space: nowrap;
+  }
+  .tag-primary { background: var(--primary-light); color: var(--primary); border-color: #cfe0ff; }
+  .tag-success { background: #e7f6f3; color: #0e8074; border-color: #cdeae4; }
+  .tag-warning { background: #fff6e8; color: #b25e00; border-color: #ffe6c7; }
+  .tag-danger { background: #fdecef; color: #c0264c; border-color: #fbd3dd; }
+  .hero-meta { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 18px; margin-top: 12px; }
+  .hero-meta .k { font-size: 13.5px; color: var(--muted-foreground); }
+  .hero-meta .v { font-size: 14.5px; color: var(--foreground); margin-top: 1px; }
+  .hero-meta .v strong { font-weight: 600; }
+
+  /* ================= 评分与意向条（每个页签顶部） ================= */
+  .si-bar {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    padding: 9px 14px; margin-bottom: 12px;
+    background: #f7f9fc; border: 1px solid var(--border); border-radius: 8px;
+  }
+  .si-item { display: inline-flex; align-items: center; gap: 8px; }
+  .si-label { font-size: 13.5px; font-weight: 600; color: #374A6A; }
+  .si-text { font-size: 13.5px; color: #5a6270; }
+  .si-sep { width: 1px; height: 16px; background: #dfe4ec; }
+
+  /* ================= 销售画像（结论为主 / 分析为辅） ================= */
+  .ins-summary {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 12px 14px; margin-bottom: 16px;
+    background: #f7f9fc; border: 1px solid var(--border); border-left: 3px solid var(--primary);
+    border-radius: 8px;
+  }
+  .ins-sum-k {
+    flex-shrink: 0; display: inline-flex; align-items: center; height: 21px; padding: 0 8px;
+    border-radius: 4px; background: var(--primary-light); color: var(--primary);
+    font-size: 12.5px; font-weight: 700; letter-spacing: .3px;
+  }
+  .ins-sum-v { font-size: 14.5px; font-weight: 700; color: #1a1f29; line-height: 1.65; }
+  .ins-list { display: flex; flex-direction: column; gap: 14px; }
+  .ins-item { padding-left: 11px; border-left: 3px solid #e3e8ef; }
+  .ins-item.lv-high { border-left-color: #f04438; }
+  .ins-item.lv-mid { border-left-color: var(--primary); }
+  .ins-item.lv-low { border-left-color: #c9d0da; }
+  .ins-concl {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 14.5px; font-weight: 700; color: #1a1f29; line-height: 1.5;
+  }
+  .ins-item.lv-mid .ins-concl { font-weight: 600; color: #262626; }
+  .ins-item.lv-low .ins-concl { font-weight: 600; color: #4b5260; }
+  .ins-lv {
+    flex-shrink: 0; display: inline-flex; align-items: center; height: 18px; padding: 0 6px;
+    border-radius: 3px; font-size: 12px; font-weight: 700; letter-spacing: .3px;
+  }
+  .lv-high .ins-lv { background: #fdecea; color: #b42318; }
+  .lv-mid .ins-lv { background: var(--primary-light); color: var(--primary); }
+  .lv-low .ins-lv { background: #f2f4f7; color: #6b7280; }
+  .ins-ana { margin-top: 4px; font-size: 13.5px; font-weight: 400; color: #5a6270; line-height: 1.65; }
+  .ins-tags { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--border); }
+
+  /* ================= 操作按钮行 ================= */
+  .actions-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 12px 20px; border-bottom: 1px solid var(--border); }
+  .btn {
+    display: inline-flex; align-items: center; gap: 5px; height: 30px; padding: 0 12px;
+    border: 1px solid var(--border); border-radius: var(--radius); background: #fff; color: #2b3240;
+    font-size: 14.5px; cursor: pointer; white-space: nowrap;
+  }
+  .btn:hover { border-color: #cfd6e0; background: #fafbfc; color: #1a1f29; }
+  .btn svg { width: 14px; height: 14px; }
+  .btn-blue { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .btn-blue:hover { background: var(--primary-dark); border-color: var(--primary-dark); color: #fff; }
+  .btn-soft { background: var(--primary-light); border-color: #cfe0ff; color: var(--primary); }
+  .btn-soft:hover { background: #dbe9ff; color: var(--primary); }
+
+  /* ================= 双栏布局 ================= */
+  .two-col { display: grid; grid-template-columns: minmax(0, 1fr) 316px; gap: 14px; padding: 14px 20px 22px; align-items: start; }
+  .col-main { min-width: 0; }
+  .col-side { min-width: 0; position: sticky; top: 0; }
+  @media (max-width: 1180px) { .two-col { grid-template-columns: minmax(0, 1fr); } .col-side { position: static; } .hero-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+  /* ================= Tabs ================= */
+  .tabs { display: flex; align-items: center; gap: 2px; border-bottom: 1px solid var(--border); overflow-x: auto; }
+  .tabs::-webkit-scrollbar { height: 0; }
+  .tab-btn {
+    position: relative; height: 38px; padding: 0 14px; border: none; background: transparent;
+    color: #333a47; font-size: 15px; font-weight: 500; cursor: pointer; white-space: nowrap;
+    border-radius: 6px 6px 0 0; display: inline-flex; align-items: center; gap: 6px;
+  }
+  .tab-btn:hover { color: var(--primary); background: #f7f9fc; }
+  .tab-btn.active { color: var(--primary); font-weight: 600; background: var(--primary-light); }
+  .tab-btn.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--primary); border-radius: 2px 2px 0 0; }
+  .tab-btn .cnt { font-size: 12.5px; font-weight: 600; color: #4a5160; background: #f0f2f5; border-radius: 999px; padding: 0 6px; line-height: 16px; }
+  .tab-btn.active .cnt { color: var(--primary); background: #fff; }
+
+  .tab-pane { display: none; padding-top: 12px; }
+  .tab-pane.active { display: block; }
+
+  /* ================= 卡片 / 面板 ================= */
+  .card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); }
+  .card + .card { margin-top: 12px; }
+  .card-head { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .card-title { font-size: 15px; font-weight: 600; color: #1a1f29; }
+  .card-sub { font-size: 13.5px; color: var(--muted-foreground); }
+  .card-body { padding: 12px 14px; }
+  .card-body.flush { padding: 0; }
+
+  .kv-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 18px; }
+  .kv-grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (max-width: 900px) { .kv-grid, .kv-grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .kv .k { font-size: 13.5px; color: var(--muted-foreground); }
+  .kv .v { font-size: 14.5px; color: var(--foreground); margin-top: 2px; word-break: break-all; }
+  .kv .v.mono { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 14px; }
+  /* ===== 键值表格（概览区）：字段名浅灰底 / 字段值深蓝 ===== */
+  .kvt { width: 100%; border-collapse: collapse; font-size: 14.5px; color: #374A6A; }
+  .kvt th, .kvt td { padding: 9px 12px; text-align: left; vertical-align: middle; border-bottom: 1px solid #f2f4f7; }
+  .kvt tbody tr:last-child th, .kvt tbody tr:last-child td { border-bottom: none; }
+  .kvt tr.kvt-group th { background: #eef2f8; color: #374A6A; font-size: 13px; font-weight: 700; letter-spacing: .3px; padding: 6px 12px; border-bottom: 1px solid #e3e8ef; }
+  .kvt th.k { width: 124px; background: #f2f5f9; color: #374A6A; font-size: 13.5px; font-weight: 600; white-space: nowrap; border-right: 1px solid #e3e8ef; }
+  .kvt td.v { color: #374A6A; font-weight: 500; word-break: break-all; }
+  .kvt td.v strong { font-weight: 700; color: #374A6A; }
+  .kvt td.v.mono { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 14px; }
+  .kvt td.v.is-danger { color: #c0392b; font-weight: 600; }
+  .kvt td.v.is-warn { color: #b54708; }
+  .kvt tbody tr:hover td.v { background: #fcfdff; }
+  .kvt thead th { background: #fafbfc; color: #3f4756; font-size: 13.5px; font-weight: 600; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  .kvt thead th + th { border-left: 1px solid #f2f4f7; }
+  .kvt-tags { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 14px; border-bottom: 1px solid var(--border); }
+
+</style>
+<style>
+  /* ================= 账户卡（一个公司多个账户） ================= */
+  .acct-list { display: flex; flex-direction: column; gap: 10px; }
+  .acct { border: 1px solid var(--border); border-radius: var(--radius); background: #fff; overflow: hidden; }
+  .acct:hover { border-color: #cfd6e0; box-shadow: 0 1px 3px rgba(16,24,40,.05); }
+  .acct.is-main { border-color: #cfe0ff; box-shadow: 0 0 0 1px #e8f0ff inset; }
+  .acct-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 10px 12px; background: #fafbfc; border-bottom: 1px solid var(--border); }
+  .acct-id { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 14.5px; font-weight: 600; color: #1a1f29; }
+  .acct-name { font-size: 14.5px; color: #2b3240; }
+  .m-badge { display: inline-flex; align-items: center; height: 20px; padding: 0 7px; border-radius: 4px; font-size: 13.5px; font-weight: 600; white-space: nowrap; border: 1px solid transparent; }
+  .m-free { background: #f2f4f7; color: #4b5260; border-color: #e4e7ec; }
+  .m-normal { background: #f0f2f5; color: #3f4756; border-color: #e0e4ea; }
+  .m-standard { background: #e6f7f7; color: #0e8074; border-color: #c8ece9; }
+  .m-advanced { background: #f0edfb; color: #6552c8; border-color: #ddd6f6; }
+  .m-vip { background: #fdecf3; color: #c53b6d; border-color: #f9d3e1; }
+  .m-plus { background: var(--primary-light); color: var(--primary); border-color: #cfe0ff; }
+  .m-madv { background: #e2f3f1; color: #12656a; border-color: #c6e5e1; }
+  .m-mstd { background: #e8f2fb; color: #2b6fa3; border-color: #cfe2f3; }
+  .acct-body { padding: 10px 12px 12px; }
+  .acct-kv { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px 14px; }
+  @media (max-width: 1000px) { .acct-kv { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .acct-kv .k { font-size: 13px; color: var(--muted-foreground); }
+  .acct-kv .v { font-size: 14px; color: var(--foreground); margin-top: 1px; }
+
+  /* 服务：标讯助手公众号 / 会员服务公众号 / APP / 小程序 */
+  .svc-block { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); }
+  .svc-label { font-size: 13px; color: var(--muted-foreground); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+  .svc-label .hint { font-size: 12.5px; color: #5a6270; }
+  .svc-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .svc {
+    display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 9px; border-radius: 4px;
+    font-size: 13.5px; background: #fff; border: 1px dashed #dfe3ea; color: #5a6270; white-space: nowrap;
+  }
+  .svc .ico { width: 6px; height: 6px; border-radius: 50%; background: #b9c0cb; flex-shrink: 0; }
+  .svc.on { background: #e7f6f3; border: 1px solid #cdeae4; color: #0e8074; }
+  .svc.on .ico { background: #12A594; }
+  .svc.on-app { background: var(--primary-light); border: 1px solid #cfe0ff; color: var(--primary); }
+  .svc.on-app .ico { background: var(--primary); }
+  .svc .meta { font-size: 12.5px; color: #6b7280; }
+  .svc.on .meta, .svc.on-app .meta { color: inherit; opacity: .75; }
+
+  /* ================= 表格 ================= */
+  .tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .tbl th {
+    text-align: left; font-weight: 600; font-size: 13.5px; color: #3f4756; background: #fafbfc;
+    padding: 8px 12px; border-bottom: 1px solid var(--border); white-space: nowrap;
+  }
+  .tbl td { padding: 9px 12px; border-bottom: 1px solid #f2f4f7; color: #2b3240; vertical-align: middle; }
+  .tbl tbody tr:hover { background: #fafbfc; }
+  .tbl tbody tr:last-child td { border-bottom: none; }
+  .tbl .num { font-variant-numeric: tabular-nums; font-weight: 600; color: #1a1f29; }
+  .tbl .mono { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 13.5px; }
+  .tbl-wrap { overflow-x: auto; }
+
+  /* ================= 右栏：客户动态 ================= */
+  .tl { position: relative; padding-left: 16px; }
+  .tl::before { content: ""; position: absolute; left: 4px; top: 4px; bottom: 4px; width: 1px; background: var(--border); }
+  .tl-item { position: relative; padding-bottom: 14px; }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-item::before {
+    content: ""; position: absolute; left: -15px; top: 5px; width: 7px; height: 7px; border-radius: 50%;
+    background: #fff; border: 2px solid #cfd6e0;
+  }
+  .tl-item.blue::before { border-color: var(--primary); }
+  .tl-item.green::before { border-color: var(--success); }
+  .tl-item.orange::before { border-color: var(--warning); }
+  .tl-time { font-size: 13px; color: #5a6270; }
+  .tl-title { font-size: 14px; color: #1a1f29; font-weight: 500; margin-top: 1px; }
+  .tl-desc { font-size: 13.5px; color: var(--muted-foreground); margin-top: 1px; }
+
+  /* 联系人详情 */
+  .contact-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-bottom: 1px solid #f2f4f7; cursor: pointer; }
+  .contact-row:last-child { border-bottom: none; }
+  .contact-row:hover { background: #fafbfc; }
+  .contact-ava { width: 30px; height: 30px; border-radius: 50%; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 13.5px; font-weight: 600; flex-shrink: 0; }
+  .contact-detail { display: none; padding: 10px 12px 12px 52px; background: #fafbfc; border-bottom: 1px solid #f2f4f7; }
+  .contact-detail.open { display: block; }
+
+  .empty { padding: 26px; text-align: center; color: var(--muted-foreground); font-size: 14.5px; }
+</style>
+
+<!-- ================= 顶部通栏 ================= -->
+<div class="topbar">
+  <div class="topbar-logo">
+    <div class="logo-mark">采</div>
+    <div class="logo-text"><span class="name">采招CRM系统</span></div>
+  </div>
+
+  <div class="topbar-search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input type="text" placeholder="搜索客户 / 手机号 / 企业名称">
+    <span class="kbd">Ctrl K</span>
+  </div>
+
+  <div class="top-quick">
+    <button class="top-quick-btn" type="button" data-quick="我的客户库">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+      <span>客户库</span>
+    </button>
+    <button class="top-quick-btn" type="button" data-quick="验重">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/><path d="M8.5 11h5"/></svg>
+      <span>客户查重</span>
+    </button>
+    <button class="top-quick-btn" type="button" data-quick="捡新注册客户">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>
+      <span>新注册客户</span>
+      <span class="tag-new">NEW</span>
+    </button>
+  </div>
+
+  <div class="topbar-right">
+    <button class="btn-primary" type="button" id="btnNewLead">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+      新建线索
+    </button>
+    <div class="topbar-icons">
+      <button type="button" title="待办">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <span class="dot"></span>
+      </button>
+      <button type="button" title="通知">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 8-3 8h18s-3-1-3-8"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+      </button>
+      <button type="button" title="帮助">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 1 1 4.4 2.7c-.8.5-1.5 1.1-1.5 2.3"/><path d="M12 17h.01"/></svg>
+      </button>
+    </div>
+    <span class="topbar-sep"></span>
+    <button class="topbar-user" type="button">
+      <span class="ava">
+        <img src="https://ui.shadcn.com/avatars/shadcn.jpg" alt="罗屿" onerror="this.style.display='none';this.parentNode.textContent='罗'">
+      </span>
+      罗屿
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ================= Shell：侧栏 iframe + 内容区 ================= -->
+<div class="app-shell" id="appShell">
+
+  <!-- 侧栏：复用 线索管理/sidebar.html -->
+  <iframe class="sidebar-frame" id="sidebarFrame" src="../线索管理/sidebar.html" title="侧边栏"></iframe>
+
+  <main class="main">
+    <header class="main-header">
+      <button class="sidebar-trigger" id="sidebarTrigger" type="button" aria-label="切换侧边栏">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
+      </button>
+      <div class="header-separator"></div>
+      <nav class="breadcrumb" aria-label="面包屑">
+        <span id="breadcrumbParent">客户库</span>
+        <span>/</span>
+        <span class="breadcrumb-current" id="breadcrumbCurrent">客户详情</span>
+      </nav>
+      <div class="header-actions ml-auto">
+        <button type="button" id="btnRefresh">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
+          刷新
+        </button>
+        <button type="button" id="btnFullscreen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+          全屏
+        </button>
+      </div>
+    </header>
+
+    <div class="content">
+      <div class="content-body" id="contentBody">
+
+        <!-- ============ 公司信息头 ============ -->
+        <section class="hero">
+          <div class="hero-top">
+            <div class="hero-logo">大土</div>
+            <div class="flex-1">
+              <div class="hero-title-row">
+                <span class="hero-title">大土豆有限责任公司</span>
+                <span class="grade-badge" title="客户意向等级：S 级（极高意向，与工作台同一套 AA / A / B / C / D / E / S / N / K 九档口径）">S<i>级</i></span>
+                <span class="score-chip" title="客户评分 92 / 100（优质程度）：登录活跃度 23 + 信息完善程度 18 + 搜索与订阅 14 + 企业监控与申请 15 + 信息查看与导出 13 + 付费贡献 9">客户评分 <b>92</b><em>/100</em></span>
+                <span class="tag tag-success">合作中</span>
+                <span class="tag tag-primary">战略客户</span>
+                <span class="tag">多账户企业</span>
+              </div>
+              <div class="hero-tags">
+                <span class="tag">客户ID：C20240118-0037</span>
+                <span class="tag">统一社会信用代码：91330100MA2XXXXX7B</span>
+                <span class="tag tag-warning">近 30 天 3 次待跟进</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2" style="flex-shrink:0">
+              <button class="btn btn-soft" type="button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 11h-6"/></svg>
+                验重
+              </button>
+              <button class="btn" type="button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v8"/><path d="M8 12h8"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                关联企业
+              </button>
+            </div>
+          </div>
+
+          <div class="hero-meta">
+            <div class="kv"><div class="k">所属销售</div><div class="v"><strong>罗屿</strong>（杭州一组）</div></div>
+            <div class="kv"><div class="k">客户来源</div><div class="v">标讯助手 · 公众号自助开通</div></div>
+            <div class="kv"><div class="k">所在地区</div><div class="v">浙江省 杭州市 余杭区</div></div>
+            <div class="kv"><div class="k">首次注册时间</div><div class="v">2024-01-18 10:24</div></div>
+            <div class="kv"><div class="k">账户总数</div><div class="v"><strong>13</strong> 个（主账号 1）</div></div>
+            <div class="kv"><div class="k">付费账户 / 免费账户</div><div class="v"><strong>7</strong> 个 / <strong>6</strong> 个</div></div>
+            <div class="kv"><div class="k">累计实收</div><div class="v"><strong>¥ 38,600.00</strong></div></div>
+            <div class="kv"><div class="k">最近活跃</div><div class="v">2026-11-12 08:41（APP）</div></div>
+          </div>
+        </section>
+
+<!-- ============ 操作按钮行 ============ -->
+        <div class="actions-row">
+          <button class="btn btn-blue" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+            新增跟进记录
+          </button>
+          <button class="btn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H5.2L4 17.2z"/></svg>
+            记录通话
+          </button>
+          <button class="btn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/></svg>
+            新建拜访
+          </button>
+          <button class="btn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            在线开通会员
+          </button>
+          <button class="btn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+            新建合同
+          </button>
+          <button class="btn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            添加联系人
+          </button>
+          <button class="btn ml-auto" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 17.7 1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m4.9 19.1 1.4-1.4"/><path d="m17.7 6.3 1.4-1.4"/></svg>
+            更多操作
+          </button>
+        </div>
+
+        <!-- ============ 双栏主体 ============ -->
+        <div class="two-col">
+          <!-- ---------- 左：标签页 ---------- -->
+          <div class="col-main">
+            <div class="tabs" id="tabs" role="tablist">
+              <button class="tab-btn active" type="button" data-tab="overview">概览</button>
+              <button class="tab-btn" type="button" data-tab="accounts">账户 <span class="cnt">13</span></button>
+              <button class="tab-btn" type="button" data-tab="contacts">联系人 <span class="cnt" id="tabContactCnt">5</span></button>
+              <button class="tab-btn" type="button" data-tab="orders">会员与订单 <span class="cnt">19</span></button>
+              <button class="tab-btn" type="button" data-tab="points">积分记录</button>
+              <button class="tab-btn" type="button" data-tab="usage">功能使用记录</button>
+            </div>
+
+            <!-- ===== 概览 ===== -->
+            <div class="tab-pane active" id="pane-overview">
+          <div class="si-bar"><div class="si-item"><span class="si-label">客户评分</span><span class="score-chip"><b>92</b><em>/100 优质客户</em></span><span class="si-text">综合 92 分 · 六维构成见下方「客户评分构成」</span></div></div>
+          <div class="card">
+                <div class="card-head"><span class="card-title">客户基本信息</span><span class="card-sub">工商信息同步于 2026-11-01</span></div>
+                <div class="card-body flush">
+                  <table class="kvt">
+                    <colgroup><col style="width:124px"><col><col style="width:124px"><col></colgroup>
+                    <tbody>
+                      <tr><th class="k">客户名称</th><td class="v">大土豆有限责任公司</td><th class="k">客户等级</th><td class="v"><strong>S 级</strong>（意向程度 · 极高意向）</td></tr>
+                      <tr><th class="k">客户评分</th><td class="v"><strong>92</strong> 分 · 优质客户</td><th class="k">客户状态</th><td class="v">合作中</td></tr>
+                      <tr><th class="k">客户类型</th><td class="v">企业客户 · 多账户</td><th class="k">法定代表人</th><td class="v">林国栋</td></tr>
+                      <tr><th class="k">注册资本</th><td class="v">5,000 万人民币</td><th class="k">成立日期</th><td class="v">2013-06-18</td></tr>
+                      <tr><th class="k">所属行业</th><td class="v">建筑工程 · 市政公用</td><th class="k">企业规模</th><td class="v">500-999 人</td></tr>
+                      <tr><th class="k">官网</th><td class="v mono">www.datumayling.com</td><th class="k">纳税等级</th><td class="v">A 级</td></tr>
+                      <tr><th class="k">注册地址</th><td class="v" colspan="3">浙江省杭州市余杭区仓前街道文一西路 1500 号</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="card">
+            <div class="card-head">
+              <span class="card-title">销售画像</span>
+              <span class="card-sub">结论为主、分析为辅，按电销执行优先级排序</span>
+            </div>
+            <div class="card-body">
+              <div class="ins-summary">
+                <span class="ins-sum-k">画像结论</span>
+                <div class="ins-sum-v">高意向、决策人直达、线上付费习惯成熟，年内可锁定框架续签并谈加购；唯一硬风险是 11-30 到期的账户，18 天内必须触达，否则续费会掉。</div>
+              </div>
+              <div class="ins-list">
+                <div class="ins-item lv-high">
+                  <div class="ins-concl"><span class="ins-lv">首要</span>先锁陈涛续费，再谈李芳升档</div>
+                  <div class="ins-ana">陈涛标准会员 2026-11-30 到期（18 天）、李芳高级会员 2026-12-08 到期（26 天）；两人近 7 天均有检索行为，属主动使用型，续费不需要重新教育。</div>
+                </div>
+                <div class="ins-item lv-high">
+                  <div class="ins-concl"><span class="ins-lv">首要</span>决策人就是主账号本人，可直接对谈</div>
+                  <div class="ins-ana">林国栋为法人且持 VIP 主账号、登录活跃，可以跳过层层约见；王燕（招投标部经理 · Plus）为日常对接人，陈涛是一线实际使用者。</div>
+                </div>
+                <div class="ins-item lv-high">
+                  <div class="ins-concl"><span class="ins-lv">首要</span>续费可线上直接推，不必走线下审批</div>
+                  <div class="ins-ana">历史 19 笔订单中 4 笔为在线开通（VIP 年卡、Plus 年卡、高级季卡、标准年卡），仅 1 笔为线下框架合同补款，客户已习惯在系统内自助下单。</div>
+                </div>
+                <div class="ins-item lv-mid">
+                  <div class="ins-concl"><span class="ins-lv">重点</span>产品粘性足，可以谈升档而不是只谈续费</div>
+                  <div class="ins-ana">近 7 天检索 42 次（chent_zb 单账户 286 次）、监控企业 18 家、近 30 天申请监控信息 6 次，属重度依赖标讯与监控的用法，加价空间来自更高档位而非新增席位。</div>
+                </div>
+                <div class="ins-item lv-mid">
+                  <div class="ins-concl"><span class="ins-lv">重点</span>加购切使用最深的人，不要撒网式推免费账户</div>
+                  <div class="ins-ana">免费账户多在非核心岗位，仅 2 个有实质检索行为（tanwei888 6 次、zhoumin_guest 2 次），另有 2 个从未登录；建议照 sunqiang_app 的岗位复制移动端高级，逐个转化。</div>
+                </div>
+                <div class="ins-item lv-mid">
+                  <div class="ins-concl"><span class="ins-lv">重点</span>触达要走公众号加电话双通道</div>
+                  <div class="ins-ana">会员服务公众号仅绑定 5 / 13、APP 登录 7 / 13，标讯助手公众号覆盖 10 / 13；会员号绑定率低，系统内续费提醒大概率漏发。</div>
+                </div>
+                <div class="ins-item lv-low">
+                  <div class="ins-concl"><span class="ins-lv">背景</span>框架续签可与账户扩容捆绑谈</div>
+                  <div class="ins-ana">框架合同 HT2026-0087（¥36,000）执行至 2026-12-31，已回款 30,000、待回款 6,000；HT2026-0092 续签待提交，是年内最后一笔大额。</div>
+                </div>
+                <div class="ins-item lv-low">
+                  <div class="ins-concl"><span class="ins-lv">背景</span>同城可安排一次实地拜访补关系</div>
+                  <div class="ins-ana">客户在浙江省杭州市余杭区，销售罗屿属杭州一组，市内当天可往返；客户由公众号自助开通，至今无线下接触记录。</div>
+                </div>
+              </div>
+              <div class="ins-tags">
+                <span class="tag tag-primary">年度框架客户</span>
+                <span class="tag tag-primary">多账户统一开票</span>
+                <span class="tag">建筑工程 · 市政公用</span>
+                <span class="tag tag-warning">续费临期 18 天</span>
+              </div>
+            </div>
+          </div>
+
+              <div class="card">
+                <div class="card-head"><span class="card-title">服务开通总览</span><span class="card-sub">按 13 个账户统计：标讯助手公众号 / 会员服务公众号 / APP / 小程序</span></div>
+                <div class="card-body flush">
+                  <table class="kvt">
+                    <colgroup><col style="width:190px"><col style="width:150px"><col style="width:120px"><col></colgroup>
+                    <thead>
+                      <tr><th>服务渠道</th><th>已开通账户</th><th>开通率</th><th>开通说明</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><th class="k">标讯助手公众号</th><td class="v"><strong>10</strong> / 13</td><td class="v">76.9%</td><td class="v">已关注并接收标讯推送</td></tr>
+                      <tr><th class="k">会员服务公众号</th><td class="v"><strong>5</strong> / 13</td><td class="v">38.5%</td><td class="v">已绑定会员服务号</td></tr>
+                      <tr><th class="k">APP</th><td class="v"><strong>7</strong> / 13</td><td class="v">53.8%</td><td class="v">近 30 天内登录过</td></tr>
+                      <tr><th class="k">小程序</th><td class="v"><strong>6</strong> / 13</td><td class="v">46.2%</td><td class="v">近 30 天内登录过</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-head"><span class="card-title">客户评分构成</span><span class="card-sub">优质程度 0-100 分，按账户真实可用功能计分：免费账户仅可搜索、订阅、监控企业并申请监控信息，不能查看信息与导出，故「信息查看与导出」维度仅付费账户计分</span></div>
+                <div class="card-body flush">
+                  <table class="kvt">
+                    <colgroup><col style="width:210px"><col style="width:150px"><col style="width:110px"><col></colgroup>
+                    <thead>
+                      <tr><th>评分维度</th><th>得分 / 满分</th><th>权重</th><th>评分依据</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><th class="k">登录活跃度</th><td class="v"><strong>23</strong> / 25</td><td class="v">25%</td><td class="v">近 30 天登录 82 次，13 个账户中 6 个近 7 天有登录（免费账户同样计分）</td></tr>
+                      <tr><th class="k">信息完善程度</th><td class="v"><strong>18</strong> / 20</td><td class="v">20%</td><td class="v">手机号已绑定 11 个账户，企业信息 9 项已补全，关键词组 12 组覆盖行业 / 地区 / 资质（免费账户同样计分）</td></tr>
+                      <tr><th class="k">搜索与订阅</th><td class="v"><strong>14</strong> / 15</td><td class="v">15%</td><td class="v">近 7 天搜索 42 次，订阅关键词 12 组，推送开启 10 个账户（免费账户可用）</td></tr>
+                      <tr><th class="k">企业监控与申请</th><td class="v"><strong>15</strong> / 15</td><td class="v">15%</td><td class="v">监控企业 18 家，近 30 天申请监控信息 6 次（免费账户可用）</td></tr>
+                      <tr><th class="k">信息查看与导出</th><td class="v"><strong>13</strong> / 15</td><td class="v">15%</td><td class="v">近 7 天解锁查看 27 条、导出报告 9 份（付费专属：免费账户不可查看信息、不可导出）</td></tr>
+                      <tr><th class="k">付费贡献</th><td class="v"><strong>9</strong> / 10</td><td class="v">10%</td><td class="v">累计实收 ¥38,600.00，付费账户 7 / 13，主账号 VIP</td></tr>
+                      <tr><th class="k">综合得分</th><td class="v"><strong>92</strong> / 100</td><td class="v">—</td><td class="v">优质程度判定为 <strong>优质客户</strong>（≥ 85 分）</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- ===== 账户与联系人 ===== -->
+            <div class="tab-pane" id="pane-accounts">
+          <div class="card">
+                <div class="card-head">
+                  <span class="card-title">账户列表</span>
+                  <span class="card-sub">同一公司下 13 个账户，会员类型与服务开通情况各自独立</span>
+                  <span class="ml-auto text-xs text-muted">按会员等级排序</span>
+                </div>
+                <div class="card-body">
+                  <div class="acct-list" id="acctList"></div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- ===== 联系人（左右布局） ===== -->
+            <div class="tab-pane" id="pane-contacts">
+              <div class="contact-split">
+                <div class="cs-left">
+                  <div class="cs-left-head">
+                    <span class="cs-title">联系人 <span class="cnt" id="ctCount">5</span></span>
+                    <div class="ml-auto" style="display:flex;align-items:center;gap:6px">
+                      <select class="cs-sort" id="ctSort">
+                        <option value="pinned">置顶优先</option>
+                        <option value="recent">最近沟通</option>
+                        <option value="name">姓名</option>
+                      </select>
+                      <button class="btn-add-ct" type="button" id="btnAddContact">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                        添加
+                      </button>
+                    </div>
+                  </div>
+                  <div class="cs-search">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                    <input type="text" id="ctSearch" placeholder="搜索姓名 / 电话 / 职位">
+                  </div>
+                  <div class="cs-filter" id="ctFilter">
+                    <button type="button" class="on" data-reg="all">全部 <span class="n" id="ctN1">7</span></button>
+                    <button type="button" data-reg="yes">已注册 <span class="n" id="ctN2">5</span></button>
+                    <button type="button" data-reg="no">未注册 <span class="n" id="ctN3">2</span></button>
+                  </div>
+                  <div class="cs-list" id="ctList"></div>
+                </div>
+                <div class="cs-right" id="ctDetail"></div>
+              </div>
+            </div>
+
+            <!-- ===== 会员与订单 ===== -->
+            <div class="tab-pane" id="pane-orders">
+          <div class="card">
+                <div class="card-head"><span class="card-title">会员状态</span><span class="card-sub">按账户维度，免费会员不产生订单</span></div>
+                <div class="card-body flush">
+                  <div class="tbl-wrap">
+                    <table class="tbl">
+                      <thead>
+                        <tr><th>账户</th><th>会员类型</th><th>生效时间</th><th>到期时间</th><th>状态</th><th>剩余天数</th></tr>
+                      </thead>
+                      <tbody id="memberTbody"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-head">
+                  <span class="card-title">订单记录</span>
+                  <span class="card-sub">订单类型含「在线开通会员」，与增值服务、积分包、合同补款并列</span>
+                  <span class="ml-auto text-xs text-muted">共 19 笔</span>
+                </div>
+                <div class="card-body flush">
+                  <div class="tbl-wrap">
+                    <table class="tbl">
+                      <thead>
+                        <tr><th>订单号</th><th>订单类型</th><th>商品 / 内容</th><th>账户</th><th>金额</th><th>支付方式</th><th>下单时间</th><th>状态</th></tr>
+                      </thead>
+                      <tbody>
+                        <tr><td class="mono">DD202611080012</td><td><span class="tag tag-primary">在线开通会员</span></td><td>VIP会员 · 年卡</td><td class="mono">15650132296</td><td class="num">¥3,980.00</td><td>微信支付</td><td>2026-11-08 10:12</td><td><span class="tag tag-success">已完成</span></td></tr>
+                        <tr><td class="mono">DD202611030007</td><td><span class="tag tag-primary">在线开通会员</span></td><td>Plus会员 · 年卡</td><td class="mono">wangyan_bd</td><td class="num">¥2,580.00</td><td>支付宝</td><td>2026-11-03 15:47</td><td><span class="tag tag-success">已完成</span></td></tr>
+                        <tr><td class="mono">DD202610260031</td><td><span class="tag">增值服务</span></td><td>企业监控 · 加购 20 家</td><td class="mono">15650132296</td><td class="num">¥600.00</td><td>微信支付</td><td>2026-10-26 09:31</td><td><span class="tag tag-success">已完成</span></td></tr>
+                        <tr><td class="mono">DD202610190018</td><td><span class="tag tag-primary">在线开通会员</span></td><td>高级会员 · 季卡</td><td class="mono">lifang_fin</td><td class="num">¥1,280.00</td><td>微信支付</td><td>2026-10-19 20:05</td><td><span class="tag tag-success">已完成</span></td></tr>
+                        <tr><td class="mono">DD202610120009</td><td><span class="tag">积分包</span></td><td>积分 5,000 点</td><td class="mono">chent_zb</td><td class="num">¥99.00</td><td>小程序支付</td><td>2026-10-12 11:22</td><td><span class="tag tag-success">已完成</span></td></tr>
+                        <tr><td class="mono">DD202609280044</td><td><span class="tag tag-primary">在线开通会员</span></td><td>标准会员 · 年卡</td><td class="mono">chent_zb</td><td class="num">¥1,280.00</td><td>微信支付</td><td>2026-09-28 08:59</td><td><span class="tag tag-success">已完成</span></td></tr>
+                        <tr><td class="mono">DD202609150023</td><td><span class="tag">服务延期</span></td><td>到期顺延 30 天</td><td class="mono">zhaolei88</td><td class="num">¥0.00</td><td>—</td><td>2026-09-15 16:40</td><td><span class="tag">已生效</span></td></tr>
+                        <tr><td class="mono">DD202608300006</td><td><span class="tag">线下合同补款</span></td><td>框架合同 HT2026-0087 补款</td><td class="mono">15650132296</td><td class="num">¥18,000.00</td><td>对公转账</td><td>2026-08-30 13:18</td><td><span class="tag tag-success">已完成</span></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ===== 积分记录 ===== -->
+            <div class="tab-pane" id="pane-points">
+          <div class="card">
+                <div class="card-head"><span class="card-title">积分流水</span><span class="card-sub">当前可用积分 8,420（企业共享池）</span></div>
+                <div class="card-body flush">
+                  <div class="tbl-wrap">
+                    <table class="tbl">
+                      <thead><tr><th>时间</th><th>账户</th><th>类型</th><th>变动</th><th>余额</th><th>说明</th></tr></thead>
+                      <tbody>
+                        <tr><td>2026-11-12 08:41</td><td class="mono">15650132296</td><td>消耗</td><td class="text-danger num">-20</td><td class="num">8,420</td><td>标讯详情导出</td></tr>
+                        <tr><td>2026-11-11 19:22</td><td class="mono">wangyan_bd</td><td>消耗</td><td class="text-danger num">-60</td><td class="num">8,440</td><td>企业监控报告生成</td></tr>
+                        <tr><td>2026-11-08 10:12</td><td class="mono">15650132296</td><td>充值</td><td class="text-success num">+5,000</td><td class="num">8,500</td><td>在线开通会员赠送</td></tr>
+                        <tr><td>2026-11-05 14:06</td><td class="mono">chent_zb</td><td>消耗</td><td class="text-danger num">-120</td><td class="num">3,500</td><td>批量标讯下载（40 条）</td></tr>
+                        <tr><td>2026-11-01 00:00</td><td class="mono">15650132296</td><td>发放</td><td class="text-success num">+800</td><td class="num">3,620</td><td>VIP 月度积分发放</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ===== 功能使用记录 ===== -->
+            <div class="tab-pane" id="pane-usage">
+          <div class="card">
+                <div class="card-head"><span class="card-title">功能使用记录</span><span class="card-sub">近 7 天按账户聚合</span></div>
+                <div class="card-body flush">
+                  <div class="tbl-wrap">
+                    <table class="tbl">
+                      <thead><tr><th>账户</th><th>标讯检索</th><th>企业监控</th><th>数据导出</th><th>订阅推送</th><th>进入终端</th><th>最近使用</th></tr></thead>
+                      <tbody>
+                        <tr><td class="mono">15650132296</td><td class="num">42</td><td class="num">18</td><td class="num">9</td><td class="num">6</td><td>APP</td><td>2026-11-12 08:41</td></tr>
+                        <tr><td class="mono">chent_zb</td><td class="num">286</td><td class="num">4</td><td class="num">12</td><td class="num">3</td><td>APP</td><td>2026-11-09 17:20</td></tr>
+                        <tr><td class="mono">wangyan_bd</td><td class="num">97</td><td class="num">26</td><td class="num">5</td><td class="num">11</td><td>小程序</td><td>2026-11-11 19:22</td></tr>
+                        <tr><td class="mono">sunqiang_app</td><td class="num">31</td><td class="num">3</td><td class="num">0</td><td class="num">2</td><td>APP</td><td>2026-11-12 07:58</td></tr>
+                        <tr><td class="mono">tanwei888</td><td class="num">6</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td>小程序</td><td>2026-10-21 10:03</td></tr>
+                        <tr><td class="mono">zhoumin_guest</td><td class="num">2</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td>公众号</td><td>2026-09-02 15:11</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ---------- 右：客户动态 ---------- -->
+          <aside class="col-side">
+            <div class="card">
+              <div class="card-head"><span class="card-title">客户动态</span><span class="card-sub ml-auto">近 30 天</span></div>
+              <div class="card-body">
+                <div class="tl">
+                  <div class="tl-item blue">
+                    <div class="tl-time">今天 08:41</div>
+                    <div class="tl-title">主账号登录 APP</div>
+                    <div class="tl-desc">15650132296 · 导出一份标讯详情</div>
+                  </div>
+                  <div class="tl-item green">
+                    <div class="tl-time">11-11 19:22</div>
+                    <div class="tl-title">小程序生成企业监控报告</div>
+                    <div class="tl-desc">wangyan_bd · 消耗 60 积分</div>
+                  </div>
+                  <div class="tl-item blue">
+                    <div class="tl-time">11-08 10:12</div>
+                    <div class="tl-title">在线开通会员</div>
+                    <div class="tl-desc">VIP 年卡 ¥3,980 · 微信支付</div>
+                  </div>
+                  <div class="tl-item">
+                    <div class="tl-time">11-05 16:30</div>
+                    <div class="tl-title">销售电话跟进</div>
+                    <div class="tl-desc">罗屿 · 与林国栋沟通续费方案 12 分钟</div>
+                  </div>
+                  <div class="tl-item orange">
+                    <div class="tl-time">11-03 15:47</div>
+                    <div class="tl-title">Plus 会员开通</div>
+                    <div class="tl-desc">wangyan_bd · 支付宝 ¥2,580</div>
+                  </div>
+                  <div class="tl-item orange">
+                    <div class="tl-time">10-19 20:05</div>
+                    <div class="tl-title">高级会员开通</div>
+                    <div class="tl-desc">lifang_fin · 季卡 ¥1,280</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head"><span class="card-title">跟进待办</span><span class="tag tag-warning ml-auto">3 项</span></div>
+              <div class="card-body">
+                <div class="tl">
+                  <div class="tl-item orange">
+                    <div class="tl-time">今天 18:00 前</div>
+                    <div class="tl-title">回访陈涛（标准会员 30 天内到期）</div>
+                  </div>
+                  <div class="tl-item">
+                    <div class="tl-time">11-14</div>
+                    <div class="tl-title">整理 6 个免费账户转化方案</div>
+                  </div>
+                  <div class="tl-item">
+                    <div class="tl-time">11-15</div>
+                    <div class="tl-title">提交框架合同 HT2026-0092 续签</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head"><span class="card-title">合同与回款</span></div>
+              <div class="card-body">
+                <div class="kv-grid two">
+                  <div class="kv"><div class="k">合同编号</div><div class="v">HT2026-0087</div></div>
+                  <div class="kv"><div class="k">合同金额</div><div class="v num"><strong>¥ 36,000.00</strong></div></div>
+                  <div class="kv"><div class="k">已回款</div><div class="v text-success">¥ 30,000.00</div></div>
+                  <div class="kv"><div class="k">待回款</div><div class="v text-warning">¥ 6,000.00</div></div>
+                  <div class="kv"><div class="k">合同期</div><div class="v">2026-01-01 ~ 2026-12-31</div></div>
+                  <div class="kv"><div class="k">状态</div><div class="v">执行中</div></div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="nav-toast" id="navToast"></div>
+
+<button class="fab-note" type="button" id="fabNote" title="写联系小计">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+  写小计
+</button>
+
+<div class="drawer-mask" id="ctMask"></div>
+<aside class="drawer" id="ctDrawer" aria-hidden="true">
+  <div class="drawer-head"><span id="ctDrawerTitle">写联系小计</span><button class="drawer-close" type="button" id="ctDrawerClose" aria-label="关闭">×</button></div>
+  <div class="drawer-body" id="ctDrawerBody"></div>
+  <div class="drawer-foot">
+    <button class="ct-btn" type="button" id="ctDrawerCancel">取消</button>
+    <button class="btn-primary" type="button" id="ctDrawerSave">保存</button>
+  </div>
+</aside>
+
+<style>
+  body.sb-collapsed .topbar-logo { width: var(--sidebar-width-icon); min-width: var(--sidebar-width-icon); padding-left: 0; justify-content: center; }
+  body.sb-collapsed .logo-text { display: none; }
+</style>
+
+<script>
+/* ==================== 账户数据（一公司多账户，服务与会员各自独立） ==================== */
+var ACCTS = [
+  { id:'15650132296', name:'林国栋', dept:'董事长办公室 / 董事长', level:'vip', levelText:'VIP会员', main:true,
+    reg:'2024-01-18 10:24', last:'2026-11-12 08:41', terminal:'APP', spend:'¥ 12,800.00', expire:'2027-03-15', status:'生效中', days:123,
+    svc:{ assist:'2024-01-18', member:'2024-06-02', app:'2026-11-12', mini:'2026-11-02' } },
+  { id:'wangyan_bd', name:'王燕', dept:'招投标部 / 部门经理', level:'plus', levelText:'Plus会员',
+    reg:'2024-03-06 14:02', last:'2026-11-11 19:22', terminal:'小程序', spend:'¥ 9,800.00', expire:'2026-12-31', status:'生效中', days:49,
+    svc:{ assist:'2024-03-06', member:'2024-08-15', app:'', mini:'2026-11-11' } },
+  { id:'lifang_fin', name:'李芳', dept:'财务部 / 财务主管', level:'advanced', levelText:'高级会员',
+    reg:'2024-05-21 09:13', last:'2026-11-10 17:05', terminal:'APP', spend:'¥ 6,600.00', expire:'2026-12-08', status:'生效中', days:26,
+    svc:{ assist:'2024-05-21', member:'', app:'2026-11-10', mini:'2026-10-19' } },
+  { id:'chent_zb', name:'陈涛', dept:'招投标部 / 标书专员', level:'standard', levelText:'标准会员',
+    reg:'2024-07-09 16:38', last:'2026-11-09 17:20', terminal:'APP', spend:'¥ 3,200.00', expire:'2026-11-30', status:'即将到期', days:18,
+    svc:{ assist:'2024-07-09', member:'2024-09-28', app:'2026-11-09', mini:'' } },
+  { id:'zhaolei88', name:'赵磊', dept:'市场部 / 市场专员', level:'normal', levelText:'普通会员',
+    reg:'2025-02-14 11:47', last:'2026-11-06 15:31', terminal:'公众号', spend:'¥ 1,200.00', expire:'2027-01-20', status:'生效中', days:69,
+    svc:{ assist:'2025-02-14', member:'', app:'', mini:'2026-10-30' } },
+  { id:'liuyang1990', name:'刘洋', dept:'项目部 / 项目助理', level:'normal', levelText:'普通会员',
+    reg:'2025-04-02 20:16', last:'2026-10-29 09:07', terminal:'小程序', spend:'¥ 1,000.00', expire:'2026-12-19', status:'生效中', days:37,
+    svc:{ assist:'2025-04-02', member:'', app:'', mini:'2026-10-29' } },
+  { id:'sunqiang_app', name:'孙强', dept:'信息部 / IT 负责人', level:'madv', levelText:'移动端高级',
+    reg:'2025-06-30 10:55', last:'2026-11-12 07:58', terminal:'APP', spend:'¥ 2,000.00', expire:'2026-12-25', status:'生效中', days:43,
+    svc:{ assist:'2025-06-30', member:'', app:'2026-11-12', mini:'2026-11-01' } },
+  { id:'zhoumin_guest', name:'周敏', dept:'行政部 / 前台', level:'free', levelText:'免费会员',
+    reg:'2026-03-11 15:20', last:'2026-09-02 15:11', terminal:'公众号', spend:'¥ 0.00', expire:'', status:'未开通', days:0,
+    svc:{ assist:'2026-03-11', member:'', app:'', mini:'' } },
+  { id:'hujie2020', name:'胡杰', dept:'工程部 / 施工员', level:'free', levelText:'免费会员',
+    reg:'2025-11-04 09:32', last:'从未登录', terminal:'—', spend:'¥ 0.00', expire:'', status:'未开通', days:0,
+    svc:{ assist:'2025-11-04', member:'', app:'', mini:'' } },
+  { id:'tanwei888', name:'谭薇', dept:'合同部 / 合同管理员', level:'free', levelText:'免费会员',
+    reg:'2026-05-19 13:08', last:'2026-10-21 10:03', terminal:'小程序', spend:'¥ 0.00', expire:'', status:'未开通', days:0,
+    svc:{ assist:'2026-05-19', member:'', app:'', mini:'2026-10-21' } },
+  { id:'xiaoyu_hr', name:'余小雨', dept:'人力部 / 招聘专员', level:'free', levelText:'免费会员',
+    reg:'2026-08-27 18:44', last:'2026-08-27 18:44', terminal:'公众号', spend:'¥ 0.00', expire:'', status:'未开通', days:0,
+    svc:{ assist:'', member:'2026-08-27', app:'', mini:'' } },
+  { id:'gongpan_bd', name:'龚攀', dept:'采购部 / 采购员', level:'free', levelText:'免费会员',
+    reg:'2026-09-15 11:26', last:'从未登录', terminal:'—', spend:'¥ 0.00', expire:'', status:'未开通', days:0,
+    svc:{ assist:'', member:'', app:'', mini:'' } },
+  { id:'yuchen02', name:'于晨', dept:'投标部 / 资料员', level:'free', levelText:'免费会员',
+    reg:'2026-10-08 20:37', last:'2026-11-01 14:19', terminal:'APP', spend:'¥ 0.00', expire:'', status:'未开通', days:0,
+    svc:{ assist:'2026-10-08', member:'', app:'2026-11-01', mini:'' } }
+];
+
+/* ==================== 渲染账户卡 ==================== */
+function svcChip(label, val, onText, offText, kind) {
+  var on = !!val;
+  var cls = 'svc' + (on ? (kind === 'app' ? ' on-app' : ' on') : '');
+  var txt = on ? (onText + (val ? ' ' + val.slice(5) : '')) : offText;
+  return '<span class="' + cls + '" title="' + label + '：' + (on ? onText + ' ' + val : offText) + '">'
+       + '<span class="ico"></span>' + label
+       + '<span class="meta">' + txt + '</span></span>';
+}
+
+function renderAccounts() {
+  var box = document.getElementById('acctList');
+  var html = ACCTS.map(function (a) {
+    var expireTxt = a.expire ? a.expire + ' 到期' : '未开通';
+    return ''
+    + '<div class="acct' + (a.main ? ' is-main' : '') + '">'
+    +   '<div class="acct-head">'
+    +     '<span class="acct-id">' + a.id + '</span>'
+    +     '<span class="acct-name">' + a.name + ' · ' + a.dept + '</span>'
+    +     (a.main ? '<span class="tag tag-primary">主账号</span>' : '')
+    +     '<span class="m-badge m-' + a.level + '">' + a.levelText + '</span>'
+    +     (a.level === 'free' ? '<span class="tag">未付费</span>' : '')
+    +     (a.status === '即将到期' ? '<span class="tag tag-danger">' + a.days + ' 天后到期</span>' : '')
+    +     '<span class="ml-auto text-xs text-muted">最近登录：' + a.last + '</span>'
+    +   '</div>'
+    +   '<div class="acct-body">'
+    +     '<div class="acct-kv">'
+    +       '<div><div class="k">注册时间</div><div class="v">' + a.reg + '</div></div>'
+    +       '<div><div class="k">进入终端</div><div class="v">' + a.terminal + '</div></div>'
+    +       '<div><div class="k">累计消费</div><div class="v">' + a.spend + '</div></div>'
+    +       '<div><div class="k">会员到期</div><div class="v">' + expireTxt + '</div></div>'
+    +     '</div>'
+    +     '<div class="svc-block">'
+    +       '<div class="svc-label">服务开通 <span class="hint">绑定公众号 / 是否登录 APP 与小程序</span></div>'
+    +       '<div class="svc-row">'
+    +         svcChip('标讯助手公众号', a.svc.assist, '已关注', '未关注')
+    +         svcChip('会员服务公众号', a.svc.member, '已绑定', '未绑定')
+    +         svcChip('APP', a.svc.app, '已登录', '未登录', 'app')
+    +         svcChip('小程序', a.svc.mini, '已登录', '未登录', 'app')
+    +       '</div>'
+    +     '</div>'
+    +   '</div>'
+    + '</div>';
+  }).join('');
+  box.innerHTML = html;
+}
+
+/* ==================== 渲染会员状态表 ==================== */
+function renderMembers() {
+  var tb = document.getElementById('memberTbody');
+  tb.innerHTML = ACCTS.map(function (a) {
+    var statTag = a.level === 'free' ? '<span class="tag">免费</span>'
+      : (a.status === '即将到期' ? '<span class="tag tag-danger">即将到期</span>' : '<span class="tag tag-success">生效中</span>');
+    return '<tr>'
+      + '<td class="mono">' + a.id + '</td>'
+      + '<td><span class="m-badge m-' + a.level + '">' + a.levelText + '</span></td>'
+      + '<td>' + (a.expire ? (a.reg || '—') : '—') + '</td>'
+      + '<td>' + (a.expire || '—') + '</td>'
+      + '<td>' + statTag + '</td>'
+      + '<td class="num">' + (a.expire ? a.days : '—') + '</td>'
+      + '</tr>';
+  }).join('');
+}
+
+renderAccounts();
+renderMembers();
+
+/* ==================== 标签页切换 ==================== */
+document.getElementById('tabs').addEventListener('click', function (e) {
+  var btn = e.target.closest('.tab-btn');
+  if (!btn) return;
+  [].forEach.call(this.querySelectorAll('.tab-btn'), function (b) { b.classList.toggle('active', b === btn); });
+  [].forEach.call(document.querySelectorAll('.tab-pane'), function (p) { p.classList.remove('active'); });
+  var pane = document.getElementById('pane-' + btn.dataset.tab);
+  if (pane) pane.classList.add('active');
+  document.getElementById('contentBody').scrollTop = 0;
+});
+
+
+/* ==================== Toast ==================== */
+var toastTimer = null;
+function toast(msg) {
+  var t = document.getElementById('navToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () { t.classList.remove('show'); }, 1800);
+}
+
+/* ==================== 侧栏 iframe 桥接（crm-main / crm-sidebar） ==================== */
+var shell = document.getElementById('appShell');
+var frame = document.getElementById('sidebarFrame');
+var initSent = false;
+var LS_KEY = 'crm-sidebar-collapsed';
+
+function postToSidebar(msg) {
+  if (!frame.contentWindow) return;
+  msg.source = 'crm-main';
+  frame.contentWindow.postMessage(msg, '*');
+}
+
+function pushInit() {
+  if (initSent) return;
+  initSent = true;
+  var collapsed = localStorage.getItem(LS_KEY) === '1';
+  setCollapsed(collapsed, false);
+  postToSidebar({ type: 'init', key: 'cust-detail' });
+  postToSidebar({ type: 'activate', key: 'cust-detail' });
+}
+
+function setCollapsed(on, persist) {
+  shell.setAttribute('data-sidebar', on ? 'collapsed' : 'expanded');
+  document.body.classList.toggle('sb-collapsed', on);
+  if (persist) localStorage.setItem(LS_KEY, on ? '1' : '0');
+}
+
+document.getElementById('sidebarTrigger').addEventListener('click', function () {
+  var next = shell.getAttribute('data-sidebar') !== 'collapsed';
+  setCollapsed(next, true);
+  postToSidebar({ type: 'collapsed', value: next });
+});
+
+window.addEventListener('message', function (e) {
+  var d = e.data;
+  if (!d || d.source !== 'crm-sidebar') return;
+  if (d.type === 'collapsed') {
+    setCollapsed(!!d.value, true);
+  } else if (d.type === 'nav') {
+    document.getElementById('breadcrumbParent').textContent = d.parent || '客户库';
+    document.getElementById('breadcrumbCurrent').textContent = d.title || '客户详情';
+    if (d.key && d.key !== 'cust-detail') {
+      toast('原型演示：已点击「' + (d.parent ? d.parent + ' / ' : '') + (d.title || '') + '」，实际将跳转对应工作台');
+    }
+  } else if (d.type === 'toast') {
+    toast(d.text || '');
+  }
+});
+
+frame.addEventListener('load', pushInit);
+setTimeout(pushInit, 400);
+
+/* ==================== 其他按钮 ==================== */
+document.getElementById('btnRefresh').addEventListener('click', function () { toast('已刷新客户数据'); });
+document.getElementById('btnFullscreen').addEventListener('click', function () {
+  if (!document.fullscreenElement) { document.documentElement.requestFullscreen(); }
+  else { document.exitFullscreen(); }
+});
+document.getElementById('btnNewLead').addEventListener('click', function () { toast('原型演示：打开新建线索面板'); });
+[].forEach.call(document.querySelectorAll('.top-quick-btn'), function (b) {
+  b.addEventListener('click', function () { toast('原型演示：' + b.dataset.quick); });
+});
+[].forEach.call(document.querySelectorAll('.actions-row .btn'), function (b) {
+  b.addEventListener('click', function () { toast('原型演示：' + b.textContent.trim()); });
+});
+/* ==================== 联系人 tab（左右布局） ==================== */
+var CT_SVG_PIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.8V4h6v6.8l2.6 2.9a1 1 0 0 1-.75 1.66H7.15a1 1 0 0 1-.75-1.66L9 10.8Z"/></svg>';
+var CT_SVG_EDIT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
+
+var CONTACTS = [
+  { id:'c1', name:'林国栋', phone:'138****8801', raw:'13800008801', dept:'董事长办公室', title:'董事长', tags:['决策人','已开通APP'], primary:true,
+    wechat:'linguodong_bd', email:'lingd@datudou.cn', acct:'15650132296（主账号 · VIP 会员 · 生效中）',
+    lastContact:'2026-11-05 · 电话 12 分钟', lastAt:'2026-11-05',
+    note:'年度框架签约人，关注集团多子公司统一管理；续签决策由其拍板，需同步法务与财务。',
+    logs:[
+      { date:'2026-11-05', way:'电话', text:'沟通年度框架续签，确认年内续签并扩容至 15 个席位；要求提供集团多主体管理方案。', next:'下一步：11-20 前发送扩容报价单' },
+      { date:'2026-10-22', way:'上门', text:'到访交流招标数据在集团层面的应用，对企情分析模块兴趣较高。' },
+      { date:'2026-09-18', way:'微信', text:'询问子账号权限与数据导出限制，已同步产品说明文档。' }
+    ] },
+  { id:'c2', name:'王燕', phone:'138****6612', raw:'13800006612', dept:'招投标部', title:'部门经理', tags:['主联系人'], primary:true,
+    wechat:'wangyan_bd', email:'wangyan@datudou.cn', acct:'wangyan_bd（Plus 会员 · 2026-12-31 到期）',
+    lastContact:'2026-11-11 · 微信 6 分钟', lastAt:'2026-11-11',
+    note:'日常对接人，负责账号使用与培训；每月例会由其组织，关注标书检索效率。',
+    logs:[
+      { date:'2026-11-11', way:'微信', text:'反馈标书检索结果偏多，希望增加按采购单位过滤；已记录为需求。', next:'下一步：11-18 前给出需求评估' },
+      { date:'2026-10-28', way:'会议', text:'线上月度例会，讲解新增订阅规则与关键词组合技巧。' },
+      { date:'2026-10-09', way:'电话', text:'咨询 3 个子账号到期时间与续费方式。' }
+    ] },
+  { id:'c3', name:'陈涛', phone:'139****3308', raw:'13900003308', dept:'招投标部', title:'标书专员', tags:['高频使用'],
+    wechat:'chentao_zb', email:'chentao@datudou.cn', acct:'chent_zb（标准会员 · 2026-11-30 到期）',
+    lastContact:'2026-11-09 · APP 登录', lastAt:'2026-11-09',
+    note:'标准会员将于 11-30 到期，使用强度高（近 30 天导出 42 次），是最优先续费转化对象。',
+    logs:[
+      { date:'2026-11-09', way:'APP', text:'连续 3 天高频检索并导出标书，已触达导出上限。', next:'下一步：11-25 前完成续费触达' },
+      { date:'2026-10-30', way:'电话', text:'询问导出次数上限与升级高级会员的差价。' }
+    ] },
+  { id:'c4', name:'李芳', phone:'137****9902', raw:'13700009902', dept:'财务部', title:'财务主管', tags:['付款方'],
+    wechat:'lifang_fin', email:'lifang@datudou.cn', acct:'lifang_fin（高级会员 · 2026-12-08 到期）',
+    lastContact:'2026-10-30 · 电话 4 分钟', lastAt:'2026-10-30',
+    note:'负责开票与对账，发票抬头固定；每年 12 月集中采购，需提前 2 周对账。',
+    logs:[
+      { date:'2026-10-30', way:'电话', text:'确认 11 月发票开具与账户到期对账流程。' },
+      { date:'2026-09-26', way:'邮件', text:'发送年度服务清单与结算明细，已回签确认。' }
+    ] },
+  { id:'c5', name:'孙强', phone:'135****4417', raw:'13500004417', dept:'信息部', title:'IT 负责人', tags:['技术对接'],
+    wechat:'sunqiang_app', email:'sunqiang@datudou.cn', acct:'sunqiang_app（移动端高级 · 生效中）',
+    lastContact:'2026-10-16 · 微信 9 分钟', lastAt:'2026-10-16',
+    note:'技术与数据对接窗口，关注 API 接口稳定性；集团系统集成由其评估。',
+    logs:[
+      { date:'2026-10-16', way:'微信', text:'沟通 API 调用频次限制，反馈希望提供批量查询接口。' },
+      { date:'2026-09-08', way:'会议', text:'技术评审会，确认数据字段口径与接口鉴权方式。' }
+    ] },
+  { id:'c6', name:'王海', phone:'139****5527', raw:'13900005527', dept:'采购部', title:'采购经理', tags:['决策人','新线索'],
+    wechat:'', email:'wanghai@datudou.cn', acct:'',
+    lastContact:'2026-11-12 · 上门 20 分钟', lastAt:'2026-11-12',
+    note:'展会现场拜访获取，负责集团采购寻源；尚未注册平台账号，已同意接收注册邀请。',
+    logs:[
+      { date:'2026-11-12', way:'上门', text:'展会现场交流，对招投标信息与企情分析有需求；尚未使用平台，留资待注册。', next:'下一步：11-20 前完成注册引导' }
+    ] },
+  { id:'c7', name:'郑晓', phone:'137****6618', raw:'13700006618', dept:'行政部', title:'行政专员', tags:['待激活'],
+    wechat:'', email:'zhengxiao@datudou.cn', acct:'',
+    lastContact:'—', lastAt:'',
+    note:'官网咨询表单留资，仅确认办公用品采购，暂无标讯类需求，待二次触达。',
+    logs:[] }
+];
+
+var CT_PIN_KEY = 'crm-contact-pinned';
+var ctPinned = [];
+try { ctPinned = JSON.parse(localStorage.getItem(CT_PIN_KEY) || '[]') || []; } catch (e) { ctPinned = []; }
+var ctCurId = CONTACTS[0] ? CONTACTS[0].id : '';
+var ctRegFilter = 'all';
+var ctDrawerMode = '', ctDrawerId = '', ctDraftTags = [];
+
+function ctEsc(t) {
+  return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+  });
+}
+function ctMask(p) { p = String(p || '').replace(/\s/g, ''); return p.length >= 7 ? p.slice(0, 3) + '****' + p.slice(-4) : p; }
+function ctFind(id) { for (var i = 0; i < CONTACTS.length; i++) { if (CONTACTS[i].id === id) return CONTACTS[i]; } return null; }
+function ctIsPin(id) { return ctPinned.indexOf(id) >= 0; }
+function ctSavePins() { try { localStorage.setItem(CT_PIN_KEY, JSON.stringify(ctPinned)); } catch (e) {} }
+function ctInitial(n) { return n ? n.charAt(0) : '?'; }
+function ctToday() {
+  var d = new Date(), m = d.getMonth() + 1, day = d.getDate();
+  return d.getFullYear() + '-' + (m < 10 ? '0' + m : m) + '-' + (day < 10 ? '0' + day : day);
+}
+function ctRegOf(c) {
+  if (!c || !c.acct) return null;
+  var id = String(c.acct).split('（')[0].trim();
+  for (var i = 0; i < ACCTS.length; i++) { if (ACCTS[i].id === id) return ACCTS[i]; }
+  return null;
+}
+function ctIsReg(c) { return !!ctRegOf(c); }
+function ctCounts() {
+  var total = CONTACTS.length, yes = 0;
+  CONTACTS.forEach(function (c) { if (ctIsReg(c)) yes++; });
+  var no = total - yes;
+  var list = document.getElementById('ctCount'), tab = document.getElementById('tabContactCnt');
+  if (list) list.textContent = total;
+  if (tab) tab.textContent = total;
+  var n1 = document.getElementById('ctN1'), n2 = document.getElementById('ctN2'), n3 = document.getElementById('ctN3');
+  if (n1) n1.textContent = total;
+  if (n2) n2.textContent = yes;
+  if (n3) n3.textContent = no;
+}
+
+/* ---------- 左栏列表 ---------- */
+function ctItemHtml(c) {
+  var tags = (c.tags || []).slice(0, 2).map(function (t, i) {
+    return '<span class="ct-tag' + (i === 0 && c.primary ? ' primary' : '') + '">' + ctEsc(t) + '</span>';
+  }).join('');
+  var pinned = ctIsPin(c.id);
+  var reg = ctIsReg(c);
+  return '<div class="ct-item' + (c.id === ctCurId ? ' active' : '') + (pinned ? ' pinned' : '') + (reg ? '' : ' unreg') + '" data-ct="' + c.id + '">'
+    + '<div class="ct-ava">' + ctEsc(ctInitial(c.name)) + '</div>'
+    + '<div class="ct-main">'
+    +   '<div class="ct-line1"><span class="ct-name">' + ctEsc(c.name) + '</span>' + tags + '</div>'
+    +   '<div class="ct-row2"><span class="ct-phone">' + ctEsc(c.phone) + '</span>'
+    +     '<span class="ct-reg ' + (reg ? 'on' : 'off') + '">' + (reg ? '已注册' : '未注册') + '</span></div>'
+    +   '<div class="ct-job">' + ctEsc(c.dept) + ' · ' + ctEsc(c.title) + '</div>'
+    + '</div>'
+    + '<button class="ct-pin' + (pinned ? ' on' : '') + '" type="button" data-pin="' + c.id + '" title="' + (pinned ? '取消置顶' : '置顶') + '">' + CT_SVG_PIN + '</button>'
+    + '</div>';
+}
+function ctRenderList() {
+  var box = document.getElementById('ctList');
+  if (!box) return;
+  var kw = (document.getElementById('ctSearch').value || '').trim().toLowerCase();
+  var mode = document.getElementById('ctSort').value;
+  var arr = CONTACTS.filter(function (c) {
+    if (ctRegFilter === 'yes' && !ctIsReg(c)) return false;
+    if (ctRegFilter === 'no' && ctIsReg(c)) return false;
+    if (!kw) return true;
+    return (c.name + c.phone + c.raw + c.title + c.dept + (c.tags || []).join('')).toLowerCase().indexOf(kw) >= 0;
+  });
+  // 过滤/搜索后当前选中项不可见时，自动切到第一条可见联系人，保证左右联动
+  var curSwitched = false;
+  if (arr.length && !arr.some(function (c) { return c.id === ctCurId; })) { ctCurId = arr[0].id; curSwitched = true; }
+  var pinArr = [], rest = [];
+  arr.forEach(function (c) { (ctIsPin(c.id) ? pinArr : rest).push(c); });
+  pinArr.sort(function (a, b) { return ctPinned.indexOf(a.id) - ctPinned.indexOf(b.id); });
+  if (mode === 'name') rest.sort(function (a, b) { return String(a.name).localeCompare(String(b.name), 'zh'); });
+  if (mode === 'recent') rest.sort(function (a, b) { return String(b.lastAt || '').localeCompare(String(a.lastAt || '')); });
+
+  var html = '';
+  if (pinArr.length) {
+    html += '<div class="cs-group">── 置顶 ──</div>' + pinArr.map(ctItemHtml).join('');
+    if (rest.length) html += '<div class="cs-group">全部联系人</div>';
+  }
+  html += rest.map(ctItemHtml).join('');
+  if (!html) html = '<div class="ct-empty">没有匹配的联系人</div>';
+  box.innerHTML = html;
+  ctCounts();
+  if (curSwitched) ctRenderDetail();
+}
+
+/* ---------- 右栏详情 ---------- */
+function ctAcctShort(c) {
+  if (!c || !c.acct) return '';
+  var a = ctRegOf(c);
+  return c.acct.replace(/（.*?）/g, '').trim() + (a ? '（' + a.levelText + ' · ' + (a.status === '未开通' ? '免费未开通' : a.expire ? a.expire + ' 到期' : a.status) + '）' : '');
+}
+function ctRegCell(c) {
+  var a = ctRegOf(c);
+  if (!a) {
+    return '<span class="ct-unreg-flag">未注册平台账号</span>'
+      + '<button class="ct-invite" type="button" id="btnInvite">发送注册邀请</button>';
+  }
+  return ctEsc(a.id) + ' · ' + ctEsc(a.levelText) + ' · 首次注册 ' + ctEsc(a.reg);
+}
+function ctDetailHtml(c) {
+  if (!c) return '<div class="ct-placeholder">选择左侧联系人查看详情</div>';
+  var tags = (c.tags || []).map(function (t, i) {
+    return '<span class="ct-tag' + (i === 0 && c.primary ? ' primary' : '') + '">' + ctEsc(t) + '</span>';
+  }).join('');
+  var pinned = ctIsPin(c.id);
+  var logs = (c.logs || []).map(function (g) {
+    return '<div class="ct-log">'
+      + '<div class="ct-log-top"><span>' + ctEsc(g.date) + '</span><span class="ct-log-way">' + ctEsc(g.way) + '</span></div>'
+      + '<div class="ct-log-text">' + ctEsc(g.text) + '</div>'
+      + (g.next ? '<div class="ct-log-next">' + ctEsc(g.next) + '</div>' : '')
+      + '</div>';
+  }).join('');
+
+  return '<div class="ct-d-head">'
+    + '<div class="ct-ava lg">' + ctEsc(ctInitial(c.name)) + '</div>'
+    + '<div class="flex-1">'
+    +   '<div class="ct-d-name">' + ctEsc(c.name) + tags
+    +     '<span class="ct-d-reg ' + (ctIsReg(c) ? 'on' : 'off') + '">' + (ctIsReg(c) ? '已注册账号' : '未注册账号') + '</span></div>'
+    +   '<div class="ct-d-sub">' + ctEsc(c.dept) + ' · ' + ctEsc(c.title) + '</div>'
+    +   '<div class="ct-d-sub">' + ctEsc(c.raw) + ' · ' + ctEsc(c.email) + '</div>'
+    + '</div>'
+    + '<div class="ct-d-actions">'
+    +   '<button class="ct-btn' + (pinned ? ' on' : '') + '" type="button" id="btnPinCur">' + CT_SVG_PIN + (pinned ? '已置顶' : '置顶') + '</button>'
+    +   '<button class="ct-btn" type="button" id="btnEditCur">' + CT_SVG_EDIT + '编辑</button>'
+    + '</div>'
+    + '</div>'
+    + '<table class="kvt"><colgroup><col style="width:96px"><col></colgroup><tbody>'
+    +   '<tr><th class="k">手机号</th><td class="v mono">' + ctEsc(c.phone) + '</td></tr>'
+    +   '<tr><th class="k">微信</th><td class="v">' + ctEsc(c.wechat || '—') + '</td></tr>'
+    +   '<tr><th class="k">部门 / 职位</th><td class="v">' + ctEsc(c.dept) + ' · ' + ctEsc(c.title) + '</td></tr>'
+    +   '<tr><th class="k">邮箱</th><td class="v">' + ctEsc(c.email || '—') + '</td></tr>'
+    +   '<tr><th class="k">注册账号</th><td class="v">' + ctRegCell(c) + '</td></tr>'
+    +   '<tr><th class="k">关联账户</th><td class="v">' + ctEsc(ctAcctShort(c) || '未关联') + '</td></tr>'
+    +   '<tr><th class="k">最近沟通</th><td class="v">' + ctEsc(c.lastContact || '—') + '</td></tr>'
+    +   '<tr><th class="k">备注</th><td class="v">' + ctEsc(c.note || '—') + '</td></tr>'
+    + '</tbody></table>'
+    + '<div class="ct-logs">'
+    +   '<div class="ct-logs-head">联系记录 <span class="cnt">' + (c.logs || []).length + '</span></div>'
+    +   (logs || '<div class="ct-empty">暂无联系记录</div>')
+    + '</div>';
+}
+function ctRenderDetail() {
+  var box = document.getElementById('ctDetail');
+  if (!box) return;
+  box.innerHTML = ctDetailHtml(ctFind(ctCurId));
+  var pinBtn = document.getElementById('btnPinCur');
+  if (pinBtn) pinBtn.addEventListener('click', function () { ctTogglePin(ctCurId); });
+  var editBtn = document.getElementById('btnEditCur');
+  if (editBtn) editBtn.addEventListener('click', function () { ctOpenDrawer('edit', ctCurId); });
+  var inviteBtn = document.getElementById('btnInvite');
+  if (inviteBtn) inviteBtn.addEventListener('click', function () {
+    var c = ctFind(ctCurId);
+    toast('已向 ' + (c ? c.name : '联系人') + ' 发送注册邀请（短信 + 邮件）');
+  });
+}
+function ctSelect(id) {
+  ctCurId = id;
+  ctRenderList();
+  ctRenderDetail();
+  var right = document.getElementById('ctDetail');
+  if (right) right.scrollTop = 0;
+}
+function ctTogglePin(id) {
+  var i = ctPinned.indexOf(id);
+  var c = ctFind(id);
+  if (i >= 0) { ctPinned.splice(i, 1); toast('已取消置顶' + (c ? '：' + c.name : '')); }
+  else { ctPinned.unshift(id); toast('已置顶' + (c ? '：' + c.name : '')); }
+  ctSavePins();
+  ctRenderList();
+  ctRenderDetail();
+}
+
+/* ---------- 抽屉 ---------- */
+function ctOpenDrawer(mode, id) {
+  var c = ctFind(id);
+  ctDrawerMode = mode; ctDrawerId = id || '';
+  var title = document.getElementById('ctDrawerTitle');
+  var body = document.getElementById('ctDrawerBody');
+  var foot = document.querySelector('#ctDrawer .drawer-foot');
+  if (mode === 'note') {
+    title.textContent = '写联系小计' + (c ? '：' + c.name : '');
+    body.innerHTML = '<div class="dr-label">小计内容<span class="req">*</span></div>'
+      + '<textarea class="dr-area" id="drNote" placeholder="记录本次沟通要点、客户诉求与下一步动作，例：沟通年度续签，客户确认年内签约，要求扩容到 15 个席位。"></textarea>'
+      + '<div class="dr-err" id="drErr">请先填写小计内容</div>'
+      + '<div class="dr-label">记录方式</div>'
+      + '<div class="dr-chips" id="drWays">'
+      + ['电话','微信','上门','会议','邮件','手动记录'].map(function (w, i) {
+          return '<button class="dr-chip' + (i === 0 ? '' : '') + '" type="button" data-way="' + w + '">' + w + '</button>';
+        }).join('')
+      + '</div>'
+      + '<div class="dr-label">下次跟进时间（选填）</div>'
+      + '<input class="dr-input" id="drNext" type="date">';
+    if (foot) foot.querySelector('#ctDrawerSave').textContent = '保存小计';
+  } else {
+    title.textContent = mode === 'add' ? '添加联系人' : '编辑联系人';
+    var v = c || {};
+    ctDraftTags = (v.tags || []).slice();
+    var opts = ACCTS.map(function (a) {
+      var label = a.id + ' · ' + a.name + ' · ' + a.levelText;
+      var sel = c && c.acct && c.acct.indexOf(a.id) === 0 ? ' selected' : '';
+      return '<option value="' + a.id + '"' + sel + '>' + label + '</option>';
+    }).join('');
+    body.innerHTML = ''
+      + '<div class="dr-row"><div><div class="dr-label">姓名<span class="req">*</span></div><input class="dr-input" id="drName" value="' + ctEsc(v.name || '') + '" placeholder="请输入姓名"></div>'
+      + '<div><div class="dr-label">手机号<span class="req">*</span></div><input class="dr-input" id="drPhone" value="' + ctEsc(v.raw || '') + '" placeholder="11 位手机号" maxlength="11"></div></div>'
+      + '<div class="dr-row"><div><div class="dr-label">部门</div><input class="dr-input" id="drDept" value="' + ctEsc(v.dept || '') + '" placeholder="如 招投标部"></div>'
+      + '<div><div class="dr-label">职位</div><input class="dr-input" id="drTitle" value="' + ctEsc(v.title || '') + '" placeholder="如 部门经理"></div></div>'
+      + '<div class="dr-label">标签（可多选）</div>'
+      + '<div class="dr-chips" id="drTags">'
+      + ['决策人','主联系人','付款方','技术对接','高频使用','已开通APP','待激活'].map(function (t) {
+          return '<button class="dr-chip' + (ctDraftTags.indexOf(t) >= 0 ? ' on' : '') + '" type="button" data-tag="' + t + '">' + t + '</button>';
+        }).join('')
+      + '</div>'
+      + '<div class="dr-row"><div><div class="dr-label">微信号</div><input class="dr-input" id="drWechat" value="' + ctEsc(v.wechat || '') + '" placeholder="选填"></div>'
+      + '<div><div class="dr-label">邮箱</div><input class="dr-input" id="drEmail" value="' + ctEsc(v.email || '') + '" placeholder="选填"></div></div>'
+      + '<div class="dr-label">关联账户<span class="dr-hint">选择账户即标记为已注册；不关联则视为未注册联系人</span></div>'
+      + '<select class="dr-select" id="drAcct"><option value="">未注册（暂不关联账户）</option>' + opts + '</select>'
+      + '<div class="dr-label">备注</div>'
+      + '<textarea class="dr-area" id="drRemark" placeholder="选填，记录客户偏好、决策链、注意事项等">' + ctEsc(v.note || '') + '</textarea>'
+      + '<div class="dr-err" id="drErr"></div>';
+    if (foot) foot.querySelector('#ctDrawerSave').textContent = '保存';
+    var chips = document.getElementById('drTags');
+    chips.addEventListener('click', function (e) {
+      var b = e.target.closest('.dr-chip');
+      if (!b) return;
+      var t = b.dataset.tag, i = ctDraftTags.indexOf(t);
+      if (i >= 0) { ctDraftTags.splice(i, 1); b.classList.remove('on'); }
+      else { ctDraftTags.push(t); b.classList.add('on'); }
+    });
+  }
+  if (mode === 'note') {
+    var ways = document.getElementById('drWays');
+    if (ways) {
+      ways.addEventListener('click', function (e) {
+        var b = e.target.closest('.dr-chip');
+        if (!b) return;
+        [].forEach.call(ways.querySelectorAll('.dr-chip'), function (x) { x.classList.remove('on'); });
+        b.classList.add('on');
+      });
+      [].forEach.call(ways.querySelectorAll('.dr-chip'), function (x, i) { if (i === 0) x.classList.add('on'); });
+    }
+  }
+  document.getElementById('ctMask').classList.add('show');
+  var dr = document.getElementById('ctDrawer');
+  dr.classList.add('show');
+  dr.setAttribute('aria-hidden', 'false');
+  setTimeout(function () {
+    var first = dr.querySelector('input, textarea');
+    if (first) first.focus();
+  }, 220);
+}
+function ctCloseDrawer() {
+  document.getElementById('ctMask').classList.remove('show');
+  var dr = document.getElementById('ctDrawer');
+  dr.classList.remove('show');
+  dr.setAttribute('aria-hidden', 'true');
+  ctDrawerMode = '';
+}
+function ctShowErr(msg) {
+  var e = document.getElementById('drErr');
+  if (e) { e.textContent = msg; e.style.display = 'block'; }
+}
+function ctSave() {
+  if (ctDrawerMode === 'note') {
+    var txt = (document.getElementById('drNote').value || '').trim();
+    if (!txt) { ctShowErr('请先填写小计内容'); return; }
+    var wayEl = document.querySelector('#drWays .dr-chip.on');
+    var way = wayEl ? wayEl.dataset.way : '手动记录';
+    var nextEl = document.getElementById('drNext');
+    var c = ctFind(ctDrawerId);
+    if (!c) { ctCloseDrawer(); return; }
+    c.logs = c.logs || [];
+    c.logs.unshift({ date: ctToday(), way: way, text: txt, next: nextEl && nextEl.value ? '下次跟进：' + nextEl.value : '' });
+    c.lastAt = ctToday();
+    c.lastContact = ctToday() + ' · ' + way;
+    ctCloseDrawer();
+    ctRenderDetail();
+    toast('小计已保存，已记入联系记录');
+    return;
+  }
+  var name = (document.getElementById('drName').value || '').trim();
+  var phone = (document.getElementById('drPhone').value || '').replace(/\s|-/g, '');
+  if (!name) { ctShowErr('请填写联系人姓名'); return; }
+  if (!phone) { ctShowErr('请填写手机号'); return; }
+  if (!/^1\d{10}$/.test(phone)) { ctShowErr('手机号需为 11 位数字'); return; }
+  var dup = CONTACTS.filter(function (x) { return x.raw === phone && x.id !== ctDrawerId; });
+  if (dup.length) { ctShowErr('该手机号已存在联系人：' + dup[0].name + '，请勿重复添加'); return; }
+  var dept = (document.getElementById('drDept').value || '').trim();
+  var titleV = (document.getElementById('drTitle').value || '').trim();
+  var wechat = (document.getElementById('drWechat').value || '').trim();
+  var email = (document.getElementById('drEmail').value || '').trim();
+  var acctId = document.getElementById('drAcct').value;
+  var remark = (document.getElementById('drRemark').value || '').trim();
+  var acctText = '未关联';
+  if (acctId) {
+    var a = null;
+    for (var i = 0; i < ACCTS.length; i++) { if (ACCTS[i].id === acctId) a = ACCTS[i]; }
+    acctText = acctId + (a ? '（' + a.name + ' · ' + a.levelText + '）' : '');
+  }
+  var tags = ctDraftTags.slice();
+
+  if (ctDrawerMode === 'add') {
+    var nc = {
+      id: 'c' + (Date.now()), name: name, raw: phone, phone: ctMask(phone),
+      dept: dept || '待补充', title: titleV || '待补充', tags: tags.length ? tags : ['新建'],
+      primary: tags.indexOf('决策人') >= 0 || tags.indexOf('主联系人') >= 0,
+      wechat: wechat, email: email, acct: acctText,
+      lastContact: '—', lastAt: '', note: remark || '—', logs: []
+    };
+    CONTACTS.push(nc);
+    ctCurId = nc.id;
+    ctCloseDrawer();
+    ctRenderList();
+    ctRenderDetail();
+    toast('已添加联系人：' + name);
+  } else if (ctDrawerMode === 'edit') {
+    var ec = ctFind(ctDrawerId);
+    if (!ec) { ctCloseDrawer(); return; }
+    ec.name = name; ec.raw = phone; ec.phone = ctMask(phone);
+    ec.dept = dept || '待补充'; ec.title = titleV || '待补充';
+    ec.tags = tags; ec.primary = tags.indexOf('决策人') >= 0 || tags.indexOf('主联系人') >= 0;
+    ec.wechat = wechat; ec.email = email; ec.acct = acctText;
+    if (remark) ec.note = remark;
+    ctCloseDrawer();
+    ctRenderList();
+    ctRenderDetail();
+    toast('已保存联系人修改：' + name);
+  }
+}
+
+/* ---------- 事件绑定 ---------- */
+(function () {
+  var list = document.getElementById('ctList');
+  if (!list) return;
+  list.addEventListener('click', function (e) {
+    var pin = e.target.closest('.ct-pin');
+    if (pin) { e.stopPropagation(); ctTogglePin(pin.dataset.pin); return; }
+    var item = e.target.closest('.ct-item');
+    if (item && item.dataset.ct) ctSelect(item.dataset.ct);
+  });
+  document.getElementById('ctSearch').addEventListener('input', ctRenderList);
+  document.getElementById('ctSort').addEventListener('change', ctRenderList);
+document.getElementById('ctFilter').addEventListener('click', function (e) {
+  var b = e.target.closest('button');
+  if (!b) return;
+  ctRegFilter = b.dataset.reg;
+  [].forEach.call(this.querySelectorAll('button'), function (x) { x.classList.toggle('on', x === b); });
+  ctRenderList();
+});
+  document.getElementById('btnAddContact').addEventListener('click', function () { ctOpenDrawer('add', ''); });
+  document.getElementById('ctDrawerClose').addEventListener('click', ctCloseDrawer);
+  document.getElementById('ctDrawerCancel').addEventListener('click', ctCloseDrawer);
+  document.getElementById('ctMask').addEventListener('click', ctCloseDrawer);
+  document.getElementById('ctDrawerSave').addEventListener('click', ctSave);
+  var fab = document.getElementById('fabNote');
+  if (fab) {
+    fab.addEventListener('click', function () {
+      if (!ctFind(ctCurId)) { toast('请先在「联系人」页签选择一位联系人'); return; }
+      ctOpenDrawer('note', ctCurId);
+    });
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') ctCloseDrawer();
+  });
+  /* 悬浮按钮：固定在屏幕右下，提示语随页签切换 */
+  function placeFab() {
+    if (!fab) return;
+    var active = document.getElementById('pane-contacts').classList.contains('active');
+    fab.title = active ? '为当前选中联系人写联系小计' : '写联系小计（需切换到联系人页签）';
+  }
+  placeFab();
+  [].forEach.call(document.querySelectorAll('.tab-btn'), function (btn) {
+    btn.addEventListener('click', function () { setTimeout(placeFab, 30); });
+  });
+
+  ctRenderList();
+  ctRenderDetail();
+})();
+
+</script>
+</body>
+</html>

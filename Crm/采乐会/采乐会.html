@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>订单管理 - 采乐会</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%231E88E5'/%3E%3Ctext%20x='32'%20y='45'%20text-anchor='middle'%20font-size='40'%20font-weight='700'%20fill='%23ffffff'%20font-family='Microsoft%20YaHei,sans-serif'%3E%E9%87%87%3C/text%3E%3C/svg%3E">
+<style>
+  /* ================================================================
+     采乐会 · 订单管理列表页（单文件静态复刻）
+     纯 HTML + CSS，无构建、无外部 CDN 依赖
+     ================================================================ */
+  :root {
+    --primary: #1E88E5;
+    --primary-dark: #1976D2;
+    --primary-light: #E3F2FD;
+    --link: #1890FF;
+    --status: #40A9FF;
+    --danger: #FF4D4F;
+    --text: #333333;
+    --text-muted: #666666;
+    --text-light: #999999;
+    --border: #E8E8E8;
+    --bg: #F5F7FA;
+    --card: #FFFFFF;
+    --radius: 4px;
+    --radius-lg: 6px;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei",
+                 "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    background: var(--bg);
+    min-width: 1400px;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { text-decoration: none; color: inherit; }
+  ul, li { list-style: none; }
+  button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+  input, select { font: inherit; color: var(--text); outline: none; }
+  table { border-collapse: collapse; width: 100%; }
+
+  /* ================= 1. 顶部导航 ================= */
+  .topbar {
+    height: 56px;
+    background: var(--primary);
+    display: flex;
+    align-items: center;
+    padding: 0 20px 0 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .brand-name {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #FFFFFF;
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, .12);
+  }
+  .brand-domain {
+    font-size: 12px;
+    color: rgba(255, 255, 255, .72);
+    letter-spacing: .2px;
+    font-weight: 400;
+  }
+
+  .main-nav {
+    margin-left: auto;
+    display: flex;
+    align-items: stretch;
+    height: 100%;
+  }
+  .main-nav a {
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, .88);
+    position: relative;
+    transition: background .15s, color .15s;
+  }
+  .main-nav a:hover { color: #FFFFFF; background: rgba(255, 255, 255, .10); }
+  .main-nav a.active {
+    color: #FFFFFF;
+    background: var(--primary-dark);
+    font-weight: 500;
+  }
+  .main-nav a.active::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 2px;
+    background: #FFFFFF;
+  }
+
+  /* ================= 2. 搜索与筛选区 ================= */
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 20px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .filter-field {
+    height: 32px;
+    border: 1px solid #DCDFE6;
+    border-radius: var(--radius);
+    background: #FFFFFF;
+    padding: 0 10px;
+    font-size: 13px;
+    color: var(--text);
+  }
+  select.filter-field {
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 26px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23A8ABB2'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 9px center;
+    cursor: pointer;
+  }
+  select.filter-field:focus, input.filter-field:focus { border-color: var(--primary); }
+  .w-meeting { width: 180px; }
+  .w-keyword { width: 260px; }
+  .w-source { width: 150px; }
+  .btn-search {
+    width: 40px;
+    height: 32px;
+    border-radius: var(--radius);
+    background: var(--primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background .15s;
+  }
+  .btn-search:hover { background: var(--primary-dark); }
+  .btn-search svg { width: 16px; height: 16px; stroke: #FFFFFF; }
+
+  .total-count {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  .total-count b {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--danger);
+    font-variant-numeric: tabular-nums;
+    margin: 0 2px;
+  }
+
+  /* ================= 3. 数据表格区 ================= */
+  .table-wrap {
+    margin: 14px 20px 24px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .data-table {
+    table-layout: fixed;
+    font-size: 13px;
+  }
+  .data-table thead th {
+    height: 44px;
+    padding: 10px 12px;
+    background: #FFFFFF;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    text-align: left;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .data-table thead th.is-sortable { cursor: pointer; }
+  .data-table thead th.is-sortable:hover { color: var(--primary); }
+  .th-inner { display: inline-flex; align-items: center; gap: 4px; }
+  .sort-caret {
+    width: 0; height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid #C0C4CC;
+    transition: transform .15s, border-top-color .15s;
+  }
+  th.is-sortable:hover .sort-caret { border-top-color: var(--primary); }
+  th[data-sort="asc"] .sort-caret { transform: rotate(180deg); border-top-color: var(--primary); }
+  th[data-sort="desc"] .sort-caret { border-top-color: var(--primary); }
+
+  .data-table tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: middle;
+    line-height: 1.45;
+    word-break: break-all;
+  }
+  .data-table tbody tr:nth-child(even) { background: var(--bg); }
+  .data-table tbody tr:hover { background: #EAF4FE; }
+  .data-table tbody tr:last-child td { border-bottom: none; }
+
+  .col-no { font-variant-numeric: tabular-nums; color: var(--text-muted); }
+  .cell-company-id { font-variant-numeric: tabular-nums; color: var(--text-muted); }
+  .cell-link { color: var(--link); }
+  .cell-link:hover { text-decoration: underline; }
+  .cell-amount { text-align: right; font-variant-numeric: tabular-nums; }
+  .cell-date { text-align: right; font-variant-numeric: tabular-nums; color: var(--text-muted); }
+  .cell-center { text-align: center; }
+
+  /* 表头对齐与数据单元格保持一致（右对齐 / 居中），与单元格共用同一 padding 节奏 */
+  .data-table thead th.cell-amount,
+  .data-table thead th.cell-date { text-align: right; }
+  .data-table thead th.cell-center,
+  .data-table thead th.cell-count { text-align: center; }
+  .data-table thead th .th-inner { white-space: nowrap; }
+  .status-arrived { color: var(--status); }
+  .cell-empty { color: var(--text-light); }
+
+  /* ================= 4. 会议类型 Tab ================= */
+  /* ---------- 统计指标卡 ---------- */
+  .stat-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px 4px;
+  }
+  .stat-card {
+    min-width: 190px;
+    padding: 12px 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+  .stat-label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 18px;
+  }
+  .stat-value {
+    display: block;
+    margin-top: 4px;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 28px;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-unit {
+    margin-left: 4px;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-light);
+  }
+
+  /* ---------- 分页控件 ---------- */
+  .pager {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .pager-info { white-space: nowrap; }
+  .pager-info b {
+    font-weight: 600;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+  .pager-size {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+  .pager-size-select {
+    height: 28px;
+    padding: 0 6px;
+    border: 1px solid #DCDFE6;
+    border-radius: var(--radius);
+    background: #FFFFFF;
+    font-size: 13px;
+    color: var(--text);
+    cursor: pointer;
+  }
+  .pager-pages {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .pager-btn {
+    height: 28px;
+    padding: 0 10px;
+    border: 1px solid #DCDFE6;
+    border-radius: var(--radius);
+    background: #FFFFFF;
+    font-size: 13px;
+    color: var(--text);
+    transition: color .15s, border-color .15s;
+  }
+  .pager-btn:hover:not(:disabled) { color: var(--primary); border-color: var(--primary); }
+  .pager-btn:disabled { color: #C0C4CC; background: #FAFAFA; cursor: not-allowed; }
+  .pager-nums {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .pager-num {
+    min-width: 28px;
+    height: 28px;
+    padding: 0 8px;
+    border: 1px solid #DCDFE6;
+    border-radius: var(--radius);
+    background: #FFFFFF;
+    font-size: 13px;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+    transition: color .15s, border-color .15s;
+  }
+  .pager-num:hover { color: var(--primary); border-color: var(--primary); }
+  .pager-num.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #FFFFFF;
+  }
+  .pager-ellipsis { padding: 0 2px; color: var(--text-light); }
+  .pager-jump {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+  .pager-input {
+    width: 46px;
+    height: 28px;
+    padding: 0 6px;
+    border: 1px solid #DCDFE6;
+    border-radius: var(--radius);
+    background: #FFFFFF;
+    font-size: 13px;
+    color: var(--text);
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .pager-input:focus { border-color: var(--primary); }
+
+  .tab-bar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 20px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+  }
+  .tab-item {
+    position: relative;
+    height: 44px;
+    padding: 0 18px;
+    font-size: 14px;
+    color: var(--text-muted);
+    transition: color .15s;
+  }
+  .tab-item:hover { color: var(--primary); }
+  .tab-item.active { color: var(--primary); font-weight: 600; }
+  .tab-item.active::after {
+    content: "";
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    bottom: 0;
+    height: 2px;
+    background: var(--primary);
+    border-radius: 1px;
+  }
+
+  /* ================= 内容区容器（宽度上限 1600px 居中） ================= */
+  .layout {
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  /* ================= 视图容器 ================= */
+  .view[hidden] { display: none; }
+
+  /* ================= 5. 线上会议视图 ================= */
+  .w-date { width: 150px; }
+
+  /* 自定义外观日期控件：规避 Edge 原生 date 占位符 yyyy/mm/日 中英混杂挤压 */
+  .date-field {
+    position: relative;
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 10px;
+    border: 1px solid #DCDFE6;
+    border-radius: var(--radius);
+    background: #FFFFFF;
+    box-sizing: border-box;
+  }
+  .date-field:focus-within { border-color: var(--primary); }
+  .date-field .date-text {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 1;
+    color: var(--text);
+    cursor: pointer;
+    text-overflow: ellipsis;
+  }
+  .date-field .date-text::placeholder { color: #A8ABB2; }
+  .date-field .date-icon {
+    flex: 0 0 16px;
+    width: 16px;
+    height: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: #A8ABB2;
+    cursor: pointer;
+  }
+  .date-field .date-icon svg { width: 16px; height: 16px; stroke: currentColor; fill: none; }
+  .date-field .date-native {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    border: none;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .w-company { width: 280px; }
+  .w-order-no { width: 175px; }
+  .w-order-status { width: 150px; }
+  .cell-datetime { font-variant-numeric: tabular-nums; color: var(--text-muted); }
+  .cell-count { text-align: center; font-variant-numeric: tabular-nums; }
+  .cell-contact, .cell-seller { line-height: 1.35; }
+  .contact-phone, .seller-dept {
+    display: block;
+    font-size: 12px;
+    color: var(--text-light);
+    font-variant-numeric: tabular-nums;
+  }
+  .status-paid { color: #52C41A; }
+  .status-unpaid { color: #FA8C16; }
+  .status-refund { color: var(--text-light); }
+</style>
+</head>
+<body>
+
+<!-- ========== 1. 顶部导航 ========== -->
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-name">采乐会</span>
+    <span class="brand-domain">www.bidcenter.com.cn</span>
+  </div>
+  <nav class="main-nav" aria-label="主导航">
+    <a href="javascript:;" data-nav="客户管理">客户管理</a>
+    <a href="javascript:;" data-nav="订单管理" class="active" aria-current="page">订单管理</a>
+    <a href="javascript:;" data-nav="申请表管理">申请表管理</a>
+    <a href="javascript:;" data-nav="验重">验重</a>
+  </nav>
+</header>
+
+<div class="layout">
+
+<!-- ========== 2. 统计指标区 ========== -->
+<div class="stat-bar">
+  <div class="stat-card">
+    <span class="stat-label">订单数量</span>
+    <span class="stat-value" id="statCount">386</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-label">订单金额</span>
+    <span class="stat-value"><span id="statAmount">34,540.00</span><span class="stat-unit">元</span></span>
+  </div>
+</div>
+
+<!-- ========== 3. 会议类型 Tab ========== -->
+<div class="tab-bar" role="tablist" aria-label="会议类型">
+  <button class="tab-item" type="button" role="tab" data-tab="offline" aria-selected="false">线下会议</button>
+  <button class="tab-item active" type="button" role="tab" data-tab="online" aria-selected="true">线上会议</button>
+</div>
+
+<!-- ========== 3. 视图：线下会议 ========== -->
+<section class="view" id="view-offline" role="tabpanel" aria-label="线下会议" hidden>
+
+<!-- ========== 3.1 搜索与筛选区 ========== -->
+<div class="filter-bar">
+  <select class="filter-field w-meeting" aria-label="会议名称">
+    <option value="">会议名称</option>
+    <option>11月20号21号南京站招投标技能实操培训</option>
+    <option>10月23号24号昆明站招投标技能实操培训</option>
+    <option>9月18号19号武汉站招投标技能实操培训</option>
+    <option>9月12号苏州站内训课</option>
+  </select>
+
+  <input class="filter-field w-keyword" type="text" placeholder="请输入内容" aria-label="请输入内容">
+
+  <button class="btn-search" type="button" title="搜索" aria-label="搜索">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round">
+      <circle cx="10.5" cy="10.5" r="6.5"/>
+      <path d="m20 20-4.9-4.9"/>
+    </svg>
+  </button>
+
+  <select class="filter-field w-source" aria-label="订单来源">
+    <option value="">订单来源</option>
+    <option>会员</option>
+    <option>内训课</option>
+    <option>会议报名</option>
+  </select>
+
+  <div class="total-count">共: <b>1002</b></div>
+</div>
+
+<!-- ========== 3.2 数据表格区 ========== -->
+<div class="table-wrap">
+  <table class="data-table">
+    <colgroup>
+      <col style="width:12.98%">
+      <col style="width:19.88%">
+      <col style="width:21.15%">
+      <col style="width:6.53%">
+      <col style="width:7.12%">
+      <col style="width:6.53%">
+      <col style="width:5.93%">
+      <col style="width:6.23%">
+      <col style="width:7.72%">
+      <col style="width:5.93%">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>订单编号</th>
+        <th>会议名称</th>
+        <th>公司名称</th>
+        <th class="is-sortable" data-sortable="条款类型">
+          <span class="th-inner">条款类型<i class="sort-caret"></i></span>
+        </th>
+        <th class="cell-amount is-sortable" data-sortable="签约金额">
+          <span class="th-inner">签约金额<i class="sort-caret"></i></span>
+        </th>
+        <th class="is-sortable" data-sortable="到尾状态">
+          <span class="th-inner">到尾状态<i class="sort-caret"></i></span>
+        </th>
+        <th>会议地区</th>
+        <th class="cell-center">参会人数</th>
+        <th class="cell-date">下单时间</th>
+        <th>销售员</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="col-no">HY261111014369781</td>
+        <td><a class="cell-link" href="javascript:;">11月20号21号南京站招投标技能实操培训</a></td>
+        <td>宁波一机阀门制造有限公司</td>
+        <td>会员</td>
+        <td class="cell-amount">6000.00</td>
+        <td><span class="status-arrived">已到位</span></td>
+        <td>南京</td>
+        <td class="cell-center">3人</td>
+        <td class="cell-date">2026/11/11</td>
+        <td>刁春风</td>
+      </tr>
+      <tr>
+        <td class="col-no">HY2611091030012710</td>
+        <td><a class="cell-link" href="javascript:;">202611月20日21日南京站招投标技能实操培训</a></td>
+        <td>安徽城市名人企业管理有限公司</td>
+        <td>会员</td>
+        <td class="cell-amount">2400.00</td>
+        <td><span class="status-arrived">已到位</span></td>
+        <td>南京</td>
+        <td class="cell-center">1人</td>
+        <td class="cell-date">2026/11/09</td>
+        <td>刁春风</td>
+      </tr>
+      <tr>
+        <td class="col-no">HY2611040950233318</td>
+        <td><a class="cell-link" href="javascript:;">11月20号21号南京站招投标技能实操培训</a></td>
+        <td>浙江七财金羽供应链科技有限公司</td>
+        <td>会员</td>
+        <td class="cell-amount">2000.00</td>
+        <td><span class="status-arrived">已到位</span></td>
+        <td>南京</td>
+        <td class="cell-center">1人</td>
+        <td class="cell-date">2026/11/04</td>
+        <td>刁春风</td>
+      </tr>
+      <tr>
+        <td class="col-no">HY261021143548623</td>
+        <td><a class="cell-link" href="javascript:;">10月23号24号昆明站招投标技能实操培训</a></td>
+        <td>芜湖慧颐乘风医疗器械贸易有限公司</td>
+        <td>会员</td>
+        <td class="cell-amount">2500.00</td>
+        <td><span class="status-arrived">已到位</span></td>
+        <td>昆明</td>
+        <td class="cell-center">1人</td>
+        <td class="cell-date">2026/10/21</td>
+        <td>刁春风</td>
+      </tr>
+      <tr>
+        <td class="col-no">HY2610201524149160</td>
+        <td><a class="cell-link" href="javascript:;">10月23号24号昆明站招投标技能实操培训</a></td>
+        <td>云南坤发环境科技有限公司</td>
+        <td>会员</td>
+        <td class="cell-amount">3680.00</td>
+        <td><span class="status-arrived">已到位</span></td>
+        <td>昆明</td>
+        <td class="cell-center">1人</td>
+        <td class="cell-date">2026/10/20</td>
+        <td>刁春风</td>
+      </tr>
+      <tr>
+        <td class="col-no">HY2610151444059842</td>
+        <td><a class="cell-link" href="javascript:;">10月23号24号昆明站招投标技能实操培训</a></td>
+        <td>新疆仁睿泽机电设备有限公司/新疆联迅杰工程科技有限公司</td>
+        <td>会员</td>
+        <td class="cell-amount">3680.00</td>
+        <td><span class="status-arrived">已到位</span></td>
+        <td>昆明</td>
+        <td class="cell-center">1人</td>
+        <td class="cell-date">2026/10/15</td>
+        <td>刁春风</td>
+      </tr>
+      <tr>
+        <td class="col-no">HY2609211332401116</td>
+        <td><a class="cell-link" href="javascript:;">9月18号19号武汉站招投标技能实操培训</a></td>
+        <td>河北华培企业管理咨询有限公司/北京市华培智采教育科研研究院/北京兴卫医院管理咨询中心(有限合伙)</td>
+        <td>会员</td>
+        <td class="cell-amount">13600.00</td>
+        <td><span class="status-arrived">已到位</span></td>
+        <td>武汉</td>
+        <td class="cell-center">10人</td>
+        <td class="cell-date">2026/09/21</td>
+        <td>刁春风</td>
+      </tr>
+      <tr>
+        <td class="col-no">HY2609210941107311</td>
+        <td><a class="cell-link" href="javascript:;">9月18号19号武汉站招投标技能实操培训</a></td>
+        <td>北京青木秀林教育咨询有限公司/北京京通智慧科技有限公司</td>
+        <td>会员</td>
+        <td class="cell-amount">2500.00</td>
+        <td><span class="status-arrived">已到位</span></td>
+        <td>武汉</td>
+        <td class="cell-center">2人</td>
+        <td class="cell-date">2026/09/21</td>
+        <td>刁春风</td>
+      </tr>
+      <tr>
+        <td class="col-no">HY2609161058503682</td>
+        <td><a class="cell-link" href="javascript:;">9月18号19号武汉站招投标技能实操培训</a></td>
+        <td>江苏高擎教育评估有限公司</td>
+        <td>会员</td>
+        <td class="cell-amount">3680.00</td>
+        <td><span class="status-arrived">已到位</span></td>
+        <td>武汉</td>
+        <td class="cell-center">1人</td>
+        <td class="cell-date">2026/09/16</td>
+        <td>刁春风</td>
+      </tr>
+      <tr>
+        <td class="col-no">HY2609140939443902</td>
+        <td><a class="cell-link" href="javascript:;">9月12号苏州站内训课</a></td>
+        <td>深圳市中图仪器股份有限公司</td>
+        <td>会员</td>
+        <td class="cell-amount">18000.00</td>
+        <td><span class="status-arrived">已到位</span></td>
+        <td>北京</td>
+        <td class="cell-center">1人</td>
+        <td class="cell-date">2026/09/14</td>
+        <td>刁春风</td>
+      </tr>
+      <tr>
+        <td class="col-no">HY2609070938133234</td>
+        <td><a class="cell-link" href="javascript:;">9月18号19号武汉站招投标技能实操培训</a></td>
+        <td>湖南中铁五新重工有限公司</td>
+        <td>会员</td>
+        <td class="cell-amount">7360.00</td>
+        <td><span class="status-arrived">已到位</span></td>
+        <td>武汉</td>
+        <td class="cell-center">3人</td>
+        <td class="cell-date">2026/09/07</td>
+        <td>刁春风</td>
+      </tr>
+      <tr>
+        <td class="col-no">HY2609040941544102</td>
+        <td><a class="cell-link" href="javascript:;">8月29号武汉站内训尾款</a></td>
+        <td>深圳市中图仪器股份有限公司</td>
+        <td class="cell-empty">—</td>
+        <td class="cell-amount cell-empty">—</td>
+        <td class="cell-empty">—</td>
+        <td class="cell-empty">—</td>
+        <td class="cell-center cell-empty">—</td>
+        <td class="cell-date cell-empty">—</td>
+        <td class="cell-empty">—</td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- 分页控件 -->
+  <div class="pager" data-total="1002">
+    <div class="pager-info">共 <b>1,002</b> 条</div>
+    <div class="pager-size">
+      <select class="pager-size-select" aria-label="每页条数">
+        <option value="10" selected>10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+      </select>
+      <span>条/页</span>
+    </div>
+    <div class="pager-pages">
+      <button class="pager-btn" type="button" data-page="prev">上一页</button>
+      <div class="pager-nums"></div>
+      <button class="pager-btn" type="button" data-page="next">下一页</button>
+    </div>
+    <div class="pager-jump">
+      <span>前往</span>
+      <input class="pager-input" type="text" inputmode="numeric" value="1" aria-label="跳转页码">
+      <span>页</span>
+    </div>
+  </div>
+</div>
+
+</section>
+
+<!-- ========== 4. 视图：线上会议 ========== -->
+<section class="view" id="view-online" role="tabpanel" aria-label="线上会议">
+
+  <!-- ========== 4.1 搜索与筛选区 ========== -->
+  <div class="filter-bar">
+    <div class="date-field w-date">
+      <input class="date-text" type="text" readonly placeholder="请选择日期" aria-label="日期">
+      <button class="date-icon" type="button" tabindex="-1" aria-label="选择日期" title="选择日期">
+        <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3.5" y="5" width="17" height="15" rx="2"></rect>
+          <path d="M8 3.5v3M16 3.5v3M3.5 10h17"></path>
+        </svg>
+      </button>
+      <input class="date-native" type="date" tabindex="-1" aria-hidden="true">
+    </div>
+
+    <input class="filter-field w-company" type="text" placeholder="请输入公司名称" aria-label="公司名称">
+
+    <input class="filter-field w-order-no" type="text" placeholder="请输入订单编号" aria-label="订单编号">
+
+    <select class="filter-field w-order-status" aria-label="订单状态">
+      <option selected>已支付</option>
+      <option>待支付</option>
+      <option>已退款</option>
+      <option>全部</option>
+    </select>
+
+    <button class="btn-search" type="button" title="搜索" aria-label="搜索">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round">
+        <circle cx="10.5" cy="10.5" r="6.5"/>
+        <path d="m20 20-4.9-4.9"/>
+      </svg>
+    </button>
+
+    <div class="total-count">共: <b>386</b></div>
+  </div>
+
+  <!-- ========== 4.2 数据表格区 ========== -->
+  <div class="table-wrap">
+    <table class="data-table">
+      <colgroup>
+      <col style="width:13.26%">
+      <col style="width:8.33%">
+      <col style="width:18.20%">
+      <col style="width:9.09%">
+      <col style="width:7.95%">
+      <col style="width:6.06%">
+      <col style="width:8.71%">
+      <col style="width:10.98%">
+      <col style="width:7.95%">
+      <col style="width:9.47%">
+    </colgroup>
+      <thead>
+        <tr>
+          <th>订单编号</th>
+          <th>公司ID</th>
+          <th>公司名称</th>
+          <th>联系人</th>
+          <th>课程时间</th>
+          <th class="cell-center">人数</th>
+          <th class="cell-amount is-sortable" data-sortable="签约金额">
+            <span class="th-inner">签约金额<i class="sort-caret"></i></span>
+          </th>
+          <th class="cell-date is-sortable" data-sortable="订单时间">
+            <span class="th-inner">订单时间<i class="sort-caret"></i></span>
+          </th>
+          <th>订单状态</th>
+          <th>销售人员</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-no">HY2611121530018801</td>
+          <td class="cell-company-id">10023847</td>
+          <td>苏州嘉信防水材料有限公司</td>
+          <td class="cell-contact">王志强<span class="contact-phone">13801234567</span></td>
+          <td class="cell-datetime">2026-11-20</td>
+          <td class="cell-count">3人</td>
+          <td class="cell-amount">3800.00</td>
+          <td class="cell-date">2026/11/12 15:30</td>
+          <td><span class="status-paid">已支付</span></td>
+          <td class="cell-seller">刁春风<span class="seller-dept">北京一部</span></td>
+        </tr>
+        <tr>
+          <td class="col-no">HY2611111045027743</td>
+          <td class="cell-company-id">10023851</td>
+          <td>无锡华瑞精密机械有限公司</td>
+          <td class="cell-contact">陈立君<span class="contact-phone">13905678812</span></td>
+          <td class="cell-datetime">2026-11-18</td>
+          <td class="cell-count">5人</td>
+          <td class="cell-amount">1980.00</td>
+          <td class="cell-date">2026/11/11 10:45</td>
+          <td><span class="status-paid">已支付</span></td>
+          <td class="cell-seller">刁春风<span class="seller-dept">北京一部</span></td>
+        </tr>
+        <tr>
+          <td class="col-no">HY2611100933015528</td>
+          <td class="cell-company-id">10023866</td>
+          <td>杭州金诺建设工程有限公司</td>
+          <td class="cell-contact">李慧敏<span class="contact-phone">13712340986</span></td>
+          <td class="cell-datetime">2026-11-15</td>
+          <td class="cell-count">2人</td>
+          <td class="cell-amount">2600.00</td>
+          <td class="cell-date">2026/11/10 09:33</td>
+          <td><span class="status-paid">已支付</span></td>
+          <td class="cell-seller">张利民<span class="seller-dept">河北二部</span></td>
+        </tr>
+        <tr>
+          <td class="col-no">HY2611081620044119</td>
+          <td class="cell-company-id">10023872</td>
+          <td>合肥中辰环保科技有限公司</td>
+          <td class="cell-contact">周振宇<span class="contact-phone">15801234567</span></td>
+          <td class="cell-datetime">2026-11-22</td>
+          <td class="cell-count">4人</td>
+          <td class="cell-amount">3800.00</td>
+          <td class="cell-date">2026/11/08 16:20</td>
+          <td><span class="status-unpaid">待支付</span></td>
+          <td class="cell-seller">刁春风<span class="seller-dept">北京一部</span></td>
+        </tr>
+        <tr>
+          <td class="col-no">HY2611051156078892</td>
+          <td class="cell-company-id">10023883</td>
+          <td>青岛远洋物流集团有限公司</td>
+          <td class="cell-contact">孙明轩<span class="contact-phone">13611112222</span></td>
+          <td class="cell-datetime">2026-11-12</td>
+          <td class="cell-count">1人</td>
+          <td class="cell-amount">1200.00</td>
+          <td class="cell-date">2026/11/05 11:56</td>
+          <td><span class="status-refund">已退款</span></td>
+          <td class="cell-seller">王雪<span class="seller-dept">北分一部</span></td>
+        </tr>
+        <tr>
+          <td class="col-no">HY2611031412036641</td>
+          <td class="cell-company-id">10023894</td>
+          <td>常州天元电气设备有限公司</td>
+          <td class="cell-contact">吴佳怡<span class="contact-phone">13502213344</span></td>
+          <td class="cell-datetime">2026-11-10</td>
+          <td class="cell-count">6人</td>
+          <td class="cell-amount">4800.00</td>
+          <td class="cell-date">2026/11/03 14:12</td>
+          <td><span class="status-paid">已支付</span></td>
+          <td class="cell-seller">张利民<span class="seller-dept">河北二部</span></td>
+        </tr>
+        <tr>
+          <td class="col-no">HY2611011002447125</td>
+          <td class="cell-company-id">10023901</td>
+          <td>郑州鼎盛教育科技有限公司</td>
+          <td class="cell-contact">冯思远<span class="contact-phone">18601234567</span></td>
+          <td class="cell-datetime">2026-11-08</td>
+          <td class="cell-count">3人</td>
+          <td class="cell-amount">1980.00</td>
+          <td class="cell-date">2026/11/01 10:02</td>
+          <td><span class="status-unpaid">待支付</span></td>
+          <td class="cell-seller">刁春风<span class="seller-dept">北京一部</span></td>
+        </tr>
+        <tr>
+          <td class="col-no">HY2610281553301187</td>
+          <td class="cell-company-id">10023912</td>
+          <td>宁波海川模具有限公司</td>
+          <td class="cell-contact">何伟<span class="contact-phone">13305556677</span></td>
+          <td class="cell-datetime">2026-10-30</td>
+          <td class="cell-count">2人</td>
+          <td class="cell-amount">1200.00</td>
+          <td class="cell-date">2026/10/28 15:53</td>
+          <td><span class="status-paid">已支付</span></td>
+          <td class="cell-seller">王雪<span class="seller-dept">北分一部</span></td>
+        </tr>
+        <tr>
+          <td class="col-no">HY2610250922104433</td>
+          <td class="cell-company-id">10023925</td>
+          <td>佛山顺德智能装备有限公司</td>
+          <td class="cell-contact">罗静怡<span class="contact-phone">13102213344</span></td>
+          <td class="cell-datetime">2026-10-27</td>
+          <td class="cell-count">5人</td>
+          <td class="cell-amount">2600.00</td>
+          <td class="cell-date">2026/10/25 09:22</td>
+          <td><span class="status-paid">已支付</span></td>
+          <td class="cell-seller">刁春风<span class="seller-dept">北京一部</span></td>
+        </tr>
+        <tr>
+          <td class="col-no">HY2610221713205590</td>
+          <td class="cell-company-id">10023936</td>
+          <td>长沙中泽建筑工程有限公司</td>
+          <td class="cell-contact">邓凯<span class="contact-phone">13705559988</span></td>
+          <td class="cell-datetime">2026-10-24</td>
+          <td class="cell-count">2人</td>
+          <td class="cell-amount">3800.00</td>
+          <td class="cell-date">2026/10/22 17:13</td>
+          <td><span class="status-refund">已退款</span></td>
+          <td class="cell-seller">张利民<span class="seller-dept">河北二部</span></td>
+        </tr>
+        <tr>
+          <td class="col-no">HY2610190908402277</td>
+          <td class="cell-company-id">10023944</td>
+          <td>天津恒昌国际货运代理有限公司</td>
+          <td class="cell-contact">韩旭<span class="contact-phone">13901112233</span></td>
+          <td class="cell-datetime">2026-10-21</td>
+          <td class="cell-count">4人</td>
+          <td class="cell-amount">1980.00</td>
+          <td class="cell-date">2026/10/19 09:08</td>
+          <td><span class="status-paid">已支付</span></td>
+          <td class="cell-seller">刁春风<span class="seller-dept">北京一部</span></td>
+        </tr>
+        <tr>
+          <td class="col-no">HY2610161420503384</td>
+          <td class="cell-company-id">10023957</td>
+          <td>西安大唐软件技术有限公司</td>
+          <td class="cell-contact">曹宇航<span class="contact-phone">18609998877</span></td>
+          <td class="cell-datetime">2026-10-18</td>
+          <td class="cell-count">3人</td>
+          <td class="cell-amount">4800.00</td>
+          <td class="cell-date">2026/10/16 14:20</td>
+          <td><span class="status-unpaid">待支付</span></td>
+          <td class="cell-seller">王雪<span class="seller-dept">北分一部</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- 分页控件 -->
+  <div class="pager" data-total="386">
+    <div class="pager-info">共 <b>386</b> 条</div>
+    <div class="pager-size">
+      <select class="pager-size-select" aria-label="每页条数">
+        <option value="10" selected>10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+      </select>
+      <span>条/页</span>
+    </div>
+    <div class="pager-pages">
+      <button class="pager-btn" type="button" data-page="prev">上一页</button>
+      <div class="pager-nums"></div>
+      <button class="pager-btn" type="button" data-page="next">下一页</button>
+    </div>
+    <div class="pager-jump">
+      <span>前往</span>
+      <input class="pager-input" type="text" inputmode="numeric" value="1" aria-label="跳转页码">
+      <span>页</span>
+    </div>
+  </div>
+</div>
+
+</section>
+
+</div>
+
+<script>
+  /* ============ 顶部导航占位交互（其余模块未实现） ============ */
+  document.querySelectorAll('.main-nav a').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      if (a.classList.contains('active')) { e.preventDefault(); return; }
+      alert('「' + a.dataset.nav + '」模块暂未接入');
+    });
+  });
+
+  /* ============ 会议类型 Tab 切换（筛选栏与表格同步切换） ============ */
+  var tabItems = document.querySelectorAll('.tab-item');
+  var tabViews = {
+    offline: document.getElementById('view-offline'),
+    online: document.getElementById('view-online')
+  };
+
+  tabItems.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      tabItems.forEach(function (o) {
+        var on = (o === tab);
+        o.classList.toggle('active', on);
+        o.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      Object.keys(tabViews).forEach(function (key) {
+        tabViews[key].hidden = (key !== tab.dataset.tab);
+      });
+    });
+  });
+
+  /* ============ 自定义外观日期控件（可见文本 + 原生日期选择器） ============ */
+  document.querySelectorAll('.date-field').forEach(function (field) {
+    var text = field.querySelector('.date-text');
+    var native = field.querySelector('.date-native');
+    if (!text || !native) return;
+
+    function openPicker() {
+      if (typeof native.showPicker === 'function') {
+        try { native.showPicker(); return; } catch (err) { /* 浏览器拒绝时回退 */ }
+      }
+      native.focus();
+      native.click();
+    }
+
+    field.addEventListener('click', function (e) {
+      e.preventDefault();
+      openPicker();
+    });
+
+    native.addEventListener('change', function () {
+      text.value = native.value || '';
+    });
+  });
+
+  /* ============ 表头排序（升序 / 降序 / 取消 三态） ============ */
+  document.querySelectorAll('th.is-sortable').forEach(function (th) {
+    th.addEventListener('click', function () {
+      var table = th.closest('table');
+      var cur = th.getAttribute('data-sort');
+      table.querySelectorAll('th.is-sortable').forEach(function (o) {
+        if (o !== th) o.removeAttribute('data-sort');
+      });
+      if (cur === 'asc') th.setAttribute('data-sort', 'desc');
+      else if (cur === 'desc') th.removeAttribute('data-sort');
+      else th.setAttribute('data-sort', 'asc');
+    });
+  });
+
+  /* ============ 统计指标（订单数量 / 订单金额，随 Tab 视图切换） ============ */
+  var statCountEl = document.getElementById('statCount');
+  var statAmountEl = document.getElementById('statAmount');
+
+  function formatAmount(num) {
+    var parts = num.toFixed(2).split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return parts[0] + '.' + parts[1];
+  }
+
+  function updateStats(tabKey) {
+    var view = tabViews[tabKey];
+    if (!view || !statCountEl || !statAmountEl) return;
+
+    var totalEl = view.querySelector('.total-count b');
+    var count = totalEl ? parseInt(totalEl.textContent.replace(/[^\d]/g, ''), 10) : 0;
+    statCountEl.textContent = (count || 0).toLocaleString('en-US');
+
+    var sum = 0;
+    view.querySelectorAll('tbody .cell-amount').forEach(function (td) {
+      var val = parseFloat(td.textContent.replace(/[^\d.]/g, ''));
+      if (!isNaN(val)) sum += val;
+    });
+    statAmountEl.textContent = formatAmount(sum);
+  }
+
+  document.querySelectorAll('.tab-item').forEach(function (tab) {
+    tab.addEventListener('click', function () { updateStats(tab.dataset.tab); });
+  });
+
+  var initialTab = document.querySelector('.tab-item.active');
+  updateStats(initialTab ? initialTab.dataset.tab : 'online');
+
+  /* ============ 分页控件（总条数按视图口径，页码示意可交互） ============ */
+  document.querySelectorAll('.pager').forEach(function (pager) {
+    var total = parseInt(pager.getAttribute('data-total'), 10) || 0;
+    var sizeSelect = pager.querySelector('.pager-size-select');
+    var numsBox = pager.querySelector('.pager-nums');
+    var prevBtn = pager.querySelector('[data-page="prev"]');
+    var nextBtn = pager.querySelector('[data-page="next"]');
+    var jumpInput = pager.querySelector('.pager-input');
+    var page = 1;
+
+    function pageSize() { return parseInt(sizeSelect.value, 10) || 10; }
+    function pageCount() { return Math.max(1, Math.ceil(total / pageSize())); }
+
+    function render() {
+      var pc = pageCount();
+      if (page < 1) page = 1;
+      if (page > pc) page = pc;
+
+      var seq = [1];
+      for (var i = page - 1; i <= page + 1; i++) {
+        if (i > 1 && i < pc) seq.push(i);
+      }
+      if (pc > 1) seq.push(pc);
+      seq = seq.filter(function (v, idx) { return seq.indexOf(v) === idx; })
+               .sort(function (x, y) { return x - y; });
+
+      numsBox.innerHTML = '';
+      var prevVal = 0;
+      seq.forEach(function (p) {
+        if (prevVal && p - prevVal > 1) {
+          var dots = document.createElement('span');
+          dots.className = 'pager-ellipsis';
+          dots.textContent = '...';
+          numsBox.appendChild(dots);
+        }
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'pager-num' + (p === page ? ' active' : '');
+        btn.setAttribute('data-num', p);
+        btn.textContent = p;
+        btn.addEventListener('click', function () { page = p; render(); });
+        numsBox.appendChild(btn);
+        prevVal = p;
+      });
+
+      prevBtn.disabled = (page <= 1);
+      nextBtn.disabled = (page >= pc);
+      jumpInput.value = page;
+    }
+
+    prevBtn.addEventListener('click', function () { if (page > 1) { page--; render(); } });
+    nextBtn.addEventListener('click', function () { if (page < pageCount()) { page++; render(); } });
+    sizeSelect.addEventListener('change', function () { page = 1; render(); });
+    jumpInput.addEventListener('change', function () {
+      var v = parseInt(jumpInput.value, 10);
+      if (!isNaN(v)) page = Math.min(Math.max(1, v), pageCount());
+      render();
+    });
+    jumpInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); jumpInput.blur(); }
+    });
+
+    render();
+  });
+
+  /* ============ 会议名称详情占位 ============ */
+  document.querySelectorAll('.cell-link').forEach(function (a) {
+    a.addEventListener('click', function () {
+      alert('会议详情：' + a.textContent.trim());
+    });
+  });
+</script>
+
+</body>
+</html>

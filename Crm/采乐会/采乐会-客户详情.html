@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>客户详情 - 采乐会</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%231E88E5'/%3E%3Ctext%20x='32'%20y='45'%20text-anchor='middle'%20font-size='40'%20font-weight='700'%20fill='%23ffffff'%20font-family='Microsoft%20YaHei,sans-serif'%3E%E9%87%87%3C/text%3E%3C/svg%3E">
+<style>
+  /* ================================================================
+     采乐会 · 客户详情（单文件静态复刻）
+     纯 HTML + CSS + 内联 JS，无构建、无外部 CDN 依赖
+     设计令牌沿用同目录 采乐会.html
+     ================================================================ */
+  :root {
+    --primary: #1E88E5;
+    --primary-dark: #1976D2;
+    --primary-light: #E3F2FD;
+    --link: #1890FF;
+    --status: #40A9FF;
+    --danger: #FF4D4F;
+    --text: #333333;
+    --text-muted: #666666;
+    --text-light: #999999;
+    --border: #E8E8E8;
+    --bg: #F5F7FA;
+    --card: #FFFFFF;
+    --radius: 4px;
+    --radius-lg: 6px;
+
+    /* 客户详情页补充色板 */
+    --purple: #722ED1;
+    --orange: #FA8C16;
+    --pink-text: #EB2F96;
+    --pink-bg: #FFF0F6;
+    --teal: #13C2C2;
+    --deep-blue: #1E6FFF;
+    --green: #52C41A;
+    --warn-red: #E60012;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei",
+                 "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    background: #F0F2F5;
+    min-width: 1400px;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { text-decoration: none; color: inherit; }
+  ul, li { list-style: none; }
+  button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+  input, select { font: inherit; color: var(--text); outline: none; }
+  table { border-collapse: collapse; width: 100%; }
+
+  /* ================= 1. 顶部导航 ================= */
+  .topbar {
+    height: 56px;
+    background: var(--primary);
+    display: flex;
+    align-items: center;
+    padding: 0 20px 0 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .brand-name {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #FFFFFF;
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, .12);
+  }
+  .brand-domain {
+    font-size: 12px;
+    color: rgba(255, 255, 255, .72);
+    letter-spacing: .2px;
+    font-weight: 400;
+  }
+
+  .main-nav {
+    margin-left: auto;
+    display: flex;
+    align-items: stretch;
+    height: 100%;
+  }
+  .main-nav a {
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, .88);
+    position: relative;
+    transition: background .15s, color .15s;
+  }
+  .main-nav a:hover { color: #FFFFFF; background: rgba(255, 255, 255, .10); }
+  .main-nav a.active {
+    color: #FFFFFF;
+    background: var(--primary-dark);
+    font-weight: 500;
+  }
+  .main-nav a.active::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 2px;
+    background: #FFFFFF;
+  }
+  .main-nav a.nav-danger { background: var(--warn-red); color: #FFFFFF; }
+  .main-nav a.nav-danger:hover { background: #C8000F; }
+
+  /* ================= 2. 页面容器 ================= */
+  .page {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 16px 20px 28px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .card:last-child { margin-bottom: 0; }
+  .card-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* ================= 3. 客户基本信息卡 ================= */
+  .cust-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+    background: linear-gradient(180deg, #EAF4FE 0%, #FFFFFF 78%);
+    border: 1px solid #D6E9FB;
+    border-radius: var(--radius-lg);
+  }
+  .cust-avatar {
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #D6E9FB;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+  }
+  .cust-avatar svg { width: 24px; height: 24px; stroke: var(--primary); fill: none; stroke-width: 1.8; }
+  .cust-main { flex: 1 1 auto; min-width: 0; }
+
+  .cust-title-row {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .cust-company {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 26px;
+  }
+  .cust-sep { color: #C0C4CC; font-size: 14px; }
+  .cust-person { font-size: 15px; color: var(--text); }
+  .cust-id {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .cust-links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 8px;
+    font-size: 13px;
+  }
+  .cust-links a { transition: opacity .15s; }
+  .cust-links a:hover { text-decoration: underline; }
+  .link-purple { color: var(--purple); }
+  .link-orange { color: var(--orange); }
+
+  .cust-fields {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .cust-fields .field-label { color: var(--text-muted); }
+  .cust-fields .field-value { color: var(--text); }
+
+  .btn-business {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 12px;
+    background: #FFFFFF;
+    border: 1px solid #DCDFE6;
+    border-radius: var(--radius);
+    font-size: 13px;
+    color: var(--text);
+    transition: border-color .15s, color .15s;
+  }
+  .btn-business:hover { border-color: var(--primary); color: var(--primary); }
+  .btn-business svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+
+  /* ================= 4. 通用按钮与标签 ================= */
+  .btn-add {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    height: 30px;
+    padding: 0 12px;
+    background: var(--primary);
+    border-radius: var(--radius);
+    font-size: 13px;
+    color: #FFFFFF;
+    transition: background .15s;
+  }
+  .btn-add:hover { background: var(--primary-dark); }
+  .btn-add svg { width: 13px; height: 13px; stroke: #FFFFFF; fill: none; stroke-width: 2.2; stroke-linecap: round; }
+
+  .link-more {
+    margin-left: auto;
+    font-size: 13px;
+    color: var(--text-light);
+  }
+  .link-more:hover { color: var(--primary); }
+
+  .btn-xs {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 26px;
+    padding: 0 10px;
+    border-radius: var(--radius);
+    font-size: 12px;
+    color: #FFFFFF;
+    white-space: nowrap;
+  }
+  .btn-xs + .btn-xs { margin-left: 8px; }
+  .btn-blue { background: var(--primary); }
+  .btn-blue:hover { background: var(--primary-dark); }
+  .btn-red { background: var(--danger); }
+  .btn-red:hover { background: #E63B3D; }
+  .btn-teal { background: var(--teal); }
+  .btn-teal:hover { background: #0FA8A8; }
+  .btn-deep { background: var(--deep-blue); }
+  .btn-deep:hover { background: #165BDB; }
+
+  .tag-outcall {
+    display: inline-flex;
+    align-items: center;
+    height: 18px;
+    padding: 0 6px;
+    margin-left: 6px;
+    background: var(--pink-bg);
+    border: 1px solid #FFD6E7;
+    border-radius: 9px;
+    font-size: 11px;
+    color: var(--pink-text);
+    vertical-align: middle;
+  }
+
+  .icon-edit {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 6px;
+    color: var(--purple);
+    vertical-align: middle;
+  }
+  .icon-edit svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+
+  .icon-phone {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 6px;
+    color: var(--green);
+    vertical-align: middle;
+  }
+  .icon-phone svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+
+  /* ================= 5. 表格通用 ================= */
+  .data-table {
+    table-layout: fixed;
+    font-size: 13px;
+  }
+  .data-table thead th {
+    height: 44px;
+    padding: 10px 12px;
+    background: #FFFFFF;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    text-align: left;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .data-table tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: middle;
+    line-height: 1.45;
+    word-break: break-all;
+  }
+  .data-table tbody tr:nth-child(even) { background: var(--bg); }
+  .data-table tbody tr:hover { background: #EAF4FE; }
+  .data-table tbody tr:last-child td { border-bottom: none; }
+
+  .th-inner { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+  .cell-amount { text-align: right; font-variant-numeric: tabular-nums; }
+  .cell-date { text-align: right; font-variant-numeric: tabular-nums; color: var(--text-muted); }
+  .cell-center { text-align: center; }
+  .data-table thead th.cell-amount,
+  .data-table thead th.cell-date { text-align: right; }
+  .data-table thead th.cell-center,
+  .data-table thead th.cell-count { text-align: center; }
+
+  .col-no { font-variant-numeric: tabular-nums; color: var(--text-muted); }
+  .cell-company-id { font-variant-numeric: tabular-nums; color: var(--text-muted); }
+  .cell-datetime { font-variant-numeric: tabular-nums; color: var(--text-muted); }
+  .cell-count { text-align: center; font-variant-numeric: tabular-nums; }
+  .cell-contact, .cell-seller { line-height: 1.35; }
+  .contact-phone, .seller-dept {
+    display: block;
+    font-size: 12px;
+    color: var(--text-light);
+    font-variant-numeric: tabular-nums;
+  }
+  .cell-link { color: var(--link); }
+  .cell-link:hover { text-decoration: underline; }
+  .cell-empty { color: var(--text-light); }
+
+  .status-arrived { color: var(--status); }
+  .status-paid { color: var(--green); }
+  .status-unpaid { color: var(--orange); }
+  .status-refund { color: var(--text-light); }
+
+  /* ================= 6. 联系人表 ================= */
+  .contact-table td { font-size: 13px; }
+  .cell-ops { white-space: nowrap; }
+
+  /* ================= 7. 当前订单 tab ================= */
+  .order-tab-bar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 18px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+  }
+  .tab-item {
+    position: relative;
+    height: 42px;
+    padding: 0 18px;
+    font-size: 14px;
+    color: var(--text-muted);
+    transition: color .15s;
+  }
+  .tab-item:hover { color: var(--primary); }
+  .tab-item.active { color: var(--primary); font-weight: 600; }
+  .tab-item.active::after {
+    content: "";
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    bottom: 0;
+    height: 2px;
+    background: var(--primary);
+    border-radius: 1px;
+  }
+  .order-view[hidden] { display: none; }
+
+  /* ================= 8. 记录查询卡 ================= */
+  .rec-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 18px;
+    min-height: 52px;
+    flex-wrap: nowrap;
+  }
+  .rec-tabs { display: flex; align-items: center; gap: 22px; height: 52px; }
+  .rec-tab {
+    position: relative;
+    height: 52px;
+    font-size: 14px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    transition: color .15s;
+  }
+  .rec-tab:hover { color: var(--primary); }
+  .rec-tab.active { color: var(--primary); font-weight: 600; }
+  .rec-tab.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: var(--primary);
+  }
+  .rec-tools {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .rec-search {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+  .rec-search svg {
+    position: absolute;
+    left: 9px;
+    width: 14px;
+    height: 14px;
+    stroke: #A8ABB2;
+    fill: none;
+    stroke-width: 2;
+    pointer-events: none;
+  }
+  .rec-input {
+    width: 200px;
+    height: 32px;
+    padding: 0 10px 0 30px;
+    border: 1px solid #DCDFE6;
+    border-radius: var(--radius);
+    background: #FFFFFF;
+    font-size: 13px;
+    color: var(--text);
+  }
+  .rec-input::placeholder { color: #A8ABB2; }
+  .rec-input:focus { border-color: var(--primary); }
+  .rec-select {
+    height: 32px;
+    border: 1px solid #DCDFE6;
+    border-radius: var(--radius);
+    background: #FFFFFF;
+    padding: 0 26px 0 10px;
+    font-size: 13px;
+    color: var(--text);
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23A8ABB2'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 9px center;
+    cursor: pointer;
+  }
+  .rec-select:focus { border-color: var(--primary); }
+  .w-contact { width: 140px; }
+  .w-record { width: 130px; }
+
+  /* ================= 9. 系统操作记录卡 ================= */
+  .sys-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 18px;
+    margin-bottom: 0;
+    background: #FFF8F0;
+    border: 1px solid #FFE7CC;
+    border-radius: var(--radius-lg);
+  }
+  .sys-avatar {
+    flex: 0 0 34px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #FFE7CC;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+  }
+  .sys-avatar svg { width: 19px; height: 19px; stroke: var(--orange); fill: none; stroke-width: 1.8; }
+  .sys-body { flex: 1 1 auto; min-width: 0; }
+  .sys-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .sys-title { font-size: 14px; font-weight: 600; color: var(--text); }
+  .sys-next { font-size: 13px; color: var(--text-muted); }
+  .sys-next b { font-weight: 400; color: var(--green); }
+  .sys-text {
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== 1. 顶部导航 ========== -->
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-name">采乐会</span>
+    <span class="brand-domain">www.bidcenter.com.cn</span>
+  </div>
+  <nav class="main-nav" aria-label="客户导航">
+    <a href="javascript:;" data-nav="客户信息" class="active" aria-current="page">客户信息</a>
+    <a href="javascript:;" data-nav="历史订单">历史订单</a>
+    <a href="javascript:;" data-nav="业务推荐">业务推荐</a>
+    <a href="javascript:;" data-nav="申请开通">申请开通</a>
+    <a href="javascript:;" data-nav="删除" class="nav-danger">删除</a>
+  </nav>
+</header>
+
+<div class="page">
+
+  <!-- ========== 2. 客户基本信息 ========== -->
+  <section class="cust-card">
+    <span class="cust-avatar" aria-hidden="true">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="8" r="4"/>
+        <path d="M4 20c0-4.1 3.6-6.5 8-6.5s8 2.4 8 6.5"/>
+      </svg>
+    </span>
+
+    <div class="cust-main">
+      <div class="cust-title-row">
+        <span class="cust-company">北京紫鸿永泰食品有限公司</span>
+        <span class="cust-sep">/</span>
+        <span class="cust-person">黄冠楠</span>
+        <span class="cust-id">(ID:3126317)</span>
+      </div>
+
+      <div class="cust-links">
+        <a href="javascript:;" class="link-purple">编辑</a>
+        <a href="javascript:;" class="link-purple">客户案</a>
+        <a href="javascript:;" class="link-orange">查看发票邮寄</a>
+        <a href="javascript:;" class="link-orange">百度一下?</a>
+        <a href="javascript:;" class="link-orange">天眼查</a>
+        <a href="javascript:;" class="link-orange">企查查</a>
+      </div>
+
+      <div class="cust-fields">
+        <a href="javascript:;" class="link-purple">补充联系人</a>
+        <span><span class="field-label">增值业务：</span><span class="field-value">无</span></span>
+        <a href="javascript:;" class="link-purple">添加备注</a>
+      </div>
+    </div>
+
+    <button class="btn-business" type="button">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3l7 3v5.5c0 4.2-2.9 7.7-7 9.5-4.1-1.8-7-5.3-7-9.5V6l7-3z"/>
+        <path d="M9.5 12.2l1.9 1.9 3.4-3.6"/>
+      </svg>
+      工商信息
+    </button>
+  </section>
+
+  <!-- ========== 3. 联系人 ========== -->
+  <section class="card">
+    <div class="card-head">
+      <span class="card-title">联系人</span>
+      <button class="btn-add" type="button">
+        <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        添加联系人
+      </button>
+      <a href="javascript:;" class="link-more">更多设置</a>
+    </div>
+
+    <table class="data-table contact-table">
+      <colgroup>
+      <col style="width:15.79%">
+      <col style="width:20.30%">
+      <col style="width:14.29%">
+      <col style="width:18.80%">
+      <col style="width:15.79%">
+      <col style="width:15.03%">
+    </colgroup>
+      <thead>
+        <tr>
+          <th>联系人</th>
+          <th>手机号</th>
+          <th>电话</th>
+          <th>邮箱</th>
+          <th>注册时间</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>黄世前<a href="javascript:;" class="icon-edit" title="编辑联系人">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>
+          </a></td>
+          <td>13552550688<a href="javascript:;" class="icon-phone" title="拨打">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h3l2 5-2.5 1.5a12 12 0 006 6L16 13l5 2v3a2 2 0 01-2.2 2A16 16 0 014 5.2 2 2 0 016 3z"/></svg>
+          </a><span class="tag-outcall">外呼</span></td>
+          <td>010-68213832</td>
+          <td>2055127801@qq.com</td>
+          <td>2018/8/29 15:18:07</td>
+          <td class="cell-ops">
+            <button class="btn-xs btn-blue" type="button">创建订单</button>
+            <button class="btn-xs btn-red" type="button">跟进</button>
+          </td>
+        </tr>
+        <tr>
+          <td>黄冠楠<a href="javascript:;" class="icon-edit" title="编辑联系人">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>
+          </a></td>
+          <td>13260125891<a href="javascript:;" class="icon-phone" title="拨打">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h3l2 5-2.5 1.5a12 12 0 006 6L16 13l5 2v3a2 2 0 01-2.2 2A16 16 0 014 5.2 2 2 0 016 3z"/></svg>
+          </a><span class="tag-outcall">外呼</span></td>
+          <td class="cell-empty">--</td>
+          <td class="cell-empty">--</td>
+          <td>2024/4/9 10:47:12</td>
+          <td class="cell-ops">
+            <button class="btn-xs btn-blue" type="button">创建订单</button>
+            <button class="btn-xs btn-red" type="button">跟进</button>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="cell-empty">[待核实]</span><a href="javascript:;" class="icon-edit" title="编辑联系人">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>
+          </a></td>
+          <td>17741368888<a href="javascript:;" class="icon-phone" title="拨打">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h3l2 5-2.5 1.5a12 12 0 006 6L16 13l5 2v3a2 2 0 01-2.2 2A16 16 0 014 5.2 2 2 0 016 3z"/></svg>
+          </a><span class="tag-outcall">外呼</span></td>
+          <td class="cell-empty">--</td>
+          <td class="cell-empty">--</td>
+          <td>2023/11/29 16:41:33</td>
+          <td class="cell-ops">
+            <button class="btn-xs btn-blue" type="button">创建订单</button>
+            <button class="btn-xs btn-red" type="button">跟进</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ========== 4. 当前订单（线下 / 线上 tab） ========== -->
+  <section class="card">
+    <div class="card-head">
+      <span class="card-title">当前订单</span>
+      <button class="btn-add" type="button">
+        <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        添加订单
+      </button>
+    </div>
+
+    <div class="order-tab-bar" role="tablist" aria-label="订单类型">
+      <button class="tab-item active" type="button" role="tab" data-order-tab="offline" aria-selected="true">线下订单</button>
+      <button class="tab-item" type="button" role="tab" data-order-tab="online" aria-selected="false">线上订单</button>
+    </div>
+
+    <!-- 4.1 线下订单：9 列（已移除公司名称），列宽按百分比铺满内容区 -->
+    <div class="order-view" id="order-offline" role="tabpanel" aria-label="线下订单">
+      <table class="data-table">
+        <colgroup>
+      <col style="width:16.46%">
+      <col style="width:25.21%">
+      <col style="width:8.28%">
+      <col style="width:9.03%">
+      <col style="width:8.28%">
+      <col style="width:7.53%">
+      <col style="width:7.90%">
+      <col style="width:9.78%">
+      <col style="width:7.53%">
+    </colgroup>
+        <thead>
+          <tr>
+            <th>订单编号</th>
+            <th>会议名称</th>
+            <th>条款类型</th>
+            <th class="cell-amount">签约金额</th>
+            <th>到尾状态</th>
+            <th>会议地区</th>
+            <th class="cell-center">参会人数</th>
+            <th class="cell-date">下单时间</th>
+            <th>销售员</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-no">HY2611121607453208</td>
+            <td><a class="cell-link" href="javascript:;">11月20号21号南京站招投标技能实操培训</a></td>
+            <td>会员</td>
+            <td class="cell-amount">6000.00</td>
+            <td><span class="status-arrived">已到位</span></td>
+            <td>南京</td>
+            <td class="cell-center">3人</td>
+            <td class="cell-date">2026/11/12</td>
+            <td>刁春风</td>
+          </tr>
+          <tr>
+            <td class="col-no">HY2610261012337451</td>
+            <td><a class="cell-link" href="javascript:;">10月23号24号昆明站招投标技能实操培训</a></td>
+            <td>会员</td>
+            <td class="cell-amount">3680.00</td>
+            <td><span class="status-arrived">已到位</span></td>
+            <td>昆明</td>
+            <td class="cell-center">1人</td>
+            <td class="cell-date">2026/10/26</td>
+            <td>张利民</td>
+          </tr>
+          <tr>
+            <td class="col-no">HY2609181544380926</td>
+            <td><a class="cell-link" href="javascript:;">9月18号19号武汉站招投标技能实操培训</a></td>
+            <td>会员</td>
+            <td class="cell-amount">2500.00</td>
+            <td><span class="status-arrived">已到位</span></td>
+            <td>武汉</td>
+            <td class="cell-center">2人</td>
+            <td class="cell-date">2026/09/18</td>
+            <td>王雪</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 4.2 线上订单：9 列（已移除公司名称），列宽按百分比铺满内容区 -->
+    <div class="order-view" id="order-online" role="tabpanel" aria-label="线上订单" hidden>
+      <table class="data-table">
+        <colgroup>
+      <col style="width:16.20%">
+      <col style="width:10.19%">
+      <col style="width:11.11%">
+      <col style="width:9.72%">
+      <col style="width:7.41%">
+      <col style="width:10.65%">
+      <col style="width:13.43%">
+      <col style="width:9.72%">
+      <col style="width:11.57%">
+    </colgroup>
+        <thead>
+          <tr>
+            <th>订单编号</th>
+            <th>公司ID</th>
+            <th>联系人</th>
+            <th>课程时间</th>
+            <th class="cell-center">人数</th>
+            <th class="cell-amount">签约金额</th>
+            <th class="cell-date">订单时间</th>
+            <th>订单状态</th>
+            <th>销售人员</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-no">HY2611130921456802</td>
+            <td class="cell-company-id">10024176</td>
+            <td class="cell-contact">黄冠楠<span class="contact-phone">13260125891</span></td>
+            <td class="cell-datetime">2026-11-25</td>
+            <td class="cell-count">3人</td>
+            <td class="cell-amount">3800.00</td>
+            <td class="cell-date">2026/11/13 09:21</td>
+            <td><span class="status-paid">已支付</span></td>
+            <td class="cell-seller">刁春风<span class="seller-dept">北京一部</span></td>
+          </tr>
+          <tr>
+            <td class="col-no">HY2610291433025517</td>
+            <td class="cell-company-id">10024176</td>
+            <td class="cell-contact">黄世前<span class="contact-phone">13552550688</span></td>
+            <td class="cell-datetime">2026-11-04</td>
+            <td class="cell-count">2人</td>
+            <td class="cell-amount">1980.00</td>
+            <td class="cell-date">2026/10/29 14:33</td>
+            <td><span class="status-unpaid">待支付</span></td>
+            <td class="cell-seller">张利民<span class="seller-dept">河北二部</span></td>
+          </tr>
+          <tr>
+            <td class="col-no">HY2609161108264410</td>
+            <td class="cell-company-id">10024176</td>
+            <td class="cell-contact">[待核实]<span class="contact-phone">17741368888</span></td>
+            <td class="cell-datetime">2026-09-22</td>
+            <td class="cell-count">1人</td>
+            <td class="cell-amount">1200.00</td>
+            <td class="cell-date">2026/09/16 11:08</td>
+            <td><span class="status-refund">已退款</span></td>
+            <td class="cell-seller">王雪<span class="seller-dept">北分一部</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ========== 5. 记录查询 ========== -->
+  <section class="card">
+    <div class="rec-bar">
+      <div class="rec-tabs" role="tablist" aria-label="记录类型">
+        <button class="rec-tab active" type="button" role="tab" aria-selected="true">联系记录</button>
+        <button class="rec-tab" type="button" role="tab" aria-selected="false">推荐记录</button>
+        <button class="rec-tab" type="button" role="tab" aria-selected="false">查看记录</button>
+        <button class="rec-tab" type="button" role="tab" aria-selected="false">搜索记录</button>
+        <button class="rec-tab" type="button" role="tab" aria-selected="false">短信记录</button>
+        <button class="rec-tab" type="button" role="tab" aria-selected="false">登录记录</button>
+      </div>
+
+      <div class="rec-tools">
+        <span class="rec-search">
+          <svg viewBox="0 0 24 24" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m20 20-4.9-4.9"/></svg>
+          <input class="rec-input" type="text" placeholder="搜索关键词" aria-label="搜索关键词">
+        </span>
+        <select class="rec-select w-contact" aria-label="选择联系人">
+          <option value="">选择联系人</option>
+          <option>黄世前</option>
+          <option>黄冠楠</option>
+          <option>[待核实]</option>
+        </select>
+        <select class="rec-select w-record" aria-label="记录范围">
+          <option value="">全部记录</option>
+          <option>今天</option>
+          <option>近7天</option>
+          <option>近30天</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 6. 系统操作记录 ========== -->
+  <section class="sys-card">
+    <span class="sys-avatar" aria-hidden="true">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="8" r="4"/>
+        <path d="M4 20c0-4.1 3.6-6.5 8-6.5s8 2.4 8 6.5"/>
+      </svg>
+    </span>
+    <div class="sys-body">
+      <div class="sys-head">
+        <span class="sys-title">系统操作记录</span>
+        <span class="sys-next">下次联系时间：<b>暂无</b></span>
+      </div>
+      <p class="sys-text">童慧推荐公司 “北京紫鸿永泰食品有限公司” 到采乐会</p>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  /* ---------- 当前订单：线下 / 线上 视图切换 ---------- */
+  (function () {
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('[data-order-tab]'));
+    var views = {
+      offline: document.getElementById('order-offline'),
+      online: document.getElementById('order-online')
+    };
+
+    function activate(key) {
+      tabs.forEach(function (tab) {
+        var on = tab.getAttribute('data-order-tab') === key;
+        tab.classList.toggle('active', on);
+        tab.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      Object.keys(views).forEach(function (k) {
+        if (views[k]) { views[k].hidden = k !== key; }
+      });
+    }
+
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        activate(tab.getAttribute('data-order-tab'));
+      });
+    });
+
+    /* 默认选中「线下订单」 */
+    activate('offline');
+  })();
+
+  /* ---------- 记录查询标签切换 ---------- */
+  (function () {
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('.rec-tab'));
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        tabs.forEach(function (t) {
+          var on = t === tab;
+          t.classList.toggle('active', on);
+          t.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+      });
+    });
+  })();
+</script>
+</body>
+</html>

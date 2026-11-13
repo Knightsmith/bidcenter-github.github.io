@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<script>if (window.top === window.self) location.replace('sidebar.html?page=' + encodeURIComponent(location.pathname.split('/').pop()));</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>市场洞察-用户中心-采招网</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%237c3aed'/%3E%3Ctext%20x='32'%20y='45'%20text-anchor='middle'%20font-size='40'%20font-weight='700'%20fill='%23ffffff'%20font-family='Microsoft%20YaHei,sans-serif'%3E%E5%B1%BF%3C/text%3E%3C/svg%3E">
+<style>
+@layer tokens, base, components;
+
+@layer tokens {
+  :root {
+    --background: #ffffff;        --foreground: #1f2430;
+    --primary: #2b7bff;           --primary-foreground: #ffffff;
+    --primary-deep: #0063ff;
+    --secondary: #f4f4f5;         --secondary-foreground: #414a59;
+    --muted: #f5f7fa;             --muted-foreground: #5f6875;
+    --accent: #ecf5ff;            --accent-foreground: #2b7bff;
+    --border: #dbe2ec;             --input: #b3bdcc;
+    --font-sans: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+    --shadow-xs: 0 1px 2px rgb(0 0 0 / .05);
+    --shadow-card: 0 1px 3px rgb(17 42 90 / .06);
+    --radius-sm: 4px; --radius-md: 6px; --radius-lg: 10px;
+  }
+}
+
+@layer base {
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body {
+    background: #f0f3fa; color: var(--foreground);
+    font-family: var(--font-sans); font-size: 15px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { text-decoration: none; color: inherit; }
+  button { font-family: inherit; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: #d6dde9; border-radius: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+}
+
+@layer components {
+  /* ---------- 外框（iframe 内容页） ---------- */
+  .app-shell { display: flex; height: 100vh; overflow: hidden; }
+  .main { flex: 1; min-width: 0; height: 100vh; overflow: hidden; }
+  .content { height: 100%; }
+  .content-scroll { height: 100%; overflow-y: auto; padding: 16px 20px 48px; }
+  .page { max-width: 1560px; margin: 0 auto; }
+
+  .card {
+    background: var(--background); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); box-shadow: var(--shadow-card);
+  }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    height: 36px; padding: 0 16px; border: 1px solid transparent; border-radius: var(--radius-md);
+    background: var(--primary); color: #fff; font-size: 14.5px; font-weight: 600;
+    cursor: pointer; white-space: nowrap; transition: all .15s ease; outline: none;
+  }
+  .btn:hover { opacity: .9; }
+  .btn[data-variant='ghost'] { background: #fff; color: var(--primary); border-color: #bcd6ff; }
+  .btn[data-variant='ghost']:hover { background: var(--accent); opacity: 1; }
+
+  /* ---------- 顶部标题 + 积分 ---------- */
+  .page-hero {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 20px;
+    background: #fff; border: 1px solid var(--border); border-radius: var(--radius-lg);
+    padding: 18px 22px; box-shadow: var(--shadow-card);
+  }
+  .hero-title { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .hero-title h1 { margin: 0; font-size: 22px; font-weight: 600; letter-spacing: .5px; }
+  .hero-sub { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .hero-sub p { margin: 0; font-size: 14.5px; color: #5f6875; }
+  .disc-link { font-size: 13.5px; color: var(--primary); }
+  .disc-link:hover { text-decoration: underline; }
+  .hero-right { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+  .points-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    height: 34px; padding: 0 16px; border-radius: 999px;
+    background: var(--accent); color: #1259cc; font-size: 14px; font-weight: 500;
+  }
+  .points-pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--primary); }
+  .points-pill b { font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  /* ---------- 分析条件（关键词 / 排除词 · 一张卡） ---------- */
+  .cond-card { margin-top: 16px; overflow: hidden; }
+  .cond-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    padding: 16px 22px; border-bottom: 1px solid var(--border); background: #f7f9fd;
+  }
+  .cond-head-title { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; min-width: 0; }
+  .cond-head-title h2 { margin: 0; font-size: 17px; font-weight: 600; color: #1f2430; }
+  .cond-head-title span { font-size: 13.5px; color: #5f6875; }
+  .cond-cost { font-size: 13.5px; color: #414a59; flex-shrink: 0; }
+  .cond-cost b { color: #1259cc; font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+  .chips-ops { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .cond-toggle {
+    display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 4px;
+    border: 0; background: none; color: #1259cc; font-family: inherit;
+    font-size: 13.5px; font-weight: 600; cursor: pointer; white-space: nowrap;
+  }
+  .cond-toggle:hover { text-decoration: underline; }
+  .cond-toggle.is-open { color: #414a59; }
+  .cond-toggle-plus { font-size: 15px; line-height: 1; font-weight: 700; }
+  .cond-row--ex { border-top: 1px solid #eef2f8; }
+  .cond-row { display: flex; gap: 24px; padding: 20px 22px; align-items: flex-start; }
+  .cond-row + .cond-row { border-top: 1px solid #eef2f8; }
+  .cond-label { width: 176px; flex-shrink: 0; display: flex; flex-direction: column; gap: 5px; padding-top: 12px; }
+  .cond-label label { display: flex; align-items: center; gap: 6px; font-size: 16px; font-weight: 700; color: #1f2430; }
+  .cond-label label i { font-style: normal; color: #d93a2b; font-size: 17px; }
+  .cond-label label em {
+    font-style: normal; font-size: 12px; font-weight: 500; color: #5f6875;
+    border: 1px solid #cfd7e3; background: #f2f5fa; border-radius: 4px; padding: 0 5px; line-height: 1.6;
+  }
+  .cond-label > span { font-size: 13px; color: #5f6875; line-height: 1.55; }
+  .cond-body { flex: 1; min-width: 0; }
+
+  .input-row { display: flex; gap: 10px; }
+  .input-row input {
+    flex: 1; min-width: 0; height: 46px; padding: 0 16px; font-size: 15.5px; font-family: inherit;
+    border: 1.5px solid var(--input); border-radius: var(--radius-md); outline: none;
+    color: var(--foreground); background: #fff; transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .input-row input::placeholder { color: #7d8797; }
+  .input-row input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgb(43 123 255 / .14); }
+  .btn-add {
+    flex-shrink: 0; min-width: 92px; height: 46px; padding: 0 24px; border: none;
+    border-radius: var(--radius-md); background: var(--primary); color: #fff;
+    font-size: 16px; font-weight: 700; cursor: pointer; transition: background .15s ease;
+  }
+  .btn-add:hover { background: #1a6aeb; }
+  .btn-add:active { background: #0f56c9; }
+
+  .chips-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+  .chips { display: flex; flex-wrap: wrap; gap: 9px; align-items: center; flex: 1; min-width: 0; }
+  .chips-empty { font-size: 13.5px; color: #7d8797; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 8px;
+    height: 32px; padding: 0 6px 0 15px; border-radius: var(--radius-md);
+    background: #e6f0ff; color: #10499c; font-size: 14.5px;
+  }
+  .chip[data-kind='exclude'] { background: #ffeceb; color: #b3271b; }
+  .chip button {
+    width: 24px; height: 24px; border: none; background: none; cursor: pointer; border-radius: 50%;
+    color: inherit; opacity: .8; font-size: 18px; line-height: 1; padding: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .chip button:hover { opacity: 1; background: rgb(0 0 0 / .07); }
+  .link-clear {
+    display: none; flex-shrink: 0; padding: 5px 14px; border: 1px solid #cfd7e3; border-radius: var(--radius-md);
+    background: #fff; font-size: 13px; color: #414a59; cursor: pointer;
+  }
+  .link-clear.show { display: inline-block; }
+  .link-clear:hover { color: #b3271b; border-color: #f0b8b2; background: #fff6f5; }
+
+  /* ---------- 提交条 ---------- */
+  .cond-foot {
+    display: flex; align-items: center; justify-content: flex-start; gap: 20px; flex-wrap: wrap;
+    padding: 16px 22px; border-top: 1px solid var(--border); background: #f7f9fd;
+  }
+  .cond-tip { margin: 0 0 0 auto; font-size: 13.5px; color: #414a59; display: flex; align-items: center; gap: 8px; line-height: 1.55; }
+  .cond-tip::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #9aa7bb; flex-shrink: 0; }
+  .btn-analyze {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    min-width: 240px; height: 48px; padding: 0 32px; border: none; border-radius: var(--radius-md);
+    background: linear-gradient(90deg, #3d8bff 0%, #0063ff 100%); color: #fff;
+    font-size: 17px; font-weight: 700; letter-spacing: .5px; cursor: pointer;
+    box-shadow: 0 6px 16px rgb(0 99 255 / .26); transition: all .18s ease;
+  }
+  .btn-analyze:hover { box-shadow: 0 8px 20px rgb(0 99 255 / .34); transform: translateY(-1px); }
+  .btn-analyze:active { transform: translateY(0); }
+  .btn-analyze[disabled] { opacity: .75; cursor: default; transform: none; box-shadow: none; }
+
+  @media (max-width: 960px) {
+    .sub-bar { padding: 4px 14px 12px; }
+    .sub-tabs { flex: 1 1 100%; }
+    .filters { flex: 1 1 100%; }
+    .filters select { flex: 1; min-width: 0; }
+    .chips-ops { gap: 8px; }
+    .cond-row { flex-direction: column; gap: 10px; padding: 18px; }
+
+    .cond-label { width: auto; flex-direction: row; align-items: center; flex-wrap: wrap; gap: 10px; padding-top: 0; }
+    .cond-foot { flex-direction: column; align-items: stretch; padding: 16px 18px; }
+    .cond-tip { margin: 0; }
+    .btn-analyze { width: 100%; min-width: 0; }
+  }
+
+  /* ---------- 结果卡 ---------- */
+  .result { margin-top: 10px; overflow: hidden; }
+    .main-tabs { display: flex; gap: 8px; padding: 16px 22px 0; background: #f7f9fd; border-bottom: 1px solid var(--border); }
+    .main-tab {
+    position: relative; height: 46px; padding: 0 30px; border: 1px solid transparent;
+    border-bottom: none; border-radius: 8px 8px 0 0; background: transparent;
+    color: #414a59; font-size: 15.5px; font-weight: 600; cursor: pointer; transition: all .15s ease;
+  }
+  .main-tab:hover { color: var(--primary); }
+  .main-tab.active { background: #fff; color: var(--primary); font-weight: 600; border-color: var(--border); }
+  .main-tab.active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: #fff; }
+
+  .sub-bar {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px 16px; flex-wrap: wrap;
+    padding: 0 18px; border-bottom: 1px solid var(--border); background: #fff;
+  }
+  .sub-tabs { display: flex; gap: 4px; overflow-x: auto; flex: 1; min-width: 0; }
+  .sub-tabs::-webkit-scrollbar { height: 0; }
+    .sub-tab {
+    height: 46px; padding: 0 14px; border: none; background: none; cursor: pointer;
+    font-size: 14.5px; color: #414a59; white-space: nowrap;
+    border-bottom: 3px solid transparent; transition: all .15s ease;
+  }
+  .sub-tab:hover { color: var(--primary); }
+  .sub-tab.active { color: var(--primary); font-weight: 600; border-bottom-color: var(--primary); }
+
+  .filters { display: flex; align-items: center; gap: 10px; flex-shrink: 0; flex-wrap: wrap; }
+    .filters select {
+    height: 42px; min-width: 122px; padding: 0 32px 0 14px; font-size: 15.5px; font-family: inherit;
+    color: #414a59; border: 1.5px solid var(--input); border-radius: var(--radius-md);
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235f6875' stroke-width='2.4' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 10px center / 14px 14px;
+    appearance: none; outline: none; cursor: pointer;
+  }
+  .filters select:focus { border-color: var(--primary); }
+
+  /* ---------- 市场数据面板 ---------- */
+    .panel { padding: 18px 22px 22px; }
+  .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .unlock-link { font-size: 15px; color: #1259cc; display: inline-flex; align-items: center; gap: 8px; font-weight: 500; }
+  .unlock-link b { font-weight: 600; }
+    .unlock-link span { color: #5f6875; font-weight: 400; font-size: 13.5px; }
+  .unlock-link:hover span { color: var(--primary); }
+  .unlock-link svg { width: 14px; height: 14px; }
+
+    .export-bar {
+    display: flex; align-items: center; gap: 14px; padding: 12px 16px;
+    border: 1px solid #cfdcef; border-radius: var(--radius-md);
+    background: linear-gradient(90deg, #f2f8ff 0%, #ffffff 100%);
+  }
+  .export-left { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .export-icon { width: 22px; height: 22px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .export-icon svg { width: 13px; height: 13px; color: var(--primary); }
+    .export-left strong { font-size: 15px; font-weight: 700; color: #1f2430; white-space: nowrap; }
+    .export-left em { font-size: 13.5px; color: #5f6875; font-style: normal; }
+
+  .metric-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 16px; }
+  @media (max-width: 1280px) { .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 720px) { .metric-grid { grid-template-columns: 1fr; } }
+
+  .metric-card {
+    position: relative; overflow: hidden;
+    border: 1px solid var(--border); border-radius: var(--radius-lg); background: #fff;
+    padding: 14px 16px 0; box-shadow: var(--shadow-xs); transition: all .18s ease;
+  }
+  .metric-card:hover { border-color: #c9dcff; box-shadow: 0 4px 14px rgb(17 42 90 / .08); transform: translateY(-1px); }
+  .metric-top { display: flex; align-items: center; gap: 8px; }
+    .metric-idx {
+    width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+    border: 1.5px solid currentColor; color: var(--mc); background: #fff;
+    font-size: 14px; font-weight: 600; line-height: 1; display: flex; align-items: center; justify-content: center;
+  }
+    .metric-title {
+    display: inline-flex; align-items: center; gap: 5px; min-width: 0;
+    font-size: 14.5px; font-weight: 500; color: #414a59; cursor: pointer;
+  }
+  .metric-title:hover { color: var(--mc); }
+  .metric-title i { font-style: normal; }
+  .metric-title svg { width: 12px; height: 12px; flex-shrink: 0; opacity: .65; }
+    .metric-value {
+    margin: 10px 0 0; font-size: 24px; font-weight: 700; line-height: 1.2;
+    font-variant-numeric: tabular-nums; color: #12203a; letter-spacing: .5px;
+  }
+  .metric-spark { margin: 6px -16px 0; height: 52px; }
+  .metric-spark svg { display: block; width: 100%; height: 100%; }
+
+    .panel-empty {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    padding: 64px 20px; color: #5f6875; font-size: 14.5px;
+  }
+  .panel-empty svg { width: 30px; height: 30px; color: #d5dae3; }
+
+    .version-badge { position: fixed; right: 16px; bottom: 14px; z-index: 40; font-size: 12.5px; color: #5f6875; background: rgba(255,255,255,.94); border: 1px solid #dbe2ec; border-radius: 999px; padding: 3px 11px; letter-spacing: .5px; user-select: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+  <main class="main">
+    <div class="content">
+      <div class="content-scroll">
+        <div class="page">
+
+          <!-- ============ 顶部标题 + 积分 ============ -->
+          <header class="page-hero">
+            <div class="hero-title">
+              <h1>市场洞察</h1>
+              <div class="hero-sub">
+                <p>多维度挖掘数据，助你全程分析市场</p>
+                <a class="disc-link" href="#" onclick="return false">免责声明</a>
+              </div>
+            </div>
+            <div class="hero-right">
+              <span class="points-pill"><span class="dot"></span>剩余积分 <b id="pointsLeft">12000</b></span>
+              <button class="btn" type="button" id="rechargeBtn">充值</button>
+            </div>
+          </header>
+
+          <!-- ============ 分析条件（关键词 / 排除词）+ 提交 ============ -->
+          <section class="card cond-card">
+            <div class="cond-head">
+              <div class="cond-head-title">
+                <h2>分析条件</h2>
+              </div>
+              <span class="cond-cost">本次消耗 <b>100</b> 积分</span>
+            </div>
+
+            <div class="cond-row">
+              <div class="cond-label">
+                <label for="kwInput">关键词 <i>*</i></label>
+                <span>要分析的词</span>
+              </div>
+              <div class="cond-body">
+                <div class="input-row">
+                  <input type="text" id="kwInput" placeholder="在这里输入，例如：服务器">
+                  <button class="btn-add" type="button" data-add="kw">添加</button>
+                </div>
+                <div class="chips-bar">
+                  <div class="chips" id="kwChips"></div>
+                  <div class="chips-ops">
+                    <button class="cond-toggle" type="button" id="exToggle" aria-expanded="false" aria-controls="exRow">
+                      <span class="cond-toggle-plus" id="exToggleIcon" aria-hidden="true">+</span>
+                      <span id="exToggleText">排除词</span>
+                    </button>
+                    <button class="link-clear" type="button" data-clear="kw">清空</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="cond-row cond-row--ex" id="exRow" style="display:none">
+              <div class="cond-label">
+                <label for="exInput">排除词 <em>选填</em></label>
+                <span>要排除的词</span>
+              </div>
+              <div class="cond-body">
+                <div class="input-row">
+                  <input type="text" id="exInput" placeholder="不需要的可以留空，例如：测试">
+                  <button class="btn-add" type="button" data-add="ex">添加</button>
+                </div>
+                <div class="chips-bar">
+                  <div class="chips" id="exChips"></div>
+                  <button class="link-clear" type="button" data-clear="ex">清空</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="cond-foot">
+              <button class="btn-analyze" type="button" id="analyzeBtn">一键分析</button>
+              <p class="cond-tip">当日同组关键词与排除词不重复消耗</p>
+            </div>
+          </section>
+
+          <!-- ============ 分析结果 ============ -->
+          <section class="card result">
+            <div class="main-tabs" id="mainTabs">
+              <button class="main-tab active" type="button" data-main="bid">招标市场分析</button>
+              <button class="main-tab" type="button" data-main="win">中标市场分析</button>
+              <button class="main-tab" type="button" data-main="forecast">市场预测</button>
+            </div>
+
+            <div class="sub-bar" id="subBar">
+              <div class="sub-tabs" id="subTabs"></div>
+              <div class="filters">
+                <select id="fArea">
+                  <option>地区</option>
+                  <option>全国</option>
+                  <option>华东</option>
+                  <option>华南</option>
+                  <option>华北</option>
+                  <option>华中</option>
+                  <option>西南</option>
+                  <option>西北</option>
+                  <option>东北</option>
+                </select>
+                <select id="fTime">
+                  <option>时间</option>
+                  <option>近1个月</option>
+                  <option>近3个月</option>
+                  <option>近6个月</option>
+                  <option>近1年</option>
+                  <option>近3年</option>
+                </select>
+                <select id="fIndustry">
+                  <option>行业类型</option>
+                  <option>信息技术</option>
+                  <option>工程建设</option>
+                  <option>医疗卫生</option>
+                  <option>能源电力</option>
+                  <option>交通运输</option>
+                  <option>教育科研</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- 市场数据 -->
+            <div class="panel" id="panelData">
+              <div class="panel-head">
+                <a class="unlock-link" href="#" onclick="return false">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 12h1v4h1"/></svg>
+                  <b>市场数据</b><span>解锁更多维度，生成深度市场分析报告</span>
+                </a>
+                <div class="export-bar">
+                  <div class="export-left">
+                    <span class="export-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    </span>
+                    <strong>数据导出</strong>
+                    <em>支持个性化、定制化数据导出</em>
+                  </div>
+                  <button class="btn" data-variant="ghost" type="button" id="exportBtn">立即前往</button>
+                </div>
+              </div>
+
+              <div class="metric-grid" id="metricGrid"></div>
+            </div>
+
+            <!-- 其他子 Tab 占位 -->
+            <div class="panel-empty" id="panelEmpty" style="display:none">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l3-4 3 2 4-6"/></svg>
+              <span id="emptyText">该维度图表待补充</span>
+            </div>
+          </section>
+
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="version-badge">v3.18.3</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ================= 状态 ================= */
+  var state = {
+    points: 12000,
+    kw: ['副食品', '农副食品'],
+    ex: ['副食品', '农副食品'],
+    main: 'bid',
+    sub: '市场数据'
+  };
+
+  /* 招标市场分析下的子 Tab（严格按设计稿文案与顺序） */
+  var SUB_TABS = ['市场数据', '区域分析', '月度中标数量与趋势变化', '月度中标结果与趋势变化', '行业分布',
+    '招标方式占比', '招标评选占比', '月采购金额分析', '采购预算分布', '业主与代理排名'];
+
+  /* 指标卡：① ~ ④ */
+  var METRICS = [
+    { key: 'count',  title: '招标次数（次）',      value: '3,431',      color: '#2b7bff',
+      data: [42, 55, 38, 61, 47, 72, 58, 66, 51, 78, 63, 71] },
+    { key: 'budget', title: '招标预算金额（元）',  value: '34,317,700', color: '#f5a623',
+      data: [30, 26, 41, 35, 52, 44, 60, 48, 57, 45, 62, 54] },
+    { key: 'owner',  title: '业主数量（家）',      value: '1,286',      color: '#8b5cf6',
+      data: [50, 44, 58, 40, 63, 52, 47, 68, 55, 49, 61, 57] },
+    { key: 'agency', title: '招标代理机构（家）',  value: '892',        color: '#13b5a6',
+      data: [36, 48, 42, 55, 39, 60, 46, 52, 44, 58, 50, 62] }
+  ];
+
+  var IDX = ['①', '②', '③', '④'];
+
+  function $(id) { return document.getElementById(id); }
+
+  /* ================= 标签（关键词 / 排除词） ================= */
+  function renderChips(kind) {
+    var list = kind === 'kw' ? state.kw : state.ex;
+    var box = kind === 'kw' ? $('kwChips') : $('exChips');
+    var clearBtn = document.querySelector('[data-clear="' + kind + '"]');
+    if (clearBtn) clearBtn.classList.toggle('show', list.length > 0);
+    if (kind === 'ex') renderExToggle();
+    if (!list.length) { box.innerHTML = '<span class="chips-empty">还没有添加</span>'; return; }
+    box.innerHTML = list.map(function (w, i) {
+      return '<span class="chip" data-kind="' + (kind === 'ex' ? 'exclude' : 'kw') + '">' + esc(w) +
+        '<button type="button" data-del="' + kind + '" data-i="' + i + '" aria-label="移除">×</button></span>';
+    }).join('');
+  }
+
+  function addWord(kind) {
+    var input = kind === 'kw' ? $('kwInput') : $('exInput');
+    var list = kind === 'kw' ? state.kw : state.ex;
+    var v = (input.value || '').trim();
+    if (!v) { input.focus(); return; }
+    if (list.indexOf(v) > -1) { input.value = ''; return; }
+    list.push(v);
+    input.value = '';
+    renderChips(kind);
+  }
+
+  document.querySelectorAll('[data-add]').forEach(function (btn) {
+    btn.addEventListener('click', function () { addWord(btn.getAttribute('data-add')); });
+  });
+  ['kwInput', 'exInput'].forEach(function (id) {
+    $(id).addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); addWord(id === 'kwInput' ? 'kw' : 'ex'); }
+    });
+  });
+  document.querySelectorAll('[data-clear]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var kind = btn.getAttribute('data-clear');
+      if (kind === 'kw') { state.kw = []; } else { state.ex = []; }
+      renderChips(kind);
+    });
+  });
+  document.addEventListener('click', function (e) {
+    var del = e.target.closest ? e.target.closest('[data-del]') : null;
+    if (!del) return;
+    var kind = del.getAttribute('data-del');
+    var i = Number(del.getAttribute('data-i'));
+    if (kind === 'kw') { state.kw.splice(i, 1); } else { state.ex.splice(i, 1); }
+    renderChips(kind);
+  });
+
+  /* ================= 排除词折叠 ================= */
+  var exExpanded = false;
+  function renderExToggle() {
+    var n = state.ex.length;
+    $('exToggleText').textContent = exExpanded ? '收起排除词'
+      : (n > 0 ? '排除词 ' + n + ' 个' : '排除词');
+    $('exToggleIcon').textContent = exExpanded ? '\u2212' : '+';
+    $('exToggle').setAttribute('aria-expanded', exExpanded ? 'true' : 'false');
+    $('exToggle').classList.toggle('is-open', exExpanded);
+  }
+  function setExExpanded(v) {
+    exExpanded = !!v;
+    $('exRow').style.display = exExpanded ? 'flex' : 'none';
+    renderExToggle();
+    if (exExpanded) setTimeout(function () { $('exInput').focus(); }, 60);
+  }
+  $('exToggle').addEventListener('click', function () { setExExpanded(!exExpanded); });
+
+  /* ================= 迷你趋势线 ================= */
+  function smoothPath(pts) {
+    if (!pts.length) return '';
+    var d = 'M' + pts[0][0].toFixed(2) + ',' + pts[0][1].toFixed(2);
+    for (var i = 0; i < pts.length - 1; i++) {
+      var p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+      var c1x = p1[0] + (p2[0] - p0[0]) / 6, c1y = p1[1] + (p2[1] - p0[1]) / 6;
+      var c2x = p2[0] - (p3[0] - p1[0]) / 6, c2y = p2[1] - (p3[1] - p1[1]) / 6;
+      d += ' C' + c1x.toFixed(2) + ',' + c1y.toFixed(2) + ' ' + c2x.toFixed(2) + ',' + c2y.toFixed(2) +
+        ' ' + p2[0].toFixed(2) + ',' + p2[1].toFixed(2);
+    }
+    return d;
+  }
+
+  function sparkSVG(data, color) {
+    var W = 240, H = 52, padY = 8, padX = 2;
+    var min = Math.min.apply(null, data), max = Math.max.apply(null, data);
+    var span = (max - min) || 1;
+    var pts = data.map(function (v, i) {
+      return [
+        padX + i * (W - padX * 2) / (data.length - 1),
+        H - padY - (v - min) / span * (H - padY * 2)
+      ];
+    });
+    var line = smoothPath(pts);
+    var area = line + ' L' + (W - padX) + ',' + H + ' L' + padX + ',' + H + ' Z';
+    var gid = 'g_' + color.replace('#', '') + '_' + Math.floor(Math.random() * 1e6);
+    return '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" role="img" aria-hidden="true">' +
+      '<defs><linearGradient id="' + gid + '" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0%" stop-color="' + color + '" stop-opacity="0.18"/>' +
+      '<stop offset="100%" stop-color="' + color + '" stop-opacity="0"/>' +
+      '</linearGradient></defs>' +
+      '<path d="' + area + '" fill="url(#' + gid + ')"/>' +
+      '<path d="' + line + '" fill="none" stroke="' + color + '" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '</svg>';
+  }
+
+  /* ================= 指标卡渲染 ================= */
+  function renderMetrics() {
+    $('metricGrid').innerHTML = METRICS.map(function (m, i) {
+      return '<div class="metric-card" style="--mc:' + m.color + '">' +
+        '<div class="metric-top">' +
+          '<span class="metric-idx">' + IDX[i] + '</span>' +
+          '<span class="metric-title">' +
+            '<i>' + m.title + '</i>' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>' +
+          '</span>' +
+        '</div>' +
+        '<p class="metric-value">' + m.value + '</p>' +
+        '<div class="metric-spark">' + sparkSVG(m.data, m.color) + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  /* ================= 子 Tab ================= */
+  function renderSubTabs() {
+    var visible = state.main === 'bid';
+    $('subBar').style.display = visible ? 'flex' : 'none';
+    if (!visible) return;
+    $('subTabs').innerHTML = SUB_TABS.map(function (t) {
+      return '<button class="sub-tab' + (t === state.sub ? ' active' : '') + '" type="button" data-sub="' + t + '">' + t + '</button>';
+    }).join('');
+  }
+
+  function renderPanel() {
+    var isData = state.main === 'bid' && state.sub === '市场数据';
+    $('panelData').style.display = isData ? 'block' : 'none';
+    $('panelEmpty').style.display = isData ? 'none' : 'flex';
+    if (!isData) {
+      $('emptyText').textContent = state.main === 'bid'
+        ? '「' + state.sub + '」维度图表待补充'
+        : '该模块图表待补充';
+    }
+  }
+
+  /* ================= 交互 ================= */
+  $('mainTabs').addEventListener('click', function (e) {
+    var btn = e.target.closest('.main-tab');
+    if (!btn) return;
+    state.main = btn.getAttribute('data-main');
+    state.sub = '市场数据';
+    document.querySelectorAll('.main-tab').forEach(function (b) { b.classList.toggle('active', b === btn); });
+    renderSubTabs();
+    renderPanel();
+  });
+
+  $('subTabs').addEventListener('click', function (e) {
+    var btn = e.target.closest('.sub-tab');
+    if (!btn) return;
+    state.sub = btn.getAttribute('data-sub');
+    document.querySelectorAll('.sub-tab').forEach(function (b) { b.classList.toggle('active', b === btn); });
+    renderPanel();
+  });
+
+  /* 一键分析：扣积分 + 数据刷新 */
+  $('analyzeBtn').addEventListener('click', function () {
+    var btn = this;
+    if (!state.kw.length) {
+      btn.textContent = '请先添加关键词';
+      setTimeout(function () { btn.textContent = '一键分析 · 消耗100积分'; }, 1400);
+      $('kwInput').focus();
+      return;
+    }
+    if (state.points < 100) {
+      btn.textContent = '积分不足，请先充值';
+      setTimeout(function () { btn.textContent = '一键分析 · 消耗100积分'; }, 1600);
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = '分析中…';
+    setTimeout(function () {
+      state.points -= 100;
+      $('pointsLeft').textContent = state.points.toLocaleString('en-US');
+      METRICS.forEach(function (m) {
+        m.data = m.data.map(function (v) {
+          var n = v + (Math.random() * 26 - 13);
+          return Math.max(8, Math.round(n));
+        });
+      });
+      renderMetrics();
+      btn.disabled = false;
+      btn.textContent = '分析完成 · 可再次分析';
+      setTimeout(function () { btn.textContent = '一键分析'; }, 1800);
+    }, 900);
+  });
+
+  $('rechargeBtn').addEventListener('click', function () {
+    try { window.top.postMessage({ type: 'bidcenter-nav', page: 'points.html', title: '积分余额' }, '*'); } catch (err) {}
+    setTimeout(function () { try { location.href = 'points.html'; } catch (err) {} }, 300);
+  });
+
+  $('exportBtn').addEventListener('click', function () {
+    var tip = document.createElement('div');
+    tip.textContent = '数据导出功能按需接入';
+    tip.style.cssText = 'position:fixed;left:50%;top:24px;transform:translateX(-50%);background:rgba(31,43,64,.9);color:#fff;font-size:13px;padding:8px 16px;border-radius:6px;z-index:99';
+    document.body.appendChild(tip);
+    setTimeout(function () { tip.remove(); }, 1600);
+  });
+
+  /* ================= 工具 ================= */
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  /* ================= 初始化 ================= */
+  renderChips('kw');
+  renderChips('ex');
+  renderExToggle();
+  renderMetrics();
+  renderSubTabs();
+  renderPanel();
+  console.log('[market-insight] build v3.18.3');
+})();
+</script>
+</body>
+</html>
