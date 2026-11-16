@@ -348,7 +348,6 @@
   .data-table thead th.cell-count { text-align: center; }
 
   .col-no { font-variant-numeric: tabular-nums; color: var(--text-muted); }
-  .cell-company-id { font-variant-numeric: tabular-nums; color: var(--text-muted); }
   .cell-datetime { font-variant-numeric: tabular-nums; color: var(--text-muted); }
   .cell-count { text-align: center; font-variant-numeric: tabular-nums; }
   .cell-contact, .cell-seller { line-height: 1.35; }
@@ -371,7 +370,7 @@
   .contact-table td { font-size: 13px; }
   .cell-ops { white-space: nowrap; }
 
-  /* ================= 7. 当前订单 tab ================= */
+  /* ================= 7. 培训订单 tab ================= */
   .order-tab-bar {
     display: flex;
     align-items: center;
@@ -400,6 +399,14 @@
     background: var(--primary);
     border-radius: 1px;
   }
+  /* tab 名称内的订单数量：紧跟文字、全角括号、同色加粗、等宽数字 */
+  .tab-count {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  /* tab 行最右侧的「+ 添加订单」按钮：仅线下培训订单视图显示 */
+  .order-add-btn { margin-left: auto; }
+  .order-add-btn[hidden] { display: none; }
   .order-view[hidden] { display: none; }
 
   /* ================= 8. 记录查询卡 ================= */
@@ -665,23 +672,19 @@
     </table>
   </section>
 
-  <!-- ========== 4. 当前订单（线下 / 线上 tab） ========== -->
+  <!-- ========== 4. 培训订单（线下 / 在线 tab，无区块标题；添加订单按钮仅线下可见） ========== -->
   <section class="card">
-    <div class="card-head">
-      <span class="card-title">当前订单</span>
-      <button class="btn-add" type="button">
+    <div class="order-tab-bar" role="tablist" aria-label="培训订单类型">
+      <button class="tab-item active" type="button" role="tab" data-order-tab="offline" aria-selected="true">线下培训订单<span class="tab-count" data-count="5">（5）</span></button>
+      <button class="tab-item" type="button" role="tab" data-order-tab="online" aria-selected="false">在线培训订单<span class="tab-count" data-count="7">（7）</span></button>
+      <button class="btn-add order-add-btn" type="button" id="orderAddBtn">
         <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
         添加订单
       </button>
     </div>
 
-    <div class="order-tab-bar" role="tablist" aria-label="订单类型">
-      <button class="tab-item active" type="button" role="tab" data-order-tab="offline" aria-selected="true">线下订单</button>
-      <button class="tab-item" type="button" role="tab" data-order-tab="online" aria-selected="false">线上订单</button>
-    </div>
-
-    <!-- 4.1 线下订单：9 列（已移除公司名称），列宽按百分比铺满内容区 -->
-    <div class="order-view" id="order-offline" role="tabpanel" aria-label="线下订单">
+    <!-- 4.1 线下培训订单：9 列（已移除公司名称），列宽按百分比铺满内容区 -->
+    <div class="order-view" id="order-offline" role="tabpanel" aria-label="线下培训订单">
       <table class="data-table">
         <colgroup>
       <col style="width:16.46%">
@@ -745,24 +748,22 @@
       </table>
     </div>
 
-    <!-- 4.2 线上订单：9 列（已移除公司名称），列宽按百分比铺满内容区 -->
-    <div class="order-view" id="order-online" role="tabpanel" aria-label="线上订单" hidden>
+    <!-- 4.2 在线培训订单：9 列（已移除公司名称），列宽按百分比铺满内容区 -->
+    <div class="order-view" id="order-online" role="tabpanel" aria-label="在线培训订单" hidden>
       <table class="data-table">
         <colgroup>
-      <col style="width:16.20%">
-      <col style="width:10.19%">
-      <col style="width:11.11%">
-      <col style="width:9.72%">
-      <col style="width:7.41%">
-      <col style="width:10.65%">
-      <col style="width:13.43%">
-      <col style="width:9.72%">
-      <col style="width:11.57%">
-    </colgroup>
+          <col style="width:18.05%">
+          <col style="width:12.37%">
+          <col style="width:10.82%">
+          <col style="width:8.25%">
+          <col style="width:11.86%">
+          <col style="width:14.95%">
+          <col style="width:10.82%">
+          <col style="width:12.88%">
+        </colgroup>
         <thead>
           <tr>
             <th>订单编号</th>
-            <th>公司ID</th>
             <th>联系人</th>
             <th>课程时间</th>
             <th class="cell-center">人数</th>
@@ -775,7 +776,6 @@
         <tbody>
           <tr>
             <td class="col-no">HY2611130921456802</td>
-            <td class="cell-company-id">10024176</td>
             <td class="cell-contact">黄冠楠<span class="contact-phone">13260125891</span></td>
             <td class="cell-datetime">2026-11-25</td>
             <td class="cell-count">3人</td>
@@ -786,7 +786,6 @@
           </tr>
           <tr>
             <td class="col-no">HY2610291433025517</td>
-            <td class="cell-company-id">10024176</td>
             <td class="cell-contact">黄世前<span class="contact-phone">13552550688</span></td>
             <td class="cell-datetime">2026-11-04</td>
             <td class="cell-count">2人</td>
@@ -797,7 +796,6 @@
           </tr>
           <tr>
             <td class="col-no">HY2609161108264410</td>
-            <td class="cell-company-id">10024176</td>
             <td class="cell-contact">[待核实]<span class="contact-phone">17741368888</span></td>
             <td class="cell-datetime">2026-09-22</td>
             <td class="cell-count">1人</td>
@@ -864,13 +862,14 @@
 </div>
 
 <script>
-  /* ---------- 当前订单：线下 / 线上 视图切换 ---------- */
+  /* ---------- 培训订单：线下 / 在线 视图切换 ---------- */
   (function () {
     var tabs = Array.prototype.slice.call(document.querySelectorAll('[data-order-tab]'));
     var views = {
       offline: document.getElementById('order-offline'),
       online: document.getElementById('order-online')
     };
+    var addBtn = document.getElementById('orderAddBtn');
 
     function activate(key) {
       tabs.forEach(function (tab) {
@@ -881,6 +880,8 @@
       Object.keys(views).forEach(function (k) {
         if (views[k]) { views[k].hidden = k !== key; }
       });
+      /* 添加订单按钮仅在「线下培训订单」显示 */
+      if (addBtn) { addBtn.hidden = key !== 'offline'; }
     }
 
     tabs.forEach(function (tab) {
@@ -889,7 +890,7 @@
       });
     });
 
-    /* 默认选中「线下订单」 */
+    /* 默认选中「线下培训订单」 */
     activate('offline');
   })();
 
