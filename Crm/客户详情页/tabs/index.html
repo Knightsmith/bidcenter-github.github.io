@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>客户详情 · 概览 - 大土豆有限责任公司 - 采招CRM系统</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%230063FF'/%3E%3Ctext%20x='32'%20y='45'%20text-anchor='middle'%20font-size='36'%20font-weight='700'%20fill='%23ffffff'%20font-family='Microsoft%20YaHei,sans-serif'%3E%E9%87%87%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/overview.css">
+</head>
+<body>
+
+<!-- ================= 顶部通栏 ================= -->
+<div class="topbar">
+  <div class="topbar-logo">
+    <div class="logo-mark">采</div>
+    <div class="logo-text"><span class="name">采招CRM系统</span></div>
+  </div>
+
+  <div class="topbar-search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input type="text" placeholder="搜索客户 / 手机号 / 企业名称">
+    <span class="kbd">Ctrl K</span>
+  </div>
+
+  <div class="top-quick">
+    <button class="top-quick-btn" type="button" data-quick="我的客户库">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+      <span>客户库</span>
+    </button>
+    <button class="top-quick-btn" type="button" data-quick="验重">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/><path d="M8.5 11h5"/></svg>
+      <span>客户查重</span>
+    </button>
+    <button class="top-quick-btn" type="button" data-quick="捡新注册客户">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>
+      <span>新注册客户</span>
+      <span class="tag-new">NEW</span>
+    </button>
+  </div>
+
+  <div class="topbar-right">
+    <button class="btn-primary" type="button" id="btnNewLead">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+      新建线索
+    </button>
+    <div class="topbar-icons">
+      <button type="button" title="待办">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <span class="dot"></span>
+      </button>
+      <button type="button" title="通知">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 8-3 8h18s-3-1-3-8"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+      </button>
+      <button type="button" title="帮助">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 1 1 4.4 2.7c-.8.5-1.5 1.1-1.5 2.3"/><path d="M12 17h.01"/></svg>
+      </button>
+    </div>
+    <span class="topbar-sep"></span>
+    <button class="topbar-user" type="button">
+      <span class="ava">
+        <img src="https://ui.shadcn.com/avatars/shadcn.jpg" alt="罗屿" onerror="this.style.display='none';this.parentNode.textContent='罗'">
+      </span>
+      罗屿
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <span class="topbar-sep"></span>
+    <div class="top-util">
+      <button id="sidebarTrigger" type="button" aria-label="切换侧边栏" title="展开 / 收起侧栏">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
+      </button>
+      <button type="button" id="btnRefresh" title="刷新">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
+      </button>
+      <button type="button" id="btnFullscreen" title="全屏">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= Shell：内容区（独立版式，不挂载侧栏 iframe） ================= -->
+<div class="app-shell no-sidebar" id="appShell">
+
+  <main class="main">
+
+    <div class="content">
+      <div class="content-body" id="contentBody">
+
+        <!-- ============ 公司信息头 ============ -->
+        <section class="hero">
+          <div class="hero-top">
+            <div class="hero-logo">大土</div>
+            <div class="flex-1">
+              <div class="hero-title-row">
+                <span class="hero-title">大土豆有限责任公司</span>
+                <span class="tag tag-id" title="客户唯一编号，可用于验重与合同关联">客户ID：C20240118-0037</span>
+              </div>
+              <div class="hero-tags">
+                <span class="grade-badge" title="客户意向等级：S 级（极高意向，与工作台同一套 AA / A / B / C / D / E / S / N / K 九档口径）">S<i>级</i></span>
+                <span class="score-chip" title="客户评分 92 / 100（优质程度）：登录活跃度 23 + 信息完善程度 18 + 搜索与订阅 14 + 企业监控与申请 15 + 信息查看与导出 13 + 付费贡献 9">客户评分 <b>92</b><em>/100</em></span>
+                <span class="tag tag-alert" title="客户投诉 1 条待处理：2026-11-09 反馈企情数据延迟，承诺 11-16 前回复处理方案">投诉 1</span>
+                <span class="tag tag-success">合作中</span>
+                <span class="biz-tag on" title="采乐会（其他业务）：已接触，2026-11-08 电话沟通过积分兑换合作">采乐会<i>接触中</i></span>
+                <span class="biz-tag" title="资质通（其他业务）：尚未接触，可在跟进时一并推荐">资质通<i>未接触</i></span>
+                <span class="tag tag-warning">近 30 天 3 次待跟进</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2" style="flex-shrink:0">
+              <button class="btn btn-soft" type="button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 11h-6"/></svg>
+                验重
+              </button>
+              <button class="btn" type="button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v8"/><path d="M8 12h8"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                关联企业
+              </button>
+            </div>
+          </div>
+
+        </section>
+
+<!-- ============ 操作按钮行 ============ -->
+        <div class="actions-row">
+          <button class="btn btn-blue" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+            新增跟进记录
+          </button>
+          <button class="btn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H5.2L4 17.2z"/></svg>
+            记录通话
+          </button>
+          <button class="btn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/></svg>
+            新建拜访
+          </button>
+          <button class="btn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            在线开通会员
+          </button>
+          <button class="btn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+            新建合同
+          </button>
+          <button class="btn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            添加联系
+          </button>
+          <button class="btn ml-auto" type="button" id="btnMoreOps">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 17.7 1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m4.9 19.1 1.4-1.4"/><path d="m17.7 6.3 1.4-1.4"/></svg>
+            更多操作
+          </button>
+        </div>
+
+        <!-- ============ 双栏主体 ============ -->
+        <div class="two-col">
+          <!-- ---------- 左：标签页 ---------- -->
+          <div class="col-main">
+            <div class="tabs" id="tabs" role="tablist">
+              <a class="tab-btn active" href="index.html">概览</a>
+              <a class="tab-btn" href="contacts.html">账户与联系人 <span class="cnt" id="tabContactCnt">15</span></a>
+              <a class="tab-btn" href="account.html">账户权限</a>
+              <a class="tab-btn" href="orders.html">订单 <span class="cnt">10</span></a>
+              <a class="tab-btn" href="points.html">积分记录</a>
+              <a class="tab-btn" href="usage.html">功能使用记录</a>
+            </div>
+            <!-- ===== 概览（结构按 sales-customer-detail-wireframe.md：有用的在前、合并基本盘、深度数据折叠） ===== -->
+            <div class="tab-pane active" id="pane-overview">
+
+              <!-- 0. 客户概览：意向 / 粘性 / 续费 / 竞品 / 地区热度 / 偏好 / 生命周期 -->
+              <div class="card" id="cardOv">
+                <div class="card-head">
+                  <span class="card-title">客户概览</span>
+                  <span class="card-sub">行为类近 30 天 · 检索类近 7 天 · 数据同步于 2026-11-18 08:57</span>
+                </div>
+                <div class="card-body">
+
+                  <div class="ov-kpis">
+                    <div class="ov-kpi is-good" title="客户意向等级 S 级（九档 AA/A/B/C/D/E/S/N/K，S 为极高意向）；评分 92 / 100，判定为优质客户（≥ 85 分）">
+                      <div class="k">客户意向</div>
+                      <div class="v">S 级 · 极高</div>
+                      <div class="d">评分 92 / 100 · 优质客户</div>
+                    </div>
+                    <div class="ov-kpi" title="使用粘性：重度使用。近 7 天有检索行为的账户占比高，检索与查看动作连续，非试用型用户">
+                      <div class="k">使用粘性</div>
+                      <div class="v">重度使用</div>
+                      <div class="d">近 7 天检索 464 次</div>
+                    </div>
+                    <div class="ov-kpi is-blue" title="近一个月解锁查看的信息条数，含招标公告、中标结果、拟在建项目等（付费账户才可查看详情）">
+                      <div class="k">查看信息数量</div>
+                      <div class="v">4,562 条</div>
+                      <div class="d">近一个月累计</div>
+                    </div>
+                    <div class="ov-kpi is-warn" title="近 30 天有登录 / 检索 / 查看行为的账户数 ÷ 账户总数；13 个账户中 6 个近 7 天有登录，活跃集中在陈涛、王燕等付费账户">
+                      <div class="k">近 30 天活跃账户</div>
+                      <div class="v">6<em>/ 13</em></div>
+                      <div class="d">活跃率 46.2% · 其余 7 个待唤醒</div>
+                    </div>
+                  </div>
+
+                  <div class="ov-sec"><span class="ov-sec-t">续费 3 账户</span><span class="ov-sec-s">到期前六个月自动预警，按到期日升序</span><span class="ov-sec-line"></span></div>
+                  <div class="ov-renew">
+                    <div class="ov-renew-i" title="陈涛 · 招投标部 / 标书专员 · 标准会员；到期日 2026-11-30，剩余 12 天，本月最紧迫，近 7 天检索最深">
+                      <div class="ov-renew-h"><span class="ov-renew-n">陈涛</span><span class="ov-days urgent">剩 12 天</span></div>
+                      <div class="ov-renew-m">2026-11-30 到期 · 标准会员</div>
+                    </div>
+                    <div class="ov-renew-i" title="王燕 · 招投标部 / 部门经理 · Plus 会员；到期日 2026-12-31，剩余 43 天，与竞品会员同期到期">
+                      <div class="ov-renew-h"><span class="ov-renew-n">王燕</span><span class="ov-days">剩 43 天</span></div>
+                      <div class="ov-renew-m">2026-12-31 到期 · Plus 会员</div>
+                    </div>
+                    <div class="ov-renew-i" title="林国栋 · 董事长办公室 / 董事长 · VIP 会员，主账户；到期日 2027-03-15，剩余 117 天">
+                      <div class="ov-renew-h"><span class="ov-renew-n">林国栋</span><span class="ov-days far">剩 117 天</span></div>
+                      <div class="ov-renew-m">2027-03-15 到期 · VIP 会员</div>
+                    </div>
+                  </div>
+
+                  <div class="ov-sec"><span class="ov-sec-t">竞品与报价</span><span class="ov-sec-s">竞品到期前六个月即进入替换窗口 · 距到期 43 天，已在抢单期；我方报价降 13.5%，响应等级 B</span><span class="ov-sec-line"></span></div>
+                  <div class="ov-comp">
+                    <div class="ov-comp-base">
+                      <div title="客户同时在用的竞品平台"><div class="k">竞品</div><div class="v"><strong>千里马招标网</strong></div></div>
+                      <div title="竞品会员到期日；到期前六个月即进入我方替换窗口，不等到期才抢"><div class="k">竞品会员到期</div><div class="v">2026-12-31<em>剩 43 天</em></div></div>
+                      <div title="竞品年费挂牌价，用于我方报价对比"><div class="k">竞品年费</div><div class="v">¥ 5,600 / 年</div></div>
+                      <div title="报价响应等级：A 直接接受 / B 需议价 / C 明显抗拒"><div class="k">响应等级</div><div class="v"><strong>B</strong> · 需议价</div></div>
+                    </div>
+                    <div class="ov-comp-win"><span class="ov-win-tag">替换窗口</span>竞品距到期 <b>43 天</b>，窗口自 <b>2026-07-04</b>（到期前六个月）已开启：不等竞品到期才动作，需在本窗口内完成替代方案锁定；客户 Plus 会员同期 12-31 到期，可一次谈「换用 + 续费」。</div>
+                      <div class="ov-quote">
+                      <div class="ov-quote-i is-now" title="本次续费报价：¥ 3,980 / 年，较历史报价降 ¥ 620（13.5%），较竞品低 29%">
+                        <div class="k">我方本次报价<span class="ov-quote-tag">降 13.5%</span></div>
+                        <div class="v">¥ 3,980<em>/ 年</em></div>
+                        <div class="d">较竞品低 29%</div>
+                      </div>
+                      <div class="ov-quote-vs">VS</div>
+                      <div class="ov-quote-i" title="历史报价：上一合作年度 ¥ 4,600 / 年">
+                        <div class="k">历史报价 · 上一年度</div>
+                        <div class="v">¥ 4,600<em>/ 年</em></div>
+                        <div class="d">降 ¥ 620 / 年</div>
+                      </div>
+                      <div class="ov-quote-note">客户仍按 B 级响应<br>期望再压价至 3,500 内</div>
+                    </div>
+                  </div>
+
+                  <div class="ov-sec"><span class="ov-sec-t">地区与关键词</span><span class="ov-sec-s">地区近一个月按周分布 · 关键词近 30 天检索次数</span><span class="ov-sec-line"></span></div>
+                  <div class="ov-geo">
+                    <div>
+                      <table class="ov-heat">
+                        <thead>
+                          <tr><th>地区</th><th>第 1 周</th><th>第 2 周</th><th>第 3 周</th><th>第 4 周</th><th>合计</th></tr>
+                        </thead>
+                        <tbody>
+                          <tr><td class="ov-heat-r">杭州</td><td class="hc3">386</td><td class="hc4">402</td><td class="hc2">328</td><td class="hc2">312</td><td class="ov-heat-sum">1,428</td></tr>
+                          <tr><td class="ov-heat-r">宁波</td><td class="hc2">268</td><td class="hc2">279</td><td class="hc1">214</td><td class="hc1">225</td><td class="ov-heat-sum">986</td></tr>
+                          <tr><td class="ov-heat-r">温州</td><td class="hc1">171</td><td class="hc1">163</td><td class="hc1">158</td><td class="hc1">150</td><td class="ov-heat-sum">642</td></tr>
+                          <tr><td class="ov-heat-r">绍兴</td><td class="hc1">132</td><td class="hc1">141</td><td class="hc1">126</td><td class="hc1">119</td><td class="ov-heat-sum">518</td></tr>
+                          <tr><td class="ov-heat-r">嘉兴</td><td class="hc1">108</td><td class="hc1">112</td><td class="hc1">105</td><td class="hc1">110</td><td class="ov-heat-sum">435</td></tr>
+                          <tr><td class="ov-heat-r">上海</td><td>74</td><td>81</td><td>69</td><td>69</td><td class="ov-heat-sum">293</td></tr>
+                          <tr><td class="ov-heat-r">江苏省</td><td>62</td><td>70</td><td>63</td><td>65</td><td class="ov-heat-sum">260</td></tr>
+                        </tbody>
+                      </table>
+                      <div class="ov-heat-cap">颜色越深查看越多 · 合计 4,562 条（近一个月）<span style="margin-left:auto">湖北省 / 广东省等长尾地区未列示</span></div>
+                    </div>
+                    <div class="ov-geo-kw">
+                      <div class="ov-kw-h"><span>关键词检索 <b>Top 2</b></span><span>近 30 天</span></div>
+                      <div class="ov-kw-row is-top" title="关键词「物业」，近 30 天检索 186 次，检索量最高的词">
+                        <span class="ov-kw-rk">1</span><span class="ov-kw-w">物业</span><span class="ov-kw-track"><i style="width:100%"></i></span><span class="ov-kw-v"><b>186</b></span>
+                      </div>
+                      <div class="ov-kw-row" title="关键词「客服」，近 30 天检索 152 次，可能与服务咨询 / 投诉相关">
+                        <span class="ov-kw-rk">2</span><span class="ov-kw-w">客服</span><span class="ov-kw-track"><i style="width:82%"></i></span><span class="ov-kw-v"><b>152</b></span>
+                      </div>
+                      <div class="ov-kw-long"><span>其余长尾词合计</span><b>1,204 次</b></div>
+                      <div class="ov-kw-long is-sum"><span>检索合计</span><b>1,542 次</b></div>
+                    </div>
+                  </div>
+
+                  <div class="ov-sec"><span class="ov-sec-t">信息查看类型偏好</span><span class="ov-sec-s">近一个月 4,562 条按类型拆分</span><span class="ov-sec-line"></span></div>
+                  <div class="ov-bars">
+                    <div class="ov-bar-row"><span class="ov-bar-label">招标公告</span><span class="ov-bar-track"><span class="ov-bar-fill" style="width:100%"></span></span><span class="ov-bar-val"><b>1,733</b> · 38%</span></div>
+                    <div class="ov-bar-row"><span class="ov-bar-label">中标结果</span><span class="ov-bar-track"><span class="ov-bar-fill" style="width:68%"></span></span><span class="ov-bar-val"><b>1,186</b> · 26%</span></div>
+                    <div class="ov-bar-row"><span class="ov-bar-label">拟在建项目</span><span class="ov-bar-track"><span class="ov-bar-fill" style="width:39%"></span></span><span class="ov-bar-val"><b>684</b> · 15%</span></div>
+                    <div class="ov-bar-row"><span class="ov-bar-label">采购意向</span><span class="ov-bar-track"><span class="ov-bar-fill" style="width:32%"></span></span><span class="ov-bar-val"><b>547</b> · 12%</span></div>
+                    <div class="ov-bar-row"><span class="ov-bar-label">业主 / 联系人</span><span class="ov-bar-track"><span class="ov-bar-fill" style="width:24%"></span></span><span class="ov-bar-val"><b>412</b> · 9%</span></div>
+                  </div>
+
+                  <div class="ov-sec"><span class="ov-sec-t">关键词检索偏好</span><span class="ov-sec-s">近 30 天 Top 2</span><span class="ov-sec-line"></span></div>
+                  <div class="ov-chips">
+                    <span class="ov-chip" title="关键词「物业」，近 30 天检索 186 次，为检索量最高的词"><i>物业</i> × <b>186</b><i>次</i></span>
+                    <span class="ov-chip" title="关键词「客服」，近 30 天检索 152 次，可能与服务咨询 / 投诉相关"><i>客服</i> × <b>152</b><i>次</i></span>
+                    <span class="ov-chip" title="其余长尾关键词合计检索次数" style="border-style:dashed;background:#fff"><i>其余长尾词合计</i> <b>1,204</b><i>次</i></span>
+                  </div>
+
+                  <div class="ov-sec"><span class="ov-sec-t">生命周期与订阅</span><span class="ov-sec-s">注册 / 入库 / 登录为最新一次记录</span><span class="ov-sec-line"></span></div>
+                  <div class="ov-metrics">
+                    <div><div class="k">注册时间</div><div class="v"><span class="mono">2024-01-18 10:24</span></div></div>
+                    <div><div class="k">入库时间</div><div class="v"><span class="mono">2025-07-07 08:54:57</span></div></div>
+                    <div><div class="k">登录时间</div><div class="v"><span class="mono">2026-11-12 08:41 · APP</span></div></div>
+                    <div title="中标次数：中标 15 次 / 未中标 12 次"><div class="k">中标次数</div><div class="v"><strong>15</strong> : 12</div></div>
+                    <div><div class="k">订阅数量</div><div class="v"><strong>12</strong> 组</div></div>
+                    <div><div class="k">邮件订阅数量</div><div class="v"><strong>5</strong> 个账户</div></div>
+                    <div><div class="k">推送邮件数量</div><div class="v"><strong>10</strong> 个账户</div></div>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- 1. 销售画像：销售赋能核心，首卡 -->
+              <div class="card">
+                <div class="card-head">
+                  <span class="card-title">销售画像</span>
+                  <span class="card-sub">结论为主、分析为辅，按电销执行优先级排序</span>
+                </div>
+                <div class="card-body">
+                  <div class="ins-summary">
+                    <span class="ins-sum-k">画像结论</span>
+                    <div class="ins-sum-v">高意向、决策人直达、线上付费成熟；年内锁续签谈加购，12 天内先触达到期账户。</div>
+                  </div>
+                  <div class="chain-head">
+                    <span class="chain-title">决策链路</span>
+                    <div class="chain-tabs" id="chainTabs">
+                      <button type="button" class="on" data-chain="hq">总部</button>
+                      <button type="button" data-chain="hz">杭州分公司 <span class="pill">2/4 待补</span></button>
+                      <button type="button" data-chain="nb">宁波分公司 <span class="pill">3/4 待补</span></button>
+                    </div>
+                  </div>
+
+                  <div class="chain-group" id="chain-hq">
+                    <div class="chain">
+                      <div class="chain-node is-decider" title="林国栋：法定代表人 / 董事长，持 VIP 主账号（15650132296），登录活跃、线上付费习惯成熟；谈价、签合同直接找他，可跳过层层约见。&#10;联合签批：周明远（分管副总）——单笔超 5 万合同需其会签，大单先取得口头认可再走流程。">
+                        <div class="role"><span class="dot"></span>决策 · 签合同</div>
+                        <div class="who">林国栋 <span class="m-badge m-vip">VIP</span><span class="pay-pill">已付费</span><span class="chain-more">+1</span></div>
+                        <div class="duty">董事长 / 法人 · 主账号</div>
+                      </div>
+                      <div class="chain-arrow" title="林国栋授权王燕执行采购与预算使用；单笔超 5 万需周明远（分管副总）会签。"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg><span class="lbl">授权采购</span></div>
+                      <div class="chain-node" title="王燕：招投标部经理，Plus 会员（wangyan_bd），日常对接人，小程序端活跃；方案演示、账号管理走她。">
+                        <div class="role"><span class="dot"></span>对接 · 日常沟通</div>
+                        <div class="who">王燕 <span class="m-badge m-plus">Plus</span><span class="pay-pill">已付费</span></div>
+                        <div class="duty">招投标部经理</div>
+                      </div>
+                      <div class="chain-arrow" title="对接人为一线使用者分配 / 管理账号，并汇总使用反馈向上传递。"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg><span class="lbl">分配账号</span></div>
+                      <div class="chain-node" title="陈涛：标书专员，标准会员（chent_zb），近 7 天检索 286 次为全司最深；续费意愿的关键，11-30 到期。">
+                        <div class="role"><span class="dot"></span>使用 · 一线操作</div>
+                        <div class="who">陈涛 <span class="m-badge m-standard">标准</span><span class="pay-pill">已付费</span></div>
+                        <div class="duty">标书专员 · 用得最深</div>
+                      </div>
+                      <div class="chain-arrow" title="使用侧发起续费 / 开通申请，由财务提交付款；客户已习惯线上自助下单，续费可线上直接推。"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg><span class="lbl">提请付款</span></div>
+                      <div class="chain-node" title="李芳：财务主管（lifang_fin），原高级会员已到期、现为免费账户；付款审批相关，可结合升档一并谈。">
+                        <div class="role"><span class="dot"></span>付款 · 财务</div>
+                        <div class="who">李芳 <span class="m-badge m-free">免费</span></div>
+                        <div class="duty">财务主管</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="chain-group" id="chain-hz" hidden>
+                    <div class="chain-note">杭州分公司 · 独立采购，与总部链路不通（组间不连线，仅财务由总部共享）</div>
+                    <div class="chain">
+                      <div class="chain-node is-decider" title="王强：杭州分公司总经理，年预算额度内可自主签约，超预算需报总部审批；尚未开通我方账户，建议先给演示。">
+                        <div class="role"><span class="dot"></span>决策 · 签合同</div>
+                        <div class="who">王强</div>
+                        <div class="duty">分公司总经理 · 预算内自签</div>
+                      </div>
+                      <div class="chain-arrow" title="王强在年度预算额度内授权刘丽执行开通与报销事务；超预算需报总部审批。"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg><span class="lbl">授权执行</span></div>
+                      <div class="chain-node" title="刘丽：商务内勤，兼管分公司账号开通与报销；微信沟通响应快，可先从她突破。">
+                        <div class="role"><span class="dot"></span>对接 · 日常沟通</div>
+                        <div class="who">刘丽</div>
+                        <div class="duty">商务内勤 · 兼账号管理</div>
+                      </div>
+                      <div class="chain-arrow" title="分公司账号由刘丽统一开通分配；使用侧暂缺，需先做账户转化或补录。"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg><span class="lbl">分配账号</span></div>
+                      <div class="chain-node is-gap" title="待补：该分公司尚无已识别的一线使用账户（内部数据源，需销售补录或做账户转化）。">
+                        <div class="role"><span class="dot"></span>使用 · 一线操作</div>
+                        <div class="who">待补</div>
+                        <div class="duty">无已识别使用账户</div>
+                      </div>
+                      <div class="chain-arrow" title="分公司合同统一由总部财务付款，对接时提前准备总部开票信息。"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg><span class="lbl">报总部付款</span></div>
+                      <div class="chain-node" title="李芳：总部财务共享服务，各分公司合同统一走总部付款；对接时提前准备总部开票信息。">
+                        <div class="role"><span class="dot"></span>付款 · 财务</div>
+                        <div class="who">李芳 <span class="m-badge m-free">免费</span><span class="shared-pill">总部共享</span></div>
+                        <div class="duty">总部财务共享</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="chain-group" id="chain-nb" hidden>
+                    <div class="chain-note">宁波分公司 · 独立采购，链路大部分待补——联系人之间无协作关系，需分别建档跟进</div>
+                    <div class="chain">
+                      <div class="chain-node is-gap" title="待补：分公司决策人未识别，建议先电话前台定位采购负责人（内部数据源，需销售补录）。">
+                        <div class="role"><span class="dot"></span>决策 · 签合同</div>
+                        <div class="who">待补</div>
+                        <div class="duty">决策人未识别</div>
+                      </div>
+                      <div class="chain-arrow" title="宁波侧决策链路尚未打通，角色关系待识别。"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg><span class="lbl">待识别</span></div>
+                      <div class="chain-node is-gap" title="待补：暂无对接人信息（内部数据源，需销售补录）。">
+                        <div class="role"><span class="dot"></span>对接 · 日常沟通</div>
+                        <div class="who">待补</div>
+                        <div class="duty">暂无对接人</div>
+                      </div>
+                      <div class="chain-arrow" title="宁波侧链路不通，谭薇目前独立使用，无上级对接关系；可从她反向切入定位对接人。"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg><span class="lbl">待识别</span></div>
+                      <div class="chain-node" title="谭薇：合同部合同管理员，免费会员（tanwei888），近 7 天检索 6 次；是宁波侧唯一活跃账户，可作转化切入点。">
+                        <div class="role"><span class="dot"></span>使用 · 一线操作</div>
+                        <div class="who">谭薇 <span class="m-badge m-free">免费</span></div>
+                        <div class="duty">合同管理员 · 唯一活跃账户</div>
+                      </div>
+                      <div class="chain-arrow" title="同总部共享财务，合同统一走总部付款；谭薇侧若转化，付款流程需引导至总部。"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg><span class="lbl">走总部付款</span></div>
+                      <div class="chain-node" title="李芳：总部财务共享服务，各分公司合同统一走总部付款。">
+                        <div class="role"><span class="dot"></span>付款 · 财务</div>
+                        <div class="who">李芳 <span class="m-badge m-free">免费</span><span class="shared-pill">总部共享</span></div>
+                        <div class="duty">总部财务共享</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="act-title">下一步行动（按优先级，悬浮可见依据）</div>
+                  <div class="act-list">
+                    <div class="act-item lv-high" title="陈涛标准会员 11-30 到期（12 天）、王燕 Plus 会员 12-31 到期（43 天）；两人近 7 天均有检索行为，续费不需要重新教育。">
+                      <span class="act-dot"></span><span class="act-txt">先锁陈涛续费<em> · 11-30 到期，仅剩 12 天</em></span>
+                    </div>
+                    <div class="act-item lv-high" title="林国栋为法人且持 VIP 主账号、登录活跃，可跳过层层约见；王燕（招投标部经理 · Plus）为日常对接人，陈涛是一线使用者。">
+                      <span class="act-dot"></span><span class="act-txt">直接约法人林国栋<em> · 本人即主账号，跳过层层约见</em></span>
+                    </div>
+                    <div class="act-item lv-high" title="历史 19 笔订单中 4 笔在线开通，仅 1 笔线下框架补款，客户已习惯系统内自助下单。">
+                      <span class="act-dot"></span><span class="act-txt">续费线上直接推<em> · 客户习惯自助下单</em></span>
+                    </div>
+                    <div class="act-item" title="近 7 天检索 464 次（chent_zb 单账户 286 次，占 62%）、监控 18 家、近 30 天申请监控 6 次；加价空间来自更高档位而非新增席位。">
+                      <span class="act-dot"></span><span class="act-txt">谈升档而非只续费<em> · 重度依赖标讯与监控</em></span>
+                    </div>
+                    <div class="act-item" title="仅 tanwei888（6 次）、zhoumin_guest（2 次）有实质行为，2 个从未登录；建议照 sunqiang_app 岗位复制移动端高级，逐个转化。">
+                      <span class="act-dot"></span><span class="act-txt">加购只切 2 个活跃免费账户<em> · 不撒网全推</em></span>
+                    </div>
+                    <div class="act-item" title="会员服务公众号仅绑定 5 / 13、APP 登录 7 / 13，标讯助手号覆盖 10 / 13；会员号绑定率低，系统内提醒大概率漏发。">
+                      <span class="act-dot"></span><span class="act-txt">触达用公众号 + 电话双通道<em> · 会员号绑定率仅 38.5%</em></span>
+                    </div>
+                  </div>
+                  <div class="ins-tags">
+                    <span class="tag tag-primary">年度框架客户</span>
+                    <span class="tag tag-primary">多账户统一开票</span>
+                    <span class="tag">建筑工程 · 市政公用</span>
+                    <span class="tag tag-warning">续费临期 12 天</span>
+                    <span class="tag">同城 · 可实地拜访</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2. 客户基本盘：原「客户简介」+「客户基本信息」合并，三列网格 + 通栏 -->
+              <div class="card">
+                <div class="card-head"><span class="card-title">客户基本盘</span><span class="card-sub">工商信息同步于 2026-11-01</span></div>
+                <div class="card-body">
+                  <div class="kv-grid">
+                    <div class="kv"><div class="k">所属销售</div><div class="v"><strong>罗屿</strong>（杭州一组）</div></div>
+                    <div class="kv"><div class="k">客户等级</div><div class="v"><strong>S 级</strong>（极高意向）</div></div>
+                    <div class="kv"><div class="k">客户状态 / 类型</div><div class="v">合作中 · 企业客户（多账户）</div></div>
+                    <div class="kv"><div class="k">账户总数</div><div class="v"><strong>13</strong> 个（主账号 1 · 付费 3 / 免费 10）</div></div>
+                    <div class="kv"><div class="k">法定代表人</div><div class="v">林国栋</div></div>
+                    <div class="kv"><div class="k">注册资本</div><div class="v">5,000 万人民币</div></div>
+                    <div class="kv"><div class="k">成立日期</div><div class="v">2013-06-18</div></div>
+                    <div class="kv"><div class="k">所属行业</div><div class="v">建筑工程 · 市政公用</div></div>
+                    <div class="kv"><div class="k">企业规模</div><div class="v">500-999 人</div></div>
+                    <div class="kv"><div class="k">纳税等级</div><div class="v">A 级</div></div>
+                    <div class="kv"><div class="k">首次注册时间</div><div class="v">2024-01-18 10:24</div></div>
+                    <div class="kv"><div class="k">最近活跃时间</div><div class="v">2026-11-12 08:41（APP）</div></div>
+                    <div class="kv wide"><div class="k">官网</div><div class="v mono">www.datumayling.com</div></div>
+                    <div class="kv wide"><div class="k">注册地址</div><div class="v">浙江省杭州市余杭区仓前街道文一西路 1500 号</div></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3. 深度数据：原「服务开通总览」+「客户评分构成」合并，低频查看默认折叠 -->
+              <div class="card">
+                <div class="card-head">
+                  <span class="card-title">深度数据</span>
+                  <span class="card-sub">服务开通总览 · 客户评分构成</span>
+                  <button class="card-toggle ml-auto" type="button" id="btnDeepToggle" aria-expanded="false">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                    <span>展开</span>
+                  </button>
+                </div>
+                <div class="card-body flush" id="deepBody" hidden>
+                  <div class="deep-sec-title">服务开通总览 · 按 13 个账户统计：标讯助手公众号 / 会员服务公众号 / APP / 小程序</div>
+                  <table class="kvt">
+                    <colgroup><col style="width:190px"><col style="width:150px"><col style="width:120px"><col></colgroup>
+                    <thead>
+                      <tr><th>服务渠道</th><th>已开通账户</th><th>开通率</th><th>开通说明</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><th class="k">标讯助手公众号</th><td class="v"><strong>10</strong> / 13</td><td class="v">76.9%</td><td class="v">已关注并接收标讯推送</td></tr>
+                      <tr><th class="k">会员服务公众号</th><td class="v"><strong>5</strong> / 13</td><td class="v">38.5%</td><td class="v">已绑定会员服务号</td></tr>
+                      <tr><th class="k">APP</th><td class="v"><strong>7</strong> / 13</td><td class="v">53.8%</td><td class="v">近 30 天内登录过</td></tr>
+                      <tr><th class="k">小程序</th><td class="v"><strong>6</strong> / 13</td><td class="v">46.2%</td><td class="v">近 30 天内登录过</td></tr>
+                    </tbody>
+                  </table>
+                  <div class="deep-sec-title">客户评分构成 · 优质程度 0-100 分，按账户真实可用功能计分：免费账户仅可搜索、订阅、监控企业并申请监控信息，不能查看信息与导出，故「信息查看与导出」维度仅付费账户计分</div>
+                  <table class="kvt">
+                    <colgroup><col style="width:210px"><col style="width:150px"><col style="width:110px"><col></colgroup>
+                    <thead>
+                      <tr><th>评分维度</th><th>得分 / 满分</th><th>权重</th><th>评分依据</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><th class="k">登录活跃度</th><td class="v"><strong>23</strong> / 25</td><td class="v">25%</td><td class="v">近 30 天登录 82 次，13 个账户中 6 个近 7 天有登录（免费账户同样计分）</td></tr>
+                      <tr><th class="k">信息完善程度</th><td class="v"><strong>18</strong> / 20</td><td class="v">20%</td><td class="v">手机号已绑定 11 个账户，企业信息 9 项已补全，关键词组 12 组覆盖行业 / 地区 / 资质（免费账户同样计分）</td></tr>
+                      <tr><th class="k">搜索与订阅</th><td class="v"><strong>14</strong> / 15</td><td class="v">15%</td><td class="v">近 7 天搜索 464 次，订阅关键词 12 组，推送开启 10 个账户（免费账户可用）</td></tr>
+                      <tr><th class="k">企业监控与申请</th><td class="v"><strong>15</strong> / 15</td><td class="v">15%</td><td class="v">监控企业 18 家，近 30 天申请监控信息 6 次（免费账户可用）</td></tr>
+                      <tr><th class="k">信息查看与导出</th><td class="v"><strong>13</strong> / 15</td><td class="v">15%</td><td class="v">近一个月解锁查看 4,562 条、导出报告 9 份（付费专属：免费账户不可查看信息、不可导出）</td></tr>
+                      <tr><th class="k">付费贡献</th><td class="v"><strong>9</strong> / 10</td><td class="v">10%</td><td class="v">累计实收 ¥38,600.00，付费账户 3 / 13，主账号 VIP</td></tr>
+                      <tr><th class="k">综合得分</th><td class="v"><strong>92</strong> / 100</td><td class="v">—</td><td class="v">优质程度判定为 <strong>优质客户</strong>（≥ 85 分）</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ---------- 右：客户动态 ---------- -->
+          <aside class="col-side">
+            <div class="card">
+              <div class="card-head"><span class="card-title">客户动态</span><span class="card-sub ml-auto">近 30 天</span>
+                <button class="card-toggle" type="button" id="btnDynToggle" aria-expanded="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  <span>收起</span>
+                </button>
+              </div>
+              <div class="card-body" id="dynBody">
+                <div class="tl">
+                  <div class="tl-item blue">
+                    <div class="tl-time">11-12 08:41</div>
+                    <div class="tl-title">主账号登录 APP</div>
+                    <div class="tl-desc">15650132296 · 导出一份标讯详情</div>
+                  </div>
+                  <div class="tl-item green">
+                    <div class="tl-time">11-11 19:22</div>
+                    <div class="tl-title">小程序生成企业监控报告</div>
+                    <div class="tl-desc">wangyan_bd · 消耗 60 积分</div>
+                  </div>
+                  <div class="tl-item blue">
+                    <div class="tl-time">11-08 10:12</div>
+                    <div class="tl-title">在线开通会员</div>
+                    <div class="tl-desc">VIP 年卡 ¥3,980 · 微信支付</div>
+                  </div>
+                  <div class="tl-item">
+                    <div class="tl-time">11-05 16:30</div>
+                    <div class="tl-title">销售电话跟进</div>
+                    <div class="tl-desc">罗屿 · 与林国栋沟通续费方案 12 分钟</div>
+                  </div>
+                  <div class="tl-item orange">
+                    <div class="tl-time">11-03 15:47</div>
+                    <div class="tl-title">Plus 会员开通</div>
+                    <div class="tl-desc">wangyan_bd · 支付宝 ¥2,580</div>
+                  </div>
+                  <div class="tl-item orange">
+                    <div class="tl-time">10-19 20:05</div>
+                    <div class="tl-title">高级会员开通</div>
+                    <div class="tl-desc">lifang_fin · 季卡 ¥1,280</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card hide-on-contacts">
+              <div class="card-head"><span class="card-title">跟进待办</span><span class="tag tag-warning ml-auto">3 项</span></div>
+              <div class="card-body">
+                <div class="tl">
+                  <div class="tl-item orange">
+                    <div class="tl-time">今天 18:00 前</div>
+                    <div class="tl-title">回访陈涛（标准会员 30 天内到期）</div>
+                  </div>
+                  <div class="tl-item">
+                    <div class="tl-time">11-14</div>
+                    <div class="tl-title">整理 6 个免费账户转化方案</div>
+                  </div>
+                  <div class="tl-item">
+                    <div class="tl-time">11-15</div>
+                    <div class="tl-title">提交框架合同 HT2026-0092 续签</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card hide-on-contacts">
+              <div class="card-head"><span class="card-title">合同与回款</span></div>
+              <div class="card-body">
+                <div class="kv-grid two">
+                  <div class="kv"><div class="k">合同编号</div><div class="v">HT2026-0087</div></div>
+                  <div class="kv"><div class="k">合同金额</div><div class="v num"><strong>¥ 36,000.00</strong></div></div>
+                  <div class="kv"><div class="k">已回款</div><div class="v text-success">¥ 30,000.00</div></div>
+                  <div class="kv"><div class="k">待回款</div><div class="v text-warning">¥ 6,000.00</div></div>
+                  <div class="kv"><div class="k">合同期</div><div class="v">2026-01-01 ~ 2026-12-31</div></div>
+                  <div class="kv"><div class="k">状态</div><div class="v">执行中</div></div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ============ 更多操作抽屉 ============ -->
+<div class="drawer-mask" id="moMask"></div>
+<aside class="drawer mo-drawer" id="moDrawer" aria-hidden="true">
+  <div class="drawer-head">
+    更多操作
+    <span class="mo-count" id="moCount"></span>
+    <button class="drawer-close" type="button" id="moClose" aria-label="关闭">×</button>
+  </div>
+  <div class="mo-sub" id="moSub"></div>
+  <div class="drawer-body" id="moBody"></div>
+</aside>
+
+<div class="nav-toast" id="navToast"></div>
+<div class="ct-dial-pop" id="ctDialPop"></div>
+
+<button class="fab-note" type="button" id="fabNote" title="写联系小计">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+  写小
+</button>
+
+<div class="drawer-mask" id="ctMask"></div>
+<aside class="drawer" id="ctDrawer" aria-hidden="true">
+  <div class="drawer-head"><span id="ctDrawerTitle">写联系小计</span><button class="drawer-close" type="button" id="ctDrawerClose" aria-label="关闭">×</button></div>
+  <div class="drawer-body" id="ctDrawerBody"></div>
+  <div class="drawer-foot">
+    <button class="ct-btn" type="button" id="ctDrawerCancel">取消</button>
+    <button class="btn-primary" type="button" id="ctDrawerSave">保存</button>
+  </div>
+</aside>
+
+
+<script src="assets/app.js"></script>
+</body>
+</html>

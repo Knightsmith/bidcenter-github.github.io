@@ -212,6 +212,8 @@ svg{display: block;}
 .rank-bar .rb-fill{height: 100%;background: var(--chart-3);border-radius: 999px;}
 .rank-bar.is-mine .rb-fill{background: var(--primary);}
 .rank-bar .rb-money{font-size: .8125rem;font-weight: 600;font-variant-numeric: tabular-nums;width: 3.25rem;text-align: right;white-space: nowrap;}
+/* —— 非前五名状态：前三名与「我前一名/我」之间的分组虚线分割条 —— */
+.rank-sep{height: 0;border-top: 1px dashed var(--border);margin: .375rem .5rem;}
 /* —— 我的业绩排名卡：橙色主视觉（与页面蓝色主调区分） —— */
 .card.is-rank{--primary: #f77200;--primary-foreground: #fafafa;}
 .card.is-rank .card-title{color: var(--primary);}
@@ -801,6 +803,11 @@ function renderRank() {
   var html = '';
   for (var i = 0; i < list.length; i++) {
     var b = list[i];
+    /* 非前五名状态：list 前三项为第1/2/3名，第4项起为「我前一名」「我」——
+       在第4项前插入虚线分割条，把领先梯队与我的对比组分开 */
+    if (me.rank > 5 && i === 3) {
+      html += '<div class="rank-sep" role="separator" aria-hidden="true"></div>';
+    }
     var mine = (b.r === me.rank);
     var pct = (maxMoney > 0 && b.money > 0) ? Math.round(b.money / maxMoney * 100) : 0;
     var moneyHtml = (b.money > 0) ? fmt(b.money) : '—';

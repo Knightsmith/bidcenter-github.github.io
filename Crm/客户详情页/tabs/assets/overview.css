@@ -1,0 +1,132 @@
+/* ============================================================
+   客户详情 · 概览页「客户概览」区块样式（仅 index.html 引用）
+   前缀 ov-，避免污染其它页签
+   ============================================================ */
+
+/* ---------- 核心指标 ---------- */
+.ov-kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+@media (max-width: 1280px) { .ov-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.ov-kpi { padding: 9px 11px; border: 1px solid var(--border); border-radius: 8px; background: #fcfdfe; min-width: 0; }
+.ov-kpi .k { font-size: 13px; color: var(--muted-foreground); display: flex; align-items: center; gap: 6px; }
+.ov-kpi .v { font-size: 16px; font-weight: 700; color: #1a1f29; margin-top: 3px; line-height: 1.35; font-variant-numeric: tabular-nums; }
+.ov-kpi .v em { font-style: normal; font-size: 12.5px; font-weight: 600; color: #5a6270; margin-left: 2px; }
+.ov-kpi .d { font-size: 12.5px; color: #5a6270; margin-top: 3px; }
+.ov-kpi.is-good { border-color: #cdeae4; background: #f5fcfb; }
+.ov-kpi.is-good .v { color: #0e8074; }
+.ov-kpi.is-warn { border-color: #fbe3c4; background: #fffbf4; }
+.ov-kpi.is-warn .v { color: #b54708; }
+.ov-kpi.is-blue { border-color: #cfe0fd; background: #f7faff; }
+.ov-kpi.is-blue .v { color: #0052d9; }
+
+/* ---------- 小节标题 ---------- */
+.ov-sec { display: flex; align-items: baseline; gap: 8px; margin: 14px 0 7px; min-width: 0; }
+.ov-sec:first-child { margin-top: 0; }
+.ov-sec-t { font-size: 13.5px; font-weight: 600; color: #1a1f29; flex-shrink: 0; }
+.ov-sec-s { font-size: 12.5px; color: var(--muted-foreground); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ov-sec-line { flex: 1; height: 1px; background: #eef1f5; align-self: center; min-width: 12px; }
+
+/* ---------- 续费与到期 ---------- */
+.ov-renew { display: flex; flex-wrap: wrap; gap: 8px; }
+.ov-renew-i { flex: 0 0 196px; width: 196px; padding: 8px 11px; border: 1px solid var(--border); border-radius: 8px; background: #fff; min-width: 0; }
+.ov-renew-h { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.ov-renew-n { font-size: 16px; font-weight: 700; color: #1a1f29; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ov-renew-m { font-size: 12.5px; color: #5a6270; margin-top: 2px; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ov-days { margin-left: auto; flex-shrink: 0; font-size: 13px; font-weight: 700; padding: 2px 9px; border-radius: 999px; background: #fff4e5; color: #b54708; white-space: nowrap; }
+.ov-days.urgent { background: #fee4e2; color: #b42318; }
+.ov-renew-h .ov-days { margin-left: auto; font-size: 12px; padding: 1px 7px; }
+.ov-days.far { background: #eaf1fd; color: #1a56c4; }
+
+/* ---------- 竞品与响应 ---------- */
+.ov-comp { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+.ov-comp-base { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px 18px; }
+@media (max-width: 1180px) { .ov-comp-base { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.ov-comp .k { font-size: 12.5px; color: var(--muted-foreground); }
+.ov-comp .v { font-size: 14.5px; color: var(--foreground); margin-top: 2px; }
+.ov-comp .v strong { font-weight: 700; }
+.ov-comp .v em { font-style: normal; font-size: 12.5px; color: var(--muted-foreground); margin-left: 6px; font-weight: 600; }
+.ov-comp-win { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; padding: 6px 10px; border-radius: 5px; background: #fff8ea; border: 1px solid #fce6bb; font-size: 12.5px; line-height: 1.65; color: #8a5a00; }
+.ov-comp-win b { font-weight: 700; color: #b25b00; }
+.ov-win-tag { font-size: 11.5px; font-weight: 700; padding: 0 7px; border-radius: 999px; background: #f79009; color: #fff; }
+
+.ov-quote { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 8px 11px; border: 1px solid #dfe7f5; border-radius: 8px; background: #f7faff; }
+.ov-quote-vs { font-size: 11.5px; font-weight: 700; color: #8a93a3; letter-spacing: .04em; }
+.ov-quote-i { min-width: 0; }
+.ov-quote-i .k { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #5a6270; }
+.ov-quote-i .v { font-size: 19px; font-weight: 700; color: #1a1f29; margin-top: 2px; line-height: 1.25; font-variant-numeric: tabular-nums; }
+.ov-quote-i .v em { font-style: normal; font-size: 12px; font-weight: 600; color: #5a6270; margin-left: 3px; }
+.ov-quote-i .d { font-size: 12px; color: #5a6270; margin-top: 2px; }
+.ov-quote-i.is-now { padding: 5px 10px; border: 1px solid #cfe0fd; border-radius: 7px; background: #fff; }
+.ov-quote-i.is-now .v { color: #0052d9; }
+.ov-quote-tag { font-size: 11.5px; font-weight: 700; padding: 0 6px; border-radius: 999px; background: #e8f7f2; color: #0e8074; }
+.ov-quote-note { font-size: 12px; color: #5a6270; text-align: right; line-height: 1.5; }
+
+/* ---------- 地区热度矩阵 + 关键词（同区） ---------- */
+.ov-geo { display: grid; grid-template-columns: minmax(0, 1fr) 292px; gap: 8px 18px; align-items: start; }
+@media (max-width: 1180px) { .ov-geo { grid-template-columns: minmax(0, 1fr); } }
+.ov-geo-kw { display: flex; flex-direction: column; padding-left: 16px; border-left: 1px solid #eef1f5; min-width: 0; }
+@media (max-width: 1180px) { .ov-geo-kw { padding-left: 0; padding-top: 8px; border-left: 0; border-top: 1px solid #eef1f5; } }
+#cardOv .card-body { container-type: inline-size; }
+@container (max-width: 800px) {
+  .ov-geo { grid-template-columns: minmax(0, 1fr); }
+  .ov-geo-kw { padding-left: 0; padding-top: 8px; border-left: 0; border-top: 1px solid #eef1f5; }
+}
+.ov-kw-h { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; font-size: 12.5px; color: #5a6270; margin-bottom: 5px; }
+.ov-kw-h b { color: #1a1f29; font-weight: 700; }
+.ov-kw-row { display: grid; grid-template-columns: 16px 52px minmax(0, 1fr) 44px; align-items: center; gap: 8px; padding: 6px 0; font-size: 13px; }
+.ov-kw-rk { font-size: 11.5px; font-weight: 700; color: #a8b0bd; text-align: center; }
+.ov-kw-row.is-top .ov-kw-rk { color: #0052d9; }
+.ov-kw-w { color: #262626; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ov-kw-track { height: 8px; border-radius: 999px; background: #eef1f5; overflow: hidden; }
+.ov-kw-track i { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, #9dc2fb, #0063FF); }
+.ov-kw-v { text-align: right; font-size: 12.5px; color: #5a6270; font-variant-numeric: tabular-nums; }
+.ov-kw-v b { color: #1a1f29; font-weight: 700; }
+.ov-kw-long { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 6px; padding-top: 6px; border-top: 1px dashed #eef1f5; font-size: 12.5px; color: #5a6270; }
+.ov-kw-long.is-sum { margin-top: 2px; padding-top: 0; border-top: 0; }
+.ov-kw-long:not(.is-sum) { margin-top: 7px; }
+.ov-kw-long b { color: #1a1f29; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* ---------- 地区热度矩阵 ---------- */
+.ov-heat { width: 100%; border-collapse: separate; border-spacing: 3px 4px; table-layout: fixed; }
+.ov-heat th { font-size: 12.5px; font-weight: 600; color: #5a6270; text-align: center; padding-bottom: 2px; }
+.ov-heat th:first-child { text-align: left; width: 104px; }
+.ov-heat th:last-child { width: 66px; }
+.ov-heat td { height: 26px; border-radius: 5px; text-align: center; font-size: 13px; font-variant-numeric: tabular-nums; color: #1a1f29; background: #f4f7fb; }
+.ov-heat td.ov-heat-r { background: none; text-align: left; font-weight: 600; color: #262626; padding-left: 2px; white-space: nowrap; }
+.ov-heat td.ov-heat-sum { background: #f2f4f7; font-weight: 700; }
+.ov-heat .hc1 { background: #e3edfd; }
+.ov-heat .hc2 { background: #bcd6fb; color: #0b3f9e; font-weight: 600; }
+.ov-heat .hc3 { background: #7fb0f7; color: #fff; font-weight: 600; }
+.ov-heat .hc4 { background: #3b82f6; color: #fff; font-weight: 700; }
+.ov-heat-cap { display: flex; align-items: center; gap: 6px; margin-top: 5px; font-size: 12px; color: var(--muted-foreground); }
+.ov-heat-cap i { display: inline-block; width: 22px; height: 10px; border-radius: 3px; font-style: normal; }
+
+/* ---------- 偏好条形 ---------- */
+.ov-bars { display: flex; flex-direction: column; gap: 1px; }
+.ov-bar-row { display: grid; grid-template-columns: 96px minmax(0, 1fr) 108px; align-items: center; gap: 12px; font-size: 13px; padding: 2px 0; }
+@media (max-width: 900px) { .ov-bar-row { grid-template-columns: 84px minmax(0, 1fr) 92px; } }
+.ov-bar-label { color: #262626; }
+.ov-bar-track { height: 8px; border-radius: 999px; background: #eef1f5; overflow: hidden; }
+.ov-bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #9dc2fb, #0063FF); }
+.ov-bar-val { text-align: right; color: #5a6270; font-variant-numeric: tabular-nums; }
+.ov-bar-val b { color: #1a1f29; font-weight: 700; }
+
+/* ---------- 关键词偏好 chips ---------- */
+.ov-chips { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+.ov-chip { display: inline-flex; align-items: center; gap: 8px; padding: 5px 11px; border: 1px solid var(--border); border-radius: 999px; background: #fcfdfe; font-size: 13.5px; color: #262626; }
+.ov-chip b { font-weight: 700; color: #0052d9; font-variant-numeric: tabular-nums; }
+.ov-chip i { font-style: normal; font-size: 12.5px; color: #5a6270; }
+
+/* ---------- 活跃账户进度 ---------- */
+.ov-active { display: flex; align-items: center; gap: 12px; padding: 9px 12px; border: 1px solid var(--border); border-radius: 8px; background: #fcfdfe; }
+.ov-active-k { font-size: 13px; color: var(--muted-foreground); flex-shrink: 0; }
+.ov-active-track { flex: 1; height: 8px; border-radius: 999px; background: #eef1f5; overflow: hidden; min-width: 60px; }
+.ov-active-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #f7b955, #f79009); }
+.ov-active-v { font-size: 15px; font-weight: 700; color: #b54708; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+
+/* ---------- 生命周期 / 订阅小指标 ---------- */
+.ov-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 18px; margin-top: 0; }
+@media (max-width: 900px) { .ov-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.ov-metrics .k { font-size: 13px; color: var(--muted-foreground); }
+.ov-metrics .v { font-size: 14.5px; color: var(--foreground); margin-top: 2px; font-variant-numeric: tabular-nums; }
+.ov-metrics .v strong { font-weight: 700; }
+.ov-metrics .v .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13.5px; }
