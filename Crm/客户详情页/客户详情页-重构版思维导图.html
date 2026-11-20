@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>客户详情页 · 重构版思维导图（公司 × 个体）</title>
+<style>
+  :root{
+    --bg:#f4f6fa; --panel:#ffffff; --bd:#e3e8ef; --tx:#1a1f29; --mut:#667085;
+    --ln:#d4dae3; --primary:#2563eb;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;background:var(--bg);color:var(--tx);display:flex;flex-direction:column;overflow:hidden}
+
+  /* ---------- 顶栏 ---------- */
+  .hd{flex-shrink:0;background:var(--panel);border-bottom:1px solid var(--bd);padding:12px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .hd h1{font-size:17px;font-weight:700}
+  .hd .sub{font-size:12px;color:var(--mut)}
+  .hd .sp{flex:1}
+  .tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .tools button{height:30px;padding:0 12px;border:1px solid var(--bd);background:#fff;border-radius:7px;font-size:13px;color:#3f4756;cursor:pointer;font-family:inherit}
+  .tools button:hover{border-color:#cfe0ff;color:var(--primary);background:#f7faff}
+  .tools button.on{border-color:var(--primary);color:var(--primary);background:#eff4ff}
+  .search{position:relative}
+  .search input{height:30px;width:220px;padding:0 10px 0 30px;border:1px solid var(--bd);border-radius:7px;font-size:13px;font-family:inherit;outline:none}
+  .search input:focus{border-color:var(--primary)}
+  .search svg{position:absolute;left:9px;top:8px;width:14px;height:14px;color:#98a2b3}
+  .stat{font-size:12px;color:var(--mut);white-space:nowrap}
+
+  /* ---------- 分支导航 ---------- */
+  .nav{flex-shrink:0;display:flex;gap:6px;padding:8px 20px;background:var(--panel);border-bottom:1px solid var(--bd);overflow-x:auto}
+  .nav button{flex-shrink:0;height:26px;padding:0 11px;border-radius:999px;border:1px solid var(--bd);background:#fff;font-size:12px;color:#3f4756;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px}
+  .nav button i{width:8px;height:8px;border-radius:50%;display:inline-block}
+  .nav button:hover{border-color:#cfe0ff;background:#f7faff}
+
+  /* ---------- 画布 ---------- */
+  .canvas{flex:1;overflow:auto;padding:26px 30px 60px}
+  .mm{display:inline-block;min-width:100%}
+  .mm ul{list-style:none;margin:0;padding:0 0 0 26px}
+  .mm li{position:relative;padding:3px 0 3px 22px}
+  .mm li::before{content:"";position:absolute;left:0;top:0;height:100%;border-left:2px solid var(--ln)}
+  .mm li::after{content:"";position:absolute;left:0;top:18px;width:22px;border-top:2px solid var(--ln)}
+  .mm li:last-child::before{height:20px}
+  .mm li.root{padding-left:0}
+  .mm li.root::before,.mm li.root::after{display:none}
+  .mm li.collapsed>ul{display:none}
+
+  /* ---------- 节点 ---------- */
+  .nd{display:inline-flex;align-items:flex-start;gap:7px;background:var(--panel);border:1px solid var(--bd);border-left:3px solid var(--bc,#98a2b3);border-radius:8px;padding:5px 10px;cursor:default;max-width:640px;transition:box-shadow .15s,border-color .15s}
+  .nd.has-k{cursor:pointer}
+  .nd.has-k:hover{border-color:var(--bc);box-shadow:0 1px 6px rgba(16,24,40,.08)}
+  .tw{flex-shrink:0;width:17px;height:17px;margin-top:1px;border-radius:50%;border:1.5px solid var(--bc,#98a2b3);background:#fff;color:var(--bc,#98a2b3);font-size:12px;line-height:1;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-family:inherit;padding:0}
+  .tw:hover{background:var(--bc);color:#fff}
+  .lb{font-size:13.5px;line-height:1.5;font-weight:500;word-break:break-all}
+  .nt{font-size:12px;color:var(--mut);line-height:1.5;font-weight:400}
+  .nt::before{content:"·";margin:0 5px;color:#c3cad4}
+  .bdg{flex-shrink:0;font-size:11px;font-weight:600;color:var(--bc);background:color-mix(in srgb,var(--bc) 10%,#fff);border-radius:999px;padding:1px 7px;margin-top:2px;white-space:nowrap}
+  .bdg.new{color:#0e8074;background:#e6f4f1}
+  .cnt{flex-shrink:0;font-size:11px;color:#98a2b3;background:#f0f2f5;border-radius:999px;padding:1px 7px;margin-top:2px;display:none}
+  li.collapsed>.nd .cnt{display:inline-block}
+
+  /* 根节点 */
+  li.root>.nd{background:#111827;border:none;border-radius:12px;padding:12px 18px;max-width:none}
+  li.root>.nd .lb{color:#fff;font-size:17px;font-weight:700}
+  li.root>.nd .nt{color:#9ca3af}
+  li.root>.nd .nt::before{color:#4b5563}
+  li.root>.nd .tw{border-color:#fff;color:#fff;background:transparent}
+  li.root>.nd .tw:hover{background:#fff;color:#111827}
+
+  /* 一级分支 */
+  li.d1>.nd{background:color-mix(in srgb,var(--bc) 8%,#fff);border-color:color-mix(in srgb,var(--bc) 30%,#fff);border-left-width:4px}
+  li.d1>.nd .lb{font-size:14.5px;font-weight:700;color:color-mix(in srgb,var(--bc) 80%,#111)}
+
+  /* 搜索状态 */
+  li.dim>.nd{opacity:.32}
+  li.hit>.nd{border-color:var(--bc);box-shadow:0 0 0 2px color-mix(in srgb,var(--bc) 35%,#fff)}
+  li.hit>.nd .lb{color:var(--bc)}
+  li.flash>.nd{animation:flash 1.2s ease}
+  @keyframes flash{0%,60%{box-shadow:0 0 0 3px color-mix(in srgb,var(--bc) 45%,#fff)}100%{box-shadow:none}}
+
+  .ft{flex-shrink:0;padding:7px 20px;background:var(--panel);border-top:1px solid var(--bd);font-size:12px;color:var(--mut);display:flex;gap:16px;flex-wrap:wrap}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-thumb{background:#cfd6e0;border-radius:6px;border:2px solid var(--bg)}
+  ::-webkit-scrollbar-track{background:transparent}
+</style>
+</head>
+<body>
+
+<div class="hd">
+  <div>
+    <h1>客户详情页 · 重构版思维导图</h1>
+    <div class="sub">公司做舞台，个体做主角 —— 账户与联系人是独立的人，各有自己的行为轨迹与信息</div>
+  </div>
+  <div class="sp"></div>
+  <div class="tools">
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="kw" type="text" placeholder="搜索节点，如：轨迹 / 商机 / 个体">
+    </div>
+    <button data-lv="99">全部展开</button>
+    <button data-lv="2">二级</button>
+    <button data-lv="3" class="on">三级</button>
+    <button data-lv="4">四级</button>
+    <button data-lv="1">全部收起</button>
+    <span class="stat" id="stat"></span>
+  </div>
+</div>
+<div class="nav" id="nav"></div>
+<div class="canvas" id="canvas"><div class="mm" id="mm"></div></div>
+<div class="ft">
+  <span>操作：点击节点折叠 / 展开 · 搜索自动展开命中路径 · 顶部色点可跳转分支</span>
+  <span>方案：B 骨架（明细下沉）+ A 商机合并卡 · 绿色「新增」标为重构新增能力</span>
+</div>
+
+<script>
+/* ================= 导图数据（重构版） ================= */
+var DATA={t:"客户详情页 · 重构版",n:"公司 × 个体 双层模型",c:[
+
+{t:"实体模型 · 设计基础",c:[
+  {t:"公司 = 法人主体 ×1",n:"大土豆有限责任公司 · C20240118-0037",c:[
+    {t:"工商身份",n:"名称 / 客户ID / 法人 / 注册资本 / 行业 / 地址 / 别称·关联企业"},
+    {t:"公司级聚合",n:"由个体数据计算而来",c:[
+      {t:"累计实收 ¥38,600 · 付费账户 3/13"},
+      {t:"活跃率 46.2% · 近月查看 4,562 条"},
+      {t:"客户评分 92 · 意向 S 级"},
+      {t:"中标 15 : 12 · 订阅 12 组"}
+    ]},
+    {t:"公司级资产",n:"框架合同与回款 ¥36,000 / 积分共享池 8,420 / 订阅推送配置"},
+    {t:"公司级判断",n:"商机与风险 / 决策链路（个体之间的关系网）"},
+    {t:"公司级事件",n:"改名 / 合并 / 拆分 —— 主体自身结构变化"}
+  ]},
+  {t:"个体 = 人 ×15",n:"账户与联系人统一为「个体」，各有轨迹",c:[
+    {t:"联系人档案（销售视角 · 可选）",n:"姓名 / 部门职位 / 电话·微信·邮箱 / 角色标签（决策人·主联系人·付款方·技术对接·高频使用）/ 备注"},
+    {t:"平台账户（系统视角 · 可选）",n:"登录账号 / 账户ID / 会员等级 / 到期 / 累计消费 / 四端绑定 / 密保手机"},
+    {t:"三种存在形态",c:[
+      {t:"双身份 ×5",n:"林国栋 / 王燕 / 陈涛 / 李芳 / 孙强 —— 档案 + 账户合并为一条"},
+      {t:"纯账户 ×8",n:"赵磊 / 刘洋 / 周敏 / 胡杰 / 谭薇 / 余小雨 / 龚攀 / 于晨 —— 待补录档案"},
+      {t:"纯联系人 ×2",n:"王海（展会留资）/ 郑晓（官网留资）—— 未注册，待邀请"}
+    ]},
+    {t:"个体行为轨迹",b:"归属个体",n:"登录 / 检索 / 查看 / 导出 / 积分消耗 / 关键词·地区·类型偏好 / 终端 —— 不再混在公司概览里"},
+    {t:"个体沟通轨迹",n:"联系记录 + 下一步 / 拨打与短信 / 注册邀请"},
+    {t:"个体商机",n:"续费（陈涛剩 12 天）/ 升档（陈涛触导出上限）/ 唤醒（孙强过期仍登录）/ 转化（谭薇宁波唯一活跃）/ 注册（王海）"}
+  ]},
+  {t:"关系与原则",c:[
+    {t:"公司 1—N 个体",n:"拆分 = 个体迁移到新公司，行为轨迹随个体走"},
+    {t:"行为产生于个体",n:"公司只看聚合结论，可下钻到任意个体"},
+    {t:"同信息只说一次",n:"明细在个体详情 / 使用分析，概览只留结论"},
+    {t:"归属口径",n:"会员·订单·积分挂账户 / 沟通·角色挂人 / 合同挂公司"}
+  ]}
+]},
+
+{t:"页面框架（保留）",c:[
+  {t:"顶部通栏",n:"全局搜索 / 客户库 / 查重 / 新注册客户 / 新建线索 / 待办·通知"},
+  {t:"侧边栏",n:"iframe 复用 + 折叠记忆"},
+  {t:"公司信息头",n:"企业身份 + 其他业务（采乐会·资质通）+ 判断标签（S级 / 92分 / 投诉1 / 合作中）+ 验重·关联企业 + 编辑入口"},
+  {t:"操作按钮行",n:"新增跟进 / 记录通话 / 新建拜访 / 在线开通 / 新建合同 / 添加联系 / 更多操作 27 项"}
+]},
+
+{t:"概览 · 公司判断层",b:"1~1.5 屏",n:"只回答：什么判断 · 什么风险 · 下一步干嘛",c:[
+  {t:"一句话结论",b:"新增",n:"「S 级高意向 · 陈涛 12 天后到期 · 竞品同期到期，替换窗口已开」"},
+  {t:"速览四格",c:[
+    {t:"意向",n:"92 分 · S 级（悬浮六维明细保留）"},
+    {t:"粘性",n:"重度使用 · 近 7 天检索 464 次"},
+    {t:"风险",n:"1 即将到期 + 1 已过期 + 竞品替换窗口"},
+    {t:"下一步",n:"今天 18:00 前回访陈涛"}
+  ]},
+  {t:"商机与风险卡",b:"合并",n:"续费 4 卡 + 竞品表 → 一张卡",c:[
+    {t:"最紧迫展开",n:"陈涛 · 标准 · 11-30 到期 · 剩 12 天 · 检索最深 →「续费跟进」按钮"},
+    {t:"其余 +3 收起",n:"王燕 Plus / 林国栋 VIP / 孙强 已过期·唤醒"},
+    {t:"竞品一行",n:"千里马 12-31 到期 · 我方价低 29% → 历史报价抽屉"},
+    {t:"倒计时规则保留",n:"180 天窗口橙→红渐变"}
+  ]},
+  {t:"精简基本盘",n:"10 行 → 4 行",c:[
+    {t:"保留",n:"所属人 / 最近付费（跳订单）/ 账户总数 13·付费 3 / 行业·地区"},
+    {t:"低频收悬浮",n:"注册时间 / 中标次数 / 邮件订阅数 / 推送数 / 法人 / 资本 / 地址"}
+  ]},
+  {t:"决策链路（上移）",n:"原销售画像卡内容 · 公司级关系网",c:[
+    {t:"三组保留",n:"总部 / 杭州 2/4 待补 / 宁波 3/4 待补"},
+    {t:"节点 = 个体",b:"新增",n:"点击节点 → 跳转个体详情"},
+    {t:"待补节点",b:"新增",n:"一键补录联系人 / 发起注册邀请"}
+  ]},
+  {t:"行为摘要一行",b:"新增",n:"Top3 关键词 + 主力地区杭州 31% →「查看使用分析」"},
+  {t:"移出概览",n:"地区热力 7×4 / 关键词 Top20 / 信息偏好 11 类 / 最近搜索 → 使用分析页签；最近搜索与关键词排行去重"}
+]},
+
+{t:"个体页签",b:"原账户与联系人",n:"以人为单位 · 15 个个体",c:[
+  {t:"个体列表",c:[
+    {t:"保留",n:"账户+档案合并条目 / 搜索 / 置顶 / 最近行为红标"},
+    {t:"筛选增强",b:"新增",n:"角色（决策/对接/使用/付款）+ 状态（付费/即将到期/免费/未注册）"}
+  ]},
+  {t:"个体详情 · 五块",c:[
+    {t:"① 身份卡",n:"姓名·部门·职位 / 决策链中的角色 / 电话·微信·邮箱 / 标签与备注"},
+    {t:"② 账户与会员",n:"等级·到期倒计时 / 累计消费 / 四端绑定 / 未注册 → 发送注册邀请"},
+    {t:"③ 个体行为轨迹",b:"新增",n:"概览明细下沉 + 个体化",c:[
+      {t:"近 30 天行为时间线",n:"登录 / 检索 / 查看 / 导出 / 积分消耗"},
+      {t:"个体偏好",n:"关键词 Top / 地区分布 / 信息类型偏好"},
+      {t:"终端与强度",n:"APP·小程序·公众号分布 · 如陈涛检索 286 次全司最深"}
+    ]},
+    {t:"④ 沟通轨迹",n:"联系记录 + 下一步 / 写小计 FAB / 拨号弹窗（本机·数企·中普云·仟客 + 短信 + 录音）"},
+    {t:"⑤ 个体商机建议",b:"新增",n:"由行为强度 + 到期状态生成：续费 / 升档 / 唤醒 / 转化 / 注册邀请"}
+  ]},
+  {t:"右栏联动保留",n:"隐藏跟进待办 / 合同与回款 · 高度自适应"}
+]},
+
+{t:"公司数据页签组",c:[
+  {t:"订单（保留）",n:"公司全量 10 笔 · 按个体 / 支付状态筛选 · 行操作（详情/收款/退款/合同）"},
+  {t:"积分（保留+下钻）",n:"共享池 8,420 · 个体消耗明细可下钻"},
+  {t:"使用分析",b:"新增页签",n:"概览明细的去处",c:[
+    {t:"视角切换",b:"新增",n:"公司聚合 ⇄ 按个体下钻"},
+    {t:"地区热力",n:"7 地区 × 4 周 · 杭州 1,428 居首"},
+    {t:"关键词 Top20",n:"物业管理服务采购 186 次居首"},
+    {t:"信息类型偏好",n:"11 类 · 招标公告 30%"},
+    {t:"最近搜索",n:"与关键词排行去重合并"}
+  ]},
+  {t:"账户权限（保留）",n:"会员状态总表 · 8 档类型 / 3 状态筛选"}
+]},
+
+{t:"右栏 · 公司级",c:[
+  {t:"公司动态",n:"聚合时间线 · 可按个体筛选",b:"增强"},
+  {t:"跟进待办",n:"3 项 · 关联个体可点击跳转",b:"增强"},
+  {t:"合同与回款",n:"HT2026-0087 · ¥36,000 · 已回 ¥30,000 · 待回 ¥6,000"}
+]},
+
+{t:"抽屉与悬浮（保留）",c:[
+  {t:"写联系小计",n:"内容 / 方式 6 选 / 下次跟进日期"},
+  {t:"添加 / 编辑 / 补录联系人",n:"姓名·手机号校验查重 / 标签 7 多选 / 关联账户"},
+  {t:"历史报价明细",n:"4 次报价 · 本次 ¥3,980 待回复 · 均价 ¥4,266"},
+  {t:"编辑企业",n:"改名 T+1 审核 / 合并不可撤销 / 拆分：个体迁移，轨迹随个体走"},
+  {t:"更多操作 27 项 / 拨号弹窗 / FAB / Toast"}
+]},
+
+{t:"关键变化对照",n:"现状 → 重构",c:[
+  {t:"概览 8 板块 → 5 板块",n:"一屏到一屏半看完，只留判断信息"},
+  {t:"行为明细：概览 → 双视图",n:"使用分析页签（公司聚合）+ 个体详情（个体轨迹）"},
+  {t:"续费 4 卡 + 竞品表 → 商机与风险合并卡",n:"最紧迫展开，其余收起"},
+  {t:"账户与联系人 → 个体页签",n:"以人为单位，行为轨迹归属个体"},
+  {t:"基本盘 10 行 → 4 行 + 悬浮",n:"低频字段不占首屏"},
+  {t:"最近搜索与关键词排行去重",n:"同信息只说一次"},
+  {t:"决策链路节点可跳转个体",n:"待补节点一键补录，关系网变成入口"}
+]}
+]};
+
+/* ================= 渲染与交互 ================= */
+var PALETTE=["#7c3aed","#2563eb","#0e8074","#d97706","#dc2626","#db2777","#0891b2","#65a30d","#4f46e5","#b45309","#0f766e","#be123c","#6d28d9"];
+var total=0;
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function build(node,depth,color){
+  var li=document.createElement("li");
+  li.className=depth===0?"root":"d"+depth;
+  li.dataset.depth=depth;
+  if(color)li.style.setProperty("--bc",color);
+  var kids=node.c&&node.c.length;
+  var nd=document.createElement("div");
+  nd.className="nd"+(kids?" has-k":"");
+  var html="";
+  if(kids)html+='<button class="tw" type="button" aria-label="折叠展开">−</button>';
+  html+='<span class="lb">'+esc(node.t)+'</span>';
+  if(node.n)html+='<span class="nt">'+esc(node.n)+'</span>';
+  if(node.b)html+='<span class="bdg'+(node.b==="新增"||node.b==="增强"?" new":"")+'">'+esc(node.b)+'</span>';
+  if(kids)html+='<span class="cnt">'+node.c.length+'</span>';
+  nd.innerHTML=html;
+  li.appendChild(nd);
+  total++;
+  if(kids){
+    var ul=document.createElement("ul");
+    node.c.forEach(function(k,i){
+      var c=depth===0?PALETTE[i%PALETTE.length]:color;
+      ul.appendChild(build(k,depth+1,c));
+    });
+    li.appendChild(ul);
+    if(depth>=3)li.classList.add("collapsed");
+    nd.addEventListener("click",function(e){
+      if(e.target.closest(".tw")||e.currentTarget===nd||e.target.closest(".lb")||e.target.closest(".nt")){
+        toggle(li);
+      }
+    });
+  }
+  return li;
+}
+function toggle(li){
+  var col=li.classList.toggle("collapsed");
+  var tw=li.querySelector(":scope>.nd .tw");
+  if(tw)tw.textContent=col?"+":"−";
+}
+function expandTo(n){
+  document.querySelectorAll(".mm li").forEach(function(li){
+    if(!li.querySelector(":scope>ul"))return;
+    var d=+li.dataset.depth;
+    var col=d>=n;
+    li.classList.toggle("collapsed",col);
+    var tw=li.querySelector(":scope>.nd .tw");
+    if(tw)tw.textContent=col?"+":"−";
+  });
+}
+var rootUl=document.createElement("ul");
+rootUl.appendChild(build(DATA,0,null));
+document.getElementById("mm").appendChild(rootUl);
+document.getElementById("stat").textContent="共 "+total+" 个节点";
+
+/* 分支导航 */
+var nav=document.getElementById("nav");
+DATA.c.forEach(function(b,i){
+  var btn=document.createElement("button");
+  btn.innerHTML='<i style="background:'+PALETTE[i%PALETTE.length]+'"></i>'+esc(b.t);
+  btn.addEventListener("click",function(){
+    var li=document.querySelectorAll(".mm>ul>li>ul>li")[i];
+    if(!li)return;
+    var p=li.parentElement.closest("li");
+    while(p){p.classList.remove("collapsed");var tw=p.querySelector(":scope>.nd .tw");if(tw)tw.textContent="−";p=p.parentElement.closest("li");}
+    li.scrollIntoView({behavior:"smooth",block:"center",inline:"start"});
+    li.classList.remove("flash");void li.offsetWidth;li.classList.add("flash");
+  });
+  nav.appendChild(btn);
+});
+
+/* 层级按钮 */
+document.querySelectorAll(".tools button[data-lv]").forEach(function(btn){
+  btn.addEventListener("click",function(){
+    document.querySelectorAll(".tools button[data-lv]").forEach(function(b){b.classList.remove("on");});
+    btn.classList.add("on");
+    expandTo(+btn.dataset.lv);
+  });
+});
+
+/* 搜索 */
+var kw=document.getElementById("kw");
+kw.addEventListener("input",function(){
+  var q=kw.value.trim().toLowerCase();
+  var lis=document.querySelectorAll(".mm li");
+  lis.forEach(function(li){li.classList.remove("hit","dim","path");});
+  if(!q)return;
+  lis.forEach(function(li){
+    var nd=li.querySelector(":scope>.nd");
+    var txt=(nd.querySelector(".lb").textContent+" "+(nd.querySelector(".nt")?nd.querySelector(".nt").textContent:"")+" "+(nd.querySelector(".bdg")?nd.querySelector(".bdg").textContent:"")).toLowerCase();
+    if(txt.indexOf(q)>=0){
+      li.classList.add("hit");
+      var p=li.parentElement.closest("li");
+      while(p){p.classList.add("path");p.classList.remove("collapsed");var tw=p.querySelector(":scope>.nd .tw");if(tw)tw.textContent="−";p=p.parentElement.closest("li");}
+    }
+  });
+  lis.forEach(function(li){if(!li.classList.contains("hit")&&!li.classList.contains("path"))li.classList.add("dim");});
+  var first=document.querySelector(".mm li.hit");
+  if(first)first.scrollIntoView({behavior:"smooth",block:"center"});
+});
+</script>
+</body>
+</html>

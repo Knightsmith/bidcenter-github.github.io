@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>客户详情页 v2 · 现状结构思维导图</title>
+<style>
+  :root{
+    --bg:#f4f6fa; --panel:#ffffff; --bd:#e3e8ef; --tx:#1a1f29; --mut:#667085;
+    --ln:#d4dae3; --primary:#2563eb;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;background:var(--bg);color:var(--tx);display:flex;flex-direction:column;overflow:hidden}
+
+  /* ---------- 顶栏 ---------- */
+  .hd{flex-shrink:0;background:var(--panel);border-bottom:1px solid var(--bd);padding:12px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .hd h1{font-size:17px;font-weight:700}
+  .hd .sub{font-size:12px;color:var(--mut)}
+  .hd .sp{flex:1}
+  .tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .tools button{height:30px;padding:0 12px;border:1px solid var(--bd);background:#fff;border-radius:7px;font-size:13px;color:#3f4756;cursor:pointer;font-family:inherit}
+  .tools button:hover{border-color:#cfe0ff;color:var(--primary);background:#f7faff}
+  .tools button.on{border-color:var(--primary);color:var(--primary);background:#eff4ff}
+  .search{position:relative}
+  .search input{height:30px;width:220px;padding:0 10px 0 30px;border:1px solid var(--bd);border-radius:7px;font-size:13px;font-family:inherit;outline:none}
+  .search input:focus{border-color:var(--primary)}
+  .search svg{position:absolute;left:9px;top:8px;width:14px;height:14px;color:#98a2b3}
+  .stat{font-size:12px;color:var(--mut);white-space:nowrap}
+
+  /* ---------- 分支导航 ---------- */
+  .nav{flex-shrink:0;display:flex;gap:6px;padding:8px 20px;background:var(--panel);border-bottom:1px solid var(--bd);overflow-x:auto}
+  .nav button{flex-shrink:0;height:26px;padding:0 11px;border-radius:999px;border:1px solid var(--bd);background:#fff;font-size:12px;color:#3f4756;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px}
+  .nav button i{width:8px;height:8px;border-radius:50%;display:inline-block}
+  .nav button:hover{border-color:#cfe0ff;background:#f7faff}
+
+  /* ---------- 画布 ---------- */
+  .canvas{flex:1;overflow:auto;padding:26px 30px 60px}
+  .mm{display:inline-block;min-width:100%}
+  .mm ul{list-style:none;margin:0;padding:0 0 0 26px}
+  .mm li{position:relative;padding:3px 0 3px 22px}
+  .mm li::before{content:"";position:absolute;left:0;top:0;height:100%;border-left:2px solid var(--ln)}
+  .mm li::after{content:"";position:absolute;left:0;top:18px;width:22px;border-top:2px solid var(--ln)}
+  .mm li:last-child::before{height:20px}
+  .mm li.root{padding-left:0}
+  .mm li.root::before,.mm li.root::after{display:none}
+  .mm li.collapsed>ul{display:none}
+
+  /* ---------- 节点 ---------- */
+  .nd{display:inline-flex;align-items:flex-start;gap:7px;background:var(--panel);border:1px solid var(--bd);border-left:3px solid var(--bc,#98a2b3);border-radius:8px;padding:5px 10px;cursor:default;max-width:640px;transition:box-shadow .15s,border-color .15s}
+  .nd.has-k{cursor:pointer}
+  .nd.has-k:hover{border-color:var(--bc);box-shadow:0 1px 6px rgba(16,24,40,.08)}
+  .tw{flex-shrink:0;width:17px;height:17px;margin-top:1px;border-radius:50%;border:1.5px solid var(--bc,#98a2b3);background:#fff;color:var(--bc,#98a2b3);font-size:12px;line-height:1;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-family:inherit;padding:0}
+  .tw:hover{background:var(--bc);color:#fff}
+  .lb{font-size:13.5px;line-height:1.5;font-weight:500;word-break:break-all}
+  .nt{font-size:12px;color:var(--mut);line-height:1.5;font-weight:400}
+  .nt::before{content:"·";margin:0 5px;color:#c3cad4}
+  .bdg{flex-shrink:0;font-size:11px;font-weight:600;color:var(--bc);background:color-mix(in srgb,var(--bc) 10%,#fff);border-radius:999px;padding:1px 7px;margin-top:2px;white-space:nowrap}
+  .cnt{flex-shrink:0;font-size:11px;color:#98a2b3;background:#f0f2f5;border-radius:999px;padding:1px 7px;margin-top:2px;display:none}
+  li.collapsed>.nd .cnt{display:inline-block}
+
+  /* 根节点 */
+  li.root>.nd{background:#111827;border:none;border-radius:12px;padding:12px 18px;max-width:none}
+  li.root>.nd .lb{color:#fff;font-size:17px;font-weight:700}
+  li.root>.nd .nt{color:#9ca3af}
+  li.root>.nd .nt::before{color:#4b5563}
+  li.root>.nd .tw{border-color:#fff;color:#fff;background:transparent}
+  li.root>.nd .tw:hover{background:#fff;color:#111827}
+
+  /* 一级分支 */
+  li.d1>.nd{background:color-mix(in srgb,var(--bc) 8%,#fff);border-color:color-mix(in srgb,var(--bc) 30%,#fff);border-left-width:4px}
+  li.d1>.nd .lb{font-size:14.5px;font-weight:700;color:color-mix(in srgb,var(--bc) 80%,#111)}
+
+  /* 搜索状态 */
+  li.dim>.nd{opacity:.32}
+  li.hit>.nd{border-color:var(--bc);box-shadow:0 0 0 2px color-mix(in srgb,var(--bc) 35%,#fff)}
+  li.hit>.nd .lb{color:var(--bc)}
+  li.flash>.nd{animation:flash 1.2s ease}
+  @keyframes flash{0%,60%{box-shadow:0 0 0 3px color-mix(in srgb,var(--bc) 45%,#fff)}100%{box-shadow:none}}
+
+  .ft{flex-shrink:0;padding:7px 20px;background:var(--panel);border-top:1px solid var(--bd);font-size:12px;color:var(--mut);display:flex;gap:16px;flex-wrap:wrap}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-thumb{background:#cfd6e0;border-radius:6px;border:2px solid var(--bg)}
+  ::-webkit-scrollbar-track{background:transparent}
+</style>
+</head>
+<body>
+
+<div class="hd">
+  <div>
+    <h1>客户详情页 v2 · 现状结构思维导图</h1>
+    <div class="sub">公司维度多账户会员版 · 大土豆有限责任公司 · 完整页面结构（含交互与数据）</div>
+  </div>
+  <div class="sp"></div>
+  <div class="tools">
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="kw" type="text" placeholder="搜索节点，如：到期 / 积分 / 抽屉">
+    </div>
+    <button data-lv="99">全部展开</button>
+    <button data-lv="2">二级</button>
+    <button data-lv="3" class="on">三级</button>
+    <button data-lv="4">四级</button>
+    <button data-lv="1">全部收起</button>
+    <span class="stat" id="stat"></span>
+  </div>
+</div>
+<div class="nav" id="nav"></div>
+<div class="canvas" id="canvas"><div class="mm" id="mm"></div></div>
+<div class="ft">
+  <span>操作：点击节点折叠 / 展开 · 搜索自动展开命中路径 · 顶部色点可跳转分支</span>
+  <span>来源：客户详情页-公司维度多账户会员版-v2.html（3771 行）</span>
+</div>
+
+<script>
+/* ================= 导图数据（现状） ================= */
+var DATA={t:"客户详情页 v2",n:"公司维度多账户会员版 · 静态原型",c:[
+
+{t:"页面框架",c:[
+  {t:"顶部通栏",c:[
+    {t:"Logo：采招CRM系统"},
+    {t:"全局搜索",n:"客户 / 手机号 / 企业名称 · Ctrl K"},
+    {t:"快捷入口",c:[{t:"客户库"},{t:"客户查重"},{t:"新注册客户",b:"NEW"}]},
+    {t:"新建线索",n:"主按钮"},
+    {t:"图标区",n:"待办（红点）/ 通知 / 帮助"},
+    {t:"当前用户",n:"罗屿"},
+    {t:"窗口工具",n:"侧栏切换 / 刷新 / 全屏"}
+  ]},
+  {t:"侧边栏",c:[
+    {t:"iframe 复用",n:"线索管理/sidebar.html"},
+    {t:"postMessage 桥接",n:"crm-main ↔ crm-sidebar · init / activate / collapsed / nav / toast"},
+    {t:"折叠状态记忆",n:"localStorage: crm-sidebar-collapsed"},
+    {t:"导航点击",n:"Toast 演示，实际跳转对应工作台"}
+  ]},
+  {t:"主内容区",n:"双栏布局 two-col · 左页签 + 右动态 · 部分页签右栏隐藏"}
+]},
+
+{t:"公司信息头 Hero",c:[
+  {t:"企业身份",c:[
+    {t:"Logo「大土」+ 大土豆有限责任公司"},
+    {t:"客户ID C20240118-0037",n:"验重与合同关联"},
+    {t:"编辑入口",n:"→ 编辑企业抽屉（改名 / 合并 / 拆分）"}
+  ]},
+  {t:"其他业务标签",c:[
+    {t:"采乐会",n:"接触中 · 2026-11-08 电话沟通积分兑换合作"},
+    {t:"资质通",n:"未接触 · 跟进时可一并推荐"}
+  ]},
+  {t:"判断标签",c:[
+    {t:"意向等级 S 级",n:"九档口径 AA/A/B/C/D/E/S/N/K · 与工作台一致"},
+    {t:"客户评分 92/100",n:"悬浮看六维明细"},
+    {t:"投诉 1",n:"待处理 · 企情数据延迟 · 承诺 11-16 前回复"},
+    {t:"合作中"},
+    {t:"近 30 天 3 次待跟进"}
+  ]},
+  {t:"操作",n:"验重 / 关联企业"}
+]},
+
+{t:"操作按钮行",c:[
+  {t:"新增跟进记录",n:"主按钮"},
+  {t:"记录通话"},{t:"新建拜访"},{t:"在线开通会员"},{t:"新建合同"},{t:"添加联系"},
+  {t:"更多操作 → 抽屉",b:"27 项",c:[
+    {t:"商机与客户",b:"7",n:"商机工具 / 相关账户 / 转介绍客户 / 推荐信息 / 模拟客户 / 同行业信息搜索 / 客户中标记录"},
+    {t:"合同与订单",b:"9",n:"生成合同 / 查看订单 / 在线开通会员 / 创建增值服务订单 / 查看优惠 / 优惠券工具 / 服务延期 / 未到账预开通 / 查看发票邮寄"},
+    {t:"服务与协作",b:"6",n:"增值业务 / 项目协助 / 信息协助 / 服务咨询 / 销售协助 / 添加广告"},
+    {t:"资料与账户",b:"5",n:"上传文件 / 补加联系人 / 密码重置 / 会员服务资料 / 历史回执"}
+  ]}
+]},
+
+{t:"左栏 · 六个页签",c:[
+
+  {t:"① 概览",n:"cardOv 巨型卡 + 销售画像卡",c:[
+    {t:"KPI 四格",c:[
+      {t:"客户意向 S级·极高",n:"评分 92/100",c:[
+        {t:"悬浮六维评分表",n:"登录活跃度 23/25 · 信息完善 18/20 · 搜索订阅 14/15 · 企业监控 15/15 · 查看导出 13/15 · 付费贡献 9/10 · ≥85 判优质"}
+      ]},
+      {t:"使用粘性 · 重度使用",n:"近 7 天检索 464 次"},
+      {t:"近一个月查看信息",n:"4,562 条 · 付费账户才可查看"},
+      {t:"近 30 天活跃账户",n:"6/13 · 活跃率 46.2% · 7 个待唤醒"}
+    ]},
+    {t:"客户基本盘表",n:"4 行 8 字段",c:[
+      {t:"所属人 罗屿",n:"入库 2025-07-07"},
+      {t:"最近付费金额 ¥3,980",n:"2026-11-08 · 点击跳订单页签"},
+      {t:"法定代表人 林国栋 / 注册资本 5,000 万"},
+      {t:"成立日期 2013-06-18 / 行业 建筑工程·市政公用"},
+      {t:"账户总数 13",n:"主账号 1 · 付费 3"},
+      {t:"注册地址",n:"杭州余杭区文一西路 1500 号"}
+    ]},
+    {t:"生命周期与订阅表",n:"3 行 6 字段",c:[
+      {t:"注册时间 2024-01-18 / 最近活跃 2026-11-12 APP"},
+      {t:"中标次数 15 : 12",n:"中标 / 未中标"},
+      {t:"订阅 12 组 / 邮件订阅 5 账户 / 推送邮件 10 账户"}
+    ]},
+    {t:"续费与到期账户",n:"4 卡 · 付费 3 + 已过期 1",c:[
+      {t:"陈涛 · 标准会员",n:"2026-11-30 到期 · 剩 12 天 · 本月最紧迫 · 检索最深"},
+      {t:"王燕 · Plus 会员",n:"2026-12-31 到期 · 与竞品同期"},
+      {t:"林国栋 · VIP 会员",n:"2027-03-15 到期 · 主账户"},
+      {t:"孙强 · 原标准会员",n:"2026-10-05 已过期 · 降为免费 · 仍登录可唤醒"},
+      {t:"倒计时规则",n:"180 天窗口橙→红渐变 · 已到期灰 · 每分钟校准"}
+    ]},
+    {t:"竞品与报价",n:"到期前 6 个月进入替换窗口",c:[
+      {t:"千里马招标网",n:"VIP · 12 个月 · ¥5,600 · 2026-12-31 到期"},
+      {t:"我方报价 ¥3,980/年 · Plus",n:"点击 → 历史报价抽屉"}
+    ]},
+    {t:"地区·关键词·信息偏好",n:"三列大表",c:[
+      {t:"地区分布热力表",n:"7 地区 × 4 周 + 合计 · 杭州 1,428 最高 · 总 4,562"},
+      {t:"关键词检索 Top20",n:"滚动 · 物业管理服务采购 186 次居首"},
+      {t:"信息查看类型偏好",n:"11 类滚动 · 招标公告 30% 居首"}
+    ]},
+    {t:"最近搜索",n:"7 个胶囊 · 关键词 + 地区（与关键词排行信息重复）"},
+    {t:"销售画像卡 · 决策链路",n:"三组切换 · localStorage 记忆",c:[
+      {t:"总部",n:"林国栋 决策(+1 周明远会签) →授权采购→ 王燕 对接 →分配账号→ 陈涛 使用 →提请付款→ 李芳 付款"},
+      {t:"杭州分公司",b:"2/4 待补",n:"王强 决策(预算内自签) → 刘丽 对接 → 使用待补 → 李芳 总部共享"},
+      {t:"宁波分公司",b:"3/4 待补",n:"决策待补 → 对接待补 → 谭薇 使用(唯一活跃) → 李芳 总部共享"},
+      {t:"节点悬浮",n:"角色说明 + 跟进建议 · 待补节点提示销售补录"}
+    ]}
+  ]},
+
+  {t:"② 账户与联系人",b:"15",n:"13 账户 + 2 纯联系人 · 左右分栏",c:[
+    {t:"左栏 · 个体列表",c:[
+      {t:"搜索",n:"姓名 / 电话 / 账号 / 职位"},
+      {t:"筛选",n:"全部 15 / 账户 13 / 联系人 2"},
+      {t:"条目",n:"头像 + 姓名 + 未注册标 + 电话 + 最近行为红标（日期 + 动作）"},
+      {t:"置顶",n:"localStorage · 置顶优先，其余按最近联系倒序"},
+      {t:"添加账户或联系人",n:"+ 按钮 → 抽屉"}
+    ]},
+    {t:"右栏 · 个体详情",c:[
+      {t:"头部",n:"姓名 + 标签 + 类型（账户/联系人·未注册）+ 部门职位 + 置顶 / 编辑（补录）"},
+      {t:"联系人档案表",n:"手机号 / 微信 / 部门职位 / 邮箱 / 最近沟通 / 备注"},
+      {t:"平台账户信息",n:"三组 13 项",c:[
+        {t:"账号信息",n:"账户名称 / 账户ID / 登录账号 / 注册手机号 / 密保手机（脱敏，仅付费账户）"},
+        {t:"会员与付费",n:"会员类型 / 账户状态 / 会员到期（剩 N 天）/ 累计消费"},
+        {t:"注册与活跃",n:"注册时间 / 最近登录 / 进入终端 / 联系电话"}
+      ]},
+      {t:"平台绑定状态",n:"标讯助手公众号 / 会员服务公众号 / APP / 小程序 · 已绑定带日期"},
+      {t:"未注册联系人",n:"暂无会员与绑定信息 → 发送注册邀请（短信+邮件）"},
+      {t:"联系记录",n:"日期 + 方式 + 内容 + 下一步 · 无档案提示先补录"},
+      {t:"电话点击 → 拨号弹窗",n:"本机拨号 / 数企 / 中普云 / 仟客 + 发短信 + 录音记录"}
+    ]},
+    {t:"数据合并逻辑",n:"账户为主挂联系人档案（ctUnits）· 5 人双身份 + 8 纯账户 + 2 纯联系人"},
+    {t:"右栏联动",n:"隐藏「跟进待办」「合同与回款」· 高度自适应铺满"}
+  ]},
+
+  {t:"③ 账户权限",n:"会员状态总表 · 右栏隐藏",c:[
+    {t:"筛选",n:"会员类型 8 档（VIP/Plus/高级/标准/普通/移动高级/移动标准/免费）· 状态（生效中/即将到期/未开通）"},
+    {t:"表格 6 列",n:"账户（账号+姓名+徽章）/ 会员类型 / 生效时间 / 到期时间 / 状态 / 剩余天数"}
+  ]},
+
+  {t:"④ 订单",b:"10 笔",n:"右栏隐藏",c:[
+    {t:"筛选",n:"支付状态（待支付/已完成/已生效）· 账号（可输入下拉）"},
+    {t:"表格 9 列",n:"订单编号 / 下单时间 / 账户 / 订单类型 / 规格 / 开通金额 / 支付状态+方式 / 业绩归属 / 操作"},
+    {t:"订单类型",n:"VIP/Plus/高级/标准会员 · 增值服务 · 积分包 · 服务延期 · 标书制作 · 线下合同补款"},
+    {t:"行操作",n:"订单详情 / 收款 / 退款 / 上传合同 / 生成合同 / 上传文件（Toast 待接入）"},
+    {t:"业绩归属",n:"罗屿（一组）/ 系统（未知部门）"}
+  ]},
+
+  {t:"⑤ 积分记录",n:"右栏隐藏",c:[
+    {t:"筛选",n:"账号 · 类型（消耗/充值/发放）"},
+    {t:"企业共享池",n:"当前可用 8,420"},
+    {t:"表格 6 列",n:"时间 / 账户 / 类型 / 变动 ± / 余额 / 说明"},
+    {t:"示例",n:"导出 -20 · 监控报告 -60 · 开通赠送 +5000 · VIP 月度发放 +800"}
+  ]},
+
+  {t:"⑥ 功能使用记录",n:"右栏隐藏",c:[
+    {t:"筛选",n:"账号 · 终端（APP/小程序/公众号）"},
+    {t:"表格 7 列",n:"账户 / 标讯检索 / 企业监控 / 数据导出 / 订阅推送 / 进入终端 / 最近使用"},
+    {t:"示例",n:"陈涛检索 286 次最深 · 仅展示有使用记录的 6 个账户"}
+  ]}
+]},
+
+{t:"右栏 · 三卡",n:"概览可见 · 联系人页签部分隐藏 · 数据页签整列隐藏",c:[
+  {t:"客户动态",n:"近 30 天 · 6 条时间线",c:[
+    {t:"11-12 主账号登录 APP",n:"导出一份标讯详情"},
+    {t:"11-11 小程序生成监控报告",n:"wangyan_bd · 消耗 60 积分"},
+    {t:"11-08 在线开通 VIP",n:"¥3,980 · 微信支付"},
+    {t:"11-05 销售电话跟进",n:"罗屿 × 林国栋 · 续费方案 12 分钟"},
+    {t:"11-03 Plus 开通 / 10-19 高级开通"},
+    {t:"收起交互",n:"整列收成竖向窄条 · localStorage 记忆"}
+  ]},
+  {t:"跟进待办",b:"3 项",n:"今天 18:00 前回访陈涛 / 11-14 免费账户转化方案 / 11-15 框架合同续签"},
+  {t:"合同与回款",n:"HT2026-0087 · ¥36,000 · 已回款 ¥30,000 · 待回款 ¥6,000 · 2026 全年 · 执行中"}
+]},
+
+{t:"悬浮与抽屉",c:[
+  {t:"FAB 写小计",n:"仅联系人页签有效 · 需联系人档案 · 否则提示补录"},
+  {t:"写联系小计抽屉",n:"内容* / 方式 6 选（电话/微信/上门/会议/邮件/手动）/ 下次跟进日期 · 保存即记入联系记录"},
+  {t:"添加 / 编辑 / 补录联系人抽屉",n:"姓名* / 手机号*（11 位 + 查重）/ 部门 / 职位 / 标签 7 多选 / 微信 / 邮箱 / 关联账户 / 备注 · 补录时账户锁定"},
+  {t:"历史报价抽屉",n:"竞品·千里马招标网",c:[
+    {t:"KPI 三格",n:"本次 ¥3,980/年 · 较竞品低 29% · 较上年 -13.5%"},
+    {t:"本次报价 2026-11-18",n:"待客户回复 · B 需议价 · 客户心理价 ¥3,500"},
+    {t:"2025 续费 ¥4,600",n:"已签约 · A 直接接受"},
+    {t:"2024 升级 ¥4,600",n:"标准→Plus · ↑9.5%"},
+    {t:"2023 首签 ¥3,600",n:"首单 8 折 · B 需议价"},
+    {t:"汇总",n:"4 次报价 · 成交均价 ¥4,266/年 · 本次历史最低"}
+  ]},
+  {t:"编辑企业抽屉",c:[
+    {t:"企业名称",n:"改名（T+1 运营审核）/ 别称·关联企业（≤10 个，仅检索命中）· 证明材料必传 · 备注"},
+    {t:"合并企业",n:"按客户ID查询（示例库 3 家）· 方向：其他→当前 · 联系人订单发票并入 · 不可撤销"},
+    {t:"拆分客户",n:"勾选账户移出至新企业档案 · 订单发票不受影响 · 单账户禁用"}
+  ]},
+  {t:"拨号平台弹窗",n:"跟随电话锚点定位 · Esc / 滚动 / 点击外部关闭"},
+  {t:"Toast",n:"原型演示提示 · 1.8s 自动消失"}
+]},
+
+{t:"数据与状态（JS）",c:[
+  {t:"ACCTS · 13 账户",n:"身份 / 会员等级 / 主账号标记 / 消费 / 到期 / 活跃 / 四端绑定 svc"},
+  {t:"CONTACTS · 7 档案",n:"5 人关联账户 + 王海·郑晓未注册 · 标签 / 备注 / 联系记录 logs"},
+  {t:"ORDERS 10 / POINTS 5 / USAGE 6 / QUOTES 4 / MERGE_DB 3"},
+  {t:"localStorage 四键",n:"侧栏折叠 / 联系人置顶 / 动态列收起 / 决策链路分组"},
+  {t:"到期倒计时",n:"data-exp 统一驱动 · 续费卡与竞品共用 180 天窗口规则"}
+]}
+]};
+
+/* ================= 渲染与交互 ================= */
+var PALETTE=["#2563eb","#0e8074","#d97706","#dc2626","#7c3aed","#db2777","#0891b2","#65a30d","#4f46e5","#b45309","#0f766e","#be123c","#6d28d9"];
+var total=0;
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function build(node,depth,color){
+  var li=document.createElement("li");
+  li.className=depth===0?"root":"d"+depth;
+  li.dataset.depth=depth;
+  if(color)li.style.setProperty("--bc",color);
+  var kids=node.c&&node.c.length;
+  var nd=document.createElement("div");
+  nd.className="nd"+(kids?" has-k":"");
+  var html="";
+  if(kids)html+='<button class="tw" type="button" aria-label="折叠展开">−</button>';
+  html+='<span class="lb">'+esc(node.t)+'</span>';
+  if(node.n)html+='<span class="nt">'+esc(node.n)+'</span>';
+  if(node.b)html+='<span class="bdg">'+esc(node.b)+'</span>';
+  if(kids)html+='<span class="cnt">'+node.c.length+'</span>';
+  nd.innerHTML=html;
+  li.appendChild(nd);
+  total++;
+  if(kids){
+    var ul=document.createElement("ul");
+    node.c.forEach(function(k,i){
+      var c=depth===0?PALETTE[i%PALETTE.length]:color;
+      ul.appendChild(build(k,depth+1,c));
+    });
+    li.appendChild(ul);
+    if(depth>=3)li.classList.add("collapsed");
+    nd.addEventListener("click",function(e){
+      if(e.target.closest(".tw")||e.currentTarget===nd||e.target.closest(".lb")||e.target.closest(".nt")){
+        toggle(li);
+      }
+    });
+  }
+  return li;
+}
+function toggle(li){
+  var col=li.classList.toggle("collapsed");
+  var tw=li.querySelector(":scope>.nd .tw");
+  if(tw)tw.textContent=col?"+":"−";
+}
+function expandTo(n){
+  document.querySelectorAll(".mm li").forEach(function(li){
+    if(!li.querySelector(":scope>ul"))return;
+    var d=+li.dataset.depth;
+    var col=d>=n;
+    li.classList.toggle("collapsed",col);
+    var tw=li.querySelector(":scope>.nd .tw");
+    if(tw)tw.textContent=col?"+":"−";
+  });
+}
+var rootUl=document.createElement("ul");
+rootUl.appendChild(build(DATA,0,null));
+document.getElementById("mm").appendChild(rootUl);
+document.getElementById("stat").textContent="共 "+total+" 个节点";
+
+/* 分支导航 */
+var nav=document.getElementById("nav");
+DATA.c.forEach(function(b,i){
+  var btn=document.createElement("button");
+  btn.innerHTML='<i style="background:'+PALETTE[i%PALETTE.length]+'"></i>'+esc(b.t);
+  btn.addEventListener("click",function(){
+    var li=document.querySelectorAll(".mm>ul>li>ul>li")[i];
+    if(!li)return;
+    var p=li.parentElement.closest("li");
+    while(p){p.classList.remove("collapsed");var tw=p.querySelector(":scope>.nd .tw");if(tw)tw.textContent="−";p=p.parentElement.closest("li");}
+    li.scrollIntoView({behavior:"smooth",block:"center",inline:"start"});
+    li.classList.remove("flash");void li.offsetWidth;li.classList.add("flash");
+  });
+  nav.appendChild(btn);
+});
+
+/* 层级按钮 */
+document.querySelectorAll(".tools button[data-lv]").forEach(function(btn){
+  btn.addEventListener("click",function(){
+    document.querySelectorAll(".tools button[data-lv]").forEach(function(b){b.classList.remove("on");});
+    btn.classList.add("on");
+    expandTo(+btn.dataset.lv);
+  });
+});
+
+/* 搜索 */
+var kw=document.getElementById("kw");
+kw.addEventListener("input",function(){
+  var q=kw.value.trim().toLowerCase();
+  var lis=document.querySelectorAll(".mm li");
+  lis.forEach(function(li){li.classList.remove("hit","dim","path");});
+  if(!q)return;
+  lis.forEach(function(li){
+    var nd=li.querySelector(":scope>.nd");
+    var txt=(nd.querySelector(".lb").textContent+" "+(nd.querySelector(".nt")?nd.querySelector(".nt").textContent:"")+" "+(nd.querySelector(".bdg")?nd.querySelector(".bdg").textContent:"")).toLowerCase();
+    if(txt.indexOf(q)>=0){
+      li.classList.add("hit");
+      var p=li.parentElement.closest("li");
+      while(p){p.classList.add("path");p.classList.remove("collapsed");var tw=p.querySelector(":scope>.nd .tw");if(tw)tw.textContent="−";p=p.parentElement.closest("li");}
+    }
+  });
+  lis.forEach(function(li){if(!li.classList.contains("hit")&&!li.classList.contains("path"))li.classList.add("dim");});
+  var first=document.querySelector(".mm li.hit");
+  if(first)first.scrollIntoView({behavior:"smooth",block:"center"});
+});
+</script>
+</body>
+</html>
